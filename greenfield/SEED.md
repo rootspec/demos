@@ -62,6 +62,9 @@ Side-by-side view with a slider or toggle:
 
 Real content in both panels — not lorem ipsum.
 
+### Version Badge
+The current RootSpec version (v6.2.0) should be displayed prominently — in the hero section and/or site header. This is a demo of the framework, so the version it was built with is a key detail. The version should be easy to update (single constant or config value).
+
 ### Open Source CTA
 Link to GitHub repo, getting started instructions, community links.
 
