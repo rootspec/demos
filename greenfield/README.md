@@ -11,7 +11,7 @@ A marketing site for RootSpec, built entirely from specification using the RootS
 
 ## Getting Started
 
-1. Install RootSpec skills (from the rootspec repo)
+1. `npx skills add rootspec/rootspec --skill '*'`
 2. `cd greenfield`
 3. `/rs-init`
 4. `/rs-spec` (use SEED.md as product context)
