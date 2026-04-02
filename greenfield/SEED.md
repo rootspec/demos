@@ -35,6 +35,13 @@ Each level can only reference higher levels, never lower. This prevents circular
 
 ## Site Sections
 
+### Meta Banner
+A persistent, visible banner (top of page or below the hero) that explains this site is itself a RootSpec demo. Something like:
+
+> "This site was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups. The spec, the code, and the tests were all produced by running four commands. [View the spec →] [View the seed →]"
+
+Link to the SEED.md and spec files in the GitHub repo. This is critical — visitors must understand that any rough edges are the result of minimal human guidance, not carelessness. The banner should be honest and direct: this is what you get from a sparse seed with no iteration.
+
 ### Hero
 Tagline and one-sentence explanation. Immediate visual clarity about what this is.
 
