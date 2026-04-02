@@ -1,0 +1,78 @@
+name: Validate & Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  greenfield:
+    runs-on: ubuntu-latest
+    if: hashFiles('greenfield/package.json') != ''
+    defaults:
+      run:
+        working-directory: greenfield
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: greenfield/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: greenfield
+          start: npx serve dist -l 3000
+          wait-on: http://localhost:3000
+          browser: chrome
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: greenfield-dist
+          path: greenfield/dist
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: [greenfield]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: greenfield-dist
+          path: _site/greenfield
+      - name: Create index
+        run: |
+          cat > _site/index.html << 'HTML'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head><meta charset="utf-8"><title>RootSpec Demos</title></head>
+          <body>
+            <h1>RootSpec Demos</h1>
+            <ul>
+              <li><a href="greenfield/">Greenfield: Marketing Site</a></li>
+            </ul>
+          </body>
+          </html>
+          HTML
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
