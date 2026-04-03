@@ -9,6 +9,7 @@ Each subdirectory is an independent demo project. When running RootSpec skills (
 ## Current Demos
 
 - `greenfield/` — Marketing site for RootSpec, built from scratch
+- `scaffold/` — SvelteKit social feed (RootFeed), spec'd from an existing scaffold
 
 ## Important
 

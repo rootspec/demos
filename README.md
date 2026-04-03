@@ -7,7 +7,7 @@ Demonstrates the RootSpec spec-to-code pipeline across three project scenarios. 
 | Demo | Scenario | Status |
 |------|----------|--------|
 | [greenfield/](greenfield/) | Marketing site for RootSpec, built from scratch | In progress |
-| scaffold/ | Add RootSpec to an existing scaffold | Planned |
+| [scaffold/](scaffold/) | SvelteKit social feed, spec'd from a scaffold | In progress |
 | brownfield/ | Retrofit RootSpec onto an existing codebase | Planned |
 
 ## How It Works

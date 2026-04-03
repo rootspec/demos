@@ -44,9 +44,37 @@ jobs:
           name: greenfield-dist
           path: greenfield/dist
 
+  scaffold:
+    runs-on: ubuntu-latest
+    if: hashFiles('scaffold/package.json') != ''
+    defaults:
+      run:
+        working-directory: scaffold
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: scaffold/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: scaffold
+          start: npx serve build -l 3001
+          wait-on: http://localhost:3001
+          browser: chrome
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: scaffold-dist
+          path: scaffold/build
+
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: [greenfield]
+    needs: [greenfield, scaffold]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -56,6 +84,12 @@ jobs:
         with:
           name: greenfield-dist
           path: _site/greenfield
+        continue-on-error: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: scaffold-dist
+          path: _site/scaffold
+        continue-on-error: true
       - name: Create index
         run: |
           cat > _site/index.html << 'HTML'
@@ -66,6 +100,7 @@ jobs:
             <h1>RootSpec Demos</h1>
             <ul>
               <li><a href="greenfield/">Greenfield: Marketing Site</a></li>
+              <li><a href="scaffold/">Scaffold: RootFeed Social Feed</a></li>
             </ul>
           </body>
           </html>
