@@ -1,0 +1,42 @@
+# =============================================================================
+# LEVEL 5: FINE TUNING - Interactive Features
+# =============================================================================
+# @spec_version: 1.0.0
+# @system: INTERACTIVE_SYSTEM
+# @last_updated: 2026-04-02T00:00:00Z
+# @status: draft
+# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+
+hierarchy_explorer:
+  expand_duration: 300
+  # @unit: milliseconds
+  # @rationale: Quick expansion that feels snappy but visible
+  # @constraints: min=150, max=500, type=integer
+
+  reference_highlight_opacity: 0.3
+  # @unit: ratio
+  # @rationale: Dimmed lines are visible but clearly secondary to the highlighted ones
+  # @constraints: min=0.1, max=0.5, type=float
+
+spec_wizard:
+  min_pillars: 3
+  # @rationale: Minimum needed to represent a meaningful product vision per framework guidance
+  # @constraints: min=2, max=4, type=integer
+
+  max_pillars: 5
+  # @rationale: More than 5 dilutes focus per L1 anti-pattern guidance
+  # @constraints: min=4, max=8, type=integer
+
+  template_count: 4
+  # @rationale: Enough variety to spark ideas without overwhelming choice
+  # @constraints: min=3, max=8, type=integer
+
+  pillar_suggestion_count: 8
+  # @rationale: Roughly double the max selectable; enough to browse without scrolling
+  # @constraints: min=6, max=12, type=integer
+
+comparison:
+  transition_duration: 300
+  # @unit: milliseconds
+  # @rationale: Matches hierarchy explorer timing for consistency
+  # @constraints: min=150, max=500, type=integer

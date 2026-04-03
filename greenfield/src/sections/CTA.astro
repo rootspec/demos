@@ -1,0 +1,33 @@
+---
+import { GITHUB_REPO } from '../data/config';
+---
+
+<section id="get-started" data-test="cta-section" class="py-16 sm:py-24 px-4 sm:px-6 bg-[var(--color-bg-alt)]">
+  <div class="max-w-content mx-auto text-center">
+    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Get started</h2>
+    <p class="mt-4 text-lg text-[var(--color-text-secondary)] max-w-xl mx-auto">
+      RootSpec is open source. Install the skills, write your seed, and run the pipeline.
+    </p>
+    <div class="mt-8 max-w-lg mx-auto text-left">
+      <pre class="p-4 rounded-lg bg-[var(--color-code-bg)] border border-[var(--color-border)] font-mono text-sm overflow-x-auto"><code class="text-[var(--color-text)]"><span class="text-[var(--color-text-muted)]"># Install skills</span>
+npx skills add rootspec/rootspec --skill '*'
+
+<span class="text-[var(--color-text-muted)]"># Run the pipeline</span>
+/rs-init
+/rs-spec
+/rs-impl
+/rs-validate</code></pre>
+    </div>
+    <div class="mt-8">
+      <a
+        data-test="github-link"
+        href={GITHUB_REPO}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
+      >
+        View on GitHub
+      </a>
+    </div>
+  </div>
+</section>

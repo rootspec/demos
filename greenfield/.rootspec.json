@@ -1,0 +1,10 @@
+{
+  "version": "6.2.1",
+  "specDirectory": "rootspec",
+  "prerequisites": {
+    "devServer": "./scripts/dev.sh",
+    "preCommitHook": "./scripts/pre-commit.sh",
+    "releaseScript": "./scripts/release.sh",
+    "validationScript": "./scripts/test.sh"
+  }
+}

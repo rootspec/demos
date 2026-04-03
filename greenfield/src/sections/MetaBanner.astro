@@ -1,0 +1,11 @@
+---
+import { SEED_URL, SPEC_URL } from '../data/config';
+---
+
+<section data-test="meta-banner" class="mx-4 sm:mx-6 lg:mx-auto max-w-content rounded-lg border border-[var(--color-banner-border)] bg-[var(--color-banner-bg)] px-4 sm:px-6 py-4">
+  <p class="text-sm sm:text-base text-[var(--color-text-secondary)] leading-relaxed">
+    <strong class="text-[var(--color-text)]">This site is a RootSpec demo.</strong> It was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups. The spec, the code, and the tests were all produced by running four commands.
+    <a data-test="meta-banner-seed-link" href={SEED_URL} target="_blank" rel="noopener noreferrer" class="text-[var(--color-accent)] hover:underline whitespace-nowrap">View the seed &rarr;</a>
+    <a data-test="meta-banner-spec-link" href={SPEC_URL} target="_blank" rel="noopener noreferrer" class="text-[var(--color-accent)] hover:underline whitespace-nowrap ml-3">View the spec &rarr;</a>
+  </p>
+</section>

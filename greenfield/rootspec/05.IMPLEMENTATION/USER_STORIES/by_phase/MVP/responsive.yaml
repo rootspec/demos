@@ -1,0 +1,26 @@
+# =============================================================================
+# USER STORY: Mobile Experience
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-02T00:00:00Z
+
+id: US-401
+title: Use the site on mobile devices
+
+acceptance_criteria:
+  - id: AC-401-1
+    title: Content is readable on small screens
+    narrative: |
+      Given I am viewing the site on a mobile device
+      When the page loads
+      Then all content should be visible without horizontal scrolling
+      And text should be readable without zooming
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=hero-tagline]' }
+      - shouldExist: { selector: '[data-test=meta-banner]' }

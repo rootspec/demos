@@ -1,0 +1,134 @@
+# =============================================================================
+# USER STORY: Explore the Hierarchy
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [INTERACTIVE_SYSTEM, ACCESSIBILITY_SYSTEM]
+# @last_updated: 2026-04-02T00:00:00Z
+
+id: US-201
+title: Explore the five-level specification hierarchy interactively
+
+acceptance_criteria:
+  - id: AC-201-1
+    title: Click a level to expand it
+    narrative: |
+      Given I am viewing the hierarchy explorer
+      When I click on a level
+      Then that level expands to show example content
+      And any previously expanded level collapses
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: '[data-test=hierarchy-level-1]' }
+    then:
+      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+
+  - id: AC-201-2
+    title: Hover a level to see its references
+    narrative: |
+      Given I am viewing the hierarchy explorer
+      When I hover over a level
+      Then I should see its allowed reference connections highlighted
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: '[data-test=hierarchy-level-3]' }
+    then:
+      - shouldExist: { selector: '[data-test=hierarchy-level-3][aria-expanded=true]' }
+
+  - id: AC-201-3
+    title: Navigate hierarchy with keyboard
+    narrative: |
+      Given I am focused on the hierarchy explorer
+      When I use arrow keys to move between levels and Enter to expand
+      Then I should be able to explore the hierarchy without a mouse
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: '[data-test=hierarchy-level-1]' }
+    then:
+      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded=true]' }
+
+---
+# =============================================================================
+# USER STORY: Try the Spec Wizard
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-02T00:00:00Z
+
+id: US-202
+title: Generate a skeleton spec from a product idea
+
+acceptance_criteria:
+  - id: AC-202-1
+    title: Complete the three-step wizard
+    narrative: |
+      Given I am viewing the spec wizard
+      When I enter a product idea, select design pillars, and describe an interaction
+      Then I should see a skeleton spec card showing my input mapped to L1-L3
+    given:
+      - visit: '/'
+    when:
+      - fill: { selector: '[data-test=wizard-mission-input]', value: 'A task manager for teams' }
+      - click: { selector: '[data-test=wizard-next-step]' }
+      - click: { selector: '[data-test=wizard-pillar-option]' }
+      - click: { selector: '[data-test=wizard-next-step]' }
+      - fill: { selector: '[data-test=wizard-interaction-who]', value: 'Team member' }
+      - fill: { selector: '[data-test=wizard-interaction-trigger]', value: 'Creates a new task' }
+      - fill: { selector: '[data-test=wizard-interaction-feedback]', value: 'Task appears in the team list' }
+      - click: { selector: '[data-test=wizard-generate]' }
+    then:
+      - shouldExist: { selector: '[data-test=wizard-result]' }
+
+  - id: AC-202-2
+    title: Start over resets the wizard
+    narrative: |
+      Given I have completed the wizard and see the result
+      When I click "Start over"
+      Then the wizard resets to step 1 with empty inputs
+    given:
+      - visit: '/'
+    when:
+      - fill: { selector: '[data-test=wizard-mission-input]', value: 'Test idea' }
+      - click: { selector: '[data-test=wizard-next-step]' }
+      - click: { selector: '[data-test=wizard-pillar-option]' }
+      - click: { selector: '[data-test=wizard-next-step]' }
+      - fill: { selector: '[data-test=wizard-interaction-who]', value: 'User' }
+      - fill: { selector: '[data-test=wizard-interaction-trigger]', value: 'Action' }
+      - fill: { selector: '[data-test=wizard-interaction-feedback]', value: 'Result' }
+      - click: { selector: '[data-test=wizard-generate]' }
+      - click: { selector: '[data-test=wizard-start-over]' }
+    then:
+      - shouldExist: { selector: '[data-test=wizard-mission-input]' }
+
+---
+# =============================================================================
+# USER STORY: Compare Before and After
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-02T00:00:00Z
+
+id: US-203
+title: See the difference RootSpec makes through a side-by-side comparison
+
+acceptance_criteria:
+  - id: AC-203-1
+    title: Toggle between without and with views
+    narrative: |
+      Given I am viewing the before/after comparison
+      When I toggle to the "With RootSpec" view
+      Then I should see structured, traceable content replacing the vague version
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: '[data-test=comparison-toggle-with]' }
+    then:
+      - shouldExist: { selector: '[data-test=comparison-with-panel]' }

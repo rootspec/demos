@@ -1,0 +1,12 @@
+---
+import { ROOTSPEC_VERSION, GITHUB_REPO } from '../data/config';
+---
+
+<footer class="border-t border-[var(--color-border)] py-8 mt-16">
+  <div class="max-w-content mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-[var(--color-text-muted)]">
+    <span class="font-mono">RootSpec v{ROOTSPEC_VERSION}</span>
+    <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--color-text-secondary)] transition-colors">
+      GitHub
+    </a>
+  </div>
+</footer>

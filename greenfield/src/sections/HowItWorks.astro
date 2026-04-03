@@ -1,0 +1,43 @@
+---
+const steps = [
+  {
+    command: '/rs-init',
+    title: 'Initialize',
+    description: 'Set up the spec directory, framework files, and project prerequisites. One command, ready in seconds.',
+  },
+  {
+    command: '/rs-spec',
+    title: 'Specify',
+    description: 'Define your product through structured dialogue — mission, design pillars, interactions, systems, and testable user stories.',
+  },
+  {
+    command: '/rs-impl',
+    title: 'Implement',
+    description: 'Turn user stories into working code, one at a time, verified by tests. Each story traces back to the spec.',
+  },
+  {
+    command: '/rs-validate',
+    title: 'Validate',
+    description: 'Run the full test suite against your spec. Every acceptance criterion is checked. Proof, not trust.',
+  },
+];
+---
+
+<section id="how-it-works" data-test="how-it-works-section" class="py-16 sm:py-24 px-4 sm:px-6">
+  <div class="max-w-content mx-auto">
+    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">How it works</h2>
+    <p class="mt-4 text-lg text-[var(--color-text-secondary)] max-w-2xl">
+      Four skills drive all workflows. Each one builds on the last.
+    </p>
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {steps.map((step, i) => (
+        <div data-test="workflow-step" class="relative p-6 rounded-lg border border-[var(--color-border)]">
+          <span class="text-xs font-mono text-[var(--color-text-muted)]">Step {i + 1}</span>
+          <code class="block mt-2 font-mono text-sm text-[var(--color-accent)]">{step.command}</code>
+          <h3 class="mt-2 font-semibold text-lg">{step.title}</h3>
+          <p class="mt-2 text-sm text-[var(--color-text-secondary)] leading-relaxed">{step.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

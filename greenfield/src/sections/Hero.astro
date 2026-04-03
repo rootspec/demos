@@ -1,0 +1,30 @@
+---
+import { GITHUB_REPO } from '../data/config';
+---
+
+<section class="py-24 sm:py-32 px-4 sm:px-6">
+  <div class="max-w-content mx-auto text-center">
+    <h1 data-test="hero-tagline" class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
+      Philosophy guides implementation,<br class="hidden sm:block" /> never vice versa.
+    </h1>
+    <p data-test="hero-description" class="mt-6 text-lg sm:text-xl text-[var(--color-text-secondary)] max-w-2xl mx-auto leading-relaxed">
+      RootSpec is a hierarchical specification system that bridges human intent and software implementation. When code and specs can be generated trivially, the real value is validation and proof.
+    </p>
+    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+      <a
+        href="#get-started"
+        class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
+      >
+        Get Started
+      </a>
+      <a
+        href={GITHUB_REPO}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:border-[var(--color-text-muted)] transition-colors"
+      >
+        View on GitHub
+      </a>
+    </div>
+  </div>
+</section>

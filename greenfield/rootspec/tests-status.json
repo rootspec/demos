@@ -1,0 +1,15 @@
+{
+  "lastRun": "2026-04-03T00:00:00Z",
+  "stories": {
+    "US-101": { "status": "pass", "criteria": { "AC-101-1": "pass", "AC-101-2": "pass" } },
+    "US-102": { "status": "pass", "criteria": { "AC-102-1": "pass" } },
+    "US-103": { "status": "pass", "criteria": { "AC-103-1": "pass" } },
+    "US-104": { "status": "pass", "criteria": { "AC-104-1": "pass" } },
+    "US-105": { "status": "pass", "criteria": { "AC-105-1": "pass" } },
+    "US-201": { "status": "pass", "criteria": { "AC-201-1": "pass", "AC-201-2": "pass", "AC-201-3": "pass" } },
+    "US-202": { "status": "pass", "criteria": { "AC-202-1": "pass", "AC-202-2": "pass" } },
+    "US-203": { "status": "pass", "criteria": { "AC-203-1": "pass" } },
+    "US-301": { "status": "pass", "criteria": { "AC-301-1": "pass", "AC-301-2": "pass" } },
+    "US-401": { "status": "pass", "criteria": { "AC-401-1": "pass" } }
+  }
+}
