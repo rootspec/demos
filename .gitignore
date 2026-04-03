@@ -18,5 +18,6 @@ Thumbs.db
 .vscode/
 .idea/
 
+.svelte-kit/
 .claude/settings.local.json
 CLAUDE.local.md

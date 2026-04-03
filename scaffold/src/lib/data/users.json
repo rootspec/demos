@@ -1,0 +1,74 @@
+[
+  {
+    "id": "u1",
+    "handle": "alice.dev",
+    "displayName": "Alice Chen",
+    "bio": "Full-stack engineer. Building things that matter. Opinions are my own compiler errors.",
+    "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=alice",
+    "followerCount": 1243,
+    "followingCount": 389
+  },
+  {
+    "id": "u2",
+    "handle": "bobwrites",
+    "displayName": "Bob Kowalski",
+    "bio": "Tech writer, recovering PM. I explain things for a living.",
+    "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=bob",
+    "followerCount": 892,
+    "followingCount": 201
+  },
+  {
+    "id": "u3",
+    "handle": "carol.systems",
+    "displayName": "Carol Okonkwo",
+    "bio": "Distributed systems @ Acme. Rust enthusiast. She/her.",
+    "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=carol",
+    "followerCount": 3401,
+    "followingCount": 156
+  },
+  {
+    "id": "u4",
+    "handle": "dan.designs",
+    "displayName": "Dan Reeves",
+    "bio": "Design engineer. Making pixels behave since 2014.",
+    "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=dan",
+    "followerCount": 2105,
+    "followingCount": 445
+  },
+  {
+    "id": "u5",
+    "handle": "elena.ml",
+    "displayName": "Elena Vasquez",
+    "bio": "ML researcher turned builder. Skeptical optimist about AI.",
+    "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=elena",
+    "followerCount": 5672,
+    "followingCount": 312
+  },
+  {
+    "id": "u6",
+    "handle": "frank.ops",
+    "displayName": "Frank Tanaka",
+    "bio": "Platform eng. If it's on fire, I'm probably already looking at it.",
+    "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=frank",
+    "followerCount": 789,
+    "followingCount": 523
+  },
+  {
+    "id": "u7",
+    "handle": "grace.builds",
+    "displayName": "Grace Liu",
+    "bio": "Indie hacker. Shipped 4 things this year, 3 of them useful.",
+    "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=grace",
+    "followerCount": 4210,
+    "followingCount": 278
+  },
+  {
+    "id": "u8",
+    "handle": "hector.sec",
+    "displayName": "Hector Morales",
+    "bio": "AppSec lead. I break things so you don't have to.",
+    "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=hector",
+    "followerCount": 1567,
+    "followingCount": 190
+  }
+]
