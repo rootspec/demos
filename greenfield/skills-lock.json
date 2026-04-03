@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "skills": {
+    "rs-impl": {
+      "source": "rootspec/rootspec",
+      "sourceType": "github",
+      "computedHash": "8f2b32ca88ee5e4123b17796c861f9deffd781f69de7779b584dcb17abab4226"
+    },
+    "rs-init": {
+      "source": "rootspec/rootspec",
+      "sourceType": "github",
+      "computedHash": "23500f968a565879615462bbb512a74a642e4bc26bc44717c02c3bd3ca1ab2ed"
+    },
+    "rs-shared": {
+      "source": "rootspec/rootspec",
+      "sourceType": "github",
+      "computedHash": "28de10ea75653cbba7843293855f3c8a688862007465360d9bfd4fcc78d41fde"
+    },
+    "rs-spec": {
+      "source": "rootspec/rootspec",
+      "sourceType": "github",
+      "computedHash": "bd4abb714124a139d3fb559bcd38903bfc4ff6f03738defaacc9a5c569438062"
+    },
+    "rs-validate": {
+      "source": "rootspec/rootspec",
+      "sourceType": "github",
+      "computedHash": "87d09f1634683963326e07433da01aa02aa01471882681af0d0b57decd74d917"
+    }
+  }
+}

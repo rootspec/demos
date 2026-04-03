@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash:*)",
+      "Bash(npm --version)",
+      "Read(//private/tmp/**)",
+      "Bash(npx create-next-app@latest rootspec-site --typescript --tailwind --eslint --app --src-dir --no-import-alias --use-npm)",
+      "Bash(chmod +x /Users/cbrown/Dev/rootspec-demos/greenfield/scripts/dev.sh)",
+      "Bash(npx cypress:*)",
+      "Bash(python3 -c \" import json, sys data = json.load\\(sys.stdin\\) for t in data.get\\('failures', []\\): print\\(f'FAIL: {t.get\\(\\\\\"fullTitle\\\\\", \\\\\"\\\\\"\\)}'\\) print\\(f' Error: {t.get\\(\\\\\"err\\\\\", {}\\).get\\(\\\\\"message\\\\\", \\\\\"\\\\\"\\)}'\\) print\\(\\) \")",
+      "Bash(./scripts/dev.sh restart:*)",
+      "Bash(npx astro:*)",
+      "Bash(./scripts/dev.sh stop:*)",
+      "Bash(./scripts/dev.sh start:*)",
+      "Bash(./scripts/dev.sh status:*)"
+    ]
+  }
+}
