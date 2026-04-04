@@ -4,36 +4,30 @@ A Bluesky-like social feed built on a pre-existing SvelteKit scaffold using the 
 
 ## Status
 
-- [ ] Create SvelteKit scaffold (routes, mock data, layout)
-- [ ] `/rs-init` — Initialize RootSpec
-- [ ] `/rs-spec` — Define specification
-- [ ] `/rs-impl` — Implement from spec
-- [ ] `/rs-validate` — Validate implementation
+- [x] Create SvelteKit scaffold (routes, mock data, layout)
+- [x] `/rs-init` — Initialize RootSpec
+- [x] `/rs-spec` — Define specification from SEED.md + existing scaffold
+- [x] `/rs-impl` — Implement from spec
+- [x] `/rs-validate` — All 12 stories passing
+
+## What Happened
+
+Started from a bare SvelteKit app with 5 routes, mock JSON data (8 users, 30 posts, 15 tags), and minimal UI. RootSpec spec'd and implemented the full experience:
+
+1. `/rs-init` detected SvelteKit, Tailwind, and the existing route structure
+2. `/rs-spec` used SEED.md and the existing code to produce L1-L5
+3. `/rs-impl` built out all features: like/bookmark, follow/unfollow, post composer, tag filtering, load more, dark/light theme, and a meta banner
+4. `/rs-validate` confirmed all 12 stories pass
 
 ## Getting Started
 
 1. `npx skills add rootspec/rootspec --skill '*'`
 2. `cd scaffold`
-3. Create the SvelteKit scaffold (see below)
-4. `/rs-init`
-5. `/rs-spec` (use SEED.md as product context)
-6. `/rs-impl`
-7. `/rs-validate`
-
-## Scaffold Setup
-
-Before running RootSpec, this demo needs a working SvelteKit app with:
-- 5 routes: `/`, `/profile/[handle]`, `/post/[id]`, `/search`, `/explore`
-- Mock JSON data in `src/lib/data/`
-- Static adapter, TypeScript, Tailwind CSS
-- Basic layout and navigation
-
-The scaffold should be functional but minimal — data loads and routes work, but the UI is bare-bones.
+3. `/rs-init`
+4. `/rs-spec` (use SEED.md as product context)
+5. `/rs-impl`
+6. `/rs-validate`
 
 ## Product Description
 
 See [SEED.md](SEED.md).
-
-## Notes
-
-CI will fail until the scaffold app and `/rs-impl` output exist. The workflow builds, runs Cypress, and deploys to GitHub Pages on green.
