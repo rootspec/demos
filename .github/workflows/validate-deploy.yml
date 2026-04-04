@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
           cache-dependency-path: greenfield/package-lock.json
       - run: npm ci
@@ -35,8 +35,8 @@ jobs:
         with:
           working-directory: greenfield
           install: false
-          start: npx serve dist -l 3000
-          wait-on: http://localhost:3000
+          start: npm run preview -- --port 4321
+          wait-on: http://localhost:4321
           browser: chrome
       - uses: actions/upload-artifact@v4
         if: always()
@@ -53,7 +53,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
           cache-dependency-path: scaffold/package-lock.json
       - run: npm ci
@@ -63,8 +63,8 @@ jobs:
         with:
           working-directory: scaffold
           install: false
-          start: npx serve build -l 3001
-          wait-on: http://localhost:3001
+          start: npm run preview -- --port 5173
+          wait-on: http://localhost:5173
           browser: chrome
       - uses: actions/upload-artifact@v4
         if: always()
@@ -81,7 +81,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
           cache-dependency-path: brownfield/package-lock.json
       - run: npm ci
@@ -91,8 +91,8 @@ jobs:
         with:
           working-directory: brownfield
           install: false
-          start: npx serve dist -l 3002
-          wait-on: http://localhost:3002
+          start: npm run preview -- --port 5173
+          wait-on: http://localhost:5173
           browser: chrome
       - uses: actions/upload-artifact@v4
         if: always()
@@ -111,7 +111,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
       - name: Build greenfield
         working-directory: greenfield
         run: npm ci && npm run build
