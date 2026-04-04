@@ -63,7 +63,7 @@ function WeatherAlerts({ weather }) {
   if (alerts.length === 0) return null;
 
   return (
-    <AlertsContainer>
+    <AlertsContainer className="weather-alerts">
       {alerts.map((alert, i) => (
         <Alert key={i} $bg={alert.bg} $color={alert.color}>
           {alert.text}

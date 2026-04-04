@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:start": "./scripts/dev.sh start",
+    "dev:stop": "./scripts/dev.sh stop",
+    "dev:restart": "./scripts/dev.sh restart",
+    "prepare": "husky"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -15,6 +19,9 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",
+    "cypress": "^15.13.0",
+    "husky": "^9.1.7",
+    "typescript": "^6.0.2",
     "vite": "^5.0.0"
   }
 }

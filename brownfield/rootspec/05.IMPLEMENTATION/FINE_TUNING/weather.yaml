@@ -1,0 +1,102 @@
+# =============================================================================
+# FINE-TUNING: RootWeather
+# =============================================================================
+# @spec_version: 1.0.0
+# @spec_source: 04.SYSTEMS/WEATHER_SYSTEM.md, 04.SYSTEMS/LOCATION_SYSTEM.md, 04.SYSTEMS/SETTINGS_SYSTEM.md
+# @last_updated: 2026-04-04T00:00:00Z
+
+# --- WEATHER_SYSTEM ---
+
+forecast_days:
+  value: 7
+  # @unit: days
+  # @rationale: One week is the standard glanceable forecast window — beyond that accuracy drops significantly
+  # @constraint: min=1, max=16
+
+hourly_window:
+  value: 24
+  # @unit: hours
+  # @rationale: Full day ahead covers all planning needs without overwhelming the horizontal strip
+  # @constraint: min=12, max=48
+
+# Alert thresholds (all based on current readings)
+
+moderate_uv:
+  value: 3
+  # @unit: UV index
+  # @rationale: WHO recommends protection starting at UV 3
+  # @constraint: min=1, max=5
+
+high_uv:
+  value: 6
+  # @unit: UV index
+  # @rationale: WHO "high" threshold
+  # @constraint: min=5, max=8
+
+very_high_uv:
+  value: 8
+  # @unit: UV index
+  # @rationale: WHO "very high" threshold — strong warning warranted
+  # @constraint: min=7, max=11
+
+breezy_wind:
+  value: 25
+  # @unit: km/h
+  # @rationale: Beaufort scale 4-5 — noticeable wind, worth mentioning
+  # @constraint: min=15, max=35
+
+strong_wind:
+  value: 40
+  # @unit: km/h
+  # @rationale: Beaufort scale 6 — strong breeze, impacts outdoor activity
+  # @constraint: min=30, max=50
+
+storm_wind:
+  value: 60
+  # @unit: km/h
+  # @rationale: Beaufort scale 7+ — near gale, safety concern
+  # @constraint: min=50, max=80
+
+high_humidity:
+  value: 85
+  # @unit: percent
+  # @rationale: Above 85% most people feel uncomfortable — worth flagging
+  # @constraint: min=75, max=95
+
+freezing_temp:
+  value: 0
+  # @unit: celsius
+  # @rationale: Literal freezing point — road ice, frost concerns
+  # @constraint: min=-5, max=2
+
+extreme_cold:
+  value: -10
+  # @unit: celsius
+  # @rationale: Frostbite risk begins around -10°C with wind chill
+  # @constraint: min=-20, max=-5
+
+extreme_heat:
+  value: 35
+  # @unit: celsius
+  # @rationale: Heat stress becomes a concern for most people above 35°C
+  # @constraint: min=30, max=45
+
+# --- LOCATION_SYSTEM ---
+
+min_search_length:
+  value: 2
+  # @unit: characters
+  # @rationale: Single-character queries return too many irrelevant results
+  # @constraint: min=1, max=3
+
+search_debounce:
+  value: 300
+  # @unit: milliseconds
+  # @rationale: Fast enough to feel responsive, slow enough to avoid spamming the API on every keystroke
+  # @constraint: min=100, max=500
+
+max_search_results:
+  value: 5
+  # @unit: count
+  # @rationale: Keeps dropdown compact and scannable — Open-Meteo supports up to 10
+  # @constraint: min=3, max=10

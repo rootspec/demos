@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Pre-commit hook — validate spec status before committing
+set -euo pipefail
+
+PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+STATUS_FILE="$PROJECT_ROOT/rootspec/spec-status.json"
+
+if [[ -f "$STATUS_FILE" ]]; then
+  VALID=$(grep -o '"valid"\s*:\s*[a-z]*' "$STATUS_FILE" | grep -o 'true\|false')
+  if [[ "$VALID" != "true" ]]; then
+    echo "⚠ RootSpec: spec is not validated. Run /rs-validate before committing."
+    echo "  To skip: git commit --no-verify"
+    exit 1
+  fi
+fi

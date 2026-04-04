@@ -1,0 +1,483 @@
+# =============================================================================
+# USER STORIES: RootWeather — Baseline Coverage
+# =============================================================================
+# All stories cover existing functionality. Phase "baseline" distinguishes
+# these from future feature work.
+
+# =============================================================================
+# USER STORY: Search for a city
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Check Weather
+# @systems: [LOCATION_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-101
+title: Search for a city by name and select it
+
+acceptance_criteria:
+  - id: AC-101-1
+    title: Autocomplete dropdown appears after typing
+    narrative: |
+      Given I am on the main page
+      When I type a city name of at least 2 characters into the search bar
+      Then I should see a dropdown with matching city results
+    given:
+      - visit: "/"
+    when:
+      - fill: { selector: "input[placeholder*='Search']", value: "Berlin" }
+    then:
+      - shouldExist: { selector: "ul li" }
+
+  - id: AC-101-2
+    title: Selecting a city loads its weather
+    narrative: |
+      Given I see search results for a city
+      When I click on a result
+      Then the weather view should display that city's current conditions
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "Berlin" }
+      - waitFor: { selector: "ul li" }
+    when:
+      - click: { selector: "ul li:first-child" }
+    then:
+      - shouldContain: { selector: "h2", text: "Berlin" }
+
+# =============================================================================
+# USER STORY: View current weather conditions
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Check Weather
+# @systems: [WEATHER_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-102
+title: View current weather conditions for a selected city
+
+acceptance_criteria:
+  - id: AC-102-1
+    title: Current conditions card shows temperature, humidity, wind, and UV
+    narrative: |
+      Given I have selected a city
+      When the weather data loads
+      Then I should see a card with temperature, humidity percentage, wind speed, and UV index
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "London" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+    when:
+      - waitFor: { selector: "[class*='card']" }
+    then:
+      - shouldContain: { selector: "[class*='details']", text: "%" }
+      - shouldContain: { selector: "[class*='details']", text: "km/h" }
+      - shouldContain: { selector: "[class*='details']", text: "UV" }
+
+# =============================================================================
+# USER STORY: View condition-based alerts
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Check Weather
+# @systems: [WEATHER_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-103
+title: See weather alerts when conditions meet thresholds
+
+acceptance_criteria:
+  - id: AC-103-1
+    title: Alerts appear for notable conditions
+    narrative: |
+      Given I am viewing weather for a city with notable conditions
+      When alerts are generated from current readings
+      Then I should see colored alert badges above the weather card
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "Dubai" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+    when:
+      - waitFor: { selector: "[class*='card']" }
+    then:
+      - shouldExist: { selector: "[class*='Alert']" }
+
+# =============================================================================
+# USER STORY: View hourly forecast
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Check Weather
+# @systems: [WEATHER_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-104
+title: View hourly forecast for the next 24 hours
+
+acceptance_criteria:
+  - id: AC-104-1
+    title: Hourly forecast strip displays after selecting a city
+    narrative: |
+      Given I have selected a city
+      When the weather data loads
+      Then I should see a scrollable hourly forecast section
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "Tokyo" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+    when:
+      - waitFor: { selector: "[class*='container']" }
+    then:
+      - shouldExist: { selector: "[class*='hourCard'], [class*='hour']" }
+
+  - id: AC-104-2
+    title: Scroll arrows navigate the hourly strip
+    narrative: |
+      Given I see the hourly forecast section
+      When I click the right arrow button
+      Then the hourly strip should scroll to reveal more hours
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "Tokyo" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+      - waitFor: { selector: "[class*='arrow']" }
+    when:
+      - click: { selector: "[class*='arrow']:last-child" }
+    then:
+      - shouldExist: { selector: "[class*='scroll']" }
+
+# =============================================================================
+# USER STORY: View 7-day forecast
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Check Weather
+# @systems: [WEATHER_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-105
+title: View 7-day forecast with temperature range and conditions
+
+acceptance_criteria:
+  - id: AC-105-1
+    title: Seven day cards appear with high/low temps and weather emoji
+    narrative: |
+      Given I have selected a city
+      When the weather data loads
+      Then I should see a 7-day forecast section with day names, emojis, and temperature ranges
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "Paris" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+    when:
+      - waitFor: { selector: "h3" }
+    then:
+      - shouldContain: { selector: "body", text: "7-Day Forecast" }
+
+# =============================================================================
+# USER STORY: Save a favorite location
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Manage Locations
+# @systems: [LOCATION_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-106
+title: Save a city as a favorite location
+
+acceptance_criteria:
+  - id: AC-106-1
+    title: Save Location button appears for unsaved cities
+    narrative: |
+      Given I have selected a city that is not in my favorites
+      When the weather view loads
+      Then I should see a "Save Location" button
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "Sydney" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+    when:
+      - waitFor: { selector: "[class*='card']" }
+    then:
+      - shouldExist: { selector: ".save-btn" }
+
+  - id: AC-106-2
+    title: Clicking save adds the city to favorites chips
+    narrative: |
+      Given I see the Save Location button
+      When I click it
+      Then the city should appear as a chip in the favorites bar
+      And the Save Location button should disappear
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "Sydney" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+      - waitFor: { selector: ".save-btn" }
+    when:
+      - click: { selector: ".save-btn" }
+    then:
+      - shouldContain: { selector: "body", text: "Saved Locations" }
+      - shouldNotExist: { selector: ".save-btn" }
+
+# =============================================================================
+# USER STORY: Switch between favorite locations
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Manage Locations
+# @systems: [LOCATION_SYSTEM, VIEW_SYSTEM, WEATHER_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-107
+title: Click a favorite chip to view its weather
+
+acceptance_criteria:
+  - id: AC-107-1
+    title: Clicking a favorite chip loads that city's weather
+    narrative: |
+      Given I have at least one saved favorite
+      When I click on a favorite chip
+      Then the weather view should update to show that city
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "Rome" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+      - waitFor: { selector: ".save-btn" }
+      - click: { selector: ".save-btn" }
+    when:
+      - click: { selector: "button[class*='Chip'], [class*='chip']" }
+    then:
+      - shouldExist: { selector: "[class*='card']" }
+
+# =============================================================================
+# USER STORY: Remove a favorite location
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Manage Locations
+# @systems: [LOCATION_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-108
+title: Remove a city from favorites
+
+acceptance_criteria:
+  - id: AC-108-1
+    title: Clicking the remove button on a chip removes the favorite
+    narrative: |
+      Given I have a saved favorite
+      When I click the remove button on its chip
+      Then the chip should disappear from the favorites bar
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "Madrid" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+      - waitFor: { selector: ".save-btn" }
+      - click: { selector: ".save-btn" }
+      - waitFor: { selector: "[class*='Remove'], [class*='remove']" }
+    when:
+      - click: { selector: "[class*='Remove'], [class*='remove']" }
+    then:
+      - shouldNotContain: { selector: "body", text: "Saved Locations" }
+
+# =============================================================================
+# USER STORY: View multi-location dashboard
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Compare Locations
+# @systems: [LOCATION_SYSTEM, WEATHER_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-109
+title: View all saved locations on the dashboard
+
+acceptance_criteria:
+  - id: AC-109-1
+    title: Dashboard view toggle appears when favorites exist
+    narrative: |
+      Given I have at least one saved favorite
+      When I look at the header
+      Then I should see Weather and Dashboard toggle buttons
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "Oslo" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+      - waitFor: { selector: ".save-btn" }
+      - click: { selector: ".save-btn" }
+    when:
+      - waitFor: { selector: ".view-toggle" }
+    then:
+      - shouldExist: { selector: ".view-btn" }
+
+  - id: AC-109-2
+    title: Switching to dashboard shows all locations with current weather
+    narrative: |
+      Given I have saved favorites and see the view toggle
+      When I click the Dashboard button
+      Then I should see a grid of location cards with weather data
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "Oslo" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+      - waitFor: { selector: ".save-btn" }
+      - click: { selector: ".save-btn" }
+      - waitFor: { selector: ".view-toggle" }
+    when:
+      - click: { selector: ".view-btn:last-child" }
+    then:
+      - shouldContain: { selector: "body", text: "All Locations" }
+
+# =============================================================================
+# USER STORY: Toggle temperature unit
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Personalize
+# @systems: [SETTINGS_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-110
+title: Switch between Celsius and Fahrenheit
+
+acceptance_criteria:
+  - id: AC-110-1
+    title: Changing temperature unit updates displayed temperatures
+    narrative: |
+      Given I have a city selected and weather is showing
+      When I open settings and switch to Fahrenheit
+      Then all temperatures should display in Fahrenheit
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "New York" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+      - waitFor: { selector: "[class*='card']" }
+    when:
+      - click: { selector: "[class*='toggle']" }
+      - click: { selector: "button", text: "°F" }
+    then:
+      - shouldContain: { selector: "[class*='temp']", text: "°F" }
+
+# =============================================================================
+# USER STORY: Toggle wind speed unit
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Personalize
+# @systems: [SETTINGS_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-111
+title: Switch between km/h and mph for wind speed
+
+acceptance_criteria:
+  - id: AC-111-1
+    title: Wind unit setting options are available
+    narrative: |
+      Given I am on the main page
+      When I open the settings panel
+      Then I should see km/h and mph options for wind speed
+    given:
+      - visit: "/"
+    when:
+      - click: { selector: "[class*='toggle']" }
+    then:
+      - shouldContain: { selector: "[class*='panel']", text: "km/h" }
+      - shouldContain: { selector: "[class*='panel']", text: "mph" }
+
+# =============================================================================
+# USER STORY: Toggle time format
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Personalize
+# @systems: [SETTINGS_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-112
+title: Switch between 24-hour and 12-hour time format
+
+acceptance_criteria:
+  - id: AC-112-1
+    title: Time format setting options are available
+    narrative: |
+      Given I am on the main page
+      When I open the settings panel
+      Then I should see 24h and 12h options for time format
+    given:
+      - visit: "/"
+    when:
+      - click: { selector: "[class*='toggle']" }
+    then:
+      - shouldContain: { selector: "[class*='panel']", text: "24h" }
+      - shouldContain: { selector: "[class*='panel']", text: "12h" }
+
+# =============================================================================
+# USER STORY: Set a default city
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Personalize
+# @systems: [SETTINGS_SYSTEM, LOCATION_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-113
+title: Set a default city that loads on app startup
+
+acceptance_criteria:
+  - id: AC-113-1
+    title: Default city dropdown appears when favorites exist
+    narrative: |
+      Given I have at least one saved favorite
+      When I open the settings panel
+      Then I should see a Default Location dropdown with my favorites
+    given:
+      - visit: "/"
+      - fill: { selector: "input[placeholder*='Search']", value: "Vienna" }
+      - waitFor: { selector: "ul li" }
+      - click: { selector: "ul li:first-child" }
+      - waitFor: { selector: ".save-btn" }
+      - click: { selector: ".save-btn" }
+    when:
+      - click: { selector: "[class*='toggle']" }
+    then:
+      - shouldExist: { selector: "select[class*='select']" }
+
+# =============================================================================
+# USER STORY: Empty state guidance
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: Check Weather
+# @systems: [VIEW_SYSTEM]
+# @last_updated: 2026-04-04T00:00:00Z
+
+id: US-114
+title: See a prompt to search when no city is selected
+
+acceptance_criteria:
+  - id: AC-114-1
+    title: Empty state message shows on first load
+    narrative: |
+      Given I visit the app with no default city
+      When the page loads
+      Then I should see a message prompting me to search for a city
+    given: []
+    when:
+      - visit: "/"
+    then:
+      - shouldContain: { selector: ".empty", text: "Search for a city" }
