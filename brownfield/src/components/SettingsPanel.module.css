@@ -1,0 +1,78 @@
+.container {
+  margin-bottom: 16px;
+}
+
+.toggle {
+  padding: 6px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.toggle:hover {
+  border-color: #667eea;
+}
+
+.panel {
+  margin-top: 8px;
+  padding: 16px;
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 12px;
+}
+
+.setting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.setting + .setting {
+  border-top: 1px solid #f0f0f0;
+}
+
+.label {
+  font-size: 14px;
+  color: #555;
+}
+
+.options {
+  display: flex;
+  gap: 2px;
+}
+
+.option {
+  padding: 4px 12px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.option:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.option:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.option:not(:first-child) {
+  border-left: none;
+}
+
+.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.select {
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+}

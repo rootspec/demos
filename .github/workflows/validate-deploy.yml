@@ -72,9 +72,38 @@ jobs:
           name: scaffold-dist
           path: scaffold/build
 
+  brownfield:
+    runs-on: ubuntu-latest
+    if: hashFiles('brownfield/package.json') != ''
+    defaults:
+      run:
+        working-directory: brownfield
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: brownfield/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - name: Run Cypress tests
+        if: hashFiles('brownfield/cypress.config.*') != ''
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: brownfield
+          start: npx serve dist -l 3002
+          wait-on: http://localhost:3002
+          browser: chrome
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: brownfield-dist
+          path: brownfield/dist
+
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: [greenfield, scaffold]
+    needs: [greenfield, scaffold, brownfield]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -90,6 +119,11 @@ jobs:
           name: scaffold-dist
           path: _site/scaffold
         continue-on-error: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: brownfield-dist
+          path: _site/brownfield
+        continue-on-error: true
       - name: Create index
         run: |
           cat > _site/index.html << 'HTML'
@@ -101,6 +135,7 @@ jobs:
             <ul>
               <li><a href="greenfield/">Greenfield: Marketing Site</a></li>
               <li><a href="scaffold/">Scaffold: RootFeed Social Feed</a></li>
+              <li><a href="brownfield/">Brownfield: RootWeather Dashboard</a></li>
             </ul>
           </body>
           </html>

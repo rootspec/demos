@@ -1,0 +1,175 @@
+import React, { useState, useEffect } from 'react';
+import SearchBar from './components/SearchBar';
+import CurrentWeather from './components/CurrentWeather';
+import ForecastChart from './components/ForecastChart';
+import HourlyForecast from './components/HourlyForecast';
+import FavoritesList from './components/FavoritesList';
+import LocationsDashboard from './components/LocationsDashboard';
+import WeatherAlerts from './components/WeatherAlerts';
+import SettingsPanel from './components/SettingsPanel';
+import { useWeather } from './hooks/useWeather';
+import {
+  loadFavorites, saveFavorites,
+  loadUnit, saveUnit,
+  loadWindUnit, saveWindUnit,
+  loadTimeFormat, saveTimeFormat,
+  loadDefaultCity, saveDefaultCity,
+} from './utils/storage';
+import './styles/global.css';
+
+// The main app — uses hooks because it was rewritten most recently
+function App() {
+  const [city, setCity] = useState(null);
+  const [favorites, setFavorites] = useState(() => loadFavorites());
+  const [unit, setUnit] = useState(() => loadUnit());
+  const [windUnit, setWindUnit] = useState(() => loadWindUnit());
+  const [timeFormat, setTimeFormat] = useState(() => loadTimeFormat());
+  const [defaultCity, setDefaultCity] = useState(() => loadDefaultCity());
+  const [view, setView] = useState('weather'); // 'weather' or 'dashboard'
+
+  const { weather, loading, error } = useWeather(
+    city?.latitude,
+    city?.longitude
+  );
+
+  // Load default city on mount
+  useEffect(() => {
+    if (defaultCity && favorites.length > 0 && !city) {
+      const found = favorites.find((f) => f.name === defaultCity);
+      if (found) setCity(found);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => { saveFavorites(favorites); }, [favorites]);
+  useEffect(() => { saveUnit(unit); }, [unit]);
+  useEffect(() => { saveWindUnit(windUnit); }, [windUnit]);
+  useEffect(() => { saveTimeFormat(timeFormat); }, [timeFormat]);
+  useEffect(() => { saveDefaultCity(defaultCity); }, [defaultCity]);
+
+  const handleCitySelect = (selectedCity) => {
+    setCity(selectedCity);
+    setView('weather');
+  };
+
+  const handleAddFavorite = () => {
+    if (!city) return;
+    const exists = favorites.some(
+      (f) => f.latitude === city.latitude && f.longitude === city.longitude
+    );
+    if (!exists) {
+      setFavorites([...favorites, {
+        name: city.name,
+        latitude: city.latitude,
+        longitude: city.longitude,
+        country: city.country,
+      }]);
+    }
+  };
+
+  const handleRemoveFavorite = (fav) => {
+    setFavorites(favorites.filter(
+      (f) => f.latitude !== fav.latitude || f.longitude !== fav.longitude
+    ));
+    // Clear default if removed
+    if (defaultCity === fav.name) {
+      setDefaultCity(null);
+    }
+  };
+
+  const isFavorite = city && favorites.some(
+    (f) => f.latitude === city.latitude && f.longitude === city.longitude
+  );
+
+  return (
+    <div className="app">
+      <header className="header">
+        <h1 className="title">🌤️ RootWeather</h1>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {favorites.length > 0 && (
+            <div className="view-toggle">
+              <button
+                className={`view-btn ${view === 'weather' ? 'active' : ''}`}
+                onClick={() => setView('weather')}
+              >
+                Weather
+              </button>
+              <button
+                className={`view-btn ${view === 'dashboard' ? 'active' : ''}`}
+                onClick={() => setView('dashboard')}
+              >
+                Dashboard
+              </button>
+            </div>
+          )}
+        </div>
+      </header>
+
+      <main className="main">
+        <SearchBar onCitySelect={handleCitySelect} />
+
+        <SettingsPanel
+          unit={unit}
+          onUnitChange={setUnit}
+          windUnit={windUnit}
+          onWindUnitChange={setWindUnit}
+          timeFormat={timeFormat}
+          onTimeFormatChange={setTimeFormat}
+          defaultCity={defaultCity}
+          favorites={favorites}
+          onDefaultCityChange={setDefaultCity}
+        />
+
+        {view === 'dashboard' ? (
+          <LocationsDashboard
+            favorites={favorites}
+            unit={unit}
+            onSelect={handleCitySelect}
+          />
+        ) : (
+          <>
+            <FavoritesList
+              favorites={favorites}
+              activeCity={city}
+              onSelect={handleCitySelect}
+              onRemove={handleRemoveFavorite}
+            />
+
+            {loading && <div className="loading">Loading weather data...</div>}
+            {error && <div className="error">Error: {error}</div>}
+
+            {weather && city && (
+              <>
+                <div className="actions">
+                  {!isFavorite && (
+                    <button className="save-btn" onClick={handleAddFavorite}>
+                      ⭐ Save Location
+                    </button>
+                  )}
+                </div>
+                <WeatherAlerts weather={weather} />
+                <CurrentWeather weather={weather} unit={unit} cityName={city.name} />
+                <HourlyForecast weather={weather} unit={unit} timeFormat={timeFormat} />
+                <ForecastChart weather={weather} unit={unit} />
+              </>
+            )}
+
+            {!city && !loading && (
+              <div className="empty">
+                Search for a city to see the weather forecast
+              </div>
+            )}
+          </>
+        )}
+      </main>
+
+      <footer className="footer">
+        <p>
+          RootWeather — A <a href="https://github.com/rootspec/rootspec">RootSpec</a> brownfield demo
+          &middot; v6.2.2 &middot; Data from <a href="https://open-meteo.com/">Open-Meteo</a>
+        </p>
+      </footer>
+    </div>
+  );
+}
+
+export default App;
