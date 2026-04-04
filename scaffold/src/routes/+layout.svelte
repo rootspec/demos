@@ -3,6 +3,7 @@
 	import type { Snippet } from 'svelte';
 	import MetaBanner from '$lib/components/MetaBanner.svelte';
 	import { theme, toggleTheme, initTheme } from '$lib/stores/theme.svelte';
+	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 
 	let { children }: { children: Snippet } = $props();
@@ -16,10 +17,10 @@
 <div class="min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100">
 	<nav class="border-b border-gray-200 px-4 py-3 dark:border-gray-700" data-test="navigation">
 		<div class="mx-auto flex max-w-2xl items-center gap-6">
-			<a href="/" class="text-lg font-bold">RootFeed</a>
-			<a href="/" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">Home</a>
-			<a href="/explore" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">Explore</a>
-			<a href="/search" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">Search</a>
+			<a href="{base}/" class="text-lg font-bold">RootFeed</a>
+			<a href="{base}/" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">Home</a>
+			<a href="{base}/explore" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">Explore</a>
+			<a href="{base}/search" class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">Search</a>
 			<div class="ml-auto">
 				<button
 					onclick={toggleTheme}

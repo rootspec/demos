@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import PostCard from '$lib/components/PostCard.svelte';
 
 	let { data } = $props();
@@ -50,7 +51,7 @@
 <div class="mb-6" data-test="suggested-users">
 	{#each data.users.slice(0, 5) as user}
 		<div class="border-b border-gray-200 py-3 dark:border-gray-700">
-			<a href="/profile/{user.handle}" class="font-medium">{user.displayName}</a>
+			<a href="{base}/profile/{user.handle}" class="font-medium">{user.displayName}</a>
 			<span class="text-sm text-gray-500 dark:text-gray-400">@{user.handle}</span>
 			<p class="text-sm text-gray-600 dark:text-gray-400">{user.bio}</p>
 		</div>

@@ -9,7 +9,10 @@ const config = {
 			pages: 'build',
 			assets: 'build',
 			fallback: '404.html'
-		})
+		}),
+		paths: {
+			base: process.env.SVELTE_BASE || ''
+		}
 	}
 };
 

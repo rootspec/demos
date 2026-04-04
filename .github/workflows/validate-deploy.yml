@@ -109,23 +109,31 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          name: greenfield-dist
-          path: _site/greenfield
-        continue-on-error: true
-      - uses: actions/download-artifact@v4
-        with:
-          name: scaffold-dist
-          path: _site/scaffold
-        continue-on-error: true
-      - uses: actions/download-artifact@v4
-        with:
-          name: brownfield-dist
-          path: _site/brownfield
-        continue-on-error: true
-      - name: Create index
+          node-version: "20"
+      - name: Build greenfield
+        working-directory: greenfield
+        run: npm ci && npm run build
+        env:
+          ASTRO_BASE: /demos/greenfield
+      - name: Build scaffold
+        working-directory: scaffold
+        run: npm ci && npm run build
+        env:
+          SVELTE_BASE: /demos/scaffold
+      - name: Build brownfield
+        working-directory: brownfield
+        run: npm ci && npm run build
+        env:
+          BASE_PATH: /demos/brownfield/
+      - name: Assemble site
         run: |
+          mkdir -p _site
+          cp -r greenfield/dist _site/greenfield || true
+          cp -r scaffold/build _site/scaffold || true
+          cp -r brownfield/dist _site/brownfield || true
           cat > _site/index.html << 'HTML'
           <!DOCTYPE html>
           <html lang="en">

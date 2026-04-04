@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import type { Post, User } from '$lib/types';
 
 	let { post, author }: { post: Post; author: User | undefined } = $props();
@@ -21,12 +22,12 @@
 	<div class="mb-1 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
 		{#if author}
 			<img src={author.avatar} alt={author.displayName} class="h-8 w-8 rounded-full" />
-			<a href="/profile/{author.handle}" class="font-medium text-gray-900 dark:text-gray-100" data-test="post-author">{author.displayName}</a>
+			<a href="{base}/profile/{author.handle}" class="font-medium text-gray-900 dark:text-gray-100" data-test="post-author">{author.displayName}</a>
 			<span>@{author.handle}</span>
 		{/if}
 		<span data-test="post-timestamp">{formatTime(post.createdAt)}</span>
 	</div>
-	<a href="/post/{post.id}" class="block">
+	<a href="{base}/post/{post.id}" class="block">
 		<p class="text-gray-900 dark:text-gray-100" data-test="post-content">{post.content}</p>
 	</a>
 	<div class="mt-2 flex items-center gap-4 text-sm text-gray-400 dark:text-gray-500">
