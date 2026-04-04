@@ -18,7 +18,7 @@ concurrency:
 jobs:
   greenfield:
     runs-on: ubuntu-latest
-    if: hashFiles('greenfield/package.json') != ''
+    if: ${{ hashFiles('greenfield/package.json') != '' }}
     defaults:
       run:
         working-directory: greenfield
@@ -46,7 +46,7 @@ jobs:
 
   scaffold:
     runs-on: ubuntu-latest
-    if: hashFiles('scaffold/package.json') != ''
+    if: ${{ hashFiles('scaffold/package.json') != '' }}
     defaults:
       run:
         working-directory: scaffold
@@ -74,7 +74,7 @@ jobs:
 
   brownfield:
     runs-on: ubuntu-latest
-    if: hashFiles('brownfield/package.json') != ''
+    if: ${{ hashFiles('brownfield/package.json') != '' }}
     defaults:
       run:
         working-directory: brownfield
