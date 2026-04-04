@@ -20,6 +20,10 @@ body {
   flex-direction: column;
 }
 
+.app.comparison-active {
+  max-width: 1024px;
+}
+
 .header {
   display: flex;
   justify-content: space-between;

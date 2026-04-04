@@ -47,7 +47,7 @@ class LocationsDashboard extends Component {
   }
 
   render() {
-    const { favorites, unit, onSelect } = this.props;
+    const { favorites, unit, onSelect, compareMode, selectedForCompare, onToggleCompareCity, onEnterCompareMode } = this.props;
     const { weatherData, loading } = this.state;
 
     if (favorites.length === 0) {
@@ -62,9 +62,38 @@ class LocationsDashboard extends Component {
       return <div style={{ textAlign: 'center', padding: 20, color: '#666' }}>Loading all locations...</div>;
     }
 
+    const selected = selectedForCompare || [];
+
     return (
       <div>
-        <h3 style={{ fontSize: 18, color: '#333', marginBottom: 12 }}>All Locations</h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <h3 style={{ fontSize: 18, color: '#333', margin: 0 }}>All Locations</h3>
+          {!compareMode && favorites.length >= 2 && (
+            <button
+              className="compare-btn"
+              onClick={onEnterCompareMode}
+              style={{
+                padding: '6px 14px',
+                borderRadius: 8,
+                border: '1px solid #667eea',
+                background: 'white',
+                color: '#667eea',
+                cursor: 'pointer',
+                fontSize: 13,
+                fontWeight: 500,
+              }}
+            >
+              Compare
+            </button>
+          )}
+        </div>
+
+        {compareMode && (
+          <div style={{ marginBottom: 12, color: '#666', fontSize: 14 }}>
+            Select at least 2 cities to compare ({selected.length} selected)
+          </div>
+        )}
+
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
@@ -75,18 +104,22 @@ class LocationsDashboard extends Component {
             const key = `${fav.latitude}-${fav.longitude}`;
             const w = weatherData[key];
             const current = w?.current;
+            const isSelected = selected.some(
+              (c) => c.latitude === fav.latitude && c.longitude === fav.longitude
+            );
 
             return (
               <div
                 key={key}
-                onClick={() => onSelect(fav)}
+                data-testid={compareMode ? 'compare-card' : undefined}
+                onClick={() => compareMode ? onToggleCompareCity(fav) : onSelect(fav)}
                 style={{
                   background: 'white',
                   borderRadius: 12,
                   padding: 16,
                   cursor: 'pointer',
-                  border: '1px solid #eee',
-                  transition: 'box-shadow 0.2s',
+                  border: isSelected ? '2px solid #667eea' : '1px solid #eee',
+                  transition: 'box-shadow 0.2s, border-color 0.2s',
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)'}
                 onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'none'}

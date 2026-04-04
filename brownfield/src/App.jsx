@@ -7,6 +7,7 @@ import FavoritesList from './components/FavoritesList';
 import LocationsDashboard from './components/LocationsDashboard';
 import WeatherAlerts from './components/WeatherAlerts';
 import SettingsPanel from './components/SettingsPanel';
+import ComparisonView from './components/ComparisonView';
 import { useWeather } from './hooks/useWeather';
 import {
   loadFavorites, saveFavorites,
@@ -25,7 +26,9 @@ function App() {
   const [windUnit, setWindUnit] = useState(() => loadWindUnit());
   const [timeFormat, setTimeFormat] = useState(() => loadTimeFormat());
   const [defaultCity, setDefaultCity] = useState(() => loadDefaultCity());
-  const [view, setView] = useState('weather'); // 'weather' or 'dashboard'
+  const [view, setView] = useState('weather'); // 'weather', 'dashboard', or 'compare'
+  const [compareMode, setCompareMode] = useState(false);
+  const [comparedCities, setComparedCities] = useState([]);
 
   const { weather, loading, error } = useWeather(
     city?.latitude,
@@ -76,12 +79,59 @@ function App() {
     }
   };
 
+  // Comparison handlers
+  const handleEnterCompareMode = () => {
+    setCompareMode(true);
+    setComparedCities([]);
+  };
+
+  const handleToggleCompareCity = (fav) => {
+    setComparedCities((prev) => {
+      const exists = prev.some(
+        (c) => c.latitude === fav.latitude && c.longitude === fav.longitude
+      );
+      if (exists) {
+        return prev.filter(
+          (c) => c.latitude !== fav.latitude || c.longitude !== fav.longitude
+        );
+      }
+      if (prev.length >= 3) return prev;
+      return [...prev, fav];
+    });
+  };
+
+  // Auto-transition to comparison view when 2+ cities selected
+  useEffect(() => {
+    if (compareMode && comparedCities.length >= 2) {
+      setView('compare');
+      setCompareMode(false);
+    }
+  }, [compareMode, comparedCities]);
+
+  const handleRemoveCompareCity = (cityToRemove) => {
+    const next = comparedCities.filter(
+      (c) => c.latitude !== cityToRemove.latitude || c.longitude !== cityToRemove.longitude
+    );
+    if (next.length < 2) {
+      setComparedCities([]);
+      setView('dashboard');
+    } else {
+      setComparedCities(next);
+    }
+  };
+
+  const handleBackToDashboard = () => {
+    setComparedCities([]);
+    setCompareMode(false);
+    setView('dashboard');
+  };
+
   const isFavorite = city && favorites.some(
     (f) => f.latitude === city.latitude && f.longitude === city.longitude
   );
 
   return (
-    <div className="app">
+    <div className={`app${view === 'compare' ? ' comparison-active' : ''}`}>
       <header className="header">
         <h1 className="title">🌤️ RootWeather</h1>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -119,11 +169,23 @@ function App() {
           onDefaultCityChange={setDefaultCity}
         />
 
-        {view === 'dashboard' ? (
+        {view === 'compare' ? (
+          <ComparisonView
+            cities={comparedCities}
+            unit={unit}
+            timeFormat={timeFormat}
+            onRemoveCity={handleRemoveCompareCity}
+            onBack={handleBackToDashboard}
+          />
+        ) : view === 'dashboard' ? (
           <LocationsDashboard
             favorites={favorites}
             unit={unit}
             onSelect={handleCitySelect}
+            compareMode={compareMode}
+            selectedForCompare={comparedCities}
+            onToggleCompareCity={handleToggleCompareCity}
+            onEnterCompareMode={handleEnterCompareMode}
           />
         ) : (
           <>

@@ -2,7 +2,7 @@
 # FINE-TUNING: RootWeather
 # =============================================================================
 # @spec_version: 1.0.0
-# @spec_source: 04.SYSTEMS/WEATHER_SYSTEM.md, 04.SYSTEMS/LOCATION_SYSTEM.md, 04.SYSTEMS/SETTINGS_SYSTEM.md
+# @spec_source: 04.SYSTEMS/WEATHER_SYSTEM.md, 04.SYSTEMS/LOCATION_SYSTEM.md, 04.SYSTEMS/SETTINGS_SYSTEM.md, 04.SYSTEMS/VIEW_SYSTEM.md
 # @last_updated: 2026-04-04T00:00:00Z
 
 # --- WEATHER_SYSTEM ---
@@ -100,3 +100,17 @@ max_search_results:
   # @unit: count
   # @rationale: Keeps dropdown compact and scannable — Open-Meteo supports up to 10
   # @constraint: min=3, max=10
+
+# --- VIEW_SYSTEM ---
+
+min_comparison_cities:
+  value: 2
+  # @unit: count
+  # @rationale: Comparison requires at least 2 cities to be meaningful
+  # @constraint: min=2, max=2
+
+max_comparison_cities:
+  value: 3
+  # @unit: count
+  # @rationale: 3 columns fit comfortably on desktop; more becomes unreadable and cramped
+  # @constraint: min=2, max=4

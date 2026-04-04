@@ -1,0 +1,80 @@
+.container {
+  margin-bottom: 20px;
+}
+
+.topBar {
+  margin-bottom: 16px;
+}
+
+.backBtn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  color: #667eea;
+}
+
+.backBtn:hover {
+  border-color: #667eea;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.column {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  min-width: 0;
+}
+
+.columnHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #667eea;
+}
+
+.cityName {
+  font-size: 18px;
+  color: #333;
+  margin: 0;
+}
+
+.removeBtn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #999;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.removeBtn:hover {
+  background: #fee;
+  color: #e53e3e;
+}
+
+.columnContent {
+  font-size: 14px;
+}
+
+.error {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+}

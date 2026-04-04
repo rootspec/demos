@@ -26,5 +26,32 @@
     "iterations": null,
     "stories": null
   }
+,
+  {
+    "skill": "rs-spec",
+    "startedAt": "2026-04-04T17:15:54Z",
+    "completedAt": "2026-04-04T17:25:33Z",
+    "durationSeconds": 579,
+    "iterations": null,
+    "stories": null
+  }
+,
+  {
+    "skill": "rs-impl",
+    "startedAt": "2026-04-04T17:26:19Z",
+    "completedAt": "2026-04-04T17:34:31Z",
+    "durationSeconds": 492,
+    "iterations": 3,
+    "stories": {"US-201":{"attempts":1},"US-202":{"attempts":1},"US-203":{"attempts":1},"US-204":{"attempts":1},"US-205":{"attempts":1}}
+  }
+,
+  {
+    "skill": "rs-validate",
+    "startedAt": "2026-04-04T17:35:10Z",
+    "completedAt": "2026-04-04T17:38:29Z",
+    "durationSeconds": 199,
+    "iterations": null,
+    "stories": null
+  }
   ]
 }

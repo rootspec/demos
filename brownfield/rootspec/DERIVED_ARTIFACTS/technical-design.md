@@ -19,8 +19,8 @@ Derived from the RootWeather specification. This is a brownfield project — con
 | State | React useState + localStorage | — | No state library |
 
 **Spec alignment notes:**
-- L2 mandates client-only architecture — ✅ no backend exists
-- L2 mandates free keyless APIs — ✅ Open-Meteo requires no auth
+- L2 mandates client-only architecture — no backend exists
+- L2 mandates free keyless APIs — Open-Meteo requires no auth
 - Mixed component styles (class vs functional) are a legacy artifact, not a design choice
 
 ---
@@ -41,6 +41,8 @@ User action → App.jsx handler → state update → re-render
 ```
 
 Weather fetching is encapsulated in `useWeather` hook (cancellable). `LocationsDashboard` has its own fetch logic (class component with `componentDidMount`).
+
+**Comparison view:** The new comparison feature introduces a third view state (`compare`) in App.jsx. Comparison selection state (`comparedCities` array) is managed alongside the existing `view` state. Weather data for compared cities can reuse the dashboard's parallel-fetch pattern from `LocationsDashboard`.
 
 **Spec alignment notes:**
 - L4 defines four systems; code maps to them naturally:
@@ -64,12 +66,14 @@ Weather fetching is encapsulated in `useWeather` hook (cancellable). `LocationsD
 **Component patterns:**
 - Class components: `SearchBar`, `ForecastChart`, `HourlyForecast`, `LocationsDashboard`, `SettingsPanel`
 - Functional components: `CurrentWeather`, `FavoritesList`, `WeatherAlerts`, `App`
-- No consistent pattern — legacy vs newer code
+- New components should prefer functional style with hooks
 
 **Styling approaches (three coexist):**
 1. CSS Modules (SearchBar, CurrentWeather, HourlyForecast, SettingsPanel)
 2. styled-components (FavoritesList, WeatherAlerts)
 3. Inline styles (ForecastChart, LocationsDashboard)
+
+New comparison components should use CSS Modules for consistency with the majority of existing components.
 
 **Export pattern:** Default exports for all components. Named exports for utility functions.
 
@@ -87,6 +91,8 @@ Two Open-Meteo endpoints, both GET with query parameters:
 | Forecast | `api.open-meteo.com/v1/forecast` | Current + hourly + daily weather |
 
 No auth headers, no API keys, no rate limiting (public tier). Responses are JSON. Error handling is minimal — fetch failures surface as error state in the UI.
+
+The comparison view fetches weather for 2-3 cities in parallel using the same pattern as the dashboard (`Promise.all` over `getWeather` calls).
 
 ---
 
@@ -108,19 +114,27 @@ No auth headers, no API keys, no rate limiting (public tier). Responses are JSON
 - `rootweather_default_city`: string | null
 - `rootweather_favorites`: JSON array of Favorite objects
 
+**View state** (transient, in-memory):
+- `view`: "weather" | "dashboard" | "compare"
+- `comparedCities`: City[] (max 3, subset of favorites)
+
 **Weather data** (transient, from API response):
-- Not stored — re-fetched on every city selection
+- Not stored — re-fetched on every city selection or comparison entry
 
 ---
 
 ## 6. Testing Strategy
 
-> Source: 05.IMPLEMENTATION/USER_STORIES/baseline.yaml
+> Source: 05.IMPLEMENTATION/USER_STORIES/
 
-**E2E (Cypress):** 14 user stories with acceptance criteria covering all user-facing flows. Stories are tagged `@phase: baseline` — they validate existing functionality.
+**E2E (Cypress):** 19 user stories across 2 phases:
+- `baseline` (14 stories) — existing functionality
+- `comparison` (5 stories) — side-by-side comparison feature
 
-**Unit tests:** None currently. Low priority given the simple logic (temperature conversion, alert threshold checks). Could be added for `utils/temperature.js` and `WeatherAlerts` alert logic if regressions appear.
+**Unit tests:** None currently. Low priority given the simple logic (temperature conversion, alert threshold checks).
 
-**Integration tests:** Not applicable — no backend, no database, no complex system interactions. E2E covers the integration surface.
+**Integration tests:** Not applicable — no backend, no database. E2E covers the integration surface.
 
-**Test data:** Tests use real API calls (Open-Meteo is free and stable). No mocks, no fixtures. This means tests depend on network availability and may have non-deterministic results for condition-specific tests (e.g., US-103 alert visibility depends on actual Dubai weather).
+**Test data:** Tests use real API calls (Open-Meteo is free and stable). No mocks, no fixtures, except US-103 which intercepts the API to ensure deterministic alert conditions.
+
+**Comparison tests:** Require saving 2+ favorites as setup, then navigating through dashboard → compare mode → selection → comparison view. Each test has a long given-chain of setup steps.

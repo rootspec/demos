@@ -11,8 +11,9 @@ Owns the active view state (weather vs. dashboard), loading/error presentation, 
 ## Data
 
 ### View State
-- `view` (enum) — `weather` or `dashboard`
+- `view` (enum) — `weather`, `dashboard`, or `compare`
 - `city` (City or null) — currently selected city in weather view
+- `comparedCities` (City[], max [max_comparison_cities]) — cities selected for side-by-side comparison
 
 ### Screen Regions
 | Region | Contents |
@@ -34,11 +35,26 @@ Owns the active view state (weather vs. dashboard), loading/error presentation, 
 ### Dashboard View Layout
 - Grid of location cards (auto-fill, responsive columns)
 - Each card shows city name, emoji, temperature, humidity, wind
+- "Compare" button appears when [min_comparison_cities]+ favorites exist
+- In comparison selection mode, cards show selectable highlight state
+
+### Comparison View Layout
+- Side-by-side columns ([min_comparison_cities] to [max_comparison_cities] equal-width columns)
+- "Back to Dashboard" navigation at top
+- Each column contains:
+  1. City name header (click to deselect/remove from comparison)
+  2. Current conditions card (temperature, humidity, wind, UV)
+  3. Condition alerts (if any thresholds met)
+  4. Hourly forecast (compact horizontal strip)
+  5. 7-day forecast (compact bar chart)
 
 ## Behavior
 
 - View toggle only renders when favorites list is non-empty
 - Selecting a city from search or dashboard switches to weather view
+- Compare button only renders on dashboard when favorites count >= [min_comparison_cities]
+- Entering comparison mode shows selectable cards; selecting enough cities transitions to comparison view
+- Deselecting a city in comparison view removes its column; dropping below minimum exits to dashboard
 - Loading state shows centered text during weather fetch
 - Error state shows styled error message
 - Empty state prompts user to search when no city is selected
