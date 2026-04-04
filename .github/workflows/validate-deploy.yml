@@ -34,6 +34,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: greenfield
+          install: false
           start: npx serve dist -l 3000
           wait-on: http://localhost:3000
           browser: chrome
@@ -61,6 +62,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: scaffold
+          install: false
           start: npx serve build -l 3001
           wait-on: http://localhost:3001
           browser: chrome
@@ -85,10 +87,10 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Run Cypress tests
-        if: hashFiles('brownfield/cypress.config.*') != ''
         uses: cypress-io/github-action@v6
         with:
           working-directory: brownfield
+          install: false
           start: npx serve dist -l 3002
           wait-on: http://localhost:3002
           browser: chrome
