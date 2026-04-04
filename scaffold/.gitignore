@@ -1,0 +1,7 @@
+.dev-server.pid
+.dev-server.log
+node_modules/
+build/
+.svelte-kit/
+cypress/screenshots/
+cypress/videos/

@@ -1,7 +1,7 @@
 [
   {
     "id": "u1",
-    "handle": "alice.dev",
+    "handle": "alice",
     "displayName": "Alice Chen",
     "bio": "Full-stack engineer. Building things that matter. Opinions are my own compiler errors.",
     "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=alice",
@@ -19,7 +19,7 @@
   },
   {
     "id": "u3",
-    "handle": "carol.systems",
+    "handle": "carol",
     "displayName": "Carol Okonkwo",
     "bio": "Distributed systems @ Acme. Rust enthusiast. She/her.",
     "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=carol",
@@ -28,7 +28,7 @@
   },
   {
     "id": "u4",
-    "handle": "dan.designs",
+    "handle": "dan",
     "displayName": "Dan Reeves",
     "bio": "Design engineer. Making pixels behave since 2014.",
     "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=dan",
@@ -37,7 +37,7 @@
   },
   {
     "id": "u5",
-    "handle": "elena.ml",
+    "handle": "elena",
     "displayName": "Elena Vasquez",
     "bio": "ML researcher turned builder. Skeptical optimist about AI.",
     "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=elena",
@@ -46,7 +46,7 @@
   },
   {
     "id": "u6",
-    "handle": "frank.ops",
+    "handle": "frank",
     "displayName": "Frank Tanaka",
     "bio": "Platform eng. If it's on fire, I'm probably already looking at it.",
     "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=frank",
@@ -55,7 +55,7 @@
   },
   {
     "id": "u7",
-    "handle": "grace.builds",
+    "handle": "grace",
     "displayName": "Grace Liu",
     "bio": "Indie hacker. Shipped 4 things this year, 3 of them useful.",
     "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=grace",
@@ -64,7 +64,7 @@
   },
   {
     "id": "u8",
-    "handle": "hector.sec",
+    "handle": "hector",
     "displayName": "Hector Morales",
     "bio": "AppSec lead. I break things so you don't have to.",
     "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=hector",

@@ -1,0 +1,65 @@
+# =============================================================================
+# USER STORY: See the Demo Banner
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: META
+# @systems: [META_SYSTEM]
+# @last_updated: 2026-04-03T00:00:00Z
+
+id: US-111
+title: See the demo banner
+
+acceptance_criteria:
+  - id: AC-111-1
+    title: Meta banner is visible on every page
+    narrative: |
+      Given I am visiting any page on RootFeed
+      When the page loads
+      Then I should see the meta banner explaining this is a RootSpec demo
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=meta-banner]' }
+
+  - id: AC-111-2
+    title: Banner contains links to spec artifacts
+    narrative: |
+      Given I am viewing the meta banner
+      When I look at the banner content
+      Then I should see links to the seed, spec, and scaffold commit
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=meta-banner] [data-test=seed-link]' }
+      - shouldExist: { selector: '[data-test=meta-banner] [data-test=spec-link]' }
+      - shouldExist: { selector: '[data-test=meta-banner] [data-test=scaffold-link]' }
+
+---
+# =============================================================================
+# USER STORY: Toggle Dark/Light Theme
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: META
+# @systems: [META_SYSTEM]
+# @last_updated: 2026-04-03T00:00:00Z
+
+id: US-112
+title: Toggle dark/light theme
+
+acceptance_criteria:
+  - id: AC-112-1
+    title: Theme toggle switches between dark and light
+    narrative: |
+      Given I am on any page
+      When I click the theme toggle
+      Then the page should switch to the opposite theme
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldExist: { selector: '[data-test=theme-indicator]' }

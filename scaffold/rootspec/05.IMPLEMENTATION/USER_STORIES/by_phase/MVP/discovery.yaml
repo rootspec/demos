@@ -1,0 +1,93 @@
+# =============================================================================
+# USER STORY: Search Posts
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: DISCOVERY
+# @systems: [DISCOVERY_SYSTEM]
+# @last_updated: 2026-04-03T00:00:00Z
+
+id: US-108
+title: Search posts
+
+acceptance_criteria:
+  - id: AC-108-1
+    title: Search filters posts by keyword
+    narrative: |
+      Given I am on the search page
+      When I type a keyword in the search input
+      Then I should see posts matching that keyword
+    given:
+      - visit: '/search'
+    when:
+      - fill: { selector: '[data-test=search-input]', value: 'svelte' }
+    then:
+      - shouldExist: { selector: '[data-test=search-results] [data-test=post-card]' }
+
+  - id: AC-108-2
+    title: Empty search results show message
+    narrative: |
+      Given I am on the search page
+      When I search for a term with no matches
+      Then I should see an empty results message
+    given:
+      - visit: '/search'
+    when:
+      - fill: { selector: '[data-test=search-input]', value: 'xyznonexistent123' }
+    then:
+      - shouldExist: { selector: '[data-test=no-results]' }
+
+---
+# =============================================================================
+# USER STORY: Explore Trending Content
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: DISCOVERY
+# @systems: [DISCOVERY_SYSTEM]
+# @last_updated: 2026-04-03T00:00:00Z
+
+id: US-109
+title: Explore trending content
+
+acceptance_criteria:
+  - id: AC-109-1
+    title: Explore page shows trending tags, suggested users, and popular posts
+    narrative: |
+      Given I am on the explore page
+      When the page loads
+      Then I should see trending tags, suggested users, and popular posts
+    given:
+      - visit: '/explore'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=trending-tags]' }
+      - shouldExist: { selector: '[data-test=suggested-users]' }
+      - shouldExist: { selector: '[data-test=popular-posts]' }
+
+---
+# =============================================================================
+# USER STORY: Filter Posts by Tag
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: DISCOVERY
+# @systems: [DISCOVERY_SYSTEM]
+# @last_updated: 2026-04-03T00:00:00Z
+
+id: US-110
+title: Filter posts by tag
+
+acceptance_criteria:
+  - id: AC-110-1
+    title: Clicking a tag filters posts
+    narrative: |
+      Given I am on the explore page
+      When I click on a trending tag
+      Then I should see only posts with that tag
+    given:
+      - visit: '/explore'
+    when:
+      - click: { selector: '[data-test=trending-tags] [data-test=tag]:first-child' }
+    then:
+      - shouldExist: { selector: '[data-test=filtered-posts] [data-test=post-card]' }

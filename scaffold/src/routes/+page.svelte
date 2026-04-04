@@ -1,25 +1,38 @@
 <script lang="ts">
+	import PostCard from '$lib/components/PostCard.svelte';
+	import Composer from '$lib/components/Composer.svelte';
+	import { feed } from '$lib/stores/feed.svelte';
+
 	let { data } = $props();
+
+	const PAGE_SIZE = 10;
+	let visibleCount = $state(PAGE_SIZE);
 
 	function getAuthor(authorId: string) {
 		return data.users.find((u) => u.id === authorId);
 	}
+
+	let allPosts = $derived([...feed.userPosts, ...data.posts]);
+	let visiblePosts = $derived(allPosts.slice(0, visibleCount));
+	let hasMore = $derived(visibleCount < allPosts.length);
 </script>
 
 <h1 class="mb-4 text-xl font-bold">Home Feed</h1>
 
-{#each data.posts as post}
-	{@const author = getAuthor(post.authorId)}
-	<div class="border-b border-gray-200 py-4">
-		<div class="mb-1 text-sm text-gray-500">
-			<a href="/profile/{author?.handle}" class="font-medium text-gray-900">{author?.displayName}</a>
-			<span>@{author?.handle}</span>
-		</div>
-		<a href="/post/{post.id}" class="block">
-			<p>{post.content}</p>
-		</a>
-		<div class="mt-2 text-xs text-gray-400">
-			{post.likeCount} likes &middot; {post.repostCount} reposts
-		</div>
-	</div>
-{/each}
+<Composer />
+
+<div>
+	{#each visiblePosts as post (post.id)}
+		<PostCard {post} author={getAuthor(post.authorId)} />
+	{/each}
+</div>
+
+{#if hasMore}
+	<button
+		onclick={() => (visibleCount += PAGE_SIZE)}
+		class="mt-4 w-full rounded border border-gray-300 py-2 text-sm text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-800"
+		data-test="load-more"
+	>
+		Load more
+	</button>
+{/if}

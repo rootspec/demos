@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+# Validate spec status before committing
+if [ -f .rootspec.json ]; then
+  SPEC_DIR=$(node -p "require('./.rootspec.json').specDirectory" 2>/dev/null || echo "rootspec")
+  STATUS_FILE="$SPEC_DIR/spec-status.json"
+
+  if [ -f "$STATUS_FILE" ]; then
+    VALID=$(node -p "require('./$STATUS_FILE').valid" 2>/dev/null || echo "false")
+    if [ "$VALID" != "true" ]; then
+      echo "⚠️  Spec not validated. Run /rs-validate before committing."
+      echo "   To skip: git commit --no-verify"
+    fi
+  fi
+fi

@@ -1,0 +1,63 @@
+# =============================================================================
+# USER STORY: Read a Post Thread
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FEED_BROWSING
+# @systems: [THREAD_SYSTEM, FEED_SYSTEM]
+# @last_updated: 2026-04-03T00:00:00Z
+
+id: US-107
+title: Read a post thread
+
+acceptance_criteria:
+  - id: AC-107-1
+    title: Post detail shows full post with engagement actions
+    narrative: |
+      Given I navigate to a post detail page
+      When the page loads
+      Then I should see the full post content with like and bookmark buttons
+    given:
+      - visit: '/post/1'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=post-detail]' }
+      - shouldExist: { selector: '[data-test=post-content]' }
+      - shouldExist: { selector: '[data-test=like-button]' }
+      - shouldExist: { selector: '[data-test=bookmark-button]' }
+
+  - id: AC-107-2
+    title: Replies display below the post
+    narrative: |
+      Given I am viewing a post that has replies
+      When the page loads
+      Then I should see replies listed below the main post
+    given:
+      - visit: '/post/1'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=replies-section]' }
+
+  - id: AC-107-3
+    title: Parent post displayed for replies
+    narrative: |
+      Given I am viewing a post that is a reply to another post
+      When the page loads
+      Then I should see the parent post displayed above
+    given:
+      - visit: '/post/3'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=parent-post]' }
+
+  - id: AC-107-4
+    title: Invalid post shows not found
+    narrative: |
+      Given I navigate to a post that does not exist
+      When the page loads
+      Then I should see a post not found message
+    given:
+      - visit: '/post/99999'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=post-not-found]' }

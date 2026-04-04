@@ -1,0 +1,30 @@
+# =============================================================================
+# LEVEL 5: FINE TUNING - Feed System
+# =============================================================================
+# @spec_version: 1.0.0
+# @system: FEED_SYSTEM
+# @last_updated: 2026-04-03T00:00:00Z
+# @status: production
+# @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
+
+# -----------------------------------------------------------------------------
+# Pagination
+# -----------------------------------------------------------------------------
+
+pagination:
+  page_size: 10
+  # @rationale: Standard feed page size — enough to scroll without overwhelming,
+  #   small enough that "load more" feels meaningful
+  # @constraints: min=5, max=25, type=integer
+  # @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
+
+# -----------------------------------------------------------------------------
+# Composer
+# -----------------------------------------------------------------------------
+
+composer:
+  max_length: 300
+  # @rationale: Short-form social posts, similar to Bluesky's character limit.
+  #   Keeps demo content concise and scannable.
+  # @constraints: min=100, max=500, type=integer
+  # @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
