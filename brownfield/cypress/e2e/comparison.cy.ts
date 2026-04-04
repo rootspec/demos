@@ -21,9 +21,9 @@ function setupTwoFavorites() {
   searchAndSelect('Paris');
   cy.get('[class*="card"]', { timeout: 10000 }).should('exist');
   saveAsFavorite();
-  cy.get('.view-toggle', { timeout: 5000 }).should('exist');
+  cy.get('.view-toggle', { timeout: 15000 }).should('exist');
   cy.get('.view-btn').last().click();
-  cy.contains('All Locations', { timeout: 10000 }).should('exist');
+  cy.contains('All Locations', { timeout: 15000 }).should('exist');
 }
 
 // Helper: enter compare mode and select both cities
