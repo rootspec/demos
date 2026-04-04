@@ -8,7 +8,7 @@ Demonstrates the RootSpec spec-to-code pipeline across three project scenarios. 
 |------|----------|--------|
 | [greenfield/](greenfield/) | Marketing site for RootSpec, built from scratch | In progress |
 | [scaffold/](scaffold/) | SvelteKit social feed, spec'd from a scaffold | In progress |
-| brownfield/ | Retrofit RootSpec onto an existing codebase | Planned |
+| [brownfield/](brownfield/) | Weather dashboard, spec'd from legacy React code | In progress |
 
 ## How It Works
 

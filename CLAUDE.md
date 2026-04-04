@@ -10,6 +10,7 @@ Each subdirectory is an independent demo project. When running RootSpec skills (
 
 - `greenfield/` — Marketing site for RootSpec, built from scratch
 - `scaffold/` — SvelteKit social feed (RootFeed), spec'd from an existing scaffold
+- `brownfield/` — React weather dashboard (RootWeather), legacy code retrofitted with RootSpec
 
 ## Important
 
