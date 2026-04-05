@@ -53,5 +53,14 @@
     "iterations": null,
     "stories": null
   }
+,
+  {
+    "skill": "rs-spec",
+    "startedAt": "2026-04-05T23:19:20Z",
+    "completedAt": "2026-04-05T23:22:23Z",
+    "durationSeconds": 183,
+    "iterations": null,
+    "stories": null
+  }
   ]
 }
