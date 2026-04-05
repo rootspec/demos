@@ -1,0 +1,210 @@
+name: Rebuild Demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      demo:
+        description: "Which demo to rebuild"
+        required: true
+        type: choice
+        options:
+          - greenfield
+          - scaffold
+          - brownfield
+      max_budget:
+        description: "Max AI budget in USD"
+        required: false
+        default: "20"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: ${{ inputs.demo }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ inputs.demo }}
+        run: npm ci
+
+      - name: Create rebuild branch
+        run: |
+          BRANCH="rebuild/${{ inputs.demo }}-$(date +%Y%m%d%H%M)"
+          git checkout -b "$BRANCH"
+          echo "branch=${BRANCH}" >> "$GITHUB_ENV"
+
+      # ── Reset phase ──────────────────────────────────────
+
+      - name: "Reset: greenfield"
+        if: inputs.demo == 'greenfield'
+        working-directory: greenfield
+        run: |
+          # Remove spec files (keep framework files 00.*)
+          rm -rf rootspec/01.PHILOSOPHY.md \
+                 rootspec/02.TRUTHS.md \
+                 rootspec/03.INTERACTIONS.md \
+                 rootspec/04.SYSTEMS \
+                 rootspec/05.IMPLEMENTATION \
+                 rootspec/DERIVED_ARTIFACTS \
+                 rootspec/spec-status.json \
+                 rootspec/tests-status.json
+
+          # Remove generated source and tests
+          rm -rf src/components src/sections src/pages src/styles src/layouts
+          rm -rf cypress/e2e
+
+          echo "Greenfield reset to pre-spec state"
+
+      - name: "Reset: scaffold"
+        if: inputs.demo == 'scaffold'
+        run: |
+          # Restore original SvelteKit scaffold from skeleton branch
+          git checkout scaffold/skeleton -- scaffold/src/
+
+          # Remove spec files (keep framework files 00.*)
+          cd scaffold
+          rm -rf rootspec/01.PHILOSOPHY.md \
+                 rootspec/02.TRUTHS.md \
+                 rootspec/03.INTERACTIONS.md \
+                 rootspec/04.SYSTEMS \
+                 rootspec/05.IMPLEMENTATION \
+                 rootspec/DERIVED_ARTIFACTS \
+                 rootspec/spec-status.json \
+                 rootspec/tests-status.json
+
+          # Remove generated tests
+          rm -rf cypress/e2e
+
+          echo "Scaffold reset to skeleton state"
+
+      # Brownfield: no reset — spec-only rebuild
+
+      # ── AI rebuild phase ─────────────────────────────────
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: "Build: spec (greenfield/scaffold)"
+        if: inputs.demo != 'brownfield'
+        working-directory: ${{ inputs.demo }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p \
+            --dangerously-skip-permissions \
+            --max-turns 50 \
+            --max-budget-usd 6 \
+            --model claude-sonnet-4-20250514 \
+            "Read the file .agents/skills/rs-spec/SKILL.md and follow those instructions.
+
+            This is an automated rebuild from SEED.md. Read SEED.md for the complete product description.
+            You have full context — skip the interview and go straight to drafting.
+            Work through all 5 levels (L1 through L5) and generate derived artifacts.
+            Do not ask questions — make your best judgment for all decisions."
+
+      - name: "Build: spec (brownfield)"
+        if: inputs.demo == 'brownfield'
+        working-directory: ${{ inputs.demo }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p \
+            --dangerously-skip-permissions \
+            --max-turns 50 \
+            --max-budget-usd 12 \
+            --model claude-sonnet-4-20250514 \
+            "Read the file .agents/skills/rs-spec/SKILL.md and follow those instructions.
+
+            This is a brownfield project — derive the spec from the existing codebase.
+            Scan the project structure, read source files, and create the specification
+            based on what the code actually does and the intent behind it.
+            Skip the interview — analyze the code and draft all 5 levels.
+            Do not ask questions — make your best judgment for all decisions."
+
+      - name: "Build: implement (greenfield/scaffold only)"
+        if: inputs.demo != 'brownfield'
+        working-directory: ${{ inputs.demo }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p \
+            --dangerously-skip-permissions \
+            --max-turns 50 \
+            --max-budget-usd 10 \
+            --model claude-sonnet-4-20250514 \
+            "Read the file .agents/skills/rs-impl/SKILL.md and follow those instructions.
+
+            Implement all user stories from the spec. This is a non-interactive CI run.
+            Work through stories by phase order. Run tests after each story.
+            Do not ask questions — make your best judgment."
+
+      - name: "Build: validate"
+        working-directory: ${{ inputs.demo }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p \
+            --dangerously-skip-permissions \
+            --max-turns 20 \
+            --max-budget-usd 4 \
+            --model claude-sonnet-4-20250514 \
+            "Read the file .agents/skills/rs-validate/SKILL.md and follow those instructions.
+
+            Run all tests and produce a validation report.
+            Do not ask questions."
+
+      # ── PR phase ─────────────────────────────────────────
+
+      - name: Commit and create PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          DEMO="${{ inputs.demo }}"
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          if [ "$DEMO" = "brownfield" ]; then
+            MSG="Rebuild ${DEMO} spec from existing code"
+          else
+            MSG="Rebuild ${DEMO} from SEED.md (spec + impl + validate)"
+          fi
+
+          git commit -m "$MSG"
+          git push origin "${{ env.branch }}"
+
+          if [ "$DEMO" = "brownfield" ]; then
+            BODY="Spec-only rebuild — derived from existing brownfield codebase."
+          else
+            BODY="Full rebuild from SEED.md: rs-spec → rs-impl → rs-validate."
+          fi
+
+          gh pr create \
+            --title "Rebuild: ${DEMO}" \
+            --body "## Summary
+          ${BODY}
+
+          ## What happened
+          - Reset ${DEMO} to pre-implementation state
+          - Ran RootSpec pipeline via Claude Code CLI
+          - Budget: \$${{ inputs.max_budget }}
+
+          🤖 Generated with [Claude Code](https://claude.ai/claude-code)" \
+            --label rebuild,ai-generated
