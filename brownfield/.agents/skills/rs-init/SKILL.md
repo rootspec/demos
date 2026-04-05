@@ -22,7 +22,7 @@ Based on the output, determine the situation:
 
 - **Fresh init** — no `.rootspec.json`, no `rootspec/` directory. Most common case.
 - **Partial init** — some files exist but others are missing (interrupted previous init).
-- **Re-init** — `.rootspec.json` exists. Ask the developer what they want to update. Do NOT overwrite existing spec files (01-05). You may update `00.AXIOMS.md` and `00.FRAMEWORK.md` to the latest bundled versions if the developer confirms.
+- **Re-init** — `.rootspec.json` exists. If the version is behind the bundled framework, suggest `/rs-update` instead. Otherwise, ask the developer what they want to update. Do NOT overwrite existing spec files (01-05). You may update `00.AXIOMS.md` and `00.FRAMEWORK.md` to the latest bundled versions if the developer confirms.
 - **Already initialized** — everything exists. Tell the developer and suggest `/rs-spec` instead.
 
 Report what you found before proceeding.
@@ -36,7 +36,7 @@ Create whatever is missing:
 3. **`rootspec/00.FRAMEWORK.md`** — copy from `../rs-shared/00.FRAMEWORK.md`. Same approach.
 4. **`rootspec/spec-status.json`**:
    ```json
-   { "hash": null, "validatedAt": null, "valid": false, "version": "6.2.2" }
+   { "hash": null, "validatedAt": null, "valid": false, "version": "6.3.0" }
    ```
 5. **`rootspec/tests-status.json`**:
    ```json
@@ -96,7 +96,7 @@ Create (or update) `.rootspec.json` at the project root:
 
 ```json
 {
-  "version": "6.2.2",
+  "version": "6.3.0",
   "specDirectory": "rootspec",
   "prerequisites": {
     "devServer": null,

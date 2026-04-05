@@ -22,7 +22,7 @@ Based on the output, determine the situation:
 
 - **Fresh init** — no `.rootspec.json`, no `rootspec/` directory. Most common case.
 - **Partial init** — some files exist but others are missing (interrupted previous init).
-- **Re-init** — `.rootspec.json` exists. Ask the developer what they want to update. Do NOT overwrite existing spec files (01-05). You may update `00.AXIOMS.md` and `00.FRAMEWORK.md` to the latest bundled versions if the developer confirms.
+- **Re-init** — `.rootspec.json` exists. If the version is behind the bundled framework, suggest `/rs-update` instead. Otherwise, ask the developer what they want to update. Do NOT overwrite existing spec files (01-05). You may update `00.AXIOMS.md` and `00.FRAMEWORK.md` to the latest bundled versions if the developer confirms.
 - **Already initialized** — everything exists. Tell the developer and suggest `/rs-spec` instead.
 
 Report what you found before proceeding.
@@ -36,7 +36,7 @@ Create whatever is missing:
 3. **`rootspec/00.FRAMEWORK.md`** — copy from `../rs-shared/00.FRAMEWORK.md`. Same approach.
 4. **`rootspec/spec-status.json`**:
    ```json
-   { "hash": null, "validatedAt": null, "valid": false, "version": "6.2.1" }
+   { "hash": null, "validatedAt": null, "valid": false, "version": "6.3.0" }
    ```
 5. **`rootspec/tests-status.json`**:
    ```json
@@ -55,13 +55,16 @@ The script outputs `DEV_SERVER=`, `PRE_COMMIT_HOOK=`, `RELEASE_SCRIPT=`, `VALIDA
 
 Read `../rs-shared/fragments/prerequisites.md` for the full reference on what each prerequisite is.
 
-Report what was found. For each prerequisite with `=none`, ask the developer:
-- "No [prerequisite] detected. Want me to create a template, or skip for now?"
+Report what was found. For missing prerequisites, tell the developer you'll create all templates and proceed unless they object:
+
+"I'll create templates for [list missing]. These are lightweight and needed by `/rs-impl` and `/rs-validate`. Let me know if you'd rather skip any."
+
+Then create them all. Do not present a menu of options or ask which ones to create — just create them. The developer can always delete what they don't want. `/rs-impl` needs the dev server and validation script. `/rs-validate` needs both. The pre-commit hook catches problems early. The release script is the only truly optional one, but it's cheap to create.
 
 For each prerequisite:
 - **Found** → confirm with developer, record the path
-- **Not found** → offer to create a template or skip
-- **Skipped** → record `null`
+- **Not found** → create the template
+- **Skipped (only if developer explicitly asks)** → record `null`
 
 ### Dev server template
 
@@ -78,13 +81,22 @@ When creating the dev server template:
    If `package.json` doesn't exist, tell the developer: "No package.json found — run `npm init` first if you want convenience scripts."
 4. **Update .gitignore** — if `.gitignore` exists, add `.dev-server.pid` and `.dev-server.log` if not already present.
 
+### Cypress plugin setup
+
+When creating the validation script template, also set up the RootSpec Cypress reporter:
+
+1. **Copy the reporter** from `../rs-shared/cypress/rootspec-reporter.ts` to `cypress/support/rootspec-reporter.ts` in the project.
+2. **Wire it into `cypress.config.ts`** — if the config exists, add the `setupNodeEvents` hook with the reporter. If creating a new config, include it from the start. See `../rs-shared/fragments/prerequisites.md` for the exact wiring.
+
+This plugin automatically updates `rootspec/tests-status.json` after every Cypress run — the agent doesn't need to parse results or call scripts.
+
 ## Step 4: Write `.rootspec.json`
 
 Create (or update) `.rootspec.json` at the project root:
 
 ```json
 {
-  "version": "6.2.1",
+  "version": "6.3.0",
   "specDirectory": "rootspec",
   "prerequisites": {
     "devServer": null,

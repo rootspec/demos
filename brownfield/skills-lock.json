@@ -2,28 +2,33 @@
   "version": 1,
   "skills": {
     "rs-impl": {
-      "source": "/Users/cbrown/Dev/rootspec",
-      "sourceType": "local",
+      "source": "rootspec/rootspec",
+      "sourceType": "github",
       "computedHash": "ffbee1906c302b3cd5f3c0aa01fd7f6a0262bd3a7670f8e4b1d105b4501a9f2d"
     },
     "rs-init": {
-      "source": "/Users/cbrown/Dev/rootspec",
-      "sourceType": "local",
-      "computedHash": "7d9beaf1117e5b03718736c9a123eba4edf6911352849e2bd51fb3e159768f46"
+      "source": "rootspec/rootspec",
+      "sourceType": "github",
+      "computedHash": "0efc1b797e4be84ecc7ff1ac50465dc437948b6cba1debb726706536667b7bea"
     },
     "rs-shared": {
-      "source": "/Users/cbrown/Dev/rootspec",
-      "sourceType": "local",
-      "computedHash": "397e37557edaf3ea79d8ccf231a19cf30400b90c57399e390bf4586bc69b0efb"
+      "source": "rootspec/rootspec",
+      "sourceType": "github",
+      "computedHash": "918ebdbe9e41e0b7314c60973f92685fe6ad93f674468ffa3ef77d11662d017c"
     },
     "rs-spec": {
-      "source": "/Users/cbrown/Dev/rootspec",
-      "sourceType": "local",
+      "source": "rootspec/rootspec",
+      "sourceType": "github",
       "computedHash": "d80300359d712989207e5ec30971b7279dffbaf9714029e7312b71ce819b1625"
     },
+    "rs-update": {
+      "source": "rootspec/rootspec",
+      "sourceType": "github",
+      "computedHash": "8bd9dd3142c564101114c2ea1dd2927421f4a43870c69fbe04525c31dc5a499b"
+    },
     "rs-validate": {
-      "source": "/Users/cbrown/Dev/rootspec",
-      "sourceType": "local",
+      "source": "rootspec/rootspec",
+      "sourceType": "github",
       "computedHash": "691eaa698e24817b5be61febe269b6eb001702eacc46813411733479aae69abf"
     }
   }
