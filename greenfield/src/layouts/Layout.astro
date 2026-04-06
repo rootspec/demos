@@ -1,37 +1,37 @@
 ---
-interface Props {
+export interface Props {
   title: string;
+  description?: string;
 }
 
-const { title } = Astro.props;
+const { title, description = 'RootSpec - Purpose-aligned declarative specification for software development' } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
-    <script is:inline>
-      (function() {
-        const saved = localStorage.getItem('rootspec-theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = saved || (prefersDark ? 'dark' : 'light');
-        document.documentElement.classList.toggle('dark', theme === 'dark');
-        document.documentElement.setAttribute('data-theme', theme);
-        document.addEventListener('DOMContentLoaded', function() {
-          document.body.setAttribute('data-theme', theme);
-        });
-      })();
-    </script>
   </head>
-  <body class="min-h-screen font-sans antialiased">
-    <div id="app">
+  <body class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen">
+    <main class="relative">
       <slot />
-    </div>
-    <script is:inline>
-      var theme = document.documentElement.getAttribute('data-theme') || 'light';
-      document.getElementById('app').setAttribute('data-theme', theme);
-    </script>
+    </main>
   </body>
 </html>
+
+<style is:global>
+  html {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+</style>

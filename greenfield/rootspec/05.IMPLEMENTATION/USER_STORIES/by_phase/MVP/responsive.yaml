@@ -1,26 +1,158 @@
-# =============================================================================
-# USER STORY: Mobile Experience
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# RootSpec Marketing Site - MVP Responsive Design
 
-id: US-401
-title: Use the site on mobile devices
+meta:
+  phase: MVP
+  category: responsive
+  priority: high
+  dependencies: [content.yaml, interactive.yaml]
 
-acceptance_criteria:
-  - id: AC-401-1
-    title: Content is readable on small screens
-    narrative: |
-      Given I am viewing the site on a mobile device
-      When the page loads
-      Then all content should be visible without horizontal scrolling
-      And text should be readable without zooming
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
-      - shouldExist: { selector: '[data-test=meta-banner]' }
+stories:
+  - id: US-201
+    title: Mobile-First Content Layout
+    as_a: Mobile user
+    i_want: All content readable and accessible on my phone
+    so_that: I can learn about RootSpec without requiring a desktop
+
+    acceptance_criteria:
+      - AC-201-1: Single-column layout stacks content appropriately
+      - AC-201-2: Text remains readable without horizontal scrolling
+      - AC-201-3: Meta banner content fits mobile viewport
+      - AC-201-4: Hero section impactful on small screens
+      - AC-201-5: Navigation (if present) collapses appropriately
+      - AC-201-6: Footer information accessible and organized
+      - AC-201-7: Version badge visible and accessible on mobile
+
+    references:
+      - "L3: Cross-Platform Behavior - Mobile experience"
+      - "L4: Presentation System - Responsive breakpoints"
+      - "L4: Performance Constraints - 3G network loading"
+
+  - id: US-202
+    title: Tablet and Desktop Enhancement
+    as_a: Desktop/tablet user
+    i_want: Optimized layout that uses available screen space effectively
+    so_that: I can see more content and enjoy enhanced interactivity
+
+    acceptance_criteria:
+      - AC-202-1: Multi-column layouts where appropriate (desktop)
+      - AC-202-2: Before/after comparison uses side-by-side layout
+      - AC-202-3: Hierarchy explorer shows full detail with hover states
+      - AC-202-4: Wizard flows horizontally when space allows
+      - AC-202-5: Larger touch targets expanded for precision pointing
+      - AC-202-6: Enhanced typography scaling for readability
+      - AC-202-7: Sidebars or secondary navigation if beneficial
+
+    references:
+      - "L3: Desktop Experience - Full interactivity"
+      - "L4: Presentation System - Layout configurations"
+      - "L4: Interactive System - Device-appropriate interfaces"
+
+  - id: US-203
+    title: Cross-Device Interactive Features
+    as_a: User on any device type
+    i_want: Interactive features that work naturally for my input method
+    so_that: I can engage with demonstrations regardless of device
+
+    acceptance_criteria:
+      - AC-203-1: Hierarchy explorer works with touch, mouse, and keyboard
+      - AC-203-2: Spec wizard optimizes for touch on mobile, precision on desktop
+      - AC-203-3: Theme toggle accessible via tap, click, and keyboard
+      - AC-203-4: Before/after toggle works intuitively on all devices
+      - AC-203-5: Smooth transitions adapt to device capabilities
+      - AC-203-6: Text selection and copy works appropriately
+      - AC-203-7: Zoom support without breaking layout
+
+    references:
+      - "L3: Touch-optimized mobile experience"
+      - "L3: Keyboard accessible desktop experience"
+      - "L4: Interactive System device adaptation"
+
+  - id: US-204
+    title: Performance Across Devices
+    as_a: User on varying network speeds and device capabilities
+    i_want: Consistent performance regardless of my setup
+    so_that: The site is usable even on slower connections or older devices
+
+    acceptance_criteria:
+      - AC-204-1: Initial content loads under 3 seconds on 3G networks
+      - AC-204-2: Interactive features work smoothly on 3-year-old devices
+      - AC-204-3: Images and assets optimized for different densities
+      - AC-204-4: Progressive loading for non-critical interactive features
+      - AC-204-5: Graceful degradation when JavaScript fails
+      - AC-204-6: Battery-efficient animations and interactions
+      - AC-204-7: Offline-first for core content viewing
+
+    references:
+      - "L4: Performance Architecture - Static generation benefits"
+      - "L4: Performance Constraints - Load time and response limits"
+      - "L4: Technical Constraints - Browser support range"
+
+  - id: US-205
+    title: Content Adaptation Strategy
+    as_a: Content consumer on different screen sizes
+    i_want: Information presented optimally for my viewing context
+    so_that: I get the most important information without overwhelm
+
+    acceptance_criteria:
+      - AC-205-1: Progressive disclosure adapts to available space
+      - AC-205-2: Critical information prioritized on smaller screens
+      - AC-205-3: Secondary content accessible but not overwhelming
+      - AC-205-4: Interactive elements sized appropriately for input method
+      - AC-205-5: Typography scales smoothly across breakpoints
+      - AC-205-6: White space and density appropriate for screen size
+      - AC-205-7: Navigation remains discoverable at all sizes
+
+    references:
+      - "L1: Clarity - Information accessible at any size"
+      - "L3: Progressive Disclosure patterns"
+      - "L4: Content System structured data adaptation"
+
+  - id: US-206
+    title: Cross-Browser Compatibility
+    as_a: User with any modern browser
+    i_want: Consistent experience regardless of browser choice
+    so_that: I'm not excluded based on my browser preferences
+
+    acceptance_criteria:
+      - AC-206-1: Core functionality works in last 2 versions of major browsers
+      - AC-206-2: Theme system works across different browser implementations
+      - AC-206-3: Interactive features degrade gracefully in older browsers
+      - AC-206-4: CSS Grid and Flexbox fallbacks where needed
+      - AC-206-5: JavaScript features use appropriate polyfills
+      - AC-206-6: Font loading works consistently across browsers
+      - AC-206-7: Animation performance maintained across implementations
+
+    references:
+      - "L4: Technical Constraints - Browser support requirements"
+      - "L4: Theme System - Cross-browser compatibility"
+      - "L4: Interactive System - Progressive enhancement"
+
+  - id: US-207
+    title: Print and Alternative Access
+    as_a: User who wants to save or share content
+    i_want: Content accessible in print and alternative formats
+    so_that: I can reference information offline or share with others
+
+    acceptance_criteria:
+      - AC-207-1: Print stylesheet provides clean, readable layout
+      - AC-207-2: Interactive content shows static alternatives when printed
+      - AC-207-3: Links and references preserved in print format
+      - AC-207-4: Meta banner information included in print version
+      - AC-207-5: Reader mode compatibility for distraction-free reading
+      - AC-207-6: Text selection and copy works for sharing excerpts
+      - AC-207-7: URL structure supports direct linking to sections
+
+    references:
+      - "L1: Clarity - Content accessible in any format"
+      - "L4: Content System - Alternative presentation modes"
+      - "L4: Presentation System - Multiple output formats"
+
+phase_definition:
+  name: MVP
+  description: Responsive design ensuring accessibility across all devices and contexts
+  success_criteria:
+    - Site usable and attractive on phones, tablets, and desktops
+    - Interactive features work naturally with touch, mouse, and keyboard
+    - Performance acceptable on 3G networks and older devices
+    - Content accessible via print, reader modes, and direct linking
+    - Cross-browser compatibility maintained

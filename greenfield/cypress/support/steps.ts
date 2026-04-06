@@ -15,8 +15,8 @@ export function runSetupSteps(steps: Step[]) {
           };
         },
       });
-      // Wait for React islands to hydrate
-      cy.get('[data-test=theme-toggle][data-hydrated=true]', { timeout: 10000 }).should('exist');
+      // Wait for page to load
+      cy.get('body', { timeout: 10000 }).should('exist');
     }
     else if ('click' in s) cy.get(s.click.selector).first().click();
     else if ('fill' in s) {

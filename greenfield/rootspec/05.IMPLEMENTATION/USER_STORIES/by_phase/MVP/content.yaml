@@ -1,147 +1,144 @@
-# =============================================================================
-# USER STORY: Understand RootSpec from Hero
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# RootSpec Marketing Site - MVP User Stories
 
-id: US-101
-title: Understand what RootSpec is from the hero section
+meta:
+  phase: MVP
+  category: content
+  priority: high
+  dependencies: []
 
-acceptance_criteria:
-  - id: AC-101-1
-    title: Hero displays tagline and explanation
-    narrative: |
-      Given I am a developer visiting the site for the first time
-      When the page loads
-      Then I should see a clear tagline and one-sentence explanation of RootSpec
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
-      - shouldExist: { selector: '[data-test=hero-description]' }
+stories:
+  - id: US-001
+    title: Meta Banner Display
+    as_a: First-time visitor
+    i_want: To immediately understand this site was built using RootSpec
+    so_that: I can see proof of the methodology rather than just reading about it
 
-  - id: AC-101-2
-    title: Version badge is visible
-    narrative: |
-      Given I am viewing the hero section
-      When the page loads
-      Then I should see the current RootSpec version displayed
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=version-badge]' }
+    acceptance_criteria:
+      - AC-001-1: Banner appears prominently on page (top or below hero)
+      - AC-001-2: Banner text explains site was generated from ~100-line description
+      - AC-001-3: Banner includes links to SEED.md and spec files in GitHub repo
+      - AC-001-4: Banner acknowledges rough edges result from minimal human guidance
+      - AC-001-5: Banner text conveys honesty and transparency about the demo nature
 
----
-# =============================================================================
-# USER STORY: See Meta Banner
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+    references:
+      - "L1: Clarity - Users understand what they're seeing"
+      - "L1: Intentionality - Everything exists for a reason"
+      - "L3: Meta-Validation - Site demonstrates its own claims"
 
-id: US-102
-title: See that the site is itself a RootSpec demo
+  - id: US-002
+    title: Hero Section Impact
+    as_a: Developer with specification problems
+    i_want: Immediate clarity on what RootSpec is and why it matters
+    so_that: I can quickly decide if this is relevant to my needs
 
-acceptance_criteria:
-  - id: AC-102-1
-    title: Meta banner explains the site is a demo
-    narrative: |
-      Given I am viewing the site
-      When I look at the meta banner
-      Then I should see an explanation that this site was built with RootSpec
-      And I should see links to the spec and seed files
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=meta-banner-spec-link]' }
-      - shouldExist: { selector: '[data-test=meta-banner-seed-link]' }
+    acceptance_criteria:
+      - AC-002-1: Tagline conveys core value proposition in one sentence
+      - AC-002-2: Visual design suggests systematic, professional approach
+      - AC-002-3: RootSpec version number displayed prominently (v6.2.0)
+      - AC-002-4: Hero content loads fast (< 3 seconds on 3G)
+      - AC-002-5: Clear visual progression to next section encourages scrolling
 
----
-# =============================================================================
-# USER STORY: Understand the Problem
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+    references:
+      - "L1: Clarity - Immediate understanding of purpose"
+      - "L2: Demonstration over Documentation"
+      - "L3: Progressive Disclosure"
 
-id: US-103
-title: Understand why existing approaches fail
+  - id: US-003
+    title: Problem Recognition
+    as_a: Developer who has experienced spec drift
+    i_want: To see my specific pain points articulated clearly
+    so_that: I feel understood and motivated to learn about the solution
 
-acceptance_criteria:
-  - id: AC-103-1
-    title: Problem section lists specific pain points
-    narrative: |
-      Given I am scrolling through the site
-      When I reach the problem section
-      Then I should see named pain points that describe real developer frustrations
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=problem-section]' }
-      - shouldExist: { selector: '[data-test=pain-point]' }
+    acceptance_criteria:
+      - AC-003-1: Lists specific problems: spec drift, philosophy-implementation gap
+      - AC-003-2: Mentions unreliable AI output without validation
+      - AC-003-3: References Google Docs specs nobody reads
+      - AC-003-4: Content resonates with technical audience, avoids buzzwords
+      - AC-003-5: Section transitions smoothly to solution explanation
 
----
-# =============================================================================
-# USER STORY: Learn How RootSpec Works
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+    references:
+      - "L1: Clarity - Users recognize their own problems"
+      - "L2: Validation over Generation"
+      - "L3: Problem Recognition journey step"
 
-id: US-104
-title: See the four-skill workflow
+  - id: US-004
+    title: How It Works Walkthrough
+    as_a: Curious developer
+    i_want: Visual understanding of the four RootSpec skills workflow
+    so_that: I can understand the process before diving into details
 
-acceptance_criteria:
-  - id: AC-104-1
-    title: How It Works shows four steps
-    narrative: |
-      Given I am viewing the How It Works section
-      When I look at the workflow
-      Then I should see the four skills (init, spec, impl, validate) with descriptions
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=how-it-works-section]' }
-      - shouldExist: { selector: '[data-test=workflow-step]' }
+    acceptance_criteria:
+      - AC-004-1: Shows clear before/after for init → spec → impl → validate
+      - AC-004-2: Visual design supports progressive understanding
+      - AC-004-3: Explains each skill's purpose in developer-friendly terms
+      - AC-004-4: Workflow diagram works on mobile devices
+      - AC-004-5: Section prepares users for interactive exploration
 
----
-# =============================================================================
-# USER STORY: Find Getting Started Instructions
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+    references:
+      - "L1: Efficiency - Process should feel manageable"
+      - "L2: Declarative over Imperative"
+      - "L3: Conceptual Scaffolding"
 
-id: US-105
-title: Find how to start using RootSpec
+  - id: US-005
+    title: RootSpec Methodology Diagram
+    as_a: Visual learner
+    i_want: Simple diagram showing how RootSpec works conceptually
+    so_that: I can quickly grasp the core methodology
 
-acceptance_criteria:
-  - id: AC-105-1
-    title: CTA section has GitHub link and instructions
-    narrative: |
-      Given I am viewing the open source CTA section
-      When I look at the getting started area
-      Then I should see a link to the GitHub repo and setup instructions
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=cta-section]' }
-      - shouldExist: { selector: '[data-test=github-link]' }
+    acceptance_criteria:
+      - AC-005-1: Shows spec surrounding development cycle as validation gate
+      - AC-005-2: Illustrates that only valid solutions pass through
+      - AC-005-3: Created with SVG if image not possible
+      - AC-005-4: Diagram loads fast and scales appropriately
+      - AC-005-5: Visual style consistent with site design
+
+    references:
+      - "L1: Clarity - Visual understanding of concepts"
+      - "L2: Structure over Flexibility"
+      - "L3: Conceptual Scaffolding"
+
+  - id: US-006
+    title: Version Badge Management
+    as_a: Site visitor
+    i_want: To know which RootSpec version was used to build this site
+    so_that: I understand the framework maturity and can reference the correct version
+
+    acceptance_criteria:
+      - AC-006-1: Version number (v6.2.0) displayed in hero section
+      - AC-006-2: Version also appears in site header or footer
+      - AC-006-3: Version is easy to update (single constant/config value)
+      - AC-006-4: Version links to appropriate GitHub release or documentation
+      - AC-006-5: Version display works across all device sizes
+
+    references:
+      - "L1: Intentionality - Version is key demo detail"
+      - "L3: Meta-Validation"
+      - "L4: Content System manages version data"
+
+  - id: US-007
+    title: Open Source CTA
+    as_a: Developer ready to try RootSpec
+    i_want: Clear pathways to get started
+    so_that: I can take action after learning about the methodology
+
+    acceptance_criteria:
+      - AC-007-1: GitHub repo link prominently displayed
+      - AC-007-2: Getting started instructions accessible
+      - AC-007-3: Community links provided (if available)
+      - AC-007-4: CTA section visually distinct and action-oriented
+      - AC-007-5: Links open appropriately (new tab for external)
+
+    references:
+      - "L1: Efficiency - Clear next steps"
+      - "L3: Deep Commitment engagement triggers"
+      - "L4: Analytics System tracks CTA engagement"
+
+phase_definition:
+  name: MVP
+  description: Core marketing site functionality demonstrating RootSpec methodology
+  success_criteria:
+    - Visitor understands what RootSpec is within 30 seconds
+    - Site demonstrates its own claims through meta-banner and transparency
+    - Clear pathways to GitHub repo and getting started
+    - Site works on mobile and desktop devices
+    - Interactive features enhance understanding without being required

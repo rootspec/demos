@@ -1,15 +1,91 @@
 {
-  "lastRun": "2026-04-03T00:00:00Z",
+  "lastRun": "2026-04-06T19:45:26Z",
   "stories": {
-    "US-101": { "status": "pass", "criteria": { "AC-101-1": "pass", "AC-101-2": "pass" } },
-    "US-102": { "status": "pass", "criteria": { "AC-102-1": "pass" } },
-    "US-103": { "status": "pass", "criteria": { "AC-103-1": "pass" } },
-    "US-104": { "status": "pass", "criteria": { "AC-104-1": "pass" } },
-    "US-105": { "status": "pass", "criteria": { "AC-105-1": "pass" } },
-    "US-201": { "status": "pass", "criteria": { "AC-201-1": "pass", "AC-201-2": "pass", "AC-201-3": "pass" } },
-    "US-202": { "status": "pass", "criteria": { "AC-202-1": "pass", "AC-202-2": "pass" } },
-    "US-203": { "status": "pass", "criteria": { "AC-203-1": "pass" } },
-    "US-301": { "status": "pass", "criteria": { "AC-301-1": "pass", "AC-301-2": "pass" } },
-    "US-401": { "status": "pass", "criteria": { "AC-401-1": "pass" } }
+    "US-001": {
+      "status": "fail",
+      "criteria": {
+        "AC-001-1": "fail",
+        "AC-001-2": "not implemented",
+        "AC-001-3": "not implemented",
+        "AC-001-4": "not implemented",
+        "AC-001-5": "not implemented"
+      }
+    },
+    "US-002": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-003": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-004": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-005": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-006": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-007": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-101": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-102": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-103": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-104": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-105": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-106": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-201": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-202": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-203": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-204": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-205": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-206": {
+      "status": "not implemented",
+      "criteria": {}
+    },
+    "US-207": {
+      "status": "not implemented",
+      "criteria": {}
+    }
   }
 }

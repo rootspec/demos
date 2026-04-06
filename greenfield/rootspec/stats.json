@@ -1,0 +1,30 @@
+{
+  "runs": [
+  {
+    "skill": "rs-spec",
+    "startedAt": "2026-04-06T19:31:35Z",
+    "completedAt": "2026-04-06T19:38:16Z",
+    "durationSeconds": 401,
+    "iterations": null,
+    "stories": null
+  }
+,
+  {
+    "skill": "rs-impl",
+    "startedAt": "2026-04-06T19:38:38Z",
+    "completedAt": "2026-04-06T19:44:59Z",
+    "durationSeconds": 381,
+    "iterations": 3,
+    "stories": {"US-001":{"attempts":3}}
+  }
+,
+  {
+    "skill": "rs-validate",
+    "startedAt": "2026-04-06T19:45:26Z",
+    "completedAt": "2026-04-06T19:48:11Z",
+    "durationSeconds": 165,
+    "iterations": 1,
+    "stories": rootspec/tests-status.json
+  }
+  ]
+}

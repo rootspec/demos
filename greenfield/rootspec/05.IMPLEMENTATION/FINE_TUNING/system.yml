@@ -1,0 +1,123 @@
+# System Fine-Tuning Parameters
+
+meta:
+  category: system
+  description: Technical configuration values and system behavior parameters
+  rationale: Ensures reliable, maintainable, and properly configured technical implementation
+
+parameters:
+
+  build_configuration:
+    node_version_min:
+      value: 18
+      unit: version
+      rationale: LTS version providing stable ES module and modern JavaScript support
+      validation: CI/CD pipeline testing and dependency compatibility verification
+
+    astro_version:
+      value: "4.0"
+      unit: version
+      rationale: Latest stable Astro with SSG optimizations and island architecture
+      validation: Framework compatibility testing and feature availability verification
+
+    target_browsers:
+      value: ["last 2 versions", "not dead", "> 0.2%"]
+      unit: browserslist_query
+      rationale: Balance of modern features with reasonable browser coverage
+      validation: Cross-browser testing and feature support verification
+
+  content_management:
+    rootspec_version_display:
+      value: "v6.2.0"
+      unit: version_string
+      rationale: Current RootSpec framework version used to build this site
+      validation: Version consistency checking and documentation alignment
+
+    github_repo_url:
+      value: "https://github.com/rootspec/rootspec"
+      unit: url
+      rationale: Canonical repository location for community and documentation
+      validation: Link validation and repository accessibility testing
+
+    seed_file_path:
+      value: "/SEED.md"
+      unit: file_path
+      rationale: Relative path to product description file for meta banner links
+      validation: File existence checking and link functionality testing
+
+  development_environment:
+    dev_server_port:
+      value: 3000
+      unit: port_number
+      rationale: Standard development port avoiding conflicts with common services
+      validation: Local development testing and port availability verification
+
+    hot_reload_debounce:
+      value: 50
+      unit: milliseconds
+      rationale: Quick response to file changes without excessive rebuilds
+      validation: Development experience testing and build performance monitoring
+
+    typescript_strict_mode:
+      value: true
+      unit: boolean
+      rationale: Enforces type safety for interactive components and build reliability
+      validation: Type checking during build and IDE integration verification
+
+  deployment_settings:
+    static_site_generation:
+      value: true
+      unit: boolean
+      rationale: Pre-renders all pages for optimal performance and CDN compatibility
+      validation: Build output verification and deployment testing
+
+    image_optimization:
+      value: true
+      unit: boolean
+      rationale: Automatic image processing for multiple formats and sizes
+      validation: Image output quality testing and format support verification
+
+    minification_enabled:
+      value: true
+      unit: boolean
+      rationale: Reduces bundle sizes for faster loading and bandwidth efficiency
+      validation: Minified output testing and functionality preservation verification
+
+  analytics_configuration:
+    privacy_focused:
+      value: true
+      unit: boolean
+      rationale: Minimal data collection respecting user privacy expectations
+      validation: Privacy policy compliance and data collection auditing
+
+    cookie_free:
+      value: true
+      unit: boolean
+      rationale: Avoids cookie consent requirements and enhances privacy
+      validation: Cookie usage auditing and consent flow testing
+
+    local_storage_only:
+      value: true
+      unit: boolean
+      rationale: Theme preferences stored locally without external transmission
+      validation: Storage behavior testing and privacy compliance verification
+
+  security_headers:
+    content_security_policy:
+      value: "default-src 'self'; style-src 'self' 'unsafe-inline'"
+      unit: csp_directive
+      rationale: Restricts external resources while allowing necessary inline styles
+      validation: Security header testing and functionality verification
+
+    referrer_policy:
+      value: "strict-origin-when-cross-origin"
+      unit: referrer_policy
+      rationale: Balances privacy with necessary referrer information
+      validation: Referrer behavior testing and privacy compliance verification
+
+references:
+  - "L4: Technical Implementation - Framework and runtime requirements"
+  - "L4: Security Considerations - Content security and privacy protection"
+  - "L4: System Constraints - Build and operational limitations"
+  - "L5: US-006 Version Badge Management"
+  - "L5: US-104 Theme Toggle System"

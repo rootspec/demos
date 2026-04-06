@@ -1,0 +1,84 @@
+# Performance Fine-Tuning Parameters
+
+meta:
+  category: performance
+  description: Numeric constraints and optimization targets for site performance
+  rationale: Ensures fast, efficient user experience across all devices and networks
+
+parameters:
+
+  loading_targets:
+    initial_load_3g:
+      value: 3000
+      unit: milliseconds
+      rationale: Maximum acceptable load time on 3G networks for core content
+      validation: Performance budget testing with network throttling
+
+    interactive_response_time:
+      value: 100
+      unit: milliseconds
+      rationale: User perception threshold for immediate response to interactions
+      validation: Performance monitoring of click-to-visual-feedback time
+
+    animation_frame_rate:
+      value: 60
+      unit: fps
+      rationale: Smooth animation standard for modern devices
+      validation: Browser performance profiling during transitions
+
+  bundle_constraints:
+    javascript_per_page:
+      value: 100
+      unit: kilobytes
+      rationale: Reasonable JS payload for interactive features without bloat
+      validation: Bundle analysis and size monitoring in CI/CD
+
+    css_bundle_size:
+      value: 50
+      unit: kilobytes
+      rationale: Compressed CSS size limit including Tailwind and custom styles
+      validation: Build output monitoring and compression verification
+
+    total_page_weight:
+      value: 500
+      unit: kilobytes
+      rationale: Initial page load size including images and fonts
+      validation: Lighthouse performance auditing
+
+  cache_optimization:
+    static_asset_cache:
+      value: 31536000
+      unit: seconds
+      rationale: One year cache for versioned static assets (1 year)
+      validation: HTTP header verification and cache hit rate monitoring
+
+    html_cache:
+      value: 3600
+      unit: seconds
+      rationale: Short cache for HTML to allow content updates (1 hour)
+      validation: CDN cache behavior testing
+
+  image_optimization:
+    webp_compression_quality:
+      value: 85
+      unit: percent
+      rationale: High quality with significant size reduction for modern browsers
+      validation: Visual quality assessment and file size comparison
+
+    fallback_jpeg_quality:
+      value: 90
+      unit: percent
+      rationale: Higher quality for fallback format to maintain fidelity
+      validation: Cross-browser image quality verification
+
+    max_image_width:
+      value: 1920
+      unit: pixels
+      rationale: Maximum useful resolution for typical displays
+      validation: Responsive image serving and display quality testing
+
+references:
+  - "L4: Performance Constraints - Load time and response limits"
+  - "L4: Technical Constraints - Browser support and compatibility"
+  - "L5: US-105 Interactive Performance Optimization"
+  - "L5: US-204 Performance Across Devices"

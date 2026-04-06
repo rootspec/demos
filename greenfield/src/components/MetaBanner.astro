@@ -1,0 +1,55 @@
+---
+import { SEED_URL, SPEC_URL } from '../data/config';
+---
+
+<div
+  class="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-400 p-4 mb-8"
+  data-test="meta-banner"
+>
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-start space-x-3">
+      <div class="flex-shrink-0">
+        <svg
+          class="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </div>
+      <div class="text-sm text-amber-800 dark:text-amber-200">
+        <p class="font-medium mb-2">
+          Demo Site: Generated from Minimal Input
+        </p>
+        <p class="mb-3">
+          This site was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups. The spec, the code, and the tests were all produced by running four commands. Any rough edges result from minimal human guidance, demonstrating what's possible with sparse requirements.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href={SEED_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-medium underline hover:no-underline focus:no-underline"
+            data-test="seed-link"
+          >
+            View the Seed →
+          </a>
+          <a
+            href={SPEC_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-medium underline hover:no-underline focus:no-underline"
+            data-test="spec-link"
+          >
+            View the Spec →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

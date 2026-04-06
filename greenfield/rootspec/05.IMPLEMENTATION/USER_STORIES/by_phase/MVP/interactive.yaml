@@ -1,134 +1,146 @@
-# =============================================================================
-# USER STORY: Explore the Hierarchy
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [INTERACTIVE_SYSTEM, ACCESSIBILITY_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# RootSpec Marketing Site - MVP Interactive Features
 
-id: US-201
-title: Explore the five-level specification hierarchy interactively
+meta:
+  phase: MVP
+  category: interactive
+  priority: high
+  dependencies: [content.yaml]
 
-acceptance_criteria:
-  - id: AC-201-1
-    title: Click a level to expand it
-    narrative: |
-      Given I am viewing the hierarchy explorer
-      When I click on a level
-      Then that level expands to show example content
-      And any previously expanded level collapses
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+stories:
+  - id: US-101
+    title: Hierarchy Explorer Visualization
+    as_a: Developer learning RootSpec methodology
+    i_want: Interactive exploration of the five-level hierarchy
+    so_that: I can understand which levels reference others and grasp the core concept
 
-  - id: AC-201-2
-    title: Hover a level to see its references
-    narrative: |
-      Given I am viewing the hierarchy explorer
-      When I hover over a level
-      Then I should see its allowed reference connections highlighted
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-3]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-3][aria-expanded=true]' }
+    acceptance_criteria:
+      - AC-101-1: Displays all five levels (Philosophy, Truths, Interactions, Systems, Implementation)
+      - AC-101-2: Visual arrows show upward-only reference relationships
+      - AC-101-3: Clicking a level expands it to show example content
+      - AC-101-4: Hovering a level highlights its allowed reference levels
+      - AC-101-5: Visual connections make hierarchy concept tangible
+      - AC-101-6: Works with touch interactions on mobile devices
+      - AC-101-7: Keyboard navigable for accessibility
 
-  - id: AC-201-3
-    title: Navigate hierarchy with keyboard
-    narrative: |
-      Given I am focused on the hierarchy explorer
-      When I use arrow keys to move between levels and Enter to expand
-      Then I should be able to explore the hierarchy without a mouse
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded=true]' }
+    references:
+      - "L1: Clarity - Core concept made tangible"
+      - "L2: Structure over Flexibility - Hierarchy visualization"
+      - "L3: Engagement Loop - Try → See Result → Understand"
+      - "L4: Interactive System manages UI state"
 
----
-# =============================================================================
-# USER STORY: Try the Spec Wizard
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+  - id: US-102
+    title: Spec Your Idea Wizard
+    as_a: Developer with a product idea
+    i_want: To quickly experience the RootSpec methodology with my own idea
+    so_that: I understand how my input maps to structured specifications
 
-id: US-202
-title: Generate a skeleton spec from a product idea
+    acceptance_criteria:
+      - AC-102-1: Step 1 - Mission input (templates + custom text option)
+      - AC-102-2: Step 2 - Design pillars selection (3-5 from suggestions)
+      - AC-102-3: Step 3 - Key interaction description field
+      - AC-102-4: Output shows skeleton spec mapping input to L1-L3
+      - AC-102-5: Client-side only, no AI - structured templates
+      - AC-102-6: Works smoothly on mobile with step-by-step flow
+      - AC-102-7: Clear "this is just a demo" messaging
+      - AC-102-8: Demonstrates approachability of methodology
 
-acceptance_criteria:
-  - id: AC-202-1
-    title: Complete the three-step wizard
-    narrative: |
-      Given I am viewing the spec wizard
-      When I enter a product idea, select design pillars, and describe an interaction
-      Then I should see a skeleton spec card showing my input mapped to L1-L3
-    given:
-      - visit: '/'
-    when:
-      - fill: { selector: '[data-test=wizard-mission-input]', value: 'A task manager for teams' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - fill: { selector: '[data-test=wizard-interaction-who]', value: 'Team member' }
-      - fill: { selector: '[data-test=wizard-interaction-trigger]', value: 'Creates a new task' }
-      - fill: { selector: '[data-test=wizard-interaction-feedback]', value: 'Task appears in the team list' }
-      - click: { selector: '[data-test=wizard-generate]' }
-    then:
-      - shouldExist: { selector: '[data-test=wizard-result]' }
+    references:
+      - "L1: Efficiency - Methodology feels approachable"
+      - "L2: Declarative over Imperative"
+      - "L3: Conceptual Scaffolding - Simple before complex"
+      - "L4: Interactive System - Client-side processing"
 
-  - id: AC-202-2
-    title: Start over resets the wizard
-    narrative: |
-      Given I have completed the wizard and see the result
-      When I click "Start over"
-      Then the wizard resets to step 1 with empty inputs
-    given:
-      - visit: '/'
-    when:
-      - fill: { selector: '[data-test=wizard-mission-input]', value: 'Test idea' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - fill: { selector: '[data-test=wizard-interaction-who]', value: 'User' }
-      - fill: { selector: '[data-test=wizard-interaction-trigger]', value: 'Action' }
-      - fill: { selector: '[data-test=wizard-interaction-feedback]', value: 'Result' }
-      - click: { selector: '[data-test=wizard-generate]' }
-      - click: { selector: '[data-test=wizard-start-over]' }
-    then:
-      - shouldExist: { selector: '[data-test=wizard-mission-input]' }
+  - id: US-103
+    title: Before/After Comparison
+    as_a: Developer evaluating specification approaches
+    i_want: Side-by-side comparison of traditional vs RootSpec approaches
+    so_that: I can see concrete value of the structured methodology
 
----
-# =============================================================================
-# USER STORY: Compare Before and After
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+    acceptance_criteria:
+      - AC-103-1: Desktop - Side-by-side panels with slider/toggle
+      - AC-103-2: Mobile - Stacked layout with toggle between views
+      - AC-103-3: Without RootSpec panel shows vague requirements, untraceable decisions
+      - AC-103-4: With RootSpec panel shows structured hierarchy, testable stories
+      - AC-103-5: Uses real content, not lorem ipsum
+      - AC-103-6: Smooth transitions between states
+      - AC-103-7: Clear labels and intuitive navigation
+      - AC-103-8: Demonstrates concrete methodology benefits
 
-id: US-203
-title: See the difference RootSpec makes through a side-by-side comparison
+    references:
+      - "L1: Clarity - Concrete value demonstration"
+      - "L2: Demonstration over Documentation"
+      - "L3: Validation Loop - Claim → Evidence → Investigation"
+      - "L4: Presentation System handles responsive layouts"
 
-acceptance_criteria:
-  - id: AC-203-1
-    title: Toggle between without and with views
-    narrative: |
-      Given I am viewing the before/after comparison
-      When I toggle to the "With RootSpec" view
-      Then I should see structured, traceable content replacing the vague version
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=comparison-toggle-with]' }
-    then:
-      - shouldExist: { selector: '[data-test=comparison-with-panel]' }
+  - id: US-104
+    title: Theme Toggle System
+    as_a: User with theme preferences
+    i_want: Dark/light mode that respects my system preference
+    so_that: The site is comfortable to read in any lighting condition
+
+    acceptance_criteria:
+      - AC-104-1: Detects system preference on first visit
+      - AC-104-2: Manual toggle button prominently accessible
+      - AC-104-3: Theme preference persists across sessions
+      - AC-104-4: Smooth transition animations between themes
+      - AC-104-5: All interactive elements work in both themes
+      - AC-104-6: Theme toggle keyboard accessible
+      - AC-104-7: High contrast ratios maintained for readability
+
+    references:
+      - "L1: Clarity - Comfortable reading in any condition"
+      - "L3: Cross-platform behavior requirements"
+      - "L4: Theme System manages preferences and state"
+      - "L4: Performance constraints - smooth transitions"
+
+  - id: US-105
+    title: Interactive Performance Optimization
+    as_a: User on any device or network
+    i_want: Responsive interactive features without delays
+    so_that: I can explore the site smoothly regardless of my device
+
+    acceptance_criteria:
+      - AC-105-1: Interactive features respond within 100ms
+      - AC-105-2: JavaScript bundles under 100KB per page
+      - AC-105-3: Progressive enhancement - core content works without JS
+      - AC-105-4: Smooth animations at 60fps on supported devices
+      - AC-105-5: Touch targets appropriately sized for mobile
+      - AC-105-6: Loading states for any delayed interactions
+      - AC-105-7: Graceful degradation on slower devices
+
+    references:
+      - "L1: Efficiency - No performance friction"
+      - "L4: Performance Architecture - Selective hydration"
+      - "L4: System Constraints - Response time limits"
+      - "L4: Technical Constraints - Browser support"
+
+  - id: US-106
+    title: Accessibility-First Interactivity
+    as_a: User relying on assistive technologies
+    i_want: Full access to all interactive features
+    so_that: I can experience the complete site functionality
+
+    acceptance_criteria:
+      - AC-106-1: All interactive elements keyboard navigable
+      - AC-106-2: Screen reader announcements for state changes
+      - AC-106-3: Focus indicators clearly visible in all themes
+      - AC-106-4: Skip links for efficient navigation
+      - AC-106-5: ARIA labels and roles for complex interactions
+      - AC-106-6: High contrast mode compatibility
+      - AC-106-7: No motion for users who prefer reduced motion
+
+    references:
+      - "L1: Clarity - Everyone can understand the concepts"
+      - "L3: Keyboard Navigation requirements"
+      - "L4: Interactive System accessibility interfaces"
+      - "L4: Browser APIs for preference detection"
+
+phase_definition:
+  name: MVP
+  description: Interactive features that demonstrate RootSpec methodology
+  success_criteria:
+    - Users can explore hierarchy concept hands-on
+    - Spec wizard shows methodology approachability
+    - Before/after comparison proves concrete value
+    - All features work smoothly on mobile and desktop
+    - Accessibility standards met for inclusive experience

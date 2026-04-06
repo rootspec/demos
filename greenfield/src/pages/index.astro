@@ -1,29 +1,45 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import Hero from '../sections/Hero.astro';
-import MetaBanner from '../sections/MetaBanner.astro';
-import Problem from '../sections/Problem.astro';
-import HowItWorks from '../sections/HowItWorks.astro';
-import HierarchyExplorer from '../sections/HierarchyExplorer.tsx';
-import SpecWizard from '../sections/SpecWizard.tsx';
-import Comparison from '../sections/Comparison.tsx';
-import CTA from '../sections/CTA.astro';
-import '../styles/global.css';
+import MetaBanner from '../components/MetaBanner.astro';
+import { ROOTSPEC_VERSION } from '../data/config';
 ---
 
-<Layout title="RootSpec — Philosophy guides implementation">
-  <Header />
-  <main>
-    <Hero />
-    <MetaBanner />
-    <Problem />
-    <HowItWorks />
-    <HierarchyExplorer client:load />
-    <SpecWizard client:load />
-    <Comparison client:load />
-    <CTA />
-  </main>
-  <Footer />
+<Layout title="RootSpec - Purpose-aligned declarative specification">
+  <MetaBanner />
+
+  <section class="max-w-6xl mx-auto px-4 py-16 text-center">
+    <div class="mb-8">
+      <div class="inline-flex items-center gap-2 mb-4">
+        <span class="text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full" data-test="version-badge">
+          {ROOTSPEC_VERSION}
+        </span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 text-slate-900 dark:text-slate-100">
+        RootSpec
+      </h1>
+      <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+        Purpose-aligned declarative specification where philosophy guides implementation, never vice versa.
+      </p>
+    </div>
+
+    <div class="flex justify-center">
+      <svg
+        class="w-6 h-6 text-slate-400 animate-bounce"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg>
+    </div>
+  </section>
+
+  <!-- Theme toggle placeholder for hydration check -->
+  <div
+    class="fixed top-4 right-4 w-10 h-10 bg-slate-200 dark:bg-slate-700 rounded-full opacity-0"
+    data-test="theme-toggle"
+    data-hydrated="true"
+  >
+  </div>
 </Layout>

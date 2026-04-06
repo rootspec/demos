@@ -1,0 +1,123 @@
+# Design Fine-Tuning Parameters
+
+meta:
+  category: design
+  description: Visual design values and interaction design parameters
+  rationale: Ensures consistent, accessible, and professionally appealing visual experience
+
+parameters:
+
+  typography:
+    base_font_size:
+      value: 16
+      unit: pixels
+      rationale: Standard readable size for body text across devices
+      validation: Readability testing and accessibility compliance
+
+    line_height_ratio:
+      value: 1.6
+      unit: ratio
+      rationale: Optimal spacing for readability without excessive whitespace
+      validation: Typography best practices and user testing
+
+    heading_scale_ratio:
+      value: 1.25
+      unit: ratio
+      rationale: Moderate type scale creating clear hierarchy without overwhelming
+      validation: Visual hierarchy assessment and mobile layout testing
+
+  spacing_system:
+    base_spacing_unit:
+      value: 8
+      unit: pixels
+      rationale: Base unit for Tailwind-compatible spacing system
+      validation: Design consistency audit and component alignment
+
+    section_padding_mobile:
+      value: 24
+      unit: pixels
+      rationale: Comfortable padding for mobile content without cramping
+      validation: Mobile usability testing and content readability
+
+    section_padding_desktop:
+      value: 64
+      unit: pixels
+      rationale: Generous padding for desktop creating premium feel
+      validation: Desktop layout assessment and visual balance testing
+
+  interaction_design:
+    button_min_touch_target:
+      value: 44
+      unit: pixels
+      rationale: iOS/Android accessibility guidelines for touch interaction
+      validation: Touch target accessibility testing and usability verification
+
+    hover_transition_duration:
+      value: 200
+      unit: milliseconds
+      rationale: Smooth but not sluggish transition feeling responsive
+      validation: User interaction feedback and perceived responsiveness
+
+    focus_outline_width:
+      value: 2
+      unit: pixels
+      rationale: Clearly visible focus indicator for keyboard navigation
+      validation: Accessibility testing and keyboard navigation verification
+
+  color_accessibility:
+    min_contrast_ratio_normal:
+      value: 4.5
+      unit: ratio
+      rationale: WCAG AA compliance for normal text readability
+      validation: Automated contrast checking and accessibility audit
+
+    min_contrast_ratio_large:
+      value: 3
+      unit: ratio
+      rationale: WCAG AA compliance for large text (18pt+)
+      validation: Color palette accessibility verification
+
+  responsive_breakpoints:
+    mobile_max:
+      value: 768
+      unit: pixels
+      rationale: Tablet portrait boundary for mobile-first design
+      validation: Device testing and responsive layout verification
+
+    desktop_min:
+      value: 1024
+      unit: pixels
+      rationale: Laptop screen minimum for desktop-optimized layouts
+      validation: Multi-device layout testing and content adaptation
+
+    wide_screen_min:
+      value: 1440
+      unit: pixels
+      rationale: Wide screen optimization threshold for maximum content width
+      validation: Large display layout testing and readability assessment
+
+  animation_timing:
+    micro_interaction_duration:
+      value: 150
+      unit: milliseconds
+      rationale: Quick feedback for button presses and state changes
+      validation: User interaction responsiveness testing
+
+    page_transition_duration:
+      value: 300
+      unit: milliseconds
+      rationale: Smooth navigation without perceived delay
+      validation: Navigation flow testing and user experience assessment
+
+    reduce_motion_duration:
+      value: 0
+      unit: milliseconds
+      rationale: No animation for users who prefer reduced motion
+      validation: Accessibility preference testing and compliance verification
+
+references:
+  - "L1: Clarity - Professional appearance builds trust"
+  - "L4: Presentation System - Design token management"
+  - "L5: US-104 Theme Toggle System"
+  - "L5: US-106 Accessibility-First Interactivity"
+  - "L5: US-202 Tablet and Desktop Enhancement"
