@@ -111,7 +111,7 @@ jobs:
             This is non-interactive — do not ask questions." \
             | tee /tmp/claude-spec.json | jq -r '.result'
           echo "--- Stats ---"
-          jq '{turns: .num_turns, input_tokens: .usage.input_tokens, output_tokens: .usage.output_tokens, cost_usd: .cost_usd}' /tmp/claude-spec.json
+          jq '{turns: .num_turns, cost_usd: .total_cost_usd, duration_ms: .duration_ms, input_tokens: (.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens), output_tokens: .usage.output_tokens}' /tmp/claude-spec.json
 
       - name: "Build: spec (brownfield)"
         if: inputs.demo == 'brownfield'
@@ -129,7 +129,7 @@ jobs:
             This is non-interactive — do not ask questions." \
             | tee /tmp/claude-spec.json | jq -r '.result'
           echo "--- Stats ---"
-          jq '{turns: .num_turns, input_tokens: .usage.input_tokens, output_tokens: .usage.output_tokens, cost_usd: .cost_usd}' /tmp/claude-spec.json
+          jq '{turns: .num_turns, cost_usd: .total_cost_usd, duration_ms: .duration_ms, input_tokens: (.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens), output_tokens: .usage.output_tokens}' /tmp/claude-spec.json
 
       - name: "Build: implement (greenfield/scaffold only)"
         if: inputs.demo != 'brownfield'
@@ -146,7 +146,7 @@ jobs:
             "Run /rs-impl. This is non-interactive — do not ask questions." \
             | tee /tmp/claude-impl.json | jq -r '.result'
           echo "--- Stats ---"
-          jq '{turns: .num_turns, input_tokens: .usage.input_tokens, output_tokens: .usage.output_tokens, cost_usd: .cost_usd}' /tmp/claude-impl.json
+          jq '{turns: .num_turns, cost_usd: .total_cost_usd, duration_ms: .duration_ms, input_tokens: (.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens), output_tokens: .usage.output_tokens}' /tmp/claude-impl.json
 
       - name: "Build: validate"
         working-directory: ${{ inputs.demo }}
@@ -163,7 +163,7 @@ jobs:
             | tee /tmp/claude-validate.json | jq -r '.result' \
             || echo "Validate step exited with $? — continuing to PR"
           echo "--- Stats ---"
-          jq '{turns: .num_turns, input_tokens: .usage.input_tokens, output_tokens: .usage.output_tokens, cost_usd: .cost_usd}' /tmp/claude-validate.json 2>/dev/null || true
+          jq '{turns: .num_turns, cost_usd: .total_cost_usd, duration_ms: .duration_ms, input_tokens: (.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens), output_tokens: .usage.output_tokens}' /tmp/claude-validate.json 2>/dev/null || true
 
       # ── PR phase ─────────────────────────────────────────
 
