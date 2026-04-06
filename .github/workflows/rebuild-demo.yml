@@ -158,6 +158,11 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           DEMO="${{ inputs.demo }}"
+
+          # Clean up artifacts that shouldn't be committed
+          rm -f "$DEMO"/rootspec/tests-status.json.bak
+          rm -rf "$DEMO"/cypress/screenshots "$DEMO"/cypress/videos
+
           git add -A
 
           if git diff --cached --quiet; then
