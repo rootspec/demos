@@ -103,11 +103,15 @@ jobs:
         run: |
           claude -p \
             --dangerously-skip-permissions \
+            --output-format json \
             --max-turns 50 \
             --max-budget-usd 6 \
             --model claude-sonnet-4-20250514 \
             "Run /rs-spec. Read SEED.md for context and skip the interview.
-            This is non-interactive — do not ask questions."
+            This is non-interactive — do not ask questions." \
+            | tee /tmp/claude-spec.json | jq -r '.result'
+          echo "--- Stats ---"
+          jq '{turns: .num_turns, input_tokens: .usage.input_tokens, output_tokens: .usage.output_tokens, cost_usd: .cost_usd}' /tmp/claude-spec.json
 
       - name: "Build: spec (brownfield)"
         if: inputs.demo == 'brownfield'
@@ -117,11 +121,15 @@ jobs:
         run: |
           claude -p \
             --dangerously-skip-permissions \
+            --output-format json \
             --max-turns 50 \
             --max-budget-usd 12 \
             --model claude-sonnet-4-20250514 \
             "Run /rs-spec. Skip the interview — derive the spec from existing code.
-            This is non-interactive — do not ask questions."
+            This is non-interactive — do not ask questions." \
+            | tee /tmp/claude-spec.json | jq -r '.result'
+          echo "--- Stats ---"
+          jq '{turns: .num_turns, input_tokens: .usage.input_tokens, output_tokens: .usage.output_tokens, cost_usd: .cost_usd}' /tmp/claude-spec.json
 
       - name: "Build: implement (greenfield/scaffold only)"
         if: inputs.demo != 'brownfield'
@@ -131,10 +139,14 @@ jobs:
         run: |
           claude -p \
             --dangerously-skip-permissions \
+            --output-format json \
             --max-turns 50 \
             --max-budget-usd 10 \
             --model claude-sonnet-4-20250514 \
-            "Run /rs-impl. This is non-interactive — do not ask questions."
+            "Run /rs-impl. This is non-interactive — do not ask questions." \
+            | tee /tmp/claude-impl.json | jq -r '.result'
+          echo "--- Stats ---"
+          jq '{turns: .num_turns, input_tokens: .usage.input_tokens, output_tokens: .usage.output_tokens, cost_usd: .cost_usd}' /tmp/claude-impl.json
 
       - name: "Build: validate"
         working-directory: ${{ inputs.demo }}
@@ -143,11 +155,15 @@ jobs:
         run: |
           claude -p \
             --dangerously-skip-permissions \
+            --output-format json \
             --max-turns 40 \
             --max-budget-usd 5 \
             --model claude-sonnet-4-20250514 \
             "Run /rs-validate. This is non-interactive — do not ask questions." \
+            | tee /tmp/claude-validate.json | jq -r '.result' \
             || echo "Validate step exited with $? — continuing to PR"
+          echo "--- Stats ---"
+          jq '{turns: .num_turns, input_tokens: .usage.input_tokens, output_tokens: .usage.output_tokens, cost_usd: .cost_usd}' /tmp/claude-validate.json 2>/dev/null || true
 
       # ── PR phase ─────────────────────────────────────────
 
