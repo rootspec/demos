@@ -93,7 +93,7 @@ jobs:
       # ── AI rebuild phase ─────────────────────────────────
 
       - name: Install Claude Code
-        run: npm install -g @anthropic-ai/claude-code
+        run: curl -fsSL https://claude.ai/install.sh | bash
 
       - name: "Build: spec (greenfield/scaffold)"
         if: inputs.demo != 'brownfield'
@@ -106,12 +106,8 @@ jobs:
             --max-turns 50 \
             --max-budget-usd 6 \
             --model claude-sonnet-4-20250514 \
-            "Read the file .agents/skills/rs-spec/SKILL.md and follow those instructions.
-
-            This is an automated rebuild from SEED.md. Read SEED.md for the complete product description.
-            You have full context — skip the interview and go straight to drafting.
-            Work through all 5 levels (L1 through L5) and generate derived artifacts.
-            Do not ask questions — make your best judgment for all decisions."
+            "Run /rs-spec. Read SEED.md for context and skip the interview.
+            This is non-interactive — do not ask questions."
 
       - name: "Build: spec (brownfield)"
         if: inputs.demo == 'brownfield'
@@ -124,13 +120,8 @@ jobs:
             --max-turns 50 \
             --max-budget-usd 12 \
             --model claude-sonnet-4-20250514 \
-            "Read the file .agents/skills/rs-spec/SKILL.md and follow those instructions.
-
-            This is a brownfield project — derive the spec from the existing codebase.
-            Scan the project structure, read source files, and create the specification
-            based on what the code actually does and the intent behind it.
-            Skip the interview — analyze the code and draft all 5 levels.
-            Do not ask questions — make your best judgment for all decisions."
+            "Run /rs-spec. Skip the interview — derive the spec from existing code.
+            This is non-interactive — do not ask questions."
 
       - name: "Build: implement (greenfield/scaffold only)"
         if: inputs.demo != 'brownfield'
@@ -143,11 +134,7 @@ jobs:
             --max-turns 50 \
             --max-budget-usd 10 \
             --model claude-sonnet-4-20250514 \
-            "Read the file .agents/skills/rs-impl/SKILL.md and follow those instructions.
-
-            Implement all user stories from the spec. This is a non-interactive CI run.
-            Work through stories by phase order. Run tests after each story.
-            Do not ask questions — make your best judgment."
+            "Run /rs-impl. This is non-interactive — do not ask questions."
 
       - name: "Build: validate"
         working-directory: ${{ inputs.demo }}
@@ -159,10 +146,7 @@ jobs:
             --max-turns 20 \
             --max-budget-usd 4 \
             --model claude-sonnet-4-20250514 \
-            "Read the file .agents/skills/rs-validate/SKILL.md and follow those instructions.
-
-            Run all tests and produce a validation report.
-            Do not ask questions."
+            "Run /rs-validate. This is non-interactive — do not ask questions."
 
       # ── PR phase ─────────────────────────────────────────
 
@@ -207,4 +191,4 @@ jobs:
           - Budget: \$${{ inputs.max_budget }}
 
           🤖 Generated with [Claude Code](https://claude.ai/claude-code)" \
-            --label rebuild,ai-generated
+            --label rebuild,ai-generated || true

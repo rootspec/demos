@@ -61,7 +61,7 @@ jobs:
           done
 
       - name: Install Claude Code
-        run: npm install -g @anthropic-ai/claude-code
+        run: curl -fsSL https://claude.ai/install.sh | bash
 
       - name: Run rs-update in each demo
         env:
@@ -79,12 +79,8 @@ jobs:
               --max-turns 30 \
               --max-budget-usd "$BUDGET_PER_DEMO" \
               --model claude-sonnet-4-20250514 \
-              "Read the file .agents/skills/rs-update/SKILL.md and follow those instructions exactly.
-              This is a non-interactive CI run — do not wait for confirmation, proceed with all recommended updates.
-              After rs-update completes, if it recommends running /rs-init, /rs-spec, or /rs-impl,
-              read the corresponding .agents/skills/{skill}/SKILL.md and execute those too.
-              For /rs-spec: if the project has a SEED.md, use it as full context and skip the interview.
-              If there is no SEED.md (brownfield), derive the spec from existing code without interviewing."
+              "Run /rs-update. This is non-interactive — proceed without asking questions.
+              After rs-update completes, run any recommended follow-up skills."
 
             cd ..
           done
@@ -116,4 +112,4 @@ jobs:
           Triggered by: ${{ github.event_name }}
 
           🤖 Generated with [Claude Code](https://claude.ai/claude-code)" \
-            --label rootspec-update
+            --label rootspec-update || true
