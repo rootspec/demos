@@ -1,0 +1,390 @@
+# =============================================================================
+# USER STORY: View Marketing Site Hero and Navigation
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM, THEME_SYSTEM]
+# @last_updated: 2026-04-06T19:06:23Z
+
+id: US-001
+title: View clear value proposition and site navigation
+narrative: |
+  As a developer visiting the RootSpec marketing site
+  I want to immediately understand what RootSpec is and see that this site demonstrates the methodology
+  So that I can quickly assess if this tool solves my specification problems
+
+acceptance_criteria:
+  - id: AC-001-1
+    title: Hero displays clear tagline and explanation
+    given:
+      - visit: '/'
+    when:
+      - pageLoads: { timeout: 5000 }
+    then:
+      - shouldContain: { selector: 'h1', text: 'RootSpec' }
+      - shouldBeVisible: { selector: '[data-test="hero-tagline"]' }
+      - shouldBeVisible: { selector: '[data-test="hero-explanation"]' }
+
+  - id: AC-001-2
+    title: Meta banner explains site generation
+    given:
+      - visit: '/'
+    when:
+      - pageLoads: { timeout: 5000 }
+    then:
+      - shouldContain: { selector: '[data-test="meta-banner"]', text: 'generated from a ~100-line product description' }
+      - shouldContain: { selector: '[data-test="meta-banner"]', text: 'no manual code, no design mockups' }
+      - shouldBeVisible: { selector: '[data-test="view-spec-link"]' }
+      - shouldBeVisible: { selector: '[data-test="view-seed-link"]' }
+
+---
+
+# =============================================================================
+# USER STORY: Toggle Between Light and Dark Themes
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [THEME_SYSTEM, INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-06T19:06:23Z
+
+id: US-002
+title: Switch between light and dark theme modes
+narrative: |
+  As a developer who prefers specific visual modes
+  I want to toggle between light and dark themes
+  So that I can view the site in my preferred visual style
+
+acceptance_criteria:
+  - id: AC-002-1
+    title: Theme toggle button is visible and functional
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: '[data-test="theme-toggle"]' }
+    then:
+      - shouldHaveClass: { selector: 'html', className: 'dark' }
+      - shouldBeVisible: { selector: '[data-test="theme-toggle"]' }
+
+  - id: AC-002-2
+    title: Theme preference persists across page reloads
+    given:
+      - visit: '/'
+      - click: { selector: '[data-test="theme-toggle"]' }
+    when:
+      - reload: {}
+    then:
+      - shouldHaveClass: { selector: 'html', className: 'dark' }
+
+---
+
+# =============================================================================
+# USER STORY: Explore RootSpec Hierarchy Interactively
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: DISCOVERY
+# @systems: [INTERACTIVE_SYSTEM, DATA_SYSTEM, CONTENT_SYSTEM]
+# @last_updated: 2026-04-06T19:06:23Z
+
+id: US-003
+title: Understand RootSpec hierarchy through interactive visualization
+narrative: |
+  As a developer learning about RootSpec
+  I want to explore the five-level hierarchy interactively
+  So that I understand how levels reference each other and see example content
+
+acceptance_criteria:
+  - id: AC-003-1
+    title: Hierarchy levels display with clear structure
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="hierarchy-explorer"]' }
+    when:
+      - pageLoads: { timeout: 5000 }
+    then:
+      - shouldBeVisible: { selector: '[data-test="level-1"]' }
+      - shouldBeVisible: { selector: '[data-test="level-2"]' }
+      - shouldBeVisible: { selector: '[data-test="level-3"]' }
+      - shouldBeVisible: { selector: '[data-test="level-4"]' }
+      - shouldBeVisible: { selector: '[data-test="level-5"]' }
+
+  - id: AC-003-2
+    title: Clicking a level expands example content
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="hierarchy-explorer"]' }
+    when:
+      - click: { selector: '[data-test="level-1"]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test="level-1-content"]' }
+      - shouldContain: { selector: '[data-test="level-1-content"]', text: 'Philosophy' }
+
+  - id: AC-003-3
+    title: Reference arrows show allowed connections
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="hierarchy-explorer"]' }
+    when:
+      - hover: { selector: '[data-test="level-3"]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test="reference-arrow-3-to-1"]' }
+      - shouldBeVisible: { selector: '[data-test="reference-arrow-3-to-2"]' }
+
+---
+
+# =============================================================================
+# USER STORY: Try Spec Creation Wizard
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: EXPERIMENTATION
+# @systems: [INTERACTIVE_SYSTEM, DATA_SYSTEM]
+# @last_updated: 2026-04-06T19:06:23Z
+
+id: US-004
+title: Create skeleton spec using guided wizard
+narrative: |
+  As a developer curious about applying RootSpec to my project
+  I want to walk through a simple wizard with my own product idea
+  So that I can see how my concept maps to the RootSpec methodology
+
+acceptance_criteria:
+  - id: AC-004-1
+    title: Wizard accepts product idea input
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="spec-wizard"]' }
+    when:
+      - type: { selector: '[data-test="product-idea-input"]', text: 'A task management app for developers' }
+      - click: { selector: '[data-test="wizard-next"]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test="mission-step"]' }
+      - shouldContain: { selector: '[data-test="current-idea"]', text: 'task management app' }
+
+  - id: AC-004-2
+    title: Mission templates are selectable
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="spec-wizard"]' }
+      - type: { selector: '[data-test="product-idea-input"]', text: 'A task management app' }
+      - click: { selector: '[data-test="wizard-next"]' }
+    when:
+      - click: { selector: '[data-test="mission-template-1"]' }
+      - click: { selector: '[data-test="wizard-next"]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test="pillars-step"]' }
+
+  - id: AC-004-3
+    title: Design pillars can be selected
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="spec-wizard"]' }
+      - type: { selector: '[data-test="product-idea-input"]', text: 'A task management app' }
+      - click: { selector: '[data-test="wizard-next"]' }
+      - click: { selector: '[data-test="mission-template-1"]' }
+      - click: { selector: '[data-test="wizard-next"]' }
+    when:
+      - click: { selector: '[data-test="pillar-simple"]' }
+      - click: { selector: '[data-test="pillar-focused"]' }
+      - click: { selector: '[data-test="pillar-reliable"]' }
+      - click: { selector: '[data-test="wizard-next"]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test="interaction-step"]' }
+
+  - id: AC-004-4
+    title: Generated skeleton spec displays
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="spec-wizard"]' }
+      - type: { selector: '[data-test="product-idea-input"]', text: 'A task management app' }
+      - click: { selector: '[data-test="wizard-next"]' }
+      - click: { selector: '[data-test="mission-template-1"]' }
+      - click: { selector: '[data-test="wizard-next"]' }
+      - click: { selector: '[data-test="pillar-simple"]' }
+      - click: { selector: '[data-test="wizard-next"]' }
+    when:
+      - type: { selector: '[data-test="interaction-input"]', text: 'User adds a task and sees it in their list' }
+      - click: { selector: '[data-test="generate-spec"]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test="generated-spec"]' }
+      - shouldContain: { selector: '[data-test="generated-spec"]', text: 'L1 — PHILOSOPHY' }
+      - shouldContain: { selector: '[data-test="generated-spec"]', text: 'task management' }
+      - shouldContain: { selector: '[data-test="generated-spec"]', text: 'Simple' }
+
+---
+
+# =============================================================================
+# USER STORY: Compare Before/After Specification Examples
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: DISCOVERY
+# @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM]
+# @last_updated: 2026-04-06T19:06:23Z
+
+id: US-005
+title: See concrete benefits through before/after comparison
+narrative: |
+  As a skeptical developer evaluating RootSpec
+  I want to see side-by-side examples of projects with and without proper specification
+  So that I can understand the concrete value of the methodology
+
+acceptance_criteria:
+  - id: AC-005-1
+    title: Comparison slider reveals content transformation
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="before-after-comparison"]' }
+    when:
+      - dragSlider: { selector: '[data-test="comparison-slider"]', position: 0 }
+    then:
+      - shouldBeVisible: { selector: '[data-test="without-spec-content"]' }
+      - shouldContain: { selector: '[data-test="without-spec-content"]', text: 'vague requirements' }
+
+  - id: AC-005-2
+    title: After state shows structured specification
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="before-after-comparison"]' }
+    when:
+      - dragSlider: { selector: '[data-test="comparison-slider"]', position: 100 }
+    then:
+      - shouldBeVisible: { selector: '[data-test="with-spec-content"]' }
+      - shouldContain: { selector: '[data-test="with-spec-content"]', text: 'structured hierarchy' }
+      - shouldContain: { selector: '[data-test="with-spec-content"]', text: 'testable stories' }
+
+---
+
+# =============================================================================
+# USER STORY: Access Getting Started Resources
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: CONVERSION
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-06T19:06:23Z
+
+id: US-006
+title: Find GitHub repository and getting started instructions
+narrative: |
+  As a developer convinced to try RootSpec
+  I want clear links to the repository and getting started documentation
+  So that I can begin using RootSpec immediately
+
+acceptance_criteria:
+  - id: AC-006-1
+    title: GitHub repository link is prominent
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="cta-section"]' }
+    when:
+      - pageLoads: { timeout: 5000 }
+    then:
+      - shouldBeVisible: { selector: '[data-test="github-link"]' }
+      - shouldHaveAttribute: { selector: '[data-test="github-link"]', attribute: 'href', value: 'https://github.com/rootspec/rootspec' }
+
+  - id: AC-006-2
+    title: Getting started instructions are clear
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="cta-section"]' }
+    when:
+      - pageLoads: { timeout: 5000 }
+    then:
+      - shouldBeVisible: { selector: '[data-test="getting-started"]' }
+      - shouldContain: { selector: '[data-test="getting-started"]', text: 'npx rootspec init' }
+
+---
+
+# =============================================================================
+# USER STORY: View Current Framework Version
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [CONTENT_SYSTEM, DATA_SYSTEM]
+# @last_updated: 2026-04-06T19:06:23Z
+
+id: US-007
+title: See current RootSpec version prominently displayed
+narrative: |
+  As a developer evaluating RootSpec
+  I want to see which version of the framework was used to build this site
+  So that I understand the current state and maturity of the tool
+
+acceptance_criteria:
+  - id: AC-007-1
+    title: Version badge displays in hero section
+    given:
+      - visit: '/'
+    when:
+      - pageLoads: { timeout: 5000 }
+    then:
+      - shouldBeVisible: { selector: '[data-test="version-badge"]' }
+      - shouldMatch: { selector: '[data-test="version-badge"]', regex: 'v\\d+\\.\\d+\\.\\d+' }
+
+---
+
+# =============================================================================
+# USER STORY: Navigate Site on Mobile Device
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, THEME_SYSTEM]
+# @last_updated: 2026-04-06T19:06:23Z
+
+id: US-008
+title: Use all interactive features on mobile device
+narrative: |
+  As a developer browsing on mobile
+  I want all interactive features to work with touch input
+  So that I can fully explore RootSpec regardless of device
+
+acceptance_criteria:
+  - id: AC-008-1
+    title: Theme toggle works on mobile
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+    when:
+      - tap: { selector: '[data-test="theme-toggle"]' }
+    then:
+      - shouldHaveClass: { selector: 'html', className: 'dark' }
+
+  - id: AC-008-2
+    title: Hierarchy explorer is touch-friendly
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="hierarchy-explorer"]' }
+    when:
+      - tap: { selector: '[data-test="level-2"]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test="level-2-content"]' }
+
+  - id: AC-008-3
+    title: Spec wizard works with touch input
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="spec-wizard"]' }
+    when:
+      - tap: { selector: '[data-test="product-idea-input"]' }
+      - type: { selector: '[data-test="product-idea-input"]', text: 'Mobile app' }
+      - tap: { selector: '[data-test="wizard-next"]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test="mission-step"]' }
+
+  - id: AC-008-4
+    title: Comparison slider supports touch gestures
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test="before-after-comparison"]' }
+    when:
+      - swipe: { selector: '[data-test="comparison-slider"]', direction: 'right' }
+    then:
+      - shouldBeVisible: { selector: '[data-test="with-spec-content"]' }

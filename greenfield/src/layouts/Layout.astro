@@ -1,37 +1,57 @@
 ---
 interface Props {
   title: string;
+  description?: string;
 }
 
-const { title } = Astro.props;
+const { title, description = "RootSpec - A structured methodology for software specifications" } = Astro.props;
 ---
 
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="light">
   <head>
     <meta charset="UTF-8" />
+    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
-    <script is:inline>
-      (function() {
-        const saved = localStorage.getItem('rootspec-theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = saved || (prefersDark ? 'dark' : 'light');
-        document.documentElement.classList.toggle('dark', theme === 'dark');
-        document.documentElement.setAttribute('data-theme', theme);
-        document.addEventListener('DOMContentLoaded', function() {
-          document.body.setAttribute('data-theme', theme);
-        });
-      })();
-    </script>
   </head>
-  <body class="min-h-screen font-sans antialiased">
-    <div id="app">
-      <slot />
-    </div>
-    <script is:inline>
-      var theme = document.documentElement.getAttribute('data-theme') || 'light';
-      document.getElementById('app').setAttribute('data-theme', theme);
-    </script>
+  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <slot />
   </body>
 </html>
+
+<style is:global>
+  /* System font stack for performance and native feel */
+  html {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* Theme variables */
+  :root {
+    --primary: hsl(240, 80%, 50%);
+    --accent: hsl(280, 80%, 60%);
+  }
+
+  .dark {
+    --primary: hsl(240, 80%, 60%);
+    --accent: hsl(280, 80%, 70%);
+  }
+
+  /* Focus indicators for accessibility */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

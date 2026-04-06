@@ -19,8 +19,45 @@ export function runSetupSteps(steps: Step[]) {
       cy.get('[data-test=theme-toggle][data-hydrated=true]', { timeout: 10000 }).should('exist');
     }
     else if ('click' in s) cy.get(s.click.selector).first().click();
+    else if ('tap' in s) cy.get(s.tap.selector).first().click();
     else if ('fill' in s) {
       cy.get(s.fill.selector).clear().type(s.fill.value);
+    }
+    else if ('type' in s) {
+      cy.get(s.type.selector).clear().type(s.type.text);
+    }
+    else if ('hover' in s) {
+      cy.get(s.hover.selector).trigger('mouseover');
+    }
+    else if ('scrollTo' in s) {
+      cy.get(s.scrollTo.selector).scrollIntoView();
+    }
+    else if ('dragSlider' in s) {
+      // Simulate slider drag by setting value directly
+      cy.get(s.dragSlider.selector).then(($slider) => {
+        if ($slider[0] && 'value' in $slider[0]) {
+          ($slider[0] as HTMLInputElement).value = s.dragSlider.position.toString();
+          $slider.trigger('input').trigger('change');
+        }
+      });
+    }
+    else if ('swipe' in s) {
+      // Simulate swipe by triggering appropriate touch events
+      const direction = s.swipe.direction;
+      if (direction === 'right') {
+        cy.get(s.swipe.selector).trigger('touchstart', { touches: [{ clientX: 100, clientY: 100 }] })
+          .trigger('touchmove', { touches: [{ clientX: 200, clientY: 100 }] })
+          .trigger('touchend');
+      }
+    }
+    else if ('reload' in s) {
+      cy.reload();
+    }
+    else if ('pageLoads' in s) {
+      cy.wait(500); // Brief wait for page load
+    }
+    else if ('setViewport' in s) {
+      cy.viewport(s.setViewport.width, s.setViewport.height);
     }
     else if ('loginAs' in s) cy.task('loginAs', s.loginAs);
     else if ('seedItem' in s) cy.task('seedItem', s.seedItem);
@@ -41,6 +78,28 @@ export function runAssertionSteps(steps: Step[]) {
       } else {
         cy.get(sel).should('exist');
       }
+    }
+    else if ('shouldBeVisible' in s) {
+      cy.get(s.shouldBeVisible.selector).should('be.visible');
+    }
+    else if ('shouldHaveClass' in s) {
+      const sel = s.shouldHaveClass.selector;
+      const className = s.shouldHaveClass.className;
+      // Handle html element specifically
+      if (sel === 'html') {
+        cy.get('html').should('have.class', className);
+      } else {
+        cy.get(sel).should('have.class', className);
+      }
+    }
+    else if ('shouldHaveAttribute' in s) {
+      cy.get(s.shouldHaveAttribute.selector).should('have.attr', s.shouldHaveAttribute.attribute, s.shouldHaveAttribute.value);
+    }
+    else if ('shouldMatch' in s) {
+      const regex = new RegExp(s.shouldMatch.regex);
+      cy.get(s.shouldMatch.selector).should(($el) => {
+        expect($el.text()).to.match(regex);
+      });
     }
   }
 }

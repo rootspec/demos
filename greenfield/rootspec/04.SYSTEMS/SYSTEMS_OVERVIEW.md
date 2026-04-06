@@ -1,50 +1,62 @@
-# Level 4: Systems Overview
+# L4 — SYSTEMS OVERVIEW
+*HOW it's built*
 
-## System Map
+## System Architecture
 
-The marketing site is composed of five systems. Each owns a distinct concern.
+### Content System
+**Owns:** Static page content, marketing copy, section text, meta descriptions  
+**State:** Page structure, text content, version references  
+**Boundaries:** Provides content to Layout System, receives no input from other systems  
+**Dependencies:** External content from SEED.md specifications
+
+### Theme System  
+**Owns:** Color schemes, typography, spacing tokens, dark/light mode state  
+**State:** Current theme preference (light/dark/system), CSS custom properties  
+**Boundaries:** Provides styling to all UI components, persists preference to browser storage  
+**Dependencies:** System preference detection, user choice persistence
+
+### Interactive System
+**Owns:** Hierarchy explorer, spec wizard, before/after comparison, theme toggle  
+**State:** Wizard progress, expanded hierarchy levels, comparison slider position  
+**Boundaries:** Receives user events, manages component state, triggers visual feedback  
+**Dependencies:** Data System for content, Theme System for styling
+
+### Data System
+**Owns:** Hierarchy examples, wizard templates, comparison content, configuration values  
+**State:** Static data structures, template definitions, validation rules  
+**Boundaries:** Provides structured data to Interactive System, no external dependencies  
+**Dependencies:** Build-time data loading from TypeScript modules
+
+### Layout System
+**Owns:** Page structure, responsive breakpoints, component positioning, navigation  
+**State:** Viewport dimensions, scroll position, section visibility  
+**Boundaries:** Orchestrates other systems, manages page flow and responsive behavior  
+**Dependencies:** Content System for structure, Theme System for responsive styling
+
+## System Boundaries
 
 ```
-┌─────────────────────────────────────────────────┐
-│                 LAYOUT_SYSTEM                    │
-│  (page structure, navigation, scroll, theme)     │
-│                                                  │
-│  ┌──────────────┐  ┌──────────────────────────┐ │
-│  │ CONTENT      │  │ INTERACTIVE              │ │
-│  │ SYSTEM       │  │ SYSTEM                   │ │
-│  │              │  │                          │ │
-│  │ hero, problem│  │ hierarchy explorer,      │ │
-│  │ how-it-works │  │ spec wizard,             │ │
-│  │ CTA, meta    │  │ before/after comparison  │ │
-│  │ banner       │  │                          │ │
-│  └──────────────┘  └──────────────────────────┘ │
-│                                                  │
-│  ┌──────────────┐  ┌──────────────────────────┐ │
-│  │ THEME        │  │ ACCESSIBILITY            │ │
-│  │ SYSTEM       │  │ SYSTEM                   │ │
-│  │              │  │                          │ │
-│  │ dark/light,  │  │ keyboard nav, ARIA,      │ │
-│  │ preferences  │  │ focus management,        │ │
-│  │              │  │ reduced motion           │ │
-│  └──────────────┘  └──────────────────────────┘ │
-└─────────────────────────────────────────────────┘
+External Sources → Data System ← Interactive System → Layout System → Content System
+                      ↓              ↑                    ↓
+                 Theme System ←────────────────────────────────────┘
 ```
 
-## System Interactions
+**Data Flow Rules:**
+- Content System only outputs, never receives internal state
+- Theme System responds to user input but maintains independence  
+- Interactive System coordinates with Data System but doesn't modify base content
+- Layout System orchestrates but doesn't own content or interaction logic
+- No circular dependencies between systems
 
-| From | To | Interaction |
-|------|----|-------------|
-| LAYOUT_SYSTEM | CONTENT_SYSTEM | Provides section containers and scroll position |
-| LAYOUT_SYSTEM | INTERACTIVE_SYSTEM | Provides section containers; reports viewport visibility |
-| LAYOUT_SYSTEM | THEME_SYSTEM | Applies theme class to root element |
-| THEME_SYSTEM | LAYOUT_SYSTEM | Provides current theme for CSS variable resolution |
-| THEME_SYSTEM | INTERACTIVE_SYSTEM | Provides color tokens for interactive elements |
-| ACCESSIBILITY_SYSTEM | INTERACTIVE_SYSTEM | Manages focus, announces state changes |
-| ACCESSIBILITY_SYSTEM | LAYOUT_SYSTEM | Provides reduced-motion preference |
+## Calculated Values
 
-## Shared Conventions
+**Theme Resolution:** `user_preference || system_preference || 'light'`  
+**Wizard Completion:** `completed_steps.length / total_steps.length`  
+**Hierarchy Validation:** `referenced_levels.every(level => level < current_level)`  
+**Responsive State:** `viewport_width >= breakpoint ? 'desktop' : 'mobile'`
 
-- **Data attributes:** All interactive elements use `data-test` attributes for testability
-- **CSS variables:** All colors, spacing, and typography use CSS custom properties managed by the theme system
-- **State management:** Client-side only. No persistence between sessions except theme preference (localStorage)
-- **Versioning:** RootSpec version stored as a single constant, referenced by the content system
+## External Interfaces
+
+**Browser APIs:** `localStorage` for theme preference, `matchMedia` for system theme detection  
+**Build System:** Astro static generation, TypeScript compilation, Tailwind CSS processing  
+**Version Source:** `package.json` for current framework version display

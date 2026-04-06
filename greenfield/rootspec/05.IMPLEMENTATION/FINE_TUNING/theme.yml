@@ -1,16 +1,52 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Theme System
+# LEVEL 5: FINE TUNING - Theme System Parameters
 # =============================================================================
 # @spec_version: 1.0.0
 # @system: THEME_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# @last_updated: 2026-04-06T19:06:23Z
+# @status: production
+# @spec_source: 04.SYSTEMS/SYSTEMS_OVERVIEW.md
 
-transition_duration: 200
-# @unit: milliseconds
-# @rationale: Fast enough to feel instant, slow enough to avoid jarring flash
-# @constraints: min=100, max=400, type=integer
+# Color scheme values (HSL for better manipulation)
+colors:
+  primary_hue: 240              # Rationale: Professional blue associated with trust/tech
+  primary_saturation: 80        # Rationale: Rich but not overwhelming
+  accent_hue: 280              # Rationale: Complementary purple for highlights
 
-localStorage_key: "rootspec-theme"
-# @rationale: Namespaced to avoid collisions with other apps on same domain
+# Contrast ratios (WCAG compliance)
+accessibility:
+  min_contrast_normal: 4.5      # Rationale: WCAG AA standard
+  min_contrast_large: 3.0       # Rationale: WCAG AA for large text
+  focus_outline_width: 2        # Rationale: Clearly visible focus indicators
+
+# Typography scale (modular scale ratio)
+typography:
+  base_font_size: 16            # Rationale: Browser default, good readability
+  scale_ratio: 1.25             # Rationale: Major third scale for harmonious sizing
+  line_height_base: 1.6         # Rationale: Optimal for reading comprehension
+  line_height_headings: 1.2     # Rationale: Tighter for visual hierarchy
+
+# Spacing system (8px grid)
+spacing:
+  base_unit: 8                  # Rationale: Divisible by many values, consistent spacing
+  container_max_width: 1200     # Rationale: Comfortable reading line length
+  section_gap: 96               # Rationale: 12 * base_unit for clear section breaks
+
+# Dark mode adjustments
+dark_mode:
+  background_lightness: 8       # Rationale: Near black but not harsh
+  surface_lightness: 12         # Rationale: Subtle elevation without stark contrast
+  text_lightness: 90           # Rationale: High contrast without pure white glare
+
+# Light mode adjustments
+light_mode:
+  background_lightness: 98      # Rationale: Slightly off-white to reduce glare
+  surface_lightness: 100        # Rationale: Pure white for clean cards/surfaces
+  text_lightness: 15           # Rationale: Dark enough for good contrast
+
+# Responsive breakpoints (px)
+breakpoints:
+  mobile: 640                   # Rationale: Modern phone landscape width
+  tablet: 768                   # Rationale: Standard tablet portrait
+  desktop: 1024                 # Rationale: Laptop screen minimum
+  wide: 1280                    # Rationale: Desktop monitor comfort zone

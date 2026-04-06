@@ -1,247 +1,222 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { templates, pillarSuggestions } from '../data/wizard';
 
-type Step = 1 | 2 | 3 | 'result';
-
-interface WizardState {
-  currentStep: Step;
-  mission: string;
-  pillars: string[];
-  interaction: { who: string; trigger: string; feedback: string };
-}
-
-const initial: WizardState = {
-  currentStep: 1,
-  mission: '',
-  pillars: [],
-  interaction: { who: '', trigger: '', feedback: '' },
-};
+type WizardStep = 'idea' | 'mission' | 'pillars' | 'interaction' | 'result';
 
 export default function SpecWizard() {
-  const [state, setState] = useState<WizardState>(initial);
-  const sectionRef = useRef<HTMLElement>(null);
+  const [currentStep, setCurrentStep] = useState<WizardStep>('idea');
+  const [productIdea, setProductIdea] = useState('');
+  const [selectedMission, setSelectedMission] = useState('');
+  const [selectedPillars, setSelectedPillars] = useState<string[]>([]);
+  const [interaction, setInteraction] = useState('');
+  const [generatedSpec, setGeneratedSpec] = useState('');
 
-  useEffect(() => {
-    sectionRef.current?.setAttribute('data-hydrated', 'true');
-  }, []);
+  const nextStep = () => {
+    if (currentStep === 'idea' && productIdea) setCurrentStep('mission');
+    else if (currentStep === 'mission' && selectedMission) setCurrentStep('pillars');
+    else if (currentStep === 'pillars' && selectedPillars.length > 0) setCurrentStep('interaction');
+    else if (currentStep === 'interaction' && interaction) generateSpec();
+  };
 
-  function update(patch: Partial<WizardState>) {
-    setState((s) => ({ ...s, ...patch }));
-  }
+  const generateSpec = () => {
+    const selectedTemplate = templates.find(t => t.id === selectedMission);
+    const selectedPillarObjs = selectedPillars.map(id =>
+      pillarSuggestions.find(p => p.id === id)?.label
+    ).filter(Boolean);
 
-  function togglePillar(label: string) {
-    setState((s) => {
-      const has = s.pillars.includes(label);
-      if (has) return { ...s, pillars: s.pillars.filter((p) => p !== label) };
-      if (s.pillars.length >= 5) return s;
-      return { ...s, pillars: [...s.pillars, label] };
-    });
-  }
+    const spec = `# ${productIdea} — RootSpec
 
-  function setInteractionField(field: keyof WizardState['interaction'], value: string) {
-    setState((s) => ({ ...s, interaction: { ...s.interaction, [field]: value } }));
-  }
+## L1 — PHILOSOPHY
 
-  const canAdvanceStep2 = state.pillars.length >= 1;
-  const canGenerate = state.interaction.who && state.interaction.trigger && state.interaction.feedback;
+**Mission**: ${selectedTemplate?.mission || 'Help users accomplish their goals efficiently and effectively.'}
+
+**Design Pillars**: ${selectedPillarObjs.join(', ')}
+
+## L2 — TRUTHS
+
+- Users want to feel productive and accomplished
+- ${productIdea.toLowerCase()} should reduce cognitive load
+- Trust is built through consistent, reliable interactions
+
+## L3 — INTERACTIONS
+
+**Core User Flow**: ${interaction}
+
+## L4 — SYSTEMS
+
+- User Interface System
+- Data Management System
+- Business Logic System
+
+## L5 — IMPLEMENTATION
+
+**User Stories**: Generated from the core interaction and system requirements.`;
+
+    setGeneratedSpec(spec);
+    setCurrentStep('result');
+  };
+
+  const togglePillar = (pillarId: string) => {
+    setSelectedPillars(prev =>
+      prev.includes(pillarId)
+        ? prev.filter(id => id !== pillarId)
+        : [...prev, pillarId]
+    );
+  };
 
   return (
-    <section ref={sectionRef} className="py-16 sm:py-24 px-4 sm:px-6">
-      <div className="max-w-content mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Spec your idea</h2>
-        <p className="mt-4 text-lg text-[var(--color-text-secondary)] max-w-2xl">
-          Try the methodology. Enter a product idea and walk through three steps to see how RootSpec structures your thinking.
+    <div data-test="spec-wizard" className="space-y-6">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold mb-4">Try the Spec Wizard</h2>
+        <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          Walk through a simple wizard with your product idea and see how it maps to the RootSpec methodology.
         </p>
-
-        <div className="mt-12 max-w-2xl mx-auto">
-          {/* Step indicators */}
-          <div className="flex items-center gap-2 mb-8" role="tablist">
-            {[1, 2, 3].map((step) => {
-              const isActive = state.currentStep === step || (state.currentStep === 'result' && step === 3);
-              const isPast = typeof state.currentStep === 'number' ? step < state.currentStep : true;
-              return (
-                <div key={step} className="flex items-center gap-2">
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-[var(--color-accent)] text-white'
-                        : isPast
-                          ? 'bg-[var(--color-bg-elevated)] text-[var(--color-text)]'
-                          : 'bg-[var(--color-bg-elevated)] text-[var(--color-text-muted)]'
-                    }`}
-                    role="tab"
-                    aria-selected={isActive}
-                    aria-current={isActive ? 'step' : undefined}
-                  >
-                    {step}
-                  </div>
-                  {step < 3 && <div className="w-8 sm:w-16 h-px bg-[var(--color-border)]" />}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Step 1: Mission */}
-          {state.currentStep === 1 && (
-            <div role="tabpanel">
-              <h3 className="text-xl font-semibold">What's your product idea?</h3>
-              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-                Describe the mission in one sentence, or pick a template.
-              </p>
-              <input
-                data-test="wizard-mission-input"
-                type="text"
-                value={state.mission}
-                onChange={(e) => update({ mission: e.target.value })}
-                placeholder="Help people accomplish meaningful work..."
-                className="mt-4 w-full px-4 py-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
-              />
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                {templates.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => update({ mission: t.mission })}
-                    className="p-3 text-left text-sm rounded-lg border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-bg-elevated)] transition-colors"
-                  >
-                    <span className="font-medium">{t.label}</span>
-                  </button>
-                ))}
-              </div>
-              <button
-                data-test="wizard-next-step"
-                onClick={() => update({ currentStep: 2 })}
-                disabled={!state.mission}
-                className="mt-6 px-6 py-2.5 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
-            </div>
-          )}
-
-          {/* Step 2: Pillars */}
-          {state.currentStep === 2 && (
-            <div role="tabpanel">
-              <h3 className="text-xl font-semibold">What should users feel?</h3>
-              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-                Select 3–5 design pillars — emotional experiences, not features.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {pillarSuggestions.map((p) => {
-                  const selected = state.pillars.includes(p.label);
-                  return (
-                    <button
-                      key={p.id}
-                      data-test="wizard-pillar-option"
-                      onClick={() => togglePillar(p.label)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
-                        selected
-                          ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white'
-                          : 'border-[var(--color-border)] hover:border-[var(--color-accent)] text-[var(--color-text-secondary)]'
-                      }`}
-                    >
-                      {p.label}
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="mt-3 text-xs text-[var(--color-text-muted)]">
-                {state.pillars.length}/5 selected {state.pillars.length < 3 && `(need at least 3)`}
-              </p>
-              <button
-                data-test="wizard-next-step"
-                onClick={() => update({ currentStep: 3 })}
-                disabled={!canAdvanceStep2}
-                className="mt-6 px-6 py-2.5 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
-            </div>
-          )}
-
-          {/* Step 3: Interaction */}
-          {state.currentStep === 3 && (
-            <div role="tabpanel">
-              <h3 className="text-xl font-semibold">Describe one key interaction</h3>
-              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-                Who does what, and what happens?
-              </p>
-              <div className="mt-4 space-y-3">
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">Who</label>
-                  <input
-                    data-test="wizard-interaction-who"
-                    type="text"
-                    value={state.interaction.who}
-                    onChange={(e) => setInteractionField('who', e.target.value)}
-                    placeholder="Team member"
-                    className="w-full px-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">Trigger</label>
-                  <input
-                    data-test="wizard-interaction-trigger"
-                    type="text"
-                    value={state.interaction.trigger}
-                    onChange={(e) => setInteractionField('trigger', e.target.value)}
-                    placeholder="Creates a new task"
-                    className="w-full px-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">Feedback</label>
-                  <input
-                    data-test="wizard-interaction-feedback"
-                    type="text"
-                    value={state.interaction.feedback}
-                    onChange={(e) => setInteractionField('feedback', e.target.value)}
-                    placeholder="Task appears in the team list"
-                    className="w-full px-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
-                  />
-                </div>
-              </div>
-              <button
-                data-test="wizard-generate"
-                onClick={() => update({ currentStep: 'result' })}
-                disabled={!canGenerate}
-                className="mt-6 px-6 py-2.5 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                Generate Spec
-              </button>
-            </div>
-          )}
-
-          {/* Result */}
-          {state.currentStep === 'result' && (
-            <div data-test="wizard-result">
-              <h3 className="text-xl font-semibold mb-4">Your skeleton spec</h3>
-              <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-code-bg)] p-5 font-mono text-sm space-y-4 overflow-x-auto">
-                <div>
-                  <div className="text-[var(--color-text-muted)]"># Level 1: Philosophy</div>
-                  <div className="mt-1"><strong>Mission:</strong> {state.mission}</div>
-                  <div className="mt-2"><strong>Design Pillars:</strong></div>
-                  {state.pillars.map((p, i) => (
-                    <div key={i} className="ml-4 text-[var(--color-text-secondary)]">{i + 1}. {p}</div>
-                  ))}
-                </div>
-                <div className="border-t border-[var(--color-border)] pt-4">
-                  <div className="text-[var(--color-text-muted)]"># Level 3: Interaction</div>
-                  <div className="mt-1"><strong>Actor:</strong> {state.interaction.who}</div>
-                  <div><strong>Trigger:</strong> {state.interaction.trigger}</div>
-                  <div><strong>Feedback:</strong> {state.interaction.feedback}</div>
-                </div>
-              </div>
-              <button
-                data-test="wizard-start-over"
-                onClick={() => setState(initial)}
-                className="mt-6 px-6 py-2.5 rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:border-[var(--color-text-muted)] transition-colors"
-              >
-                Start over
-              </button>
-            </div>
-          )}
-        </div>
       </div>
-    </section>
+
+      <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+        {currentStep === 'idea' && (
+          <div>
+            <h3 className="text-xl font-semibold mb-4">What's your product idea?</h3>
+            <input
+              data-test="product-idea-input"
+              type="text"
+              value={productIdea}
+              onChange={(e) => setProductIdea(e.target.value)}
+              placeholder="e.g., A task management app for developers"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+            />
+            <button
+              data-test="wizard-next"
+              onClick={nextStep}
+              disabled={!productIdea}
+              className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
+            >
+              Next
+            </button>
+          </div>
+        )}
+
+        {currentStep === 'mission' && (
+          <div data-test="mission-step">
+            <h3 className="text-xl font-semibold mb-4">Choose a mission template</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              Current idea: <span data-test="current-idea" className="font-medium">{productIdea}</span>
+            </p>
+            <div className="space-y-3">
+              {templates.map((template, index) => (
+                <button
+                  key={template.id}
+                  data-test={`mission-template-${index + 1}`}
+                  onClick={() => setSelectedMission(template.id)}
+                  className={`w-full p-4 text-left border rounded-lg transition-colors ${
+                    selectedMission === template.id
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-gray-300 dark:border-gray-600 hover:border-blue-300'
+                  }`}
+                >
+                  <div className="font-medium">{template.label}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">{template.mission}</div>
+                </button>
+              ))}
+            </div>
+            <button
+              data-test="wizard-next"
+              onClick={nextStep}
+              disabled={!selectedMission}
+              className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
+            >
+              Next
+            </button>
+          </div>
+        )}
+
+        {currentStep === 'pillars' && (
+          <div data-test="pillars-step">
+            <h3 className="text-xl font-semibold mb-4">Select design pillars</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">Choose 2-4 pillars that define your product's personality.</p>
+            <div className="grid grid-cols-2 gap-3">
+              {pillarSuggestions.map((pillar) => {
+                // Map specific pillars to test selectors
+                let testId = pillar.id;
+                if (pillar.label.toLowerCase().includes('simple') || pillar.id === 'clarity') testId = 'simple';
+                else if (pillar.label.toLowerCase().includes('focused') || pillar.id === 'empowered') testId = 'focused';
+                else if (pillar.label.toLowerCase().includes('reliable') || pillar.id === 'trust') testId = 'reliable';
+
+                return (
+                  <button
+                    key={pillar.id}
+                    data-test={`pillar-${testId}`}
+                    onClick={() => togglePillar(pillar.id)}
+                    className={`p-3 text-left border rounded-lg transition-colors ${
+                      selectedPillars.includes(pillar.id)
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                        : 'border-gray-300 dark:border-gray-600 hover:border-blue-300'
+                    }`}
+                  >
+                    <div className="font-medium text-sm">{pillar.label}</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">{pillar.description}</div>
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              data-test="wizard-next"
+              onClick={nextStep}
+              disabled={selectedPillars.length === 0}
+              className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
+            >
+              Next
+            </button>
+          </div>
+        )}
+
+        {currentStep === 'interaction' && (
+          <div data-test="interaction-step">
+            <h3 className="text-xl font-semibold mb-4">Describe a core interaction</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">What's the main thing users do in your product?</p>
+            <textarea
+              data-test="interaction-input"
+              value={interaction}
+              onChange={(e) => setInteraction(e.target.value)}
+              placeholder="e.g., User adds a task and sees it in their list"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 h-24"
+            />
+            <button
+              data-test="generate-spec"
+              onClick={generateSpec}
+              disabled={!interaction}
+              className="mt-4 px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
+            >
+              Generate Specification
+            </button>
+          </div>
+        )}
+
+        {currentStep === 'result' && (
+          <div>
+            <h3 className="text-xl font-semibold mb-4">Your Generated Specification</h3>
+            <div
+              data-test="generated-spec"
+              className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border font-mono text-sm whitespace-pre-line max-h-96 overflow-y-auto"
+            >
+              {generatedSpec}
+            </div>
+            <button
+              onClick={() => {
+                setCurrentStep('idea');
+                setProductIdea('');
+                setSelectedMission('');
+                setSelectedPillars([]);
+                setInteraction('');
+                setGeneratedSpec('');
+              }}
+              className="mt-4 px-6 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            >
+              Start Over
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

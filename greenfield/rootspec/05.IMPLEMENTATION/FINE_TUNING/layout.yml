@@ -1,35 +1,48 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Layout & Responsive
+# LEVEL 5: FINE TUNING - Layout System Parameters
 # =============================================================================
 # @spec_version: 1.0.0
 # @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
-# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# @last_updated: 2026-04-06T19:06:23Z
+# @status: production
+# @spec_source: 04.SYSTEMS/SYSTEMS_OVERVIEW.md
 
-breakpoints:
-  small: 640
-  # @unit: pixels
-  # @rationale: Standard mobile/tablet breakpoint; below this is single-column
-  # @constraints: min=320, max=768, type=integer
+# Page structure parameters
+layout:
+  header_height: 64             # Rationale: Standard height for branding and navigation
+  footer_height: 200            # Rationale: Space for attribution and links
+  hero_min_height: 500          # Rationale: Above-fold impact without overwhelming
+  section_min_height: 400       # Rationale: Comfortable reading blocks
 
-  large: 1024
-  # @unit: pixels
-  # @rationale: Tablet/desktop breakpoint; above this gets full layout with side-by-side elements
-  # @constraints: min=768, max=1280, type=integer
+# Content sizing
+content:
+  max_prose_width: 65           # Rationale: Optimal characters per line for reading
+  sidebar_width: 320            # Rationale: Enough for meaningful secondary content
+  grid_gap: 24                  # Rationale: Breathing room between components
+  card_padding: 32              # Rationale: Comfortable internal spacing
 
-max_content_width: 1200
-# @unit: pixels
-# @rationale: Readable line lengths on wide screens; prevents content from stretching too wide
-# @constraints: min=960, max=1440, type=integer
+# Interactive elements
+interactive:
+  wizard_width: 600             # Rationale: Wide enough for form fields, narrow enough for focus
+  hierarchy_width: 800          # Rationale: Space for visual connections between levels
+  comparison_height: 400        # Rationale: Enough vertical space for meaningful content
+  slider_track_height: 6        # Rationale: Visible but not overwhelming
 
-section_animation:
-  duration: 400
-  # @unit: milliseconds
-  # @rationale: Fast enough to feel responsive, slow enough to be noticed as a transition
-  # @constraints: min=200, max=800, type=integer
+# Scroll and navigation
+navigation:
+  scroll_offset: 80             # Rationale: Account for fixed header when linking sections
+  smooth_scroll_duration: 800   # Rationale: Fast enough to feel responsive, slow enough to follow
+  sticky_threshold: 100         # Rationale: Header becomes sticky after initial scroll
 
-  threshold: 0.15
-  # @unit: ratio (intersection observer)
-  # @rationale: Trigger animation when 15% of section is visible; early enough to feel seamless
-  # @constraints: min=0.05, max=0.5, type=float
+# Mobile optimizations
+mobile:
+  side_margin: 16               # Rationale: Minimum comfortable edge spacing
+  touch_spacing: 8              # Rationale: Extra space around touch targets
+  wizard_padding: 20            # Rationale: Reduced padding for smaller screens
+  section_padding: 48           # Rationale: Compressed but still readable sections
+
+# Performance thresholds
+performance:
+  lazy_load_offset: 200         # Rationale: Start loading images before they enter viewport
+  intersection_threshold: 0.1   # Rationale: Trigger animations when 10% visible
+  debounce_scroll: 16           # Rationale: 60fps throttling for scroll events

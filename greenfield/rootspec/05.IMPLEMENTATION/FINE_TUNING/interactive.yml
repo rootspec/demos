@@ -1,42 +1,40 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Interactive Features
+# LEVEL 5: FINE TUNING - Interactive System Parameters
 # =============================================================================
 # @spec_version: 1.0.0
 # @system: INTERACTIVE_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
-# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+# @last_updated: 2026-04-06T19:06:23Z
+# @status: production
+# @spec_source: 03.INTERACTIONS.md
 
-hierarchy_explorer:
-  expand_duration: 300
-  # @unit: milliseconds
-  # @rationale: Quick expansion that feels snappy but visible
-  # @constraints: min=150, max=500, type=integer
+# Timing values in milliseconds
+interaction_timing:
+  theme_transition: 200          # Rationale: Smooth but not distractingly slow
+  hierarchy_expand: 300          # Rationale: Allows content to flow naturally
+  wizard_step_transition: 250    # Rationale: Maintains flow between steps
+  comparison_slider: 150         # Rationale: Responsive drag feedback
 
-  reference_highlight_opacity: 0.3
-  # @unit: ratio
-  # @rationale: Dimmed lines are visible but clearly secondary to the highlighted ones
-  # @constraints: min=0.1, max=0.5, type=float
+# Touch targets in pixels (minimum for accessibility)
+touch_targets:
+  minimum_size: 44              # Rationale: WCAG AA compliance for mobile
+  button_padding: 12            # Rationale: Comfortable spacing around interactive elements
+  slider_handle: 48             # Rationale: Easy to grab on mobile devices
 
-spec_wizard:
-  min_pillars: 3
-  # @rationale: Minimum needed to represent a meaningful product vision per framework guidance
-  # @constraints: min=2, max=4, type=integer
+# Wizard flow parameters
+wizard_config:
+  max_pillars: 5                # Rationale: Prevents overwhelming choice paralysis
+  min_pillars: 3                # Rationale: Ensures meaningful design foundation
+  idea_max_length: 100          # Rationale: Forces concise problem statement
+  interaction_max_length: 200   # Rationale: Detailed enough for meaningful spec
 
-  max_pillars: 5
-  # @rationale: More than 5 dilutes focus per L1 anti-pattern guidance
-  # @constraints: min=4, max=8, type=integer
+# Hierarchy explorer parameters
+hierarchy_config:
+  max_expanded_levels: 2        # Rationale: Prevents cognitive overload
+  reference_highlight_delay: 100 # Rationale: Immediate visual feedback
+  content_preview_lines: 3      # Rationale: Enough to understand without overwhelming
 
-  template_count: 4
-  # @rationale: Enough variety to spark ideas without overwhelming choice
-  # @constraints: min=3, max=8, type=integer
-
-  pillar_suggestion_count: 8
-  # @rationale: Roughly double the max selectable; enough to browse without scrolling
-  # @constraints: min=6, max=12, type=integer
-
-comparison:
-  transition_duration: 300
-  # @unit: milliseconds
-  # @rationale: Matches hierarchy explorer timing for consistency
-  # @constraints: min=150, max=500, type=integer
+# Animation easing and curves
+animation_config:
+  easing_function: 'ease-out'   # Rationale: Natural feeling motion
+  stagger_delay: 50             # Rationale: Smooth sequential animations
+  hover_response: 100           # Rationale: Immediate visual feedback
