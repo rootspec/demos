@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+import { rootspecReporter } from './cypress/support/rootspec-reporter';
 
 export default defineConfig({
   e2e: {
@@ -8,5 +9,8 @@ export default defineConfig({
     video: false,
     screenshotOnRunFailure: false,
     defaultCommandTimeout: 10000,
+    setupNodeEvents(on, config) {
+      rootspecReporter(on, { statusPath: 'rootspec/tests-status.json' });
+    },
   },
 });
