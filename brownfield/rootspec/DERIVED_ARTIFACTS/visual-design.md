@@ -1,118 +1,217 @@
 # Visual Design
 
-Derived from L1 design pillars and L3 interaction patterns. This is a brownfield project — existing visual choices are documented and mapped to spec intent.
-
----
+*Generated from L1 design pillars and L3 interaction patterns*
 
 ## 1. Design Principles
 
-> Source: 01.PHILOSOPHY.md — Design Pillars
-
 ### Effortless Clarity → Visual Simplicity
-Large, prominent data. Minimal chrome. Information hierarchy enforced through size and weight, not decoration.
-- Temperature is the largest text element in every context
-- Weather emoji provides instant condition recognition without reading
-- Alert badges use color alone to communicate severity
-- **Comparison:** Side-by-side columns let differences register at a glance without mental context-switching
+Weather information is immediately understandable through clear hierarchy and minimal visual noise.
 
-### Familiar Comfort → Consistent Warmth
-Soft edges, neutral backgrounds, accent color for interactive elements. The interface should feel like a personal tool, not a data dashboard.
-- Rounded corners on cards and chips (8-12px radius)
-- Warm neutral palette (grays, not blue-grays)
-- Active states use the accent color (#667eea) consistently
-- **Comparison:** Selected cards use accent highlight; columns reuse the same card styles as the weather view
+- **Large data display** — Temperature dominates with emoji condition indicators
+- **Minimal chrome** — No unnecessary borders, shadows, or decorative elements  
+- **Information hierarchy** — Size, weight, and color communicate importance, not decoration
+- **Alert visibility** — Condition-based alerts surface automatically with color coding
+
+### Familiar Comfort → Consistent Warmth  
+The interface feels like a personal tool with consistent, comfortable visual patterns.
+
+- **Soft edges** — Rounded corners (8-12px radius) on cards, buttons, and chips
+- **Warm neutral palette** — Grays with warm undertones, not cold blue-grays
+- **Consistent accent** — Single accent color for all interactive elements
+- **Predictable layouts** — Similar content types use similar visual patterns
 
 ### Ambient Awareness → Contextual Surfacing
-Information appears when relevant, not by default. Alerts, precipitation probability, and the save button appear only when applicable.
-- Alerts render above weather card only when thresholds are met
-- Precipitation percentage shown inline only when > 0%
-- Save button absent for already-saved cities
-- View toggle absent when no favorites exist
-- **Comparison:** Compare button only appears when 2+ favorites exist; alerts surface per column
+Relevant information appears naturally without hunting or configuration.
 
----
+- **Conditional display** — Alerts, save buttons, and comparison options only appear when relevant
+- **Progressive disclosure** — Settings panel collapsed by default, favorites appear after saving locations
+- **Inline feedback** — Precipitation probability shown contextually in forecasts
+- **State clarity** — Active selections and current location clearly highlighted
+
+> Source: 01.PHILOSOPHY.md — Design Pillars translated to visual principles
 
 ## 2. Component Patterns
 
-> Source: 03.INTERACTIONS.md — Core Journeys, 05.IMPLEMENTATION/USER_STORIES/
+### Primary Components
 
-**Search input + dropdown:** Full-width text input with debounced autocomplete. Dropdown overlays content below. Clean dismiss on selection.
+**Search Bar**
+- Full-width text input with debounced autocomplete dropdown
+- Clean dismiss behavior on city selection
+- Prominent placement for immediate access
 
-**Weather card:** Centered layout with city name + emoji header, large temperature, description, and a details row (humidity, wind, UV) using emoji prefixes.
+**Weather Display Cards**
+- Centered layout with city name and weather emoji header
+- Large temperature display as primary focal point
+- Secondary details row (humidity, wind, UV) with emoji prefixes
+- Alert badges positioned above when conditions warrant
 
-**Chip bar:** Horizontal wrap of pill-shaped buttons for favorites. Active chip uses accent fill. Remove affordance (✕) inline with opacity hover reveal.
+**Favorites Management**
+- Horizontal chip bar with pill-shaped buttons
+- Active city highlighted with accent color fill
+- Remove affordance (✕) with hover reveal
+- Wraps to multiple lines as needed
 
-**Hourly strip:** Horizontal scroll with arrow controls. Fixed-width hour cards showing time, emoji, temperature, and optional precipitation.
+**Forecast Components**
+- Hourly strip: horizontal scroll with fixed-width time cards showing emoji, temp, precipitation
+- Daily chart: proportional height bars with gradient fills between high/low temperatures
+- Consistent emoji usage for weather condition recognition
 
-**Forecast bar chart:** Horizontal flex of day columns with proportional height bars (gradient fill) between high and low temperatures.
+### Multi-View Components
 
-**Dashboard grid:** Auto-fill responsive grid (minmax 180px). Hover shadow on cards. Click navigates to weather view. Compare button positioned above the grid.
+**Dashboard Grid**
+- Auto-fill responsive grid (minimum 180px per card)
+- Location cards show current temp and conditions
+- Hover states provide selection feedback
+- Compare button positioned above grid when applicable
 
-**Comparison selection cards:** Dashboard cards with a selectable toggle state — accent border or check indicator when selected. Non-destructive: clicking toggles, doesn't navigate.
+**Comparison Interface**
+- Selection mode: cards become toggleable with accent borders or check indicators
+- Comparison view: equal-width columns (2-3) in flexible layout
+- Each column: city header with deselect option, compact weather display, condensed forecast
+- "Back to Dashboard" navigation at top of comparison view
 
-**Comparison columns:** Equal-width columns (2-3) in a flex or grid row. Each column is a vertical stack: city name header with deselect affordance, then weather card, hourly strip (compact), and forecast chart (compact). "Back to Dashboard" link at the top of the comparison view.
+**Settings Panel**
+- Collapsible section with toggle control
+- Binary option buttons (active state uses accent fill)
+- Dropdown for default city selection from favorites
+- Immediate persistence of all changes
 
-**Settings panel:** Collapsible section with toggle button. Binary option buttons (active = accent fill). Select dropdown for default city.
-
-**Alert badges:** Small colored pills. Background and text color vary by severity. No dismiss — they reflect current conditions.
-
----
+> Source: 03.INTERACTIONS.md — Core Journeys mapped to visual patterns
+> Source: 05.IMPLEMENTATION/USER_STORIES/ — specific component behaviors
 
 ## 3. Layout Approach
 
-> Source: 03.INTERACTIONS.md — Interaction Loop Architecture
+### Overall Structure
+- **Single-column layout** with 640px max-width, auto margins for desktop
+- **Vertical stacking** of all primary content regions
+- **Sticky header** maintains context across view transitions
 
-**Single-column, centered:** Max-width 640px, auto margins. All content stacks vertically.
+### Content Regions (in order)
+1. **Header** — App title and view toggle (when favorites exist)
+2. **Search** — Always accessible city search input
+3. **Settings** — Collapsible preferences panel
+4. **Primary Content** — Weather view, dashboard grid, or comparison columns
+5. **Footer** — Attribution and version information
 
-**Comparison exception:** The comparison view needs wider layout to fit 2-3 columns. Options:
-- Expand max-width to ~960px (3 × 300px columns + gaps)
-- Or use the full viewport width with a max-width of ~1024px
-- Each column maintains the same vertical stacking as the weather view but in a compact variant
+### View-Specific Layouts
 
-**Region order:**
-1. Header (title + view toggle) — sticky context
-2. Search — always accessible
-3. Settings — collapsed by default, secondary
-4. Content (weather view OR dashboard OR comparison) — primary focus
+**Weather View**
+- Standard single-column layout at 640px max-width
+- Favorites bar below search when locations are saved
+- Weather content stack: alerts → current weather → hourly → daily forecast
 
-**Navigation:** No pages, no routes. Three views (weather/dashboard/compare) managed via state. Comparison is entered from dashboard, not directly accessible from weather view.
+**Dashboard View**  
+- Grid layout within the 640px container
+- Auto-fill responsive grid, minimum 180px per card
+- Compare button above grid when 2+ favorites exist
 
-**Information hierarchy:** Search → context (favorites/settings) → primary data (weather/dashboard/comparison). Most important action (search) is always visible and topmost.
+**Comparison View**
+- Expanded layout to accommodate 2-3 columns (960px+ max-width)
+- Equal-width columns with vertical content stacking
+- Each column uses compact versions of weather view components
 
----
+### Navigation Model
+- **No routing** — three view states managed via application state
+- **View toggle** in header switches between Weather and Dashboard
+- **Comparison** entered from Dashboard, returns to Dashboard on completion
+- **Search selection** automatically switches to Weather view
+
+> Source: 03.INTERACTIONS.md — interaction loops and view transitions
 
 ## 4. Color & Typography Direction
 
-> Source: 01.PHILOSOPHY.md — Pillars, existing codebase
+### Color Palette
 
-**Palette direction:**
-- Background: Light warm gray (#f0f2f5)
-- Cards: White with subtle borders (#eee)
-- Primary accent: Indigo (#667eea) — used for active states, links, interactive highlights, comparison selection
-- Gradient accent: Indigo to purple (#667eea → #764ba2) — forecast bars
-- Alert colors: Semantic (red for danger, amber for warning, blue for info, gray for neutral)
+**Base Colors**
+- Background: Light warm gray (#f0f2f5) for overall page
+- Cards: White with subtle borders (#eee) for content containers
 - Text: Dark gray (#333) primary, medium gray (#666) secondary, light gray (#999) tertiary
-- Selection state: Accent border or subtle accent background for selected comparison cards
 
-**Typography:**
-- System font stack: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif
-- Scale: 12px (metadata) → 13-14px (body/controls) → 16px (empty state) → 18px (section headers) → 24px (app title) → large (temperature display)
-- Weight: 400 normal, 500 medium (alerts), 600 semibold (temperatures, city names)
-- Comparison columns use slightly reduced font sizes for compact display
+**Interactive Colors**
+- Primary accent: Indigo (#667eea) for active states, links, selection highlights
+- Gradient accent: Indigo to purple (#667eea → #764ba2) for forecast bars
+- Hover states: Subtle opacity changes and shadow additions
 
----
+**Semantic Colors**
+- Alert red: Danger conditions and error states
+- Alert amber: Warning conditions
+- Alert blue: Information and notices
+- Alert gray: Neutral status indicators
+
+**Selection States**
+- Accent border or subtle accent background for selected comparison cards
+- Accent fill for active favorites chips and settings options
+
+### Typography Scale
+
+**Font Stack**
+- System fonts: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif
+- Fallback: Arial, sans-serif
+
+**Scale & Weights**
+- Metadata: 12px regular (timestamps, attribution)
+- Body text: 13-14px regular (descriptions, details)
+- Controls: 14px regular (buttons, inputs, labels)  
+- Empty states: 16px regular (prompts, instructions)
+- Section headers: 18px medium (component titles)
+- App title: 24px semibold (header branding)
+- Temperatures: Large sizes 28-36px semibold (primary data display)
+- City names: 20px semibold (location headers)
+
+**Comparison Adjustments**
+- Compact variants use slightly reduced font sizes for column layouts
+- Maintain relative hierarchy while fitting more content per column
+
+> Source: 01.PHILOSOPHY.md — emotional targets inform visual mood
+> Source: Existing codebase — styled-components implementation patterns
 
 ## 5. Responsive Strategy
 
-> Source: 02.TRUTHS.md — Constraints, 03.INTERACTIONS.md
+### Desktop-First Approach
+The 640px max-width container naturally works on mobile devices without complex breakpoints.
 
-**Desktop-first, responsive-tolerant.** The 640px max-width means the layout naturally works on mobile without breakpoints. Key responsive behaviors:
+**Key Responsive Behaviors**
+- **Dashboard grid** uses auto-fill with 180px minimum — collapses to single column on narrow screens
+- **Favorites chips** wrap to multiple rows as needed
+- **Hourly forecast** scrolls horizontally with touch-friendly controls
+- **Daily forecast** bars use flexible sizing with 60px minimum width
 
-- Forecast chart uses `flex: 1 0 0` with `minWidth: 60px` and horizontal scroll overflow
-- Dashboard grid uses `auto-fill, minmax(180px, 1fr)` — collapses to single column on narrow screens
-- Hourly strip scrolls horizontally with arrow controls
-- Favorites chips wrap to multiple rows
+**Comparison View Responsive**
+- **Wide screens** (960px+): 3-column side-by-side layout
+- **Medium screens** (640-960px): 2-column layout with optional vertical stack at breakpoint
+- **Narrow screens** (<640px): Single column with sequential city comparisons
 
-**Comparison responsive behavior:** On narrow viewports, comparison columns may stack vertically (one per row) rather than side-by-side, since 2-3 columns at ~300px each require ~640-960px of content width. A single media query or container query can handle this transition.
+### Mobile Considerations
+- **Touch targets** minimum 44px for buttons and interactive elements
+- **Scroll areas** optimized for touch interaction
+- **Content spacing** sufficient for thumb navigation
+- **Text sizing** maintains readability without zoom requirements
 
-No media queries in the existing codebase, but the comparison view may introduce the first one for the column layout breakpoint.
+### Breakpoint Strategy
+- **No media queries** in current implementation for main layout
+- **Comparison view** may introduce first breakpoint for column transitions
+- **Container queries** preferred over viewport queries for component responsiveness
+
+> Source: 02.TRUTHS.md — responsive constraints
+> Source: 03.INTERACTIONS.md — interaction patterns across screen sizes
+
+## Implementation Notes
+
+### Existing Visual Implementation
+The current codebase uses a mix of styled-components and global CSS, implementing these design principles through:
+- Consistent spacing scale and color usage
+- Emoji-first weather condition display
+- Subtle shadows and rounded corners for depth
+- Clean typography hierarchy with system fonts
+
+### Visual Debt Areas
+- **Styling consistency** — Mix of styled-components, CSS modules, and inline styles
+- **Component variants** — No systematic approach to compact/expanded component versions
+- **Design tokens** — Colors and spacing values scattered across components
+
+### Enhancement Opportunities
+- **Design system** — Centralized tokens for colors, spacing, typography
+- **Comparison UI** — New visual patterns for multi-city comparison interface
+- **Accessibility** — Color contrast verification and focus state improvements
+
+> Source: src/styles/ and component analysis — actual visual implementation patterns

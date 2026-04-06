@@ -1,140 +1,221 @@
 # Technical Design
 
-Derived from the RootWeather specification. This is a brownfield project — conventions are documented from existing code, with notes on spec alignment.
-
----
+*Generated from validated RootSpec specification and existing codebase analysis*
 
 ## 1. Technology Stack
 
-> Source: scan-project.sh output, 04.SYSTEMS/SYSTEMS_OVERVIEW.md
+### Core Framework
+- **React 18.2** with functional components and hooks
+- **Vite 5.0** for development server and build tooling  
+- **JavaScript (ES modules)** — no TypeScript in current implementation despite devDependency
 
-| Layer | Technology | Version | Notes |
-|-------|-----------|---------|-------|
-| Framework | React | ^18.2.0 | Functional components + class components (mixed) |
-| Build tool | Vite | ^5.0.0 | Default config, no custom plugins |
-| Styling | CSS Modules + styled-components + inline styles | Mixed | Three styling approaches coexist |
-| Language | JavaScript (ES modules) | — | No TypeScript, JSX files |
-| API | Open-Meteo (REST, keyless) | — | Geocoding + forecast endpoints |
-| Testing | Cypress (newly added) | — | E2E only, no unit tests |
-| State | React useState + localStorage | — | No state library |
+### Styling
+- **styled-components 5.3** for component styling
+- **Global CSS** (`src/styles/global.css`) for base styles and layout
+- **CSS-in-JS approach** with component-specific styling
 
-**Spec alignment notes:**
-- L2 mandates client-only architecture — no backend exists
-- L2 mandates free keyless APIs — Open-Meteo requires no auth
-- Mixed component styles (class vs functional) are a legacy artifact, not a design choice
+### External Dependencies
+- **Open-Meteo API** — free, keyless weather and geocoding services
+- **Browser APIs** — localStorage for persistence, fetch for HTTP
 
----
+> Source: scan-project.sh output — package.json, vite.config.js, src/ analysis
+> Source: 02.TRUTHS.md — client-only architecture, open data constraints
 
 ## 2. Architecture Patterns
 
-> Source: 04.SYSTEMS/SYSTEMS_OVERVIEW.md, 02.TRUTHS.md
-
-**Module structure:** Flat `src/components/` directory. No routing — single-page app with view state managed in `App.jsx`.
-
-**State management:** All state lives in `App.jsx` and flows down via props. No context, no reducers, no state library. Settings and favorites are synced to localStorage via `useEffect`.
-
-**Data flow:**
+### Component Organization
 ```
-User action → App.jsx handler → state update → re-render
-                                    ↓
-                              localStorage sync (side effect)
+src/
+├── components/          # UI components by feature
+│   ├── SearchBar.jsx   # City search with autocomplete
+│   ├── CurrentWeather.jsx
+│   ├── ForecastChart.jsx
+│   ├── HourlyForecast.jsx
+│   ├── FavoritesList.jsx
+│   ├── LocationsDashboard.jsx
+│   ├── ComparisonView.jsx
+│   ├── SettingsPanel.jsx
+│   └── WeatherAlerts.jsx
+├── hooks/              # Custom React hooks
+│   └── useWeather.js   # Weather data fetching logic
+├── utils/              # Pure utility modules
+│   ├── api.js          # Open-Meteo API interface
+│   ├── storage.js      # localStorage abstraction
+│   └── temperature.js  # Unit conversion utilities
+└── App.jsx            # Root component with state management
 ```
 
-Weather fetching is encapsulated in `useWeather` hook (cancellable). `LocationsDashboard` has its own fetch logic (class component with `componentDidMount`).
+### State Management
+- **React hooks** (`useState`, `useEffect`) in App.jsx for global state
+- **Custom hooks** (`useWeather`) for data fetching with cleanup
+- **localStorage** for persistent state (favorites, settings)
+- **Props drilling** for component communication — no external state library
 
-**Comparison view:** The new comparison feature introduces a third view state (`compare`) in App.jsx. Comparison selection state (`comparedCities` array) is managed alongside the existing `view` state. Weather data for compared cities can reuse the dashboard's parallel-fetch pattern from `LocationsDashboard`.
+### Data Flow Patterns
+- **Top-down props** from App.jsx to child components
+- **Event handlers** passed down for state mutations
+- **Effect synchronization** between React state and localStorage
+- **Parallel fetching** for dashboard weather data
 
-**Spec alignment notes:**
-- L4 defines four systems; code maps to them naturally:
-  - WEATHER_SYSTEM → `utils/api.js`, `hooks/useWeather.js`, `WeatherAlerts.jsx`
-  - LOCATION_SYSTEM → `utils/api.js` (searchCities), `utils/storage.js` (favorites)
-  - SETTINGS_SYSTEM → `utils/storage.js` (units/format), `SettingsPanel.jsx`
-  - VIEW_SYSTEM → `App.jsx`, all display components
-
----
+> Source: 04.SYSTEMS/SYSTEMS_OVERVIEW.md — system responsibilities and data flow
+> Source: src/App.jsx analysis — actual state management patterns
 
 ## 3. Coding Conventions
 
-> Source: Existing codebase patterns
+### File Organization
+- **PascalCase** for React components (`CurrentWeather.jsx`)
+- **camelCase** for hooks (`useWeather.js`) and utilities
+- **Single component** per file with default export
+- **Relative imports** for local modules
 
-**File naming:**
-- Components: PascalCase `.jsx` (e.g., `SearchBar.jsx`)
-- Utilities: camelCase `.js` (e.g., `temperature.js`)
-- Hooks: camelCase with `use` prefix `.js` (e.g., `useWeather.js`)
-- CSS Modules: `ComponentName.module.css`
+### Component Patterns
+- **Functional components** with hooks throughout
+- **Props destructuring** in function parameters
+- **Conditional rendering** with logical operators (`&&`, ternary)
+- **Event handler** naming: `handleXxx` functions
 
-**Component patterns:**
-- Class components: `SearchBar`, `ForecastChart`, `HourlyForecast`, `LocationsDashboard`, `SettingsPanel`
-- Functional components: `CurrentWeather`, `FavoritesList`, `WeatherAlerts`, `App`
-- New components should prefer functional style with hooks
+### Code Style
+- **ES6+ features** — arrow functions, destructuring, template literals
+- **Array methods** for data transformation (`.map()`, `.filter()`, `.some()`)
+- **Early returns** and guard clauses for error states
+- **Inline styles** via styled-components, minimal className usage
 
-**Styling approaches (three coexist):**
-1. CSS Modules (SearchBar, CurrentWeather, HourlyForecast, SettingsPanel)
-2. styled-components (FavoritesList, WeatherAlerts)
-3. Inline styles (ForecastChart, LocationsDashboard)
-
-New comparison components should use CSS Modules for consistency with the majority of existing components.
-
-**Export pattern:** Default exports for all components. Named exports for utility functions.
-
----
+> Source: src/ codebase analysis — existing patterns and conventions
 
 ## 4. API Approach
 
-> Source: 04.SYSTEMS/WEATHER_SYSTEM.md, 04.SYSTEMS/LOCATION_SYSTEM.md
+### External APIs
+- **Open-Meteo Geocoding** — `GET /v1/search?name={query}` for city search
+- **Open-Meteo Weather** — `GET /v1/forecast?lat={lat}&lon={lon}&current=...&hourly=...&daily=...`
 
-Two Open-Meteo endpoints, both GET with query parameters:
+### API Layer Organization
+```javascript
+// src/utils/api.js
+export async function searchCities(query)    // Returns city candidates
+export async function getWeather(lat, lon)   // Returns weather data
+export function getWeatherDescription(code)  // Converts codes to text
+export function getWeatherEmoji(code)        // Converts codes to emoji
+```
 
-| Endpoint | Base URL | Purpose |
-|----------|---------|---------|
-| Geocoding | `geocoding-api.open-meteo.com/v1/search` | City search by name |
-| Forecast | `api.open-meteo.com/v1/forecast` | Current + hourly + daily weather |
+### Request Patterns
+- **No authentication** required — keyless APIs only
+- **URL-encoded parameters** for GET requests
+- **Fetch with async/await** for all HTTP calls
+- **Error handling** via try/catch in calling code
 
-No auth headers, no API keys, no rate limiting (public tier). Responses are JSON. Error handling is minimal — fetch failures surface as error state in the UI.
+### Data Transformation
+- **Minimal processing** — API responses used mostly as-is
+- **Weather code mapping** for human-readable descriptions and emoji
+- **Coordinate-based** location identification (lat/lon pairs)
 
-The comparison view fetches weather for 2-3 cities in parallel using the same pattern as the dashboard (`Promise.all` over `getWeather` calls).
-
----
+> Source: 04.SYSTEMS/WEATHER_SYSTEM.md — API integration responsibilities
+> Source: src/utils/api.js analysis — actual API interface implementation
 
 ## 5. Data Model
 
-> Source: 04.SYSTEMS/ (all system docs)
+### Core Entities
 
-**City** (transient, from geocoding response):
-- `id`, `name`, `latitude`, `longitude`, `country`, `admin1`
+**City Location**
+```javascript
+{
+  name: string,           // Display name (e.g., "New York")
+  latitude: number,       // Decimal coordinates
+  longitude: number,      // Decimal coordinates  
+  country: string         // Country code (e.g., "US")
+}
+```
 
-**Favorite** (persisted to localStorage):
-- `name`, `latitude`, `longitude`, `country`
-- Keyed by `${latitude}-${longitude}` for uniqueness
+**Weather Data** (Open-Meteo response format)
+```javascript
+{
+  current: {
+    temperature_2m: number,
+    relative_humidity_2m: number,
+    wind_speed_10m: number,
+    uv_index: number,
+    weather_code: number
+  },
+  hourly: {
+    time: string[],
+    temperature_2m: number[],
+    weather_code: number[],
+    precipitation_probability: number[]
+  },
+  daily: {
+    time: string[],
+    temperature_2m_max: number[],
+    temperature_2m_min: number[],
+    weather_code: number[],
+    precipitation_probability_max: number[]
+  }
+}
+```
 
-**Settings** (persisted to localStorage):
-- `rootweather_unit`: "celsius" | "fahrenheit"
-- `rootweather_wind_unit`: "kmh" | "mph"
-- `rootweather_time_format`: "24h" | "12h"
-- `rootweather_default_city`: string | null
-- `rootweather_favorites`: JSON array of Favorite objects
+**Settings**
+```javascript
+{
+  unit: "celsius" | "fahrenheit",
+  windUnit: "kmh" | "mph", 
+  timeFormat: "24h" | "12h",
+  defaultCity: string | null,
+  favorites: CityLocation[]
+}
+```
 
-**View state** (transient, in-memory):
-- `view`: "weather" | "dashboard" | "compare"
-- `comparedCities`: City[] (max 3, subset of favorites)
+### Data Ownership
+- **WEATHER_SYSTEM** owns weather API responses and condition alerts
+- **LOCATION_SYSTEM** owns city search results and favorites list
+- **SETTINGS_SYSTEM** owns user preferences and localStorage keys
 
-**Weather data** (transient, from API response):
-- Not stored — re-fetched on every city selection or comparison entry
-
----
+> Source: 04.SYSTEMS/SYSTEMS_OVERVIEW.md — system data ownership
+> Source: src/utils/storage.js analysis — actual data persistence structure
 
 ## 6. Testing Strategy
 
-> Source: 05.IMPLEMENTATION/USER_STORIES/
+### Current Setup
+- **Cypress** for end-to-end testing (15.13.0 detected)
+- **No unit testing framework** — Jest or Vitest would be typical additions
+- **Husky** for pre-commit hooks
 
-**E2E (Cypress):** 19 user stories across 2 phases:
-- `baseline` (14 stories) — existing functionality
-- `comparison` (5 stories) — side-by-side comparison feature
+### Recommended Testing Approach
 
-**Unit tests:** None currently. Low priority given the simple logic (temperature conversion, alert threshold checks).
+**E2E Testing** (using existing Cypress)
+- **Search and select city** — core user journey
+- **Save and manage favorites** — persistence verification
+- **Settings changes** — unit switching and persistence
+- **View transitions** — weather/dashboard/comparison modes
+- **Comparison workflows** — multi-city selection and display
 
-**Integration tests:** Not applicable — no backend, no database. E2E covers the integration surface.
+**Unit Testing** (recommended addition)
+- **Utility functions** — `src/utils/` modules (temperature conversion, weather code mapping)
+- **Custom hooks** — `useWeather` hook with mocked API responses
+- **localStorage abstraction** — `storage.js` functions with mocked localStorage
 
-**Test data:** Tests use real API calls (Open-Meteo is free and stable). No mocks, no fixtures, except US-103 which intercepts the API to ensure deterministic alert conditions.
+**Integration Testing** (recommended addition)
+- **Component interactions** — settings panel affecting weather display
+- **API integration** — actual Open-Meteo responses (with network stubbing)
+- **State synchronization** — React state ↔ localStorage consistency
 
-**Comparison tests:** Require saving 2+ favorites as setup, then navigating through dashboard → compare mode → selection → comparison view. Each test has a long given-chain of setup steps.
+> Source: 05.IMPLEMENTATION/USER_STORIES/ — testable acceptance criteria
+> Source: cypress/ directory detected — existing E2E setup
+
+## Implementation Notes
+
+### Existing Code Alignment
+The current codebase closely follows the L4 system design:
+- Clear separation between weather data, location management, settings, and view logic
+- Client-only architecture with localStorage persistence
+- Open-Meteo API integration matching the "open data" constraint
+
+### Technical Debt Areas
+- TypeScript configured but not used — consider full migration or removal
+- No unit testing framework — limits refactoring confidence
+- Global CSS + styled-components mixture — could standardize approach
+
+### Performance Considerations
+- **Parallel weather fetching** for dashboard view already implemented
+- **Request cancellation** in useWeather hook prevents race conditions
+- **localStorage persistence** on every settings change — acceptable for small data volumes
+
+> Source: 02.TRUTHS.md — client-only architecture trade-offs
+> Source: App.jsx analysis — performance patterns in actual implementation
