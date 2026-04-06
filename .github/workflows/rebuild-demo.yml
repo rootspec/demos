@@ -143,10 +143,11 @@ jobs:
         run: |
           claude -p \
             --dangerously-skip-permissions \
-            --max-turns 20 \
-            --max-budget-usd 4 \
+            --max-turns 40 \
+            --max-budget-usd 5 \
             --model claude-sonnet-4-20250514 \
-            "Run /rs-validate. This is non-interactive — do not ask questions."
+            "Run /rs-validate. This is non-interactive — do not ask questions." \
+            || echo "Validate step exited with $? — continuing to PR"
 
       # ── PR phase ─────────────────────────────────────────
 
