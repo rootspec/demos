@@ -1,35 +1,87 @@
-# =============================================================================
-# LEVEL 5: FINE TUNING - Layout & Responsive
-# =============================================================================
-# @spec_version: 1.0.0
-# @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
-# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# Layout System Fine-Tuning Parameters
 
-breakpoints:
-  small: 640
-  # @unit: pixels
-  # @rationale: Standard mobile/tablet breakpoint; below this is single-column
-  # @constraints: min=320, max=768, type=integer
+## Performance Budgets
+max_page_load_time: 2000ms
+  # Used for: Performance monitoring and optimization targets
+  # Rationale: User expectation for modern web sites, affects engagement
 
-  large: 1024
-  # @unit: pixels
-  # @rationale: Tablet/desktop breakpoint; above this gets full layout with side-by-side elements
-  # @constraints: min=768, max=1280, type=integer
+max_interaction_response: 100ms
+  # Used for: Interactive element response time
+  # Rationale: Google Core Web Vitals threshold for perceived responsiveness
 
-max_content_width: 1200
-# @unit: pixels
-# @rationale: Readable line lengths on wide screens; prevents content from stretching too wide
-# @constraints: min=960, max=1440, type=integer
+max_cumulative_layout_shift: 0.1
+  # Used for: Visual stability measurement
+  # Rationale: Google Core Web Vitals "Good" threshold
 
-section_animation:
-  duration: 400
-  # @unit: milliseconds
-  # @rationale: Fast enough to feel responsive, slow enough to be noticed as a transition
-  # @constraints: min=200, max=800, type=integer
+## Content Layout
+optimal_line_length_min: 45
+  # Used for: Minimum characters per line for comfortable reading
+  # Rationale: Typography best practices for readability
 
-  threshold: 0.15
-  # @unit: ratio (intersection observer)
-  # @rationale: Trigger animation when 15% of section is visible; early enough to feel seamless
-  # @constraints: min=0.05, max=0.5, type=float
+optimal_line_length_max: 75
+  # Used for: Maximum characters per line for comfortable reading
+  # Rationale: Prevents eye strain from excessively long lines
+
+section_spacing_mobile: 3rem
+  # Used for: Vertical spacing between major sections on mobile
+  # Rationale: Enough separation without excessive scrolling on small screens
+
+section_spacing_desktop: 5rem
+  # Used for: Vertical spacing between major sections on desktop
+  # Rationale: Proportional to larger viewport, maintains visual rhythm
+
+## Interactive Component Layout
+hierarchy_explorer_max_width: 800px
+  # Used for: Maximum width of hierarchy visualization
+  # Rationale: Optimal size for comprehension without overwhelming smaller screens
+
+wizard_max_width: 600px
+  # Used for: Maximum width of spec wizard interface
+  # Rationale: Form best practices for focused interaction
+
+comparison_panel_min_height: 400px
+  # Used for: Minimum height for before/after comparison panels
+  # Rationale: Enough space to show meaningful content differences
+
+## Grid System
+grid_columns: 12
+  # Used for: CSS Grid column count
+  # Rationale: Flexible division supporting common layout patterns
+
+grid_gap_mobile: 1rem
+  # Used for: Spacing between grid items on mobile
+  # Rationale: Sufficient separation without wasting precious mobile space
+
+grid_gap_desktop: 2rem
+  # Used for: Spacing between grid items on desktop
+  # Rationale: Proportional to larger screens, maintains visual breathing room
+
+## Navigation and Hierarchy
+header_height_mobile: 60px
+  # Used for: Fixed header height on mobile devices
+  # Rationale: Large enough for touch targets, small enough to preserve content space
+
+header_height_desktop: 80px
+  # Used for: Header height on desktop
+  # Rationale: Proportional to larger screens, accommodates larger touch targets
+
+skip_link_z_index: 1000
+  # Used for: Ensuring skip links appear above other content
+  # Rationale: High enough to avoid conflicts while staying below modal/overlay ranges
+
+## Scroll and Focus Behavior
+smooth_scroll_duration: 800ms
+  # Used for: Duration for smooth scroll animations
+  # Rationale: Long enough to be followed visually, short enough not to feel sluggish
+
+focus_scroll_offset: 80px
+  # Used for: Offset when scrolling focused elements into view
+  # Rationale: Accounts for fixed header and provides comfortable margin
+
+scroll_padding_mobile: 1rem
+  # Used for: Padding around scroll target areas on mobile
+  # Rationale: Prevents content from touching screen edges
+
+scroll_padding_desktop: 2rem
+  # Used for: Padding around scroll target areas on desktop
+  # Rationale: Proportional spacing for larger viewports

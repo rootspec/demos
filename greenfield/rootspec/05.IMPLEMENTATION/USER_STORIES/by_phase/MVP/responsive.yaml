@@ -1,26 +1,59 @@
-# =============================================================================
-# USER STORY: Mobile Experience
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+US-017:
+  title: "Navigate site sections intuitively"
+  as: "first-time visitor"
+  want: "to understand the site structure and flow easily"
+  so_that: "I can find information without confusion"
+  acceptance_criteria:
+    AC-017-1: "Given I visit the homepage when I scan the layout then sections flow logically from problem through solution to action"
+    AC-017-2: "Given I want to navigate when I look for options then clear section headings or navigation elements guide me"
+    AC-017-3: "Given I'm reading through sections when I scroll then visual cues indicate progress and next steps"
+    AC-017-4: "Given I want to return to earlier content when I navigate then I can easily jump to previous sections"
+  priority: high
+  phase: MVP
+  system: layout
+  design_pillar: IMMEDIATE_CLARITY
 
-id: US-401
-title: Use the site on mobile devices
+US-018:
+  title: "Load and read content quickly"
+  as: "time-conscious developer"
+  want: "fast page loads and immediate access to information"
+  so_that: "I can evaluate RootSpec efficiently"
+  acceptance_criteria:
+    AC-018-1: "Given I visit the site when the page loads then content appears within 2 seconds on standard connections"
+    AC-018-2: "Given I'm scanning content when I look at sections then text is immediately readable without waiting for additional loads"
+    AC-018-3: "Given I want to interact when I try features then interactive elements are responsive within 100ms"
+    AC-018-4: "Given I have a slow connection when I use the site then critical content loads first with progressive enhancement"
+  priority: high
+  phase: MVP
+  system: layout
+  design_pillar: METHODICAL_CONFIDENCE
 
-acceptance_criteria:
-  - id: AC-401-1
-    title: Content is readable on small screens
-    narrative: |
-      Given I am viewing the site on a mobile device
-      When the page loads
-      Then all content should be visible without horizontal scrolling
-      And text should be readable without zooming
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
-      - shouldExist: { selector: '[data-test=meta-banner]' }
+US-019:
+  title: "Focus on content without distraction"
+  as: "developer evaluating a new tool"
+  want: "content-focused design that doesn't get in the way"
+  so_that: "I can concentrate on understanding RootSpec concepts"
+  acceptance_criteria:
+    AC-019-1: "Given I'm reading content when I focus on text then layout doesn't compete for attention"
+    AC-019-2: "Given I want to understand concepts when I study sections then visual hierarchy supports comprehension"
+    AC-019-3: "Given I'm using interactive features when I engage with them then layout frames the interaction clearly"
+    AC-019-4: "Given I have limited attention when I scan the page then key information stands out appropriately"
+  priority: medium
+  phase: MVP
+  system: layout
+  design_pillar: IMMEDIATE_CLARITY
+
+US-020:
+  title: "Use site efficiently on mobile"
+  as: "mobile user"
+  want: "content and interactions optimized for small screens"
+  so_that: "I get full value from the site regardless of device"
+  acceptance_criteria:
+    AC-020-1: "Given I'm on mobile when I read content then text sizing and line spacing are comfortable for mobile reading"
+    AC-020-2: "Given I want to interact when I tap elements then touch targets are at least 44px and well-spaced"
+    AC-020-3: "Given I navigate the site when I use gestures then scrolling feels natural and responsive"
+    AC-020-4: "Given I switch orientations when I rotate my device then layouts adapt smoothly to portrait/landscape"
+  priority: high
+  phase: MVP
+  system: layout
+  design_pillar: TANGIBLE_DEMONSTRATION

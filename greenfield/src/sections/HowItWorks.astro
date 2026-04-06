@@ -1,43 +1,448 @@
 ---
-const steps = [
-  {
-    command: '/rs-init',
-    title: 'Initialize',
-    description: 'Set up the spec directory, framework files, and project prerequisites. One command, ready in seconds.',
-  },
-  {
-    command: '/rs-spec',
-    title: 'Specify',
-    description: 'Define your product through structured dialogue — mission, design pillars, interactions, systems, and testable user stories.',
-  },
-  {
-    command: '/rs-impl',
-    title: 'Implement',
-    description: 'Turn user stories into working code, one at a time, verified by tests. Each story traces back to the spec.',
-  },
-  {
-    command: '/rs-validate',
-    title: 'Validate',
-    description: 'Run the full test suite against your spec. Every acceptance criterion is checked. Proof, not trust.',
-  },
-];
 ---
 
-<section id="how-it-works" data-test="how-it-works-section" class="py-16 sm:py-24 px-4 sm:px-6">
-  <div class="max-w-content mx-auto">
-    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">How it works</h2>
-    <p class="mt-4 text-lg text-[var(--color-text-secondary)] max-w-2xl">
-      Four skills drive all workflows. Each one builds on the last.
-    </p>
-    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-      {steps.map((step, i) => (
-        <div data-test="workflow-step" class="relative p-6 rounded-lg border border-[var(--color-border)]">
-          <span class="text-xs font-mono text-[var(--color-text-muted)]">Step {i + 1}</span>
-          <code class="block mt-2 font-mono text-sm text-[var(--color-accent)]">{step.command}</code>
-          <h3 class="mt-2 font-semibold text-lg">{step.title}</h3>
-          <p class="mt-2 text-sm text-[var(--color-text-secondary)] leading-relaxed">{step.description}</p>
+<section class="how-it-works" id="how-it-works" data-test="how-it-works-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">How RootSpec Works</h2>
+      <p class="section-subtitle">
+        A structured five-level hierarchy that transforms vague requirements into precise implementation guidance.
+      </p>
+    </div>
+
+    <div class="methodology-content">
+      <!-- Five Levels Hierarchy -->
+      <div class="hierarchy-explanation">
+        <h3 class="subsection-title">Five-Level Hierarchy</h3>
+        <p class="hierarchy-intro">
+          RootSpec organizes specifications into five levels, each building on the previous one
+          with strict <strong>upward-only references</strong>:
+        </p>
+
+        <div class="levels-flow" data-test="levels-hierarchy">
+          <div class="level-item" data-test="level-1">
+            <div class="level-number">1</div>
+            <div class="level-content">
+              <h4 class="level-title">Philosophy</h4>
+              <p class="level-description">WHY & WHAT EXPERIENCE</p>
+              <div class="level-details">Mission, design pillars, principles</div>
+            </div>
+          </div>
+
+          <div class="flow-arrow">⬇️</div>
+
+          <div class="level-item" data-test="level-2">
+            <div class="level-number">2</div>
+            <div class="level-content">
+              <h4 class="level-title">Truths</h4>
+              <p class="level-description">CONSTRAINTS & FACTS</p>
+              <div class="level-details">Business rules, technical constraints, user needs</div>
+            </div>
+          </div>
+
+          <div class="flow-arrow">⬇️</div>
+
+          <div class="level-item" data-test="level-3">
+            <div class="level-number">3</div>
+            <div class="level-content">
+              <h4 class="level-title">Interactions</h4>
+              <p class="level-description">USER JOURNEYS & FLOWS</p>
+              <div class="level-details">How users accomplish goals step-by-step</div>
+            </div>
+          </div>
+
+          <div class="flow-arrow">⬇️</div>
+
+          <div class="level-item" data-test="level-4">
+            <div class="level-number">4</div>
+            <div class="level-content">
+              <h4 class="level-title">Systems</h4>
+              <p class="level-description">FUNCTIONAL COMPONENTS</p>
+              <div class="level-details">Authentication, content, layout, theme systems</div>
+            </div>
+          </div>
+
+          <div class="flow-arrow">⬇️</div>
+
+          <div class="level-item" data-test="level-5">
+            <div class="level-number">5</div>
+            <div class="level-content">
+              <h4 class="level-title">Implementation</h4>
+              <p class="level-description">USER STORIES & TESTS</p>
+              <div class="level-details">Executable specifications with acceptance criteria</div>
+            </div>
+          </div>
         </div>
-      ))}
+
+        <div class="upward-reference-rule" data-test="upward-rule">
+          <h4 class="rule-title">🔼 Upward-Only References</h4>
+          <p class="rule-description">
+            Each level can only reference levels <strong>above</strong> it in the hierarchy.
+            This prevents circular dependencies and ensures clean, maintainable specifications.
+          </p>
+          <div class="rule-examples">
+            <div class="rule-example good">
+              <span class="example-label">✅ ALLOWED:</span>
+              <span class="example-text">User story references a design pillar</span>
+            </div>
+            <div class="rule-example bad">
+              <span class="example-label">❌ FORBIDDEN:</span>
+              <span class="example-text">Philosophy references implementation details</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Four Commands Workflow -->
+      <div class="workflow-explanation">
+        <h3 class="subsection-title">Four-Command Workflow</h3>
+        <p class="workflow-intro">
+          RootSpec provides four commands that guide you through the entire specification-driven development process:
+        </p>
+
+        <div class="commands-grid" data-test="commands-workflow">
+          <div class="command-item" data-test="init-command">
+            <div class="command-icon">🏗️</div>
+            <h4 class="command-name">/rs-init</h4>
+            <p class="command-purpose">Initialize Project</p>
+            <p class="command-description">
+              Set up RootSpec framework, create directory structure, and configure prerequisites.
+            </p>
+          </div>
+
+          <div class="command-item" data-test="spec-command">
+            <div class="command-icon">📝</div>
+            <h4 class="command-name">/rs-spec</h4>
+            <p class="command-purpose">Create Specification</p>
+            <p class="command-description">
+              Interview-driven process to build your five-level specification with validation.
+            </p>
+          </div>
+
+          <div class="command-item" data-test="impl-command">
+            <div class="command-icon">⚙️</div>
+            <h4 class="command-name">/rs-impl</h4>
+            <p class="command-purpose">Implement Features</p>
+            <p class="command-description">
+              Autonomous implementation guided by your specification, with test-driven development.
+            </p>
+          </div>
+
+          <div class="command-item" data-test="validate-command">
+            <div class="command-icon">✅</div>
+            <h4 class="command-name">/rs-validate</h4>
+            <p class="command-purpose">Verify Results</p>
+            <p class="command-description">
+              Run tests, check coverage, and generate reports on specification compliance.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+  .how-it-works {
+    background: var(--color-bg-primary);
+    padding: 5rem 1rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  .methodology-content {
+    display: grid;
+    gap: 4rem;
+  }
+
+  .subsection-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .hierarchy-intro,
+  .workflow-intro {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    text-align: center;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Hierarchy Levels */
+  .levels-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .level-item {
+    background: var(--color-bg-secondary);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--color-primary);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 500px;
+    width: 100%;
+    transition: transform 0.2s ease;
+  }
+
+  .level-item:hover {
+    transform: translateX(8px);
+  }
+
+  .level-number {
+    background: var(--color-primary);
+    color: white;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .level-content {
+    flex: 1;
+  }
+
+  .level-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 0.25rem 0;
+  }
+
+  .level-description {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .level-details {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .flow-arrow {
+    font-size: 2rem;
+    color: var(--color-primary);
+    margin: 0.5rem 0;
+  }
+
+  /* Upward Reference Rule */
+  .upward-reference-rule {
+    background: linear-gradient(135deg, var(--color-accent) 0%, #0891b2 100%);
+    color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .rule-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .rule-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  .rule-examples {
+    display: grid;
+    gap: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .rule-example {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: left;
+  }
+
+  .example-label {
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .example-text {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  /* Commands Grid */
+  .commands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+
+  .command-item {
+    background: var(--color-bg-secondary);
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-neutral-200);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .command-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .command-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .command-name {
+    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .command-purpose {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .command-description {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .how-it-works {
+      padding: 3rem 1rem;
+    }
+
+    .section-header {
+      margin-bottom: 3rem;
+    }
+
+    .methodology-content {
+      gap: 3rem;
+    }
+
+    .level-item {
+      padding: 1.25rem;
+      gap: 1rem;
+    }
+
+    .level-number {
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1rem;
+    }
+
+    .level-title {
+      font-size: 1.2rem;
+    }
+
+    .upward-reference-rule {
+      padding: 1.5rem;
+    }
+
+    .rule-examples {
+      gap: 0.75rem;
+    }
+
+    .rule-example {
+      padding: 0.75rem;
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
+
+    .commands-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .command-item {
+      padding: 1.5rem;
+    }
+
+    .command-icon {
+      font-size: 2.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .how-it-works {
+      padding: 2rem 0.75rem;
+    }
+
+    .level-item {
+      padding: 1rem;
+    }
+
+    .upward-reference-rule {
+      padding: 1.25rem;
+    }
+
+    .command-item {
+      padding: 1.25rem;
+    }
+  }
+</style>

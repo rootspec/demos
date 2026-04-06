@@ -1,42 +1,62 @@
-# =============================================================================
-# LEVEL 5: FINE TUNING - Interactive Features
-# =============================================================================
-# @spec_version: 1.0.0
-# @system: INTERACTIVE_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
-# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+# Interactive System Fine-Tuning Parameters
 
-hierarchy_explorer:
-  expand_duration: 300
-  # @unit: milliseconds
-  # @rationale: Quick expansion that feels snappy but visible
-  # @constraints: min=150, max=500, type=integer
+## Animation Timing
+animation_duration_fast: 150ms
+  # Used for: Button hover states, focus indicators
+  # Rationale: Quick enough to feel responsive, slow enough to be perceived
 
-  reference_highlight_opacity: 0.3
-  # @unit: ratio
-  # @rationale: Dimmed lines are visible but clearly secondary to the highlighted ones
-  # @constraints: min=0.1, max=0.5, type=float
+animation_duration_standard: 250ms
+  # Used for: Component state transitions, theme toggle
+  # Rationale: Standard web animation duration that feels smooth but not sluggish
 
-spec_wizard:
-  min_pillars: 3
-  # @rationale: Minimum needed to represent a meaningful product vision per framework guidance
-  # @constraints: min=2, max=4, type=integer
+animation_duration_slow: 400ms
+  # Used for: Section transitions, hierarchy explorer expand/collapse
+  # Rationale: Complex state changes need time to be comprehensible
 
-  max_pillars: 5
-  # @rationale: More than 5 dilutes focus per L1 anti-pattern guidance
-  # @constraints: min=4, max=8, type=integer
+animation_easing: ease-out
+  # Used for: All animations
+  # Rationale: Feels more natural than linear, starts fast and settles
 
-  template_count: 4
-  # @rationale: Enough variety to spark ideas without overwhelming choice
-  # @constraints: min=3, max=8, type=integer
+## Touch Interaction
+min_touch_target_size: 44px
+  # Used for: All interactive elements on mobile
+  # Rationale: Apple HIG and Android guidelines minimum for reliable touch
 
-  pillar_suggestion_count: 8
-  # @rationale: Roughly double the max selectable; enough to browse without scrolling
-  # @constraints: min=6, max=12, type=integer
+touch_feedback_duration: 100ms
+  # Used for: Visual feedback on mobile taps
+  # Rationale: Immediate feedback without interfering with subsequent interactions
 
-comparison:
-  transition_duration: 300
-  # @unit: milliseconds
-  # @rationale: Matches hierarchy explorer timing for consistency
-  # @constraints: min=150, max=500, type=integer
+## Keyboard Navigation
+focus_trap_escape_delay: 200ms
+  # Used for: Delay before focus returns to trigger after Escape key
+  # Rationale: Allows animation to complete before focus jump
+
+skip_link_offset: 10px
+  # Used for: Distance skip links move into view when focused
+  # Rationale: Enough to be clearly visible without jarring layout shift
+
+## Interactive Component Timing
+hierarchy_level_expand_delay: 50ms
+  # Used for: Stagger animation when multiple levels expand
+  # Rationale: Creates smooth cascade effect without feeling slow
+
+wizard_step_transition: 300ms
+  # Used for: Moving between wizard steps
+  # Rationale: Long enough for user to follow content changes
+
+debounce_input_delay: 300ms
+  # Used for: User input processing in wizard
+  # Rationale: Prevents excessive processing while allowing responsive feel
+
+## State Management
+theme_preference_key: "rootspec-theme"
+  # Used for: localStorage key for theme preference
+  # Rationale: Namespaced to avoid conflicts with other sites
+
+wizard_state_key: "rootspec-wizard-draft"
+  # Used for: localStorage key for wizard draft state
+  # Rationale: Allows recovery of work if user navigates away
+
+state_persistence_delay: 500ms
+  # Used for: Delay before saving state to localStorage
+  # Rationale: Prevents excessive writes during rapid interactions

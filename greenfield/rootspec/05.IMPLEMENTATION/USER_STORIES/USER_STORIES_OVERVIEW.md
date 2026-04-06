@@ -1,33 +1,53 @@
 # User Stories Overview
 
-## Organization
+## Story Organization
 
-Stories are organized by phase, journey, and system. A story may appear in multiple collections.
+Stories are organized by **phase** to reflect development priorities and **system** to ensure comprehensive coverage of architectural concerns.
 
-## Phases
+### Phases
 
-| Phase | Description |
-|-------|-------------|
-| **MVP** | Core marketing site — all sections, all interactive features, dark/light theme, responsive layout |
+- **MVP:** Core functionality for demonstrating RootSpec methodology through working interactive features
 
-This is a single-phase marketing site. All features ship together.
+### Systems Coverage
 
-## Journeys
+- **Content:** Static information, version display, attribution
+- **Interactive:** Hierarchy explorer, spec wizard, before/after comparison 
+- **Theme:** Dark/light mode, responsive design
+- **Layout:** Page structure, mobile optimization
+- **Accessibility:** Keyboard navigation, screen reader support
 
-| Journey | Description |
-|---------|-------------|
-| **FIRST_VISIT** | Developer arrives, scrolls through the narrative, tries interactives, reaches CTA |
+## Story Format
 
-## Systems
+Each story follows this structure:
+```yaml
+US-001:
+  title: "Brief story description"
+  as: "user type"
+  want: "capability"
+  so_that: "business value"
+  acceptance_criteria:
+    AC-001-1: "Given [context] when [action] then [outcome]"
+    AC-001-2: "Given [context] when [action] then [outcome]"
+  priority: high|medium|low
+  phase: MVP
+  system: system_name
+  design_pillar: DESIGN_PILLAR_NAME
+```
 
-| System | Story Coverage |
-|--------|---------------|
-| CONTENT_SYSTEM | Hero, meta banner, problem section, how-it-works, CTA |
-| INTERACTIVE_SYSTEM | Hierarchy explorer, spec wizard, before/after comparison |
-| THEME_SYSTEM | Dark/light toggle, system preference |
-| ACCESSIBILITY_SYSTEM | Keyboard navigation, screen reader support |
+## Acceptance Criteria Guidelines
 
-## Test Suites
+- **Testable:** Each criterion can be verified through interaction or inspection
+- **Specific:** Clear success conditions with measurable outcomes
+- **User-focused:** Written from user perspective, not implementation details
+- **Complete:** Covers happy path, edge cases, and accessibility requirements
 
-- `cypress/e2e/mvp.cy.ts` → loads `by_phase/MVP/**/*.yaml`
-- `cypress/e2e/first-visit.cy.ts` → loads `by_journey/FIRST_VISIT/**/*.yaml`
+## Story Dependencies
+
+Stories within the same system may have dependencies, but cross-system dependencies should be minimal to enable parallel development.
+
+Critical path: Content → Layout → Theme → Interactive → Accessibility (progressive enhancement pattern)
+
+## Phase Definitions
+
+### MVP Phase
+Minimum viable demonstration of RootSpec methodology with all core interactive features working accessibly across devices. Success criteria: visitors can understand and explore RootSpec concepts through working examples.

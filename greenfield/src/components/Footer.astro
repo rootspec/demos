@@ -1,12 +1,105 @@
 ---
-import { ROOTSPEC_VERSION, GITHUB_REPO } from '../data/config';
+const currentYear = new Date().getFullYear();
+const buildDate = new Date().toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
 ---
 
-<footer class="border-t border-[var(--color-border)] py-8 mt-16">
-  <div class="max-w-content mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-[var(--color-text-muted)]">
-    <span class="font-mono">RootSpec v{ROOTSPEC_VERSION}</span>
-    <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--color-text-secondary)] transition-colors">
-      GitHub
-    </a>
+<footer class="footer" data-test="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="attribution" data-test="attribution">
+        <p class="builder-info">
+          Built by <strong data-test="builder-name">Claude Sonnet 4</strong>
+          using RootSpec methodology
+        </p>
+        <p class="build-info">
+          Generated on <time data-test="build-date" datetime={new Date().toISOString().split('T')[0]}>
+            {buildDate}
+          </time>
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <p class="copyright">
+          © {currentYear} RootSpec. Transforming specifications into implementation guidance.
+        </p>
+      </div>
+    </div>
   </div>
 </footer>
+
+<style>
+  .footer {
+    background: var(--color-neutral-800);
+    color: var(--color-neutral-200);
+    padding: 2rem 1rem;
+    border-top: 1px solid var(--color-neutral-700);
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .attribution {
+    text-align: left;
+  }
+
+  .builder-info,
+  .build-info {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .builder-info {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .build-info {
+    font-size: 0.9rem;
+    color: var(--color-neutral-400);
+  }
+
+  .footer-links {
+    text-align: right;
+  }
+
+  .copyright {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-neutral-400);
+    line-height: 1.6;
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .footer {
+      padding: 1.5rem 1rem;
+    }
+
+    .footer-content {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    .attribution,
+    .footer-links {
+      text-align: center;
+    }
+  }
+</style>

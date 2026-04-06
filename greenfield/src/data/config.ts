@@ -1,4 +1,4 @@
-export const ROOTSPEC_VERSION = '6.2.1';
+export const ROOTSPEC_VERSION = '7.0.2';
 
 export const GITHUB_REPO = 'https://github.com/rootspec/rootspec';
 export const SEED_URL = 'https://github.com/rootspec/rootspec-demos/blob/main/greenfield/SEED.md';

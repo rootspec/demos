@@ -1,16 +1,91 @@
-# =============================================================================
-# LEVEL 5: FINE TUNING - Theme System
-# =============================================================================
-# @spec_version: 1.0.0
-# @system: THEME_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# Theme System Fine-Tuning Parameters
 
-transition_duration: 200
-# @unit: milliseconds
-# @rationale: Fast enough to feel instant, slow enough to avoid jarring flash
-# @constraints: min=100, max=400, type=integer
+## Typography Scale
+font_scale_ratio: 1.25
+  # Used for: Type scale progression (1rem, 1.25rem, 1.563rem, etc.)
+  # Rationale: Major third ratio provides balanced hierarchy without extreme jumps
 
-localStorage_key: "rootspec-theme"
-# @rationale: Namespaced to avoid collisions with other apps on same domain
+base_font_size: 16px
+  # Used for: Root font size
+  # Rationale: Browser default, optimal for reading on most devices
+
+line_height_body: 1.6
+  # Used for: Body text line spacing
+  # Rationale: Improves readability, especially on mobile screens
+
+line_height_heading: 1.2
+  # Used for: Heading line spacing
+  # Rationale: Tighter spacing for headings maintains visual cohesion
+
+## Color Contrast Ratios
+min_contrast_normal: 4.5
+  # Used for: Regular text contrast validation
+  # Rationale: WCAG AA compliance for normal text
+
+min_contrast_large: 3.0
+  # Used for: Large text (18pt+ or 14pt+ bold) contrast validation
+  # Rationale: WCAG AA compliance for large text
+
+min_contrast_interactive: 3.0
+  # Used for: Interactive element contrast (buttons, links)
+  # Rationale: WCAG AA for non-text elements
+
+## Spacing System
+spacing_unit: 0.25rem
+  # Used for: Base unit for all spacing calculations (4px at 16px base)
+  # Rationale: 4px grid provides pixel-perfect alignment at common screen densities
+
+spacing_scale_factor: 1.5
+  # Used for: Progression between spacing sizes (4px, 6px, 9px, 14px, 21px...)
+  # Rationale: Creates harmony while providing enough variety for different uses
+
+max_content_width: 1200px
+  # Used for: Maximum width for readable content
+  # Rationale: Optimal line length for reading comfort across devices
+
+## Responsive Breakpoints
+breakpoint_mobile: 320px
+  # Used for: Minimum mobile design target
+  # Rationale: Accommodates oldest supported devices
+
+breakpoint_tablet: 768px
+  # Used for: Tablet and small laptop threshold
+  # Rationale: Common tablet width in portrait orientation
+
+breakpoint_desktop: 1024px
+  # Used for: Desktop and large tablet threshold
+  # Rationale: Point where desktop-specific layouts become beneficial
+
+## Visual Effects
+border_radius_small: 4px
+  # Used for: Small elements (buttons, form inputs)
+  # Rationale: Subtle rounding that feels modern without being distracting
+
+border_radius_large: 8px
+  # Used for: Large components (cards, modals)
+  # Rationale: Proportional to component size, maintains visual consistency
+
+shadow_elevation_1: "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)"
+  # Used for: Subtle elevation (buttons, input focus)
+  # Rationale: Material Design inspired, provides depth without distraction
+
+shadow_elevation_2: "0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12)"
+  # Used for: Medium elevation (cards, dropdowns)
+  # Rationale: Clear elevation while maintaining visual hierarchy
+
+## Motion and Animation
+motion_curve_standard: cubic-bezier(0.4, 0.0, 0.2, 1)
+  # Used for: Standard UI transitions
+  # Rationale: Material Design standard easing, feels natural
+
+motion_curve_decelerate: cubic-bezier(0.0, 0.0, 0.2, 1)
+  # Used for: Elements entering the screen
+  # Rationale: Starts fast, decelerates smoothly
+
+motion_curve_accelerate: cubic-bezier(0.4, 0.0, 1, 1)
+  # Used for: Elements exiting the screen
+  # Rationale: Starts slow, accelerates for snappy feel
+
+reduced_motion_duration: 0ms
+  # Used for: Animation duration when user prefers reduced motion
+  # Rationale: Respects accessibility preference while maintaining functionality

@@ -1,147 +1,83 @@
-# =============================================================================
-# USER STORY: Understand RootSpec from Hero
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+US-001:
+  title: "Display framework version prominently"
+  as: "potential RootSpec user"
+  want: "to see the current framework version being demonstrated"
+  so_that: "I know this site reflects current RootSpec capabilities"
+  acceptance_criteria:
+    AC-001-1: "Given I visit the homepage when I look at the hero section then I see the RootSpec version number (v7.0.2) clearly displayed"
+    AC-001-2: "Given the version is displayed when I see it then it updates automatically from a single configuration source"
+    AC-001-3: "Given I'm viewing on mobile when I check the version then it remains visible and readable"
+  priority: high
+  phase: MVP
+  system: content
+  design_pillar: AUTHENTIC_TRANSPARENCY
 
-id: US-101
-title: Understand what RootSpec is from the hero section
+US-002:
+  title: "Show honest meta banner about site origin"
+  as: "skeptical developer"
+  want: "to understand how this marketing site was actually created"
+  so_that: "I can evaluate RootSpec's real capabilities versus marketing claims"
+  acceptance_criteria:
+    AC-002-1: "Given I visit the site when I scroll past the hero then I see a prominent banner explaining this site's generation from SEED.md"
+    AC-002-2: "Given I read the meta banner when I see the links then I can click to view the actual SEED.md and spec files on GitHub"
+    AC-002-3: "Given I'm viewing the banner when I read it then the tone is honest about what minimal human guidance produces"
+  priority: high
+  phase: MVP
+  system: content
+  design_pillar: AUTHENTIC_TRANSPARENCY
 
-acceptance_criteria:
-  - id: AC-101-1
-    title: Hero displays tagline and explanation
-    narrative: |
-      Given I am a developer visiting the site for the first time
-      When the page loads
-      Then I should see a clear tagline and one-sentence explanation of RootSpec
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
-      - shouldExist: { selector: '[data-test=hero-description]' }
+US-003:
+  title: "Present clear problem statement"
+  as: "developer experiencing spec drift"
+  want: "to see my pain points clearly articulated"
+  so_that: "I feel understood and motivated to learn about the solution"
+  acceptance_criteria:
+    AC-003-1: "Given I read the problem section when I see the content then specification drift, philosophy-implementation gaps, and unreliable AI output are clearly described"
+    AC-003-2: "Given I have experience with Google Docs specs when I read the problems then I recognize familiar frustrations"
+    AC-003-3: "Given I'm scanning quickly when I see the section then key problems are highlighted or bulleted for easy reading"
+  priority: high
+  phase: MVP
+  system: content
+  design_pillar: IMMEDIATE_CLARITY
 
-  - id: AC-101-2
-    title: Version badge is visible
-    narrative: |
-      Given I am viewing the hero section
-      When the page loads
-      Then I should see the current RootSpec version displayed
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=version-badge]' }
+US-004:
+  title: "Explain RootSpec methodology clearly"
+  as: "newcomer to RootSpec"
+  want: "to understand the five-level hierarchy and upward-only references"
+  so_that: "I grasp the core concept before trying interactive features"
+  acceptance_criteria:
+    AC-004-1: "Given I read the how it works section when I see the methodology then the five levels (Philosophy→Truths→Interactions→Systems→Implementation) are clearly explained"
+    AC-004-2: "Given I'm learning the hierarchy when I read about references then the upward-only rule is explicit and illustrated"
+    AC-004-3: "Given I want to understand the workflow when I see the explanation then the four commands (init→spec→impl→validate) are prominently featured"
+  priority: high
+  phase: MVP
+  system: content
+  design_pillar: METHODICAL_CONFIDENCE
 
----
-# =============================================================================
-# USER STORY: See Meta Banner
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+US-005:
+  title: "Provide clear getting started information"
+  as: "interested developer"
+  want: "to know exactly how to begin using RootSpec"
+  so_that: "I can move from interest to action immediately"
+  acceptance_criteria:
+    AC-005-1: "Given I want to start using RootSpec when I look for next steps then I see clear instructions to run /rs-init in my project"
+    AC-005-2: "Given I want more information when I look at the CTA section then I see links to the GitHub repository and documentation"
+    AC-005-3: "Given I want community support when I check the links then I find clear paths to ask questions or contribute"
+  priority: medium
+  phase: MVP
+  system: content
+  design_pillar: ACTIONABLE_NEXT_STEPS
 
-id: US-102
-title: See that the site is itself a RootSpec demo
-
-acceptance_criteria:
-  - id: AC-102-1
-    title: Meta banner explains the site is a demo
-    narrative: |
-      Given I am viewing the site
-      When I look at the meta banner
-      Then I should see an explanation that this site was built with RootSpec
-      And I should see links to the spec and seed files
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=meta-banner-spec-link]' }
-      - shouldExist: { selector: '[data-test=meta-banner-seed-link]' }
-
----
-# =============================================================================
-# USER STORY: Understand the Problem
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
-
-id: US-103
-title: Understand why existing approaches fail
-
-acceptance_criteria:
-  - id: AC-103-1
-    title: Problem section lists specific pain points
-    narrative: |
-      Given I am scrolling through the site
-      When I reach the problem section
-      Then I should see named pain points that describe real developer frustrations
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=problem-section]' }
-      - shouldExist: { selector: '[data-test=pain-point]' }
-
----
-# =============================================================================
-# USER STORY: Learn How RootSpec Works
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
-
-id: US-104
-title: See the four-skill workflow
-
-acceptance_criteria:
-  - id: AC-104-1
-    title: How It Works shows four steps
-    narrative: |
-      Given I am viewing the How It Works section
-      When I look at the workflow
-      Then I should see the four skills (init, spec, impl, validate) with descriptions
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=how-it-works-section]' }
-      - shouldExist: { selector: '[data-test=workflow-step]' }
-
----
-# =============================================================================
-# USER STORY: Find Getting Started Instructions
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
-
-id: US-105
-title: Find how to start using RootSpec
-
-acceptance_criteria:
-  - id: AC-105-1
-    title: CTA section has GitHub link and instructions
-    narrative: |
-      Given I am viewing the open source CTA section
-      When I look at the getting started area
-      Then I should see a link to the GitHub repo and setup instructions
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=cta-section]' }
-      - shouldExist: { selector: '[data-test=github-link]' }
+US-006:
+  title: "Display builder attribution"
+  as: "visitor"
+  want: "to know who built this site and when"
+  so_that: "I can understand the provenance and currency of this demonstration"
+  acceptance_criteria:
+    AC-006-1: "Given I scroll to the footer when I see the attribution then it identifies the site builder by name"
+    AC-006-2: "Given I check the attribution when I see the date then it shows when the site was built"
+    AC-006-3: "Given I want context when I see the attribution then it's clearly formatted and professional"
+  priority: low
+  phase: MVP
+  system: content
+  design_pillar: AUTHENTIC_TRANSPARENCY

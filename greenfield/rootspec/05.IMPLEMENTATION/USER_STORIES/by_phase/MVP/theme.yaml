@@ -1,39 +1,59 @@
-# =============================================================================
-# USER STORY: Toggle Theme
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [THEME_SYSTEM, ACCESSIBILITY_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+US-013:
+  title: "Experience cohesive visual design"
+  as: "visitor evaluating RootSpec"
+  want: "to see a polished, professional presentation"
+  so_that: "I trust the methodology and its implementation quality"
+  acceptance_criteria:
+    AC-013-1: "Given I view the site when I scan the design then typography, spacing, and colors feel cohesive and intentional"
+    AC-013-2: "Given I look at interactive elements when I see them then hover states, focus indicators, and active states are clearly designed"
+    AC-013-3: "Given I examine the layout when I assess quality then visual hierarchy guides my attention effectively"
+    AC-013-4: "Given I compare to other developer tools when I evaluate this site then the design quality feels professional and trustworthy"
+  priority: medium
+  phase: MVP
+  system: theme
+  design_pillar: METHODICAL_CONFIDENCE
 
-id: US-301
-title: Switch between dark and light themes
+US-014:
+  title: "Read content comfortably in both light and dark modes"
+  as: "user with specific display preferences"
+  want: "readable contrast and comfortable color schemes"
+  so_that: "I can focus on content without eye strain"
+  acceptance_criteria:
+    AC-014-1: "Given I use light mode when I read content then text has sufficient contrast for comfortable reading"
+    AC-014-2: "Given I use dark mode when I view the site then colors are easy on the eyes without being too dim"
+    AC-014-3: "Given I switch between modes when I compare them then both feel intentionally designed, not just inverted"
+    AC-014-4: "Given I have visual accessibility needs when I use the site then contrast ratios meet WCAG AA standards"
+  priority: high
+  phase: MVP
+  system: theme
+  design_pillar: IMMEDIATE_CLARITY
 
-acceptance_criteria:
-  - id: AC-301-1
-    title: Toggle switches theme
-    narrative: |
-      Given I am viewing the site in light mode
-      When I click the theme toggle
-      Then the site switches to dark mode
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=theme-toggle]' }
-    then:
-      - shouldExist: { selector: '[data-theme=dark]' }
+US-015:
+  title: "View site beautifully on any screen size"
+  as: "user on various devices"
+  want: "layouts that work well from mobile to desktop"
+  so_that: "the experience feels native to my device"
+  acceptance_criteria:
+    AC-015-1: "Given I view on mobile when I scroll through sections then text remains readable and interactive elements are appropriately sized"
+    AC-015-2: "Given I view on tablet when I use the site then layouts take advantage of the medium screen real estate effectively"
+    AC-015-3: "Given I view on desktop when I see the design then wider screens show more content without feeling sparse or crowded"
+    AC-015-4: "Given I resize my browser when the layout changes then transitions are smooth and nothing breaks or overflows"
+  priority: high
+  phase: MVP
+  system: theme
+  design_pillar: IMMEDIATE_CLARITY
 
-  - id: AC-301-2
-    title: Theme persists on reload
-    narrative: |
-      Given I have toggled to dark mode
-      When I reload the page
-      Then the site should still be in dark mode
-    given:
-      - visit: '/'
-      - click: { selector: '[data-test=theme-toggle]' }
-    when:
-      - visit: '/'
-    then:
-      - shouldExist: { selector: '[data-theme=dark]' }
+US-016:
+  title: "Experience smooth, purposeful animations"
+  as: "user interacting with the site"
+  want: "visual feedback that enhances rather than distracts"
+  so_that: "interactions feel responsive and polished"
+  acceptance_criteria:
+    AC-016-1: "Given I interact with elements when I trigger state changes then animations provide clear feedback about what's happening"
+    AC-016-2: "Given I have motion sensitivity when I use the site then animations respect prefers-reduced-motion settings"
+    AC-016-3: "Given I'm waiting for interactions when I trigger them then animations feel snappy, not sluggish"
+    AC-016-4: "Given I use the site repeatedly when I see animations then they enhance comprehension without becoming annoying"
+  priority: medium
+  phase: MVP
+  system: theme
+  design_pillar: TANGIBLE_DEMONSTRATION

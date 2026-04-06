@@ -1,134 +1,89 @@
-# =============================================================================
-# USER STORY: Explore the Hierarchy
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [INTERACTIVE_SYSTEM, ACCESSIBILITY_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+US-007:
+  title: "Explore RootSpec hierarchy interactively"
+  as: "learner trying to understand RootSpec"
+  want: "to click through the five levels and see example content"
+  so_that: "the abstract concept becomes tangible and memorable"
+  acceptance_criteria:
+    AC-007-1: "Given I see the hierarchy explorer when I click on a level card then it expands to show example content from that level"
+    AC-007-2: "Given a level is expanded when I hover over other levels then visual arrows show which levels this one can reference"
+    AC-007-3: "Given I'm exploring levels when I interact with them then smooth animations provide clear feedback"
+    AC-007-4: "Given multiple levels are expanded when I want to focus then I can collapse levels by clicking elsewhere or pressing Escape"
+  priority: high
+  phase: MVP
+  system: interactive
+  design_pillar: TANGIBLE_DEMONSTRATION
 
-id: US-201
-title: Explore the five-level specification hierarchy interactively
+US-008:
+  title: "Try spec wizard with my own product idea"
+  as: "developer with a product idea"
+  want: "to walk through creating a basic spec structure"
+  so_that: "I see how my ideas map to RootSpec levels"
+  acceptance_criteria:
+    AC-008-1: "Given I enter a product idea when I proceed through the wizard then I get prompted for mission, design pillars, and key interaction"
+    AC-008-2: "Given I complete wizard steps when I finish then I see a skeleton spec showing how my input maps to L1-L3"
+    AC-008-3: "Given I create a spec skeleton when I want to save it then I can copy the output or download it as a file"
+    AC-008-4: "Given I want to try again when I finish a wizard session then I can easily start over with a new idea"
+  priority: high
+  phase: MVP
+  system: interactive
+  design_pillar: ACTIONABLE_NEXT_STEPS
 
-acceptance_criteria:
-  - id: AC-201-1
-    title: Click a level to expand it
-    narrative: |
-      Given I am viewing the hierarchy explorer
-      When I click on a level
-      Then that level expands to show example content
-      And any previously expanded level collapses
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+US-009:
+  title: "Compare before/after spec approaches"
+  as: "skeptical developer"
+  want: "to see concrete differences between approaches"
+  so_that: "I understand the practical value of structured specifications"
+  acceptance_criteria:
+    AC-009-1: "Given I view the comparison section when I see the interface then I can toggle or slide between 'without spec' and 'with RootSpec' views"
+    AC-009-2: "Given I compare the approaches when I examine the content then both panels show realistic project content, not lorem ipsum"
+    AC-009-3: "Given I switch between views when I see the transition then smooth animations help me track the changes"
+    AC-009-4: "Given I want to understand differences when I study the panels then clear visual distinctions highlight the contrast"
+  priority: medium
+  phase: MVP
+  system: interactive
+  design_pillar: TANGIBLE_DEMONSTRATION
 
-  - id: AC-201-2
-    title: Hover a level to see its references
-    narrative: |
-      Given I am viewing the hierarchy explorer
-      When I hover over a level
-      Then I should see its allowed reference connections highlighted
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-3]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-3][aria-expanded=true]' }
+US-010:
+  title: "Toggle between light and dark themes"
+  as: "user with display preferences"
+  want: "to use the site in my preferred color scheme"
+  so_that: "the site feels comfortable and matches my workflow"
+  acceptance_criteria:
+    AC-010-1: "Given I visit the site when it loads then it detects my system theme preference automatically"
+    AC-010-2: "Given I want to change themes when I find the toggle then I can click or use keyboard to switch themes"
+    AC-010-3: "Given I manually choose a theme when I return later then the site remembers my preference"
+    AC-010-4: "Given I switch themes when the transition happens then smooth color animations provide pleasant feedback"
+  priority: medium
+  phase: MVP
+  system: interactive
+  design_pillar: METHODICAL_CONFIDENCE
 
-  - id: AC-201-3
-    title: Navigate hierarchy with keyboard
-    narrative: |
-      Given I am focused on the hierarchy explorer
-      When I use arrow keys to move between levels and Enter to expand
-      Then I should be able to explore the hierarchy without a mouse
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded=true]' }
+US-011:
+  title: "Navigate all interactive features with keyboard"
+  as: "keyboard user"
+  want: "to access all functionality without using a mouse"
+  so_that: "I can fully experience the site using my preferred input method"
+  acceptance_criteria:
+    AC-011-1: "Given I use Tab navigation when I move through the site then I can reach all interactive elements in logical order"
+    AC-011-2: "Given I reach an interactive component when I use Arrow keys then I can navigate within that component"
+    AC-011-3: "Given I want to activate elements when I press Enter or Space then buttons and controls respond appropriately"
+    AC-011-4: "Given I want to exit a component when I press Escape then focus returns to a logical parent element"
+  priority: high
+  phase: MVP
+  system: interactive
+  design_pillar: METHODICAL_CONFIDENCE
 
----
-# =============================================================================
-# USER STORY: Try the Spec Wizard
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
-
-id: US-202
-title: Generate a skeleton spec from a product idea
-
-acceptance_criteria:
-  - id: AC-202-1
-    title: Complete the three-step wizard
-    narrative: |
-      Given I am viewing the spec wizard
-      When I enter a product idea, select design pillars, and describe an interaction
-      Then I should see a skeleton spec card showing my input mapped to L1-L3
-    given:
-      - visit: '/'
-    when:
-      - fill: { selector: '[data-test=wizard-mission-input]', value: 'A task manager for teams' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - fill: { selector: '[data-test=wizard-interaction-who]', value: 'Team member' }
-      - fill: { selector: '[data-test=wizard-interaction-trigger]', value: 'Creates a new task' }
-      - fill: { selector: '[data-test=wizard-interaction-feedback]', value: 'Task appears in the team list' }
-      - click: { selector: '[data-test=wizard-generate]' }
-    then:
-      - shouldExist: { selector: '[data-test=wizard-result]' }
-
-  - id: AC-202-2
-    title: Start over resets the wizard
-    narrative: |
-      Given I have completed the wizard and see the result
-      When I click "Start over"
-      Then the wizard resets to step 1 with empty inputs
-    given:
-      - visit: '/'
-    when:
-      - fill: { selector: '[data-test=wizard-mission-input]', value: 'Test idea' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - fill: { selector: '[data-test=wizard-interaction-who]', value: 'User' }
-      - fill: { selector: '[data-test=wizard-interaction-trigger]', value: 'Action' }
-      - fill: { selector: '[data-test=wizard-interaction-feedback]', value: 'Result' }
-      - click: { selector: '[data-test=wizard-generate]' }
-      - click: { selector: '[data-test=wizard-start-over]' }
-    then:
-      - shouldExist: { selector: '[data-test=wizard-mission-input]' }
-
----
-# =============================================================================
-# USER STORY: Compare Before and After
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
-
-id: US-203
-title: See the difference RootSpec makes through a side-by-side comparison
-
-acceptance_criteria:
-  - id: AC-203-1
-    title: Toggle between without and with views
-    narrative: |
-      Given I am viewing the before/after comparison
-      When I toggle to the "With RootSpec" view
-      Then I should see structured, traceable content replacing the vague version
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=comparison-toggle-with]' }
-    then:
-      - shouldExist: { selector: '[data-test=comparison-with-panel]' }
+US-012:
+  title: "Use interactive features on mobile devices"
+  as: "mobile user"
+  want: "to explore hierarchy and try the wizard on my phone"
+  so_that: "I can learn about RootSpec regardless of my device"
+  acceptance_criteria:
+    AC-012-1: "Given I'm on a mobile device when I tap interactive elements then they respond with appropriate touch feedback"
+    AC-012-2: "Given I use touch gestures when appropriate then swipe or pinch gestures work where expected"
+    AC-012-3: "Given I'm viewing on a small screen when I see interactive components then they remain fully functional with touch-friendly target sizes"
+    AC-012-4: "Given I rotate my device when components are active then they adapt gracefully to orientation changes"
+  priority: high
+  phase: MVP
+  system: interactive
+  design_pillar: TANGIBLE_DEMONSTRATION

@@ -1,37 +1,255 @@
 ---
-const painPoints = [
-  {
-    title: 'Spec drift',
-    description: 'Requirements documents diverge from implementation within weeks. Nobody notices until it\'s too late.',
-  },
-  {
-    title: 'Philosophy-implementation gap',
-    description: 'The "why" behind a product lives in founders\' heads and degrades at every handoff. AI accelerates this degradation.',
-  },
-  {
-    title: 'Unreliable AI output',
-    description: 'AI tools generate code confidently but have no way to validate alignment with intent. More code, same drift.',
-  },
-  {
-    title: 'Dead documentation',
-    description: 'Specs written once, shared once, read never. No living connection to what gets built.',
-  },
-];
 ---
 
-<section id="problem" data-test="problem-section" class="py-16 sm:py-24 px-4 sm:px-6 bg-[var(--color-bg-alt)]">
-  <div class="max-w-content mx-auto">
-    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">The problem</h2>
-    <p class="mt-4 text-lg text-[var(--color-text-secondary)] max-w-2xl">
-      AI has knowledge but not wisdom. Humans supply philosophy; AI executes implementation. Without a bridge, intent degrades at every step.
-    </p>
-    <div class="mt-12 grid gap-6 sm:grid-cols-2">
-      {painPoints.map((point) => (
-        <div data-test="pain-point" class="p-6 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)]">
-          <h3 class="font-semibold text-lg">{point.title}</h3>
-          <p class="mt-2 text-[var(--color-text-secondary)] leading-relaxed">{point.description}</p>
-        </div>
-      ))}
+<section class="problem" data-test="problem-section">
+  <div class="container">
+    <div class="problem-header">
+      <h2 class="section-title">The Specification Problem</h2>
+      <p class="section-subtitle">
+        Sound familiar? You're not alone. These pain points plague development teams everywhere.
+      </p>
+    </div>
+
+    <div class="problems-grid">
+      <div class="problem-card" data-test="spec-drift-problem">
+        <div class="problem-icon">📄➡️🗑️</div>
+        <h3 class="problem-title">Specification Drift</h3>
+        <p class="problem-description">
+          That beautiful Google Doc becomes outdated the moment development starts.
+          Developers implement features differently than specified, but no one updates
+          the documentation. Six months later, your spec is fiction.
+        </p>
+        <ul class="problem-symptoms">
+          <li>"Wait, this doesn't match the spec..."</li>
+          <li>Duplicate work from miscommunication</li>
+          <li>New teammates get confused by outdated docs</li>
+        </ul>
+      </div>
+
+      <div class="problem-card" data-test="philosophy-gap-problem">
+        <div class="problem-icon">🤔💭❓</div>
+        <h3 class="problem-title">Philosophy-Implementation Gaps</h3>
+        <p class="problem-description">
+          Your product vision sounds great in meetings, but how does "user-friendly"
+          translate to actual button placement? Teams interpret abstract concepts
+          differently, leading to inconsistent user experiences.
+        </p>
+        <ul class="problem-symptoms">
+          <li>"That's not what I meant by intuitive..."</li>
+          <li>Design and engineering misalignment</li>
+          <li>Feature creep from unclear boundaries</li>
+        </ul>
+      </div>
+
+      <div class="problem-card" data-test="ai-unreliability-problem">
+        <div class="problem-icon">🤖🎲💥</div>
+        <h3 class="problem-title">Unreliable AI Output</h3>
+        <p class="problem-description">
+          AI tools promise to build your app from descriptions, but they hallucinate
+          features, misunderstand context, and produce code that barely resembles
+          your requirements. You spend more time fixing than building.
+        </p>
+        <ul class="problem-symptoms">
+          <li>"This isn't even close to what I asked for..."</li>
+          <li>Constant back-and-forth with AI tools</li>
+          <li>Fear of losing control over your codebase</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="problem-summary">
+      <h3 class="summary-title">The Root Issue</h3>
+      <p class="summary-text">
+        <strong>Traditional specifications don't guide implementation.</strong>
+        They document what you <em>think</em> you want, not what you actually need to build.
+        Without clear structure and upward references, specs become suggestions rather than blueprints.
+      </p>
     </div>
   </div>
 </section>
+
+<style>
+  .problem {
+    background: var(--color-bg-secondary);
+    padding: 5rem 1rem;
+    position: relative;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .problem-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  .problems-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .problem-card {
+    background: var(--color-bg-primary);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-neutral-200);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .problem-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .problem-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .problem-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .problem-description {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .problem-symptoms {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .problem-symptoms li {
+    font-size: 0.95rem;
+    color: var(--color-error);
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+    font-style: italic;
+  }
+
+  .problem-symptoms li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--color-error);
+    font-weight: bold;
+  }
+
+  .problem-summary {
+    background: linear-gradient(135deg, var(--color-neutral-100) 0%, var(--color-neutral-50) 100%);
+    border-radius: 1rem;
+    padding: 2.5rem;
+    text-align: center;
+    border-left: 4px solid var(--color-primary);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .problem-summary {
+      background: linear-gradient(135deg, var(--color-neutral-800) 0%, var(--color-neutral-700) 100%);
+    }
+  }
+
+  [data-theme="dark"] .problem-summary {
+    background: linear-gradient(135deg, var(--color-neutral-800) 0%, var(--color-neutral-700) 100%);
+  }
+
+  .summary-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+  }
+
+  .summary-text {
+    font-size: 1.1rem;
+    color: var(--color-text-primary);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .problem {
+      padding: 3rem 1rem;
+    }
+
+    .problem-header {
+      margin-bottom: 3rem;
+    }
+
+    .problems-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .problem-card {
+      padding: 1.5rem;
+    }
+
+    .problem-icon {
+      font-size: 2.5rem;
+    }
+
+    .problem-title {
+      font-size: 1.3rem;
+    }
+
+    .problem-summary {
+      padding: 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .problem {
+      padding: 2rem 0.75rem;
+    }
+
+    .problem-card {
+      padding: 1.25rem;
+    }
+
+    .problem-summary {
+      padding: 1.5rem;
+    }
+
+    .summary-text {
+      font-size: 1rem;
+    }
+  }
+</style>

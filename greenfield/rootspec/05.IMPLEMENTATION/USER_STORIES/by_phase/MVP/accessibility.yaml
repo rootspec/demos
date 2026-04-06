@@ -1,0 +1,74 @@
+US-021:
+  title: "Navigate entire site with keyboard only"
+  as: "keyboard user"
+  want: "complete access to all content and functionality"
+  so_that: "I can fully evaluate RootSpec using my preferred interaction method"
+  acceptance_criteria:
+    AC-021-1: "Given I use keyboard navigation when I press Tab then focus moves through all interactive elements in logical order"
+    AC-021-2: "Given I reach interactive components when I use them then Arrow keys navigate within components (like hierarchy explorer)"
+    AC-021-3: "Given I want to activate elements when I press Enter or Space then all buttons, links, and controls respond appropriately"
+    AC-021-4: "Given I want to exit components when I press Escape then focus returns to appropriate parent elements"
+  priority: high
+  phase: MVP
+  system: accessibility
+  design_pillar: METHODICAL_CONFIDENCE
+
+US-022:
+  title: "Use screen reader to understand all content"
+  as: "screen reader user"
+  want: "complete access to information and interactions"
+  so_that: "I can learn about RootSpec through my assistive technology"
+  acceptance_criteria:
+    AC-022-1: "Given I use a screen reader when I navigate the site then semantic HTML provides clear content structure"
+    AC-022-2: "Given I encounter interactive elements when I reach them then ARIA labels describe their purpose and state"
+    AC-022-3: "Given content changes dynamically when I interact with components then screen reader announces the changes"
+    AC-022-4: "Given I explore the hierarchy when I use it then each level and its relationships are clearly described"
+  priority: high
+  phase: MVP
+  system: accessibility
+  design_pillar: METHODICAL_CONFIDENCE
+
+US-023:
+  title: "Skip to main content efficiently"
+  as: "assistive technology user"
+  want: "to bypass navigation and reach primary content quickly"
+  so_that: "I don't have to hear/tab through repeated elements on each page"
+  acceptance_criteria:
+    AC-023-1: "Given I visit the site when I start keyboard navigation then skip links are available as the first focusable elements"
+    AC-023-2: "Given I activate a skip link when I use it then focus moves directly to the targeted content section"
+    AC-023-3: "Given I use a screen reader when I navigate then landmark regions (header, main, footer) are properly identified"
+    AC-023-4: "Given I want to navigate efficiently when I use assistive technology then section headings provide a clear content outline"
+  priority: medium
+  phase: MVP
+  system: accessibility
+  design_pillar: IMMEDIATE_CLARITY
+
+US-024:
+  title: "Perceive visual information through alternatives"
+  as: "user with visual impairment"
+  want: "equivalent access to visual design and information"
+  so_that: "I can understand all concepts regardless of visual ability"
+  acceptance_criteria:
+    AC-024-1: "Given visual elements convey information when I encounter them then alternative text or descriptions provide equivalent information"
+    AC-024-2: "Given colors indicate state or meaning when I see them then additional cues (text, patterns, or descriptions) convey the same information"
+    AC-024-3: "Given the hierarchy explorer shows visual relationships when I use it then screen reader descriptions explain the reference patterns"
+    AC-024-4: "Given animations provide feedback when they occur then alternative indicators ensure I receive the same information"
+  priority: high
+  phase: MVP
+  system: accessibility
+  design_pillar: TANGIBLE_DEMONSTRATION
+
+US-025:
+  title: "Focus clearly on current element"
+  as: "keyboard or low-vision user"
+  want: "obvious visual indication of focused elements"
+  so_that: "I can track my position and understand what I'm about to activate"
+  acceptance_criteria:
+    AC-025-1: "Given I navigate with keyboard when I move focus then current element has clear, high-contrast focus indicator"
+    AC-025-2: "Given I reach custom interactive components when I focus them then focus indicators work within complex components like the hierarchy explorer"
+    AC-025-3: "Given focus moves within components when I navigate then focus indicators update smoothly and are always visible"
+    AC-025-4: "Given I use high contrast mode when I view the site then focus indicators remain visible and effective"
+  priority: high
+  phase: MVP
+  system: accessibility
+  design_pillar: METHODICAL_CONFIDENCE

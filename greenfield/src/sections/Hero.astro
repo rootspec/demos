@@ -1,30 +1,199 @@
 ---
-import { GITHUB_REPO } from '../data/config';
+import { ROOTSPEC_VERSION } from '../data/config';
 ---
 
-<section class="py-24 sm:py-32 px-4 sm:px-6">
-  <div class="max-w-content mx-auto text-center">
-    <h1 data-test="hero-tagline" class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-      Philosophy guides implementation,<br class="hidden sm:block" /> never vice versa.
-    </h1>
-    <p data-test="hero-description" class="mt-6 text-lg sm:text-xl text-[var(--color-text-secondary)] max-w-2xl mx-auto leading-relaxed">
-      RootSpec is a hierarchical specification system that bridges human intent and software implementation. When code and specs can be generated trivially, the real value is validation and proof.
-    </p>
-    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-      <a
-        href="#get-started"
-        class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
-      >
-        Get Started
-      </a>
-      <a
-        href={GITHUB_REPO}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:border-[var(--color-text-muted)] transition-colors"
-      >
-        View on GitHub
-      </a>
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="version-badge" data-test="version-display">
+        <span class="version-label">RootSpec</span>
+        <span class="version-number">v{ROOTSPEC_VERSION}</span>
+      </div>
+
+      <h1 class="hero-title">
+        Transform specifications from
+        <span class="highlight">documentation debt</span>
+        into <span class="highlight">implementation guidance</span>
+      </h1>
+
+      <p class="hero-description">
+        RootSpec provides a structured methodology for creating specifications that
+        actually guide development. Stop writing docs that drift from reality —
+        start building specs that drive reliable AI implementation.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#getting-started" class="btn btn-primary" data-test="primary-cta">
+          Get Started
+        </a>
+        <a href="#how-it-works" class="btn btn-secondary" data-test="secondary-cta">
+          How It Works
+        </a>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+  .hero {
+    background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+    padding: 4rem 1rem;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .hero-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .version-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--color-primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .version-label {
+    font-size: 0.9rem;
+  }
+
+  .version-number {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+    font-size: 0.85rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: var(--color-text-primary);
+  }
+
+  .highlight {
+    color: var(--color-primary);
+    position: relative;
+  }
+
+  .hero-description {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    display: inline-block;
+    min-width: 150px;
+    text-align: center;
+  }
+
+  .btn-primary {
+    background: var(--color-primary);
+    color: white;
+    border: 2px solid var(--color-primary);
+  }
+
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--color-primary);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  .btn-secondary:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .hero {
+      padding: 3rem 1rem;
+      min-height: 70vh;
+    }
+
+    .version-badge {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .version-number {
+      font-size: 0.8rem;
+      padding: 0.2rem 0.6rem;
+    }
+
+    .hero-title {
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn {
+      width: 100%;
+      max-width: 280px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero {
+      padding: 2rem 0.75rem;
+    }
+
+    .version-badge {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+  }
+</style>
