@@ -1,13 +1,19 @@
 {
-  "lastRun": "2026-04-07T02:44:21.904Z",
+  "lastRun": "2026-04-07T02:47:30.519Z",
   "stories": {
     "US-001": {
       "status": "pass",
-      "criteria": {}
+      "criteria": {
+        "AC-001-1": "pass",
+        "AC-001-2": "pass"
+      }
     },
     "US-002": {
-      "status": "pass",
-      "criteria": {}
+      "status": "fail",
+      "criteria": {
+        "AC-002-1": "fail",
+        "AC-002-2": "fail"
+      }
     }
   }
 }
