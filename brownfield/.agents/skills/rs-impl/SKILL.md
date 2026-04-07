@@ -9,9 +9,9 @@ This is a non-interactive skill. Do not ask the developer questions during imple
 
 **Stats tracking:** Record `STARTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")` at the very start. Track iteration count and per-story attempt counts as you work. At the end (Step 4), call `write-stats.sh`.
 
-**Turn budget:** Target ≤50 turns total. Be aggressive about batching file reads and writes. Every tool call costs one turn.
+**Turn efficiency:** Every tool call costs one turn. Be aggressive about batching file reads and writes. Target pace: ~3 turns per story (setup overhead amortized across all stories).
 
-## Step 1: Assess (budget: 1-2 turns)
+## Step 1: Assess (~2 turns)
 
 Front-load ALL reading in a single script call. Find the scripts directory first — look for `.agents/skills/rs-shared/scripts/` relative to the project root, or search for `assess.sh` under the skills directory.
 
@@ -38,7 +38,7 @@ Announce: "Found X stories across N phases. M already passing. Implementing [foc
 
 **You now have all context. Do NOT re-read any of these files during implementation.**
 
-## Step 2: Set up (budget: 3-5 turns)
+## Step 2: Set up (~4 turns)
 
 ### 2a. Filter stories (if focus provided)
 
@@ -57,6 +57,14 @@ bash "$SHARED_DIR/scripts/scaffold-cypress.sh" . "$SHARED_DIR"
 ```
 
 This creates all Cypress files in one call: config, support files, DSL steps, schema, reporter. Review its output to see what was created vs skipped.
+
+**Then generate the test file from spec YAML:**
+
+```bash
+bash "$SHARED_DIR/scripts/generate-test-file.sh" rootspec cypress/e2e/mvp.cy.ts
+```
+
+This creates the test file with all stories embedded as YAML string literals using the `loadAndRun()` pattern. Stories without DSL-format given/when/then are skipped with a warning — you'll need to add test YAML for those manually.
 
 **After scaffolding, customize in ONE write turn.** Check your stories for:
 - `loginAs` steps → implement the task body in `cypress.config.ts`
@@ -77,18 +85,29 @@ sleep 3
 
 If `rootspec/CONVENTIONS/` doesn't exist, create both `technical.md` and `visual.md` using parallel Write calls in this same turn. Derive from the spec and detected framework. Use `## Heading` sections with `- **Label:** value` entries.
 
-## Step 3: Implement (budget: 30-40 turns)
+## Step 3: Implement (~3 turns per story)
 
-**Iteration cap: 50. Per-story cap: 2 test-fix cycles.** Track your count: `Iteration N/50: implementing US-XXX`
+**Per-story cap: 2 test-fix cycles.** If you're spending more than 5 turns on one story, record FAIL and move on.
 
-**Target pace: 3-4 turns per story.** If you're spending more than 5 turns on one story, record FAIL and move on.
+**Target pace: ~3 turns per story.** Implement as many stories as the spec requires — don't cut corners to save turns.
+
+### Before implementing: plan your write batches
+
+Before writing any code, plan how to group files into turns using parallel Write calls:
+- **Page components:** Group components on the same page (e.g., Hero + MetaBanner + ProblemSection → 3 parallel Writes = 1 turn)
+- **Infrastructure:** Layout + global styles + Header + Footer → 1 turn
+- **Data/config:** All data files and configs → 1 turn
+- **Interactive components:** Complex React/TSX components can be 1 per turn if large
+- **Test file:** Add ALL story YAMLs to the test file — never defer test entries
+
+Aim for **4-6 write turns total** for all app code, not one file per turn.
 
 ### Strategy: batch aggressively
 
-1. **Write ALL files for a story in ONE turn** — use multiple parallel Write/Edit tool calls to create/modify several files simultaneously. App code + test file + styles in one turn. Never separate "write app code" and "write test" into different turns.
+1. **Write multiple files per turn** — use parallel Write tool calls. 3-4 component files in one turn is normal.
 2. **Batch test runs.** Run tests after implementing 3+ stories, NOT after each story. For a ~10 story project, aim for 2-3 total test runs.
 3. **Fix failures in ONE turn** — use parallel tool calls to fix multiple files at once.
-4. **Track your turn count.** If you're at turn 30 and fewer than 6 stories are complete, implement ALL remaining stories before running tests again.
+4. **If progress stalls**, implement all remaining stories before running tests again rather than retrying individual failures.
 
 ### Test file pattern (CRITICAL)
 
@@ -160,11 +179,18 @@ Do not re-read YAML, conventions, or fragments. Use the context from Step 1.
 
 For non-baseline stories, in ONE write turn per story:
 - Create/modify all application files (routes, components, pages, styles)
-- Add the story's YAML to the test file (append to the existing test file)
+- **Add the story's YAML to the test file** (append to the existing test file)
 - Use `data-test` attributes matching acceptance criteria selectors
 - Follow conventions from Step 1
 
-**Batch implementation example:** If implementing US-101 (hero), US-102 (meta banner), and US-103 (problem section) — write ALL their components, update the page layout, AND add all three story YAMLs to the test file in 3 write turns. Then run tests ONCE for the whole batch.
+**A story is NOT implemented until its test YAML is in the test file.** App code without a test entry does not count as done. Do not skip test entries for any story.
+
+**Batch implementation example:** If implementing US-001 (meta banner), US-002 (hero), and US-003 (problem section):
+- **Turn 1:** Write MetaBanner.astro, HeroSection.astro, ProblemSection.astro (3 parallel Write calls = 1 turn)
+- **Turn 2:** Update index.astro to include all three components + add all three story YAMLs to the test file (parallel writes)
+- **Turn 3:** Run `npx cypress run` to test the batch
+
+That's 3 stories in 3 turns. Never write one component per turn when you can batch.
 
 #### 3b. Test (1 turn per batch)
 
@@ -199,7 +225,7 @@ After each story or batch:
 
 When all target stories pass, or iteration cap reached, go to Step 4.
 
-## Step 4: Summary and commit (budget: 2-3 turns)
+## Step 4: Summary and commit (~3 turns)
 
 ### Update conventions (1 turn)
 
@@ -225,16 +251,13 @@ Where `<stories-json>` is a JSON object like `{"US-101":{"attempts":2},"US-102":
 
 ### Report
 
-```
-Implementation complete.
+Generate the report from `tests-status.json` — do not self-assess:
 
-PASS: N stories
-FAIL: M stories
-
-Passing: US-101, US-102, ...
-Failing:
-  US-108: AC-108-2 — [reason]
+```bash
+bash "$SHARED_DIR/scripts/generate-test-report.sh" rootspec/tests-status.json rootspec
 ```
+
+This outputs pass/fail/not-tested counts from the actual test results. Include its output in your summary.
 
 ## Focus
 

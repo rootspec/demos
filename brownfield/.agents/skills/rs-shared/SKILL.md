@@ -22,6 +22,7 @@ This skill contains shared resources for all RootSpec skills. Do not invoke dire
 - `scripts/scan-project.sh` — Detect framework, source dirs, config files
 
 ### Spec validation
+- `scripts/validate-spec.sh` — Run all 6 validation checks in one call (hierarchy, numerics, duplicate IDs, pillar quality, tradeoffs, coverage)
 - `scripts/check-hierarchy.sh` — Find downward references across spec levels
 - `scripts/check-numerics.sh` — Find hardcoded numbers in L1-L4
 - `scripts/check-duplicate-ids.sh` — Find duplicate story IDs in L5
@@ -38,6 +39,9 @@ This skill contains shared resources for all RootSpec skills. Do not invoke dire
 ### Implementation support
 - `scripts/assess.sh` — Front-load all reading for rs-impl in one call (spec, project, stories, conventions, fragments)
 - `scripts/scaffold-cypress.sh` — Create all Cypress infrastructure files in one call (config, support, DSL, reporter)
+- `scripts/generate-test-file.sh` — Build Cypress test file from spec YAML (embeds stories with loadAndRun pattern)
+- `scripts/init-conventions.sh` — Extract conventions from package.json, tsconfig, Tailwind config, and source code
+- `scripts/generate-test-report.sh` — Parse tests-status.json into formatted pass/fail/not-tested report
 
 ### Stories and testing
 - `scripts/filter-stories.sh` — Filter L5 stories by ID, system, priority, or status
