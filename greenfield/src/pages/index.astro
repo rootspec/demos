@@ -1,23 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import Hero from '../sections/Hero.astro';
 import MetaBanner from '../sections/MetaBanner.astro';
+import Hero from '../sections/Hero.astro';
 import Problem from '../sections/Problem.astro';
 import HowItWorks from '../sections/HowItWorks.astro';
 import HierarchyExplorer from '../sections/HierarchyExplorer.tsx';
 import SpecWizard from '../sections/SpecWizard.tsx';
 import Comparison from '../sections/Comparison.tsx';
 import CTA from '../sections/CTA.astro';
-import '../styles/global.css';
+import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="RootSpec — Philosophy guides implementation">
-  <Header />
+<Layout>
   <main>
-    <Hero />
     <MetaBanner />
+    <Hero />
     <Problem />
     <HowItWorks />
     <HierarchyExplorer client:load />
@@ -27,3 +24,11 @@ import '../styles/global.css';
   </main>
   <Footer />
 </Layout>
+
+<style>
+  main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+</style>

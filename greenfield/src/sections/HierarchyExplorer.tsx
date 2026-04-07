@@ -1,77 +1,153 @@
-import { useState, useEffect, useRef } from 'react';
-import { levels } from '../data/hierarchy';
+import { useState } from 'react';
+
+interface Level {
+  id: string;
+  name: string;
+  title: string;
+  description: string;
+  canReference: string[];
+  examples: string[];
+}
+
+const levels: Level[] = [
+  {
+    id: 'level-1',
+    name: 'L1: Philosophy',
+    title: 'Philosophy',
+    description: 'Core beliefs and principles that guide all decisions. Philosophy forms the foundation of every specification.',
+    canReference: [],
+    examples: ['User-centricity', 'Performance-first', 'Privacy by design', 'Accessibility always']
+  },
+  {
+    id: 'level-2',
+    name: 'L2: Truths',
+    title: 'Truths',
+    description: 'Objective constraints and realities that inform solutions',
+    canReference: ['level-1'],
+    examples: ['Mobile traffic is 70%', 'Users abandon after 3s load time', 'Team size: 3 developers']
+  },
+  {
+    id: 'level-3',
+    name: 'L3: Interactions',
+    title: 'Interactions',
+    description: 'High-level user flows and system behaviors',
+    canReference: ['level-1', 'level-2'],
+    examples: ['User uploads image → instant feedback', 'Search → results → filter → refine']
+  },
+  {
+    id: 'level-4',
+    name: 'L4: Systems',
+    title: 'Systems',
+    description: 'Architectural components and their relationships',
+    canReference: ['level-1', 'level-2', 'level-3'],
+    examples: ['Authentication system', 'Content management', 'Real-time notifications']
+  },
+  {
+    id: 'level-5',
+    name: 'L5: Implementation',
+    title: 'Implementation',
+    description: 'Specific features, user stories, and technical details',
+    canReference: ['level-1', 'level-2', 'level-3', 'level-4'],
+    examples: ['Login form validation', 'Image upload progress bar', 'Search autocomplete API']
+  }
+];
 
 export default function HierarchyExplorer() {
-  const [expanded, setExpanded] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLElement>(null);
+  const [expandedLevels, setExpandedLevels] = useState<string[]>([]);
+  const [hoveredLevel, setHoveredLevel] = useState<string | null>(null);
 
-  useEffect(() => {
-    sectionRef.current?.setAttribute('data-hydrated', 'true');
-  }, []);
+  const toggleLevel = (levelId: string) => {
+    setExpandedLevels(prev =>
+      prev.includes(levelId)
+        ? prev.filter(id => id !== levelId)
+        : [...prev, levelId]
+    );
+  };
 
-  function toggle(id: number) {
-    setExpanded(expanded === id ? null : id);
-  }
+  const isExpanded = (levelId: string) => expandedLevels.includes(levelId);
+  const isHighlighted = (levelId: string) => {
+    if (!hoveredLevel) return false;
+    const hoveredLevelData = levels.find(l => l.id === hoveredLevel);
+    return hoveredLevelData?.canReference.includes(levelId);
+  };
 
   return (
-    <section ref={sectionRef} id="explore" className="py-16 sm:py-24 px-4 sm:px-6 bg-[var(--color-bg-alt)]">
-      <div className="max-w-content mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">The five levels</h2>
-        <p className="mt-4 text-lg text-[var(--color-text-secondary)] max-w-2xl">
-          Each level can only reference higher levels, never lower. Philosophy stays stable when implementation changes. Click a level to explore.
+    <section data-test="hierarchy-explorer" className="hierarchy-explorer">
+      <div className="hierarchy-container">
+        <h2 className="hierarchy-title">The Five-Level Hierarchy</h2>
+
+        <p className="hierarchy-intro">
+          RootSpec organizes specifications into five levels, where each level can only reference levels above it.
+          Click any level to explore its purpose and examples.
         </p>
 
-        <div className="mt-12 space-y-3" role="list" aria-label="Specification hierarchy">
-          {levels.map((level) => {
-            const isExpanded = expanded === level.id;
-            return (
-              <div key={level.id} className="rounded-lg border border-[var(--color-border)] overflow-hidden">
-                <button
-                  data-test={`hierarchy-level-${level.id}`}
-                  onClick={() => toggle(level.id)}
-                  aria-expanded={isExpanded}
-                  aria-controls={`hierarchy-content-${level.id}`}
-                  className="w-full flex items-center gap-4 p-4 sm:p-5 text-left hover:bg-[var(--color-bg-elevated)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-inset"
-                >
-                  <span className="text-2xl flex-shrink-0">{level.icon}</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-semibold">L{level.id}: {level.title}</span>
-                      <span className="text-xs font-mono text-[var(--color-text-muted)]">{level.subtitle}</span>
-                    </div>
-                    {level.allowedReferences.length > 0 && (
-                      <div className="mt-1 text-xs text-[var(--color-text-muted)]">
-                        References: {level.allowedReferences.map((r) => `L${r}`).join(', ')}
-                      </div>
-                    )}
-                    {level.allowedReferences.length === 0 && (
-                      <div className="mt-1 text-xs text-[var(--color-text-muted)]">
-                        References: external only
-                      </div>
-                    )}
-                  </div>
-                  <svg
-                    className={`w-5 h-5 flex-shrink-0 text-[var(--color-text-muted)] transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {isExpanded && (
-                  <div
-                    id={`hierarchy-content-${level.id}`}
-                    data-test={`hierarchy-level-${level.id}-content`}
-                    className="px-4 sm:px-5 pb-5 border-t border-[var(--color-border)]"
-                  >
-                    <pre className="mt-4 p-4 rounded-lg bg-[var(--color-code-bg)] font-mono text-sm overflow-x-auto whitespace-pre-wrap leading-relaxed text-[var(--color-text-secondary)]">
-                      {level.exampleContent}
-                    </pre>
-                  </div>
-                )}
+        <div className="levels-container">
+          {levels.map((level, index) => (
+            <div
+              key={level.id}
+              data-test={level.id}
+              className={`level ${isExpanded(level.id) ? 'expanded' : ''} ${isHighlighted(level.id) ? 'highlighted' : ''}`}
+              onClick={() => toggleLevel(level.id)}
+              onMouseEnter={() => setHoveredLevel(level.id)}
+              onMouseLeave={() => setHoveredLevel(null)}
+              tabIndex={0}
+              role="button"
+              aria-expanded={isExpanded(level.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  toggleLevel(level.id);
+                }
+              }}
+            >
+              <div className="level-header">
+                <div className="level-number">{index + 1}</div>
+                <h3 className="level-name">{level.name}</h3>
+                <div className="expand-icon">
+                  {isExpanded(level.id) ? '−' : '+'}
+                </div>
               </div>
-            );
-          })}
+
+              {isExpanded(level.id) && (
+                <div data-test={`${level.id}-content`} className="level-content">
+                  <p className="level-description">{level.description}</p>
+
+                  <div className="level-examples">
+                    <h4>Examples:</h4>
+                    <ul>
+                      {level.examples.map((example, i) => (
+                        <li key={i}>{example}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {level.canReference.length > 0 && (
+                    <div className="level-references">
+                      <h4>Can reference:</h4>
+                      <div className="reference-pills">
+                        {level.canReference.map(refId => {
+                          const refLevel = levels.find(l => l.id === refId);
+                          return (
+                            <span key={refId} className="reference-pill">
+                              {refLevel?.title}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+
+          {hoveredLevel && (
+            <div data-test="reference-arrows" className="reference-arrows">
+              <div className="arrow-explanation">
+                <strong>{levels.find(l => l.id === hoveredLevel)?.title}</strong> can reference highlighted levels above
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

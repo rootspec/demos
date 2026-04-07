@@ -1,0 +1,130 @@
+# =============================================================================
+# FINE-TUNING: Layout System
+# =============================================================================
+# @spec_version: 1.0.0
+# @spec_source: 04.SYSTEMS/SYSTEMS_OVERVIEW.md
+# @last_updated: 2026-04-07T14:55:00Z
+
+responsive_breakpoints:
+  mobile_max:
+    value: 767
+    # @unit: pixels
+    # @rationale: Standard mobile breakpoint, ensures single-column layout on phones
+    # @constraint: min=600, max=899
+
+  tablet_min:
+    value: 768
+    # @unit: pixels
+    # @rationale: Standard tablet breakpoint, allows two-column layouts
+    # @constraint: min=700, max=1023
+
+  tablet_max:
+    value: 1023
+    # @unit: pixels
+    # @rationale: Upper bound for tablet-specific layouts
+    # @constraint: min=900, max=1199
+
+  desktop_min:
+    value: 1024
+    # @unit: pixels
+    # @rationale: Desktop layouts with full feature set
+    # @constraint: min=1000, max=1400
+
+performance_budget:
+  first_contentful_paint_target:
+    value: 1.5
+    # @unit: seconds
+    # @rationale: Fast enough to feel instant, accounts for slower mobile connections
+    # @constraint: max=2.0
+    # @spec_source: L2 Truths - Performance constraints
+
+  largest_contentful_paint_target:
+    value: 2.5
+    # @unit: seconds
+    # @rationale: Hero content visible quickly, meets Core Web Vitals guidelines
+    # @constraint: max=4.0
+
+  cumulative_layout_shift_limit:
+    value: 0.1
+    # @unit: score
+    # @rationale: Minimal layout shifting, good user experience
+    # @constraint: max=0.25
+    # @inviolable: true
+
+  javascript_bundle_size_limit:
+    value: 150
+    # @unit: kilobytes
+    # @rationale: Interactive features without bloat, fast parsing on mobile
+    # @constraint: max=250
+
+section_spacing:
+  mobile_vertical_spacing:
+    value: 3
+    # @unit: rem
+    # @rationale: Adequate white space without excessive scrolling on small screens
+    # @constraint: min=2, max=5
+
+  desktop_vertical_spacing:
+    value: 6
+    # @unit: rem
+    # @rationale: Generous spacing for comfortable reading on large screens
+    # @constraint: min=4, max=10
+
+  content_max_width:
+    value: 1200
+    # @unit: pixels
+    # @rationale: Optimal reading line length, prevents content from being too wide
+    # @constraint: min=800, max=1600
+
+  sidebar_content_ratio:
+    value: 0.75
+    # @unit: ratio
+    # @rationale: Main content gets most space, sidebar provides context
+    # @constraint: min=0.6, max=0.85
+
+accessibility_spacing:
+  minimum_touch_target_spacing:
+    value: 8
+    # @unit: pixels
+    # @rationale: Prevents accidental taps between interactive elements
+    # @constraint: min=4, max=16
+    # @inviolable: true
+
+  focus_outline_offset:
+    value: 2
+    # @unit: pixels
+    # @rationale: Clear separation between focus indicator and element
+    # @constraint: min=1, max=4
+
+  text_line_height:
+    value: 1.6
+    # @unit: ratio
+    # @rationale: Comfortable reading, good for accessibility
+    # @constraint: min=1.4, max=2.0
+    # @inviolable: true
+
+scroll_behavior:
+  smooth_scroll_duration:
+    value: 800
+    # @unit: milliseconds
+    # @rationale: Smooth enough to track movement, not slow enough to be annoying
+    # @constraint: min=400, max=1500
+
+  section_scroll_offset:
+    value: 100
+    # @unit: pixels
+    # @rationale: Account for sticky navigation, proper section positioning
+    # @constraint: min=60, max=150
+
+loading_strategy:
+  image_lazy_loading_threshold:
+    value: 200
+    # @unit: pixels
+    # @rationale: Start loading images before they enter viewport for smooth experience
+    # @constraint: min=100, max=500
+
+  critical_css_inline_limit:
+    value: 14
+    # @unit: kilobytes
+    # @rationale: Inline critical CSS without inflating HTML too much
+    # @constraint: min=8, max=25

@@ -1,11 +1,60 @@
 ---
-import { SEED_URL, SPEC_URL } from '../data/config';
+// Meta Banner - Explains this site is a RootSpec demo
 ---
 
-<section data-test="meta-banner" class="mx-4 sm:mx-6 lg:mx-auto max-w-content rounded-lg border border-[var(--color-banner-border)] bg-[var(--color-banner-bg)] px-4 sm:px-6 py-4">
-  <p class="text-sm sm:text-base text-[var(--color-text-secondary)] leading-relaxed">
-    <strong class="text-[var(--color-text)]">This site is a RootSpec demo.</strong> It was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups. The spec, the code, and the tests were all produced by running four commands.
-    <a data-test="meta-banner-seed-link" href={SEED_URL} target="_blank" rel="noopener noreferrer" class="text-[var(--color-accent)] hover:underline whitespace-nowrap">View the seed &rarr;</a>
-    <a data-test="meta-banner-spec-link" href={SPEC_URL} target="_blank" rel="noopener noreferrer" class="text-[var(--color-accent)] hover:underline whitespace-nowrap ml-3">View the spec &rarr;</a>
-  </p>
+<section data-test="meta-banner" class="meta-banner">
+  <div class="meta-container">
+    <p class="meta-text">
+      This marketing site was <strong>generated from a ~100-line product description</strong>
+      through the <a href="https://github.com/rootspec/rootspec" data-test="view-spec-link" class="spec-link">RootSpec pipeline</a>.
+      View the <a href="https://github.com/rootspec/demos/blob/main/greenfield/SEED.md" class="seed-link">seed file</a>
+      and <a href="https://github.com/rootspec/demos/tree/main/greenfield/rootspec" class="spec-link">complete specification</a>.
+    </p>
+  </div>
 </section>
+
+<style>
+.meta-banner {
+  background: var(--color-surface-elevated);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-12) 0;
+  font-size: var(--text-sm);
+}
+
+.meta-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-16);
+  text-align: center;
+}
+
+.meta-text {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.spec-link,
+.seed-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 200ms ease;
+}
+
+.spec-link:hover,
+.seed-link:hover {
+  border-bottom-color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .meta-banner {
+    padding: var(--space-8) 0;
+  }
+
+  .meta-text {
+    font-size: var(--text-xs);
+  }
+}
+</style>

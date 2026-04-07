@@ -1,147 +1,178 @@
 # =============================================================================
-# USER STORY: Understand RootSpec from Hero
+# USER STORIES: Content System - MVP Phase
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# @systems: [CONTENT_SYSTEM, META_SYSTEM]
+# @last_updated: 2026-04-07T14:55:00Z
 
-id: US-101
-title: Understand what RootSpec is from the hero section
+# =============================================================================
+# USER STORY: View Meta Banner
+# =============================================================================
+id: US-001
+title: Understand this site is a RootSpec demo
+requirement_id: R-001
 
 acceptance_criteria:
-  - id: AC-101-1
-    title: Hero displays tagline and explanation
+  - id: AC-001-1
+    title: Meta banner is visible and informative
     narrative: |
-      Given I am a developer visiting the site for the first time
-      When the page loads
-      Then I should see a clear tagline and one-sentence explanation of RootSpec
+      Given I visit the RootSpec marketing site
+      When I view the page
+      Then I should see a prominent banner explaining this site is a RootSpec demo
     given:
       - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
-      - shouldExist: { selector: '[data-test=hero-description]' }
-
-  - id: AC-101-2
-    title: Version badge is visible
-    narrative: |
-      Given I am viewing the hero section
-      When the page loads
-      Then I should see the current RootSpec version displayed
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=version-badge]' }
-
----
-# =============================================================================
-# USER STORY: See Meta Banner
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
-
-id: US-102
-title: See that the site is itself a RootSpec demo
-
-acceptance_criteria:
-  - id: AC-102-1
-    title: Meta banner explains the site is a demo
-    narrative: |
-      Given I am viewing the site
-      When I look at the meta banner
-      Then I should see an explanation that this site was built with RootSpec
-      And I should see links to the spec and seed files
-    given:
-      - visit: '/'
-    when: []
+    when:
+      - pageLoads: true
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=meta-banner-spec-link]' }
-      - shouldExist: { selector: '[data-test=meta-banner-seed-link]' }
+      - shouldContain: { selector: '[data-test=meta-banner]', text: 'generated from a ~100-line product description' }
+      - shouldContain: { selector: '[data-test=meta-banner]', text: 'RootSpec pipeline' }
 
----
+  - id: AC-001-2
+    title: Banner links to spec and seed files
+    narrative: |
+      Given I can see the meta banner
+      When I click the spec or seed links
+      Then I should be taken to the GitHub repository files
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: '[data-test=view-spec-link]' }
+    then:
+      - shouldNavigateTo: 'github.com'
+      - urlShouldContain: 'rootspec'
+
+# =============================================================================
+# USER STORY: Read Hero Section
+# =============================================================================
+id: US-002
+title: Understand what RootSpec is immediately
+requirement_id: R-002
+
+acceptance_criteria:
+  - id: AC-002-1
+    title: Clear tagline and explanation
+    narrative: |
+      Given I visit the site
+      When I read the hero section
+      Then I should understand what RootSpec does in one sentence
+    given:
+      - visit: '/'
+    when:
+      - pageLoads: true
+    then:
+      - shouldExist: { selector: '[data-test=hero-tagline]' }
+      - shouldExist: { selector: '[data-test=hero-explanation]' }
+      - shouldContain: { selector: '[data-test=hero-explanation]', text: 'philosophy guides implementation' }
+
+  - id: AC-002-2
+    title: Version badge is prominent
+    narrative: |
+      Given I am viewing the hero section
+      When I look for version information
+      Then I should see the current RootSpec version clearly displayed
+    given:
+      - visit: '/'
+    when:
+      - pageLoads: true
+    then:
+      - shouldExist: { selector: '[data-test=version-badge]' }
+      - shouldContain: { selector: '[data-test=version-badge]', text: 'v' }
+
 # =============================================================================
 # USER STORY: Understand the Problem
 # =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
-
-id: US-103
-title: Understand why existing approaches fail
+id: US-003
+title: Recognize specification pain points
+requirement_id: R-003
 
 acceptance_criteria:
-  - id: AC-103-1
-    title: Problem section lists specific pain points
+  - id: AC-003-1
+    title: Problem section explains current failures
     narrative: |
-      Given I am scrolling through the site
-      When I reach the problem section
-      Then I should see named pain points that describe real developer frustrations
+      Given I scroll to the problem section
+      When I read about existing approaches
+      Then I should see familiar pain points described
     given:
       - visit: '/'
-    when: []
+      - scrollTo: { selector: '[data-test=problem-section]' }
+    when:
+      - pageLoads: true
     then:
-      - shouldExist: { selector: '[data-test=problem-section]' }
-      - shouldExist: { selector: '[data-test=pain-point]' }
+      - shouldContain: { selector: '[data-test=problem-section]', text: 'spec drift' }
+      - shouldContain: { selector: '[data-test=problem-section]', text: 'philosophy-implementation gap' }
+      - shouldContain: { selector: '[data-test=problem-section]', text: 'Google Docs specs nobody reads' }
 
----
 # =============================================================================
 # USER STORY: Learn How RootSpec Works
 # =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
-
-id: US-104
-title: See the four-skill workflow
+id: US-004
+title: See the four-skill workflow visually
+requirement_id: R-004
 
 acceptance_criteria:
-  - id: AC-104-1
-    title: How It Works shows four steps
+  - id: AC-004-1
+    title: Four skills are clearly presented
     narrative: |
-      Given I am viewing the How It Works section
-      When I look at the workflow
-      Then I should see the four skills (init, spec, impl, validate) with descriptions
+      Given I reach the "How It Works" section
+      When I view the workflow explanation
+      Then I should see all four RootSpec skills with before/after context
     given:
       - visit: '/'
-    when: []
+      - scrollTo: { selector: '[data-test=how-it-works-section]' }
+    when:
+      - pageLoads: true
     then:
-      - shouldExist: { selector: '[data-test=how-it-works-section]' }
-      - shouldExist: { selector: '[data-test=workflow-step]' }
+      - shouldContain: { selector: '[data-test=how-it-works-section]', text: '/rs-init' }
+      - shouldContain: { selector: '[data-test=how-it-works-section]', text: '/rs-spec' }
+      - shouldContain: { selector: '[data-test=how-it-works-section]', text: '/rs-impl' }
+      - shouldContain: { selector: '[data-test=how-it-works-section]', text: '/rs-validate' }
 
----
 # =============================================================================
-# USER STORY: Find Getting Started Instructions
+# USER STORY: Access Open Source Resources
 # =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
-
-id: US-105
-title: Find how to start using RootSpec
+id: US-005
+title: Find getting started information easily
+requirement_id: R-005
 
 acceptance_criteria:
-  - id: AC-105-1
-    title: CTA section has GitHub link and instructions
+  - id: AC-005-1
+    title: CTA section provides clear next steps
     narrative: |
-      Given I am viewing the open source CTA section
-      When I look at the getting started area
-      Then I should see a link to the GitHub repo and setup instructions
+      Given I want to try RootSpec
+      When I look for getting started information
+      Then I should find GitHub links and clear instructions
     given:
       - visit: '/'
-    when: []
+      - scrollTo: { selector: '[data-test=cta-section]' }
+    when:
+      - pageLoads: true
     then:
-      - shouldExist: { selector: '[data-test=cta-section]' }
       - shouldExist: { selector: '[data-test=github-link]' }
+      - shouldContain: { selector: '[data-test=cta-section]', text: 'getting started' }
+      - shouldExist: { selector: '[data-test=community-links]' }
+
+# =============================================================================
+# USER STORY: See Site Attribution
+# =============================================================================
+id: US-006
+title: Know who built this site and when
+requirement_id: R-006
+
+acceptance_criteria:
+  - id: AC-006-1
+    title: Footer contains builder attribution and date
+    narrative: |
+      Given I scroll to the bottom of the site
+      When I view the footer
+      Then I should see the site builder's name and build date
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=footer]' }
+    when:
+      - pageLoads: true
+    then:
+      - shouldExist: { selector: '[data-test=attribution]' }
+      - shouldContain: { selector: '[data-test=attribution]', text: '2026' }
+      - shouldExist: { selector: '[data-test=builder-name]' }

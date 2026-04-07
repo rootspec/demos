@@ -1,30 +1,141 @@
 ---
-import { GITHUB_REPO } from '../data/config';
+// Hero Section - Main introduction to RootSpec
 ---
 
-<section class="py-24 sm:py-32 px-4 sm:px-6">
-  <div class="max-w-content mx-auto text-center">
-    <h1 data-test="hero-tagline" class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-      Philosophy guides implementation,<br class="hidden sm:block" /> never vice versa.
+<section data-test="hero-section" class="hero">
+  <div class="hero-container">
+    <div class="hero-badge">
+      <span data-test="version-badge" class="version-badge">v7.0.3</span>
+    </div>
+
+    <h1 data-test="hero-tagline" class="hero-title">
+      Build software where <em>philosophy guides implementation</em>
     </h1>
-    <p data-test="hero-description" class="mt-6 text-lg sm:text-xl text-[var(--color-text-secondary)] max-w-2xl mx-auto leading-relaxed">
-      RootSpec is a hierarchical specification system that bridges human intent and software implementation. When code and specs can be generated trivially, the real value is validation and proof.
+
+    <p data-test="hero-explanation" class="hero-description">
+      RootSpec is a methodology that transforms product descriptions into testable, hierarchical specifications where <strong>philosophy guides implementation</strong> through a structured five-level approach.
     </p>
-    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-      <a
-        href="#get-started"
-        class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
-      >
-        Get Started
-      </a>
-      <a
-        href={GITHUB_REPO}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:border-[var(--color-text-muted)] transition-colors"
-      >
-        View on GitHub
-      </a>
+
+    <div class="hero-actions">
+      <a href="#how-it-works" class="cta-primary">See How It Works</a>
+      <a href="https://github.com/rootspec/rootspec" class="cta-secondary">View on GitHub</a>
     </div>
   </div>
 </section>
+
+<style>
+.hero {
+  padding: var(--space-64) 0 var(--space-48);
+  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-surface-elevated) 100%);
+  text-align: center;
+  position: relative;
+}
+
+.hero-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 var(--space-16);
+}
+
+.hero-badge {
+  margin-bottom: var(--space-24);
+}
+
+.version-badge {
+  display: inline-block;
+  background: var(--color-primary);
+  color: white;
+  padding: var(--space-4) var(--space-12);
+  border-radius: 100px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+.hero-title {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--space-24);
+  color: var(--color-text);
+}
+
+.hero-title em {
+  color: var(--color-primary);
+  font-style: normal;
+}
+
+.hero-description {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-32);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--space-16);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-primary {
+  background: var(--color-primary);
+  color: white;
+  padding: var(--space-12) var(--space-24);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 200ms ease;
+  min-width: 140px;
+}
+
+.cta-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.cta-secondary {
+  background: transparent;
+  color: var(--color-text);
+  padding: var(--space-12) var(--space-24);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 200ms ease;
+  min-width: 140px;
+}
+
+.cta-secondary:hover {
+  background: var(--color-surface-elevated);
+  border-color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: var(--space-48) 0 var(--space-32);
+  }
+
+  .hero-title {
+    font-size: var(--text-3xl);
+  }
+
+  .hero-description {
+    font-size: var(--text-base);
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-primary,
+  .cta-secondary {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+</style>

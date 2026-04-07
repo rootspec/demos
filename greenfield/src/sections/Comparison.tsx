@@ -1,66 +1,121 @@
-import { useState, useEffect, useRef } from 'react';
-import { withoutSpec, withSpec } from '../data/comparison';
+import { useState } from 'react';
 
 export default function Comparison() {
-  const [view, setView] = useState<'without' | 'with'>('without');
-  const sectionRef = useRef<HTMLElement>(null);
+  const [showAfter, setShowAfter] = useState(false);
 
-  useEffect(() => {
-    sectionRef.current?.setAttribute('data-hydrated', 'true');
-  }, []);
+  const toggleComparison = () => {
+    setShowAfter(prev => !prev);
+  };
 
   return (
-    <section ref={sectionRef} className="py-16 sm:py-24 px-4 sm:px-6 bg-[var(--color-bg-alt)]">
-      <div className="max-w-content mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Before & after</h2>
-        <p className="mt-4 text-lg text-[var(--color-text-secondary)] max-w-2xl">
-          See what changes when you use a structured specification instead of a loose requirements doc.
+    <section data-test="comparison-section" className={`comparison ${showAfter ? 'after-mode' : 'before-mode'}`}>
+      <div className="comparison-container">
+        <h2 className="comparison-title">Before vs After RootSpec</h2>
+
+        <p className="comparison-intro">
+          See the difference between traditional specification approaches and RootSpec's structured methodology.
         </p>
 
-        <div className="mt-8 flex gap-2" role="radiogroup" aria-label="Comparison view">
+        <div className="comparison-controls">
           <button
-            data-test="comparison-toggle-without"
-            onClick={() => setView('without')}
-            role="radio"
-            aria-checked={view === 'without'}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              view === 'without'
-                ? 'bg-[var(--color-accent)] text-white'
-                : 'bg-[var(--color-bg-elevated)] text-[var(--color-text-secondary)] hover:text-[var(--color-text)]'
-            }`}
+            data-test="comparison-toggle"
+            onClick={toggleComparison}
+            className="comparison-toggle"
+            aria-label={`Switch to ${showAfter ? 'before' : 'after'} view`}
           >
-            Without spec
-          </button>
-          <button
-            data-test="comparison-toggle-with"
-            onClick={() => setView('with')}
-            role="radio"
-            aria-checked={view === 'with'}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              view === 'with'
-                ? 'bg-[var(--color-accent)] text-white'
-                : 'bg-[var(--color-bg-elevated)] text-[var(--color-text-secondary)] hover:text-[var(--color-text)]'
-            }`}
-          >
-            With RootSpec
+            {showAfter ? 'Show Before' : 'Show After'}
           </button>
         </div>
 
-        <div className="mt-6">
-          {view === 'without' && (
-            <div data-test="comparison-without-panel" className="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] p-6">
-              <pre className="font-mono text-sm whitespace-pre-wrap leading-relaxed text-[var(--color-text-secondary)]">
-                {withoutSpec}
-              </pre>
+        <div data-test="comparison-content" className="comparison-content">
+          <div data-test="before-panel" className={`comparison-panel before-panel ${!showAfter ? 'active' : ''}`}>
+            <h3 className="panel-title">Before RootSpec</h3>
+            <div className="panel-content">
+              <div className="spec-example">
+                <h4>Product Requirements Document</h4>
+                <div className="chaotic-spec">
+                  <p><strong>Goal:</strong> Build a social platform for sharing photos</p>
+                  <p><em>vague requirements:</em></p>
+                  <ul>
+                    <li>"Users should be able to upload photos easily"</li>
+                    <li>"The feed should be engaging and show relevant content"</li>
+                    <li>"Performance should be good on mobile"</li>
+                    <li>"Make it look modern and clean"</li>
+                    <li>"Security is important"</li>
+                  </ul>
+
+                  <div className="problem-indicators">
+                    <div className="problem">
+                      <span className="problem-icon">⚠️</span>
+                      <span>No clear philosophy</span>
+                    </div>
+                    <div className="problem">
+                      <span className="problem-icon">❌</span>
+                      <span>Implementation drift inevitable</span>
+                    </div>
+                    <div className="problem">
+                      <span className="problem-icon">📄</span>
+                      <span>Google Docs specs nobody reads</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
-          {view === 'with' && (
-            <div data-test="comparison-with-panel" className="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] p-6">
-              <pre className="font-mono text-sm whitespace-pre-wrap leading-relaxed text-[var(--color-text-secondary)]">
-                {withSpec}
-              </pre>
+          </div>
+
+          <div data-test="after-panel" className={`comparison-panel after-panel ${showAfter ? 'active' : ''}`}>
+            <h3 className="panel-title">After RootSpec</h3>
+            <div className="panel-content">
+              <div className="spec-example">
+                <h4>structured hierarchy</h4>
+                <div className="structured-spec">
+                  <div className="spec-level">
+                    <h5>L1: Philosophy</h5>
+                    <p>Authentic human connection through intentional sharing</p>
+                  </div>
+
+                  <div className="spec-level">
+                    <h5>L2: Truths</h5>
+                    <ul>
+                      <li>85% of usage happens on mobile</li>
+                      <li>Users abandon apps after 3s load time</li>
+                      <li>Privacy concerns drive platform choice</li>
+                    </ul>
+                  </div>
+
+                  <div className="spec-level">
+                    <h5>L3: Interactions</h5>
+                    <ul>
+                      <li>Photo upload → instant preview → contextual sharing</li>
+                      <li>Feed browsing → meaningful discovery → connection prompts</li>
+                    </ul>
+                  </div>
+
+                  <div className="success-indicators">
+                    <div className="success">
+                      <span className="success-icon">✅</span>
+                      <span>Clear philosophy guides decisions</span>
+                    </div>
+                    <div className="success">
+                      <span className="success-icon">🎯</span>
+                      <span>Implementation stays aligned</span>
+                    </div>
+                    <div className="success">
+                      <span className="success-icon">🔄</span>
+                      <span>Living specification evolves with code</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
+          </div>
+        </div>
+
+        <div className="comparison-summary">
+          <p>
+            <strong>Result:</strong> RootSpec transforms vague requirements into a <em>structured hierarchy</em> where
+            every implementation decision can be traced back to core philosophy.
+          </p>
         </div>
       </div>
     </section>

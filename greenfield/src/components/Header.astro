@@ -1,22 +1,89 @@
 ---
 import ThemeToggle from './ThemeToggle.tsx';
-import { ROOTSPEC_VERSION } from '../data/config';
 ---
 
-<header class="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-bg)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--color-bg)]/60">
-  <div class="max-w-content mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <span class="font-mono font-bold text-lg">RootSpec</span>
-      <span data-test="version-badge" class="font-mono text-xs px-2 py-0.5 rounded-full bg-[var(--color-bg-elevated)] text-[var(--color-text-secondary)]">
-        v{ROOTSPEC_VERSION}
-      </span>
+<header class="header">
+  <div class="header-container">
+    <div class="logo">
+      <a href="/">RootSpec</a>
     </div>
-    <nav class="hidden sm:flex items-center gap-6 text-sm text-[var(--color-text-secondary)]">
-      <a href="#problem" class="hover:text-[var(--color-text)] transition-colors">Problem</a>
-      <a href="#how-it-works" class="hover:text-[var(--color-text)] transition-colors">How It Works</a>
-      <a href="#explore" class="hover:text-[var(--color-text)] transition-colors">Explore</a>
-      <a href="#get-started" class="hover:text-[var(--color-text)] transition-colors">Get Started</a>
+
+    <nav class="nav">
+      <ThemeToggle client:load />
     </nav>
-    <ThemeToggle client:load />
   </div>
 </header>
+
+<style>
+.header {
+  background: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-16);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.logo a {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+/* Theme Toggle Styles */
+:global(.theme-toggle) {
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 200ms ease;
+  color: var(--color-text);
+}
+
+:global(.theme-toggle:hover) {
+  background: var(--color-border);
+}
+
+:global(.theme-toggle:focus) {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+:global(.theme-icon) {
+  transition: transform 200ms ease;
+}
+
+:global(.theme-toggle:hover .theme-icon) {
+  transform: scale(1.1);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  :global(.theme-toggle),
+  :global(.theme-icon) {
+    transition: none !important;
+  }
+}
+</style>

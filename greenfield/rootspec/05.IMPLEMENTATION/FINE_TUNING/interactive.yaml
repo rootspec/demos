@@ -1,0 +1,114 @@
+# =============================================================================
+# FINE-TUNING: Interactive System
+# =============================================================================
+# @spec_version: 1.0.0
+# @spec_source: 04.SYSTEMS/SYSTEMS_OVERVIEW.md
+# @last_updated: 2026-04-07T14:55:00Z
+
+hierarchy_explorer:
+  expansion_animation_duration:
+    value: 300
+    # @unit: milliseconds
+    # @rationale: Smooth enough to feel polished, fast enough to not impede exploration
+    # @constraint: min=200, max=600
+
+  hover_highlight_delay:
+    value: 100
+    # @unit: milliseconds
+    # @rationale: Immediate enough to feel responsive, slight delay prevents flicker on cursor movement
+    # @constraint: min=50, max=300
+
+  reference_arrow_opacity:
+    value: 0.7
+    # @unit: ratio
+    # @rationale: Visible enough to convey connection, subtle enough not to dominate
+    # @constraint: min=0.4, max=1.0
+
+  max_simultaneous_expansions:
+    value: 5
+    # @unit: count
+    # @rationale: All levels can be expanded - matches the 5-level RootSpec structure
+    # @constraint: min=1, max=5
+    # @inviolable: true
+
+spec_wizard:
+  step_transition_duration:
+    value: 400
+    # @unit: milliseconds
+    # @rationale: Smooth progression that feels intentional, not rushed
+    # @constraint: min=250, max=800
+
+  auto_save_delay:
+    value: 1000
+    # @unit: milliseconds
+    # @rationale: Preserve user work without excessive local storage writes
+    # @constraint: min=500, max=3000
+
+  mission_template_count:
+    value: 6
+    # @unit: count
+    # @rationale: Enough variety to be useful, not overwhelming to choose from
+    # @constraint: min=3, max=12
+
+  design_pillar_max_selection:
+    value: 5
+    # @unit: count
+    # @rationale: Matches L1 Philosophy guidance for 3-5 design pillars
+    # @constraint: min=3, max=7
+    # @spec_source: L1 Philosophy - Design Pillars structure
+
+  output_generation_delay:
+    value: 500
+    # @unit: milliseconds
+    # @rationale: Brief pause creates sense of processing, shows value of structured thinking
+    # @constraint: min=200, max=1500
+
+comparison_slider:
+  transition_duration:
+    value: 600
+    # @unit: milliseconds
+    # @rationale: Long enough to show the transformation clearly, demonstrates before/after difference
+    # @constraint: min=300, max=1200
+
+  content_fade_overlap:
+    value: 0.3
+    # @unit: ratio
+    # @rationale: Smooth crossfade without jarring flicker, maintains readability
+    # @constraint: min=0.1, max=0.7
+
+touch_interaction:
+  minimum_target_size:
+    value: 44
+    # @unit: pixels
+    # @rationale: Meets iOS and Android accessibility guidelines for touch targets
+    # @constraint: min=40, max=60
+    # @inviolable: true
+
+  touch_delay_threshold:
+    value: 300
+    # @unit: milliseconds
+    # @rationale: Distinguish between tap and scroll, prevent accidental activations
+    # @constraint: min=200, max=500
+
+  hover_to_touch_adaptation:
+    value: true
+    # @rationale: Convert hover states to first-tap states on touch devices for better UX
+    # @spec_source: L2 Truths - All interactive features must work on mobile
+
+keyboard_navigation:
+  focus_ring_animation:
+    value: 150
+    # @unit: milliseconds
+    # @rationale: Quick enough to feel immediate, smooth enough to not be jarring
+    # @constraint: min=100, max=300
+
+  scroll_into_view_behavior:
+    value: "smooth"
+    # @rationale: Smooth scrolling helps users track focus movement
+    # @constraint: options=['auto', 'smooth']
+
+  skip_link_offset:
+    value: 80
+    # @unit: pixels
+    # @rationale: Account for sticky header, ensure proper positioning
+    # @constraint: min=60, max=120

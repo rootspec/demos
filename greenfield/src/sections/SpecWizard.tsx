@@ -1,246 +1,289 @@
-import { useState, useEffect, useRef } from 'react';
-import { templates, pillarSuggestions } from '../data/wizard';
-
-type Step = 1 | 2 | 3 | 'result';
+import { useState } from 'react';
 
 interface WizardState {
-  currentStep: Step;
+  step: number;
   mission: string;
   pillars: string[];
-  interaction: { who: string; trigger: string; feedback: string };
+  interaction: string;
 }
 
-const initial: WizardState = {
-  currentStep: 1,
-  mission: '',
-  pillars: [],
-  interaction: { who: '', trigger: '', feedback: '' },
-};
+const missionTemplates = [
+  "Build a social platform where authentic connections flourish through meaningful shared experiences",
+  "Create a productivity tool that adapts to individual workflows while maintaining team coherence",
+  "Develop a learning platform that makes complex subjects accessible through personalized paths",
+  "Design a marketplace that connects local creators with their communities sustainably"
+];
+
+const pillarOptions = [
+  "User-centric design", "Performance-first", "Privacy by design", "Accessibility always",
+  "Mobile-native experience", "Offline capability", "Real-time collaboration", "Data transparency",
+  "Sustainable growth", "Community-driven", "Developer-friendly", "Minimal complexity"
+];
 
 export default function SpecWizard() {
-  const [state, setState] = useState<WizardState>(initial);
-  const sectionRef = useRef<HTMLElement>(null);
+  const [isStarted, setIsStarted] = useState(false);
+  const [wizardState, setWizardState] = useState<WizardState>({
+    step: 1,
+    mission: '',
+    pillars: [],
+    interaction: ''
+  });
 
-  useEffect(() => {
-    sectionRef.current?.setAttribute('data-hydrated', 'true');
-  }, []);
+  const startWizard = () => {
+    setIsStarted(true);
+    setWizardState({ step: 1, mission: '', pillars: [], interaction: '' });
+  };
 
-  function update(patch: Partial<WizardState>) {
-    setState((s) => ({ ...s, ...patch }));
+  const nextStep = () => {
+    setWizardState(prev => ({ ...prev, step: prev.step + 1 }));
+  };
+
+  const selectMission = (mission: string) => {
+    setWizardState(prev => ({ ...prev, mission }));
+  };
+
+  const togglePillar = (pillar: string) => {
+    setWizardState(prev => ({
+      ...prev,
+      pillars: prev.pillars.includes(pillar)
+        ? prev.pillars.filter(p => p !== pillar)
+        : [...prev.pillars, pillar]
+    }));
+  };
+
+  const updateInteraction = (interaction: string) => {
+    setWizardState(prev => ({ ...prev, interaction }));
+  };
+
+  const completeWizard = () => {
+    setWizardState(prev => ({ ...prev, step: 4 }));
+  };
+
+  const generateSpecOutput = () => {
+    return {
+      philosophy: [
+        `User experience drives every technical decision`,
+        `${wizardState.mission.split(' ').slice(0, 5).join(' ')}... forms our north star`,
+        `${wizardState.pillars[0]} ensures consistent quality`
+      ],
+      truths: [
+        `Target users expect ${wizardState.interaction.split(' ')[0].toLowerCase()} functionality`,
+        `Performance budget: < 3s initial load on mobile networks`,
+        `Team capacity: 1-2 developers for MVP phase`
+      ],
+      interactions: [
+        `Primary flow: ${wizardState.interaction}`,
+        `Error handling: Clear feedback on failed operations`,
+        `Success states: Immediate confirmation with next steps`
+      ]
+    };
+  };
+
+  if (!isStarted) {
+    return (
+      <section data-test="spec-wizard" className="spec-wizard">
+        <div className="wizard-container">
+          <h2 className="wizard-title">Try the Spec Wizard</h2>
+
+          <p className="wizard-intro">
+            Experience how RootSpec transforms a simple product idea into a structured specification.
+            This interactive wizard will guide you through creating L1-L3 levels for your own product concept.
+          </p>
+
+          <button
+            data-test="start-wizard"
+            onClick={startWizard}
+            className="start-wizard-btn"
+          >
+            Start Creating Your Spec
+          </button>
+        </div>
+      </section>
+    );
   }
-
-  function togglePillar(label: string) {
-    setState((s) => {
-      const has = s.pillars.includes(label);
-      if (has) return { ...s, pillars: s.pillars.filter((p) => p !== label) };
-      if (s.pillars.length >= 5) return s;
-      return { ...s, pillars: [...s.pillars, label] };
-    });
-  }
-
-  function setInteractionField(field: keyof WizardState['interaction'], value: string) {
-    setState((s) => ({ ...s, interaction: { ...s.interaction, [field]: value } }));
-  }
-
-  const canAdvanceStep2 = state.pillars.length >= 1;
-  const canGenerate = state.interaction.who && state.interaction.trigger && state.interaction.feedback;
 
   return (
-    <section ref={sectionRef} className="py-16 sm:py-24 px-4 sm:px-6">
-      <div className="max-w-content mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Spec your idea</h2>
-        <p className="mt-4 text-lg text-[var(--color-text-secondary)] max-w-2xl">
-          Try the methodology. Enter a product idea and walk through three steps to see how RootSpec structures your thinking.
-        </p>
-
-        <div className="mt-12 max-w-2xl mx-auto">
-          {/* Step indicators */}
-          <div className="flex items-center gap-2 mb-8" role="tablist">
-            {[1, 2, 3].map((step) => {
-              const isActive = state.currentStep === step || (state.currentStep === 'result' && step === 3);
-              const isPast = typeof state.currentStep === 'number' ? step < state.currentStep : true;
-              return (
-                <div key={step} className="flex items-center gap-2">
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-[var(--color-accent)] text-white'
-                        : isPast
-                          ? 'bg-[var(--color-bg-elevated)] text-[var(--color-text)]'
-                          : 'bg-[var(--color-bg-elevated)] text-[var(--color-text-muted)]'
-                    }`}
-                    role="tab"
-                    aria-selected={isActive}
-                    aria-current={isActive ? 'step' : undefined}
-                  >
-                    {step}
-                  </div>
-                  {step < 3 && <div className="w-8 sm:w-16 h-px bg-[var(--color-border)]" />}
-                </div>
-              );
-            })}
+    <section data-test="spec-wizard" className="spec-wizard">
+      <div className="wizard-container">
+        <div data-test="wizard-progress" className="wizard-progress" aria-label={`Progress: step ${wizardState.step} of 3`}>
+          <div className="progress-steps">
+            {[1, 2, 3].map(step => (
+              <div
+                key={step}
+                className={`progress-step ${step <= wizardState.step ? 'active' : ''}`}
+              >
+                {step}
+              </div>
+            ))}
           </div>
+          <div className="progress-bar">
+            <div
+              className="progress-fill"
+              style={{ width: `${(wizardState.step / 3) * 100}%` }}
+            />
+          </div>
+        </div>
 
-          {/* Step 1: Mission */}
-          {state.currentStep === 1 && (
-            <div role="tabpanel">
-              <h3 className="text-xl font-semibold">What's your product idea?</h3>
-              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-                Describe the mission in one sentence, or pick a template.
-              </p>
-              <input
-                data-test="wizard-mission-input"
-                type="text"
-                value={state.mission}
-                onChange={(e) => update({ mission: e.target.value })}
-                placeholder="Help people accomplish meaningful work..."
-                className="mt-4 w-full px-4 py-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+        {wizardState.step === 1 && (
+          <div data-test="wizard-step-1" className="wizard-step">
+            <h3 className="step-title">Step 1: Define Your Mission</h3>
+            <p className="step-description">
+              Select or customize a mission statement that captures your product's core purpose.
+            </p>
+
+            <div className="mission-templates">
+              {missionTemplates.map((template, index) => (
+                <button
+                  key={index}
+                  data-test={`mission-template-${index + 1}`}
+                  onClick={() => selectMission(template)}
+                  className={`mission-template ${wizardState.mission === template ? 'selected' : ''}`}
+                >
+                  {template}
+                </button>
+              ))}
+            </div>
+
+            <div className="custom-mission">
+              <label htmlFor="custom-mission">Or write your own:</label>
+              <textarea
+                id="custom-mission"
+                value={wizardState.mission}
+                onChange={(e) => selectMission(e.target.value)}
+                placeholder="Describe your product's mission in 1-2 sentences..."
+                className="custom-mission-input"
               />
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                {templates.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => update({ mission: t.mission })}
-                    className="p-3 text-left text-sm rounded-lg border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-bg-elevated)] transition-colors"
-                  >
-                    <span className="font-medium">{t.label}</span>
-                  </button>
+            </div>
+
+            {wizardState.mission && (
+              <button
+                data-test="next-step"
+                onClick={nextStep}
+                className="next-step-btn"
+              >
+                Continue to Design Pillars
+              </button>
+            )}
+          </div>
+        )}
+
+        {wizardState.step === 2 && (
+          <div data-test="wizard-step-2" className="wizard-step">
+            <h3 className="step-title">Step 2: Choose Design Pillars</h3>
+            <p className="step-description">
+              Select 3-5 design pillars that will guide your implementation decisions.
+            </p>
+
+            <div className="pillars-grid">
+              {pillarOptions.map((pillar, index) => (
+                <button
+                  key={index}
+                  data-test={`pillar-option-${index + 1}`}
+                  onClick={() => togglePillar(pillar)}
+                  className={`pillar-option ${wizardState.pillars.includes(pillar) ? 'selected' : ''}`}
+                >
+                  {pillar}
+                </button>
+              ))}
+            </div>
+
+            <div className="selected-pillars">
+              <h4>Selected pillars ({wizardState.pillars.length}):</h4>
+              <div className="pillars-list">
+                {wizardState.pillars.map((pillar, index) => (
+                  <span key={index} className="selected-pillar">
+                    {pillar}
+                  </span>
                 ))}
               </div>
-              <button
-                data-test="wizard-next-step"
-                onClick={() => update({ currentStep: 2 })}
-                disabled={!state.mission}
-                className="mt-6 px-6 py-2.5 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
             </div>
-          )}
 
-          {/* Step 2: Pillars */}
-          {state.currentStep === 2 && (
-            <div role="tabpanel">
-              <h3 className="text-xl font-semibold">What should users feel?</h3>
-              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-                Select 3–5 design pillars — emotional experiences, not features.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {pillarSuggestions.map((p) => {
-                  const selected = state.pillars.includes(p.label);
-                  return (
-                    <button
-                      key={p.id}
-                      data-test="wizard-pillar-option"
-                      onClick={() => togglePillar(p.label)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
-                        selected
-                          ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white'
-                          : 'border-[var(--color-border)] hover:border-[var(--color-accent)] text-[var(--color-text-secondary)]'
-                      }`}
-                    >
-                      {p.label}
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="mt-3 text-xs text-[var(--color-text-muted)]">
-                {state.pillars.length}/5 selected {state.pillars.length < 3 && `(need at least 3)`}
-              </p>
+            {wizardState.pillars.length >= 3 && (
               <button
-                data-test="wizard-next-step"
-                onClick={() => update({ currentStep: 3 })}
-                disabled={!canAdvanceStep2}
-                className="mt-6 px-6 py-2.5 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                data-test="next-step"
+                onClick={nextStep}
+                className="next-step-btn"
               >
-                Next
+                Continue to Key Interaction
               </button>
-            </div>
-          )}
+            )}
+          </div>
+        )}
 
-          {/* Step 3: Interaction */}
-          {state.currentStep === 3 && (
-            <div role="tabpanel">
-              <h3 className="text-xl font-semibold">Describe one key interaction</h3>
-              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-                Who does what, and what happens?
-              </p>
-              <div className="mt-4 space-y-3">
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">Who</label>
-                  <input
-                    data-test="wizard-interaction-who"
-                    type="text"
-                    value={state.interaction.who}
-                    onChange={(e) => setInteractionField('who', e.target.value)}
-                    placeholder="Team member"
-                    className="w-full px-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">Trigger</label>
-                  <input
-                    data-test="wizard-interaction-trigger"
-                    type="text"
-                    value={state.interaction.trigger}
-                    onChange={(e) => setInteractionField('trigger', e.target.value)}
-                    placeholder="Creates a new task"
-                    className="w-full px-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">Feedback</label>
-                  <input
-                    data-test="wizard-interaction-feedback"
-                    type="text"
-                    value={state.interaction.feedback}
-                    onChange={(e) => setInteractionField('feedback', e.target.value)}
-                    placeholder="Task appears in the team list"
-                    className="w-full px-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
-                  />
-                </div>
-              </div>
+        {wizardState.step === 3 && (
+          <div data-test="wizard-step-3" className="wizard-step">
+            <h3 className="step-title">Step 3: Describe Key Interaction</h3>
+            <p className="step-description">
+              Describe the most important user interaction in your product.
+            </p>
+
+            <div className="interaction-input">
+              <label htmlFor="key-interaction">Key interaction:</label>
+              <textarea
+                id="key-interaction"
+                data-test="interaction-input"
+                value={wizardState.interaction}
+                onChange={(e) => updateInteraction(e.target.value)}
+                placeholder="e.g., User uploads a photo and gets instant feedback"
+                className="interaction-textarea"
+              />
+            </div>
+
+            {wizardState.interaction && (
               <button
-                data-test="wizard-generate"
-                onClick={() => update({ currentStep: 'result' })}
-                disabled={!canGenerate}
-                className="mt-6 px-6 py-2.5 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                data-test="complete-wizard"
+                onClick={completeWizard}
+                className="complete-wizard-btn"
               >
-                Generate Spec
+                Generate Specification
               </button>
-            </div>
-          )}
+            )}
+          </div>
+        )}
 
-          {/* Result */}
-          {state.currentStep === 'result' && (
-            <div data-test="wizard-result">
-              <h3 className="text-xl font-semibold mb-4">Your skeleton spec</h3>
-              <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-code-bg)] p-5 font-mono text-sm space-y-4 overflow-x-auto">
-                <div>
-                  <div className="text-[var(--color-text-muted)]"># Level 1: Philosophy</div>
-                  <div className="mt-1"><strong>Mission:</strong> {state.mission}</div>
-                  <div className="mt-2"><strong>Design Pillars:</strong></div>
-                  {state.pillars.map((p, i) => (
-                    <div key={i} className="ml-4 text-[var(--color-text-secondary)]">{i + 1}. {p}</div>
+        {wizardState.step === 4 && (
+          <div data-test="spec-output" className="spec-output">
+            <h3 className="output-title">Your Generated Specification</h3>
+
+            <div className="spec-levels">
+              <div className="spec-level">
+                <h4 className="spec-level-title">L1: Philosophy</h4>
+                <ul>
+                  {generateSpecOutput().philosophy.map((item, index) => (
+                    <li key={index}>{item}</li>
                   ))}
-                </div>
-                <div className="border-t border-[var(--color-border)] pt-4">
-                  <div className="text-[var(--color-text-muted)]"># Level 3: Interaction</div>
-                  <div className="mt-1"><strong>Actor:</strong> {state.interaction.who}</div>
-                  <div><strong>Trigger:</strong> {state.interaction.trigger}</div>
-                  <div><strong>Feedback:</strong> {state.interaction.feedback}</div>
-                </div>
+                </ul>
               </div>
+
+              <div className="spec-level">
+                <h4 className="spec-level-title">L2: Truths</h4>
+                <ul>
+                  {generateSpecOutput().truths.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="spec-level">
+                <h4 className="spec-level-title">L3: Interactions</h4>
+                <ul>
+                  {generateSpecOutput().interactions.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="output-actions">
               <button
-                data-test="wizard-start-over"
-                onClick={() => setState(initial)}
-                className="mt-6 px-6 py-2.5 rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:border-[var(--color-text-muted)] transition-colors"
+                onClick={() => setIsStarted(false)}
+                className="restart-wizard-btn"
               >
-                Start over
+                Try Another Product
               </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </section>
   );

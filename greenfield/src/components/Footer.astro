@@ -1,12 +1,136 @@
 ---
-import { ROOTSPEC_VERSION, GITHUB_REPO } from '../data/config';
+// Footer - Site attribution and build information
+const buildDate = new Date().getFullYear();
 ---
 
-<footer class="border-t border-[var(--color-border)] py-8 mt-16">
-  <div class="max-w-content mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-[var(--color-text-muted)]">
-    <span class="font-mono">RootSpec v{ROOTSPEC_VERSION}</span>
-    <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--color-text-secondary)] transition-colors">
-      GitHub
-    </a>
+<footer data-test="footer" class="footer">
+  <div class="footer-container">
+    <div class="footer-content">
+      <div class="attribution">
+        <p data-test="attribution" class="attribution-text">
+          Built in <strong>{buildDate}</strong> using RootSpec methodology
+        </p>
+        <p data-test="builder-name" class="builder-name">
+          Created by <strong>Claude Code</strong> from a product specification
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://github.com/rootspec/rootspec" class="footer-link">
+          RootSpec Framework
+        </a>
+        <a href="https://github.com/rootspec/demos" class="footer-link">
+          Demo Projects
+        </a>
+        <a href="https://claude.ai" class="footer-link">
+          Claude AI
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-note">
+        This site demonstrates specification-driven development where philosophy guides implementation.
+      </p>
+    </div>
   </div>
 </footer>
+
+<style>
+.footer {
+  background: var(--color-surface-elevated);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-48) 0 var(--space-32);
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-16);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-32);
+  gap: var(--space-32);
+}
+
+.attribution {
+  flex: 1;
+}
+
+.attribution-text,
+.builder-name {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.attribution-text {
+  margin-bottom: var(--space-8);
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--space-24);
+  align-items: center;
+}
+
+.footer-link {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  border-bottom: 1px solid transparent;
+  transition: all 200ms ease;
+}
+
+.footer-link:hover {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.footer-bottom {
+  padding-top: var(--space-24);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.footer-note {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  font-style: italic;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: var(--space-32) 0 var(--space-24);
+  }
+
+  .footer-content {
+    flex-direction: column;
+    gap: var(--space-24);
+  }
+
+  .footer-links {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .attribution {
+    text-align: center;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .footer-link {
+    transition: none !important;
+  }
+}
+</style>

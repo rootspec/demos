@@ -1,134 +1,309 @@
 # =============================================================================
-# USER STORY: Explore the Hierarchy
+# USER STORIES: Interactive System - MVP Phase
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [INTERACTIVE_SYSTEM, ACCESSIBILITY_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# @systems: [INTERACTIVE_SYSTEM, THEME_SYSTEM]
+# @last_updated: 2026-04-07T14:55:00Z
 
-id: US-201
-title: Explore the five-level specification hierarchy interactively
+# =============================================================================
+# USER STORY: Explore RootSpec Hierarchy
+# =============================================================================
+id: US-101
+title: Interact with the five-level hierarchy visualization
+requirement_id: R-101
 
 acceptance_criteria:
-  - id: AC-201-1
-    title: Click a level to expand it
+  - id: AC-101-1
+    title: All five levels are clickable and expandable
     narrative: |
-      Given I am viewing the hierarchy explorer
-      When I click on a level
-      Then that level expands to show example content
-      And any previously expanded level collapses
+      Given I reach the hierarchy explorer section
+      When I click on any of the five levels (L1-L5)
+      Then I should see that level expand with example content
     given:
       - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
     when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+      - click: { selector: '[data-test=level-1]' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+      - shouldHaveClass: { selector: '[data-test=level-1]', class: 'expanded' }
+      - shouldExist: { selector: '[data-test=level-1-content]' }
+      - shouldContain: { selector: '[data-test=level-1-content]', text: 'Philosophy' }
 
-  - id: AC-201-2
-    title: Hover a level to see its references
+  - id: AC-101-2
+    title: Visual connections show reference directions
     narrative: |
-      Given I am viewing the hierarchy explorer
-      When I hover over a level
-      Then I should see its allowed reference connections highlighted
+      Given I have expanded a level in the hierarchy explorer
+      When I hover over any level
+      Then I should see visual indicators showing which levels it can reference
     given:
       - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      - click: { selector: '[data-test=level-3]' }
     when:
-      - click: { selector: '[data-test=hierarchy-level-3]' }
+      - hover: { selector: '[data-test=level-3]' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-3][aria-expanded=true]' }
+      - shouldExist: { selector: '[data-test=reference-arrows]' }
+      - shouldHaveClass: { selector: '[data-test=level-1]', class: 'highlighted' }
+      - shouldHaveClass: { selector: '[data-test=level-2]', class: 'highlighted' }
 
-  - id: AC-201-3
-    title: Navigate hierarchy with keyboard
+  - id: AC-101-3
+    title: Multiple levels can be expanded simultaneously
     narrative: |
-      Given I am focused on the hierarchy explorer
-      When I use arrow keys to move between levels and Enter to expand
-      Then I should be able to explore the hierarchy without a mouse
+      Given I have one level expanded
+      When I click on another level
+      Then both levels should remain expanded
     given:
       - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      - click: { selector: '[data-test=level-1]' }
     when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+      - click: { selector: '[data-test=level-3]' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded=true]' }
+      - shouldHaveClass: { selector: '[data-test=level-1]', class: 'expanded' }
+      - shouldHaveClass: { selector: '[data-test=level-3]', class: 'expanded' }
 
----
 # =============================================================================
 # USER STORY: Try the Spec Wizard
 # =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
-
-id: US-202
-title: Generate a skeleton spec from a product idea
+id: US-102
+title: Create a sample spec for my own product idea
+requirement_id: R-102
 
 acceptance_criteria:
-  - id: AC-202-1
-    title: Complete the three-step wizard
+  - id: AC-102-1
+    title: Wizard has three clear steps
     narrative: |
-      Given I am viewing the spec wizard
-      When I enter a product idea, select design pillars, and describe an interaction
-      Then I should see a skeleton spec card showing my input mapped to L1-L3
+      Given I reach the spec wizard section
+      When I start the wizard
+      Then I should see three distinct steps with clear labels
     given:
       - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
     when:
-      - fill: { selector: '[data-test=wizard-mission-input]', value: 'A task manager for teams' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - fill: { selector: '[data-test=wizard-interaction-who]', value: 'Team member' }
-      - fill: { selector: '[data-test=wizard-interaction-trigger]', value: 'Creates a new task' }
-      - fill: { selector: '[data-test=wizard-interaction-feedback]', value: 'Task appears in the team list' }
-      - click: { selector: '[data-test=wizard-generate]' }
+      - click: { selector: '[data-test=start-wizard]' }
     then:
-      - shouldExist: { selector: '[data-test=wizard-result]' }
+      - shouldExist: { selector: '[data-test=wizard-step-1]' }
+      - shouldContain: { selector: '[data-test=wizard-step-1]', text: 'mission' }
+      - shouldExist: { selector: '[data-test=wizard-progress]' }
 
-  - id: AC-202-2
-    title: Start over resets the wizard
+  - id: AC-102-2
+    title: Step 1 captures product mission
     narrative: |
-      Given I have completed the wizard and see the result
-      When I click "Start over"
-      Then the wizard resets to step 1 with empty inputs
+      Given I am in wizard step 1
+      When I select or enter a mission statement
+      Then I should see my input reflected and be able to proceed
     given:
       - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+      - click: { selector: '[data-test=start-wizard]' }
     when:
-      - fill: { selector: '[data-test=wizard-mission-input]', value: 'Test idea' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - fill: { selector: '[data-test=wizard-interaction-who]', value: 'User' }
-      - fill: { selector: '[data-test=wizard-interaction-trigger]', value: 'Action' }
-      - fill: { selector: '[data-test=wizard-interaction-feedback]', value: 'Result' }
-      - click: { selector: '[data-test=wizard-generate]' }
-      - click: { selector: '[data-test=wizard-start-over]' }
+      - click: { selector: '[data-test=mission-template-1]' }
+      - click: { selector: '[data-test=next-step]' }
     then:
-      - shouldExist: { selector: '[data-test=wizard-mission-input]' }
+      - shouldExist: { selector: '[data-test=wizard-step-2]' }
+      - shouldContain: { selector: '[data-test=wizard-step-2]', text: 'design pillars' }
 
----
+  - id: AC-102-3
+    title: Step 2 selects design pillars
+    narrative: |
+      Given I am in wizard step 2
+      When I select 3-5 design pillars
+      Then I should see my selections and be able to proceed
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+      - click: { selector: '[data-test=start-wizard]' }
+      - click: { selector: '[data-test=mission-template-1]' }
+      - click: { selector: '[data-test=next-step]' }
+    when:
+      - click: { selector: '[data-test=pillar-option-1]' }
+      - click: { selector: '[data-test=pillar-option-2]' }
+      - click: { selector: '[data-test=pillar-option-3]' }
+      - click: { selector: '[data-test=next-step]' }
+    then:
+      - shouldExist: { selector: '[data-test=wizard-step-3]' }
+      - shouldContain: { selector: '[data-test=wizard-step-3]', text: 'key interaction' }
+
+  - id: AC-102-4
+    title: Step 3 describes key interaction and shows output
+    narrative: |
+      Given I am in wizard step 3
+      When I describe a key interaction and complete the wizard
+      Then I should see structured spec output mapping my input to L1-L3
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+      - click: { selector: '[data-test=start-wizard]' }
+      - click: { selector: '[data-test=mission-template-1]' }
+      - click: { selector: '[data-test=next-step]' }
+      - click: { selector: '[data-test=pillar-option-1]' }
+      - click: { selector: '[data-test=next-step]' }
+    when:
+      - fill: { selector: '[data-test=interaction-input]', value: 'User uploads a photo and gets instant feedback' }
+      - click: { selector: '[data-test=complete-wizard]' }
+    then:
+      - shouldExist: { selector: '[data-test=spec-output]' }
+      - shouldContain: { selector: '[data-test=spec-output]', text: 'L1: Philosophy' }
+      - shouldContain: { selector: '[data-test=spec-output]', text: 'L2: Truths' }
+      - shouldContain: { selector: '[data-test=spec-output]', text: 'L3: Interactions' }
+
 # =============================================================================
 # USER STORY: Compare Before and After
 # =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
-
-id: US-203
-title: See the difference RootSpec makes through a side-by-side comparison
+id: US-103
+title: See the difference between chaotic and structured specifications
+requirement_id: R-103
 
 acceptance_criteria:
-  - id: AC-203-1
-    title: Toggle between without and with views
+  - id: AC-103-1
+    title: Comparison shows both states with real content
     narrative: |
-      Given I am viewing the before/after comparison
-      When I toggle to the "With RootSpec" view
-      Then I should see structured, traceable content replacing the vague version
+      Given I reach the before/after comparison section
+      When I view the default state
+      Then I should see side-by-side content showing structured vs unstructured approaches
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=comparison-section]' }
+    when:
+      - pageLoads: true
+    then:
+      - shouldExist: { selector: '[data-test=before-panel]' }
+      - shouldExist: { selector: '[data-test=after-panel]' }
+      - shouldContain: { selector: '[data-test=before-panel]', text: 'vague requirements' }
+      - shouldContain: { selector: '[data-test=after-panel]', text: 'structured hierarchy' }
+
+  - id: AC-103-2
+    title: Slider or toggle controls the comparison
+    narrative: |
+      Given I can see the before/after comparison
+      When I interact with the slider or toggle control
+      Then I should see smooth transitions between the two states
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=comparison-section]' }
+    when:
+      - click: { selector: '[data-test=comparison-toggle]' }
+    then:
+      - shouldHaveClass: { selector: '[data-test=comparison-section]', class: 'after-mode' }
+      - shouldHaveTransition: { selector: '[data-test=comparison-content]' }
+
+# =============================================================================
+# USER STORY: Toggle Site Theme
+# =============================================================================
+id: US-104
+title: Switch between dark and light modes
+requirement_id: R-104
+
+acceptance_criteria:
+  - id: AC-104-1
+    title: Theme toggle button is accessible
+    narrative: |
+      Given I am viewing the site
+      When I look for theme controls
+      Then I should find a clearly labeled theme toggle button
     given:
       - visit: '/'
     when:
-      - click: { selector: '[data-test=comparison-toggle-with]' }
+      - pageLoads: true
     then:
-      - shouldExist: { selector: '[data-test=comparison-with-panel]' }
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+      - shouldHaveAttribute: { selector: '[data-test=theme-toggle]', attribute: 'aria-label' }
+
+  - id: AC-104-2
+    title: Manual theme toggle works immediately
+    narrative: |
+      Given I can see the theme toggle button
+      When I click it
+      Then the site theme should change instantly with smooth transitions
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldHaveClass: { selector: 'html', class: 'dark' }
+      - shouldHaveTransition: { selector: 'body' }
+
+  - id: AC-104-3
+    title: System theme preference is detected
+    narrative: |
+      Given I have a system dark mode preference
+      When I visit the site for the first time
+      Then the site should automatically match my system preference
+    given:
+      - setSystemTheme: 'dark'
+      - visit: '/'
+    when:
+      - pageLoads: true
+    then:
+      - shouldHaveClass: { selector: 'html', class: 'dark' }
+
+  - id: AC-104-4
+    title: Theme preference persists across visits
+    narrative: |
+      Given I have manually set a theme preference
+      When I refresh the page or return to the site
+      Then my theme choice should be remembered
+    given:
+      - visit: '/'
+      - click: { selector: '[data-test=theme-toggle]' }
+    when:
+      - refresh: true
+    then:
+      - shouldHaveClass: { selector: 'html', class: 'dark' }
+
+# =============================================================================
+# USER STORY: Use Keyboard Navigation
+# =============================================================================
+id: US-105
+title: Navigate interactive features without a mouse
+requirement_id: R-105
+
+acceptance_criteria:
+  - id: AC-105-1
+    title: All interactive elements are keyboard accessible
+    narrative: |
+      Given I am navigating with only keyboard
+      When I use Tab to move through the page
+      Then I should be able to reach all interactive elements
+    given:
+      - visit: '/'
+    when:
+      - keyPress: 'Tab'
+      - keyPress: 'Tab'
+      - keyPress: 'Tab'
+    then:
+      - shouldHaveFocus: '[data-test=theme-toggle]'
+      - shouldExist: { selector: '[data-test=focus-indicator]' }
+
+  - id: AC-105-2
+    title: Hierarchy explorer works with keyboard
+    narrative: |
+      Given I navigate to the hierarchy explorer with keyboard
+      When I press Enter or Space on a level
+      Then that level should expand just like clicking
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      - keyPress: 'Tab'
+    when:
+      - keyPress: 'Enter'
+    then:
+      - shouldHaveClass: { selector: '[data-test=level-1]', class: 'expanded' }
+
+  - id: AC-105-3
+    title: Spec wizard supports keyboard input
+    narrative: |
+      Given I start the spec wizard using keyboard
+      When I navigate through all steps using Tab and Enter
+      Then I should be able to complete the entire wizard
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    when:
+      - keyPress: 'Tab'
+      - keyPress: 'Enter'
+      - keyPress: 'Tab'
+      - keyPress: 'Enter'
+    then:
+      - shouldExist: { selector: '[data-test=wizard-step-2]' }

@@ -1,26 +1,246 @@
 # =============================================================================
-# USER STORY: Mobile Experience
+# USER STORIES: Responsive System - MVP Phase
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
 # @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# @last_updated: 2026-04-07T14:55:00Z
 
-id: US-401
-title: Use the site on mobile devices
+# =============================================================================
+# USER STORY: Use Site on Mobile Device
+# =============================================================================
+id: US-201
+title: Access all functionality on smartphones
+requirement_id: R-201
 
 acceptance_criteria:
-  - id: AC-401-1
-    title: Content is readable on small screens
+  - id: AC-201-1
+    title: Site loads and is readable on mobile viewport
     narrative: |
-      Given I am viewing the site on a mobile device
+      Given I visit the site on a mobile device
       When the page loads
-      Then all content should be visible without horizontal scrolling
-      And text should be readable without zooming
+      Then all content should be readable without horizontal scrolling
     given:
+      - setViewport: { width: 375, height: 667 }
       - visit: '/'
-    when: []
+    when:
+      - pageLoads: true
     then:
+      - shouldFitViewport: true
+      - shouldBeReadable: { minFontSize: '16px' }
+      - shouldNotOverflow: 'horizontal'
+
+  - id: AC-201-2
+    title: Touch interactions work for all interactive elements
+    narrative: |
+      Given I am using a touch device
+      When I tap on interactive elements like the hierarchy explorer
+      Then they should respond as expected with touch-friendly targets
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - touch: { selector: '[data-test=level-1]' }
+    then:
+      - shouldHaveClass: { selector: '[data-test=level-1]', class: 'expanded' }
+      - shouldHaveMinSize: { selector: '[data-test=level-1]', size: '44px' }
+
+  - id: AC-201-3
+    title: Comparison section stacks vertically on mobile
+    narrative: |
+      Given I am viewing the before/after comparison on mobile
+      When I interact with the comparison toggle
+      Then the panels should stack vertically and remain usable
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=comparison-section]' }
+    when:
+      - touch: { selector: '[data-test=comparison-toggle]' }
+    then:
+      - shouldHaveClass: { selector: '[data-test=comparison-section]', class: 'mobile-stacked' }
+      - shouldExist: { selector: '[data-test=before-panel]' }
+      - shouldExist: { selector: '[data-test=after-panel]' }
+
+# =============================================================================
+# USER STORY: Use Site on Tablet Device
+# =============================================================================
+id: US-202
+title: Optimal experience on tablet-sized screens
+requirement_id: R-202
+
+acceptance_criteria:
+  - id: AC-202-1
+    title: Layout adapts appropriately for tablet viewport
+    narrative: |
+      Given I visit the site on a tablet device
+      When I view the hierarchy explorer
+      Then it should use available space efficiently without being cramped
+    given:
+      - setViewport: { width: 768, height: 1024 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - pageLoads: true
+    then:
+      - shouldUseSpace: 'efficiently'
+      - shouldNotBeCramped: true
+      - shouldMaintainReadability: true
+
+  - id: AC-202-2
+    title: Spec wizard works well in landscape orientation
+    narrative: |
+      Given I am using the spec wizard on a tablet in landscape mode
+      When I complete all three steps
+      Then the interface should remain usable and well-proportioned
+    given:
+      - setViewport: { width: 1024, height: 768 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    when:
+      - touch: { selector: '[data-test=start-wizard]' }
+      - touch: { selector: '[data-test=mission-template-1]' }
+      - touch: { selector: '[data-test=next-step]' }
+    then:
+      - shouldExist: { selector: '[data-test=wizard-step-2]' }
+      - shouldBeProportional: true
+
+# =============================================================================
+# USER STORY: Performance on Slower Connections
+# =============================================================================
+id: US-203
+title: Site loads and becomes interactive quickly
+requirement_id: R-203
+
+acceptance_criteria:
+  - id: AC-203-1
+    title: Core content loads within 3 seconds on 3G
+    narrative: |
+      Given I visit the site on a slow 3G connection
+      When the page starts loading
+      Then I should see readable content within 3 seconds
+    given:
+      - setConnection: '3G'
+      - visit: '/'
+    when:
+      - startTimer: 'pageLoad'
+    then:
+      - shouldLoadWithin: { seconds: 3 }
       - shouldExist: { selector: '[data-test=hero-tagline]' }
-      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldBeReadable: '[data-test=meta-banner]'
+
+  - id: AC-203-2
+    title: Interactive features enhance progressively
+    narrative: |
+      Given the basic content has loaded
+      When JavaScript finishes loading
+      Then interactive features should enhance the experience without breaking basic functionality
+    given:
+      - setConnection: '3G'
+      - visit: '/'
+      - waitFor: { selector: '[data-test=hero-tagline]' }
+    when:
+      - waitForJS: true
+    then:
+      - shouldEnhance: 'progressively'
+      - shouldNotBreak: 'basic-functionality'
+      - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
+
+# =============================================================================
+# USER STORY: Accessibility with Screen Readers
+# =============================================================================
+id: US-204
+title: Navigate site effectively with assistive technology
+requirement_id: R-204
+
+acceptance_criteria:
+  - id: AC-204-1
+    title: All interactive elements have proper ARIA labels
+    narrative: |
+      Given I am using a screen reader
+      When I navigate through interactive elements
+      Then each should have descriptive labels and roles
+    given:
+      - enableScreenReader: true
+      - visit: '/'
+    when:
+      - navigateByElement: 'button'
+    then:
+      - shouldHaveAriaLabel: { selector: '[data-test=theme-toggle]' }
+      - shouldHaveRole: { selector: '[data-test=hierarchy-explorer]', role: 'tabpanel' }
+      - shouldAnnounce: 'theme toggle button'
+
+  - id: AC-204-2
+    title: Hierarchy explorer is screen reader accessible
+    narrative: |
+      Given I am using a screen reader
+      When I interact with the hierarchy explorer
+      Then I should receive clear feedback about state changes
+    given:
+      - enableScreenReader: true
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - keyPress: 'Tab'
+      - keyPress: 'Enter'
+    then:
+      - shouldAnnounce: 'Level 1 Philosophy expanded'
+      - shouldHaveAriaExpanded: { selector: '[data-test=level-1]', value: 'true' }
+
+  - id: AC-204-3
+    title: Spec wizard provides clear progress feedback
+    narrative: |
+      Given I am completing the spec wizard with a screen reader
+      When I advance through each step
+      Then I should hear progress updates and clear instructions
+    given:
+      - enableScreenReader: true
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    when:
+      - keyPress: 'Tab'
+      - keyPress: 'Enter'
+    then:
+      - shouldAnnounce: 'Step 1 of 3: Select mission'
+      - shouldHaveAriaLabel: { selector: '[data-test=wizard-progress]', text: 'Progress: step 1 of 3' }
+
+# =============================================================================
+# USER STORY: Reduced Motion Support
+# =============================================================================
+id: US-205
+title: Respect user motion preferences
+requirement_id: R-205
+
+acceptance_criteria:
+  - id: AC-205-1
+    title: Animations are reduced when user prefers reduced motion
+    narrative: |
+      Given I have set my system to prefer reduced motion
+      When I interact with animated elements
+      Then transitions should be minimal or instant
+    given:
+      - setPrefersReducedMotion: true
+      - visit: '/'
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldHaveReducedMotion: true
+      - shouldTransitionInstantly: '[data-test=theme-change]'
+
+  - id: AC-205-2
+    title: Core functionality still works with reduced motion
+    narrative: |
+      Given I prefer reduced motion
+      When I use interactive features like the hierarchy explorer
+      Then they should work normally just without smooth animations
+    given:
+      - setPrefersReducedMotion: true
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - click: { selector: '[data-test=level-1]' }
+    then:
+      - shouldHaveClass: { selector: '[data-test=level-1]', class: 'expanded' }
+      - shouldShowContent: '[data-test=level-1-content]'
+      - shouldNotAnimate: 'expand-transition'

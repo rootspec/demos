@@ -1,33 +1,211 @@
 ---
-import { GITHUB_REPO } from '../data/config';
+// CTA Section - Call to action for getting started with RootSpec
 ---
 
-<section id="get-started" data-test="cta-section" class="py-16 sm:py-24 px-4 sm:px-6 bg-[var(--color-bg-alt)]">
-  <div class="max-w-content mx-auto text-center">
-    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Get started</h2>
-    <p class="mt-4 text-lg text-[var(--color-text-secondary)] max-w-xl mx-auto">
-      RootSpec is open source. Install the skills, write your seed, and run the pipeline.
-    </p>
-    <div class="mt-8 max-w-lg mx-auto text-left">
-      <pre class="p-4 rounded-lg bg-[var(--color-code-bg)] border border-[var(--color-border)] font-mono text-sm overflow-x-auto"><code class="text-[var(--color-text)]"><span class="text-[var(--color-text-muted)]"># Install skills</span>
-npx skills add rootspec/rootspec --skill '*'
+<section data-test="cta-section" class="cta">
+  <div class="cta-container">
+    <h2 class="cta-title">Ready to Build with Philosophy?</h2>
 
-<span class="text-[var(--color-text-muted)]"># Run the pipeline</span>
-/rs-init
-/rs-spec
-/rs-impl
-/rs-validate</code></pre>
-    </div>
-    <div class="mt-8">
-      <a
-        data-test="github-link"
-        href={GITHUB_REPO}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
-      >
+    <p class="cta-description">
+      Join developers who are building software where philosophy guides implementation. Start with <strong>getting started</strong> documentation or explore our community.
+    </p>
+
+    <div class="cta-actions">
+      <a href="https://github.com/rootspec/rootspec" data-test="github-link" class="cta-primary">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="github-icon">
+          <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+        </svg>
         View on GitHub
       </a>
+
+      <a href="https://github.com/rootspec/rootspec#getting-started" class="cta-secondary">
+        Documentation
+      </a>
+    </div>
+
+    <div data-test="community-links" class="community-links">
+      <h3 class="community-title">Community & Resources</h3>
+      <div class="community-grid">
+        <a href="https://github.com/rootspec/demos" class="community-link">
+          <span class="community-link-title">Demo Projects</span>
+          <span class="community-link-description">Explore real implementations</span>
+        </a>
+
+        <a href="https://github.com/rootspec/rootspec/discussions" class="community-link">
+          <span class="community-link-title">Discussions</span>
+          <span class="community-link-description">Ask questions, share ideas</span>
+        </a>
+
+        <a href="https://github.com/rootspec/rootspec/issues" class="community-link">
+          <span class="community-link-title">Issues</span>
+          <span class="community-link-description">Report bugs, request features</span>
+        </a>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+.cta {
+  padding: var(--space-64) 0;
+  background: var(--color-background);
+  text-align: center;
+}
+
+.cta-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 var(--space-16);
+}
+
+.cta-title {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  margin-bottom: var(--space-16);
+  color: var(--color-text);
+}
+
+.cta-description {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-32);
+  line-height: 1.6;
+}
+
+.cta-actions {
+  display: flex;
+  gap: var(--space-16);
+  justify-content: center;
+  margin-bottom: var(--space-48);
+  flex-wrap: wrap;
+}
+
+.cta-primary {
+  background: var(--color-primary);
+  color: white;
+  padding: var(--space-12) var(--space-24);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  transition: background-color 200ms ease;
+  min-width: 160px;
+  justify-content: center;
+}
+
+.cta-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.cta-secondary {
+  background: transparent;
+  color: var(--color-text);
+  padding: var(--space-12) var(--space-24);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 200ms ease;
+  min-width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-secondary:hover {
+  background: var(--color-surface-elevated);
+  border-color: var(--color-primary);
+}
+
+.github-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.community-links {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-32);
+}
+
+.community-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-24);
+  color: var(--color-text);
+}
+
+.community-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-16);
+}
+
+.community-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  padding: var(--space-16);
+  border-radius: 8px;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  transition: all 200ms ease;
+}
+
+.community-link:hover {
+  background: var(--color-background);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.community-link-title {
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+}
+
+.community-link-description {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+  .cta {
+    padding: var(--space-48) 0;
+  }
+
+  .cta-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-primary,
+  .cta-secondary {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .community-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .community-link:hover {
+    transform: none;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .cta-primary,
+  .cta-secondary,
+  .community-link {
+    transition: none !important;
+  }
+
+  .community-link:hover {
+    transform: none !important;
+  }
+}
+</style>

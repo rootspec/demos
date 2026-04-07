@@ -1,44 +1,77 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ThemeToggle() {
-  const [dark, setDark] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    const isDark = document.documentElement.classList.contains('dark');
-    setDark(isDark);
-    // Ensure #app has data-theme synced on hydration
-    const theme = isDark ? 'dark' : 'light';
-    document.getElementById('app')?.setAttribute('data-theme', theme);
-    // Signal hydration complete
-    buttonRef.current?.setAttribute('data-hydrated', 'true');
+    // Get initial theme from localStorage or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    let initialTheme: 'light' | 'dark';
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+      initialTheme = savedTheme;
+    } else {
+      initialTheme = systemPrefersDark ? 'dark' : 'light';
+    }
+
+    setTheme(initialTheme);
+    applyTheme(initialTheme);
+    setIsHydrated(true);
   }, []);
 
-  function toggle() {
-    const next = !dark;
-    setDark(next);
-    const theme = next ? 'dark' : 'light';
-    document.documentElement.classList.toggle('dark', next);
-    document.documentElement.setAttribute('data-theme', theme);
-    document.getElementById('app')?.setAttribute('data-theme', theme);
-    localStorage.setItem('rootspec-theme', theme);
-  }
+  const applyTheme = (newTheme: 'light' | 'dark') => {
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', newTheme);
+  };
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    applyTheme(newTheme);
+  };
 
   return (
     <button
-      ref={buttonRef}
       data-test="theme-toggle"
-      onClick={toggle}
-      className="p-2 rounded-lg hover:bg-[var(--color-bg-elevated)] transition-colors"
-      aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-      role="switch"
-      aria-checked={dark}
+      data-hydrated={isHydrated}
+      onClick={toggleTheme}
+      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      className="theme-toggle"
     >
-      {dark ? (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-      ) : (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      )}
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="theme-icon"
+      >
+        {theme === 'light' ? (
+          // Moon icon for light mode (to switch to dark)
+          <path
+            d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+            fill="currentColor"
+          />
+        ) : (
+          // Sun icon for dark mode (to switch to light)
+          <>
+            <path
+              d="M10 2v1a1 1 0 102 0V2a1 1 0 10-2 0zM10 17v1a1 1 0 102 0v-1a1 1 0 10-2 0zM2 10h1a1 1 0 100-2H2a1 1 0 100 2zM17 10h1a1 1 0 100-2h-1a1 1 0 100 2zM4.343 4.343l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zM14.243 14.243l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zM14.95 4.05l-.707.707a1 1 0 101.414 1.414l.707-.707a1 1 0 00-1.414-1.414zM5.05 14.95l-.707.707a1 1 0 101.414 1.414l.707-.707a1 1 0 00-1.414-1.414z"
+              fill="currentColor"
+            />
+            <path
+              d="M10 7a3 3 0 100 6 3 3 0 000-6z"
+              fill="currentColor"
+            />
+          </>
+        )}
+      </svg>
     </button>
   );
 }

@@ -1,37 +1,142 @@
 ---
-const painPoints = [
-  {
-    title: 'Spec drift',
-    description: 'Requirements documents diverge from implementation within weeks. Nobody notices until it\'s too late.',
-  },
-  {
-    title: 'Philosophy-implementation gap',
-    description: 'The "why" behind a product lives in founders\' heads and degrades at every handoff. AI accelerates this degradation.',
-  },
-  {
-    title: 'Unreliable AI output',
-    description: 'AI tools generate code confidently but have no way to validate alignment with intent. More code, same drift.',
-  },
-  {
-    title: 'Dead documentation',
-    description: 'Specs written once, shared once, read never. No living connection to what gets built.',
-  },
-];
+// Problem Section - Describes current specification pain points
 ---
 
-<section id="problem" data-test="problem-section" class="py-16 sm:py-24 px-4 sm:px-6 bg-[var(--color-bg-alt)]">
-  <div class="max-w-content mx-auto">
-    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">The problem</h2>
-    <p class="mt-4 text-lg text-[var(--color-text-secondary)] max-w-2xl">
-      AI has knowledge but not wisdom. Humans supply philosophy; AI executes implementation. Without a bridge, intent degrades at every step.
+<section data-test="problem-section" class="problem" id="problem">
+  <div class="problem-container">
+    <h2 class="problem-title">The Specification Problem</h2>
+
+    <p class="problem-intro">
+      Most product specifications fail because they're disconnected from implementation reality.
     </p>
-    <div class="mt-12 grid gap-6 sm:grid-cols-2">
-      {painPoints.map((point) => (
-        <div data-test="pain-point" class="p-6 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)]">
-          <h3 class="font-semibold text-lg">{point.title}</h3>
-          <p class="mt-2 text-[var(--color-text-secondary)] leading-relaxed">{point.description}</p>
-        </div>
-      ))}
+
+    <div class="problem-grid">
+      <div class="problem-item">
+        <h3 class="problem-item-title">Spec Drift</h3>
+        <p class="problem-item-description">
+          <strong>spec drift</strong> happens when documentation becomes outdated the moment development begins. Features evolve, requirements change, and specs become historical artifacts instead of living guides.
+        </p>
+      </div>
+
+      <div class="problem-item">
+        <h3 class="problem-item-title">Philosophy-Implementation Gap</h3>
+        <p class="problem-item-description">
+          There's a massive <strong>philosophy-implementation gap</strong> between what product teams envision and what engineering teams build. Intent gets lost in translation.
+        </p>
+      </div>
+
+      <div class="problem-item">
+        <h3 class="problem-item-title">Documentation Debt</h3>
+        <p class="problem-item-description">
+          <strong>Google Docs specs nobody reads</strong> pile up while teams rely on Slack messages and verbal context that disappears when people leave.
+        </p>
+      </div>
+    </div>
+
+    <div class="problem-conclusion">
+      <p>RootSpec solves this by creating <em>living specifications</em> that evolve with your code and enforce the connection between philosophy and implementation.</p>
     </div>
   </div>
 </section>
+
+<style>
+.problem {
+  padding: var(--space-64) 0;
+  background: var(--color-background);
+}
+
+.problem-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-16);
+}
+
+.problem-title {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--space-16);
+  color: var(--color-text);
+}
+
+.problem-intro {
+  font-size: var(--text-lg);
+  text-align: center;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-48);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-32);
+  margin-bottom: var(--space-48);
+}
+
+.problem-item {
+  padding: var(--space-24);
+  background: var(--color-surface-elevated);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
+
+.problem-item-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-12);
+  color: var(--color-text);
+}
+
+.problem-item-description {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.problem-conclusion {
+  text-align: center;
+  padding: var(--space-32);
+  background: var(--color-surface-elevated);
+  border-radius: 12px;
+  border: 2px solid var(--color-primary-subtle);
+}
+
+.problem-conclusion p {
+  font-size: var(--text-lg);
+  color: var(--color-text);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.problem-conclusion em {
+  color: var(--color-primary);
+  font-style: normal;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .problem {
+    padding: var(--space-48) 0;
+  }
+
+  .problem-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-24);
+  }
+
+  .problem-item {
+    padding: var(--space-20);
+  }
+
+  .problem-conclusion {
+    padding: var(--space-24);
+  }
+
+  .problem-conclusion p {
+    font-size: var(--text-base);
+  }
+}
+</style>

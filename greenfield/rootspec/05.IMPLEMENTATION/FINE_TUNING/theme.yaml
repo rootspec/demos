@@ -1,0 +1,47 @@
+# =============================================================================
+# FINE-TUNING: Theme System
+# =============================================================================
+# @spec_version: 1.0.0
+# @spec_source: 04.SYSTEMS/SYSTEMS_OVERVIEW.md
+# @last_updated: 2026-04-07T14:55:00Z
+
+theme_transition_duration:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Fast enough to feel instant, slow enough to be smooth and not jarring
+  # @constraint: min=100, max=500
+
+color_contrast_ratio:
+  value: 4.5
+  # @unit: ratio
+  # @rationale: Meets WCAG AA standards for normal text accessibility
+  # @constraint: min=4.5, max=21
+  # @inviolable: true
+
+dark_theme_detection_priority:
+  system_preference: 1
+  manual_override: 2
+  default_fallback: 3
+  # @rationale: User explicit choice overrides system, system overrides default
+  # @spec_source: L1 Philosophy - User agency and transparency
+
+theme_persistence_duration:
+  value: 365
+  # @unit: days
+  # @rationale: Long enough to be permanent-feeling, not indefinite to allow preference evolution
+  # @constraint: min=30, max=730
+
+focus_indicator_thickness:
+  value: 2
+  # @unit: pixels
+  # @rationale: Visible without being intrusive, meets accessibility guidelines
+  # @constraint: min=1, max=4
+  # @inviolable: true
+
+reduced_motion_threshold:
+  opacity_transition: 0
+  transform_transition: 0
+  color_transition: 100
+  # @unit: milliseconds
+  # @rationale: Respect user preference completely for motion, allow subtle color changes
+  # @spec_source: L2 Truths - Accessibility constraints
