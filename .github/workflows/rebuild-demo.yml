@@ -31,12 +31,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: npm
-          cache-dependency-path: ${{ inputs.demo }}/package-lock.json
 
       - name: Install dependencies
         working-directory: ${{ inputs.demo }}
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            echo "No package-lock.json — deps will be installed during pipeline"
+          fi
 
       - name: Create rebuild branch
         run: |
@@ -50,21 +53,33 @@ jobs:
         if: inputs.demo == 'greenfield'
         working-directory: greenfield
         run: |
-          # Remove spec files (keep framework files 00.*)
-          rm -rf rootspec/01.PHILOSOPHY.md \
-                 rootspec/02.TRUTHS.md \
-                 rootspec/03.INTERACTIONS.md \
-                 rootspec/04.SYSTEMS \
-                 rootspec/05.IMPLEMENTATION \
-                 rootspec/DERIVED_ARTIFACTS \
-                 rootspec/spec-status.json \
-                 rootspec/tests-status.json
+          # Keep: SEED.md, rootspec/00.*, .agents/, .claude/, .gitignore, README.md, skills-lock.json
+          # Remove everything else
 
-          # Remove generated source and tests
-          rm -rf src/components src/sections src/pages src/styles src/layouts
-          rm -rf cypress/e2e
+          # Spec files (keep 00.AXIOMS.md and 00.FRAMEWORK.md)
+          rm -rf rootspec/01.* rootspec/02.* rootspec/03.* rootspec/04.SYSTEMS rootspec/05.IMPLEMENTATION
+          rm -rf rootspec/CONVENTIONS rootspec/DERIVED_ARTIFACTS
+          rm -f rootspec/spec-status.json rootspec/tests-status.json rootspec/stats.json
 
-          echo "Greenfield reset to pre-spec state"
+          # Source code and build artifacts
+          rm -rf src/ dist/ .astro/ .next/
+
+          # Cypress / test infrastructure
+          rm -rf cypress/ cypress.config.ts
+
+          # Framework configs (agent chooses the framework)
+          rm -f package.json package-lock.json tsconfig.json
+          rm -f astro.config.mjs astro.config.ts vite.config.ts vite.config.js
+          rm -f next.config.js next.config.ts next.config.mjs
+          rm -f tailwind.config.mjs tailwind.config.js tailwind.config.ts
+          rm -f postcss.config.js postcss.config.ts
+
+          # Prerequisites (created by rs-init)
+          rm -rf scripts/
+          rm -f .rootspec.json
+          rm -f .dev-server.pid .dev-server.log cypress-output.log
+
+          echo "Greenfield reset to blank slate"
 
       - name: "Reset: scaffold"
         if: inputs.demo == 'scaffold'
@@ -94,6 +109,29 @@ jobs:
 
       - name: Install Claude Code
         run: curl -fsSL https://claude.ai/install.sh | bash
+
+      - name: "Build: init (greenfield only)"
+        if: inputs.demo == 'greenfield'
+        working-directory: greenfield
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p \
+            --dangerously-skip-permissions \
+            --output-format json \
+            --max-turns 20 \
+            --max-budget-usd 3 \
+            --model claude-sonnet-4-20250514 \
+            "Run /rs-init. This is non-interactive — do not ask questions.
+            There is no package.json yet — create one with npm init -y first." \
+            | tee /tmp/claude-init.json | jq -r '.result'
+          echo "--- Stats ---"
+          jq '{turns: .num_turns, cost_usd: .total_cost_usd}' /tmp/claude-init.json
+
+          # Install deps that rs-init set up (Cypress, etc.)
+          if [ -f package.json ]; then
+            npm install
+          fi
 
       - name: "Build: spec (greenfield/scaffold)"
         if: inputs.demo != 'brownfield'

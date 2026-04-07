@@ -4,3 +4,5 @@ out/
 .dev-server.pid
 .dev-server.log
 .astro/
+.next/
+cypress-output.log
