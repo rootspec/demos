@@ -1,28 +1,28 @@
 #!/usr/bin/env bash
-# pre-commit.sh — Git pre-commit hook for spec validation
-# Install: cp scripts/pre-commit.sh .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
-# Or use husky: npx husky add .husky/pre-commit './scripts/pre-commit.sh'
+# Pre-commit hook for RootSpec projects
+# Validates specification and runs basic checks
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 echo "Running pre-commit checks..."
 
-# Check if spec files were modified
-SPEC_CHANGED=$(git diff --cached --name-only | grep '^rootspec/' || true)
-
-if [[ -n "$SPEC_CHANGED" ]]; then
-  echo "Spec files changed — running validation..."
-  # TODO: Add spec validation command once /rs-validate is configured
-  # Example: npx rootspec validate
-  echo "Spec validation: skipped (not yet configured)"
+# Check if rootspec directory exists
+if [[ ! -d "$PROJECT_ROOT/rootspec" ]]; then
+  echo "Warning: No rootspec directory found"
+  exit 0
 fi
 
-# Run tests if available
-if [[ -f "package.json" ]] && grep -q '"test"' package.json 2>/dev/null; then
-  echo "Running tests..."
-  npm test
-else
-  echo "Tests: skipped (no test script found)"
+# Run spec validation if available
+if command -v npx >/dev/null 2>&1; then
+  echo "Validating RootSpec..."
+  cd "$PROJECT_ROOT"
+  npx @rootspec/skills validate-spec || {
+    echo "Spec validation failed. Fix issues before committing."
+    exit 1
+  }
 fi
 
 echo "Pre-commit checks passed"

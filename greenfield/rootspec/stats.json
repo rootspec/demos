@@ -1,0 +1,21 @@
+{
+  "runs": [
+  {
+    "skill": "rs-spec",
+    "startedAt": "2026-04-07T21:52:31Z",
+    "completedAt": "2026-04-07T22:02:47Z",
+    "durationSeconds": 616,
+    "iterations": null,
+    "stories": null
+  }
+,
+  {
+    "skill": "rs-validate",
+    "startedAt": "2026-04-07T22:13:00Z",
+    "completedAt": "2026-04-07T22:15:45Z",
+    "durationSeconds": 165,
+    "iterations": null,
+    "stories": null
+  }
+  ]
+}

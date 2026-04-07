@@ -1,26 +1,314 @@
 # =============================================================================
-# USER STORY: Mobile Experience
+# USER STORIES: Responsive Design MVP
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: FIRST_VISIT
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, ACCESSIBILITY_SYSTEM]
+# @last_updated: 2026-04-07T21:52:31Z
 
-id: US-401
-title: Use the site on mobile devices
+# =============================================================================
+# USER STORY: Mobile Navigation
+# =============================================================================
+
+id: US-201
+title: Navigate site effectively on mobile devices
+requirement_id: R-201
 
 acceptance_criteria:
-  - id: AC-401-1
-    title: Content is readable on small screens
+  - id: AC-201-1
+    title: Mobile hamburger menu appears on small screens
     narrative: |
       Given I am viewing the site on a mobile device
       When the page loads
-      Then all content should be visible without horizontal scrolling
-      And text should be readable without zooming
+      Then I should see a hamburger menu icon instead of full navigation
     given:
+      - setViewport: { width: 375, height: 667 }
       - visit: '/'
-    when: []
+    when:
+      - waitFor: { selector: '[data-test=mobile-nav]' }
     then:
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
-      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: '[data-test=hamburger-menu]' }
+      - shouldNotBeVisible: { selector: '[data-test=desktop-nav]' }
+      - shouldBeVisible: { selector: '[data-test=mobile-nav]' }
+
+  - id: AC-201-2
+    title: Tap hamburger to expand mobile menu
+    narrative: |
+      Given I see the hamburger menu on mobile
+      When I tap the hamburger icon
+      Then the navigation menu should expand with all section links
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+    when:
+      - tap: { selector: '[data-test=hamburger-menu]' }
+    then:
+      - shouldHaveClass: { selector: '[data-test=mobile-nav]', class: 'expanded' }
+      - shouldExist: { selector: '[data-test=nav-link-hero]' }
+      - shouldExist: { selector: '[data-test=nav-link-problem]' }
+      - shouldExist: { selector: '[data-test=nav-link-how-it-works]' }
+
+  - id: AC-201-3
+    title: Mobile menu links navigate to sections
+    narrative: |
+      Given I have opened the mobile navigation menu
+      When I tap on a section link
+      Then I should scroll to that section and the menu should close
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+      - tap: { selector: '[data-test=hamburger-menu]' }
+    when:
+      - tap: { selector: '[data-test=nav-link-how-it-works]' }
+    then:
+      - shouldBeInView: { selector: '[data-test=how-it-works]' }
+      - shouldNotHaveClass: { selector: '[data-test=mobile-nav]', class: 'expanded' }
+
+  - id: AC-201-4
+    title: Touch targets meet minimum size requirements
+    narrative: |
+      Given I am using touch navigation on mobile
+      When I interact with navigation elements
+      Then all touch targets should be at least 44px for easy tapping
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+    when:
+      - measureElement: { selector: '[data-test=hamburger-menu]' }
+    then:
+      - shouldHaveMinimumSize: { selector: '[data-test=hamburger-menu]', width: 44, height: 44 }
+      - shouldHaveMinimumSize: { selector: '[data-test=theme-toggle]', width: 44, height: 44 }
+
+# =============================================================================
+# USER STORY: Interactive Features on Mobile
+# =============================================================================
+
+id: US-202
+title: Use interactive features effectively on mobile
+requirement_id: R-202
+
+acceptance_criteria:
+  - id: AC-202-1
+    title: Hierarchy explorer works with touch
+    narrative: |
+      Given I am viewing the hierarchy explorer on mobile
+      When I tap on hierarchy levels
+      Then they should expand and show content with touch-friendly sizing
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - tap: { selector: '[data-test=level-L1]' }
+    then:
+      - shouldExist: { selector: '[data-test=level-L1-content].expanded' }
+      - shouldHaveMinimumSize: { selector: '[data-test=level-L1]', width: 44, height: 44 }
+
+  - id: AC-202-2
+    title: Spec wizard adapts to mobile screen
+    narrative: |
+      Given I am using the spec wizard on mobile
+      When I interact with wizard steps
+      Then all inputs and buttons should be appropriately sized for touch
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    when:
+      - tap: { selector: '[data-test=mission-input]' }
+      - fill: { selector: '[data-test=mission-input]', value: 'Mobile test mission' }
+    then:
+      - shouldBeFocused: { selector: '[data-test=mission-input]' }
+      - shouldHaveMinimumSize: { selector: '[data-test=wizard-next]', width: 44, height: 44 }
+      - shouldNotCauseHorizontalScroll: { selector: '[data-test=spec-wizard]' }
+
+  - id: AC-202-3
+    title: Comparison slider works with touch
+    narrative: |
+      Given I am viewing the comparison slider on mobile
+      When I swipe or drag the slider control
+      Then it should respond smoothly to touch gestures
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=comparison-slider]' }
+    when:
+      - swipe: { selector: '[data-test=slider-control]', direction: 'right', distance: 100 }
+    then:
+      - shouldHaveAttribute: { selector: '[data-test=slider-control]', attribute: 'value', min: 50 }
+      - shouldHaveMinimumSize: { selector: '[data-test=slider-control]', width: 44, height: 44 }
+
+# =============================================================================
+# USER STORY: Tablet Layout Adaptation
+# =============================================================================
+
+id: US-203
+title: Experience optimized layout on tablet devices
+requirement_id: R-203
+
+acceptance_criteria:
+  - id: AC-203-1
+    title: Navigation adapts to tablet screen size
+    narrative: |
+      Given I am viewing the site on a tablet
+      When the page loads
+      Then I should see desktop-style navigation that may wrap based on content
+    given:
+      - setViewport: { width: 768, height: 1024 }
+      - visit: '/'
+    when:
+      - waitFor: { selector: '[data-test=navigation]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test=desktop-nav]' }
+      - shouldNotExist: { selector: '[data-test=hamburger-menu]' }
+      - shouldAdaptToWidth: { selector: '[data-test=navigation]', maxWidth: 768 }
+
+  - id: AC-203-2
+    title: Interactive features scale appropriately for tablet
+    narrative: |
+      Given I am using interactive features on tablet
+      When I interact with the hierarchy explorer and wizard
+      Then they should use space efficiently without feeling cramped
+    given:
+      - setViewport: { width: 768, height: 1024 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - tap: { selector: '[data-test=level-L2]' }
+    then:
+      - shouldExist: { selector: '[data-test=level-L2-content].expanded' }
+      - shouldUseSpaceEfficiently: { selector: '[data-test=hierarchy-explorer]', viewport: 'tablet' }
+
+  - id: AC-203-3
+    title: Content sections adapt to tablet width
+    narrative: |
+      Given I am reading content sections on tablet
+      When I scroll through the page
+      Then text line length should be comfortable for reading
+    given:
+      - setViewport: { width: 768, height: 1024 }
+      - visit: '/'
+    when:
+      - scrollTo: { selector: '[data-test=problem-section]' }
+    then:
+      - shouldHaveOptimalLineLength: { selector: '[data-test=problem-section] p', min: 45, max: 75 }
+      - shouldNotCauseHorizontalScroll: { selector: '[data-test=problem-section]' }
+
+# =============================================================================
+# USER STORY: Desktop Optimal Experience
+# =============================================================================
+
+id: US-204
+title: Experience full feature set on desktop
+requirement_id: R-204
+
+acceptance_criteria:
+  - id: AC-204-1
+    title: Desktop navigation shows full horizontal layout
+    narrative: |
+      Given I am viewing the site on desktop
+      When the page loads
+      Then I should see full navigation with all links visible horizontally
+    given:
+      - setViewport: { width: 1280, height: 720 }
+      - visit: '/'
+    when:
+      - waitFor: { selector: '[data-test=navigation]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test=desktop-nav]' }
+      - shouldNotExist: { selector: '[data-test=hamburger-menu]' }
+      - shouldDisplayHorizontally: { selector: '[data-test=nav-links]' }
+
+  - id: AC-204-2
+    title: Interactive features use available desktop space
+    narrative: |
+      Given I am using interactive features on desktop
+      When I explore the hierarchy and use the wizard
+      Then they should take advantage of larger screen real estate
+    given:
+      - setViewport: { width: 1280, height: 720 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - click: { selector: '[data-test=level-L3]' }
+      - hover: { selector: '[data-test=level-L4]' }
+    then:
+      - shouldExist: { selector: '[data-test=level-L3-content].expanded' }
+      - shouldExist: { selector: '[data-test=reference-arrows]' }
+      - shouldOptimizeForDesktop: { selector: '[data-test=hierarchy-explorer]' }
+
+  - id: AC-204-3
+    title: Content sections use optimal desktop layout
+    narrative: |
+      Given I am reading content on desktop
+      When I view different sections
+      Then content should be properly containerized with optimal reading width
+    given:
+      - setViewport: { width: 1280, height: 720 }
+      - visit: '/'
+    when:
+      - scrollTo: { selector: '[data-test=how-it-works]' }
+    then:
+      - shouldHaveMaxWidth: { selector: '[data-test=content-container]', maxWidth: 1200 }
+      - shouldBeCentered: { selector: '[data-test=content-container]' }
+      - shouldHaveOptimalLineLength: { selector: '[data-test=how-it-works] p', min: 60, max: 80 }
+
+# =============================================================================
+# USER STORY: Cross-Breakpoint Consistency
+# =============================================================================
+
+id: US-205
+title: Maintain functionality across all screen sizes
+requirement_id: R-205
+
+acceptance_criteria:
+  - id: AC-205-1
+    title: Theme toggle works consistently across breakpoints
+    narrative: |
+      Given I am switching between different device sizes
+      When I toggle the theme on any screen size
+      Then the theme should persist and work correctly on all breakpoints
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+      - click: { selector: '[data-test=theme-toggle]' }
+    when:
+      - setViewport: { width: 1280, height: 720 }
+    then:
+      - shouldHaveClass: { selector: 'body', class: 'dark-theme' }
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+  - id: AC-205-2
+    title: Navigation state persists across breakpoint changes
+    narrative: |
+      Given I am on a specific section of the page
+      When I resize the browser window to different breakpoints
+      Then the active section should remain consistent
+    given:
+      - setViewport: { width: 1280, height: 720 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=how-it-works]' }
+    when:
+      - setViewport: { width: 375, height: 667 }
+    then:
+      - shouldBeInView: { selector: '[data-test=how-it-works]' }
+      - shouldIndicateActiveSection: { section: 'how-it-works' }
+
+  - id: AC-205-3
+    title: Interactive feature state preserved during resize
+    narrative: |
+      Given I have expanded levels in the hierarchy explorer
+      When I resize the browser window
+      Then the expanded state should be preserved
+    given:
+      - setViewport: { width: 1280, height: 720 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      - click: { selector: '[data-test=level-L1]' }
+      - click: { selector: '[data-test=level-L2]' }
+    when:
+      - setViewport: { width: 768, height: 1024 }
+    then:
+      - shouldExist: { selector: '[data-test=level-L1-content].expanded' }
+      - shouldExist: { selector: '[data-test=level-L2-content].expanded' }

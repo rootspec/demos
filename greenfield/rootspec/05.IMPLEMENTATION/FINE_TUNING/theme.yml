@@ -1,16 +1,192 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Theme System
+# FINE-TUNING: Theme System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: THEME_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# @last_updated: 2026-04-07T21:52:31Z
 
-transition_duration: 200
-# @unit: milliseconds
-# @rationale: Fast enough to feel instant, slow enough to avoid jarring flash
-# @constraints: min=100, max=400, type=integer
+# Color Contrast Requirements
+normal_text_contrast:
+  value: 4.5
+  # @unit: ratio
+  # @rationale: WCAG AA requirement for normal text readability
+  # @constraint: min=4.5
+  # @inviolable: true
 
-localStorage_key: "rootspec-theme"
-# @rationale: Namespaced to avoid collisions with other apps on same domain
+large_text_contrast:
+  value: 3.0
+  # @unit: ratio
+  # @rationale: WCAG AA requirement for large text (18pt+ or 14pt+ bold)
+  # @constraint: min=3.0
+  # @inviolable: true
+
+interactive_element_contrast:
+  value: 3.0
+  # @unit: ratio
+  # @rationale: WCAG AA requirement for interactive elements
+  # @constraint: min=3.0
+  # @inviolable: true
+
+focus_indicator_contrast:
+  value: 3.0
+  # @unit: ratio
+  # @rationale: WCAG AA requirement for focus indicators
+  # @constraint: min=3.0
+  # @inviolable: true
+
+# Theme Transition Performance
+theme_switch_duration:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Fast enough to feel instant, slow enough to avoid jarring flash
+  # @constraint: min=150, max=300
+  # @inviolable: true
+
+color_transition_easing:
+  value: "ease-in-out"
+  # @rationale: Smooth, natural feeling transition curve
+  # @constraint: cubic-bezier or CSS easing function
+
+# Typography Scale
+base_font_size:
+  value: 16
+  # @unit: pixels
+  # @rationale: Browser default, optimal for readability
+  # @constraint: min=14, max=18
+
+heading_scale_ratio:
+  value: 1.25
+  # @unit: ratio (major third)
+  # @rationale: Harmonious scale that provides clear hierarchy
+  # @constraint: min=1.2, max=1.333
+
+line_height_base:
+  value: 1.6
+  # @unit: ratio
+  # @rationale: Optimal balance between density and readability for body text
+  # @constraint: min=1.4, max=1.8
+
+heading_line_height:
+  value: 1.2
+  # @unit: ratio
+  # @rationale: Tighter spacing appropriate for headings
+  # @constraint: min=1.1, max=1.4
+
+# Color System
+primary_hue:
+  value: 220
+  # @unit: degrees
+  # @rationale: Professional blue that conveys trust and technology
+  # @constraint: min=200, max=240
+
+primary_saturation_light:
+  value: 85
+  # @unit: percentage
+  # @rationale: Vibrant enough for energy, muted enough for professionalism
+  # @constraint: min=70, max=100
+
+primary_saturation_dark:
+  value: 70
+  # @unit: percentage
+  # @rationale: Reduced saturation for dark theme to prevent eye strain
+  # @constraint: min=60, max=85
+
+# Light Theme Colors
+light_background_lightness:
+  value: 98
+  # @unit: percentage
+  # @rationale: Near-white but not pure white to reduce eye strain
+  # @constraint: min=95, max=100
+
+light_text_lightness:
+  value: 15
+  # @unit: percentage
+  # @rationale: Dark enough for strong contrast, not pure black
+  # @constraint: min=10, max=25
+
+light_accent_lightness:
+  value: 50
+  # @unit: percentage
+  # @rationale: Mid-range for interactive elements with good contrast
+  # @constraint: min=40, max=60
+
+# Dark Theme Colors
+dark_background_lightness:
+  value: 8
+  # @unit: percentage
+  # @rationale: Dark enough to feel like dark mode, not pure black for eye comfort
+  # @constraint: min=5, max=15
+
+dark_text_lightness:
+  value: 90
+  # @unit: percentage
+  # @rationale: Light enough for readability, not pure white to reduce glare
+  # @constraint: min=85, max=95
+
+dark_accent_lightness:
+  value: 65
+  # @unit: percentage
+  # @rationale: Brighter for dark backgrounds while maintaining accessibility
+  # @constraint: min=60, max=80
+
+# Shadow System
+shadow_blur_base:
+  value: 8
+  # @unit: pixels
+  # @rationale: Subtle depth without overwhelming the content
+  # @constraint: min=4, max=16
+
+shadow_opacity_light:
+  value: 0.1
+  # @unit: alpha
+  # @rationale: Visible depth cue without heavy visual weight
+  # @constraint: min=0.05, max=0.2
+
+shadow_opacity_dark:
+  value: 0.3
+  # @unit: alpha
+  # @rationale: Stronger shadows needed for visibility on dark backgrounds
+  # @constraint: min=0.2, max=0.5
+
+# Border Radius System
+border_radius_small:
+  value: 4
+  # @unit: pixels
+  # @rationale: Subtle rounding for small elements
+  # @constraint: min=2, max=8
+
+border_radius_medium:
+  value: 8
+  # @unit: pixels
+  # @rationale: Comfortable rounding for buttons and inputs
+  # @constraint: min=6, max=12
+
+border_radius_large:
+  value: 16
+  # @unit: pixels
+  # @rationale: Prominent rounding for cards and larger components
+  # @constraint: min=12, max=24
+
+# Motion and Animation
+motion_duration_fast:
+  value: 100
+  # @unit: milliseconds
+  # @rationale: Immediate feedback for micro-interactions
+  # @constraint: min=50, max=150
+
+motion_duration_medium:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Standard transition duration for most UI changes
+  # @constraint: min=150, max=300
+
+motion_duration_slow:
+  value: 400
+  # @unit: milliseconds
+  # @rationale: Deliberate transitions for major state changes
+  # @constraint: min=300, max=600
+
+motion_easing_standard:
+  value: "cubic-bezier(0.4, 0.0, 0.2, 1)"
+  # @rationale: Material Design standard easing for natural feel
+  # @constraint: must be valid cubic-bezier function

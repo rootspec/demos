@@ -1,0 +1,111 @@
+---
+// Problem section highlighting common specification challenges
+---
+
+<section class="problem-section" data-test="problem-section">
+  <div class="container">
+    <h2>The Specification Problem</h2>
+    <p class="section-intro">
+      Software teams struggle with unclear requirements that lead to wasted time,
+      budget overruns, and disappointing products.
+    </p>
+
+    <div class="problems-grid">
+      <div class="problem-card">
+        <h3>Spec drift</h3>
+        <p>
+          Requirements change mid-project without clear documentation,
+          leading to scope creep and misaligned expectations.
+        </p>
+      </div>
+
+      <div class="problem-card">
+        <h3>Philosophy-Implementation Gap</h3>
+        <p>
+          High-level product vision fails to translate into concrete,
+          actionable development tasks.
+        </p>
+      </div>
+
+      <div class="problem-card">
+        <h3>Unreliable AI Output</h3>
+        <p>
+          AI tools produce inconsistent results when given vague
+          or poorly structured specification input.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .problem-section {
+    padding: 4rem 0;
+    background-color: var(--bg-gray);
+  }
+
+  .problem-section h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+  }
+
+  .section-intro {
+    font-size: 1.25rem;
+    color: var(--text-light);
+    text-align: center;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .problems-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .problem-card {
+    background-color: var(--bg-light);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-gray);
+  }
+
+  .problem-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+  }
+
+  .problem-card p {
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .problem-section {
+      padding: 3rem 0;
+    }
+
+    .problem-section h2 {
+      font-size: 2rem;
+    }
+
+    .problems-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .problem-card {
+      padding: 1.5rem;
+    }
+  }
+</style>

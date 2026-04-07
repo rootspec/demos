@@ -1,0 +1,116 @@
+---
+// Hero section with tagline, description, and version badge
+---
+
+<section class="hero-section" data-test="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <div class="version-badge" data-test="version-badge">v7.0.6</div>
+      <h1 class="hero-tagline" data-test="hero-tagline">
+        Structured specification methodology for software development
+      </h1>
+      <p class="hero-description" data-test="hero-description">
+        RootSpec transforms vague requirements into testable, hierarchical specifications
+        that bridge the gap between product vision and implementation reality.
+      </p>
+      <div class="hero-actions">
+        <a href="#open-source" class="cta-primary">Get Started</a>
+        <a href="#how-it-works" class="cta-secondary">Learn More</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-gray) 100%);
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .version-badge {
+    display: inline-block;
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-tagline {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+  }
+
+  .hero-description {
+    font-size: 1.25rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-primary, .cta-secondary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .cta-primary {
+    background-color: var(--primary-blue);
+    color: white;
+  }
+
+  .cta-primary:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+  }
+
+  .cta-secondary {
+    background-color: transparent;
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+  }
+
+  .cta-secondary:hover {
+    background-color: var(--primary-blue);
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 3rem 0;
+    }
+
+    .hero-tagline {
+      font-size: 2rem;
+    }
+
+    .hero-description {
+      font-size: 1.125rem;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>

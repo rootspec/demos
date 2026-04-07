@@ -1,39 +1,294 @@
 # =============================================================================
-# USER STORY: Toggle Theme
+# USER STORIES: Theme and Visual Consistency MVP
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: FIRST_VISIT
-# @systems: [THEME_SYSTEM, ACCESSIBILITY_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# @systems: [THEME_SYSTEM, LAYOUT_SYSTEM, ACCESSIBILITY_SYSTEM]
+# @last_updated: 2026-04-07T21:52:31Z
+
+# =============================================================================
+# USER STORY: Visual Theme Consistency
+# =============================================================================
 
 id: US-301
-title: Switch between dark and light themes
+title: Experience consistent visual theme across all elements
+requirement_id: R-301
 
 acceptance_criteria:
   - id: AC-301-1
-    title: Toggle switches theme
+    title: All components use consistent color scheme
     narrative: |
-      Given I am viewing the site in light mode
-      When I click the theme toggle
-      Then the site switches to dark mode
+      Given I am viewing the site in any theme
+      When I look at different components and sections
+      Then all elements should use colors from the same cohesive palette
     given:
       - visit: '/'
     when:
-      - click: { selector: '[data-test=theme-toggle]' }
+      - waitFor: { selector: '[data-test=theme-loaded]' }
     then:
-      - shouldExist: { selector: '[data-theme=dark]' }
+      - shouldUseConsistentColors: { elements: '[data-test=header], [data-test=hero-section], [data-test=footer]' }
+      - shouldNotUseHardcodedColors: { selector: '*' }
+      - shouldUseThemeVariables: { selector: '[data-test=interactive-elements]' }
 
   - id: AC-301-2
-    title: Theme persists on reload
+    title: Typography scale consistent across content
     narrative: |
-      Given I have toggled to dark mode
-      When I reload the page
-      Then the site should still be in dark mode
+      Given I am reading content throughout the site
+      When I examine headings, body text, and interactive elements
+      Then all typography should follow a consistent scale and hierarchy
+    given:
+      - visit: '/'
+    when:
+      - scrollTo: { selector: '[data-test=content-sections]' }
+    then:
+      - shouldFollowTypographyScale: { selectors: 'h1, h2, h3, p, button, input' }
+      - shouldUseConsistentFontFamily: { selector: 'body' }
+      - shouldMaintainReadableLineHeight: { selector: 'p' }
+
+  - id: AC-301-3
+    title: Spacing system consistent throughout layout
+    narrative: |
+      Given I am viewing different sections of the site
+      When I examine margins, padding, and gaps between elements
+      Then all spacing should use consistent scale values
+    given:
+      - visit: '/'
+    when:
+      - measureSpacing: { selectors: '[data-test=section], [data-test=component]' }
+    then:
+      - shouldUseSpacingScale: { elements: 'all' }
+      - shouldNotUseArbitrarySpacing: { selector: '*' }
+      - shouldMaintainVerticalRhythm: { selector: '[data-test=content-sections]' }
+
+# =============================================================================
+# USER STORY: Light Theme Experience
+# =============================================================================
+
+id: US-302
+title: Use site comfortably in light theme
+requirement_id: R-302
+
+acceptance_criteria:
+  - id: AC-302-1
+    title: Light theme has sufficient contrast for readability
+    narrative: |
+      Given I am using the site in light theme
+      When I read text content and interact with elements
+      Then all text should meet accessibility contrast requirements
+    given:
+      - setSystemTheme: 'light'
+      - visit: '/'
+    when:
+      - waitFor: { selector: '[data-test=light-theme]' }
+    then:
+      - shouldMeetContrastRatio: { selector: 'p', ratio: 4.5 }
+      - shouldMeetContrastRatio: { selector: 'h1, h2, h3', ratio: 3.0 }
+      - shouldMeetContrastRatio: { selector: 'button', ratio: 3.0 }
+
+  - id: AC-302-2
+    title: Light theme interactive elements clearly visible
+    narrative: |
+      Given I am using interactive features in light theme
+      When I hover, focus, or interact with elements
+      Then all states should be clearly distinguishable
+    given:
+      - setSystemTheme: 'light'
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - hover: { selector: '[data-test=level-L1]' }
+      - focus: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldShowHoverState: { selector: '[data-test=level-L1]' }
+      - shouldShowFocusIndicator: { selector: '[data-test=theme-toggle]' }
+      - shouldMeetContrastRatio: { selector: '[data-test=level-L1]:hover', ratio: 3.0 }
+
+  - id: AC-302-3
+    title: Light theme syntax highlighting readable
+    narrative: |
+      Given I am viewing code examples in light theme
+      When I read syntax-highlighted code blocks
+      Then all code should be clearly readable with appropriate contrast
+    given:
+      - setSystemTheme: 'light'
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=code-example]' }
+    when:
+      - waitFor: { selector: '[data-test=syntax-highlighting]' }
+    then:
+      - shouldMeetContrastRatio: { selector: '[data-test=code-example] code', ratio: 4.5 }
+      - shouldDistinguishSyntaxElements: { selector: '[data-test=syntax-highlighting]' }
+
+# =============================================================================
+# USER STORY: Dark Theme Experience
+# =============================================================================
+
+id: US-303
+title: Use site comfortably in dark theme
+requirement_id: R-303
+
+acceptance_criteria:
+  - id: AC-303-1
+    title: Dark theme has sufficient contrast without eye strain
+    narrative: |
+      Given I am using the site in dark theme
+      When I read content and use interactive features
+      Then all elements should be comfortable to view in low-light conditions
+    given:
+      - setSystemTheme: 'dark'
+      - visit: '/'
+    when:
+      - waitFor: { selector: '[data-test=dark-theme]' }
+    then:
+      - shouldMeetContrastRatio: { selector: 'p', ratio: 4.5 }
+      - shouldNotCauseEyeStrain: { selector: 'body' }
+      - shouldUseDarkModeColors: { selector: '[data-test=background]' }
+
+  - id: AC-303-2
+    title: Dark theme interactive elements clearly visible
+    narrative: |
+      Given I am using interactive features in dark theme
+      When I interact with hierarchy explorer, wizard, and controls
+      Then all states should be clearly visible against dark background
+    given:
+      - setSystemTheme: 'dark'
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    when:
+      - focus: { selector: '[data-test=mission-input]' }
+      - click: { selector: '[data-test=pillar-option]' }
+    then:
+      - shouldShowFocusIndicator: { selector: '[data-test=mission-input]' }
+      - shouldShowSelectedState: { selector: '[data-test=pillar-option]' }
+      - shouldMeetContrastRatio: { selector: '[data-test=mission-input]:focus', ratio: 3.0 }
+
+  - id: AC-303-3
+    title: Dark theme syntax highlighting optimized
+    narrative: |
+      Given I am viewing code in dark theme
+      When I examine syntax highlighting
+      Then colors should be optimized for dark backgrounds
+    given:
+      - setSystemTheme: 'dark'
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=code-example]' }
+    when:
+      - waitFor: { selector: '[data-test=syntax-highlighting]' }
+    then:
+      - shouldUseDarkSyntaxColors: { selector: '[data-test=code-example]' }
+      - shouldMeetContrastRatio: { selector: '[data-test=code-example] code', ratio: 4.5 }
+
+# =============================================================================
+# USER STORY: Theme Transition Experience
+# =============================================================================
+
+id: US-304
+title: Experience smooth theme transitions
+requirement_id: R-304
+
+acceptance_criteria:
+  - id: AC-304-1
+    title: Theme changes animate smoothly without jarring
+    narrative: |
+      Given I am viewing content on the site
+      When I toggle between light and dark themes
+      Then the transition should be smooth and not disruptive
+    given:
+      - visit: '/'
+      - waitFor: { selector: '[data-test=content-loaded]' }
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldTransitionSmoothly: { duration: 200 }
+      - shouldNotCauseLayoutShift: true
+      - shouldNotFlashUnstyled: true
+
+  - id: AC-304-2
+    title: All components update simultaneously during theme change
+    narrative: |
+      Given I have interactive features visible
+      When I switch themes
+      Then all components should update together without delay
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      - click: { selector: '[data-test=level-L1]' }
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldUpdateSimultaneously: { selectors: '[data-test=hierarchy-explorer], [data-test=level-L1-content], [data-test=navigation]' }
+      - shouldCompleteWithin: { duration: 200 }
+
+  - id: AC-304-3
+    title: Theme preference persists across page navigation
+    narrative: |
+      Given I have selected a specific theme preference
+      When I navigate to different sections or refresh the page
+      Then my theme choice should persist
     given:
       - visit: '/'
       - click: { selector: '[data-test=theme-toggle]' }
     when:
-      - visit: '/'
+      - reload: {}
     then:
-      - shouldExist: { selector: '[data-theme=dark]' }
+      - shouldMaintainTheme: { expected: 'user-selected' }
+      - shouldExist: { storageItem: 'theme-preference' }
+
+# =============================================================================
+# USER STORY: Accessibility Visual Requirements
+# =============================================================================
+
+id: US-305
+title: Meet visual accessibility requirements in all themes
+requirement_id: R-305
+
+acceptance_criteria:
+  - id: AC-305-1
+    title: Focus indicators clearly visible in both themes
+    narrative: |
+      Given I am navigating with keyboard in any theme
+      When I tab through interactive elements
+      Then focus indicators should be clearly visible with sufficient contrast
+    given:
+      - visit: '/'
+    when:
+      - pressKey: 'Tab'
+      - pressKey: 'Tab'
+      - pressKey: 'Tab'
+    then:
+      - shouldShowFocusIndicator: { selector: ':focus' }
+      - shouldMeetContrastRatio: { selector: ':focus', ratio: 3.0 }
+      - shouldNotRelyOnColorAlone: { selector: ':focus' }
+
+  - id: AC-305-2
+    title: Color never the sole means of conveying information
+    narrative: |
+      Given I am using the site with color vision limitations
+      When I interact with all features
+      Then information should be conveyed through multiple visual means
+    given:
+      - simulateColorBlindness: 'deuteranopia'
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    when:
+      - click: { selector: '[data-test=pillar-option]' }
+    then:
+      - shouldNotRelyOnColorAlone: { selector: '[data-test=pillar-option].selected' }
+      - shouldShowAdditionalIndicators: { selector: '[data-test=pillar-option].selected' }
+
+  - id: AC-305-3
+    title: Text scaling up to 200% maintains usability
+    narrative: |
+      Given I need larger text for readability
+      When I scale browser text up to 200%
+      Then content should remain usable without horizontal scrolling
+    given:
+      - setTextScale: 200
+      - visit: '/'
+    when:
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    then:
+      - shouldNotCauseHorizontalScroll: { selector: '[data-test=spec-wizard]' }
+      - shouldRemainUsable: { selector: '[data-test=interactive-elements]' }
+      - shouldMaintainReadability: { selector: 'p' }

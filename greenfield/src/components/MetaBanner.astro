@@ -1,0 +1,44 @@
+---
+// Meta Banner for transparency about site generation
+---
+
+<div class="meta-banner" data-test="meta-banner">
+  <div class="container">
+    <p>
+      This marketing site was generated from a ~100-line description using the
+      <strong>RootSpec pipeline</strong>.
+      <a href="https://github.com/rootspec/rootspec/tree/main/demos/greenfield/rootspec" data-test="meta-banner-spec-link" target="_blank" rel="noopener">
+        View the spec
+      </a> |
+      <a href="https://github.com/rootspec/rootspec/blob/main/demos/greenfield/SEED.md" data-test="meta-banner-seed-link" target="_blank" rel="noopener">
+        View the seed
+      </a>
+    </p>
+  </div>
+</div>
+
+<style>
+  .meta-banner {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+    text-align: center;
+  }
+
+  .meta-banner a {
+    color: white;
+    text-decoration: underline;
+    font-weight: 500;
+  }
+
+  .meta-banner a:hover {
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    .meta-banner {
+      font-size: 0.75rem;
+    }
+  }
+</style>

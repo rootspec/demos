@@ -1,42 +1,125 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Interactive Features
+# FINE-TUNING: Interactive System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: INTERACTIVE_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+# @last_updated: 2026-04-07T21:52:31Z
 
-hierarchy_explorer:
-  expand_duration: 300
+# Hierarchy Explorer Performance
+hierarchy_expansion_duration:
+  value: 300
   # @unit: milliseconds
-  # @rationale: Quick expansion that feels snappy but visible
-  # @constraints: min=150, max=500, type=integer
+  # @rationale: Fast enough to feel responsive, slow enough to show smooth animation
+  # @constraint: min=200, max=500
 
-  reference_highlight_opacity: 0.3
-  # @unit: ratio
-  # @rationale: Dimmed lines are visible but clearly secondary to the highlighted ones
-  # @constraints: min=0.1, max=0.5, type=float
-
-spec_wizard:
-  min_pillars: 3
-  # @rationale: Minimum needed to represent a meaningful product vision per framework guidance
-  # @constraints: min=2, max=4, type=integer
-
-  max_pillars: 5
-  # @rationale: More than 5 dilutes focus per L1 anti-pattern guidance
-  # @constraints: min=4, max=8, type=integer
-
-  template_count: 4
-  # @rationale: Enough variety to spark ideas without overwhelming choice
-  # @constraints: min=3, max=8, type=integer
-
-  pillar_suggestion_count: 8
-  # @rationale: Roughly double the max selectable; enough to browse without scrolling
-  # @constraints: min=6, max=12, type=integer
-
-comparison:
-  transition_duration: 300
+level_hover_delay:
+  value: 150
   # @unit: milliseconds
-  # @rationale: Matches hierarchy explorer timing for consistency
-  # @constraints: min=150, max=500, type=integer
+  # @rationale: Quick enough for exploration, long enough to prevent accidental triggers
+  # @constraint: min=100, max=300
+
+connection_fade_duration:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Subtle but visible transition for reference arrow visibility
+  # @constraint: min=100, max=400
+
+# Wizard Flow Timing
+wizard_step_transition:
+  value: 250
+  # @unit: milliseconds
+  # @rationale: Smooth progression between steps without feeling sluggish
+  # @constraint: min=200, max=400
+
+input_validation_debounce:
+  value: 500
+  # @unit: milliseconds
+  # @rationale: Prevents excessive validation triggers while typing
+  # @constraint: min=300, max=1000
+
+spec_generation_delay:
+  value: 100
+  # @unit: milliseconds
+  # @rationale: Brief pause to feel intentional, not instantaneous
+  # @constraint: min=50, max=200
+
+# Comparison Slider Behavior
+slider_response_time:
+  value: 16
+  # @unit: milliseconds
+  # @rationale: 60fps smooth tracking for responsive feel
+  # @constraint: min=16, max=33
+
+content_transition_duration:
+  value: 400
+  # @unit: milliseconds
+  # @rationale: Long enough to appreciate the transformation, short enough to stay engaging
+  # @constraint: min=300, max=600
+
+# Theme Toggle Performance
+theme_transition_duration:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Quick enough to feel instant, slow enough to avoid jarring flash
+  # @constraint: min=150, max=300
+  # @inviolable: true
+
+# Touch Interaction Standards
+minimum_touch_target:
+  value: 44
+  # @unit: pixels
+  # @rationale: Apple and Android accessibility guidelines for comfortable touch
+  # @constraint: min=44, max=60
+  # @inviolable: true
+
+touch_response_delay:
+  value: 100
+  # @unit: milliseconds
+  # @rationale: Immediate feedback for touch interactions
+  # @constraint: min=50, max=150
+
+# Performance Budgets
+feature_response_budget:
+  value: 100
+  # @unit: milliseconds
+  # @rationale: User expectation for immediate response to interactions
+  # @constraint: max=100
+  # @inviolable: true
+
+animation_frame_budget:
+  value: 16.67
+  # @unit: milliseconds
+  # @rationale: 60fps requirement for smooth animations
+  # @constraint: max=16.67
+  # @inviolable: true
+
+# User Input Validation
+mission_min_length:
+  value: 10
+  # @unit: characters
+  # @rationale: Minimum for meaningful mission statement
+  # @constraint: min=5, max=20
+
+mission_max_length:
+  value: 200
+  # @unit: characters
+  # @rationale: Forces conciseness while allowing adequate expression
+  # @constraint: min=100, max=300
+
+pillar_selection_min:
+  value: 3
+  # @unit: count
+  # @rationale: Enough pillars for meaningful design guidance
+  # @constraint: min=2, max=4
+
+pillar_selection_max:
+  value: 5
+  # @unit: count
+  # @rationale: Prevents overwhelming scope while allowing flexibility
+  # @constraint: min=4, max=7
+
+interaction_description_min:
+  value: 20
+  # @unit: characters
+  # @rationale: Minimum for specific, actionable interaction description
+  # @constraint: min=10, max=30

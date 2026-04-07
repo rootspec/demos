@@ -1,0 +1,231 @@
+---
+// How It Works section explaining the four-skill pipeline
+---
+
+<section class="how-it-works" data-test="how-it-works" id="how-it-works">
+  <div class="container">
+    <div class="methodology-section" data-test="methodology-section">
+      <h2>How RootSpec Works</h2>
+      <p class="section-intro">
+        RootSpec provides a four-command pipeline that transforms product ideas
+        into tested, working software through structured specification.
+      </p>
+
+      <div class="pipeline-steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3><code>/rs-init</code></h3>
+            <p>Initialize project structure with RootSpec framework files and validation prerequisites.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3><code>/rs-spec</code></h3>
+            <p>Create validated specification through interview-driven process with built-in quality checks.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3><code>/rs-impl</code></h3>
+            <p>Generate working code from specification using test-driven implementation with autonomous development.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3><code>/rs-validate</code></h3>
+            <p>Run comprehensive tests against specification to verify implementation meets requirements.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="before-after-section" data-test="before-after-section">
+        <h3>Before vs After RootSpec</h3>
+        <div class="comparison-grid">
+          <div class="before-content" data-test="before-content">
+            <h4>Before: Traditional Approach</h4>
+            <ul>
+              <li>Vague requirements</li>
+              <li>Scope drift</li>
+              <li>Implementation gaps</li>
+              <li>Manual testing</li>
+              <li>Inconsistent AI output</li>
+            </ul>
+          </div>
+          <div class="after-content" data-test="after-content">
+            <h4>After: RootSpec Methodology</h4>
+            <ul>
+              <li>Structured hierarchy</li>
+              <li>Clear constraints</li>
+              <li>Testable acceptance criteria</li>
+              <li>Automated validation</li>
+              <li>Reliable AI integration</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .how-it-works {
+    padding: 4rem 0;
+    background-color: var(--bg-light);
+  }
+
+  .methodology-section h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+  }
+
+  .section-intro {
+    font-size: 1.25rem;
+    color: var(--text-light);
+    text-align: center;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .pipeline-steps {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .step-number {
+    background-color: var(--primary-blue);
+    color: white;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  .step-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+  }
+
+  .step-content code {
+    background-color: var(--bg-gray);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  .step-content p {
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  .before-after-section h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--text-dark);
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .before-content, .after-content {
+    padding: 2rem;
+    border-radius: 0.75rem;
+    border: 2px solid var(--border-gray);
+  }
+
+  .before-content {
+    background-color: #fef2f2;
+    border-color: #fecaca;
+  }
+
+  .after-content {
+    background-color: #f0fdf4;
+    border-color: #bbf7d0;
+  }
+
+  .before-content h4 {
+    color: #b91c1c;
+    margin-bottom: 1rem;
+  }
+
+  .after-content h4 {
+    color: #166534;
+    margin-bottom: 1rem;
+  }
+
+  .comparison-grid ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .comparison-grid li {
+    padding: 0.5rem 0;
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .before-content li::before {
+    content: "✗";
+    position: absolute;
+    left: 0;
+    color: #b91c1c;
+  }
+
+  .after-content li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #166534;
+  }
+
+  @media (max-width: 768px) {
+    .how-it-works {
+      padding: 3rem 0;
+    }
+
+    .methodology-section h2 {
+      font-size: 2rem;
+    }
+
+    .comparison-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .step {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>

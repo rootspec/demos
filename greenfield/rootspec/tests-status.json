@@ -1,15 +1,74 @@
 {
-  "lastRun": "2026-04-03T00:00:00Z",
+  "lastRun": "2026-04-07T22:15:22.728Z",
   "stories": {
-    "US-101": { "status": "pass", "criteria": { "AC-101-1": "pass", "AC-101-2": "pass" } },
-    "US-102": { "status": "pass", "criteria": { "AC-102-1": "pass" } },
-    "US-103": { "status": "pass", "criteria": { "AC-103-1": "pass" } },
-    "US-104": { "status": "pass", "criteria": { "AC-104-1": "pass" } },
-    "US-105": { "status": "pass", "criteria": { "AC-105-1": "pass" } },
-    "US-201": { "status": "pass", "criteria": { "AC-201-1": "pass", "AC-201-2": "pass", "AC-201-3": "pass" } },
-    "US-202": { "status": "pass", "criteria": { "AC-202-1": "pass", "AC-202-2": "pass" } },
-    "US-203": { "status": "pass", "criteria": { "AC-203-1": "pass" } },
-    "US-301": { "status": "pass", "criteria": { "AC-301-1": "pass", "AC-301-2": "pass" } },
-    "US-401": { "status": "pass", "criteria": { "AC-401-1": "pass" } }
+    "US-001": {
+      "status": "fail",
+      "criteria": {
+        "AC-001-1": "fail",
+        "AC-001-2": "fail",
+        "AC-001-3": "fail"
+      }
+    },
+    "US-002": {
+      "status": "fail",
+      "criteria": {
+        "AC-002-1": "fail",
+        "AC-002-2": "fail"
+      }
+    },
+    "US-003": {
+      "status": "fail",
+      "criteria": {
+        "AC-003-1": "fail"
+      }
+    },
+    "US-004": {
+      "status": "fail",
+      "criteria": {
+        "AC-004-1": "fail",
+        "AC-004-2": "fail"
+      }
+    },
+    "US-005": {
+      "status": "fail",
+      "criteria": {
+        "AC-005-1": "fail",
+        "AC-005-2": "fail"
+      }
+    },
+    "US-006": {
+      "status": "fail",
+      "criteria": {
+        "AC-006-1": "fail"
+      }
+    },
+    "US-101": {
+      "status": "fail",
+      "criteria": {
+        "AC-101-1": "fail",
+        "AC-101-2": "fail"
+      }
+    },
+    "US-102": {
+      "status": "fail",
+      "criteria": {
+        "AC-102-1": "fail",
+        "AC-102-2": "fail"
+      }
+    },
+    "US-103": {
+      "status": "fail",
+      "criteria": {
+        "AC-103-1": "fail",
+        "AC-103-2": "fail"
+      }
+    },
+    "US-104": {
+      "status": "fail",
+      "criteria": {
+        "AC-104-1": "fail",
+        "AC-104-2": "fail"
+      }
+    }
   }
 }

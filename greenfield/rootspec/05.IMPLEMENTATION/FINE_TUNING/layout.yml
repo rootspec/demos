@@ -1,35 +1,149 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Layout & Responsive
+# FINE-TUNING: Layout System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# @last_updated: 2026-04-07T21:52:31Z
 
-breakpoints:
-  small: 640
+# Responsive Breakpoints
+mobile_breakpoint:
+  value: 768
   # @unit: pixels
-  # @rationale: Standard mobile/tablet breakpoint; below this is single-column
-  # @constraints: min=320, max=768, type=integer
+  # @rationale: Standard mobile/tablet boundary, matches common device sizes
+  # @constraint: min=600, max=800
+  # @inviolable: true
 
-  large: 1024
+tablet_breakpoint:
+  value: 1024
   # @unit: pixels
-  # @rationale: Tablet/desktop breakpoint; above this gets full layout with side-by-side elements
-  # @constraints: min=768, max=1280, type=integer
+  # @rationale: Standard tablet/desktop boundary, accommodates iPad landscape
+  # @constraint: min=900, max=1200
+  # @inviolable: true
 
-max_content_width: 1200
-# @unit: pixels
-# @rationale: Readable line lengths on wide screens; prevents content from stretching too wide
-# @constraints: min=960, max=1440, type=integer
+# Container Widths
+mobile_container_width:
+  value: 100
+  # @unit: percentage
+  # @rationale: Full width utilization on small screens
+  # @constraint: min=95, max=100
 
-section_animation:
-  duration: 400
+tablet_container_width:
+  value: 90
+  # @unit: percentage
+  # @rationale: Small margins for comfortable reading without waste
+  # @constraint: min=85, max=95
+
+desktop_container_max_width:
+  value: 1200
+  # @unit: pixels
+  # @rationale: Optimal reading width that doesn't stretch too wide on large screens
+  # @constraint: min=1000, max=1400
+
+# Spacing Scale
+base_spacing_unit:
+  value: 8
+  # @unit: pixels
+  # @rationale: Common design system base, allows for flexible scale
+  # @constraint: min=4, max=16
+
+section_spacing:
+  value: 96
+  # @unit: pixels (12 * base_spacing_unit)
+  # @rationale: Clear section separation without excessive whitespace
+  # @constraint: min=64, max=128
+
+component_spacing:
+  value: 32
+  # @unit: pixels (4 * base_spacing_unit)
+  # @rationale: Sufficient breathing room between components
+  # @constraint: min=24, max=48
+
+element_spacing:
+  value: 16
+  # @unit: pixels (2 * base_spacing_unit)
+  # @rationale: Comfortable spacing between related elements
+  # @constraint: min=8, max=24
+
+# Navigation Behavior
+scroll_offset:
+  value: 80
+  # @unit: pixels
+  # @rationale: Accounts for fixed header height plus comfortable margin
+  # @constraint: min=60, max=120
+
+smooth_scroll_duration:
+  value: 800
   # @unit: milliseconds
-  # @rationale: Fast enough to feel responsive, slow enough to be noticed as a transition
-  # @constraints: min=200, max=800, type=integer
+  # @rationale: Fast enough to feel intentional, slow enough to follow visually
+  # @constraint: min=500, max=1200
 
-  threshold: 0.15
-  # @unit: ratio (intersection observer)
-  # @rationale: Trigger animation when 15% of section is visible; early enough to feel seamless
-  # @constraints: min=0.05, max=0.5, type=float
+header_height:
+  value: 64
+  # @unit: pixels
+  # @rationale: Sufficient for branding and navigation without dominating viewport
+  # @constraint: min=48, max=80
+
+# Mobile Navigation
+hamburger_menu_size:
+  value: 48
+  # @unit: pixels
+  # @rationale: Comfortable touch target that's clearly visible
+  # @constraint: min=44, max=60
+
+mobile_menu_animation:
+  value: 300
+  # @unit: milliseconds
+  # @rationale: Smooth expansion that feels polished but not sluggish
+  # @constraint: min=200, max=500
+
+# Performance Standards
+layout_shift_budget:
+  value: 0.1
+  # @unit: CLS score
+  # @rationale: Google Core Web Vitals recommendation for good user experience
+  # @constraint: max=0.1
+  # @inviolable: true
+
+resize_debounce:
+  value: 100
+  # @unit: milliseconds
+  # @rationale: Prevents excessive layout recalculation during window resize
+  # @constraint: min=50, max=200
+
+# Reading Optimization
+optimal_line_length_min:
+  value: 45
+  # @unit: characters
+  # @rationale: Minimum for comfortable reading flow
+  # @constraint: min=35, max=55
+
+optimal_line_length_max:
+  value: 75
+  # @unit: characters
+  # @rationale: Maximum before reading becomes uncomfortable
+  # @constraint: min=65, max=85
+
+line_height_ratio:
+  value: 1.6
+  # @unit: ratio
+  # @rationale: Optimal balance between density and readability
+  # @constraint: min=1.4, max=1.8
+
+# Z-Index Hierarchy
+header_z_index:
+  value: 100
+  # @unit: z-index
+  # @rationale: Above content but below modals
+  # @constraint: min=10, max=990
+
+mobile_menu_z_index:
+  value: 200
+  # @unit: z-index
+  # @rationale: Above header when expanded
+  # @constraint: min=150, max=990
+
+modal_z_index:
+  value: 1000
+  # @unit: z-index
+  # @rationale: Above all other content
+  # @constraint: min=500, max=9999

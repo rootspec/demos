@@ -1,12 +1,84 @@
 ---
-import { ROOTSPEC_VERSION, GITHUB_REPO } from '../data/config';
+// Footer with builder attribution
+const currentYear = new Date().getFullYear();
 ---
 
-<footer class="border-t border-[var(--color-border)] py-8 mt-16">
-  <div class="max-w-content mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-[var(--color-text-muted)]">
-    <span class="font-mono">RootSpec v{ROOTSPEC_VERSION}</span>
-    <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--color-text-secondary)] transition-colors">
-      GitHub
-    </a>
+<footer class="footer" data-test="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="attribution" data-test="builder-attribution">
+        Built with RootSpec in {currentYear} by the RootSpec community
+      </div>
+      <div class="links">
+        <a href="https://github.com/rootspec/rootspec">GitHub</a>
+        <a href="https://github.com/rootspec/rootspec/blob/main/LICENSE">License</a>
+        <a href="https://github.com/rootspec/rootspec/issues">Issues</a>
+      </div>
+    </div>
+    <div class="separator"></div>
+    <div class="bottom">
+      <p>RootSpec is open source software for structured specification methodology.</p>
+    </div>
   </div>
 </footer>
+
+<style>
+  .footer {
+    background-color: var(--text-dark);
+    color: var(--bg-light);
+    padding: 2rem 0 1rem;
+    margin-top: 4rem;
+  }
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .attribution {
+    font-weight: 500;
+  }
+
+  .links {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .links a {
+    color: var(--bg-light);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+  }
+
+  .links a:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  .separator {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 1.5rem 0;
+  }
+
+  .bottom {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .links {
+      gap: 1rem;
+    }
+  }
+</style>

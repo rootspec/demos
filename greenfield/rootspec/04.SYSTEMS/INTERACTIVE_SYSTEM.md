@@ -1,132 +1,187 @@
-# Level 4: Interactive System
+# **INTERACTIVE_SYSTEM**
 
 ## Responsibility
 
-All interactive features: hierarchy explorer, spec wizard, and before/after comparison. Owns user interaction state, input handling, and dynamic output rendering.
+Manages all dynamic, user-driven features including the hierarchy explorer, spec idea wizard, before/after comparison slider, and theme toggle. Provides engaging interactions that demonstrate RootSpec methodology through hands-on experience while maintaining client-side operation.
 
-## Hierarchy Explorer
+## System Boundaries
 
-### State
+### Owns
+- Hierarchy Explorer visualization and interaction logic
+- "Spec Your Idea" wizard flow and state management
+- Before/After comparison slider functionality
+- Theme toggle component behavior
+- User input validation and processing
+- Dynamic content generation for interactive features
 
-```
-explorer_state:
-  expanded_level: null | 1 | 2 | 3 | 4 | 5
-  hovered_level: null | 1 | 2 | 3 | 4 | 5
-  highlighted_references: [level_numbers]
-```
+### Does Not Own
+- Visual styling or theming (THEME_SYSTEM responsibility)
+- Component positioning or layout (LAYOUT_SYSTEM responsibility)
+- Static content or copy (CONTENT_SYSTEM responsibility)
+- Keyboard navigation or screen reader support (ACCESSIBILITY_SYSTEM responsibility)
 
-### Entities
+## Data Ownership
 
-Each level has:
-- id (1-5)
-- icon (emoji)
-- title (string)
-- subtitle (string — the "WHY", "WHAT", "HOW", etc.)
-- example_content (markdown string — shown when expanded)
-- allowed_references (array of level ids that this level can reference)
+### Hierarchy Explorer State
+```typescript
+interface HierarchyExplorerState {
+  expandedLevels: Level[]
+  selectedLevel: Level | null
+  hoveredLevel: Level | null
+  connectionVisibility: ConnectionMap
+  exampleContent: LevelContentMap
+}
 
-### Behavior
-
-- Click a level → toggles expansion. If another level is expanded, collapse it first.
-- Hover a level → highlight the levels it can reference (arrows/lines illuminate upward)
-- Reference visualization: lines or arrows between levels, flowing upward only. When a level is hovered, its reference lines highlight; all others dim.
-- Only one level expanded at a time.
-
-### Data
-
-Level content is hardcoded (not fetched). The five levels and their example content are defined as a static data structure.
-
-### Fallback
-
-If JavaScript fails to initialize, all five levels render in a static expanded state with text descriptions of reference rules.
-
-## Spec Wizard
-
-### State
-
-```
-wizard_state:
-  current_step: 1 | 2 | 3 | "result"
-  mission: string (user input)
-  selected_template: string | null
-  pillars: [string] (3-5 selected or custom)
-  interaction: {
-    who: string
-    trigger: string
-    feedback: string
-  }
+interface Level {
+  id: 'L1' | 'L2' | 'L3' | 'L4' | 'L5'
+  name: string
+  description: string
+  exampleContent: string
+  allowedReferences: Level[]
+}
 ```
 
-### Step 1: Mission
+### Wizard State
+```typescript
+interface WizardState {
+  currentStep: number
+  totalSteps: number
+  userInput: WizardInput
+  generatedSpec: SpecSkeleton
+  validationErrors: ValidationError[]
+}
 
-- Text input field for product idea
-- [template-count] template suggestions displayed as clickable cards
-- Selecting a template pre-fills the text input
-- "Next" button enabled when input is non-empty
+interface WizardInput {
+  mission?: string
+  designPillars?: string[]
+  keyInteraction?: string
+}
 
-### Step 2: Design Pillars
-
-- Display [pillar-suggestion-count] suggested emotional pillars as selectable chips
-- Suggestions may adapt based on mission input (simple keyword matching, not AI)
-- User can select 3-5 pillars
-- User can type custom pillars
-- "Next" enabled when 3-5 pillars selected
-
-### Step 3: Key Interaction
-
-- Three text inputs: Who (user role), Trigger (what starts it), Feedback (what the user gets)
-- Optional: pre-fill suggestions based on mission
-- "Generate" button enabled when all three fields are non-empty
-
-### Result
-
-- Display a skeleton spec card showing:
-  - L1 section: Mission statement + selected pillars
-  - L2 section: Inferred truth (template-based)
-  - L3 section: Interaction loop from the three inputs
-- Card is styled to look like a spec document
-- "Start over" button resets wizard state
-
-### Fallback
-
-If JavaScript fails, show a pre-filled example spec card with all three steps visible as static content.
-
-## Before/After Comparison
-
-### State
-
-```
-comparison_state:
-  active_view: "without" | "with"
+interface SpecSkeleton {
+  philosophy: string
+  truths: string
+  interactions: string
+}
 ```
 
-### Panels
+### Comparison Slider State
+```typescript
+interface ComparisonState {
+  sliderPosition: number // 0-100
+  beforeContent: ComparisonContent
+  afterContent: ComparisonContent
+  transitionActive: boolean
+}
+```
 
-**Without spec panel:**
-- Vague requirements document excerpt (real content, not lorem ipsum)
-- Ambiguous user story example
-- Decision with no traceable rationale
+## Interactions with Other Systems
 
-**With RootSpec panel:**
-- Same requirements, structured into the five-level hierarchy
-- Testable user story with acceptance criteria
-- Decision traced to a design pillar
+### → THEME_SYSTEM
+**Provides:** User theme selection events, component state changes requiring visual updates
+**Receives:** Component styling, interaction affordances, transition specifications
 
-### Behavior
+### → LAYOUT_SYSTEM
+**Provides:** Interactive component dimensions, space requirements for features
+**Receives:** Container constraints, positioning context for dynamic components
 
-- Toggle or slider switches between the two views
-- On desktop: side-by-side with a draggable divider, or toggle buttons
-- On mobile: stacked panels with toggle buttons
-- Transition between states is smooth (crossfade or slide)
+### → CONTENT_SYSTEM
+**Provides:** User-generated content updates, dynamic content rendering requirements
+**Receives:** Template data for dynamic features, examples and copy for interactions
 
-### Fallback
+### → ACCESSIBILITY_SYSTEM
+**Provides:** Interactive elements requiring focus management, dynamic content updates
+**Receives:** Keyboard navigation patterns, screen reader announcement requirements
 
-If JavaScript fails, both panels render side-by-side statically.
+## Core Behaviors
 
-## Shared Interactive Conventions
+### Hierarchy Explorer
+- **Level Expansion:** Click to expand/collapse individual levels and reveal example content
+- **Connection Visualization:** Hover over level to highlight allowed reference connections (upward arrows)
+- **Example Display:** Show representative content for each level when expanded
+- **Dependency Teaching:** Visual demonstration of hierarchy rules and reference constraints
 
-- All interactive elements use `data-test` attributes
-- All state is ephemeral — no persistence between page loads
-- Animations respect `prefers-reduced-motion`
-- Focus management: interactive elements are focusable and keyboard-operable
-- ARIA: `role`, `aria-expanded`, `aria-selected`, `aria-label` on all interactive elements
+### Spec Idea Wizard
+- **Step Progression:** Guide user through 3-step process with clear navigation
+- **Input Validation:** Provide real-time feedback on input quality and completeness
+- **Template Application:** Apply user input to structured templates for each level
+- **Spec Generation:** Generate skeleton specification showing how input maps to RootSpec levels
+
+### Before/After Comparison
+- **Slider Interaction:** Smooth slider control for revealing content transition
+- **Content Interpolation:** Seamlessly blend between "before" and "after" states
+- **Real Examples:** Show actual specification evolution, not lorem ipsum
+- **Visual Demonstration:** Clearly illustrate transformation from vague to structured
+
+### Theme Toggle
+- **Preference Detection:** Detect and apply system theme preference on initial load
+- **Manual Override:** Allow user to override system preference with explicit choice
+- **State Persistence:** Remember user preference across sessions using localStorage
+- **Smooth Transition:** Animate theme changes without jarring visual shifts
+
+## External Dependencies
+
+### Browser APIs
+- `localStorage` for persisting wizard progress and theme preferences
+- `IntersectionObserver` for triggering interactive features when visible
+- `requestAnimationFrame` for smooth animations and transitions
+- `MutationObserver` for handling dynamic content updates
+
+### Client-Side Libraries
+- Animation library for smooth transitions and micro-interactions
+- State management utilities for complex interactive features
+- Input validation utilities for wizard form processing
+
+## Validation Rules
+
+### User Input Quality
+- Mission statements between 10-200 characters for clarity
+- Design pillars selections limited to 3-5 items to prevent overwhelming scope
+- Key interaction descriptions specific enough to generate meaningful examples
+- Input sanitization to prevent XSS and maintain content quality
+
+### Performance Standards
+- Interactive features respond within 100ms of user input
+- Animations maintain 60fps on modern devices
+- State changes don't cause layout thrashing or reflow
+- Client-side processing completes within 500ms
+
+### Accessibility Standards
+- All interactive elements accessible via keyboard navigation
+- Focus indicators clearly visible and properly managed
+- Dynamic content changes announced to screen readers
+- Touch targets minimum 44px for mobile interaction
+
+## Error Handling
+
+### Input Processing Failures
+- **Validation Feedback:** Provide clear, helpful error messages for invalid input
+- **Partial Progress Saving:** Preserve user input even if processing fails
+- **Graceful Recovery:** Allow users to correct errors without losing previous work
+
+### State Management Failures
+- **State Recovery:** Restore previous valid state if current state becomes corrupted
+- **Local Storage Failures:** Degrade gracefully if persistence features unavailable
+- **Animation Failures:** Ensure functionality remains even if animations break
+
+### Feature Degradation
+- **JavaScript Disabled:** Provide static alternatives explaining interactive features
+- **Reduced Motion:** Respect user motion preferences and provide alternatives
+- **Network Failures:** Ensure all features work entirely client-side without external dependencies
+
+## Interaction Patterns
+
+### Progressive Enhancement
+- **Core Functionality First:** Ensure basic functionality works without advanced features
+- **Enhanced Experience:** Layer interactive enhancements for capable browsers
+- **Graceful Degradation:** Maintain usability when advanced features unavailable
+
+### Feedback Mechanisms
+- **Immediate Response:** Visual feedback within 100ms of user interaction
+- **Progress Indication:** Clear progress indicators for multi-step processes
+- **Completion Confirmation:** Positive feedback when users complete interactive tasks
+- **Error Recovery:** Clear guidance when interactions fail or produce errors
+
+### State Persistence
+- **Session Continuity:** Maintain user progress across page reloads
+- **Cross-Session Memory:** Remember user preferences between visits
+- **Privacy Respect:** Store only necessary data locally, respect user privacy preferences
