@@ -1,0 +1,147 @@
+# =============================================================================
+# FINE-TUNING: Layout System
+# =============================================================================
+# @spec_version: 1.0.0
+# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# @last_updated: 2026-04-07T20:16:51Z
+
+# Responsive Breakpoints
+breakpoint_mobile:
+  value: 0
+  # @unit: pixels
+  # @rationale: Mobile-first approach starts at smallest viewport
+  # @constraint: min=0, max=0
+  # @inviolable: true
+
+breakpoint_tablet:
+  value: 768
+  # @unit: pixels
+  # @rationale: Standard tablet breakpoint balances mobile and desktop needs
+  # @constraint: min=600, max=900
+
+breakpoint_desktop:
+  value: 1024
+  # @unit: pixels
+  # @rationale: Accommodates most laptop screens and smaller desktops
+  # @constraint: min=900, max=1200
+
+breakpoint_wide:
+  value: 1280
+  # @unit: pixels
+  # @rationale: Optimal viewing for large desktop screens
+  # @constraint: min=1200, max=1600
+
+# Content Width and Spacing
+max_content_width:
+  value: 1200
+  # @unit: pixels
+  # @rationale: Optimal reading line length and visual hierarchy
+  # @constraint: min=1000, max=1400
+
+section_padding_mobile:
+  value: 20
+  # @unit: pixels
+  # @rationale: Sufficient spacing without wasting limited mobile screen space
+  # @constraint: min=16, max=32
+
+section_padding_desktop:
+  value: 80
+  # @unit: pixels
+  # @rationale: Creates visual separation and breathing room on larger screens
+  # @constraint: min=60, max=120
+
+component_spacing:
+  value: 24
+  # @unit: pixels
+  # @rationale: Consistent rhythm throughout the design system
+  # @constraint: min=16, max=32
+
+# Grid and Layout Configuration
+grid_columns_mobile:
+  value: 1
+  # @unit: count
+  # @rationale: Single column prevents cramped content on small screens
+  # @constraint: min=1, max=1
+  # @inviolable: true
+
+grid_columns_tablet:
+  value: 2
+  # @unit: count
+  # @rationale: Efficient use of tablet screen width
+  # @constraint: min=1, max=3
+
+grid_columns_desktop:
+  value: 3
+  # @unit: count
+  # @rationale: Optimal information density for desktop viewing
+  # @constraint: min=2, max=4
+
+grid_gap:
+  value: 24
+  # @unit: pixels
+  # @rationale: Visual separation without excessive whitespace
+  # @constraint: min=16, max=40
+
+# Navigation and Scroll Behavior
+navigation_height:
+  value: 60
+  # @unit: pixels
+  # @rationale: Sufficient space for navigation without dominating viewport
+  # @constraint: min=50, max=80
+
+scroll_offset:
+  value: 80
+  # @unit: pixels
+  # @rationale: Accounts for fixed navigation when scrolling to sections
+  # @constraint: min=60, max=100
+
+smooth_scroll_duration:
+  value: 800
+  # @unit: milliseconds
+  # @rationale: Smooth enough to be pleasant, fast enough to not feel sluggish
+  # @constraint: min=500, max=1200
+
+# Typography and Readability
+base_font_size:
+  value: 16
+  # @unit: pixels
+  # @rationale: Browser default ensures accessibility and readability
+  # @constraint: min=14, max=18
+  # @inviolable: true
+
+line_height:
+  value: 1.6
+  # @unit: ratio
+  # @rationale: Optimal readability for body text across all screen sizes
+  # @constraint: min=1.4, max=1.8
+
+heading_line_height:
+  value: 1.2
+  # @unit: ratio
+  # @rationale: Tighter spacing for headings improves visual hierarchy
+  # @constraint: min=1.1, max=1.4
+
+optimal_reading_width:
+  value: 65
+  # @unit: characters
+  # @rationale: Research-backed optimal line length for reading comprehension
+  # @constraint: min=45, max=85
+
+# Performance and Optimization
+viewport_buffer:
+  value: 200
+  # @unit: pixels
+  # @rationale: Preloads content slightly before it becomes visible
+  # @constraint: min=100, max=400
+
+layout_recalc_throttle:
+  value: 16
+  # @unit: milliseconds
+  # @rationale: Matches display refresh rate for smooth performance
+  # @constraint: min=8, max=32
+
+resize_debounce:
+  value: 100
+  # @unit: milliseconds
+  # @rationale: Prevents excessive layout calculations during window resize
+  # @constraint: min=50, max=300

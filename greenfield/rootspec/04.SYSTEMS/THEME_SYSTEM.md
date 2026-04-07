@@ -1,64 +1,124 @@
-# Level 4: Theme System
+# Theme System
 
 ## Responsibility
+Controls visual presentation and user theme preferences for the RootSpec marketing site. Manages dark/light mode detection, theme switching, preference persistence, and coordinates theme application across all visual components.
 
-Dark/light theme management, CSS custom property resolution, system preference detection, and user override persistence.
+## Boundaries
+**Owns:**
+- Theme state management and preference detection
+- Dark/light mode switching functionality  
+- Theme preference persistence across sessions
+- CSS custom property coordination for theme values
+- Motion and accessibility preference respect
 
-## State
+**Does not own:**
+- Individual component styling or layout (LAYOUT_SYSTEM)
+- Interactive behavior or state (INTERACTIVE_SYSTEM)
+- Content or configuration data (CONTENT_SYSTEM)
+- Semantic structure or ARIA attributes (ACCESSIBILITY_SYSTEM)
 
-```
-theme_state:
-  current_theme: "light" | "dark"
-  source: "system" | "user"
-  system_preference: "light" | "dark"
-```
+## Data Ownership
 
-## Behavior
-
-### Initialization
-
-1. Check localStorage for saved user preference
-2. If found → apply saved theme, set `source: "user"`
-3. If not found → read `prefers-color-scheme` media query, set `source: "system"`
-4. Apply theme class to document root (`data-theme="light"` or `data-theme="dark"`)
-
-### Toggle
-
-1. Switch `current_theme` to opposite value
-2. Set `source: "user"`
-3. Save preference to localStorage
-4. Update document root `data-theme` attribute
-5. Transition smoothly (CSS transition on background/color properties)
-
-### System Preference Change
-
-- Listen for `prefers-color-scheme` media query changes
-- If `source` is `"system"`, update theme to match
-- If `source` is `"user"`, ignore system changes (user override takes precedence)
-
-## CSS Custom Properties
-
-The theme system defines CSS custom properties on `:root` that all other systems consume:
-
-```
-Categories:
-  - Background colors (page, surface, elevated)
-  - Text colors (primary, secondary, muted)
-  - Accent colors (primary, hover, active)
-  - Border colors
-  - Shadow definitions
-  - Code block colors (syntax highlighting)
+**Theme State:**
+```typescript
+{
+  currentTheme: 'light' | 'dark' | 'system',
+  resolvedTheme: 'light' | 'dark',
+  systemPreference: 'light' | 'dark',
+  userHasManualPreference: boolean,
+  motionPreference: 'reduce' | 'normal',
+  contrastPreference: 'normal' | 'high'
+}
 ```
 
-All components reference these variables — no hardcoded colors anywhere in the codebase.
+**Theme Configuration:**
+```typescript
+{
+  light: {
+    colors: { primary: string, background: string, text: string, ... },
+    shadows: { subtle: string, prominent: string, ... },
+    typography: { weights: Record<string, number>, sizes: Record<string, string> }
+  },
+  dark: {
+    colors: { primary: string, background: string, text: string, ... },
+    shadows: { subtle: string, prominent: string, ... },
+    typography: { weights: Record<string, number>, sizes: Record<string, string> }
+  }
+}
+```
 
-## Toggle UI
+## Interactions with Other Systems
 
-- Always visible in the header
-- Icon reflects current state (sun/moon or similar)
-- Accessible: `aria-label` describes current state and action ("Switch to dark mode")
-- Keyboard: activates on Enter/Space
+**→ LAYOUT_SYSTEM:** Provides theme values for visual styling
+- CSS custom properties for colors, typography, and spacing
+- Motion preference values for animation timing
+- Contrast preference values for visual emphasis
 
-## Fallback
+**→ INTERACTIVE_SYSTEM:** Coordinates theme changes with dynamic elements
+- Updates theme-sensitive interactive components
+- Applies theme to dynamically generated content (wizard output)
+- Ensures smooth transitions during theme switching
 
-If JavaScript fails, the site renders in a default theme (light) using CSS-only `prefers-color-scheme` media queries as fallback.
+**← ACCESSIBILITY_SYSTEM:** Receives accessibility preference overrides
+- Respects reduced motion preferences for animations
+- Applies high contrast mode when requested
+- Ensures color contrast meets WCAG requirements
+
+**→ CONTENT_SYSTEM:** Influences content presentation
+- Theme-appropriate icon selection
+- Color-coded examples in before/after comparisons
+- Visual hierarchy emphasis based on current theme
+
+## Theme Management
+
+**System Preference Detection:**
+- Uses `prefers-color-scheme` media query for initial detection
+- Listens for system preference changes during session
+- Automatically updates resolved theme when system changes
+
+**Manual Override:**
+- User can explicitly select light or dark mode
+- Manual preference persists across browser sessions
+- Manual preference overrides system detection
+
+**Preference Persistence:**
+- Stores user theme choice in localStorage
+- Syncs preference across browser tabs
+- Graceful fallback to system preference if storage fails
+
+**Theme Application:**
+- Updates CSS custom properties on `<html>` element
+- Provides smooth transition animations between themes
+- Ensures theme consistency across all page sections
+
+## Visual Coordination
+
+**Color Management:**
+- Semantic color tokens (primary, secondary, accent, neutral)
+- Automatic contrast calculation for accessibility compliance
+- Dark/light mode color variations with consistent relationships
+
+**Typography Coordination:**
+- Theme-appropriate font weights and sizing
+- Contrast-adjusted text colors for readability
+- Consistent typography hierarchy across themes
+
+**Motion Preferences:**
+- Respects `prefers-reduced-motion` for accessibility
+- Scales animation duration based on preference
+- Provides immediate theme switching when motion is reduced
+
+**Focus and Interactive States:**
+- Theme-appropriate focus indicator styling
+- Hover and active state colors that work in both themes
+- Accessible contrast ratios for all interactive elements
+
+## Performance Considerations
+
+**CSS Custom Properties:** Efficient theme switching without layout recalculation or component re-rendering.
+
+**Minimal JavaScript:** Theme detection and switching require minimal client-side processing.
+
+**No Flash of Wrong Theme:** Server-side theme detection prevents initial theme flicker.
+
+**Efficient Storage:** Lightweight preference storage with automatic cleanup of outdated values.

@@ -1,0 +1,161 @@
+# =============================================================================
+# FINE-TUNING: Theme System
+# =============================================================================
+# @spec_version: 1.0.0
+# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# @last_updated: 2026-04-07T20:16:51Z
+
+# Color Contrast and Accessibility
+text_contrast_ratio:
+  value: 4.5
+  # @unit: ratio
+  # @rationale: WCAG AA compliance for normal text readability
+  # @constraint: min=4.5, max=7.0
+  # @inviolable: true
+
+large_text_contrast_ratio:
+  value: 3.0
+  # @unit: ratio
+  # @rationale: WCAG AA compliance for large text (18pt+ or 14pt bold)
+  # @constraint: min=3.0, max=4.5
+  # @inviolable: true
+
+focus_indicator_contrast:
+  value: 3.0
+  # @unit: ratio
+  # @rationale: Ensures focus indicators are visible for keyboard navigation
+  # @constraint: min=3.0, max=5.0
+  # @inviolable: true
+
+# Theme Transition and Animation
+theme_transition_duration:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Quick enough to feel responsive, slow enough to be smooth
+  # @constraint: min=100, max=500
+
+color_transition_easing:
+  value: "ease-in-out"
+  # @unit: css-timing-function
+  # @rationale: Natural feeling transition between color states
+  # @constraint: ease-in-out, ease, linear
+
+preference_storage_duration:
+  value: 31536000000
+  # @unit: milliseconds (1 year)
+  # @rationale: Long enough to persist user preference, not indefinite
+  # @constraint: min=86400000, max=31536000000
+
+# Theme Detection and Handling
+system_preference_priority:
+  value: true
+  # @unit: boolean
+  # @rationale: Respect user's system-wide preference by default
+  # @inviolable: true
+
+theme_detection_timeout:
+  value: 100
+  # @unit: milliseconds
+  # @rationale: Quick detection prevents flash of wrong theme
+  # @constraint: min=50, max=200
+
+prefers_reduced_motion_respect:
+  value: true
+  # @unit: boolean
+  # @rationale: Accessibility requirement for motion-sensitive users
+  # @inviolable: true
+
+# Color Palette Configuration
+primary_hue:
+  value: 220
+  # @unit: degrees
+  # @rationale: Blue hue conveys trust and professionalism for technical audience
+  # @constraint: min=200, max=240
+
+secondary_hue:
+  value: 280
+  # @unit: degrees
+  # @rationale: Purple accent provides visual interest without distraction
+  # @constraint: min=260, max=300
+
+neutral_hue:
+  value: 220
+  # @unit: degrees
+  # @rationale: Cool gray aligned with primary for visual cohesion
+  # @constraint: min=200, max=240
+
+# Saturation and Lightness
+primary_saturation:
+  value: 70
+  # @unit: percentage
+  # @rationale: Vivid enough to be engaging, muted enough for professionalism
+  # @constraint: min=50, max=90
+
+light_theme_lightness:
+  value: 98
+  # @unit: percentage
+  # @rationale: Very light background reduces eye strain while maintaining contrast
+  # @constraint: min=95, max=100
+
+dark_theme_lightness:
+  value: 8
+  # @unit: percentage
+  # @rationale: True dark theme reduces eye strain in low light conditions
+  # @constraint: min=5, max=15
+
+# Typography and Visual Hierarchy
+heading_font_weight:
+  value: 600
+  # @unit: css-weight
+  # @rationale: Semi-bold creates clear hierarchy without being too heavy
+  # @constraint: min=500, max=700
+
+body_font_weight:
+  value: 400
+  # @unit: css-weight
+  # @rationale: Regular weight ensures readability at all sizes
+  # @constraint: min=300, max=500
+
+emphasis_font_weight:
+  value: 500
+  # @unit: css-weight
+  # @rationale: Medium weight provides subtle emphasis without distraction
+  # @constraint: min=400, max=600
+
+# Interactive Element Styling
+button_border_radius:
+  value: 6
+  # @unit: pixels
+  # @rationale: Subtle rounding feels modern without being too stylized
+  # @constraint: min=4, max=12
+
+card_border_radius:
+  value: 8
+  # @unit: pixels
+  # @rationale: Slightly more rounding for larger elements feels proportional
+  # @constraint: min=6, max=16
+
+shadow_opacity:
+  value: 0.1
+  # @unit: ratio
+  # @rationale: Subtle depth without overwhelming content
+  # @constraint: min=0.05, max=0.2
+
+# Focus and Interaction States
+focus_ring_width:
+  value: 2
+  # @unit: pixels
+  # @rationale: Visible for accessibility without being intrusive
+  # @constraint: min=1, max=4
+
+hover_opacity_change:
+  value: 0.8
+  # @unit: ratio
+  # @rationale: Clear feedback for hover state without dramatic change
+  # @constraint: min=0.7, max=0.9
+
+active_scale_factor:
+  value: 0.98
+  # @unit: ratio
+  # @rationale: Subtle press feedback provides tactile response
+  # @constraint: min=0.95, max=0.99

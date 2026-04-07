@@ -1,62 +1,102 @@
-# Level 4: Content System
+# Content System
 
 ## Responsibility
+Manages all static content, configuration values, and structured data for the RootSpec marketing site. Serves as the single source of truth for site copy, links, version information, and data that powers interactive features.
 
-All static and semi-static content: copy, messaging, section content, links, and version display. Owns what the site says.
+## Boundaries
+**Owns:**
+- Site copy and messaging across all sections
+- Configuration constants (RootSpec version, GitHub links)
+- Structured data for hierarchy explorer and spec wizard
+- Before/after comparison content
+- Meta information and external resource links
 
-## Version Management
+**Does not own:**
+- Dynamic user input or form state (INTERACTIVE_SYSTEM)
+- Visual styling or theme preferences (THEME_SYSTEM)  
+- Page layout or responsive behavior (LAYOUT_SYSTEM)
+- Accessibility markup or ARIA labels (ACCESSIBILITY_SYSTEM)
 
-- RootSpec version stored as a single constant (e.g., in a config file or at the top of the main module)
-- Referenced by: hero section version badge, meta banner, any version mentions in copy
-- Updating the version requires changing one value
+## Data Ownership
 
-## Section Content
+**Configuration Data:**
+```typescript
+{
+  ROOTSPEC_VERSION: string,
+  GITHUB_REPO: string,
+  SEED_URL: string, 
+  SPEC_URL: string
+}
+```
 
-### Header
-- Site title: "RootSpec"
-- Version badge: `v[rootspec_version]`
-- Theme toggle (rendered by Theme System)
-- Navigation links to major sections
+**Hierarchy Data:**
+```typescript
+{
+  levels: {
+    id: string,
+    name: string,
+    description: string,
+    canReference: string[],
+    examples: string[]
+  }[]
+}
+```
 
-### Hero
-- Tagline (short, memorable)
-- One-sentence explanation of what RootSpec is
-- Primary CTA button (links to GitHub or getting started)
+**Wizard Data:**
+```typescript
+{
+  missions: { id: string, label: string, description: string }[],
+  pillars: { id: string, label: string, description: string }[],
+  interactionTemplates: { id: string, label: string, template: string }[]
+}
+```
 
-### Meta Banner
-- Prominent banner explaining this site is a RootSpec demo
-- Tone: honest, direct — "This site was generated from a ~100-line product description using the RootSpec pipeline"
-- Links to: SEED.md in GitHub repo, spec files in GitHub repo
-- Acknowledges that rough edges reflect minimal human guidance, not carelessness
+**Comparison Data:**
+```typescript
+{
+  without: { title: string, content: string, problems: string[] },
+  with: { title: string, content: string, benefits: string[] }
+}
+```
 
-### The Problem
-- [problem-count] named pain points, each with a title and brief description
-- Pain points from L1: spec drift, philosophy-implementation gap, unreliable AI output, dead documentation
-- Real-world framing — describe the problem as developers experience it
+## Interactions with Other Systems
 
-### How It Works
-- Four-step walkthrough: init → spec → impl → validate
-- Each step: command name, what it does, visual representation of before/after
-- Visual flow showing the progression
+**→ INTERACTIVE_SYSTEM:** Provides structured data for dynamic features
+- Hierarchy levels and relationships for explorer component
+- Template options and examples for spec wizard
+- Before/after content for comparison slider
 
-### Open Source CTA
-- GitHub repository link
-- Getting started instructions (the four commands)
-- Community links (if applicable)
+**→ LAYOUT_SYSTEM:** Supplies content for page sections  
+- Hero copy and taglines
+- Section headings and body content
+- Navigation labels and structure
+- Footer information and attributions
 
-### Footer
-- Minimal: links, credits, GitHub
+**→ ACCESSIBILITY_SYSTEM:** Provides semantic content structure
+- Heading hierarchy and landmark content
+- Alt text and descriptive content for interactive elements
+- Error messages and user guidance text
 
-## External Links
+## Content Organization
 
-All external links:
-- Open in new tab (`target="_blank"` with `rel="noopener noreferrer"`)
-- GitHub repo links point to the specific files (SEED.md, rootspec/ directory)
+**Static Content Files:**
+- `src/data/config.ts` — Version numbers and external links
+- `src/data/hierarchy.ts` — Five-level structure data for explorer  
+- `src/data/wizard.ts` — Template options for spec wizard
+- `src/data/comparison.ts` — Before/after content examples
 
-## Content Tone Rules
+**Content Delivery:**
+- Exported constants for consistent values across components
+- Typed interfaces ensure content structure integrity  
+- Static imports eliminate runtime content loading delays
+- Immutable data prevents accidental content modification
 
-Per L1 inviolable principles and L2 developer-native communication:
-- No buzzwords
-- Specific over general
-- Technical but accessible
-- Confident but not preachy
+## Content Validation
+
+**Structure Validation:** TypeScript interfaces enforce required fields and data types for all structured content.
+
+**Link Validation:** External URLs point to actual GitHub resources. Version numbers match current RootSpec framework version.
+
+**Content Quality:** Real examples in all sections. No placeholder or lorem ipsum content. Before/after comparisons use authentic specification scenarios.
+
+**Accessibility Content:** All interactive elements have descriptive labels. Error states include helpful guidance text.

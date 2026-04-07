@@ -1,0 +1,97 @@
+# =============================================================================
+# FINE-TUNING: Interactive System
+# =============================================================================
+# @spec_version: 1.0.0
+# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+# @last_updated: 2026-04-07T20:16:51Z
+
+# Animation and Interaction Timing
+animation_duration:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Fast enough to feel responsive, slow enough to be perceivable
+  # @constraint: min=100, max=500
+
+hierarchy_expand_delay:
+  value: 150
+  # @unit: milliseconds
+  # @rationale: Slight delay prevents accidental expansions during rapid navigation
+  # @constraint: min=50, max=300
+
+wizard_step_transition:
+  value: 300
+  # @unit: milliseconds
+  # @rationale: Gives users time to process step change without feeling sluggish
+  # @constraint: min=200, max=600
+
+# User Input Handling
+input_debounce_delay:
+  value: 300
+  # @unit: milliseconds
+  # @rationale: Balances responsiveness with reducing excessive processing
+  # @constraint: min=100, max=1000
+
+validation_feedback_delay:
+  value: 500
+  # @unit: milliseconds
+  # @rationale: Gives users time to finish typing before showing validation
+  # @constraint: min=200, max=1000
+
+# Interactive Feature Configuration
+hierarchy_levels_visible:
+  value: 5
+  # @unit: count
+  # @rationale: Shows all RootSpec levels without scrolling on desktop
+  # @constraint: min=3, max=7
+  # @inviolable: true
+
+wizard_max_steps:
+  value: 4
+  # @unit: count
+  # @rationale: Keeps wizard simple while covering essential spec elements
+  # @constraint: min=3, max=6
+
+comparison_slider_sensitivity:
+  value: 0.8
+  # @unit: ratio
+  # @rationale: Responsive to user input without being too sensitive
+  # @constraint: min=0.3, max=1.0
+
+# Touch and Mobile Interactions
+touch_target_minimum:
+  value: 44
+  # @unit: pixels
+  # @rationale: Meets accessibility guidelines for touch target size
+  # @constraint: min=44, max=60
+  # @inviolable: true
+
+mobile_gesture_threshold:
+  value: 10
+  # @unit: pixels
+  # @rationale: Distinguishes intentional gestures from accidental touches
+  # @constraint: min=5, max=20
+
+swipe_distance_threshold:
+  value: 50
+  # @unit: pixels
+  # @rationale: Clear gesture intent without requiring excessive movement
+  # @constraint: min=30, max=100
+
+# Performance and Responsiveness
+lazy_loading_threshold:
+  value: 100
+  # @unit: pixels
+  # @rationale: Loads interactive features just before they become visible
+  # @constraint: min=50, max=200
+
+interaction_timeout:
+  value: 30000
+  # @unit: milliseconds
+  # @rationale: Prevents hanging interactions while allowing complex user flows
+  # @constraint: min=10000, max=60000
+
+state_persistence_duration:
+  value: 86400000
+  # @unit: milliseconds (24 hours)
+  # @rationale: Preserves user progress for reasonable session duration
+  # @constraint: min=3600000, max=604800000

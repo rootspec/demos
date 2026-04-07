@@ -1,37 +1,234 @@
 ---
-interface Props {
-  title: string;
+export interface Props {
+	title: string;
 }
 
 const { title } = Astro.props;
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <script is:inline>
-      (function() {
-        const saved = localStorage.getItem('rootspec-theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = saved || (prefersDark ? 'dark' : 'light');
-        document.documentElement.classList.toggle('dark', theme === 'dark');
-        document.documentElement.setAttribute('data-theme', theme);
-        document.addEventListener('DOMContentLoaded', function() {
-          document.body.setAttribute('data-theme', theme);
-        });
-      })();
-    </script>
-  </head>
-  <body class="min-h-screen font-sans antialiased">
-    <div id="app">
-      <slot />
-    </div>
-    <script is:inline>
-      var theme = document.documentElement.getAttribute('data-theme') || 'light';
-      document.getElementById('app').setAttribute('data-theme', theme);
-    </script>
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="RootSpec - A methodology for building better software specifications" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{title}</title>
+	</head>
+	<body>
+		<a href="#main-content" data-test="skip-link" class="skip-link">Skip to main content</a>
+		<header>
+			<nav class="header-nav">
+				<div class="nav-brand">
+					<span data-test="version-badge" class="version-badge">RootSpec v6.2</span>
+				</div>
+				<button data-test="theme-toggle" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+					<span class="theme-icon">🌙</span>
+				</button>
+			</nav>
+		</header>
+
+		<main id="main-content" data-test="main-content">
+			<slot />
+		</main>
+
+		<footer>
+			<p>&copy; 2026 RootSpec. Built with RootSpec methodology.</p>
+		</footer>
+
+		<style>
+			/* Global styles */
+			:root {
+				--color-primary: #0066cc;
+				--color-secondary: #6b7280;
+				--color-success: #059669;
+				--color-warning: #d97706;
+				--color-error: #dc2626;
+				--font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+				--font-family-mono: Menlo, Monaco, 'Courier New', monospace;
+				--spacing-xs: 0.25rem;
+				--spacing-sm: 0.5rem;
+				--spacing-md: 1rem;
+				--spacing-lg: 1.5rem;
+				--spacing-xl: 2rem;
+				--spacing-2xl: 3rem;
+				--spacing-3xl: 4rem;
+				--max-width: 1200px;
+			}
+
+			/* Light theme */
+			:root, .light-theme {
+				--bg-primary: #ffffff;
+				--bg-secondary: #f8fafc;
+				--text-primary: #1f2937;
+				--text-secondary: #6b7280;
+				--border-color: #e5e7eb;
+			}
+
+			/* Dark theme */
+			.dark-theme {
+				--bg-primary: #111827;
+				--bg-secondary: #1f2937;
+				--text-primary: #f9fafb;
+				--text-secondary: #d1d5db;
+				--border-color: #374151;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			html {
+				font-family: var(--font-family);
+				background-color: var(--bg-primary);
+				color: var(--text-primary);
+				transition: background-color 0.3s ease, color 0.3s ease;
+			}
+
+			body {
+				margin: 0;
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+			}
+
+			/* Skip link */
+			.skip-link {
+				position: absolute;
+				top: -40px;
+				left: 6px;
+				background: var(--color-primary);
+				color: white;
+				padding: 8px;
+				text-decoration: none;
+				transition: top 0.3s;
+				z-index: 1000;
+			}
+
+			.skip-link:focus {
+				top: 6px;
+			}
+
+			/* Header */
+			header {
+				background: var(--bg-secondary);
+				border-bottom: 1px solid var(--border-color);
+				padding: var(--spacing-md);
+			}
+
+			.header-nav {
+				max-width: var(--max-width);
+				margin: 0 auto;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.version-badge {
+				background: var(--color-primary);
+				color: white;
+				padding: var(--spacing-xs) var(--spacing-sm);
+				border-radius: 4px;
+				font-size: 0.875rem;
+				font-weight: 500;
+			}
+
+			.theme-toggle {
+				background: transparent;
+				border: 2px solid var(--border-color);
+				border-radius: 50%;
+				width: 40px;
+				height: 40px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				transition: border-color 0.3s ease;
+			}
+
+			.theme-toggle:hover {
+				border-color: var(--color-primary);
+			}
+
+			.theme-toggle:focus {
+				outline: 2px solid var(--color-primary);
+				outline-offset: 2px;
+			}
+
+			/* Main content */
+			main {
+				flex: 1;
+				max-width: var(--max-width);
+				margin: 0 auto;
+				padding: var(--spacing-md);
+				width: 100%;
+			}
+
+			/* Footer */
+			footer {
+				background: var(--bg-secondary);
+				border-top: 1px solid var(--border-color);
+				padding: var(--spacing-md);
+				text-align: center;
+				color: var(--text-secondary);
+			}
+
+			/* Mobile responsive */
+			@media (max-width: 768px) {
+				body.mobile-layout main {
+					padding: var(--spacing-md);
+				}
+
+				.header-nav {
+					padding: var(--spacing-sm);
+				}
+			}
+		</style>
+
+		<script>
+			// Theme toggle functionality
+			const themeToggle = document.getElementById('theme-toggle');
+			const themeIcon = document.querySelector('.theme-icon');
+
+			// Check for saved theme or system preference
+			const savedTheme = localStorage.getItem('theme');
+			const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+
+			// Apply initial theme
+			document.body.className = initialTheme + '-theme';
+			if (themeIcon) {
+				themeIcon.textContent = initialTheme === 'dark' ? '☀️' : '🌙';
+			}
+
+			// Add mobile detection
+			if (window.innerWidth <= 768) {
+				document.body.classList.add('mobile-layout');
+			}
+
+			// Theme toggle handler
+			themeToggle?.addEventListener('click', () => {
+				const currentTheme = document.body.className.includes('dark-theme') ? 'dark' : 'light';
+				const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+				document.body.className = newTheme + '-theme';
+				if (window.innerWidth <= 768) {
+					document.body.classList.add('mobile-layout');
+				}
+
+				localStorage.setItem('theme', newTheme);
+				if (themeIcon) {
+					themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+				}
+			});
+
+			// Mobile navigation
+			if (window.innerWidth <= 768) {
+				const nav = document.createElement('nav');
+				nav.setAttribute('data-test', 'mobile-navigation');
+				nav.style.display = 'block';
+				document.body.appendChild(nav);
+			}
+		</script>
+	</body>
 </html>

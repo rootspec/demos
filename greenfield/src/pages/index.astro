@@ -1,29 +1,38 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import Hero from '../sections/Hero.astro';
 import MetaBanner from '../sections/MetaBanner.astro';
-import Problem from '../sections/Problem.astro';
-import HowItWorks from '../sections/HowItWorks.astro';
+import Hero from '../sections/Hero.astro';
 import HierarchyExplorer from '../sections/HierarchyExplorer.tsx';
 import SpecWizard from '../sections/SpecWizard.tsx';
 import Comparison from '../sections/Comparison.tsx';
 import CTA from '../sections/CTA.astro';
-import '../styles/global.css';
 ---
 
-<Layout title="RootSpec — Philosophy guides implementation">
-  <Header />
-  <main>
-    <Hero />
-    <MetaBanner />
-    <Problem />
-    <HowItWorks />
+<Layout title="RootSpec - Build Better Software Specifications">
+  <MetaBanner />
+  <Hero />
+
+  <section id="hierarchy-explorer">
     <HierarchyExplorer client:load />
+  </section>
+
+  <section id="spec-wizard">
     <SpecWizard client:load />
+  </section>
+
+  <section id="comparison">
     <Comparison client:load />
-    <CTA />
-  </main>
-  <Footer />
+  </section>
+
+  <CTA />
 </Layout>
+
+<style>
+  section {
+    margin: var(--spacing-3xl) 0;
+  }
+
+  #hierarchy-explorer, #spec-wizard, #comparison {
+    scroll-margin-top: 80px; /* Account for any fixed header */
+  }
+</style>

@@ -1,33 +1,74 @@
-# User Stories Overview
+# L5 — User Stories Overview
 
-## Organization
+## Story Organization
 
-Stories are organized by phase, journey, and system. A story may appear in multiple collections.
+### By Phase
+- **MVP** — Core functionality for technical leads to understand and evaluate RootSpec methodology
+- **Enhancement** — Advanced features and optimizations for broader audience engagement
+- **Polish** — Performance improvements and advanced accessibility features
 
-## Phases
+### By System
+- **Content Stories** — Information presentation and static content management
+- **Interactive Stories** — Dynamic user engagement and hands-on exploration
+- **Theme Stories** — Visual presentation and user preference management
+- **Layout Stories** — Responsive design and cross-device functionality
+- **Accessibility Stories** — Universal access and compliance features
 
-| Phase | Description |
-|-------|-------------|
-| **MVP** | Core marketing site — all sections, all interactive features, dark/light theme, responsive layout |
+## Success Criteria
 
-This is a single-phase marketing site. All features ship together.
+**MVP Success Criteria:**
+- Technical lead can understand RootSpec methodology within 5 minutes
+- All core interactive features work on desktop and mobile
+- Site demonstrates its own creation via RootSpec methodology
+- Clear path from understanding to implementation
 
-## Journeys
+**Enhancement Success Criteria:**
+- Broader audience engagement with interactive features
+- Advanced customization options for user preferences
+- Performance optimized for various connection speeds
+- Comprehensive accessibility beyond basic compliance
 
-| Journey | Description |
-|---------|-------------|
-| **FIRST_VISIT** | Developer arrives, scrolls through the narrative, tries interactives, reaches CTA |
+**Polish Success Criteria:**
+- Professional-grade performance and optimization
+- Advanced accessibility features for diverse user needs
+- Seamless experience across all devices and browsers
+- Comprehensive analytics and user feedback integration
 
-## Systems
+## Testing Strategy
 
-| System | Story Coverage |
-|--------|---------------|
-| CONTENT_SYSTEM | Hero, meta banner, problem section, how-it-works, CTA |
-| INTERACTIVE_SYSTEM | Hierarchy explorer, spec wizard, before/after comparison |
-| THEME_SYSTEM | Dark/light toggle, system preference |
-| ACCESSIBILITY_SYSTEM | Keyboard navigation, screen reader support |
+**Acceptance Testing:**
+- Each story includes specific, observable acceptance criteria
+- Criteria focus on user-visible behavior rather than implementation details
+- Testing covers both happy path and error conditions
+- Mobile and desktop testing for all interactive features
 
-## Test Suites
+**Integration Testing:**
+- System integration points validated through user stories
+- Cross-browser compatibility testing for core functionality
+- Performance testing under various network conditions
+- Accessibility testing with real assistive technologies
 
-- `cypress/e2e/mvp.cy.ts` → loads `by_phase/MVP/**/*.yaml`
-- `cypress/e2e/first-visit.cy.ts` → loads `by_journey/FIRST_VISIT/**/*.yaml`
+**User Validation:**
+- Real user testing with target audience (technical leads)
+- Feedback collection and iteration on user experience
+- Conversion rate tracking from understanding to action
+- Accessibility validation with users who rely on assistive technology
+
+## Story Dependencies
+
+**Foundation Stories:** Must be completed before other stories in the same phase
+**Enhancement Stories:** Build upon foundation stories with additional functionality
+**Integration Stories:** Require multiple systems working together
+**Validation Stories:** Confirm that integrated functionality meets user needs
+
+## Phase Progression
+
+**MVP → Enhancement:**
+- Core functionality must be stable and tested
+- User feedback incorporated from MVP testing
+- Performance baseline established for optimization
+
+**Enhancement → Polish:**
+- Advanced features validated with extended user testing
+- Accessibility compliance confirmed through comprehensive testing
+- Performance optimizations prioritized based on usage data

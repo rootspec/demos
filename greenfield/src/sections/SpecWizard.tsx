@@ -1,247 +1,652 @@
-import { useState, useEffect, useRef } from 'react';
-import { templates, pillarSuggestions } from '../data/wizard';
+import { useState } from 'react';
 
-type Step = 1 | 2 | 3 | 'result';
-
-interface WizardState {
-  currentStep: Step;
-  mission: string;
-  pillars: string[];
-  interaction: { who: string; trigger: string; feedback: string };
+interface WizardStep {
+  id: number;
+  title: string;
+  description: string;
 }
 
-const initial: WizardState = {
-  currentStep: 1,
-  mission: '',
-  pillars: [],
-  interaction: { who: '', trigger: '', feedback: '' },
-};
+const steps: WizardStep[] = [
+  {
+    id: 1,
+    title: 'Your Idea',
+    description: 'Tell us about your product idea in a few words'
+  },
+  {
+    id: 2,
+    title: 'Mission',
+    description: 'Choose a mission template that fits your product'
+  },
+  {
+    id: 3,
+    title: 'Pillars',
+    description: 'Select the core pillars that will guide your product'
+  },
+  {
+    id: 4,
+    title: 'Interactions',
+    description: 'Describe key user interactions'
+  },
+  {
+    id: 5,
+    title: 'Generated Spec',
+    description: 'Your skeleton specification is ready!'
+  }
+];
+
+const missionTemplates = [
+  {
+    id: 'productivity',
+    name: 'Productivity Tool',
+    description: 'Help users accomplish tasks more efficiently'
+  },
+  {
+    id: 'social',
+    name: 'Social Platform',
+    description: 'Connect people and enable communication'
+  },
+  {
+    id: 'marketplace',
+    name: 'Marketplace',
+    description: 'Facilitate transactions between buyers and sellers'
+  },
+  {
+    id: 'education',
+    name: 'Educational Tool',
+    description: 'Enable learning and knowledge sharing'
+  }
+];
+
+const pillars = [
+  { id: 'simplicity', name: 'Simplicity', description: 'Easy to understand and use' },
+  { id: 'speed', name: 'Speed', description: 'Fast and responsive experience' },
+  { id: 'security', name: 'Security', description: 'Protect user data and privacy' },
+  { id: 'collaboration', name: 'Collaboration', description: 'Enable teamwork and sharing' },
+  { id: 'customization', name: 'Customization', description: 'Adaptable to user needs' },
+  { id: 'accessibility', name: 'Accessibility', description: 'Inclusive for all users' }
+];
 
 export default function SpecWizard() {
-  const [state, setState] = useState<WizardState>(initial);
-  const sectionRef = useRef<HTMLElement>(null);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({
+    idea: '',
+    mission: '',
+    selectedPillars: [] as string[],
+    interactions: ''
+  });
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  useEffect(() => {
-    sectionRef.current?.setAttribute('data-hydrated', 'true');
-  }, []);
+  const nextStep = () => {
+    if (currentStep < steps.length) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
 
-  function update(patch: Partial<WizardState>) {
-    setState((s) => ({ ...s, ...patch }));
-  }
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
 
-  function togglePillar(label: string) {
-    setState((s) => {
-      const has = s.pillars.includes(label);
-      if (has) return { ...s, pillars: s.pillars.filter((p) => p !== label) };
-      if (s.pillars.length >= 5) return s;
-      return { ...s, pillars: [...s.pillars, label] };
-    });
-  }
+  const handleIdeaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, idea: e.target.value });
+  };
 
-  function setInteractionField(field: keyof WizardState['interaction'], value: string) {
-    setState((s) => ({ ...s, interaction: { ...s.interaction, [field]: value } }));
-  }
+  const handleMissionSelect = (missionId: string) => {
+    setFormData({ ...formData, mission: missionId });
+  };
 
-  const canAdvanceStep2 = state.pillars.length >= 1;
-  const canGenerate = state.interaction.who && state.interaction.trigger && state.interaction.feedback;
+  const handlePillarToggle = (pillarId: string) => {
+    const newPillars = formData.selectedPillars.includes(pillarId)
+      ? formData.selectedPillars.filter(p => p !== pillarId)
+      : [...formData.selectedPillars, pillarId];
+    setFormData({ ...formData, selectedPillars: newPillars });
+  };
+
+  const handleInteractionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFormData({ ...formData, interactions: e.target.value });
+  };
+
+  const generateSpec = async () => {
+    setIsGenerating(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsGenerating(false);
+      nextStep();
+    }, 2000);
+  };
+
+  const canProceed = () => {
+    switch (currentStep) {
+      case 1:
+        return formData.idea.length > 0;
+      case 2:
+        return formData.mission.length > 0;
+      case 3:
+        return formData.selectedPillars.length >= 2;
+      case 4:
+        return formData.interactions.length > 0;
+      default:
+        return true;
+    }
+  };
 
   return (
-    <section ref={sectionRef} className="py-16 sm:py-24 px-4 sm:px-6">
-      <div className="max-w-content mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Spec your idea</h2>
-        <p className="mt-4 text-lg text-[var(--color-text-secondary)] max-w-2xl">
-          Try the methodology. Enter a product idea and walk through three steps to see how RootSpec structures your thinking.
-        </p>
+    <div data-test="spec-wizard" className="spec-wizard">
+      <div className="wizard-content">
+        <div className="wizard-header">
+          <h2>Try the Spec Wizard</h2>
+          <p>Generate a skeleton specification from your idea in 5 simple steps</p>
+        </div>
 
-        <div className="mt-12 max-w-2xl mx-auto">
-          {/* Step indicators */}
-          <div className="flex items-center gap-2 mb-8" role="tablist">
-            {[1, 2, 3].map((step) => {
-              const isActive = state.currentStep === step || (state.currentStep === 'result' && step === 3);
-              const isPast = typeof state.currentStep === 'number' ? step < state.currentStep : true;
-              return (
-                <div key={step} className="flex items-center gap-2">
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-[var(--color-accent)] text-white'
-                        : isPast
-                          ? 'bg-[var(--color-bg-elevated)] text-[var(--color-text)]'
-                          : 'bg-[var(--color-bg-elevated)] text-[var(--color-text-muted)]'
-                    }`}
-                    role="tab"
-                    aria-selected={isActive}
-                    aria-current={isActive ? 'step' : undefined}
-                  >
-                    {step}
-                  </div>
-                  {step < 3 && <div className="w-8 sm:w-16 h-px bg-[var(--color-border)]" />}
-                </div>
-              );
-            })}
-          </div>
+        <div className="wizard-progress">
+          {steps.map((step, index) => (
+            <div
+              key={step.id}
+              className={`progress-step ${currentStep >= step.id ? 'completed' : ''} ${
+                currentStep === step.id ? 'active' : ''
+              }`}
+            >
+              <div className="step-number">{step.id}</div>
+              <div className="step-info">
+                <div className="step-title">{step.title}</div>
+              </div>
+            </div>
+          ))}
+        </div>
 
-          {/* Step 1: Mission */}
-          {state.currentStep === 1 && (
-            <div role="tabpanel">
-              <h3 className="text-xl font-semibold">What's your product idea?</h3>
-              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-                Describe the mission in one sentence, or pick a template.
-              </p>
+        <div className="wizard-body">
+          {currentStep === 1 && (
+            <div data-test="step-1" className="wizard-step">
+              <h3>{steps[0].title}</h3>
+              <p>{steps[0].description}</p>
               <input
-                data-test="wizard-mission-input"
                 type="text"
-                value={state.mission}
-                onChange={(e) => update({ mission: e.target.value })}
-                placeholder="Help people accomplish meaningful work..."
-                className="mt-4 w-full px-4 py-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+                data-test="idea-input"
+                placeholder="e.g., A task management app for remote teams"
+                value={formData.idea}
+                onChange={handleIdeaChange}
+                className="wizard-input"
+                autoFocus
               />
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                {templates.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => update({ mission: t.mission })}
-                    className="p-3 text-left text-sm rounded-lg border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-bg-elevated)] transition-colors"
+            </div>
+          )}
+
+          {currentStep === 2 && (
+            <div data-test="step-2" className="wizard-step">
+              <h3>{steps[1].title}</h3>
+              <p>{steps[1].description}</p>
+              <div data-test="mission-options" className="option-grid">
+                {missionTemplates.map((template) => (
+                  <div
+                    key={template.id}
+                    data-test={`mission-template`}
+                    className={`option-card ${formData.mission === template.id ? 'selected' : ''}`}
+                    onClick={() => handleMissionSelect(template.id)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleMissionSelect(template.id);
+                      }
+                    }}
                   >
-                    <span className="font-medium">{t.label}</span>
-                  </button>
+                    <h4>{template.name}</h4>
+                    <p>{template.description}</p>
+                  </div>
                 ))}
               </div>
-              <button
-                data-test="wizard-next-step"
-                onClick={() => update({ currentStep: 2 })}
-                disabled={!state.mission}
-                className="mt-6 px-6 py-2.5 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
             </div>
           )}
 
-          {/* Step 2: Pillars */}
-          {state.currentStep === 2 && (
-            <div role="tabpanel">
-              <h3 className="text-xl font-semibold">What should users feel?</h3>
-              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-                Select 3–5 design pillars — emotional experiences, not features.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {pillarSuggestions.map((p) => {
-                  const selected = state.pillars.includes(p.label);
-                  return (
-                    <button
-                      key={p.id}
-                      data-test="wizard-pillar-option"
-                      onClick={() => togglePillar(p.label)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
-                        selected
-                          ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white'
-                          : 'border-[var(--color-border)] hover:border-[var(--color-accent)] text-[var(--color-text-secondary)]'
-                      }`}
-                    >
-                      {p.label}
-                    </button>
-                  );
-                })}
+          {currentStep === 3 && (
+            <div data-test="step-3" className="wizard-step">
+              <h3>{steps[2].title}</h3>
+              <p>{steps[2].description} (select at least 2)</p>
+              <div className="pillars-grid">
+                {pillars.map((pillar, index) => (
+                  <div
+                    key={pillar.id}
+                    data-test={`pillar-${index + 1}`}
+                    className={`pillar-card ${formData.selectedPillars.includes(pillar.id) ? 'selected' : ''}`}
+                    onClick={() => handlePillarToggle(pillar.id)}
+                    role="checkbox"
+                    aria-checked={formData.selectedPillars.includes(pillar.id)}
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handlePillarToggle(pillar.id);
+                      }
+                    }}
+                  >
+                    <h4>{pillar.name}</h4>
+                    <p>{pillar.description}</p>
+                    <div className="pillar-check">
+                      {formData.selectedPillars.includes(pillar.id) ? '✓' : ''}
+                    </div>
+                  </div>
+                ))}
               </div>
-              <p className="mt-3 text-xs text-[var(--color-text-muted)]">
-                {state.pillars.length}/5 selected {state.pillars.length < 3 && `(need at least 3)`}
-              </p>
-              <button
-                data-test="wizard-next-step"
-                onClick={() => update({ currentStep: 3 })}
-                disabled={!canAdvanceStep2}
-                className="mt-6 px-6 py-2.5 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
             </div>
           )}
 
-          {/* Step 3: Interaction */}
-          {state.currentStep === 3 && (
-            <div role="tabpanel">
-              <h3 className="text-xl font-semibold">Describe one key interaction</h3>
-              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-                Who does what, and what happens?
-              </p>
-              <div className="mt-4 space-y-3">
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">Who</label>
-                  <input
-                    data-test="wizard-interaction-who"
-                    type="text"
-                    value={state.interaction.who}
-                    onChange={(e) => setInteractionField('who', e.target.value)}
-                    placeholder="Team member"
-                    className="w-full px-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">Trigger</label>
-                  <input
-                    data-test="wizard-interaction-trigger"
-                    type="text"
-                    value={state.interaction.trigger}
-                    onChange={(e) => setInteractionField('trigger', e.target.value)}
-                    placeholder="Creates a new task"
-                    className="w-full px-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">Feedback</label>
-                  <input
-                    data-test="wizard-interaction-feedback"
-                    type="text"
-                    value={state.interaction.feedback}
-                    onChange={(e) => setInteractionField('feedback', e.target.value)}
-                    placeholder="Task appears in the team list"
-                    className="w-full px-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
-                  />
-                </div>
-              </div>
-              <button
-                data-test="wizard-generate"
-                onClick={() => update({ currentStep: 'result' })}
-                disabled={!canGenerate}
-                className="mt-6 px-6 py-2.5 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                Generate Spec
-              </button>
+          {currentStep === 4 && (
+            <div data-test="step-4" className="wizard-step">
+              <h3>{steps[3].title}</h3>
+              <p>{steps[3].description}</p>
+              <textarea
+                data-test="interaction-input"
+                placeholder="e.g., Add a new task quickly, Collaborate with team members, Track project progress"
+                value={formData.interactions}
+                onChange={handleInteractionChange}
+                className="wizard-textarea"
+                rows={4}
+                autoFocus
+              />
             </div>
           )}
 
-          {/* Result */}
-          {state.currentStep === 'result' && (
-            <div data-test="wizard-result">
-              <h3 className="text-xl font-semibold mb-4">Your skeleton spec</h3>
-              <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-code-bg)] p-5 font-mono text-sm space-y-4 overflow-x-auto">
-                <div>
-                  <div className="text-[var(--color-text-muted)]"># Level 1: Philosophy</div>
-                  <div className="mt-1"><strong>Mission:</strong> {state.mission}</div>
-                  <div className="mt-2"><strong>Design Pillars:</strong></div>
-                  {state.pillars.map((p, i) => (
-                    <div key={i} className="ml-4 text-[var(--color-text-secondary)]">{i + 1}. {p}</div>
-                  ))}
+          {currentStep === 5 && (
+            <div data-test="step-5" className="wizard-step">
+              <h3>{steps[4].title}</h3>
+              <p>Here's your generated specification skeleton:</p>
+              <div data-test="generated-spec" className="generated-spec">
+                <div data-test="spec-l1" className="spec-level">
+                  <h4>1. Philosophy</h4>
+                  <p>
+                    Mission: {missionTemplates.find(t => t.id === formData.mission)?.description}<br />
+                    Pillars: {formData.selectedPillars.map(id => pillars.find(p => p.id === id)?.name).join(', ')}
+                  </p>
                 </div>
-                <div className="border-t border-[var(--color-border)] pt-4">
-                  <div className="text-[var(--color-text-muted)]"># Level 3: Interaction</div>
-                  <div className="mt-1"><strong>Actor:</strong> {state.interaction.who}</div>
-                  <div><strong>Trigger:</strong> {state.interaction.trigger}</div>
-                  <div><strong>Feedback:</strong> {state.interaction.feedback}</div>
+                <div data-test="spec-l2" className="spec-level">
+                  <h4>2. Truths</h4>
+                  <p>User needs: {formData.idea}</p>
+                </div>
+                <div data-test="spec-l3" className="spec-level">
+                  <h4>3. Interactions</h4>
+                  <p>{formData.interactions}</p>
+                </div>
+                <div className="spec-level">
+                  <h4>4. Systems</h4>
+                  <p>Authentication, Data Management, User Interface</p>
+                </div>
+                <div className="spec-level">
+                  <h4>5. Implementation</h4>
+                  <p>User stories, API specifications, UI components</p>
                 </div>
               </div>
-              <button
-                data-test="wizard-start-over"
-                onClick={() => setState(initial)}
-                className="mt-6 px-6 py-2.5 rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:border-[var(--color-text-muted)] transition-colors"
-              >
-                Start over
-              </button>
+              <div className="spec-actions">
+                <button className="btn-primary">Download Spec</button>
+                <button className="btn-secondary" onClick={() => {
+                  setCurrentStep(1);
+                  setFormData({ idea: '', mission: '', selectedPillars: [], interactions: '' });
+                }}>
+                  Start Over
+                </button>
+              </div>
             </div>
           )}
         </div>
+
+        <div className="wizard-controls">
+          {currentStep > 1 && currentStep < 5 && (
+            <button
+              onClick={prevStep}
+              className="btn-secondary"
+            >
+              Previous
+            </button>
+          )}
+          {currentStep < 4 && (
+            <button
+              data-test="next-step"
+              onClick={nextStep}
+              disabled={!canProceed()}
+              className="btn-primary"
+            >
+              Next
+            </button>
+          )}
+          {currentStep === 4 && (
+            <button
+              data-test="generate-spec"
+              onClick={generateSpec}
+              disabled={!canProceed() || isGenerating}
+              className="btn-primary"
+            >
+              {isGenerating ? 'Generating...' : 'Generate Spec'}
+            </button>
+          )}
+        </div>
       </div>
-    </section>
+
+      <style jsx>{`
+        .spec-wizard {
+          background: var(--bg-primary);
+          padding: var(--spacing-3xl) 0;
+        }
+
+        .wizard-content {
+          max-width: var(--max-width);
+          margin: 0 auto;
+          padding: 0 var(--spacing-md);
+        }
+
+        .wizard-header {
+          text-align: center;
+          margin-bottom: var(--spacing-3xl);
+        }
+
+        .wizard-header h2 {
+          font-size: 2.5rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 0 0 var(--spacing-md) 0;
+        }
+
+        .wizard-header p {
+          font-size: 1.125rem;
+          color: var(--text-secondary);
+          margin: 0;
+        }
+
+        .wizard-progress {
+          display: flex;
+          justify-content: center;
+          gap: var(--spacing-lg);
+          margin-bottom: var(--spacing-3xl);
+          flex-wrap: wrap;
+        }
+
+        .progress-step {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-sm);
+          opacity: 0.5;
+          transition: opacity 0.3s ease;
+        }
+
+        .progress-step.completed, .progress-step.active {
+          opacity: 1;
+        }
+
+        .step-number {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: var(--border-color);
+          color: var(--text-secondary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          font-size: 0.875rem;
+          transition: all 0.3s ease;
+        }
+
+        .progress-step.completed .step-number {
+          background: var(--color-success);
+          color: white;
+        }
+
+        .progress-step.active .step-number {
+          background: var(--color-primary);
+          color: white;
+        }
+
+        .step-title {
+          font-weight: 500;
+          color: var(--text-primary);
+          font-size: 0.875rem;
+        }
+
+        .wizard-body {
+          min-height: 400px;
+          margin-bottom: var(--spacing-xl);
+        }
+
+        .wizard-step {
+          max-width: 600px;
+          margin: 0 auto;
+          text-align: center;
+        }
+
+        .wizard-step h3 {
+          font-size: 1.75rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin: 0 0 var(--spacing-md) 0;
+        }
+
+        .wizard-step p {
+          font-size: 1.125rem;
+          color: var(--text-secondary);
+          margin: 0 0 var(--spacing-xl) 0;
+        }
+
+        .wizard-input, .wizard-textarea {
+          width: 100%;
+          padding: var(--spacing-md);
+          border: 2px solid var(--border-color);
+          border-radius: 8px;
+          font-size: 1rem;
+          font-family: inherit;
+          background: var(--bg-secondary);
+          color: var(--text-primary);
+          transition: border-color 0.3s ease;
+        }
+
+        .wizard-input:focus, .wizard-textarea:focus {
+          outline: none;
+          border-color: var(--color-primary);
+        }
+
+        .option-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: var(--spacing-md);
+          margin-top: var(--spacing-lg);
+        }
+
+        .option-card, .pillar-card {
+          padding: var(--spacing-lg);
+          border: 2px solid var(--border-color);
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          background: var(--bg-secondary);
+          text-align: left;
+          position: relative;
+        }
+
+        .option-card:hover, .pillar-card:hover {
+          border-color: var(--color-primary);
+          transform: translateY(-2px);
+        }
+
+        .option-card.selected, .pillar-card.selected {
+          border-color: var(--color-primary);
+          background: rgba(0, 102, 204, 0.05);
+        }
+
+        .option-card:focus, .pillar-card:focus {
+          outline: 2px solid var(--color-primary);
+          outline-offset: 2px;
+        }
+
+        .option-card h4, .pillar-card h4 {
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin: 0 0 var(--spacing-sm) 0;
+        }
+
+        .option-card p, .pillar-card p {
+          color: var(--text-secondary);
+          margin: 0;
+          font-size: 0.875rem;
+        }
+
+        .pillars-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: var(--spacing-md);
+          margin-top: var(--spacing-lg);
+        }
+
+        .pillar-check {
+          position: absolute;
+          top: var(--spacing-md);
+          right: var(--spacing-md);
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: var(--color-primary);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          font-weight: 600;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .pillar-card.selected .pillar-check {
+          opacity: 1;
+        }
+
+        .generated-spec {
+          text-align: left;
+          background: var(--bg-secondary);
+          border-radius: 12px;
+          padding: var(--spacing-xl);
+          margin: var(--spacing-lg) 0;
+        }
+
+        .spec-level {
+          margin-bottom: var(--spacing-lg);
+          padding-bottom: var(--spacing-lg);
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .spec-level:last-child {
+          border-bottom: none;
+          margin-bottom: 0;
+          padding-bottom: 0;
+        }
+
+        .spec-level h4 {
+          color: var(--color-primary);
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0 0 var(--spacing-sm) 0;
+        }
+
+        .spec-level p {
+          color: var(--text-primary);
+          margin: 0;
+          line-height: 1.6;
+        }
+
+        .spec-actions {
+          display: flex;
+          gap: var(--spacing-md);
+          justify-content: center;
+          margin-top: var(--spacing-xl);
+        }
+
+        .wizard-controls {
+          display: flex;
+          justify-content: center;
+          gap: var(--spacing-md);
+        }
+
+        .btn-primary, .btn-secondary {
+          padding: var(--spacing-md) var(--spacing-xl);
+          border-radius: 8px;
+          font-weight: 600;
+          text-decoration: none;
+          border: 2px solid;
+          cursor: pointer;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+          min-width: 120px;
+        }
+
+        .btn-primary {
+          background: var(--color-primary);
+          color: white;
+          border-color: var(--color-primary);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+          background: #0052a3;
+          border-color: #0052a3;
+          transform: translateY(-2px);
+        }
+
+        .btn-primary:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .btn-secondary {
+          background: transparent;
+          color: var(--color-primary);
+          border-color: var(--color-primary);
+        }
+
+        .btn-secondary:hover {
+          background: var(--color-primary);
+          color: white;
+          transform: translateY(-2px);
+        }
+
+        .btn-primary:focus, .btn-secondary:focus {
+          outline: 2px solid var(--color-primary);
+          outline-offset: 2px;
+        }
+
+        @media (max-width: 768px) {
+          .wizard-header h2 {
+            font-size: 2rem;
+          }
+
+          .wizard-progress {
+            gap: var(--spacing-md);
+          }
+
+          .step-info {
+            display: none;
+          }
+
+          .wizard-step h3 {
+            font-size: 1.5rem;
+          }
+
+          .option-grid, .pillars-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .wizard-controls {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .spec-actions {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .btn-primary, .btn-secondary {
+            width: 100%;
+            max-width: 200px;
+          }
+        }
+      `}</style>
+    </div>
   );
 }

@@ -1,30 +1,227 @@
 ---
-import { GITHUB_REPO } from '../data/config';
+// Hero section that explains RootSpec clearly
 ---
 
-<section class="py-24 sm:py-32 px-4 sm:px-6">
-  <div class="max-w-content mx-auto text-center">
-    <h1 data-test="hero-tagline" class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-      Philosophy guides implementation,<br class="hidden sm:block" /> never vice versa.
-    </h1>
-    <p data-test="hero-description" class="mt-6 text-lg sm:text-xl text-[var(--color-text-secondary)] max-w-2xl mx-auto leading-relaxed">
-      RootSpec is a hierarchical specification system that bridges human intent and software implementation. When code and specs can be generated trivially, the real value is validation and proof.
-    </p>
-    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-      <a
-        href="#get-started"
-        class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] transition-colors"
-      >
-        Get Started
-      </a>
-      <a
-        href={GITHUB_REPO}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:border-[var(--color-text-muted)] transition-colors"
-      >
-        View on GitHub
-      </a>
+<section data-test="hero-section" class="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1 data-test="hero-tagline" class="hero-title">
+        Build better software with <span class="brand">RootSpec</span>
+      </h1>
+      <p class="hero-subtitle">
+        RootSpec is a methodology that transforms vague ideas into structured, testable specifications.
+        Stop building the wrong thing—start building it right.
+      </p>
+      <div class="hero-actions">
+        <a href="#hierarchy-explorer" class="btn-primary">Explore the Hierarchy</a>
+        <a href="#spec-wizard" class="btn-secondary">Try the Wizard</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hierarchy-preview">
+        <div class="level level-1">
+          <span class="level-number">1</span>
+          <span class="level-name">Philosophy</span>
+        </div>
+        <div class="level level-2">
+          <span class="level-number">2</span>
+          <span class="level-name">Truths</span>
+        </div>
+        <div class="level level-3">
+          <span class="level-number">3</span>
+          <span class="level-name">Interactions</span>
+        </div>
+        <div class="level level-4">
+          <span class="level-number">4</span>
+          <span class="level-name">Systems</span>
+        </div>
+        <div class="level level-5">
+          <span class="level-number">5</span>
+          <span class="level-name">Implementation</span>
+        </div>
+        <div class="connection-lines">
+          <!-- Visual connection lines between levels -->
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+  .hero {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    padding: var(--spacing-3xl) 0;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-3xl);
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 var(--spacing-lg) 0;
+    color: var(--text-primary);
+  }
+
+  .brand {
+    color: var(--color-primary);
+    background: linear-gradient(135deg, var(--color-primary), #0052a3);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin: 0 0 var(--spacing-xl) 0;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+  }
+
+  .btn-primary, .btn-secondary {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 160px;
+  }
+
+  .btn-primary {
+    background: var(--color-primary);
+    color: white;
+    border: 2px solid var(--color-primary);
+  }
+
+  .btn-primary:hover {
+    background: #0052a3;
+    border-color: #0052a3;
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  .btn-secondary:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .btn-primary:focus, .btn-secondary:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Hierarchy Preview */
+  .hierarchy-preview {
+    position: relative;
+    padding: var(--spacing-xl);
+  }
+
+  .level {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-md);
+    margin: var(--spacing-sm) 0;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .level:hover {
+    border-color: var(--color-primary);
+    transform: translateX(8px);
+  }
+
+  .level-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--color-primary);
+    color: white;
+    border-radius: 50%;
+    font-weight: 600;
+    margin-right: var(--spacing-md);
+    font-size: 0.875rem;
+  }
+
+  .level-name {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: var(--spacing-xl) 0;
+      min-height: auto;
+    }
+
+    .hero-content {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-xl);
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: 2rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.125rem;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+
+    .btn-primary, .btn-secondary {
+      min-width: 140px;
+    }
+
+    .hierarchy-preview {
+      padding: var(--spacing-md);
+    }
+
+    .level {
+      padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .level-number {
+      width: 28px;
+      height: 28px;
+      font-size: 0.75rem;
+    }
+
+    .level-name {
+      font-size: 0.875rem;
+    }
+  }
+</style>

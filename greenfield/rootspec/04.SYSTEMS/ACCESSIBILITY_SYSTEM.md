@@ -1,67 +1,162 @@
-# Level 4: Accessibility System
+# Accessibility System
 
 ## Responsibility
+Ensures universal access to the RootSpec marketing site through keyboard navigation, screen reader support, and WCAG 2.1 AA compliance. Manages focus states, ARIA labels, semantic structure, and accessibility testing integration.
 
-Keyboard navigation, focus management, ARIA attributes, reduced motion support, and screen reader announcements. Ensures the site is usable by everyone regardless of input method or assistive technology.
+## Boundaries
+**Owns:**
+- Keyboard navigation and focus management
+- Screen reader support and ARIA implementation
+- Semantic HTML structure and landmark organization
+- Accessibility testing and compliance validation
+- User preference respect (motion, contrast, screen reader)
 
-## Keyboard Navigation
+**Does not own:**
+- Visual styling or color choices (THEME_SYSTEM)
+- Interactive functionality implementation (INTERACTIVE_SYSTEM)
+- Page layout or responsive behavior (LAYOUT_SYSTEM)
+- Content copy or messaging (CONTENT_SYSTEM)
 
-### Global
-- Tab moves focus through all interactive elements in document order
-- Shift+Tab moves focus backward
-- Skip-to-content link as first focusable element
+## Data Ownership
 
-### Hierarchy Explorer
-- Tab to the explorer, then arrow keys (Up/Down) to move between levels
-- Enter/Space to expand/collapse a level
-- Escape to collapse the currently expanded level
-- When a level is focused, its reference highlights are shown (same as hover)
+**Accessibility State:**
+```typescript
+{
+  focusManagement: {
+    currentFocusElement: Element | null,
+    focusHistory: Element[],
+    skipLinkTargets: Map<string, Element>
+  },
+  screenReader: {
+    liveRegions: Map<string, Element>,
+    announcementQueue: string[],
+    lastAnnouncement: string
+  },
+  userPreferences: {
+    prefersReducedMotion: boolean,
+    prefersHighContrast: boolean,
+    screenReaderActive: boolean,
+    keyboardNavigation: boolean
+  }
+}
+```
 
-### Spec Wizard
-- Tab moves between form fields within a step
-- Enter on "Next"/"Generate" advances the step
-- Shift+Tab returns to previous field
-- Escape does not close the wizard (it's inline, not modal)
+**ARIA Configuration:**
+```typescript
+{
+  roles: Map<string, string>,
+  labels: Map<string, string>,
+  descriptions: Map<string, string>,
+  states: Map<string, Record<string, boolean | string>>
+}
+```
 
-### Before/After Comparison
-- Tab to the toggle
-- Enter/Space or Arrow keys to switch views
+## Interactions with Other Systems
 
-### Theme Toggle
-- Tab to reach it
-- Enter/Space to toggle
+**→ INTERACTIVE_SYSTEM:** Provides accessibility enhancements for dynamic features
+- Keyboard event handling for interactive components
+- Focus management during state changes
+- ARIA live announcements for dynamic content updates
+- Screen reader compatible interaction patterns
 
-## Focus Management
+**→ LAYOUT_SYSTEM:** Ensures layout supports accessibility requirements
+- Semantic landmark structure for navigation
+- Skip link implementation and targeting
+- Focus indicator visibility requirements
+- Responsive layout accessibility considerations
 
-- Focus ring visible on all interactive elements (styled, not browser default)
-- Focus ring uses sufficient contrast in both light and dark themes
-- When a section of the hierarchy explorer expands, focus moves to the expanded content
-- When the wizard advances a step, focus moves to the first input of the new step
+**→ THEME_SYSTEM:** Validates accessibility compliance for visual design
+- Color contrast ratio validation
+- Motion preference implementation
+- High contrast mode support
+- Focus indicator styling requirements
 
-## ARIA Attributes
+**← CONTENT_SYSTEM:** Receives content for accessibility enhancement
+- Alt text and descriptive content
+- Error messages and user guidance text
+- Navigation labels and landmark descriptions
 
-| Element | Attributes |
-|---------|------------|
-| Hierarchy levels | `role="button"`, `aria-expanded`, `aria-controls` |
-| Hierarchy container | `role="list"` with `aria-label="Specification hierarchy"` |
-| Wizard steps | `role="tablist"` / `role="tabpanel"` pattern |
-| Wizard progress | `aria-current="step"` on active step indicator |
-| Before/After toggle | `role="radiogroup"` with `role="radio"` options |
-| Theme toggle | `role="switch"`, `aria-checked`, `aria-label` |
-| Section navigation | `role="navigation"`, `aria-label` per nav region |
+## Accessibility Features
 
-## Reduced Motion
+**Keyboard Navigation:**
+- Full site functionality available via keyboard only
+- Logical tab order through all interactive elements
+- Escape key handling for modal/overlay closure
+- Arrow key navigation for complex interactive components
+- Custom keyboard shortcuts for common actions
 
-- Check `prefers-reduced-motion: reduce` media query
-- If enabled: disable all CSS transitions and animations
-- Scroll behavior becomes instant (no smooth scroll)
-- Section entry animations are suppressed
-- Interactive state changes are instant (no fade/slide)
+**Screen Reader Support:**
+- Semantic HTML structure with proper heading hierarchy
+- ARIA landmarks for major page sections
+- ARIA live regions for dynamic content announcements
+- Descriptive labels for all interactive elements
+- Context information for complex interactions
 
-## Screen Reader Announcements
+**Focus Management:**
+- Visible focus indicators for all interactive elements
+- Focus trapping in modal/overlay components
+- Focus restoration after dynamic content changes
+- Skip links for efficient navigation between sections
+- Focus management during interactive state changes
 
-- Live region (`aria-live="polite"`) for dynamic content changes:
-  - Hierarchy explorer: announce level name and state when expanded/collapsed
-  - Wizard: announce step transitions (e.g., "Choose design pillars")
-  - Before/After: announce which view is active
-  - Theme: announce new theme ("Switched to dark mode")
+**User Preference Respect:**
+- Reduced motion implementation via CSS and JavaScript
+- High contrast mode detection and support
+- Screen reader detection for optimized interaction patterns
+- Keyboard navigation preference detection and enhancement
+
+## WCAG 2.1 AA Compliance
+
+**Perceivable:**
+- Color contrast ratios meet AA standards (4.5:1 normal text, 3:1 large text)
+- Text scaling up to 200% without horizontal scrolling
+- Alternative text for all meaningful images
+- Captions/transcripts for any audio/video content
+
+**Operable:**
+- Keyboard accessibility for all functionality
+- No flashing content that could trigger seizures
+- Sufficient time limits or user control over time limits
+- Clear navigation and page structure
+
+**Understandable:**
+- Clear, consistent navigation patterns
+- Error identification and correction guidance
+- Predictable interface behavior and responses
+- Plain language content appropriate for target audience
+
+**Robust:**
+- Valid, semantic HTML markup
+- Assistive technology compatibility
+- Progressive enhancement for JavaScript features
+- Cross-browser accessibility support
+
+## Testing Integration
+
+**Automated Testing:**
+- axe-core integration for automated accessibility scanning
+- Lighthouse accessibility audit integration
+- Color contrast validation during build process
+- ARIA implementation validation
+
+**Manual Testing:**
+- Keyboard-only navigation testing procedures
+- Screen reader testing with NVDA/VoiceOver/JAWS
+- Voice control testing for speech recognition users
+- Mobile accessibility testing with TalkBack/VoiceOver
+
+**User Testing:**
+- Testing with actual users who rely on assistive technologies
+- Feedback collection and iteration based on real usage
+- Accessibility persona development and validation
+- Continuous improvement based on user experience data
+
+## Error Prevention and Recovery
+
+**Input Validation:** Clear, immediate feedback for form errors with descriptive, actionable error messages.
+
+**Navigation Recovery:** Multiple ways to find content (navigation, search, sitemap) with clear breadcrumbs and orientation cues.
+
+**Interaction Guidance:** Help text and examples provided for complex interactions with clear instructions for successful completion.
+
+**Fallback Patterns:** Graceful degradation when JavaScript fails, ensuring core functionality remains accessible.

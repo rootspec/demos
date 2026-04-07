@@ -1,132 +1,119 @@
-# Level 4: Interactive System
+# Interactive System
 
 ## Responsibility
+Manages all dynamic user interactions on the RootSpec marketing site. Handles client-side state, user input processing, and interactive feature behavior including the hierarchy explorer, spec wizard, and before/after comparison.
 
-All interactive features: hierarchy explorer, spec wizard, and before/after comparison. Owns user interaction state, input handling, and dynamic output rendering.
+## Boundaries
+**Owns:**
+- Interactive component state and user input handling
+- Client-side form processing and validation
+- Dynamic content generation (spec wizard output)
+- Interactive animation triggers and state changes
+- User interaction event handling and processing
 
-## Hierarchy Explorer
+**Does not own:**
+- Static content or configuration data (CONTENT_SYSTEM)
+- Visual styling or theme state (THEME_SYSTEM)
+- Page layout or navigation structure (LAYOUT_SYSTEM)  
+- Accessibility markup or focus management (ACCESSIBILITY_SYSTEM)
 
-### State
+## Data Ownership
 
-```
-explorer_state:
-  expanded_level: null | 1 | 2 | 3 | 4 | 5
-  hovered_level: null | 1 | 2 | 3 | 4 | 5
-  highlighted_references: [level_numbers]
-```
-
-### Entities
-
-Each level has:
-- id (1-5)
-- icon (emoji)
-- title (string)
-- subtitle (string — the "WHY", "WHAT", "HOW", etc.)
-- example_content (markdown string — shown when expanded)
-- allowed_references (array of level ids that this level can reference)
-
-### Behavior
-
-- Click a level → toggles expansion. If another level is expanded, collapse it first.
-- Hover a level → highlight the levels it can reference (arrows/lines illuminate upward)
-- Reference visualization: lines or arrows between levels, flowing upward only. When a level is hovered, its reference lines highlight; all others dim.
-- Only one level expanded at a time.
-
-### Data
-
-Level content is hardcoded (not fetched). The five levels and their example content are defined as a static data structure.
-
-### Fallback
-
-If JavaScript fails to initialize, all five levels render in a static expanded state with text descriptions of reference rules.
-
-## Spec Wizard
-
-### State
-
-```
-wizard_state:
-  current_step: 1 | 2 | 3 | "result"
-  mission: string (user input)
-  selected_template: string | null
-  pillars: [string] (3-5 selected or custom)
-  interaction: {
-    who: string
-    trigger: string
-    feedback: string
+**Component State:**
+```typescript
+{
+  hierarchyExplorer: {
+    selectedLevel: string | null,
+    expandedLevels: Set<string>,
+    hoveredLevel: string | null
+  },
+  specWizard: {
+    currentStep: number,
+    userInput: {
+      idea: string,
+      mission: string,
+      pillars: string[],
+      interaction: string
+    },
+    generatedOutput: string
+  },
+  beforeAfterComparison: {
+    currentView: 'without' | 'with',
+    transitionState: 'idle' | 'transitioning'
   }
+}
 ```
 
-### Step 1: Mission
+**User Input Processing:**
+- Form input validation and sanitization
+- Multi-step wizard navigation state
+- Interactive element selection tracking
+- Dynamic content generation based on user choices
 
-- Text input field for product idea
-- [template-count] template suggestions displayed as clickable cards
-- Selecting a template pre-fills the text input
-- "Next" button enabled when input is non-empty
+## Interactions with Other Systems
 
-### Step 2: Design Pillars
+**← CONTENT_SYSTEM:** Receives structured data for interactive features
+- Hierarchy level data for explorer visualization
+- Wizard templates and option lists  
+- Comparison content for before/after slider
 
-- Display [pillar-suggestion-count] suggested emotional pillars as selectable chips
-- Suggestions may adapt based on mission input (simple keyword matching, not AI)
-- User can select 3-5 pillars
-- User can type custom pillars
-- "Next" enabled when 3-5 pillars selected
+**→ THEME_SYSTEM:** Coordinates with theme state for dynamic elements
+- Applies current theme to generated wizard output
+- Ensures interactive animations respect motion preferences
+- Updates dynamic elements when theme changes
 
-### Step 3: Key Interaction
+**← ACCESSIBILITY_SYSTEM:** Receives behavioral enhancements
+- Keyboard navigation event handling
+- Focus management for complex interactions
+- Screen reader announcements for state changes
 
-- Three text inputs: Who (user role), Trigger (what starts it), Feedback (what the user gets)
-- Optional: pre-fill suggestions based on mission
-- "Generate" button enabled when all three fields are non-empty
+**→ LAYOUT_SYSTEM:** Triggers layout updates for responsive interactions
+- Section visibility changes during navigation
+- Dynamic content height adjustments
+- Mobile interaction pattern adaptations
 
-### Result
+## Interactive Features
 
-- Display a skeleton spec card showing:
-  - L1 section: Mission statement + selected pillars
-  - L2 section: Inferred truth (template-based)
-  - L3 section: Interaction loop from the three inputs
-- Card is styled to look like a spec document
-- "Start over" button resets wizard state
+**Hierarchy Explorer:**
+- Visual connection display between RootSpec levels
+- Click-to-expand level details with smooth animations
+- Hover highlighting of allowed reference relationships  
+- Touch-friendly interaction patterns for mobile devices
 
-### Fallback
+**Spec Wizard:**
+- Multi-step form with progress indication
+- Template selection with preview functionality
+- Real-time spec output generation as user progresses
+- Client-side validation with helpful error guidance
 
-If JavaScript fails, show a pre-filled example spec card with all three steps visible as static content.
+**Before/After Comparison:**
+- Slider interface for content comparison
+- Smooth transition animations between states
+- Touch gesture support for mobile slider control
+- Keyboard navigation for accessibility compliance
 
-## Before/After Comparison
+**Theme Toggle:**
+- Manual theme switching with immediate visual feedback
+- Smooth transition animations during theme changes
+- State persistence across browser sessions
+- Integration with system preference detection
 
-### State
+## Client-Side Processing
 
-```
-comparison_state:
-  active_view: "without" | "with"
-```
+**No External Dependencies:** All processing happens in the browser without API calls or external services.
 
-### Panels
+**Progressive Enhancement:** Core functionality available even if JavaScript fails to load or execute.
 
-**Without spec panel:**
-- Vague requirements document excerpt (real content, not lorem ipsum)
-- Ambiguous user story example
-- Decision with no traceable rationale
+**Performance Optimization:** Lazy loading for complex interactions. Debounced input handling to prevent excessive processing.
 
-**With RootSpec panel:**
-- Same requirements, structured into the five-level hierarchy
-- Testable user story with acceptance criteria
-- Decision traced to a design pillar
+**State Management:** Lightweight, component-local state management. No global state store required for current feature complexity.
 
-### Behavior
+## Error Handling
 
-- Toggle or slider switches between the two views
-- On desktop: side-by-side with a draggable divider, or toggle buttons
-- On mobile: stacked panels with toggle buttons
-- Transition between states is smooth (crossfade or slide)
+**Input Validation:** Client-side validation with immediate feedback. Clear error messages guide users toward valid input.
 
-### Fallback
+**Graceful Degradation:** Interactive features degrade to static alternatives when JavaScript is unavailable.
 
-If JavaScript fails, both panels render side-by-side statically.
+**Touch Interaction Fallbacks:** Alternative interaction methods for devices with limited touch capability.
 
-## Shared Interactive Conventions
-
-- All interactive elements use `data-test` attributes
-- All state is ephemeral — no persistence between page loads
-- Animations respect `prefers-reduced-motion`
-- Focus management: interactive elements are focusable and keyboard-operable
-- ARIA: `role`, `aria-expanded`, `aria-selected`, `aria-label` on all interactive elements
+**Connection Issues:** All features work offline since no external dependencies exist.

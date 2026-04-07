@@ -1,11 +1,82 @@
 ---
-import { SEED_URL, SPEC_URL } from '../data/config';
+// Meta banner showing this site was generated with RootSpec
 ---
 
-<section data-test="meta-banner" class="mx-4 sm:mx-6 lg:mx-auto max-w-content rounded-lg border border-[var(--color-banner-border)] bg-[var(--color-banner-bg)] px-4 sm:px-6 py-4">
-  <p class="text-sm sm:text-base text-[var(--color-text-secondary)] leading-relaxed">
-    <strong class="text-[var(--color-text)]">This site is a RootSpec demo.</strong> It was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups. The spec, the code, and the tests were all produced by running four commands.
-    <a data-test="meta-banner-seed-link" href={SEED_URL} target="_blank" rel="noopener noreferrer" class="text-[var(--color-accent)] hover:underline whitespace-nowrap">View the seed &rarr;</a>
-    <a data-test="meta-banner-spec-link" href={SPEC_URL} target="_blank" rel="noopener noreferrer" class="text-[var(--color-accent)] hover:underline whitespace-nowrap ml-3">View the spec &rarr;</a>
-  </p>
+<section data-test="meta-banner" class="meta-banner">
+  <div class="meta-content">
+    <p class="meta-text">
+      🎯 This site was generated using the RootSpec methodology.
+      <a href="/SEED.md" data-test="seed-link" class="meta-link">View the seed idea</a> or
+      <a href="/rootspec" data-test="spec-link" class="meta-link">explore the specification</a>.
+    </p>
+  </div>
 </section>
+
+<style>
+  .meta-banner {
+    background: linear-gradient(135deg, var(--color-primary), #0052a3);
+    color: white;
+    padding: var(--spacing-sm) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .meta-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>') repeat;
+    animation: float 20s linear infinite;
+  }
+
+  @keyframes float {
+    0% { transform: translateX(-50px) translateY(-50px); }
+    100% { transform: translateX(50px) translateY(50px); }
+  }
+
+  .meta-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    position: relative;
+    z-index: 1;
+  }
+
+  .meta-text {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .meta-link {
+    color: white;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity 0.3s ease;
+  }
+
+  .meta-link:hover {
+    opacity: 0.8;
+  }
+
+  .meta-link:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .meta-text {
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .meta-content {
+      padding: 0 var(--spacing-sm);
+    }
+  }
+</style>

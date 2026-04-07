@@ -1,49 +1,158 @@
-# Level 4: Layout System
+# Layout System
 
 ## Responsibility
+Manages responsive design, page structure, and navigation for the RootSpec marketing site. Handles section organization, mobile adaptations, scroll behavior, and responsive breakpoint management across all devices.
 
-Page structure, section ordering, scroll behavior, navigation indicators, and responsive layout. The container that everything else lives inside.
+## Boundaries
+**Owns:**
+- Page structure and section organization
+- Responsive breakpoint management and mobile adaptations
+- Navigation structure and scroll behavior
+- Grid layouts and component positioning
+- Viewport-based layout calculations and adjustments
 
-## Page Structure
+**Does not own:**
+- Visual styling or color theming (THEME_SYSTEM)
+- Interactive behavior or user input handling (INTERACTIVE_SYSTEM)
+- Content or copy within sections (CONTENT_SYSTEM)
+- Semantic markup or accessibility attributes (ACCESSIBILITY_SYSTEM)
 
-The page is a single vertical scroll with ordered sections:
+## Data Ownership
 
-| Order | Section | Content System Owner |
-|-------|---------|---------------------|
-| 1 | Header | Site title, version badge, theme toggle, nav links |
-| 2 | Hero | Tagline, one-sentence explanation |
-| 3 | Meta Banner | "This site is a RootSpec demo" with links |
-| 4 | The Problem | Pain points section |
-| 5 | How It Works | Four-skill walkthrough |
-| 6 | Hierarchy Explorer | Interactive five-level visualization |
-| 7 | Spec Wizard | Interactive "Spec Your Idea" |
-| 8 | Before/After | Interactive comparison |
-| 9 | Open Source CTA | GitHub, getting started, community |
-| 10 | Footer | Links, credits |
+**Layout State:**
+```typescript
+{
+  viewport: {
+    width: number,
+    height: number,
+    breakpoint: 'mobile' | 'tablet' | 'desktop' | 'wide'
+  },
+  navigation: {
+    activeSection: string,
+    scrollPosition: number,
+    isHeaderVisible: boolean
+  },
+  sections: {
+    visibleSections: Set<string>,
+    sectionOffsets: Map<string, number>,
+    sectionHeights: Map<string, number>
+  }
+}
+```
 
-## Scroll Behavior
+**Responsive Configuration:**
+```typescript
+{
+  breakpoints: {
+    mobile: 0,
+    tablet: 768,
+    desktop: 1024,
+    wide: 1280
+  },
+  gridColumns: {
+    mobile: 1,
+    tablet: 2,
+    desktop: 3,
+    wide: 4
+  },
+  spacing: {
+    mobile: { section: string, component: string },
+    desktop: { section: string, component: string }
+  }
+}
+```
 
-- Smooth scroll enabled for in-page navigation links
-- Sections animate on entry (slide/fade) when they enter the viewport
-- Animation respects `prefers-reduced-motion` — if enabled, sections appear without animation
-- Scroll position tracked for navigation indicator
+## Interactions with Other Systems
 
-## Navigation
+**← THEME_SYSTEM:** Receives theme values for layout styling
+- Spacing and sizing tokens from current theme
+- Motion preferences for scroll and navigation animations
+- Color values for layout elements (borders, backgrounds)
 
-- Minimal header with section jump links
-- Optional floating nav dot indicator on the side (desktop only)
-- Header collapses or becomes sticky on scroll
+**→ INTERACTIVE_SYSTEM:** Provides layout context for interactive features
+- Section visibility for scroll-triggered interactions
+- Viewport dimensions for responsive interactive behavior
+- Navigation state for user orientation feedback
 
-## Responsive Breakpoints
+**← CONTENT_SYSTEM:** Receives content structure for layout organization
+- Section content and hierarchy for page structure
+- Navigation labels and organization
+- Meta content for header and footer layout
 
-| Breakpoint | Layout |
-|------------|--------|
-| < [small-breakpoint] | Single column, stacked sections, hamburger nav |
-| [small-breakpoint] – [large-breakpoint] | Two-column where appropriate, simplified interactives |
-| > [large-breakpoint] | Full layout, side-by-side comparisons, full interactives |
+**← ACCESSIBILITY_SYSTEM:** Receives semantic structure requirements
+- Landmark organization for screen reader navigation
+- Focus management constraints for layout behavior
+- Skip link targets and navigation shortcuts
 
-## Data Attributes
+## Responsive Strategy
 
-- `data-section="<section-name>"` on each section container
-- `data-visible="true|false"` toggled by intersection observer
-- `data-test="<element-name>"` on all testable elements
+**Mobile-First Design:**
+- Base styles target mobile viewport (320px+)
+- Progressive enhancement for larger screens
+- Touch-friendly interaction targets (44px minimum)
+- Simplified navigation patterns for mobile usage
+
+**Breakpoint Management:**
+- Fluid typography scaling between breakpoints
+- Container width management with max-width constraints
+- Flexible grid systems that adapt to available space
+- Image and media responsive sizing strategies
+
+**Performance Optimization:**
+- CSS containment for isolated layout regions
+- Efficient viewport change handling with debouncing
+- Minimal layout recalculation during responsive changes
+- Lazy loading coordination for below-fold content
+
+## Section Organization
+
+**Page Structure:**
+1. Meta Banner (persistent, accessible)
+2. Hero Section (primary messaging)
+3. Problem Section (motivation)
+4. How It Works Section (methodology explanation)
+5. Interactive Sections (hierarchy explorer, wizard, comparison)
+6. CTA Section (conversion and next steps)
+7. Footer (attribution and links)
+
+**Navigation Coordination:**
+- Smooth scroll behavior between sections
+- Active section highlighting in navigation
+- Mobile navigation menu with accessible controls
+- Skip links for keyboard navigation efficiency
+
+**Layout Patterns:**
+- Consistent section padding and margin rhythm
+- Visual hierarchy through spacing and typography
+- Content width constraints for optimal reading
+- Flexible component layouts within sections
+
+## Responsive Interactive Features
+
+**Hierarchy Explorer:**
+- Grid layout adapts from single column (mobile) to multi-column (desktop)
+- Touch-friendly interaction areas for mobile
+- Simplified connection visualization on small screens
+- Collapsible sections for mobile space management
+
+**Spec Wizard:**
+- Single-column form layout on mobile
+- Multi-column layout with sidebar on desktop
+- Progress indicator adapts to available width
+- Touch-optimized form controls and spacing
+
+**Before/After Comparison:**
+- Stacked layout on mobile with toggle controls
+- Side-by-side layout on desktop with slider
+- Touch gesture support for mobile interaction
+- Keyboard navigation for all viewport sizes
+
+## Performance Considerations
+
+**Layout Efficiency:** CSS Grid and Flexbox for modern, efficient layouts with minimal DOM manipulation required.
+
+**Viewport Management:** Efficient viewport change detection with ResizeObserver and debounced event handling.
+
+**Scroll Performance:** Passive scroll listeners and IntersectionObserver for section visibility without layout thrashing.
+
+**Mobile Optimization:** Reduced layout complexity on mobile devices for improved performance and battery life.
