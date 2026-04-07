@@ -1,1 +1,62 @@
-../../by_phase/MVP/responsive.yaml
+# =============================================================================
+# USER STORY: Use interactive features on mobile device
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, ACCESSIBILITY_SYSTEM]
+# @last_updated: 2026-04-07T23:11:36Z
+
+id: US-105
+title: Use interactive features on mobile device
+requirement_id: R-105
+
+acceptance_criteria:
+  - id: AC-105-1
+    title: Touch targets are appropriately sized on mobile
+    narrative: |
+      Given I am using a mobile device
+      When I try to interact with hierarchy explorer or wizard
+      Then all touch targets should be easily tappable
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - touch: { selector: '[data-test=level-2]' }
+    then:
+      - shouldHaveClass: { selector: '[data-test=level-2]', class: 'expanded' }
+      - shouldExist: { selector: '[data-test=level-2-content]' }
+
+  - id: AC-105-2
+    title: Content reflows appropriately on mobile
+    narrative: |
+      Given I am viewing the site on mobile
+      When I scroll through sections
+      Then content should be readable without horizontal scroll
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+    when:
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    then:
+      - shouldNotHaveHorizontalScroll: true
+      - shouldBeReadable: { selector: '[data-test=wizard-content]' }
+
+  - id: AC-105-3
+    title: Spec wizard works with touch interactions
+    narrative: |
+      Given I am using the wizard on mobile
+      When I progress through the steps
+      Then all interactions should work with touch
+    given:
+      - setViewport: { width: 375, height: 667 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    when:
+      - touch: { selector: '[data-test=wizard-product-input]' }
+      - type: { text: 'Mobile task app' }
+      - touch: { selector: '[data-test=wizard-next]' }
+    then:
+      - shouldExist: { selector: '[data-test=wizard-step-2]' }
+      - shouldContain: { selector: '[data-test=wizard-progress]', text: 'Step 2' }

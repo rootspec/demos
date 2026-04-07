@@ -1,16 +1,103 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Theme System
+# FINE-TUNING: Theme System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: THEME_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# @last_updated: 2026-04-07T23:11:36Z
 
-transition_duration: 200
-# @unit: milliseconds
-# @rationale: Fast enough to feel instant, slow enough to avoid jarring flash
-# @constraints: min=100, max=400, type=integer
+transitions:
+  theme_switch_duration:
+    value: 200
+    # @unit: milliseconds
+    # @rationale: Quick enough to feel instant, slow enough to be comfortable
+    # @constraint: min=100, max=400
 
-localStorage_key: "rootspec-theme"
-# @rationale: Namespaced to avoid collisions with other apps on same domain
+  color_transition_easing:
+    value: "ease-out"
+    # @unit: css-timing-function
+    # @rationale: Natural feeling transition that settles quickly
+    # @constraint: options=[ease, ease-out, ease-in-out]
+
+  focus_indicator_duration:
+    value: 150
+    # @unit: milliseconds
+    # @rationale: Fast focus feedback without feeling jarring
+    # @constraint: min=100, max=250
+
+contrast_ratios:
+  text_primary:
+    value: 7.0
+    # @unit: ratio
+    # @rationale: WCAG AAA compliance for maximum accessibility
+    # @constraint: min=7.0, max=21.0
+    # @inviolable: true
+
+  text_secondary:
+    value: 4.5
+    # @unit: ratio
+    # @rationale: WCAG AA compliance for secondary content
+    # @constraint: min=4.5, max=7.0
+
+  interactive_elements:
+    value: 3.0
+    # @unit: ratio
+    # @rationale: Sufficient contrast for UI elements while maintaining design
+    # @constraint: min=3.0, max=4.5
+
+color_palette:
+  primary_hue:
+    value: 220
+    # @unit: degrees
+    # @rationale: Professional blue that works well in both themes
+    # @constraint: min=200, max=240
+
+  primary_saturation_light:
+    value: 85
+    # @unit: percentage
+    # @rationale: Vibrant enough for brand recognition, not overwhelming in light mode
+    # @constraint: min=70, max=95
+
+  primary_saturation_dark:
+    value: 60
+    # @unit: percentage
+    # @rationale: Reduced saturation prevents eye strain in dark mode
+    # @constraint: min=45, max=75
+
+  accent_hue:
+    value: 160
+    # @unit: degrees
+    # @rationale: Complementary green for interactive elements and success states
+    # @constraint: min=140, max=180
+
+motion_preferences:
+  reduced_motion_threshold:
+    value: 0.5
+    # @unit: ratio
+    # @rationale: Significantly reduced but not eliminated motion for essential feedback
+    # @constraint: min=0.2, max=0.8
+
+  animation_disable_completely:
+    value: false
+    # @unit: boolean
+    # @rationale: Maintain essential transitions even with reduced motion preference
+    # @constraint: options=[true, false]
+    # @ethical_review: Balances accessibility needs with functional requirements
+
+border_radius:
+  small:
+    value: 4
+    # @unit: pixels
+    # @rationale: Subtle rounding that softens edges without being distracting
+    # @constraint: min=2, max=6
+
+  medium:
+    value: 8
+    # @unit: pixels
+    # @rationale: Moderate rounding for buttons and interactive elements
+    # @constraint: min=6, max=12
+
+  large:
+    value: 16
+    # @unit: pixels
+    # @rationale: Strong rounding for cards and major content areas
+    # @constraint: min=12, max=24

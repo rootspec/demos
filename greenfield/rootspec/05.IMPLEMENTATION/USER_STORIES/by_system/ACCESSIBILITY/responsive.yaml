@@ -1,1 +1,141 @@
-../../by_phase/MVP/responsive.yaml
+# =============================================================================
+# USER STORY: Navigate site with keyboard only
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [ACCESSIBILITY_SYSTEM, INTERACTIVE_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-07T23:11:36Z
+
+id: US-301
+title: Navigate site with keyboard only
+requirement_id: R-301
+
+acceptance_criteria:
+  - id: AC-301-1
+    title: Can reach all interactive elements via Tab
+    narrative: |
+      Given I am navigating with keyboard only
+      When I press Tab repeatedly
+      Then I should be able to reach all interactive elements in logical order
+    given:
+      - visit: '/'
+    when:
+      - keyPress: 'Tab'
+      - keyPress: 'Tab'
+      - keyPress: 'Tab'
+    then:
+      - shouldHaveFocus: { selector: '[data-test=theme-toggle], [data-test=skip-link], [data-test=hierarchy-explorer] [role=button]:first-child' }
+
+  - id: AC-301-2
+    title: Focus indicators are clearly visible
+    narrative: |
+      Given I am navigating with keyboard
+      When I focus on interactive elements
+      Then focus indicators should be clearly visible with sufficient contrast
+    given:
+      - visit: '/'
+    when:
+      - focus: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldHaveVisibleFocus: { selector: '[data-test=theme-toggle]' }
+      - shouldHaveAccessibleFocus: true
+
+  - id: AC-301-3
+    title: Can operate hierarchy explorer with keyboard
+    narrative: |
+      Given I am using keyboard navigation
+      When I focus the hierarchy explorer and use arrow keys
+      Then I should be able to explore levels and see content
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - focus: { selector: '[data-test=level-1]' }
+      - keyPress: 'Enter'
+    then:
+      - shouldHaveClass: { selector: '[data-test=level-1]', class: 'expanded' }
+      - shouldExist: { selector: '[data-test=level-1-content]' }
+
+  - id: AC-301-4
+    title: Can complete spec wizard with keyboard
+    narrative: |
+      Given I am using keyboard navigation
+      When I focus the wizard and navigate through steps
+      Then I should be able to complete the entire flow
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    when:
+      - focus: { selector: '[data-test=wizard-product-input]' }
+      - type: { text: 'Keyboard accessible app' }
+      - keyPress: 'Tab'
+      - keyPress: 'Enter'
+    then:
+      - shouldExist: { selector: '[data-test=wizard-step-2]' }
+
+---
+
+# =============================================================================
+# USER STORY: Use site with screen reader
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [ACCESSIBILITY_SYSTEM, CONTENT_SYSTEM, INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-07T23:11:36Z
+
+id: US-302
+title: Use site with screen reader
+requirement_id: R-302
+
+acceptance_criteria:
+  - id: AC-302-1
+    title: Proper heading hierarchy for navigation
+    narrative: |
+      Given I am using a screen reader
+      When I navigate by headings
+      Then I should find a logical hierarchy that helps me understand page structure
+    given:
+      - visit: '/'
+      - enableScreenReader: true
+    when:
+      - navigateByHeadings: true
+    then:
+      - shouldHaveHeading: { level: 1, text: 'RootSpec' }
+      - shouldHaveHeading: { level: 2, text: 'Problem' }
+      - shouldHaveHeading: { level: 2, text: 'How It Works' }
+      - shouldHaveLogicalHeadingOrder: true
+
+  - id: AC-302-2
+    title: Interactive components have proper ARIA labels
+    narrative: |
+      Given I am using a screen reader
+      When I encounter interactive components
+      Then they should be properly labeled and announce their purpose
+    given:
+      - visit: '/'
+      - enableScreenReader: true
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - focus: { selector: '[data-test=level-1]' }
+    then:
+      - shouldHaveAriaLabel: { selector: '[data-test=level-1]', text: 'Philosophy level' }
+      - shouldAnnounce: { text: 'Philosophy level, button, collapsed' }
+
+  - id: AC-302-3
+    title: Dynamic content changes are announced
+    narrative: |
+      Given I am using a screen reader
+      When interactive content changes (wizard progress, explorer expansion)
+      Then changes should be announced via live regions
+    given:
+      - visit: '/'
+      - enableScreenReader: true
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    when:
+      - fill: { selector: '[data-test=wizard-product-input]', value: 'Test app' }
+      - click: { selector: '[data-test=wizard-next]' }
+    then:
+      - shouldAnnounce: { text: 'Step 2 of 3' }
+      - shouldHaveLiveRegion: { selector: '[data-test=wizard-progress]' }

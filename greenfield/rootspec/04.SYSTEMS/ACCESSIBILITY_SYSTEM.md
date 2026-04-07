@@ -1,67 +1,77 @@
-# Level 4: Accessibility System
+# ACCESSIBILITY_SYSTEM
+
+*References: [[01.PHILOSOPHY]] [[02.TRUTHS]] [[03.INTERACTIONS]] [[SYSTEMS_OVERVIEW]]*
 
 ## Responsibility
 
-Keyboard navigation, focus management, ARIA attributes, reduced motion support, and screen reader announcements. Ensures the site is usable by everyone regardless of input method or assistive technology.
+Ensures equal access and usability for all users through keyboard navigation, screen reader support, motion preferences, and inclusive interaction patterns. Provides accessibility foundation for all other systems.
 
-## Keyboard Navigation
+## Boundaries
 
-### Global
-- Tab moves focus through all interactive elements in document order
-- Shift+Tab moves focus backward
-- Skip-to-content link as first focusable element
+**Owns**:
+- Keyboard navigation implementation and focus management
+- ARIA labels, landmarks, and live regions
+- Screen reader compatibility patterns
+- Motion preference detection and respect
+- Color contrast validation and high contrast mode support
 
-### Hierarchy Explorer
-- Tab to the explorer, then arrow keys (Up/Down) to move between levels
-- Enter/Space to expand/collapse a level
-- Escape to collapse the currently expanded level
-- When a level is focused, its reference highlights are shown (same as hover)
+**Does Not Own**:
+- Visual styling decisions (THEME_SYSTEM)
+- Layout structure (LAYOUT_SYSTEM)
+- Interactive component logic (INTERACTIVE_SYSTEM)
+- Content creation (CONTENT_SYSTEM)
 
-### Spec Wizard
-- Tab moves between form fields within a step
-- Enter on "Next"/"Generate" advances the step
-- Shift+Tab returns to previous field
-- Escape does not close the wizard (it's inline, not modal)
+## Data Ownership
 
-### Before/After Comparison
-- Tab to the toggle
-- Enter/Space or Arrow keys to switch views
+**Focus State**: Current focus position, focus trap boundaries, focus restoration points
+**User Preferences**: Motion sensitivity settings, high contrast mode, screen reader detection
+**Navigation Patterns**: Keyboard shortcuts, tab order specifications, skip link targets
+**Announcement Queue**: Screen reader announcements for dynamic content changes
 
-### Theme Toggle
-- Tab to reach it
-- Enter/Space to toggle
+## Interactions with Other Systems
 
-## Focus Management
+**→ INTERACTIVE_SYSTEM**: Provides keyboard event handlers, focus management coordination, ARIA state updates
+**→ THEME_SYSTEM**: Supplies focus indicator requirements, high contrast specifications, motion preference data
+**→ LAYOUT_SYSTEM**: Defines minimum touch target sizes, readable line length requirements
+**→ CONTENT_SYSTEM**: Provides ARIA label patterns, semantic markup requirements
 
-- Focus ring visible on all interactive elements (styled, not browser default)
-- Focus ring uses sufficient contrast in both light and dark themes
-- When a section of the hierarchy explorer expands, focus moves to the expanded content
-- When the wizard advances a step, focus moves to the first input of the new step
+## Implementation Patterns
 
-## ARIA Attributes
+**Progressive Enhancement**: Semantic HTML foundation with ARIA enhancements where beneficial
+**Focus Management**: Proper tab order, focus traps for modal content, focus restoration after interactions
+**Keyboard Navigation**: Standard navigation patterns (Tab, Enter, Space, Arrow keys) with custom enhancements
+**Screen Reader Support**: Logical heading hierarchy, descriptive link text, live region updates
+**Motion Respect**: Automatic detection of `prefers-reduced-motion`, animation disable functionality
 
-| Element | Attributes |
-|---------|------------|
-| Hierarchy levels | `role="button"`, `aria-expanded`, `aria-controls` |
-| Hierarchy container | `role="list"` with `aria-label="Specification hierarchy"` |
-| Wizard steps | `role="tablist"` / `role="tabpanel"` pattern |
-| Wizard progress | `aria-current="step"` on active step indicator |
-| Before/After toggle | `role="radiogroup"` with `role="radio"` options |
-| Theme toggle | `role="switch"`, `aria-checked`, `aria-label` |
-| Section navigation | `role="navigation"`, `aria-label` per nav region |
+## ARIA Patterns
 
-## Reduced Motion
+**Hierarchy Explorer**: 
+- `role="tablist"` for level selector
+- `role="tabpanel"` for expanded content
+- `aria-expanded` for expansion state
+- `aria-controls` for panel relationships
 
-- Check `prefers-reduced-motion: reduce` media query
-- If enabled: disable all CSS transitions and animations
-- Scroll behavior becomes instant (no smooth scroll)
-- Section entry animations are suppressed
-- Interactive state changes are instant (no fade/slide)
+**Spec Wizard**:
+- `role="progressbar"` for step indication
+- `aria-live="polite"` for step transitions
+- `aria-describedby` for help text
+- `aria-invalid` for validation errors
 
-## Screen Reader Announcements
+**Comparison Toggle**:
+- `role="tablist"` for before/after switcher
+- `aria-selected` for active panel
+- `aria-labelledby` for panel identification
 
-- Live region (`aria-live="polite"`) for dynamic content changes:
-  - Hierarchy explorer: announce level name and state when expanded/collapsed
-  - Wizard: announce step transitions (e.g., "Choose design pillars")
-  - Before/After: announce which view is active
-  - Theme: announce new theme ("Switched to dark mode")
+## Keyboard Interaction Specifications
+
+**Global Navigation**: Tab order respects logical reading flow, skip links for main content
+**Explorer Component**: Arrow keys for level navigation, Enter/Space for expansion, Escape for reset
+**Wizard Component**: Tab for field navigation, Enter for progression, Escape for exit
+**Theme Toggle**: Space or Enter for activation, automatic announcement of new state
+
+## Motion and Animation Guidelines
+
+**Reduced Motion**: Disable animations when `prefers-reduced-motion: reduce` is detected
+**Essential Motion**: Maintain functional transitions (focus indicators, state changes) even with reduced motion
+**Animation Timing**: Respect user attention and processing speed, avoid flashing or rapid changes
+**Motion Controls**: Provide manual animation disable for additional user control

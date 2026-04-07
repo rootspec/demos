@@ -1,33 +1,34 @@
 # User Stories Overview
 
+*References: [[01.PHILOSOPHY]] [[02.TRUTHS]] [[03.INTERACTIONS]] [[04.SYSTEMS]]*
+
+This directory contains user stories organized by journey, phase, and system. All stories target the MVP phase for initial launch.
+
 ## Organization
 
-Stories are organized by phase, journey, and system. A story may appear in multiple collections.
+**by_journey/FIRST_VISIT**: Stories covering the complete first-time user experience from landing to understanding RootSpec methodology.
 
-## Phases
+**by_phase/MVP**: All stories required for minimum viable product launch - core functionality without advanced features.
 
-| Phase | Description |
-|-------|-------------|
-| **MVP** | Core marketing site — all sections, all interactive features, dark/light theme, responsive layout |
+**by_system**: Stories grouped by the primary system they exercise:
+- **CONTENT**: Static content display, meta-banner, version information
+- **INTERACTIVE**: Hierarchy explorer, spec wizard, before/after comparison  
+- **THEME**: Dark/light mode switching, visual consistency
+- **LAYOUT**: Responsive behavior, navigation, scroll coordination
+- **ACCESSIBILITY**: Keyboard navigation, screen reader support, motion preferences
 
-This is a single-phase marketing site. All features ship together.
+## Testing Approach
 
-## Journeys
+All acceptance criteria use realistic selectors and copy that will be implemented. No placeholder content - every assertion tests actual user-facing functionality.
 
-| Journey | Description |
-|---------|-------------|
-| **FIRST_VISIT** | Developer arrives, scrolls through the narrative, tries interactives, reaches CTA |
+Each story includes:
+- Clear user goal in title
+- Specific acceptance criteria with given/when/then structure  
+- Testable selectors for implementation validation
+- System coverage noting which L4 systems are exercised
 
-## Systems
+## Phase Scope
 
-| System | Story Coverage |
-|--------|---------------|
-| CONTENT_SYSTEM | Hero, meta banner, problem section, how-it-works, CTA |
-| INTERACTIVE_SYSTEM | Hierarchy explorer, spec wizard, before/after comparison |
-| THEME_SYSTEM | Dark/light toggle, system preference |
-| ACCESSIBILITY_SYSTEM | Keyboard navigation, screen reader support |
+**MVP Phase**: Core demonstration of RootSpec methodology with essential interactive features. All stories in this phase must pass for launch readiness.
 
-## Test Suites
-
-- `cypress/e2e/mvp.cy.ts` → loads `by_phase/MVP/**/*.yaml`
-- `cypress/e2e/first-visit.cy.ts` → loads `by_journey/FIRST_VISIT/**/*.yaml`
+Future phases (v1, enhancement) will add advanced features like analytics, A/B testing, additional wizard templates, and extended before/after examples.

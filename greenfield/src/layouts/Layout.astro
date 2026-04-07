@@ -1,37 +1,31 @@
 ---
-interface Props {
+export interface Props {
   title: string;
 }
 
 const { title } = Astro.props;
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="description" content="RootSpec - Specification methodology for building software" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
-    <script is:inline>
-      (function() {
-        const saved = localStorage.getItem('rootspec-theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = saved || (prefersDark ? 'dark' : 'light');
-        document.documentElement.classList.toggle('dark', theme === 'dark');
-        document.documentElement.setAttribute('data-theme', theme);
-        document.addEventListener('DOMContentLoaded', function() {
-          document.body.setAttribute('data-theme', theme);
-        });
-      })();
-    </script>
   </head>
-  <body class="min-h-screen font-sans antialiased">
-    <div id="app">
-      <slot />
-    </div>
-    <script is:inline>
-      var theme = document.documentElement.getAttribute('data-theme') || 'light';
-      document.getElementById('app').setAttribute('data-theme', theme);
-    </script>
+  <body>
+    <slot />
   </body>
 </html>
+
+<style>
+  html {
+    font-family: system-ui, sans-serif;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+  }
+</style>

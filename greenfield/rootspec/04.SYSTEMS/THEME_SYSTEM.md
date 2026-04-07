@@ -1,64 +1,60 @@
-# Level 4: Theme System
+# THEME_SYSTEM
+
+*References: [[01.PHILOSOPHY]] [[02.TRUTHS]] [[03.INTERACTIONS]] [[SYSTEMS_OVERVIEW]]*
 
 ## Responsibility
 
-Dark/light theme management, CSS custom property resolution, system preference detection, and user override persistence.
+Coordinates visual consistency across all systems through dark/light mode management, color token distribution, and design system implementation. Ensures coherent visual experience while respecting user preferences.
 
-## State
+## Boundaries
 
-```
-theme_state:
-  current_theme: "light" | "dark"
-  source: "system" | "user"
-  system_preference: "light" | "dark"
-```
+**Owns**:
+- CSS custom property definitions for colors, spacing, typography
+- Theme preference detection and storage
+- Dark/light mode toggle functionality
+- Design token coordination across all visual elements
+- Animation and motion preference handling
 
-## Behavior
+**Does Not Own**:
+- Component structure or layout (LAYOUT_SYSTEM)
+- Interactive behavior (INTERACTIVE_SYSTEM)
+- Content markup (CONTENT_SYSTEM)
+- Accessibility implementation details (ACCESSIBILITY_SYSTEM)
 
-### Initialization
+## Data Ownership
 
-1. Check localStorage for saved user preference
-2. If found → apply saved theme, set `source: "user"`
-3. If not found → read `prefers-color-scheme` media query, set `source: "system"`
-4. Apply theme class to document root (`data-theme="light"` or `data-theme="dark"`)
+**Theme Preferences**: User's dark/light mode choice, system preference detection results
+**Design Tokens**: Color palettes, typography scales, spacing values, motion timing
+**Visual State**: Current theme application, CSS custom property values
+**Motion Settings**: User's motion preference, animation enable/disable state
 
-### Toggle
+## Interactions with Other Systems
 
-1. Switch `current_theme` to opposite value
-2. Set `source: "user"`
-3. Save preference to localStorage
-4. Update document root `data-theme` attribute
-5. Transition smoothly (CSS transition on background/color properties)
+**← ACCESSIBILITY_SYSTEM**: Receives motion preference detection, contrast requirements, focus indicator specifications
+**→ CONTENT_SYSTEM**: Provides CSS class hooks and theme-aware markup patterns
+**→ INTERACTIVE_SYSTEM**: Supplies visual tokens for dynamic component styling, theme change event notifications
+**→ LAYOUT_SYSTEM**: Coordinates color contrast requirements, spacing token consistency
 
-### System Preference Change
+## Implementation Patterns
 
-- Listen for `prefers-color-scheme` media query changes
-- If `source` is `"system"`, update theme to match
-- If `source` is `"user"`, ignore system changes (user override takes precedence)
+**CSS Custom Properties**: Centralized design token system with automatic theme switching
+**Progressive Enhancement**: CSS-only theme application with JavaScript enhancement for user preferences
+**Storage Management**: localStorage for theme persistence, automatic fallback to system preferences
+**Event Coordination**: Custom events for theme changes, automatic re-render coordination
 
-## CSS Custom Properties
+## Design Token Structure
 
-The theme system defines CSS custom properties on `:root` that all other systems consume:
+**Colors**: Primary, secondary, accent, neutral scales with automatic dark/light variants
+**Typography**: Font families, size scales, line heights, font weights
+**Spacing**: Consistent spacing scale for margins, padding, gaps
+**Motion**: Duration, easing, animation preferences
+**Shadows**: Elevation system with theme-appropriate depth
+**Borders**: Radius values, border widths, outline specifications
 
-```
-Categories:
-  - Background colors (page, surface, elevated)
-  - Text colors (primary, secondary, muted)
-  - Accent colors (primary, hover, active)
-  - Border colors
-  - Shadow definitions
-  - Code block colors (syntax highlighting)
-```
+## Theme Switching Logic
 
-All components reference these variables — no hardcoded colors anywhere in the codebase.
-
-## Toggle UI
-
-- Always visible in the header
-- Icon reflects current state (sun/moon or similar)
-- Accessible: `aria-label` describes current state and action ("Switch to dark mode")
-- Keyboard: activates on Enter/Space
-
-## Fallback
-
-If JavaScript fails, the site renders in a default theme (light) using CSS-only `prefers-color-scheme` media queries as fallback.
+1. **Initial Load**: Detect system preference via `prefers-color-scheme` media query
+2. **Storage Check**: Override with user's stored preference if available
+3. **Application**: Apply theme via CSS custom property updates
+4. **Persistence**: Store user's explicit choice for future sessions
+5. **Coordination**: Notify other systems of theme change via custom events

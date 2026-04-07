@@ -1,1 +1,70 @@
-../../by_phase/MVP/theme.yaml
+# =============================================================================
+# USER STORY: Switch between light and dark themes
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [THEME_SYSTEM, ACCESSIBILITY_SYSTEM, INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-07T23:11:36Z
+
+id: US-106
+title: Switch between light and dark themes
+requirement_id: R-106
+
+acceptance_criteria:
+  - id: AC-106-1
+    title: Theme toggle changes visual appearance
+    narrative: |
+      Given I am viewing the site in light mode
+      When I click the theme toggle
+      Then the site should switch to dark mode with appropriate colors
+    given:
+      - visit: '/'
+      - waitForPage: true
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldHaveAttribute: { selector: 'html', attribute: 'data-theme', value: 'dark' }
+      - shouldHaveComputedStyle: { selector: 'body', property: 'background-color', value: 'dark' }
+
+  - id: AC-106-2
+    title: Theme preference persists across sessions
+    narrative: |
+      Given I have set my theme preference to dark
+      When I reload the page
+      Then the dark theme should still be active
+    given:
+      - visit: '/'
+      - click: { selector: '[data-test=theme-toggle]' }
+    when:
+      - reload: true
+    then:
+      - shouldHaveAttribute: { selector: 'html', attribute: 'data-theme', value: 'dark' }
+
+  - id: AC-106-3
+    title: Respects system preference on first visit
+    narrative: |
+      Given my system is set to prefer dark mode
+      When I visit the site for the first time
+      Then the site should load in dark mode
+    given:
+      - setPrefersColorScheme: 'dark'
+      - clearLocalStorage: true
+    when:
+      - visit: '/'
+    then:
+      - shouldHaveAttribute: { selector: 'html', attribute: 'data-theme', value: 'dark' }
+
+  - id: AC-106-4
+    title: Theme toggle is keyboard accessible
+    narrative: |
+      Given I am navigating with keyboard
+      When I focus the theme toggle and press Enter or Space
+      Then the theme should change
+    given:
+      - visit: '/'
+    when:
+      - focus: { selector: '[data-test=theme-toggle]' }
+      - keyPress: 'Enter'
+    then:
+      - shouldHaveAttribute: { selector: 'html', attribute: 'data-theme', value: 'dark' }

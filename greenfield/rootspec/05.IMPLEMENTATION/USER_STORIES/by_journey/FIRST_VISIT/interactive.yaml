@@ -1,1 +1,137 @@
-../../by_phase/MVP/interactive.yaml
+# =============================================================================
+# USER STORY: Explore hierarchy to understand RootSpec levels
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [INTERACTIVE_SYSTEM, ACCESSIBILITY_SYSTEM, THEME_SYSTEM]
+# @last_updated: 2026-04-07T23:11:36Z
+
+id: US-103
+title: Explore hierarchy to understand RootSpec levels
+requirement_id: R-103
+
+acceptance_criteria:
+  - id: AC-103-1
+    title: Can expand levels to see example content
+    narrative: |
+      Given I am viewing the hierarchy explorer
+      When I click on a level (L1-L5)
+      Then I should see example content for that level
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - click: { selector: '[data-test=level-1]' }
+    then:
+      - shouldHaveClass: { selector: '[data-test=level-1]', class: 'expanded' }
+      - shouldExist: { selector: '[data-test=level-1-content]' }
+      - shouldContain: { selector: '[data-test=level-1-content]', text: 'Philosophy' }
+
+  - id: AC-103-2
+    title: Reference arrows highlight allowed connections
+    narrative: |
+      Given I have expanded a level
+      When I hover or focus on that level
+      Then I should see which levels it can reference
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      - click: { selector: '[data-test=level-3]' }
+    when:
+      - hover: { selector: '[data-test=level-3]' }
+    then:
+      - shouldExist: { selector: '[data-test=reference-arrow-3-to-1]' }
+      - shouldExist: { selector: '[data-test=reference-arrow-3-to-2]' }
+      - shouldNotExist: { selector: '[data-test=reference-arrow-3-to-4]' }
+
+  - id: AC-103-3
+    title: Can reset explorer to collapsed state
+    narrative: |
+      Given I have expanded multiple levels
+      When I click the reset button
+      Then all levels should collapse to overview state
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      - click: { selector: '[data-test=level-1]' }
+      - click: { selector: '[data-test=level-3]' }
+    when:
+      - click: { selector: '[data-test=explorer-reset]' }
+    then:
+      - shouldNotHaveClass: { selector: '[data-test=level-1]', class: 'expanded' }
+      - shouldNotHaveClass: { selector: '[data-test=level-3]', class: 'expanded' }
+      - shouldNotExist: { selector: '[data-test=level-1-content]' }
+
+---
+
+# =============================================================================
+# USER STORY: Try spec wizard with own product idea
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM, ACCESSIBILITY_SYSTEM]
+# @last_updated: 2026-04-07T23:11:36Z
+
+id: US-104
+title: Try spec wizard with own product idea
+requirement_id: R-104
+
+acceptance_criteria:
+  - id: AC-104-1
+    title: Can enter product idea and progress through steps
+    narrative: |
+      Given I am viewing the spec wizard
+      When I enter a product idea and progress through steps
+      Then I should see my input mapped to spec levels
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    when:
+      - fill: { selector: '[data-test=wizard-product-input]', value: 'Task management app for busy parents' }
+      - click: { selector: '[data-test=wizard-next]' }
+    then:
+      - shouldExist: { selector: '[data-test=wizard-step-2]' }
+      - shouldContain: { selector: '[data-test=wizard-progress]', text: 'Step 2' }
+
+  - id: AC-104-2
+    title: Can select design pillars from suggestions
+    narrative: |
+      Given I am on step 2 of the wizard
+      When I select design pillars
+      Then I should see them added to my spec
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+      - fill: { selector: '[data-test=wizard-product-input]', value: 'Task app' }
+      - click: { selector: '[data-test=wizard-next]' }
+    when:
+      - click: { selector: '[data-test=pillar-simplicity]' }
+      - click: { selector: '[data-test=pillar-reliability]' }
+      - click: { selector: '[data-test=wizard-next]' }
+    then:
+      - shouldExist: { selector: '[data-test=wizard-step-3]' }
+      - shouldContain: { selector: '[data-test=selected-pillars]', text: 'Simplicity' }
+      - shouldContain: { selector: '[data-test=selected-pillars]', text: 'Reliability' }
+
+  - id: AC-104-3
+    title: Generates skeleton spec showing input mapping
+    narrative: |
+      Given I have completed all wizard steps
+      When I view the output
+      Then I should see how my inputs map to L1-L3 spec levels
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+      - fill: { selector: '[data-test=wizard-product-input]', value: 'Task app' }
+      - click: { selector: '[data-test=wizard-next]' }
+      - click: { selector: '[data-test=pillar-simplicity]' }
+      - click: { selector: '[data-test=wizard-next]' }
+      - fill: { selector: '[data-test=wizard-interaction]', value: 'Add new task quickly' }
+      - click: { selector: '[data-test=wizard-generate]' }
+    then:
+      - shouldExist: { selector: '[data-test=wizard-output]' }
+      - shouldContain: { selector: '[data-test=output-l1]', text: 'Task app' }
+      - shouldContain: { selector: '[data-test=output-l2]', text: 'Simplicity' }
+      - shouldContain: { selector: '[data-test=output-l3]', text: 'Add new task' }

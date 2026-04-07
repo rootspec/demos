@@ -1,62 +1,42 @@
-# Level 4: Content System
+# CONTENT_SYSTEM
+
+*References: [[01.PHILOSOPHY]] [[02.TRUTHS]] [[03.INTERACTIONS]] [[SYSTEMS_OVERVIEW]]*
 
 ## Responsibility
 
-All static and semi-static content: copy, messaging, section content, links, and version display. Owns what the site says.
+Manages all static content rendering, meta-information display, version tracking, and external resource linking. Serves as the primary data source for all display systems.
 
-## Version Management
+## Boundaries
 
-- RootSpec version stored as a single constant (e.g., in a config file or at the top of the main module)
-- Referenced by: hero section version badge, meta banner, any version mentions in copy
-- Updating the version requires changing one value
+**Owns**: 
+- Static HTML generation from Astro components
+- Meta-banner content and GitHub repository links
+- RootSpec version badge display and update mechanisms
+- Markdown content compilation (SEED.md references, documentation)
+- Structured data for interactive components (hierarchy examples, wizard templates)
 
-## Section Content
+**Does Not Own**: 
+- Interactive behavior or state management (INTERACTIVE_SYSTEM)
+- Visual styling beyond semantic markup (THEME_SYSTEM, LAYOUT_SYSTEM)
+- User input validation or client-side logic (INTERACTIVE_SYSTEM)
 
-### Header
-- Site title: "RootSpec"
-- Version badge: `v[rootspec_version]`
-- Theme toggle (rendered by Theme System)
-- Navigation links to major sections
+## Data Ownership
 
-### Hero
-- Tagline (short, memorable)
-- One-sentence explanation of what RootSpec is
-- Primary CTA button (links to GitHub or getting started)
+**Version Information**: Current RootSpec framework version, build timestamps, GitHub commit references
+**Static Content**: Hero copy, problem descriptions, methodology explanations, getting-started instructions
+**Template Data**: Structured templates for spec wizard, hierarchy explorer examples, before/after comparison content
+**External References**: GitHub repository URLs, documentation links, community resource references
 
-### Meta Banner
-- Prominent banner explaining this site is a RootSpec demo
-- Tone: honest, direct — "This site was generated from a ~100-line product description using the RootSpec pipeline"
-- Links to: SEED.md in GitHub repo, spec files in GitHub repo
-- Acknowledges that rough edges reflect minimal human guidance, not carelessness
+## Interactions with Other Systems
 
-### The Problem
-- [problem-count] named pain points, each with a title and brief description
-- Pain points from L1: spec drift, philosophy-implementation gap, unreliable AI output, dead documentation
-- Real-world framing — describe the problem as developers experience it
+**→ LAYOUT_SYSTEM**: Provides semantic HTML structure, heading hierarchy, content sections for responsive styling
+**→ INTERACTIVE_SYSTEM**: Supplies structured data templates for wizard progression, hierarchy examples for explorer component
+**→ THEME_SYSTEM**: Generates markup with proper CSS class hooks for theme application
+**← INTERACTIVE_SYSTEM**: Receives dynamic content updates for wizard output display, comparison panel content
 
-### How It Works
-- Four-step walkthrough: init → spec → impl → validate
-- Each step: command name, what it does, visual representation of before/after
-- Visual flow showing the progression
+## Implementation Patterns
 
-### Open Source CTA
-- GitHub repository link
-- Getting started instructions (the four commands)
-- Community links (if applicable)
-
-### Footer
-- Minimal: links, credits, GitHub
-
-## External Links
-
-All external links:
-- Open in new tab (`target="_blank"` with `rel="noopener noreferrer"`)
-- GitHub repo links point to the specific files (SEED.md, rootspec/ directory)
-
-## Content Tone Rules
-
-Per L1 inviolable principles and L2 developer-native communication:
-- No buzzwords
-- Specific over general
-- Technical but accessible
-- Confident but not preachy
+**Component Architecture**: Astro components for each major content section (Hero, Problem, HowItWorks, Explorer, Wizard, Comparison, Footer)
+**Data Sources**: Static JSON for wizard templates, inline content for marketing copy, environment variables for version information
+**Markdown Integration**: Automatic compilation of SEED.md references, documentation snippets, GitHub-flavored markdown support
+**Link Management**: Centralized configuration for GitHub repository, documentation, and community links with automatic validation

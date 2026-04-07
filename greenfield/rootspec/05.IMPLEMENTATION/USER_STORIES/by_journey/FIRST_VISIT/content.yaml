@@ -1,1 +1,90 @@
-../../by_phase/MVP/content.yaml
+# =============================================================================
+# USER STORY: Understand what RootSpec is from hero section
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [CONTENT_SYSTEM, THEME_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-07T23:11:36Z
+
+id: US-101
+title: Understand what RootSpec is from hero section
+requirement_id: R-101
+
+acceptance_criteria:
+  - id: AC-101-1
+    title: Hero displays clear tagline and explanation
+    narrative: |
+      Given I am a developer visiting the site for the first time
+      When I land on the homepage
+      Then I should immediately see what RootSpec is and why it exists
+    given:
+      - visit: '/'
+    when:
+      - waitForPage: true
+    then:
+      - shouldExist: { selector: '[data-test=hero-tagline]' }
+      - shouldContain: { selector: '[data-test=hero-tagline]', text: 'RootSpec' }
+      - shouldExist: { selector: '[data-test=hero-explanation]' }
+      - shouldContain: { selector: '[data-test=hero-explanation]', text: 'specification' }
+
+  - id: AC-101-2
+    title: Meta-banner explains this is a live demo
+    narrative: |
+      Given I am viewing the homepage
+      When I see the meta-banner
+      Then I should understand this site was built with RootSpec
+    given:
+      - visit: '/'
+    when:
+      - waitForPage: true
+    then:
+      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldContain: { selector: '[data-test=meta-banner]', text: 'generated from' }
+      - shouldContain: { selector: '[data-test=meta-banner]', text: 'RootSpec pipeline' }
+
+  - id: AC-101-3
+    title: Version badge shows current framework version
+    narrative: |
+      Given I am viewing the site
+      When I look for version information
+      Then I should see the RootSpec framework version used to build this
+    given:
+      - visit: '/'
+    when:
+      - waitForPage: true
+    then:
+      - shouldExist: { selector: '[data-test=version-badge]' }
+      - shouldContain: { selector: '[data-test=version-badge]', text: 'v7.0.7' }
+
+---
+
+# =============================================================================
+# USER STORY: Recognize problems from experience
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-07T23:11:36Z
+
+id: US-102
+title: Recognize problems from experience
+requirement_id: R-102
+
+acceptance_criteria:
+  - id: AC-102-1
+    title: Problem section lists familiar pain points
+    narrative: |
+      Given I am a developer who has experienced spec drift
+      When I read the problem section
+      Then I should recognize pain points from my own experience
+    given:
+      - visit: '/'
+    when:
+      - scrollTo: { selector: '[data-test=problem-section]' }
+    then:
+      - shouldExist: { selector: '[data-test=problem-section]' }
+      - shouldContain: { selector: '[data-test=problem-section]', text: 'spec drift' }
+      - shouldContain: { selector: '[data-test=problem-section]', text: 'Google Docs' }
+      - shouldContain: { selector: '[data-test=problem-section]', text: 'unreliable AI' }

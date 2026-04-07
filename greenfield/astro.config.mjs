@@ -1,12 +1,11 @@
 import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
-
-const base = process.env.ASTRO_BASE || '/';
+import react from '@astrojs/react';
 
 export default defineConfig({
-  integrations: [react(), tailwind()],
-  output: 'static',
-  site: process.env.ASTRO_BASE ? 'https://rootspec.github.io' : undefined,
-  base,
+  integrations: [tailwind(), react()],
+  server: {
+    port: 3000,
+    host: true
+  }
 });
