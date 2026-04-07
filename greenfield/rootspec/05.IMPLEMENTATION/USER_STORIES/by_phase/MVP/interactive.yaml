@@ -1,134 +1,250 @@
 # =============================================================================
-# USER STORY: Explore the Hierarchy
+# USER STORIES: Interactive System - Dynamic User Experiences
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [INTERACTIVE_SYSTEM, ACCESSIBILITY_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# @systems: [INTERACTIVE_SYSTEM, VALIDATION_SYSTEM]
+# @last_updated: 2026-04-07T02:25:00Z
 
-id: US-201
-title: Explore the five-level specification hierarchy interactively
+# -----------------------------------------------------------------------------
+# Hierarchy Explorer - Core Concept Demonstration
+# -----------------------------------------------------------------------------
 
-acceptance_criteria:
-  - id: AC-201-1
-    title: Click a level to expand it
-    narrative: |
-      Given I am viewing the hierarchy explorer
-      When I click on a level
-      Then that level expands to show example content
-      And any previously expanded level collapses
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+- id: US-101
+  title: Explore RootSpec five-level hierarchy interactively
+  requirement_id: R-101
 
-  - id: AC-201-2
-    title: Hover a level to see its references
-    narrative: |
-      Given I am viewing the hierarchy explorer
-      When I hover over a level
-      Then I should see its allowed reference connections highlighted
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-3]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-3][aria-expanded=true]' }
+  acceptance_criteria:
+    - id: AC-101-1
+      title: Levels expand to show example content
+      narrative: |
+        Given I want to understand the RootSpec hierarchy
+        When I click on a level in the hierarchy explorer
+        Then I should see example content for that level
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      when:
+        - click: { selector: '[data-test=level-1]' }
+      then:
+        - shouldExist: { selector: '[data-test=level-1-content]' }
+        - shouldContain: { selector: '[data-test=level-1-content]', text: 'Philosophy' }
 
-  - id: AC-201-3
-    title: Navigate hierarchy with keyboard
-    narrative: |
-      Given I am focused on the hierarchy explorer
-      When I use arrow keys to move between levels and Enter to expand
-      Then I should be able to explore the hierarchy without a mouse
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded=true]' }
+    - id: AC-101-2
+      title: Reference relationships highlighted on hover
+      narrative: |
+        Given I am exploring level relationships
+        When I hover over a level in the hierarchy
+        Then I should see visual indicators of which levels it can reference
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      when:
+        - hover: { selector: '[data-test=level-3]' }
+      then:
+        - shouldExist: { selector: '[data-test=reference-arrows]' }
+        - shouldHaveClass: { selector: '[data-test=level-1]', class: 'highlighted' }
+        - shouldHaveClass: { selector: '[data-test=level-2]', class: 'highlighted' }
 
----
-# =============================================================================
-# USER STORY: Try the Spec Wizard
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+    - id: AC-101-3
+      title: Keyboard navigation supports accessibility
+      narrative: |
+        Given I am using keyboard navigation
+        When I tab through the hierarchy explorer
+        Then I should be able to expand levels using Enter key
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      when:
+        - keyPress: { key: 'Tab' }
+        - keyPress: { key: 'Enter' }
+      then:
+        - shouldHaveFocus: { selector: '[data-test=level-1]' }
+        - shouldExist: { selector: '[data-test=level-1-content]' }
 
-id: US-202
-title: Generate a skeleton spec from a product idea
+# -----------------------------------------------------------------------------
+# Spec Wizard - Hands-on Experience
+# -----------------------------------------------------------------------------
 
-acceptance_criteria:
-  - id: AC-202-1
-    title: Complete the three-step wizard
-    narrative: |
-      Given I am viewing the spec wizard
-      When I enter a product idea, select design pillars, and describe an interaction
-      Then I should see a skeleton spec card showing my input mapped to L1-L3
-    given:
-      - visit: '/'
-    when:
-      - fill: { selector: '[data-test=wizard-mission-input]', value: 'A task manager for teams' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - fill: { selector: '[data-test=wizard-interaction-who]', value: 'Team member' }
-      - fill: { selector: '[data-test=wizard-interaction-trigger]', value: 'Creates a new task' }
-      - fill: { selector: '[data-test=wizard-interaction-feedback]', value: 'Task appears in the team list' }
-      - click: { selector: '[data-test=wizard-generate]' }
-    then:
-      - shouldExist: { selector: '[data-test=wizard-result]' }
+- id: US-102
+  title: Create skeleton specification through guided wizard
+  requirement_id: R-102
 
-  - id: AC-202-2
-    title: Start over resets the wizard
-    narrative: |
-      Given I have completed the wizard and see the result
-      When I click "Start over"
-      Then the wizard resets to step 1 with empty inputs
-    given:
-      - visit: '/'
-    when:
-      - fill: { selector: '[data-test=wizard-mission-input]', value: 'Test idea' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-next-step]' }
-      - fill: { selector: '[data-test=wizard-interaction-who]', value: 'User' }
-      - fill: { selector: '[data-test=wizard-interaction-trigger]', value: 'Action' }
-      - fill: { selector: '[data-test=wizard-interaction-feedback]', value: 'Result' }
-      - click: { selector: '[data-test=wizard-generate]' }
-      - click: { selector: '[data-test=wizard-start-over]' }
-    then:
-      - shouldExist: { selector: '[data-test=wizard-mission-input]' }
+  acceptance_criteria:
+    - id: AC-102-1
+      title: Three-step wizard guides user through methodology
+      narrative: |
+        Given I want to experience creating a RootSpec
+        When I use the spec wizard
+        Then I should progress through mission, pillars, and interaction steps
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=spec-wizard]' }
+      when:
+        - fill: { selector: '[data-test=mission-input]', value: 'Help developers build better software' }
+        - click: { selector: '[data-test=next-step]' }
+      then:
+        - shouldExist: { selector: '[data-test=step-2]' }
+        - shouldContain: { selector: '[data-test=step-indicator]', text: '2' }
 
----
-# =============================================================================
-# USER STORY: Compare Before and After
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+    - id: AC-102-2
+      title: Template selection provides helpful examples
+      narrative: |
+        Given I am in the mission step of the wizard
+        When I view template options
+        Then I should see helpful mission examples I can select or customize
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=spec-wizard]' }
+      when:
+        - click: { selector: '[data-test=template-select]' }
+      then:
+        - shouldExist: { selector: '[data-test=mission-template-1]' }
+        - shouldExist: { selector: '[data-test=mission-template-2]' }
+        - shouldExist: { selector: '[data-test=custom-option]' }
 
-id: US-203
-title: See the difference RootSpec makes through a side-by-side comparison
+    - id: AC-102-3
+      title: Live preview shows RootSpec structure
+      narrative: |
+        Given I have completed all wizard steps
+        When I view the output preview
+        Then I should see my inputs formatted as a skeleton RootSpec
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=spec-wizard]' }
+        - fill: { selector: '[data-test=mission-input]', value: 'Test mission' }
+        - click: { selector: '[data-test=next-step]' }
+        - selectMultiple: { selector: '[data-test=pillar-suggestions]', values: ['Clarity', 'Simplicity'] }
+        - click: { selector: '[data-test=next-step]' }
+        - fill: { selector: '[data-test=interaction-input]', value: 'User clicks and sees result' }
+      when:
+        - click: { selector: '[data-test=generate-preview]' }
+      then:
+        - shouldExist: { selector: '[data-test=spec-preview]' }
+        - shouldContain: { selector: '[data-test=spec-preview]', text: 'L1: Philosophy' }
+        - shouldContain: { selector: '[data-test=spec-preview]', text: 'Test mission' }
 
-acceptance_criteria:
-  - id: AC-203-1
-    title: Toggle between without and with views
-    narrative: |
-      Given I am viewing the before/after comparison
-      When I toggle to the "With RootSpec" view
-      Then I should see structured, traceable content replacing the vague version
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=comparison-toggle-with]' }
-    then:
-      - shouldExist: { selector: '[data-test=comparison-with-panel]' }
+# -----------------------------------------------------------------------------
+# Input Validation - Secure and Helpful
+# -----------------------------------------------------------------------------
+
+- id: US-103
+  title: Validate user inputs with helpful feedback
+  requirement_id: R-103
+
+  acceptance_criteria:
+    - id: AC-103-1
+      title: Real-time validation provides immediate feedback
+      narrative: |
+        Given I am entering text in the spec wizard
+        When I exceed character limits or enter invalid content
+        Then I should see immediate validation feedback
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=spec-wizard]' }
+      when:
+        - fill: { selector: '[data-test=mission-input]', value: 'A'.repeat(250) }
+      then:
+        - shouldExist: { selector: '[data-test=validation-error]' }
+        - shouldContain: { selector: '[data-test=character-count]', text: '250/200' }
+
+    - id: AC-103-2
+      title: HTML content sanitized for security
+      narrative: |
+        Given I enter HTML tags in wizard inputs
+        When I view the preview output
+        Then HTML tags should be stripped for security
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=spec-wizard]' }
+      when:
+        - fill: { selector: '[data-test=mission-input]', value: 'Test <script>alert("xss")</script> mission' }
+        - click: { selector: '[data-test=generate-preview]' }
+      then:
+        - shouldContain: { selector: '[data-test=spec-preview]', text: 'Test  mission' }
+        - shouldNotContain: { selector: '[data-test=spec-preview]', text: '<script>' }
+
+# -----------------------------------------------------------------------------
+# Before/After Comparison - Value Demonstration
+# -----------------------------------------------------------------------------
+
+- id: US-104
+  title: Compare traditional requirements with RootSpec approach
+  requirement_id: R-104
+
+  acceptance_criteria:
+    - id: AC-104-1
+      title: Side-by-side comparison with toggle or slider
+      narrative: |
+        Given I want to understand RootSpec benefits
+        When I interact with the before/after comparison
+        Then I should see clear differences between approaches
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=comparison-section]' }
+      when:
+        - click: { selector: '[data-test=comparison-toggle]' }
+      then:
+        - shouldExist: { selector: '[data-test=before-content]' }
+        - shouldExist: { selector: '[data-test=after-content]' }
+        - shouldContain: { selector: '[data-test=before-content]', text: 'vague requirements' }
+        - shouldContain: { selector: '[data-test=after-content]', text: 'structured hierarchy' }
+
+    - id: AC-104-2
+      title: Real content demonstrates concrete improvements
+      narrative: |
+        Given I am evaluating RootSpec methodology
+        When I examine both sides of the comparison
+        Then I should see realistic, not lorem ipsum, examples
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=comparison-section]' }
+      when: []
+      then:
+        - shouldNotContain: { selector: '[data-test=comparison-section]', text: 'lorem ipsum' }
+        - shouldNotContain: { selector: '[data-test=comparison-section]', text: 'placeholder' }
+
+# -----------------------------------------------------------------------------
+# State Management - Persistent Experience
+# -----------------------------------------------------------------------------
+
+- id: US-105
+  title: Maintain component state across user interactions
+  requirement_id: R-105
+
+  acceptance_criteria:
+    - id: AC-105-1
+      title: Wizard progress persisted during session
+      narrative: |
+        Given I am partway through the spec wizard
+        When I scroll away and return to the wizard
+        Then my progress should be preserved
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=spec-wizard]' }
+        - fill: { selector: '[data-test=mission-input]', value: 'My test mission' }
+        - click: { selector: '[data-test=next-step]' }
+      when:
+        - scrollTo: { selector: '[data-test=hero]' }
+        - scrollTo: { selector: '[data-test=spec-wizard]' }
+      then:
+        - shouldHaveValue: { selector: '[data-test=mission-input]', value: 'My test mission' }
+        - shouldContain: { selector: '[data-test=step-indicator]', text: '2' }
+
+    - id: AC-105-2
+      title: Explorer state resets appropriately
+      narrative: |
+        Given I have expanded levels in the hierarchy explorer
+        When I interact with other components
+        Then the explorer state should remain independent
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+        - click: { selector: '[data-test=level-1]' }
+        - click: { selector: '[data-test=level-2]' }
+      when:
+        - scrollTo: { selector: '[data-test=spec-wizard]' }
+        - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      then:
+        - shouldExist: { selector: '[data-test=level-1-content]' }
+        - shouldExist: { selector: '[data-test=level-2-content]' }

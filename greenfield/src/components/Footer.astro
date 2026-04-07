@@ -1,12 +1,119 @@
 ---
-import { ROOTSPEC_VERSION, GITHUB_REPO } from '../data/config';
+// Footer with attribution and build date (US-006)
+const buildDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
 ---
 
-<footer class="border-t border-[var(--color-border)] py-8 mt-16">
-  <div class="max-w-content mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-[var(--color-text-muted)]">
-    <span class="font-mono">RootSpec v{ROOTSPEC_VERSION}</span>
-    <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--color-text-secondary)] transition-colors">
-      GitHub
-    </a>
+<footer data-test="footer" class="bg-gray-900 dark:bg-black border-t border-gray-800 dark:border-gray-700">
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid md:grid-cols-4 gap-8">
+      <!-- Brand -->
+      <div class="md:col-span-1">
+        <div class="flex items-center space-x-3 mb-4">
+          <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <span class="text-white text-sm font-bold">R</span>
+          </div>
+          <span class="text-xl font-semibold text-white">RootSpec</span>
+        </div>
+        <p class="text-gray-400 text-sm mb-4">
+          Structured product specifications that actually work.
+        </p>
+        <div data-test="builder-attribution" class="text-sm text-gray-500">
+          <p>Built with RootSpec</p>
+          <p data-test="build-date" class="mt-1">
+            Generated: {buildDate}
+          </p>
+        </div>
+      </div>
+
+      <!-- Documentation -->
+      <div>
+        <h3 class="text-white font-semibold mb-4">Documentation</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="https://github.com/rootspec/rootspec#getting-started" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+              Getting Started
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/rootspec/rootspec#methodology" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+              Methodology
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/rootspec/rootspec#examples" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+              Examples
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/rootspec/rootspec#api-reference" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+              API Reference
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Community -->
+      <div>
+        <h3 class="text-white font-semibold mb-4">Community</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="https://github.com/rootspec/rootspec" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/rootspec/rootspec/issues" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+              Issues
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/rootspec/rootspec/discussions" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+              Discussions
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/rootspec/rootspec/blob/main/CONTRIBUTING.md" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+              Contributing
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <h3 class="text-white font-semibold mb-4">Resources</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="https://github.com/rootspec/demos" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+              Demo Projects
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/rootspec/demos/blob/main/greenfield/SEED.md" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+              This Site's SEED
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/rootspec/demos/tree/main/greenfield/rootspec" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+              This Site's Spec
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/rootspec/rootspec/releases" class="text-gray-400 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+              Releases
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+      <p>
+        © 2026 RootSpec. Open source software.
+      </p>
+      <p class="mt-4 md:mt-0">
+        This demonstration site was generated from a ~100-line product description.
+      </p>
+    </div>
   </div>
 </footer>

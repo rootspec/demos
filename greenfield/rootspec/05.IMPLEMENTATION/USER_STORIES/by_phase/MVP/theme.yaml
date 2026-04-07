@@ -1,39 +1,265 @@
 # =============================================================================
-# USER STORY: Toggle Theme
+# USER STORIES: Theme System - Visual Presentation and Accessibility
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [THEME_SYSTEM, ACCESSIBILITY_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# @systems: [THEME_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-07T02:25:00Z
 
-id: US-301
-title: Switch between dark and light themes
+# -----------------------------------------------------------------------------
+# Dark/Light Theme Toggle - User Preference Support
+# -----------------------------------------------------------------------------
 
-acceptance_criteria:
-  - id: AC-301-1
-    title: Toggle switches theme
-    narrative: |
-      Given I am viewing the site in light mode
-      When I click the theme toggle
-      Then the site switches to dark mode
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=theme-toggle]' }
-    then:
-      - shouldExist: { selector: '[data-theme=dark]' }
+- id: US-201
+  title: Toggle between dark and light themes seamlessly
+  requirement_id: R-201
 
-  - id: AC-301-2
-    title: Theme persists on reload
-    narrative: |
-      Given I have toggled to dark mode
-      When I reload the page
-      Then the site should still be in dark mode
-    given:
-      - visit: '/'
-      - click: { selector: '[data-test=theme-toggle]' }
-    when:
-      - visit: '/'
-    then:
-      - shouldExist: { selector: '[data-theme=dark]' }
+  acceptance_criteria:
+    - id: AC-201-1
+      title: Theme toggle provides immediate visual feedback
+      narrative: |
+        Given I am viewing the site in light theme
+        When I click the theme toggle
+        Then I should see the site switch to dark theme with smooth transition
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=theme-toggle]' }
+      then:
+        - shouldHaveAttribute: { selector: 'html', attribute: 'data-theme', value: 'dark' }
+        - shouldExist: { selector: '[data-test=theme-toggle][aria-pressed="true"]' }
+
+    - id: AC-201-2
+      title: Theme preference persisted across sessions
+      narrative: |
+        Given I have selected dark theme
+        When I refresh the page or return later
+        Then my theme preference should be remembered
+      given:
+        - visit: '/'
+        - click: { selector: '[data-test=theme-toggle]' }
+      when:
+        - reload: {}
+      then:
+        - shouldHaveAttribute: { selector: 'html', attribute: 'data-theme', value: 'dark' }
+
+    - id: AC-201-3
+      title: System preference detected on first visit
+      narrative: |
+        Given I have dark mode enabled in my system preferences
+        When I visit the site for the first time
+        Then the site should default to dark theme
+      given:
+        - setSystemPreference: { colorScheme: 'dark' }
+        - visit: '/'
+      when: []
+      then:
+        - shouldHaveAttribute: { selector: 'html', attribute: 'data-theme', value: 'dark' }
+
+# -----------------------------------------------------------------------------
+# Visual Consistency - Professional Appearance
+# -----------------------------------------------------------------------------
+
+- id: US-202
+  title: Maintain visual consistency that builds credibility
+  requirement_id: R-202
+
+  acceptance_criteria:
+    - id: AC-202-1
+      title: Color contrast meets WCAG accessibility standards
+      narrative: |
+        Given I am using the site in either theme
+        When I view text content and interactive elements
+        Then color contrast should meet WCAG AA standards
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldMeetContrastRatio: { selector: 'body', ratio: 4.5 }
+        - shouldMeetContrastRatio: { selector: '[data-test=hero-tagline]', ratio: 4.5 }
+
+    - id: AC-202-2
+      title: Interactive elements have consistent hover states
+      narrative: |
+        Given I am exploring interactive elements
+        When I hover over buttons and links
+        Then they should provide consistent visual feedback
+      given:
+        - visit: '/'
+      when:
+        - hover: { selector: '[data-test=github-link]' }
+      then:
+        - shouldHaveTransition: { selector: '[data-test=github-link]', property: 'background-color' }
+
+    - id: AC-202-3
+      title: Typography scale creates clear information hierarchy
+      narrative: |
+        Given I am scanning the page content
+        When I view headings and body text
+        Then the typography should guide my attention appropriately
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldHaveLargerFontSize: { selector: 'h1', compared_to: 'h2' }
+        - shouldHaveLargerFontSize: { selector: 'h2', compared_to: 'p' }
+
+# -----------------------------------------------------------------------------
+# Accessibility Features - Inclusive Design
+# -----------------------------------------------------------------------------
+
+- id: US-203
+  title: Support users with diverse accessibility needs
+  requirement_id: R-203
+
+  acceptance_criteria:
+    - id: AC-203-1
+      title: Keyboard navigation covers all interactive elements
+      narrative: |
+        Given I am navigating using only keyboard
+        When I tab through the page
+        Then I should reach all interactive elements with clear focus indicators
+      given:
+        - visit: '/'
+      when:
+        - keyPress: { key: 'Tab' }
+      then:
+        - shouldHaveFocus: { selector: '[data-test=theme-toggle]' }
+        - shouldHaveVisibleFocusIndicator: { selector: '[data-test=theme-toggle]' }
+
+    - id: AC-203-2
+      title: Screen readers receive helpful announcements
+      narrative: |
+        Given I am using a screen reader
+        When the theme changes or interactive elements update
+        Then I should receive appropriate announcements
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=theme-toggle]' }
+      then:
+        - shouldAnnounce: { text: 'Dark theme activated' }
+
+    - id: AC-203-3
+      title: Reduced motion preferences respected
+      narrative: |
+        Given I have reduced motion enabled in my system preferences
+        When I interact with animated elements
+        Then animations should be reduced or disabled
+      given:
+        - setSystemPreference: { reducedMotion: true }
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=theme-toggle]' }
+      then:
+        - shouldHaveReducedMotion: { selector: '*' }
+
+# -----------------------------------------------------------------------------
+# Performance Optimization - Fast Theme Switching
+# -----------------------------------------------------------------------------
+
+- id: US-204
+  title: Theme changes perform smoothly without layout shifts
+  requirement_id: R-204
+
+  acceptance_criteria:
+    - id: AC-204-1
+      title: Theme transition completes within performance budget
+      narrative: |
+        Given I am switching themes
+        When I click the theme toggle
+        Then the transition should complete quickly without janky animations
+      given:
+        - visit: '/'
+      when:
+        - measurePerformance: {}
+        - click: { selector: '[data-test=theme-toggle]' }
+      then:
+        - shouldCompleteTransitionWithin: { duration: '300ms' }
+        - shouldNotCauseLayoutShift: {}
+
+    - id: AC-204-2
+      title: No flash of incorrect theme on page load
+      narrative: |
+        Given I have a saved theme preference
+        When I visit the site
+        Then the correct theme should display immediately without flashing
+      given:
+        - setStoredPreference: { theme: 'dark' }
+      when:
+        - visit: '/'
+      then:
+        - shouldNotFlashIncorrectTheme: {}
+        - shouldHaveAttribute: { selector: 'html', attribute: 'data-theme', value: 'dark' }
+
+# -----------------------------------------------------------------------------
+# Version Badge - Framework Currency Display
+# -----------------------------------------------------------------------------
+
+- id: US-205
+  title: Display RootSpec version prominently and accurately
+  requirement_id: R-205
+
+  acceptance_criteria:
+    - id: AC-205-1
+      title: Version badge shows current framework version
+      narrative: |
+        Given I want to know which RootSpec version was used
+        When I view the version badge
+        Then I should see the current framework version clearly displayed
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=version-badge]' }
+        - shouldMatch: { selector: '[data-test=version-badge]', pattern: 'v\\d+\\.\\d+\\.\\d+' }
+
+    - id: AC-205-2
+      title: Version badge styling adapts to theme
+      narrative: |
+        Given I am switching between themes
+        When I view the version badge
+        Then it should remain clearly visible in both light and dark themes
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=theme-toggle]' }
+      then:
+        - shouldMeetContrastRatio: { selector: '[data-test=version-badge]', ratio: 4.5 }
+        - shouldBeVisible: { selector: '[data-test=version-badge]' }
+
+# -----------------------------------------------------------------------------
+# Visual Polish - Professional Presentation
+# -----------------------------------------------------------------------------
+
+- id: US-206
+  title: Create polished visual presentation that builds trust
+  requirement_id: R-206
+
+  acceptance_criteria:
+    - id: AC-206-1
+      title: Smooth transitions enhance user experience
+      narrative: |
+        Given I am interacting with dynamic elements
+        When elements change state or position
+        Then transitions should feel smooth and intentional
+      given:
+        - visit: '/'
+      when:
+        - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+        - click: { selector: '[data-test=level-1]' }
+      then:
+        - shouldHaveTransition: { selector: '[data-test=level-1-content]', property: 'opacity' }
+
+    - id: AC-206-2
+      title: Spacing and layout feel intentional and balanced
+      narrative: |
+        Given I am reading through the site content
+        When I view different sections
+        Then spacing should create clear visual separation and hierarchy
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldHaveConsistentSpacing: { sections: '[data-test$="-section"]' }
+        - shouldHaveVerticalRhythm: { elements: 'h1, h2, h3, p' }

@@ -1,26 +1,292 @@
 # =============================================================================
-# USER STORY: Mobile Experience
+# USER STORIES: Responsive Design - Cross-Device Experience
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, THEME_SYSTEM]
+# @last_updated: 2026-04-07T02:25:00Z
 
-id: US-401
-title: Use the site on mobile devices
+# -----------------------------------------------------------------------------
+# Mobile Experience - Touch-First Design
+# -----------------------------------------------------------------------------
 
-acceptance_criteria:
-  - id: AC-401-1
-    title: Content is readable on small screens
-    narrative: |
-      Given I am viewing the site on a mobile device
-      When the page loads
-      Then all content should be visible without horizontal scrolling
-      And text should be readable without zooming
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
-      - shouldExist: { selector: '[data-test=meta-banner]' }
+- id: US-301
+  title: Navigate and interact effectively on mobile devices
+  requirement_id: R-301
+
+  acceptance_criteria:
+    - id: AC-301-1
+      title: Touch targets meet accessibility guidelines
+      narrative: |
+        Given I am using the site on a mobile device
+        When I attempt to tap interactive elements
+        Then all touch targets should be at least 44px for easy tapping
+      given:
+        - setViewport: { width: 375, height: 667 }
+        - visit: '/'
+      when: []
+      then:
+        - shouldMeetMinimumTouchSize: { selector: '[data-test=theme-toggle]', minSize: '44px' }
+        - shouldMeetMinimumTouchSize: { selector: '[data-test=github-link]', minSize: '44px' }
+
+    - id: AC-301-2
+      title: Navigation adapts to mobile viewport
+      narrative: |
+        Given I am viewing the site on mobile
+        When I need to navigate between sections
+        Then navigation should be optimized for mobile interaction patterns
+      given:
+        - setViewport: { width: 375, height: 667 }
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=mobile-nav]' }
+        - shouldBeVisible: { selector: '[data-test=mobile-nav]' }
+
+    - id: AC-301-3
+      title: Interactive components work with touch
+      narrative: |
+        Given I am using touch interaction
+        When I use the hierarchy explorer and spec wizard
+        Then they should respond appropriately to touch gestures
+      given:
+        - setViewport: { width: 375, height: 667 }
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      when:
+        - tap: { selector: '[data-test=level-1]' }
+      then:
+        - shouldExist: { selector: '[data-test=level-1-content]' }
+
+# -----------------------------------------------------------------------------
+# Tablet Experience - Balanced Layout
+# -----------------------------------------------------------------------------
+
+- id: US-302
+  title: Provide optimized experience for tablet viewports
+  requirement_id: R-302
+
+  acceptance_criteria:
+    - id: AC-302-1
+      title: Content layout optimized for tablet reading
+      narrative: |
+        Given I am using a tablet device
+        When I read through site content
+        Then layout should optimize for tablet viewport characteristics
+      given:
+        - setViewport: { width: 768, height: 1024 }
+        - visit: '/'
+      when: []
+      then:
+        - shouldHaveOptimalLineLength: { selector: '[data-test=content-area]' }
+        - shouldUseTabletLayout: { selector: '[data-test=main-content]' }
+
+    - id: AC-302-2
+      title: Interactive elements sized appropriately for tablet
+      narrative: |
+        Given I am using tablet-specific interaction patterns
+        When I interact with the spec wizard and explorer
+        Then they should provide tablet-optimized touch targets and spacing
+      given:
+        - setViewport: { width: 768, height: 1024 }
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=spec-wizard]' }
+      when:
+        - tap: { selector: '[data-test=mission-input]' }
+      then:
+        - shouldHaveTabletOptimizedSpacing: { selector: '[data-test=spec-wizard]' }
+
+# -----------------------------------------------------------------------------
+# Desktop Experience - Full Feature Access
+# -----------------------------------------------------------------------------
+
+- id: US-303
+  title: Deliver rich desktop experience with all features accessible
+  requirement_id: R-303
+
+  acceptance_criteria:
+    - id: AC-303-1
+      title: Full layout utilizes desktop viewport effectively
+      narrative: |
+        Given I am using a desktop computer
+        When I view the site
+        Then layout should take advantage of available screen real estate
+      given:
+        - setViewport: { width: 1920, height: 1080 }
+        - visit: '/'
+      when: []
+      then:
+        - shouldUseDesktopLayout: { selector: '[data-test=main-content]' }
+        - shouldHaveMultiColumnLayout: { selector: '[data-test=comparison-section]' }
+
+    - id: AC-303-2
+      title: Hover interactions provide rich feedback on desktop
+      narrative: |
+        Given I am using mouse interaction
+        When I hover over interactive elements
+        Then I should receive immediate visual feedback
+      given:
+        - setViewport: { width: 1920, height: 1080 }
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      when:
+        - hover: { selector: '[data-test=level-3]' }
+      then:
+        - shouldExist: { selector: '[data-test=reference-arrows]' }
+        - shouldHaveClass: { selector: '[data-test=level-1]', class: 'highlighted' }
+
+# -----------------------------------------------------------------------------
+# Responsive Breakpoint Transitions - Smooth Adaptation
+# -----------------------------------------------------------------------------
+
+- id: US-304
+  title: Handle viewport changes smoothly without content loss
+  requirement_id: R-304
+
+  acceptance_criteria:
+    - id: AC-304-1
+      title: Layout transitions smoothly between breakpoints
+      narrative: |
+        Given I am resizing the browser window
+        When I cross responsive breakpoints
+        Then layout should adapt without jarring jumps or content loss
+      given:
+        - visit: '/'
+        - setViewport: { width: 1200, height: 800 }
+      when:
+        - resizeViewport: { width: 768, height: 1024 }
+      then:
+        - shouldNotCauseLayoutShift: {}
+        - shouldMaintainContentVisibility: {}
+
+    - id: AC-304-2
+      title: Interactive component state preserved during resize
+      narrative: |
+        Given I have interacted with components
+        When I change viewport size
+        Then component states should be preserved appropriately
+      given:
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+        - click: { selector: '[data-test=level-1]' }
+        - setViewport: { width: 1200, height: 800 }
+      when:
+        - resizeViewport: { width: 375, height: 667 }
+      then:
+        - shouldExist: { selector: '[data-test=level-1-content]' }
+
+# -----------------------------------------------------------------------------
+# Cross-Device Performance - Optimized Loading
+# -----------------------------------------------------------------------------
+
+- id: US-305
+  title: Deliver optimal performance across device capabilities
+  requirement_id: R-305
+
+  acceptance_criteria:
+    - id: AC-305-1
+      title: Essential content loads quickly on slower connections
+      narrative: |
+        Given I am on a slower mobile connection
+        When I load the site
+        Then essential content should appear quickly without blocking
+      given:
+        - setNetworkCondition: { speed: '3G' }
+        - setViewport: { width: 375, height: 667 }
+      when:
+        - visit: '/'
+      then:
+        - shouldLoadWithin: { selector: '[data-test=hero]', duration: '2s' }
+        - shouldLoadWithin: { selector: '[data-test=meta-banner]', duration: '1s' }
+
+    - id: AC-305-2
+      title: Interactive features enhance progressively
+      narrative: |
+        Given JavaScript is loading or disabled
+        When I view the site
+        Then core content should be accessible while interactive features enhance the experience
+      given:
+        - disableJavaScript: {}
+        - visit: '/'
+      when: []
+      then:
+        - shouldBeVisible: { selector: '[data-test=hero]' }
+        - shouldBeVisible: { selector: '[data-test=problem-section]' }
+        - shouldBeReadable: { selector: '[data-test=how-it-works]' }
+
+# -----------------------------------------------------------------------------
+# Orientation Handling - Portrait and Landscape
+# -----------------------------------------------------------------------------
+
+- id: US-306
+  title: Adapt appropriately to device orientation changes
+  requirement_id: R-306
+
+  acceptance_criteria:
+    - id: AC-306-1
+      title: Portrait orientation optimizes for vertical scrolling
+      narrative: |
+        Given I am holding my device in portrait orientation
+        When I navigate through the site
+        Then content should be optimized for vertical reading flow
+      given:
+        - setViewport: { width: 375, height: 667 }
+        - setOrientation: 'portrait'
+        - visit: '/'
+      when: []
+      then:
+        - shouldHaveVerticalOptimizedLayout: { selector: '[data-test=main-content]' }
+
+    - id: AC-306-2
+      title: Landscape orientation utilizes horizontal space
+      narrative: |
+        Given I rotate my device to landscape orientation
+        When I view interactive components
+        Then layout should adapt to use horizontal space effectively
+      given:
+        - setViewport: { width: 667, height: 375 }
+        - setOrientation: 'landscape'
+        - visit: '/'
+        - scrollTo: { selector: '[data-test=comparison-section]' }
+      when: []
+      then:
+        - shouldUseLandscapeLayout: { selector: '[data-test=comparison-section]' }
+
+# -----------------------------------------------------------------------------
+# Accessibility Across Devices - Universal Access
+# -----------------------------------------------------------------------------
+
+- id: US-307
+  title: Maintain accessibility standards across all device types
+  requirement_id: R-307
+
+  acceptance_criteria:
+    - id: AC-307-1
+      title: Touch targets remain accessible on all devices
+      narrative: |
+        Given I am using assistive technology on any device
+        When I navigate interactive elements
+        Then accessibility features should work consistently
+      given:
+        - setViewport: { width: 375, height: 667 }
+        - visit: '/'
+      when:
+        - enableScreenReader: {}
+        - keyPress: { key: 'Tab' }
+      then:
+        - shouldAnnounce: { text: 'Theme toggle button' }
+        - shouldHaveFocus: { selector: '[data-test=theme-toggle]' }
+
+    - id: AC-307-2
+      title: Content remains readable at different zoom levels
+      narrative: |
+        Given I need to zoom for better readability
+        When I zoom the page to 200%
+        Then content should remain accessible without horizontal scrolling
+      given:
+        - visit: '/'
+      when:
+        - setZoomLevel: 200
+      then:
+        - shouldNotHaveHorizontalScroll: {}
+        - shouldRemainReadable: { selector: '[data-test=main-content]' }

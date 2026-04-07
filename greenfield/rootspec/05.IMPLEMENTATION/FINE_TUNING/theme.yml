@@ -1,16 +1,125 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Theme System
+# FINE-TUNING: Theme System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: THEME_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# @last_updated: 2026-04-07T02:25:00Z
 
-transition_duration: 200
-# @unit: milliseconds
-# @rationale: Fast enough to feel instant, slow enough to avoid jarring flash
-# @constraints: min=100, max=400, type=integer
+# -----------------------------------------------------------------------------
+# Theme Transition Parameters
+# -----------------------------------------------------------------------------
 
-localStorage_key: "rootspec-theme"
-# @rationale: Namespaced to avoid collisions with other apps on same domain
+theme_transition_duration:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Fast enough to feel immediate, slow enough to see smooth color changes
+  # @constraint: min=100, max=400
+
+theme_transition_easing:
+  value: "ease-in-out"
+  # @unit: string
+  # @rationale: Natural feeling transition that accelerates and decelerates smoothly
+  # @constraint: options=[ease, ease-in, ease-out, ease-in-out, linear]
+
+# -----------------------------------------------------------------------------
+# Color Accessibility Parameters
+# -----------------------------------------------------------------------------
+
+light_theme_contrast_ratio:
+  value: 7.0
+  # @unit: ratio
+  # @rationale: Exceeds WCAG AAA standards for maximum accessibility
+  # @constraint: min=4.5, max=21.0
+
+dark_theme_contrast_ratio:
+  value: 12.0
+  # @unit: ratio
+  # @rationale: High contrast in dark theme reduces eye strain and improves readability
+  # @constraint: min=4.5, max=21.0
+
+version_badge_contrast_ratio:
+  value: 8.5
+  # @unit: ratio
+  # @rationale: Version information should be highly visible for framework credibility
+  # @constraint: min=4.5, max=21.0
+
+# -----------------------------------------------------------------------------
+# Focus Management Parameters
+# -----------------------------------------------------------------------------
+
+focus_outline_width:
+  value: 2
+  # @unit: pixels
+  # @rationale: Visible for accessibility without being visually overwhelming
+  # @constraint: min=1, max=4
+
+focus_outline_offset:
+  value: 2
+  # @unit: pixels
+  # @rationale: Creates clear separation between focus indicator and element border
+  # @constraint: min=1, max=5
+
+# -----------------------------------------------------------------------------
+# System Preference Integration
+# -----------------------------------------------------------------------------
+
+system_preference_check_interval:
+  value: 1000
+  # @unit: milliseconds
+  # @rationale: Responsive to system changes without excessive polling
+  # @constraint: min=500, max=5000
+
+theme_preference_expiry:
+  value: 2592000000
+  # @unit: milliseconds (30 days)
+  # @rationale: Long enough to be useful, short enough to respect changing preferences
+  # @constraint: min=86400000, max=31536000000
+
+# -----------------------------------------------------------------------------
+# Visual Hierarchy Parameters
+# -----------------------------------------------------------------------------
+
+brand_primary_luminance:
+  value: 0.6
+  # @unit: ratio (0-1)
+  # @rationale: Balanced visibility in both themes while maintaining brand recognition
+  # @constraint: min=0.3, max=0.8
+
+accent_color_saturation:
+  value: 0.75
+  # @unit: ratio (0-1)
+  # @rationale: Vibrant enough to draw attention, not so intense as to be distracting
+  # @constraint: min=0.5, max=1.0
+
+# -----------------------------------------------------------------------------
+# Performance Parameters
+# -----------------------------------------------------------------------------
+
+css_custom_property_update_batch_size:
+  value: 10
+  # @unit: count
+  # @rationale: Batches property updates to reduce layout thrashing during theme changes
+  # @constraint: min=5, max=20
+
+theme_initialization_timeout:
+  value: 100
+  # @unit: milliseconds
+  # @rationale: Quick enough to prevent flash of wrong theme, long enough for system detection
+  # @constraint: min=50, max=200
+
+# -----------------------------------------------------------------------------
+# Reduced Motion Support
+# -----------------------------------------------------------------------------
+
+reduced_motion_transition_duration:
+  value: 0
+  # @unit: milliseconds
+  # @rationale: Instant changes respect users who prefer reduced motion
+  # @constraint: min=0, max=50
+  # @inviolable: true
+
+motion_sensitivity_threshold:
+  value: 0.5
+  # @unit: ratio
+  # @rationale: Conservative threshold that respects users with vestibular disorders
+  # @constraint: min=0.0, max=1.0

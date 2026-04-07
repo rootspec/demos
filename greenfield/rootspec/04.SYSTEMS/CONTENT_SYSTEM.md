@@ -1,62 +1,115 @@
-# Level 4: Content System
+# Content System
 
-## Responsibility
+## Purpose
+Delivers static content and maintains information architecture that supports **Transparency over Polish** and **Methodology Demonstration over Product Sales**.
 
-All static and semi-static content: copy, messaging, section content, links, and version display. Owns what the site says.
+## Responsibilities
+- Static page content generation and delivery
+- Version information management and display
+- Documentation linking and attribution
+- Information hierarchy organization
 
-## Version Management
+## State Management
 
-- RootSpec version stored as a single constant (e.g., in a config file or at the top of the main module)
-- Referenced by: hero section version badge, meta banner, any version mentions in copy
-- Updating the version requires changing one value
+### Version State
+```
+version: string (semver)
+buildDate: string (ISO timestamp)  
+builderAttribution: string
+frameworkVersion: string
+```
 
-## Section Content
+### Content State
+```
+siteContent: {
+  hero: { tagline, description, cta }
+  problem: { headline, painPoints[], solutions[] }
+  howItWorks: { steps[], visualGuides[] }
+  comparison: { beforeState, afterState }
+  cta: { githubUrl, gettingStarted, community }
+}
+metaBanner: {
+  transparency: string
+  specLink: string
+  seedLink: string  
+}
+```
 
-### Header
-- Site title: "RootSpec"
-- Version badge: `v[rootspec_version]`
-- Theme toggle (rendered by Theme System)
-- Navigation links to major sections
+### Navigation State
+```
+sections: [
+  { id, title, order, anchor }
+]
+currentSection: string
+```
 
-### Hero
-- Tagline (short, memorable)
-- One-sentence explanation of what RootSpec is
-- Primary CTA button (links to GitHub or getting started)
+## External Interfaces
 
-### Meta Banner
-- Prominent banner explaining this site is a RootSpec demo
-- Tone: honest, direct — "This site was generated from a ~100-line product description using the RootSpec pipeline"
-- Links to: SEED.md in GitHub repo, spec files in GitHub repo
-- Acknowledges that rough edges reflect minimal human guidance, not carelessness
+### Build System Integration
+- **Input**: Markdown files, configuration, build metadata
+- **Output**: Static HTML pages, structured data objects
+- **Contract**: File-based routing with predictable naming conventions
 
-### The Problem
-- [problem-count] named pain points, each with a title and brief description
-- Pain points from L1: spec drift, philosophy-implementation gap, unreliable AI output, dead documentation
-- Real-world framing — describe the problem as developers experience it
+### Repository Integration  
+- **Input**: Commit metadata, file paths, repository URLs
+- **Output**: Attribution links, transparency references
+- **Contract**: Git metadata available at build time
 
-### How It Works
-- Four-step walkthrough: init → spec → impl → validate
-- Each step: command name, what it does, visual representation of before/after
-- Visual flow showing the progression
+### Interactive System Handoff
+- **Output**: Template structures for wizard, example content for explorer
+- **Contract**: Structured data objects with consistent schema
+- **Example**: Wizard templates include mission options, pillar suggestions
 
-### Open Source CTA
-- GitHub repository link
-- Getting started instructions (the four commands)
-- Community links (if applicable)
+## Implementation Patterns
 
-### Footer
-- Minimal: links, credits, GitHub
+### Static Generation
+Content processed at build time through Astro compilation:
+- Markdown → HTML conversion with frontmatter parsing
+- Template rendering with build-time data injection
+- Asset optimization and bundling
 
-## External Links
+### Configuration Management
+Centralized configuration drives content structure:
+- Version information from package.json and build environment
+- Site content from structured data files or frontmatter
+- External links and references from environment variables
 
-All external links:
-- Open in new tab (`target="_blank"` with `rel="noopener noreferrer"`)
-- GitHub repo links point to the specific files (SEED.md, rootspec/ directory)
+### Information Architecture
+Content organization supports user journey flows:
+- Progressive disclosure from hero through detailed explanations
+- Visual hierarchy guides attention to key concepts
+- Meta-information provides transparency without distraction
 
-## Content Tone Rules
+## Data Dependencies
 
-Per L1 inviolable principles and L2 developer-native communication:
-- No buzzwords
-- Specific over general
-- Technical but accessible
-- Confident but not preachy
+### Version Management
+- **Source**: package.json, build environment, git metadata
+- **Usage**: Version badge display, attribution footer, meta banner
+- **Update Trigger**: Build process, deployment pipeline
+
+### Content Structure
+- **Source**: Seed requirements, specification levels, framework documentation
+- **Usage**: Section content, wizard templates, explorer examples
+- **Update Trigger**: Specification changes, framework updates
+
+### External References
+- **Source**: Repository URLs, documentation links, community resources
+- **Usage**: GitHub integration, getting started flows, community CTAs
+- **Update Trigger**: Repository changes, documentation updates
+
+## Error Handling
+
+### Missing Content
+- **Scenario**: Required content not available at build time
+- **Response**: Build failure with clear error message indicating missing dependency
+- **Recovery**: Graceful defaults for non-critical content, hard failure for essential data
+
+### Invalid References  
+- **Scenario**: Links to non-existent files or repositories
+- **Response**: Build warning with link validation, fallback to generic references
+- **Recovery**: Manual review and correction of broken references
+
+### Version Mismatch
+- **Scenario**: Framework version doesn't match site version
+- **Response**: Clear indication in version badge, meta banner disclosure
+- **Recovery**: Version synchronization through update process

@@ -1,0 +1,12 @@
+{
+  "runs": [
+  {
+    "skill": "rs-spec",
+    "startedAt": "2026-04-07T02:25:07Z",
+    "completedAt": "2026-04-07T02:34:26Z",
+    "durationSeconds": 559,
+    "iterations": null,
+    "stories": null
+  }
+  ]
+}

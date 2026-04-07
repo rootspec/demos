@@ -1,37 +1,81 @@
 ---
-interface Props {
-  title: string;
+export interface Props {
+  title?: string;
+  description?: string;
 }
 
-const { title } = Astro.props;
+const {
+  title = "RootSpec - Product Specifications That Work",
+  description = "Turn a 100-line product description into a fully working application with RootSpec's structured methodology."
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
+    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <script is:inline>
+      // Theme initialization - must be inline to prevent flash
       (function() {
-        const saved = localStorage.getItem('rootspec-theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = saved || (prefersDark ? 'dark' : 'light');
-        document.documentElement.classList.toggle('dark', theme === 'dark');
+        const stored = localStorage.getItem('theme');
+        const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        const theme = stored || system;
         document.documentElement.setAttribute('data-theme', theme);
-        document.addEventListener('DOMContentLoaded', function() {
-          document.body.setAttribute('data-theme', theme);
-        });
       })();
     </script>
   </head>
-  <body class="min-h-screen font-sans antialiased">
-    <div id="app">
-      <slot />
-    </div>
-    <script is:inline>
-      var theme = document.documentElement.getAttribute('data-theme') || 'light';
-      document.getElementById('app').setAttribute('data-theme', theme);
+  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200">
+    <slot />
+    <script>
+      // Theme toggle functionality
+      function initThemeToggle() {
+        const toggle = document.querySelector('[data-test="theme-toggle"]');
+        if (!toggle) return;
+
+        toggle.addEventListener('click', () => {
+          const current = document.documentElement.getAttribute('data-theme');
+          const next = current === 'dark' ? 'light' : 'dark';
+
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
+
+          // Update toggle state
+          toggle.setAttribute('aria-pressed', next === 'dark' ? 'true' : 'false');
+
+          // Announce to screen readers
+          const announcement = next === 'dark' ? 'Dark theme activated' : 'Light theme activated';
+          const announcer = document.createElement('div');
+          announcer.setAttribute('aria-live', 'polite');
+          announcer.setAttribute('aria-atomic', 'true');
+          announcer.className = 'sr-only';
+          announcer.textContent = announcement;
+          document.body.appendChild(announcer);
+          setTimeout(() => document.body.removeChild(announcer), 1000);
+        });
+
+        // Set initial state
+        const current = document.documentElement.getAttribute('data-theme');
+        toggle.setAttribute('aria-pressed', current === 'dark' ? 'true' : 'false');
+      }
+
+      // Initialize when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          initThemeToggle();
+          // Mark as hydrated for tests
+          const toggle = document.querySelector('[data-test="theme-toggle"]');
+          if (toggle) toggle.setAttribute('data-hydrated', 'true');
+        });
+      } else {
+        initThemeToggle();
+        // Mark as hydrated for tests
+        const toggle = document.querySelector('[data-test="theme-toggle"]');
+        if (toggle) toggle.setAttribute('data-hydrated', 'true');
+      }
     </script>
   </body>
 </html>

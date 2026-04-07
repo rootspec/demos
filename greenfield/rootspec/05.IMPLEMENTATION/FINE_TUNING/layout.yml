@@ -1,35 +1,167 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Layout & Responsive
+# FINE-TUNING: Layout System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# @last_updated: 2026-04-07T02:25:00Z
 
-breakpoints:
-  small: 640
+# -----------------------------------------------------------------------------
+# Responsive Breakpoints
+# -----------------------------------------------------------------------------
+
+breakpoint_mobile_max:
+  value: 767
   # @unit: pixels
-  # @rationale: Standard mobile/tablet breakpoint; below this is single-column
-  # @constraints: min=320, max=768, type=integer
+  # @rationale: Standard mobile breakpoint that covers most phone devices
+  # @constraint: min=320, max=800
 
-  large: 1024
+breakpoint_tablet_min:
+  value: 768
   # @unit: pixels
-  # @rationale: Tablet/desktop breakpoint; above this gets full layout with side-by-side elements
-  # @constraints: min=768, max=1280, type=integer
+  # @rationale: iPad and similar tablet devices start at 768px width
+  # @constraint: min=600, max=900
 
-max_content_width: 1200
-# @unit: pixels
-# @rationale: Readable line lengths on wide screens; prevents content from stretching too wide
-# @constraints: min=960, max=1440, type=integer
+breakpoint_tablet_max:
+  value: 1023
+  # @unit: pixels
+  # @rationale: Covers tablet devices up to small laptop screens
+  # @constraint: min=900, max=1200
 
-section_animation:
-  duration: 400
+breakpoint_desktop_min:
+  value: 1024
+  # @unit: pixels
+  # @rationale: Standard desktop breakpoint for full-featured layout
+  # @constraint: min=1000, max=1400
+
+# -----------------------------------------------------------------------------
+# Touch Target Specifications
+# -----------------------------------------------------------------------------
+
+minimum_touch_target_size:
+  value: 44
+  # @unit: pixels
+  # @rationale: Apple's minimum recommended touch target size for accessibility
+  # @constraint: min=40, max=60
+  # @inviolable: true
+
+touch_target_spacing:
+  value: 8
+  # @unit: pixels
+  # @rationale: Adequate spacing to prevent accidental touches
+  # @constraint: min=4, max=16
+
+# -----------------------------------------------------------------------------
+# Spacing and Typography Scale
+# -----------------------------------------------------------------------------
+
+base_spacing_unit:
+  value: 16
+  # @unit: pixels
+  # @rationale: Standard 1rem equivalent that scales well across devices
+  # @constraint: min=12, max=20
+
+content_max_width:
+  value: 1200
+  # @unit: pixels
+  # @rationale: Optimal reading width that prevents overly long lines
+  # @constraint: min=800, max=1600
+
+line_height_multiplier:
+  value: 1.6
+  # @unit: ratio
+  # @rationale: Comfortable reading line height for web content
+  # @constraint: min=1.2, max=2.0
+
+paragraph_spacing_multiplier:
+  value: 1.5
+  # @unit: ratio (relative to base spacing)
+  # @rationale: Clear paragraph separation without excessive whitespace
+  # @constraint: min=1.0, max=2.0
+
+# -----------------------------------------------------------------------------
+# Navigation and Scroll Behavior
+# -----------------------------------------------------------------------------
+
+sticky_header_offset:
+  value: 20
+  # @unit: pixels
+  # @rationale: Slight offset prevents header from appearing glued to viewport edge
+  # @constraint: min=0, max=50
+
+scroll_snap_tolerance:
+  value: 50
+  # @unit: pixels
+  # @rationale: Forgiving snap behavior that doesn't fight user intent
+  # @constraint: min=20, max=100
+
+section_visibility_threshold:
+  value: 0.3
+  # @unit: ratio (0-1)
+  # @rationale: Section considered visible when 30% is in viewport for navigation highlighting
+  # @constraint: min=0.1, max=0.8
+
+# -----------------------------------------------------------------------------
+# Mobile-Specific Parameters
+# -----------------------------------------------------------------------------
+
+mobile_menu_animation_duration:
+  value: 250
   # @unit: milliseconds
-  # @rationale: Fast enough to feel responsive, slow enough to be noticed as a transition
-  # @constraints: min=200, max=800, type=integer
+  # @rationale: Quick enough to feel responsive, smooth enough to feel polished
+  # @constraint: min=150, max=400
 
-  threshold: 0.15
-  # @unit: ratio (intersection observer)
-  # @rationale: Trigger animation when 15% of section is visible; early enough to feel seamless
-  # @constraints: min=0.05, max=0.5, type=float
+mobile_horizontal_padding:
+  value: 16
+  # @unit: pixels
+  # @rationale: Comfortable content padding that works on small screens
+  # @constraint: min=8, max=24
+
+mobile_vertical_spacing:
+  value: 32
+  # @unit: pixels
+  # @rationale: Adequate spacing between sections on mobile without being excessive
+  # @constraint: min=16, max=48
+
+# -----------------------------------------------------------------------------
+# Desktop Enhancement Parameters
+# -----------------------------------------------------------------------------
+
+desktop_sidebar_width:
+  value: 280
+  # @unit: pixels
+  # @rationale: Wide enough for navigation labels, narrow enough to preserve content space
+  # @constraint: min=200, max=400
+
+desktop_content_padding:
+  value: 48
+  # @unit: pixels
+  # @rationale: Generous padding that creates breathing room on larger screens
+  # @constraint: min=24, max=80
+
+desktop_multi_column_threshold:
+  value: 1200
+  # @unit: pixels
+  # @rationale: Screen width where multi-column layouts become beneficial
+  # @constraint: min=1000, max=1600
+
+# -----------------------------------------------------------------------------
+# Performance and Interaction Parameters
+# -----------------------------------------------------------------------------
+
+layout_calculation_debounce:
+  value: 100
+  # @unit: milliseconds
+  # @rationale: Reduces layout thrashing during window resize without feeling sluggish
+  # @constraint: min=50, max=300
+
+intersection_observer_threshold:
+  value: 0.1
+  # @unit: ratio (0-1)
+  # @rationale: Early detection of element visibility for smooth animations
+  # @constraint: min=0.0, max=0.5
+
+animation_distance_threshold:
+  value: 50
+  # @unit: pixels
+  # @rationale: Elements animate in when they're close enough to viewport for smooth effect
+  # @constraint: min=0, max=100

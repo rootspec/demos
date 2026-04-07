@@ -1,132 +1,169 @@
-# Level 4: Interactive System
+# Interactive System
 
-## Responsibility
+## Purpose
+Enables hands-on exploration that demonstrates **Hierarchical Integrity** and **Human-AI Collaboration** through dynamic user experiences.
 
-All interactive features: hierarchy explorer, spec wizard, and before/after comparison. Owns user interaction state, input handling, and dynamic output rendering.
+## Responsibilities
+- Hierarchy Explorer component state and navigation
+- Spec Wizard flow management and template processing
+- User input capture and sanitization
+- Interactive state persistence across sessions
 
-## Hierarchy Explorer
+## State Management
 
-### State
-
+### Hierarchy Explorer State
 ```
-explorer_state:
-  expanded_level: null | 1 | 2 | 3 | 4 | 5
-  hovered_level: null | 1 | 2 | 3 | 4 | 5
-  highlighted_references: [level_numbers]
+explorerState: {
+  expandedLevels: Set<string>
+  hoveredLevel: string | null
+  selectedLevel: string | null
+  exampleContent: Map<string, object>
+  referenceHighlights: boolean
+}
 ```
 
-### Entities
-
-Each level has:
-- id (1-5)
-- icon (emoji)
-- title (string)
-- subtitle (string — the "WHY", "WHAT", "HOW", etc.)
-- example_content (markdown string — shown when expanded)
-- allowed_references (array of level ids that this level can reference)
-
-### Behavior
-
-- Click a level → toggles expansion. If another level is expanded, collapse it first.
-- Hover a level → highlight the levels it can reference (arrows/lines illuminate upward)
-- Reference visualization: lines or arrows between levels, flowing upward only. When a level is hovered, its reference lines highlight; all others dim.
-- Only one level expanded at a time.
-
-### Data
-
-Level content is hardcoded (not fetched). The five levels and their example content are defined as a static data structure.
-
-### Fallback
-
-If JavaScript fails to initialize, all five levels render in a static expanded state with text descriptions of reference rules.
-
-## Spec Wizard
-
-### State
-
+### Spec Wizard State
 ```
-wizard_state:
-  current_step: 1 | 2 | 3 | "result"
-  mission: string (user input)
-  selected_template: string | null
-  pillars: [string] (3-5 selected or custom)
-  interaction: {
-    who: string
-    trigger: string
-    feedback: string
+wizardState: {
+  currentStep: number (1-3)
+  userInputs: {
+    mission: string
+    pillars: string[]
+    interaction: string
   }
+  selectedTemplates: {
+    missionTemplate: string | 'custom'
+    pillarSuggestions: string[]
+  }
+  outputPreview: string
+  isComplete: boolean
+}
 ```
 
-### Step 1: Mission
-
-- Text input field for product idea
-- [template-count] template suggestions displayed as clickable cards
-- Selecting a template pre-fills the text input
-- "Next" button enabled when input is non-empty
-
-### Step 2: Design Pillars
-
-- Display [pillar-suggestion-count] suggested emotional pillars as selectable chips
-- Suggestions may adapt based on mission input (simple keyword matching, not AI)
-- User can select 3-5 pillars
-- User can type custom pillars
-- "Next" enabled when 3-5 pillars selected
-
-### Step 3: Key Interaction
-
-- Three text inputs: Who (user role), Trigger (what starts it), Feedback (what the user gets)
-- Optional: pre-fill suggestions based on mission
-- "Generate" button enabled when all three fields are non-empty
-
-### Result
-
-- Display a skeleton spec card showing:
-  - L1 section: Mission statement + selected pillars
-  - L2 section: Inferred truth (template-based)
-  - L3 section: Interaction loop from the three inputs
-- Card is styled to look like a spec document
-- "Start over" button resets wizard state
-
-### Fallback
-
-If JavaScript fails, show a pre-filled example spec card with all three steps visible as static content.
-
-## Before/After Comparison
-
-### State
-
+### Global Interactive State  
 ```
-comparison_state:
-  active_view: "without" | "with"
+interactiveState: {
+  keyboardNavigation: boolean
+  reducedMotion: boolean
+  touchDevice: boolean
+  currentFocus: string | null
+}
 ```
 
-### Panels
+## External Interfaces
 
-**Without spec panel:**
-- Vague requirements document excerpt (real content, not lorem ipsum)
-- Ambiguous user story example
-- Decision with no traceable rationale
+### Content System Integration
+- **Input**: Template structures, example content, wizard configurations  
+- **Output**: Structured user inputs for preview generation
+- **Contract**: Template schema consistency, example content format
 
-**With RootSpec panel:**
-- Same requirements, structured into the five-level hierarchy
-- Testable user story with acceptance criteria
-- Decision traced to a design pillar
+### Theme System Integration
+- **Input**: Theme state, accessibility preferences, visual variables
+- **Output**: Component style adaptations, animation states
+- **Contract**: CSS custom property usage, theme transition support
 
-### Behavior
+### Validation System Integration
+- **Input**: User inputs requiring validation
+- **Output**: Validation requests with context
+- **Contract**: Validation schema compliance, error state handling
 
-- Toggle or slider switches between the two views
-- On desktop: side-by-side with a draggable divider, or toggle buttons
-- On mobile: stacked panels with toggle buttons
-- Transition between states is smooth (crossfade or slide)
+## Implementation Patterns
 
-### Fallback
+### Component Isolation
+Each interactive component manages its own state:
+- Hierarchy Explorer isolated from Spec Wizard state
+- Local state updates don't trigger global re-renders
+- Component unmounting cleans up event listeners and timers
 
-If JavaScript fails, both panels render side-by-side statically.
+### Progressive Enhancement
+Interactive features layer on top of static content:
+- Core information accessible without JavaScript
+- Interactive enhancements provide educational value
+- Graceful degradation maintains usability
 
-## Shared Interactive Conventions
+### Accessibility First
+All interactions support multiple input methods:
+- Keyboard navigation equivalent to mouse interaction
+- Screen reader announcements for state changes
+- Focus management during component transitions
 
-- All interactive elements use `data-test` attributes
-- All state is ephemeral — no persistence between page loads
-- Animations respect `prefers-reduced-motion`
-- Focus management: interactive elements are focusable and keyboard-operable
-- ARIA: `role`, `aria-expanded`, `aria-selected`, `aria-label` on all interactive elements
+## Data Dependencies
+
+### Template Processing
+- **Source**: Content System template definitions
+- **Usage**: Wizard step content, pillar suggestions, mission examples
+- **Update Trigger**: User interaction, step navigation
+
+### Example Content
+- **Source**: Content System hierarchy examples
+- **Usage**: Explorer level expansion, reference demonstration
+- **Update Trigger**: Level selection, hover states
+
+### User Preferences
+- **Source**: Theme System accessibility settings
+- **Usage**: Animation behavior, keyboard navigation, focus styles
+- **Update Trigger**: System preference changes, manual overrides
+
+## Interactive Components
+
+### Hierarchy Explorer
+**Purpose**: Visual demonstration of five-level methodology
+
+**Interactions**:
+- Click level to expand example content
+- Hover to highlight reference relationships
+- Keyboard arrow navigation between levels
+- Escape to collapse, Enter to expand
+
+**State Transitions**:
+- Collapsed → Expanded (smooth animation)
+- Normal → Highlighted (reference relationships)
+- Focused → Blurred (keyboard navigation)
+
+### Spec Wizard  
+**Purpose**: Guided experience creating skeleton specification
+
+**Interactions**:
+- Three-step form with progressive disclosure
+- Template selection with custom input options
+- Real-time preview generation
+- Step navigation with validation
+
+**State Transitions**:
+- Step 1 → Step 2 → Step 3 (forward progression)
+- Any step → Any step (navigation with validation)
+- Draft → Complete (final preview generation)
+
+## Error Handling
+
+### Invalid User Input
+- **Scenario**: User enters invalid characters or exceeds length limits
+- **Response**: Real-time validation with inline error messages
+- **Recovery**: Clear guidance on valid input format and examples
+
+### Template Loading Failure
+- **Scenario**: Wizard templates fail to load from Content System
+- **Response**: Fallback templates with basic functionality
+- **Recovery**: Error indication with manual input as alternative
+
+### State Corruption
+- **Scenario**: Browser storage corruption or invalid state
+- **Response**: State reset to defaults with user notification
+- **Recovery**: Fresh start capability, state export for debugging
+
+## Performance Optimization
+
+### State Management
+- Component state isolation prevents unnecessary updates
+- Debounced user input reduces validation frequency  
+- Memoized template processing avoids repeated calculations
+
+### Interaction Response
+- Animation frame scheduling for smooth transitions
+- Event listener cleanup prevents memory leaks
+- Throttled scroll and resize handlers
+
+### Data Loading
+- Lazy loading of example content reduces initial bundle
+- Progressive enhancement loads interactive features after core content
+- Local storage caching reduces repeated template processing

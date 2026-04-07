@@ -1,42 +1,128 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Interactive Features
+# FINE-TUNING: Interactive System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: INTERACTIVE_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+# @last_updated: 2026-04-07T02:25:00Z
 
-hierarchy_explorer:
-  expand_duration: 300
+# -----------------------------------------------------------------------------
+# Hierarchy Explorer Parameters
+# -----------------------------------------------------------------------------
+
+hierarchy_expand_duration:
+  value: 250
   # @unit: milliseconds
-  # @rationale: Quick expansion that feels snappy but visible
-  # @constraints: min=150, max=500, type=integer
+  # @rationale: Fast enough to feel responsive, slow enough to see transition smoothly
+  # @constraint: min=150, max=400
 
-  reference_highlight_opacity: 0.3
-  # @unit: ratio
-  # @rationale: Dimmed lines are visible but clearly secondary to the highlighted ones
-  # @constraints: min=0.1, max=0.5, type=float
-
-spec_wizard:
-  min_pillars: 3
-  # @rationale: Minimum needed to represent a meaningful product vision per framework guidance
-  # @constraints: min=2, max=4, type=integer
-
-  max_pillars: 5
-  # @rationale: More than 5 dilutes focus per L1 anti-pattern guidance
-  # @constraints: min=4, max=8, type=integer
-
-  template_count: 4
-  # @rationale: Enough variety to spark ideas without overwhelming choice
-  # @constraints: min=3, max=8, type=integer
-
-  pillar_suggestion_count: 8
-  # @rationale: Roughly double the max selectable; enough to browse without scrolling
-  # @constraints: min=6, max=12, type=integer
-
-comparison:
-  transition_duration: 300
+hierarchy_reference_highlight_delay:
+  value: 100
   # @unit: milliseconds
-  # @rationale: Matches hierarchy explorer timing for consistency
-  # @constraints: min=150, max=500, type=integer
+  # @rationale: Immediate feedback feels most responsive for hover interactions
+  # @constraint: min=0, max=200
+
+hierarchy_max_expanded_levels:
+  value: 3
+  # @unit: count
+  # @rationale: Allows exploration without overwhelming the interface
+  # @constraint: min=1, max=5
+
+# -----------------------------------------------------------------------------
+# Spec Wizard Parameters
+# -----------------------------------------------------------------------------
+
+wizard_step_transition_duration:
+  value: 300
+  # @unit: milliseconds
+  # @rationale: Smooth progression that feels guided without being slow
+  # @constraint: min=200, max=500
+
+wizard_auto_save_interval:
+  value: 2000
+  # @unit: milliseconds
+  # @rationale: Frequent enough to preserve progress, not so frequent as to be disruptive
+  # @constraint: min=1000, max=5000
+
+wizard_validation_debounce:
+  value: 300
+  # @unit: milliseconds
+  # @rationale: Allows user to finish typing before showing validation feedback
+  # @constraint: min=200, max=800
+
+wizard_preview_generation_delay:
+  value: 500
+  # @unit: milliseconds
+  # @rationale: Feels immediate while allowing user to finish editing
+  # @constraint: min=200, max=1000
+
+# -----------------------------------------------------------------------------
+# Input Validation Parameters
+# -----------------------------------------------------------------------------
+
+validation_max_mission_length:
+  value: 200
+  # @unit: characters
+  # @rationale: Long enough for meaningful mission statements, short enough for focus
+  # @constraint: min=50, max=500
+
+validation_max_pillar_count:
+  value: 5
+  # @unit: count
+  # @rationale: Design pillar research suggests 3-7 is optimal, 5 balances choice with focus
+  # @constraint: min=2, max=7
+
+validation_max_pillar_length:
+  value: 50
+  # @unit: characters
+  # @rationale: Pillars should be concise emotional phrases, not feature descriptions
+  # @constraint: min=10, max=100
+
+validation_max_interaction_length:
+  value: 500
+  # @unit: characters
+  # @rationale: Enough detail for meaningful interaction description without being verbose
+  # @constraint: min=50, max=1000
+
+# -----------------------------------------------------------------------------
+# Performance Parameters
+# -----------------------------------------------------------------------------
+
+component_state_cleanup_delay:
+  value: 5000
+  # @unit: milliseconds
+  # @rationale: Long enough to handle quick navigation back, short enough to prevent memory bloat
+  # @constraint: min=1000, max=10000
+
+scroll_throttle_interval:
+  value: 16
+  # @unit: milliseconds
+  # @rationale: 60fps equivalent for smooth scroll-based interactions
+  # @constraint: min=8, max=32
+
+resize_debounce_delay:
+  value: 150
+  # @unit: milliseconds
+  # @rationale: Responsive enough for resize feedback, not so frequent as to cause performance issues
+  # @constraint: min=100, max=300
+
+# -----------------------------------------------------------------------------
+# Accessibility Parameters
+# -----------------------------------------------------------------------------
+
+keyboard_navigation_delay:
+  value: 50
+  # @unit: milliseconds
+  # @rationale: Immediate response for keyboard users, slight delay prevents accidental activation
+  # @constraint: min=0, max=100
+
+focus_indicator_visibility_duration:
+  value: 2000
+  # @unit: milliseconds
+  # @rationale: Long enough to be helpful, short enough not to be distracting
+  # @constraint: min=1000, max=5000
+
+screen_reader_announcement_delay:
+  value: 100
+  # @unit: milliseconds
+  # @rationale: Brief delay ensures state change completes before announcement
+  # @constraint: min=0, max=300

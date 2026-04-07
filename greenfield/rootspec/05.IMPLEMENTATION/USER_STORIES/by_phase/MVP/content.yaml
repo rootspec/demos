@@ -1,147 +1,202 @@
 # =============================================================================
-# USER STORY: Understand RootSpec from Hero
+# USER STORIES: Content System - Static Content and Information Architecture
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
-
-id: US-101
-title: Understand what RootSpec is from the hero section
-
-acceptance_criteria:
-  - id: AC-101-1
-    title: Hero displays tagline and explanation
-    narrative: |
-      Given I am a developer visiting the site for the first time
-      When the page loads
-      Then I should see a clear tagline and one-sentence explanation of RootSpec
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
-      - shouldExist: { selector: '[data-test=hero-description]' }
-
-  - id: AC-101-2
-    title: Version badge is visible
-    narrative: |
-      Given I am viewing the hero section
-      When the page loads
-      Then I should see the current RootSpec version displayed
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=version-badge]' }
-
----
-# =============================================================================
-# USER STORY: See Meta Banner
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
 # @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# @last_updated: 2026-04-07T02:25:00Z
 
-id: US-102
-title: See that the site is itself a RootSpec demo
+# -----------------------------------------------------------------------------
+# Meta Banner - Transparency Communication
+# -----------------------------------------------------------------------------
 
-acceptance_criteria:
-  - id: AC-102-1
-    title: Meta banner explains the site is a demo
-    narrative: |
-      Given I am viewing the site
-      When I look at the meta banner
-      Then I should see an explanation that this site was built with RootSpec
-      And I should see links to the spec and seed files
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=meta-banner-spec-link]' }
-      - shouldExist: { selector: '[data-test=meta-banner-seed-link]' }
+- id: US-001
+  title: Display transparent meta banner about site generation
+  requirement_id: R-001
 
----
-# =============================================================================
-# USER STORY: Understand the Problem
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+  acceptance_criteria:
+    - id: AC-001-1
+      title: Banner displays generation transparency
+      narrative: |
+        Given I am a first-time visitor to the site
+        When I load the homepage
+        Then I should see a prominent banner explaining the site was generated from RootSpec
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=meta-banner]' }
+        - shouldContain: { selector: '[data-test=meta-banner]', text: 'This site was generated from a ~100-line product description' }
 
-id: US-103
-title: Understand why existing approaches fail
+    - id: AC-001-2
+      title: Banner links to source files
+      narrative: |
+        Given I am viewing the meta banner
+        When I click the spec link or seed link
+        Then I should navigate to the actual GitHub files
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=spec-link]' }
+      then:
+        - shouldNavigateToURL: { pattern: 'github.com.*rootspec' }
 
-acceptance_criteria:
-  - id: AC-103-1
-    title: Problem section lists specific pain points
-    narrative: |
-      Given I am scrolling through the site
-      When I reach the problem section
-      Then I should see named pain points that describe real developer frustrations
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=problem-section]' }
-      - shouldExist: { selector: '[data-test=pain-point]' }
+# -----------------------------------------------------------------------------
+# Hero Section - Value Proposition
+# -----------------------------------------------------------------------------
 
----
-# =============================================================================
-# USER STORY: Learn How RootSpec Works
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+- id: US-002
+  title: Present clear value proposition in hero section
+  requirement_id: R-002
 
-id: US-104
-title: See the four-skill workflow
+  acceptance_criteria:
+    - id: AC-002-1
+      title: Hero communicates purpose immediately
+      narrative: |
+        Given I am a developer visiting the site
+        When I view the hero section
+        Then I should understand what RootSpec is within 10 seconds
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=hero]' }
+        - shouldContain: { selector: '[data-test=hero-tagline]', text: 'RootSpec' }
+        - shouldExist: { selector: '[data-test=hero-description]' }
 
-acceptance_criteria:
-  - id: AC-104-1
-    title: How It Works shows four steps
-    narrative: |
-      Given I am viewing the How It Works section
-      When I look at the workflow
-      Then I should see the four skills (init, spec, impl, validate) with descriptions
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=how-it-works-section]' }
-      - shouldExist: { selector: '[data-test=workflow-step]' }
+    - id: AC-002-2
+      title: Version badge displays current framework version
+      narrative: |
+        Given I am evaluating RootSpec for adoption
+        When I view the hero section
+        Then I should see the current version prominently displayed
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=version-badge]' }
+        - shouldMatch: { selector: '[data-test=version-badge]', pattern: 'v\\d+\\.\\d+\\.\\d+' }
 
----
-# =============================================================================
-# USER STORY: Find Getting Started Instructions
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM]
-# @last_updated: 2026-04-02T00:00:00Z
+# -----------------------------------------------------------------------------
+# Problem Section - Pain Point Validation
+# -----------------------------------------------------------------------------
 
-id: US-105
-title: Find how to start using RootSpec
+- id: US-003
+  title: Articulate developer pain points clearly
+  requirement_id: R-003
 
-acceptance_criteria:
-  - id: AC-105-1
-    title: CTA section has GitHub link and instructions
-    narrative: |
-      Given I am viewing the open source CTA section
-      When I look at the getting started area
-      Then I should see a link to the GitHub repo and setup instructions
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=cta-section]' }
-      - shouldExist: { selector: '[data-test=github-link]' }
+  acceptance_criteria:
+    - id: AC-003-1
+      title: Problem section resonates with target audience
+      narrative: |
+        Given I am a technical lead who has experienced spec drift
+        When I read the problem section
+        Then I should feel that my pain points are understood
+      given:
+        - visit: '/'
+      when:
+        - scrollTo: { selector: '[data-test=problem-section]' }
+      then:
+        - shouldExist: { selector: '[data-test=problem-section]' }
+        - shouldContain: { selector: '[data-test=problem-section]', text: 'spec drift' }
+        - shouldContain: { selector: '[data-test=problem-section]', text: 'philosophy-implementation gap' }
+
+# -----------------------------------------------------------------------------
+# How It Works Section - Process Explanation
+# -----------------------------------------------------------------------------
+
+- id: US-004
+  title: Explain four-skill workflow visually
+  requirement_id: R-004
+
+  acceptance_criteria:
+    - id: AC-004-1
+      title: Four skills clearly presented
+      narrative: |
+        Given I want to understand the RootSpec workflow
+        When I view the How It Works section
+        Then I should see all four skills with clear descriptions
+      given:
+        - visit: '/'
+      when:
+        - scrollTo: { selector: '[data-test=how-it-works]' }
+      then:
+        - shouldExist: { selector: '[data-test=skill-rs-init]' }
+        - shouldExist: { selector: '[data-test=skill-rs-spec]' }
+        - shouldExist: { selector: '[data-test=skill-rs-impl]' }
+        - shouldExist: { selector: '[data-test=skill-rs-validate]' }
+
+    - id: AC-004-2
+      title: Visual progression shows before and after
+      narrative: |
+        Given I am evaluating the RootSpec process
+        When I view the workflow visualization
+        Then I should see clear before/after states for each step
+      given:
+        - visit: '/'
+      when:
+        - scrollTo: { selector: '[data-test=workflow-visual]' }
+      then:
+        - shouldExist: { selector: '[data-test=workflow-visual]' }
+        - shouldExist: { selector: '[data-test=before-state]' }
+        - shouldExist: { selector: '[data-test=after-state]' }
+
+# -----------------------------------------------------------------------------
+# Open Source CTA - Community Engagement
+# -----------------------------------------------------------------------------
+
+- id: US-005
+  title: Provide clear path to getting started
+  requirement_id: R-005
+
+  acceptance_criteria:
+    - id: AC-005-1
+      title: GitHub repository prominently linked
+      narrative: |
+        Given I want to try RootSpec
+        When I look for getting started information
+        Then I should find clear links to the GitHub repository
+      given:
+        - visit: '/'
+      when:
+        - scrollTo: { selector: '[data-test=cta-section]' }
+      then:
+        - shouldExist: { selector: '[data-test=github-link]' }
+        - shouldContain: { selector: '[data-test=github-link]', text: 'GitHub' }
+
+    - id: AC-005-2
+      title: Getting started instructions accessible
+      narrative: |
+        Given I am ready to implement RootSpec
+        When I click getting started
+        Then I should find actionable next steps
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=getting-started]' }
+      then:
+        - shouldNavigateToURL: { pattern: 'github.com.*#getting-started|#installation' }
+
+# -----------------------------------------------------------------------------
+# Footer Attribution - Builder Transparency
+# -----------------------------------------------------------------------------
+
+- id: US-006
+  title: Identify site builder and build date
+  requirement_id: R-006
+
+  acceptance_criteria:
+    - id: AC-006-1
+      title: Clear attribution and timestamp
+      narrative: |
+        Given I want to understand who built this demonstration
+        When I view the footer
+        Then I should see builder identification and build date
+      given:
+        - visit: '/'
+      when:
+        - scrollTo: { selector: '[data-test=footer]' }
+      then:
+        - shouldExist: { selector: '[data-test=footer]' }
+        - shouldExist: { selector: '[data-test=builder-attribution]' }
+        - shouldMatch: { selector: '[data-test=build-date]', pattern: '\\d{4}-\\d{2}-\\d{2}' }
