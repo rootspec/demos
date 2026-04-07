@@ -1,0 +1,188 @@
+
+DevTools listening on ws://127.0.0.1:41395/devtools/browser/ddca2089-c900-496e-aff0-7adf2af47c7d
+(node:30356) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("file%3A///home/runner/.cache/Cypress/14.5.4/Cypress/resources/app/node_modules/ts-node/esm/transpile-only.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30356) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+tput: No value for $TERM and no -T specified
+[90m====================================================================================================[39m
+
+[0m  ([4m[1mRun Starting[22m[24m)[0m
+
+[90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
+[90m  │[39m [90mCypress:[39m        14.5.4                                                                         [90m│[39m
+[90m  │[39m [90mBrowser:[39m        Electron 130 [90m(headless)[39m                                                        [90m│[39m
+[90m  │[39m [90mNode Version:[39m   [0mv22.22.2 [90m(/opt/hostedtoolcache/node/22.22.2/x64/bin/node)[39m[0m                      [90m│[39m
+[90m  │[39m [90mSpecs:[39m          [0m1 found (mvp.cy.ts)[0m                                                            [90m│[39m
+[90m  │[39m [90mSearched:[39m       [0mcypress/e2e/**/*.cy.ts[0m                                                         [90m│[39m
+[90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
+
+
+[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m
+                                                                                                    
+  Running:  [90mmvp.cy.ts[39m                                                                       [90m(1 of 1)[39m
+
+[0m[0m
+[0m  US-001: Technical lead understands RootSpec in 5 minutes[0m
+  [31m  1) AC-001-1: Hero section explains RootSpec clearly[0m
+  [31m  2) AC-001-2: Meta banner shows site is RootSpec demo[0m
+
+[0m  US-002: Interact with five-level hierarchy[0m
+  [31m  3) AC-002-1: Click levels to expand details[0m
+  [31m  4) AC-002-2: Hover shows allowed references[0m
+
+[0m  US-003: Generate skeleton spec from idea[0m
+  [31m  5) AC-003-1: Complete wizard steps successfully[0m
+  [31m  6) AC-003-2: Wizard works on mobile[0m
+
+[0m  US-004: See concrete before/after differences[0m
+  [31m  7) AC-004-1: Toggle between spec/no-spec views[0m
+  [31m  8) AC-004-2: Slider works on touch devices[0m
+
+[0m  US-005: Find clear path to getting started[0m
+  [31m  9) AC-005-1: CTA section provides next steps[0m
+  [31m  10) AC-005-2: Version information is visible[0m
+
+[0m  US-006: Navigate site with keyboard only[0m
+  [31m  11) AC-006-1: Keyboard navigation works for all features[0m
+  [31m  12) AC-006-2: Interactive features support keyboard[0m
+
+[0m  US-007: Use site effectively on mobile[0m
+  [31m  13) AC-007-1: Mobile layout adapts appropriately[0m
+  [31m  14) AC-007-2: Theme toggle works on mobile[0m
+
+
+[92m [0m[32m 0 passing[0m[90m (2m)[0m
+[31m  14 failing[0m
+
+[0m  1) US-001: Technical lead understands RootSpec in 5 minutes
+       AC-001-1: Hero section explains RootSpec clearly:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  2) US-001: Technical lead understands RootSpec in 5 minutes
+       AC-001-2: Meta banner shows site is RootSpec demo:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  3) US-002: Interact with five-level hierarchy
+       AC-002-1: Click levels to expand details:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  4) US-002: Interact with five-level hierarchy
+       AC-002-2: Hover shows allowed references:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  5) US-003: Generate skeleton spec from idea
+       AC-003-1: Complete wizard steps successfully:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  6) US-003: Generate skeleton spec from idea
+       AC-003-2: Wizard works on mobile:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  7) US-004: See concrete before/after differences
+       AC-004-1: Toggle between spec/no-spec views:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  8) US-004: See concrete before/after differences
+       AC-004-2: Slider works on touch devices:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  9) US-005: Find clear path to getting started
+       AC-005-1: CTA section provides next steps:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  10) US-005: Find clear path to getting started
+       AC-005-2: Version information is visible:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  11) US-006: Navigate site with keyboard only
+       AC-006-1: Keyboard navigation works for all features:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  12) US-006: Navigate site with keyboard only
+       AC-006-2: Interactive features support keyboard:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  13) US-007: Use site effectively on mobile
+       AC-007-1: Mobile layout adapts appropriately:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+[0m  14) US-007: Use site effectively on mobile
+       AC-007-2: Theme toggle works on mobile:
+[0m[31m     AssertionError: Timed out retrying after 10000ms: Expected to find element: `[data-test=theme-toggle][data-hydrated=true]`, but never found it.[0m[90m
+      at runSetupSteps (webpack://rootspec-marketing/./cypress/support/steps.ts:19:81)
+      at Context.eval (webpack://rootspec-marketing/./cypress/e2e/mvp.cy.ts:16:38)
+[0m
+
+
+
+[31m  ([4m[1mResults[22m[24m)[39m
+
+[90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
+[90m  │[39m [90mTests:[39m        [31m14[39m                                                                               [90m│[39m
+[90m  │[39m [90mPassing:[39m      [31m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mFailing:[39m      [31m14[39m                                                                               [90m│[39m
+[90m  │[39m [90mPending:[39m      [31m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mSkipped:[39m      [31m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mScreenshots:[39m  [31m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mVideo:[39m        [31mfalse[39m                                                                            [90m│[39m
+[90m  │[39m [90mDuration:[39m     [31m2 minutes, 23 seconds[39m                                                            [90m│[39m
+[90m  │[39m [90mSpec Ran:[39m     [31m[31mmvp.cy.ts[31m[39m                                                                        [90m│[39m
+[90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
+
+
+[rootspec] Updated rootspec/tests-status.json — 0/7 stories passing
+
+
+[90m====================================================================================================[39m
+
+[0m  ([4m[1mRun Finished[22m[24m)[0m
+tput: No value for $TERM and no -T specified
+
+
+[90m   [39m    [90mSpec[39m                                              [90mTests[39m  [90mPassing[39m  [90mFailing[39m  [90mPending[39m  [90mSkipped[39m [90m [39m
+[90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
+[90m  │[39m [31m✖[39m  [0mmvp.cy.ts[0m                                [90m02:23[39m       [0m14[0m        [90m-[39m       [31m14[39m        [90m-[39m        [90m-[39m [90m│[39m
+[90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
+[90m   [39m [31m✖[39m  [31m1 of 1 failed (100%)[39m                     [90m02:23[39m       [0m14[0m        [90m-[39m       [31m14[39m        [90m-[39m        [90m-[39m [90m [39m
+
+tput: No value for $TERM and no -T specified
+[90m----------------------------------------------------------------------------------------------------[39m
+
+  Debug faster with full visibility.
+
+  Record to Cypress Cloud and get instant access to full test details and replays.
+  Inspect the DOM, network events, and console logs exactly as they ran in CI.
+
+  >> [36mhttps://on.cypress.io/cloud-get-started[39m
+
+tput: No value for $TERM and no -T specified
+[90m----------------------------------------------------------------------------------------------------[39m
