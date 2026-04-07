@@ -36,7 +36,7 @@ Create whatever is missing:
 3. **`rootspec/00.FRAMEWORK.md`** — copy from `../rs-shared/00.FRAMEWORK.md`. Same approach.
 4. **`rootspec/spec-status.json`**:
    ```json
-   { "hash": null, "validatedAt": null, "valid": false, "version": "7.0.5" }
+   { "hash": null, "validatedAt": null, "valid": false, "version": "7.0.6" }
    ```
 5. **`rootspec/tests-status.json`**:
    ```json
@@ -54,6 +54,8 @@ bash "$(dirname "$0")/../rs-shared/scripts/detect-prerequisites.sh" .
 The script outputs `DEV_SERVER=`, `PRE_COMMIT_HOOK=`, `RELEASE_SCRIPT=`, `VALIDATION_SCRIPT=` lines with detected paths or `none`.
 
 Read `../rs-shared/fragments/prerequisites.md` for the full reference on what each prerequisite is.
+
+**Non-interactive mode:** If no `package.json` exists, create one with `npm init -y` before proceeding with prerequisites. The agent needs a package.json to install dev dependencies and configure scripts.
 
 Report what was found. For missing prerequisites, tell the developer you'll create all templates and proceed unless they object:
 
@@ -96,7 +98,7 @@ Create (or update) `.rootspec.json` at the project root:
 
 ```json
 {
-  "version": "7.0.5",
+  "version": "7.0.6",
   "specDirectory": "rootspec",
   "prerequisites": {
     "devServer": null,

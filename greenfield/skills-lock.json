@@ -9,12 +9,12 @@
     "rs-init": {
       "source": "rootspec/rootspec",
       "sourceType": "github",
-      "computedHash": "3875febc4704caa6348a2a37021e0eff14550be6f12d9f09d33d40e73880522c"
+      "computedHash": "58e635e88134861c378a0615f6a829993ea9e51c299f62d965ea52749ce56b4e"
     },
     "rs-shared": {
       "source": "rootspec/rootspec",
       "sourceType": "github",
-      "computedHash": "fa8f262c151f2f7eee825c305853abf390e11ab7d5e2534fd0ee06bfdc0f3c2f"
+      "computedHash": "0b5fc61801713a418ac6283f562fbf303708c0a0ba8e531ca0e4337b4275fa57"
     },
     "rs-spec": {
       "source": "rootspec/rootspec",
@@ -24,7 +24,7 @@
     "rs-update": {
       "source": "rootspec/rootspec",
       "sourceType": "github",
-      "computedHash": "131c0e246a0f499c9a452fc88adc3960bbd6b42e191175c432835db9dcfe740e"
+      "computedHash": "86cee397c2497480c81cb10ebaefcb76e687124ac084e458fd4a7952f00d2442"
     },
     "rs-validate": {
       "source": "rootspec/rootspec",
