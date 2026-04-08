@@ -5,6 +5,6 @@
     "devServer": "./scripts/dev.sh",
     "preCommitHook": "./scripts/pre-commit.sh",
     "releaseScript": "./scripts/release.sh",
-    "validationScript": "./scripts/test.sh"
+    "validationScript": "npm run cypress"
   }
 }

@@ -1,64 +1,104 @@
-# Level 4: Theme System
+# L4: Theme System
 
 ## Responsibility
+Manages visual design consistency, dark/light theme implementation, and aesthetic presentation that supports RootSpec's "clarity over convenience" design pillar.
 
-Dark/light theme management, CSS custom property resolution, system preference detection, and user override persistence.
+## Boundaries
 
-## State
+### Owns
+- Color palette definitions and theme switching
+- Typography scales and font loading
+- Spacing system and visual rhythm
+- Animation timing and motion design
+- Visual hierarchy and design tokens
+- Theme preference detection and persistence
 
-```
-theme_state:
-  current_theme: "light" | "dark"
-  source: "system" | "user"
-  system_preference: "light" | "dark"
-```
+### Does Not Own  
+- Content structure and information architecture (managed by Content System)
+- Interactive behavior and state management (managed by Interactive System)
+- Responsive layout and grid systems (managed by Layout System)
+- Component rendering and hydration (managed by Framework Integration)
 
-## Behavior
+## Data Ownership
 
-### Initialization
+### Design Tokens
+- Color palette (primary, secondary, neutral, semantic colors)
+- Typography scale (font sizes, weights, line heights)  
+- Spacing system (margin, padding, gap values)
+- Animation properties (durations, easing curves, delays)
+- Border radius, shadows, and surface treatments
 
-1. Check localStorage for saved user preference
-2. If found → apply saved theme, set `source: "user"`
-3. If not found → read `prefers-color-scheme` media query, set `source: "system"`
-4. Apply theme class to document root (`data-theme="light"` or `data-theme="dark"`)
+### Theme State
+- Current theme preference (light/dark/system)
+- System theme detection results
+- User override preferences
+- Theme-specific asset references
 
-### Toggle
+## Interactions with Other Systems
 
-1. Switch `current_theme` to opposite value
-2. Set `source: "user"`
-3. Save preference to localStorage
-4. Update document root `data-theme` attribute
-5. Transition smoothly (CSS transition on background/color properties)
+### → Content System
+- **Provides:** Visual styling for content hierarchy and readability
+- **Receives:** Content structure requiring thematic treatment
+- **Interface:** CSS custom properties, component styling classes
 
-### System Preference Change
+### → Interactive System
+- **Provides:** Visual feedback styling for interactive states
+- **Receives:** Interactive state changes requiring visual updates
+- **Interface:** State-based styling, animation coordination
 
-- Listen for `prefers-color-scheme` media query changes
-- If `source` is `"system"`, update theme to match
-- If `source` is `"user"`, ignore system changes (user override takes precedence)
+### → Layout System  
+- **Provides:** Theme-aware responsive styling adjustments
+- **Receives:** Breakpoint context for theme adaptations
+- **Interface:** Responsive design tokens, conditional styling
 
-## CSS Custom Properties
+### → Framework Integration
+- **Provides:** CSS architecture and build-time style processing
+- **Receives:** Astro component styling requirements
+- **Interface:** Scoped styles, global CSS custom properties
 
-The theme system defines CSS custom properties on `:root` that all other systems consume:
+## Internal Structure
 
-```
-Categories:
-  - Background colors (page, surface, elevated)
-  - Text colors (primary, secondary, muted)
-  - Accent colors (primary, hover, active)
-  - Border colors
-  - Shadow definitions
-  - Code block colors (syntax highlighting)
-```
+### Color System
+1. **Light Theme**
+   - Background: Clean whites and warm grays
+   - Text: High contrast dark grays and blacks  
+   - Accent: Professional blue with accessibility compliance
+   - Interactive: Clear hover and focus states
 
-All components reference these variables — no hardcoded colors anywhere in the codebase.
+2. **Dark Theme**
+   - Background: Rich dark grays and near-blacks
+   - Text: Warm whites and light grays
+   - Accent: Brightened blue maintaining contrast ratios
+   - Interactive: Subtle glow effects for feedback
 
-## Toggle UI
+### Typography Hierarchy
+- **Primary Font:** Modern sans-serif for readability
+- **Code Font:** Monospace for technical content
+- **Heading Scale:** Clear hierarchy supporting content structure
+- **Body Text:** Optimized for extended reading
 
-- Always visible in the header
-- Icon reflects current state (sun/moon or similar)
-- Accessible: `aria-label` describes current state and action ("Switch to dark mode")
-- Keyboard: activates on Enter/Space
+### Motion Design
+- **Micro-interactions:** Button hovers, focus indicators  
+- **Content Transitions:** Smooth section reveals, theme switching
+- **Interactive Feedback:** Immediate response to user actions
+- **Respect Motion Preferences:** Reduced motion support
 
-## Fallback
+## Quality Assurance
 
-If JavaScript fails, the site renders in a default theme (light) using CSS-only `prefers-color-scheme` media queries as fallback.
+### Accessibility Standards
+- WCAG AA contrast ratios in both themes
+- Focus indicators clearly visible in all contexts
+- Motion respects user system preferences
+- Color not sole means of conveying information
+
+### Design Consistency  
+- Design tokens prevent arbitrary styling
+- Component styles inherit from central system
+- Visual rhythm maintained across all breakpoints
+- Theme switching preserves layout and functionality
+
+### Performance Optimization
+- Critical CSS inlined for fast initial render
+- Theme switching without layout shift
+- Font loading optimized to prevent FOIT/FOUT
+- CSS custom properties for efficient theme updates

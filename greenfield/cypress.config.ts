@@ -11,6 +11,16 @@ export default defineConfig({
     defaultCommandTimeout: 10000,
     setupNodeEvents(on, config) {
       rootspecReporter(on, { statusPath: 'rootspec/tests-status.json' });
+
+      // Placeholder tasks — customize bodies as needed
+      on('task', {
+        loginAs(role: string) { return null; },
+        seedItem(data: Record<string, unknown>) { return null; },
+        resetDatabase() { return null; },
+        log(message: string) { console.log(message); return null; },
+      });
+
+      return config;
     },
   },
 });

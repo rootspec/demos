@@ -1,35 +1,78 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Layout & Responsive
+# FINE-TUNING: Layout System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-02T00:00:00Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# @last_updated: 2026-04-08T00:59:00Z
 
-breakpoints:
-  small: 640
+breakpoint_mobile:
+  value: 320
   # @unit: pixels
-  # @rationale: Standard mobile/tablet breakpoint; below this is single-column
-  # @constraints: min=320, max=768, type=integer
+  # @rationale: Accommodates smallest common smartphone screens in portrait mode
+  # @constraint: min=320, max=480
 
-  large: 1024
+breakpoint_tablet:
+  value: 768
   # @unit: pixels
-  # @rationale: Tablet/desktop breakpoint; above this gets full layout with side-by-side elements
-  # @constraints: min=768, max=1280, type=integer
+  # @rationale: Standard tablet width and common responsive design breakpoint
+  # @constraint: min=640, max=1024
 
-max_content_width: 1200
-# @unit: pixels
-# @rationale: Readable line lengths on wide screens; prevents content from stretching too wide
-# @constraints: min=960, max=1440, type=integer
+breakpoint_desktop:
+  value: 1024
+  # @unit: pixels
+  # @rationale: Ensures adequate space for multi-column layouts and enhanced interactions
+  # @constraint: min=1024, max=1440
 
-section_animation:
-  duration: 400
-  # @unit: milliseconds
-  # @rationale: Fast enough to feel responsive, slow enough to be noticed as a transition
-  # @constraints: min=200, max=800, type=integer
+max_content_width:
+  value: 1200
+  # @unit: pixels
+  # @rationale: Prevents excessively wide lines that reduce readability on large screens
+  # @constraint: min=1000, max=1600
 
-  threshold: 0.15
-  # @unit: ratio (intersection observer)
-  # @rationale: Trigger animation when 15% of section is visible; early enough to feel seamless
-  # @constraints: min=0.05, max=0.5, type=float
+section_spacing_mobile:
+  value: 32
+  # @unit: pixels
+  # @rationale: Adequate visual separation on small screens without wasting space
+  # @constraint: min=24, max=48
+
+section_spacing_desktop:
+  value: 64
+  # @unit: pixels
+  # @rationale: Generous breathing room that feels professional on large screens
+  # @constraint: min=48, max=96
+
+grid_gap_base:
+  value: 24
+  # @unit: pixels
+  # @rationale: Provides clear separation between content blocks without excessive whitespace
+  # @constraint: min=16, max=32
+
+navigation_height:
+  value: 64
+  # @unit: pixels
+  # @rationale: Comfortable touch target height that doesn't dominate viewport on mobile
+  # @constraint: min=48, max=80
+
+focus_outline_offset:
+  value: 2
+  # @unit: pixels
+  # @rationale: Prevents outline from overlapping with element borders while remaining visible
+  # @constraint: min=1, max=4
+
+scroll_margin_top:
+  value: 80
+  # @unit: pixels
+  # @rationale: Accounts for sticky navigation when jumping to anchored sections
+  # @constraint: min=60, max=120
+
+content_padding_mobile:
+  value: 16
+  # @unit: pixels
+  # @rationale: Minimal but adequate spacing from screen edges on mobile devices
+  # @constraint: min=12, max=24
+
+content_padding_desktop:
+  value: 32
+  # @unit: pixels
+  # @rationale: Comfortable margins that don't waste space but provide visual breathing room
+  # @constraint: min=24, max=48
