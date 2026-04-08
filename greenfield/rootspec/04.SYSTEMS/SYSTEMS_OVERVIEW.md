@@ -1,50 +1,77 @@
-# Level 4: Systems Overview
+# L4: Systems Overview
 
 ## System Map
 
-The marketing site is composed of five systems. Each owns a distinct concern.
-
 ```
-┌─────────────────────────────────────────────────┐
-│                 LAYOUT_SYSTEM                    │
-│  (page structure, navigation, scroll, theme)     │
-│                                                  │
-│  ┌──────────────┐  ┌──────────────────────────┐ │
-│  │ CONTENT      │  │ INTERACTIVE              │ │
-│  │ SYSTEM       │  │ SYSTEM                   │ │
-│  │              │  │                          │ │
-│  │ hero, problem│  │ hierarchy explorer,      │ │
-│  │ how-it-works │  │ spec wizard,             │ │
-│  │ CTA, meta    │  │ before/after comparison  │ │
-│  │ banner       │  │                          │ │
-│  └──────────────┘  └──────────────────────────┘ │
-│                                                  │
-│  ┌──────────────┐  ┌──────────────────────────┐ │
-│  │ THEME        │  │ ACCESSIBILITY            │ │
-│  │ SYSTEM       │  │ SYSTEM                   │ │
-│  │              │  │                          │ │
-│  │ dark/light,  │  │ keyboard nav, ARIA,      │ │
-│  │ preferences  │  │ focus management,        │ │
-│  │              │  │ reduced motion           │ │
-│  └──────────────┘  └──────────────────────────┘ │
-└─────────────────────────────────────────────────┘
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   CONTENT       │    │   INTERACTIVE    │    │     THEME       │
+│   SYSTEM        │────│     SYSTEM       │────│    SYSTEM       │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+         │                       │                       │
+         │                       │                       │
+         └───────────────────────┼───────────────────────┘
+                                 │
+                    ┌─────────────────────────┐
+                    │    LAYOUT SYSTEM        │
+                    └─────────────────────────┘
+                                 │
+                    ┌─────────────────────────┐  
+                    │  FRAMEWORK INTEGRATION  │
+                    └─────────────────────────┘
 ```
 
 ## System Interactions
 
-| From | To | Interaction |
-|------|----|-------------|
-| LAYOUT_SYSTEM | CONTENT_SYSTEM | Provides section containers and scroll position |
-| LAYOUT_SYSTEM | INTERACTIVE_SYSTEM | Provides section containers; reports viewport visibility |
-| LAYOUT_SYSTEM | THEME_SYSTEM | Applies theme class to root element |
-| THEME_SYSTEM | LAYOUT_SYSTEM | Provides current theme for CSS variable resolution |
-| THEME_SYSTEM | INTERACTIVE_SYSTEM | Provides color tokens for interactive elements |
-| ACCESSIBILITY_SYSTEM | INTERACTIVE_SYSTEM | Manages focus, announces state changes |
-| ACCESSIBILITY_SYSTEM | LAYOUT_SYSTEM | Provides reduced-motion preference |
+| From System | To System | Interaction Type | Data Flow |
+|-------------|-----------|------------------|-----------|
+| Content | Interactive | Event triggers | Section visibility, wizard data |
+| Content | Theme | Style application | Content styling, readability |
+| Interactive | Content | State updates | Wizard output, explorer selections |
+| Interactive | Theme | Visual feedback | Animation states, focus indicators |
+| Theme | Layout | Responsive styling | Breakpoint adjustments, contrast |
+| Layout | Framework | Component structure | Page templates, routing |
+| Framework | Content | Static generation | Build-time content processing |
+| Framework | Interactive | Client hydration | JavaScript enhancement |
 
-## Shared Conventions
+## Data Flow
 
-- **Data attributes:** All interactive elements use `data-test` attributes for testability
-- **CSS variables:** All colors, spacing, and typography use CSS custom properties managed by the theme system
-- **State management:** Client-side only. No persistence between sessions except theme preference (localStorage)
-- **Versioning:** RootSpec version stored as a single constant, referenced by the content system
+### Content Flow
+Static Markdown/YAML → Astro processing → HTML generation → Client rendering → User consumption
+
+### Interaction Flow  
+User input → JavaScript handlers → Local state management → Visual feedback → Content updates
+
+### Theme Flow
+System preference detection → Local storage → CSS custom properties → Component styling → User experience
+
+### Layout Flow
+Viewport detection → Responsive breakpoints → Component adaptation → Accessibility enhancements → Rendered interface
+
+## Calculated Values
+
+### Content Metrics
+- Reading time estimation based on word count
+- Section progress tracking for long-form content
+- Hierarchy depth calculation for visual organization
+
+### Interactive Metrics  
+- Wizard completion percentage
+- Explorer engagement time
+- Before/after toggle frequency
+
+### Theme Metrics
+- Contrast ratio calculations for accessibility
+- Animation duration based on user motion preferences  
+- Color scheme derivation from base palette
+
+### Layout Metrics
+- Responsive breakpoint determination
+- Touch target size validation
+- Keyboard navigation order calculation
+
+## External Dependencies
+
+- **Astro Framework:** Static site generation, component hydration, build optimization
+- **System APIs:** Prefers-color-scheme detection, local storage access
+- **Web Standards:** CSS Grid/Flexbox, Intersection Observer, Custom Properties
+- **Accessibility APIs:** Screen reader compatibility, keyboard event handling

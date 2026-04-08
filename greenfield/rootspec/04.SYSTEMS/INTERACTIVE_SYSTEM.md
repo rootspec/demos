@@ -1,132 +1,103 @@
-# Level 4: Interactive System
+# L4: Interactive System
 
 ## Responsibility
+Manages all client-side interactive elements that allow users to experience RootSpec methodology hands-on, including the hierarchy explorer, spec wizard, and before/after comparison.
 
-All interactive features: hierarchy explorer, spec wizard, and before/after comparison. Owns user interaction state, input handling, and dynamic output rendering.
+## Boundaries
 
-## Hierarchy Explorer
+### Owns
+- Hierarchy explorer visualization and interaction logic
+- "Spec Your Idea" wizard flow and data processing
+- Before/after comparison toggle functionality
+- User input validation and feedback
+- Interactive element state management
+- Animation and transition coordination
 
-### State
+### Does Not Own
+- Static content presentation (managed by Content System)
+- Visual styling and color schemes (managed by Theme System)  
+- Responsive layout behavior (managed by Layout System)
+- Framework component structure (managed by Framework Integration)
 
-```
-explorer_state:
-  expanded_level: null | 1 | 2 | 3 | 4 | 5
-  hovered_level: null | 1 | 2 | 3 | 4 | 5
-  highlighted_references: [level_numbers]
-```
+## Data Ownership
 
-### Entities
+### User Input Data
+- Wizard form state (product idea, mission, design pillars, interactions)
+- Hierarchy explorer selection state
+- Before/after comparison toggle state
+- User preferences (completed wizard steps, explorer bookmarks)
 
-Each level has:
-- id (1-5)
-- icon (emoji)
-- title (string)
-- subtitle (string — the "WHY", "WHAT", "HOW", etc.)
-- example_content (markdown string — shown when expanded)
-- allowed_references (array of level ids that this level can reference)
+### Generated Content
+- Skeleton spec output from wizard inputs
+- Dynamic hierarchy example content
+- Interactive feedback messages
+- Progress tracking across multi-step flows
 
-### Behavior
+## Interactions with Other Systems
 
-- Click a level → toggles expansion. If another level is expanded, collapse it first.
-- Hover a level → highlight the levels it can reference (arrows/lines illuminate upward)
-- Reference visualization: lines or arrows between levels, flowing upward only. When a level is hovered, its reference lines highlight; all others dim.
-- Only one level expanded at a time.
+### → Content System
+- **Provides:** Dynamic content updates based on user interactions
+- **Receives:** Static content templates and trigger points
+- **Interface:** Event-driven content injection, template population
 
-### Data
+### → Theme System
+- **Provides:** Interactive state requiring visual feedback
+- **Receives:** Theme-aware styling for interactive elements
+- **Interface:** CSS class toggling, animation property coordination
 
-Level content is hardcoded (not fetched). The five levels and their example content are defined as a static data structure.
+### → Layout System  
+- **Provides:** Interactive element dimensions and positioning needs
+- **Receives:** Responsive interaction patterns (touch vs mouse)
+- **Interface:** Adaptive interaction zones, mobile gesture support
 
-### Fallback
+### → Framework Integration
+- **Provides:** Client-side JavaScript requirements
+- **Receives:** Astro hydration directives and component boundaries
+- **Interface:** Component state management, progressive enhancement
 
-If JavaScript fails to initialize, all five levels render in a static expanded state with text descriptions of reference rules.
+## Internal Structure
 
-## Spec Wizard
+### Core Components
+1. **Hierarchy Explorer**
+   - Level expansion/collapse logic
+   - Visual connection rendering
+   - Example content switching
+   - Reference highlighting on hover
 
-### State
+2. **Spec Wizard**
+   - Multi-step form management
+   - Input validation and sanitization  
+   - Template-based output generation
+   - Progress tracking and navigation
 
-```
-wizard_state:
-  current_step: 1 | 2 | 3 | "result"
-  mission: string (user input)
-  selected_template: string | null
-  pillars: [string] (3-5 selected or custom)
-  interaction: {
-    who: string
-    trigger: string
-    feedback: string
-  }
-```
+3. **Before/After Comparison**
+   - Content toggle mechanics
+   - Smooth transition animations
+   - State persistence across sessions
+   - Accessibility-friendly controls
 
-### Step 1: Mission
+### State Management
+- Local component state for immediate feedback
+- Session storage for wizard progress
+- No external API dependencies
+- Client-side only data processing
 
-- Text input field for product idea
-- [template-count] template suggestions displayed as clickable cards
-- Selecting a template pre-fills the text input
-- "Next" button enabled when input is non-empty
+## Quality Assurance
 
-### Step 2: Design Pillars
+### Interaction Standards
+- All interactive elements keyboard accessible
+- Touch targets minimum 44px for mobile
+- Clear focus indicators for navigation
+- Logical tab order throughout interfaces
 
-- Display [pillar-suggestion-count] suggested emotional pillars as selectable chips
-- Suggestions may adapt based on mission input (simple keyword matching, not AI)
-- User can select 3-5 pillars
-- User can type custom pillars
-- "Next" enabled when 3-5 pillars selected
+### Performance Requirements
+- Interactive elements load progressively
+- No blocking JavaScript for core functionality  
+- Smooth animations at 60fps on standard devices
+- Graceful degradation when JavaScript disabled
 
-### Step 3: Key Interaction
-
-- Three text inputs: Who (user role), Trigger (what starts it), Feedback (what the user gets)
-- Optional: pre-fill suggestions based on mission
-- "Generate" button enabled when all three fields are non-empty
-
-### Result
-
-- Display a skeleton spec card showing:
-  - L1 section: Mission statement + selected pillars
-  - L2 section: Inferred truth (template-based)
-  - L3 section: Interaction loop from the three inputs
-- Card is styled to look like a spec document
-- "Start over" button resets wizard state
-
-### Fallback
-
-If JavaScript fails, show a pre-filled example spec card with all three steps visible as static content.
-
-## Before/After Comparison
-
-### State
-
-```
-comparison_state:
-  active_view: "without" | "with"
-```
-
-### Panels
-
-**Without spec panel:**
-- Vague requirements document excerpt (real content, not lorem ipsum)
-- Ambiguous user story example
-- Decision with no traceable rationale
-
-**With RootSpec panel:**
-- Same requirements, structured into the five-level hierarchy
-- Testable user story with acceptance criteria
-- Decision traced to a design pillar
-
-### Behavior
-
-- Toggle or slider switches between the two views
-- On desktop: side-by-side with a draggable divider, or toggle buttons
-- On mobile: stacked panels with toggle buttons
-- Transition between states is smooth (crossfade or slide)
-
-### Fallback
-
-If JavaScript fails, both panels render side-by-side statically.
-
-## Shared Interactive Conventions
-
-- All interactive elements use `data-test` attributes
-- All state is ephemeral — no persistence between page loads
-- Animations respect `prefers-reduced-motion`
-- Focus management: interactive elements are focusable and keyboard-operable
-- ARIA: `role`, `aria-expanded`, `aria-selected`, `aria-label` on all interactive elements
+### Error Handling
+- Input validation with clear error messages
+- Fallback content when interactive elements fail
+- Recovery mechanisms for incomplete wizard sessions
+- Accessibility-compliant error announcements

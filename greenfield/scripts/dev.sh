@@ -6,7 +6,7 @@
 set -euo pipefail
 
 # --- Configuration (edit these) ---
-DEV_CMD="npx astro dev"
+DEV_CMD="npm run dev"
 PORT="${PORT:-4321}"
 
 # --- Internal ---

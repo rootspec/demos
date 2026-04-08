@@ -1,62 +1,83 @@
-# Level 4: Content System
+# L4: Content System
 
 ## Responsibility
+Manages all static and dynamic content presentation, including marketing copy, meta information, and educational materials that explain RootSpec methodology.
 
-All static and semi-static content: copy, messaging, section content, links, and version display. Owns what the site says.
+## Boundaries
 
-## Version Management
+### Owns
+- Hero section content (tagline, description)
+- Meta banner (demo acknowledgment, links to spec/seed)
+- Problem/solution section copy
+- How it works explanatory content
+- Open source CTA and attribution footer
+- Version number display and management
 
-- RootSpec version stored as a single constant (e.g., in a config file or at the top of the main module)
-- Referenced by: hero section version badge, meta banner, any version mentions in copy
-- Updating the version requires changing one value
+### Does Not Own
+- Interactive widget content (managed by Interactive System)
+- Visual styling and theming (managed by Theme System)
+- Layout and responsive behavior (managed by Layout System)
+- User input processing (managed by Interactive System)
 
-## Section Content
+## Data Ownership
 
-### Header
-- Site title: "RootSpec"
-- Version badge: `v[rootspec_version]`
-- Theme toggle (rendered by Theme System)
-- Navigation links to major sections
+### Static Content
+- Marketing copy stored in Astro components/pages
+- Version number as configuration constant
+- Attribution information (builder name, build date)
+- GitHub repository links and metadata
 
-### Hero
-- Tagline (short, memorable)
-- One-sentence explanation of what RootSpec is
-- Primary CTA button (links to GitHub or getting started)
+### Dynamic Content
+- Section visibility state based on user scroll position
+- Reading progress indicators
+- Content adaptation based on theme/layout context
 
-### Meta Banner
-- Prominent banner explaining this site is a RootSpec demo
-- Tone: honest, direct — "This site was generated from a ~100-line product description using the RootSpec pipeline"
-- Links to: SEED.md in GitHub repo, spec files in GitHub repo
-- Acknowledges that rough edges reflect minimal human guidance, not carelessness
+## Interactions with Other Systems
 
-### The Problem
-- [problem-count] named pain points, each with a title and brief description
-- Pain points from L1: spec drift, philosophy-implementation gap, unreliable AI output, dead documentation
-- Real-world framing — describe the problem as developers experience it
+### → Interactive System
+- **Provides:** Section trigger points for wizard activation
+- **Receives:** State updates that affect content visibility
+- **Interface:** Event-based content show/hide, wizard data integration
 
-### How It Works
-- Four-step walkthrough: init → spec → impl → validate
-- Each step: command name, what it does, visual representation of before/after
-- Visual flow showing the progression
+### → Theme System  
+- **Provides:** Content structure requiring visual treatment
+- **Receives:** Theme-aware content variants (if applicable)
+- **Interface:** CSS class application, content readability optimization
 
-### Open Source CTA
-- GitHub repository link
-- Getting started instructions (the four commands)
-- Community links (if applicable)
+### → Layout System
+- **Provides:** Content hierarchy and semantic structure
+- **Receives:** Responsive content adaptations
+- **Interface:** Content reflow, mobile-optimized copy variants
 
-### Footer
-- Minimal: links, credits, GitHub
+### → Framework Integration
+- **Provides:** Static content for build-time processing
+- **Receives:** Astro component structure and hydration points
+- **Interface:** Component props, slot content, static generation directives
 
-## External Links
+## Internal Structure
 
-All external links:
-- Open in new tab (`target="_blank"` with `rel="noopener noreferrer"`)
-- GitHub repo links point to the specific files (SEED.md, rootspec/ directory)
+### Content Types
+1. **Hero Content:** Mission statement, value proposition, immediate call-to-action
+2. **Educational Content:** Problem definition, methodology explanation, workflow walkthrough  
+3. **Meta Content:** Demo disclaimer, transparency about rough edges, development attribution
+4. **CTA Content:** GitHub links, getting started instructions, community resources
 
-## Content Tone Rules
+### Content Management
+- Version-controlled in component files
+- Single source of truth for all copy
+- Build-time validation for broken links
+- Consistent tone and voice across all sections
 
-Per L1 inviolable principles and L2 developer-native communication:
-- No buzzwords
-- Specific over general
-- Technical but accessible
-- Confident but not preachy
+## Quality Assurance
+
+### Content Standards
+- Technical accuracy about RootSpec methodology
+- Tone alignment with "confident but not preachy" guideline
+- No buzzwords or corporate marketing speak
+- Specific examples rather than abstract concepts
+
+### Validation Rules  
+- All external links functional at build time
+- Version number consistency across displays
+- Attribution completeness (builder name, date)
+- Content accessibility (reading level, structure)
