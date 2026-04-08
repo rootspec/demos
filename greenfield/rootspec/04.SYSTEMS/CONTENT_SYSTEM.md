@@ -1,83 +1,98 @@
-# L4: Content System
+# Content System
 
 ## Responsibility
-Manages all static and dynamic content presentation, including marketing copy, meta information, and educational materials that explain RootSpec methodology.
 
-## Boundaries
+Manages static content delivery, meta information presentation, and content structure organization. Ensures all textual and media content supports the RootSpec methodology explanation while maintaining accuracy and accessibility.
 
-### Owns
-- Hero section content (tagline, description)
-- Meta banner (demo acknowledgment, links to spec/seed)
-- Problem/solution section copy
-- How it works explanatory content
-- Open source CTA and attribution footer
-- Version number display and management
+## System Boundaries
 
-### Does Not Own
-- Interactive widget content (managed by Interactive System)
-- Visual styling and theming (managed by Theme System)
-- Layout and responsive behavior (managed by Layout System)
-- User input processing (managed by Interactive System)
+**Owns:**
+- Static content management and organization
+- Meta banner content and presentation
+- Section content structure and hierarchy
+- Version information display and updates
+- Asset optimization and delivery
+
+**Does NOT own:**
+- Interactive feature implementation
+- Theme-specific content rendering
+- User-generated content processing  
+- Dynamic content personalization
 
 ## Data Ownership
 
-### Static Content
-- Marketing copy stored in Astro components/pages
-- Version number as configuration constant
-- Attribution information (builder name, build date)
-- GitHub repository links and metadata
+### Primary Data
+- **Section content**: Hero, problem, methodology, and CTA text
+- **Meta banner information**: Demo site explanation and repository links
+- **Version metadata**: Current RootSpec framework version display
+- **Static assets**: Images, icons, and media files
+- **Example content**: Before/after comparison text, wizard templates
 
-### Dynamic Content
-- Section visibility state based on user scroll position
-- Reading progress indicators
-- Content adaptation based on theme/layout context
+### Structured Data
+- **Navigation hierarchy**: Section organization and routing information
+- **SEO metadata**: Page titles, descriptions, and social sharing data
+- **Accessibility content**: Alt text, ARIA labels, and descriptive content
+- **Link references**: GitHub repositories, documentation, and external resources
 
 ## Interactions with Other Systems
 
-### → Interactive System
-- **Provides:** Section trigger points for wizard activation
-- **Receives:** State updates that affect content visibility
-- **Interface:** Event-based content show/hide, wizard data integration
+### → LAYOUT_SYSTEM
+- **Provides**: Content data for page structure and navigation
+- **Interface**: Content API, section metadata, navigation structure
+- **Frequency**: Initial load and navigation changes
 
-### → Theme System  
-- **Provides:** Content structure requiring visual treatment
-- **Receives:** Theme-aware content variants (if applicable)
-- **Interface:** CSS class application, content readability optimization
+### ← THEME_SYSTEM
+- **Receives**: Theme context for content adaptation
+- **Uses**: Theme state for conditional content rendering
 
-### → Layout System
-- **Provides:** Content hierarchy and semantic structure
-- **Receives:** Responsive content adaptations
-- **Interface:** Content reflow, mobile-optimized copy variants
+### ← INTERACTIVE_SYSTEM
+- **Provides**: Template content for wizard functionality
+- **Interface**: Content templates, example text, validation messages
 
-### → Framework Integration
-- **Provides:** Static content for build-time processing
-- **Receives:** Astro component structure and hydration points
-- **Interface:** Component props, slot content, static generation directives
+## External Dependencies
 
-## Internal Structure
+### Content Sources
+- **Markdown Files**: For structured content authoring and maintenance  
+- **Asset Pipeline**: For image optimization and responsive media
+- **Version Config**: For framework version synchronization
 
-### Content Types
-1. **Hero Content:** Mission statement, value proposition, immediate call-to-action
-2. **Educational Content:** Problem definition, methodology explanation, workflow walkthrough  
-3. **Meta Content:** Demo disclaimer, transparency about rough edges, development attribution
-4. **CTA Content:** GitHub links, getting started instructions, community resources
+### SEO & Social
+- **Meta Tags**: For search engine and social platform optimization
+- **Open Graph**: For rich social sharing previews
+- **Schema Markup**: For structured data enhancement
 
-### Content Management
-- Version-controlled in component files
-- Single source of truth for all copy
-- Build-time validation for broken links
-- Consistent tone and voice across all sections
+## Internal Architecture
 
-## Quality Assurance
+### Content Organization
+- **Section Manager**: Organizes content by page sections and hierarchy
+- **Asset Manager**: Handles image, icon, and media file delivery
+- **Meta Manager**: Coordinates SEO, social, and accessibility metadata
+- **Version Manager**: Synchronizes framework version across all references
 
-### Content Standards
-- Technical accuracy about RootSpec methodology
-- Tone alignment with "confident but not preachy" guideline
-- No buzzwords or corporate marketing speak
-- Specific examples rather than abstract concepts
+### Content Processing
+1. **Source Phase**: Load content from markdown and configuration files
+2. **Processing Phase**: Transform content for web delivery and accessibility
+3. **Optimization Phase**: Optimize assets and prepare for responsive delivery
+4. **Distribution Phase**: Provide content to layout and interactive systems
 
-### Validation Rules  
-- All external links functional at build time
-- Version number consistency across displays
-- Attribution completeness (builder name, date)
-- Content accessibility (reading level, structure)
+## Content Strategy
+
+### Accuracy Maintenance
+- **Version synchronization**: Keep framework version current across all mentions
+- **Link validation**: Ensure GitHub and documentation links remain functional  
+- **Content freshness**: Review methodology explanations for framework updates
+- **Example relevance**: Maintain realistic, non-placeholder content in all sections
+
+### Accessibility Implementation
+- **Semantic structure**: Use proper heading hierarchy and landmark roles
+- **Descriptive content**: Provide meaningful alt text and ARIA descriptions
+- **Reading level**: Maintain appropriate technical depth for target audience
+- **Language clarity**: Use consistent terminology and clear explanations
+
+## Error Handling
+
+### Content Failures
+- **Missing content**: Provide graceful fallbacks with clear error indication
+- **Asset loading errors**: Display alt text and maintain layout structure
+- **Version mismatch**: Show warning when version information is inconsistent
+- **Link failures**: Indicate broken references while maintaining site functionality

@@ -1,103 +1,109 @@
-# L4: Interactive System
+# Interactive System
 
 ## Responsibility
-Manages all client-side interactive elements that allow users to experience RootSpec methodology hands-on, including the hierarchy explorer, spec wizard, and before/after comparison.
 
-## Boundaries
+Manages all user interactions, client-side functionality, and dynamic content presentation. Provides hands-on demonstrations of RootSpec methodology through hierarchy exploration, wizard workflows, and comparison tools.
 
-### Owns
-- Hierarchy explorer visualization and interaction logic
-- "Spec Your Idea" wizard flow and data processing
-- Before/after comparison toggle functionality
-- User input validation and feedback
-- Interactive element state management
-- Animation and transition coordination
+## System Boundaries
 
-### Does Not Own
-- Static content presentation (managed by Content System)
-- Visual styling and color schemes (managed by Theme System)  
-- Responsive layout behavior (managed by Layout System)
-- Framework component structure (managed by Framework Integration)
+**Owns:**
+- Hierarchy explorer interaction logic
+- "Spec Your Idea" wizard implementation
+- Before/after comparison interface
+- User input validation and processing
+- Interactive feedback and animations
+
+**Does NOT own:**
+- Static content generation or management
+- Theme preference storage or detection
+- Page layout structure or navigation
+- Backend data processing or persistence
 
 ## Data Ownership
 
-### User Input Data
-- Wizard form state (product idea, mission, design pillars, interactions)
-- Hierarchy explorer selection state
-- Before/after comparison toggle state
-- User preferences (completed wizard steps, explorer bookmarks)
+### Interactive State
+- **Hierarchy explorer state**: Current level selection, expansion state, reference highlighting
+- **Wizard progress**: Step completion, form validation, user inputs
+- **Comparison state**: Toggle position, panel visibility, transition state
+- **User session data**: Interaction history, progress tracking (client-side only)
 
-### Generated Content
-- Skeleton spec output from wizard inputs
-- Dynamic hierarchy example content
-- Interactive feedback messages
-- Progress tracking across multi-step flows
+### Dynamic Content
+- **Wizard templates**: Mission templates, design pillar suggestions, interaction patterns
+- **Validation logic**: Input requirements, format checking, completion criteria
+- **Generated output**: Skeleton spec creation from user wizard inputs
+- **Interactive feedback**: Success messages, error states, progress indicators
 
 ## Interactions with Other Systems
 
-### → Content System
-- **Provides:** Dynamic content updates based on user interactions
-- **Receives:** Static content templates and trigger points
-- **Interface:** Event-driven content injection, template population
+### ← CONTENT_SYSTEM
+- **Receives**: Template content for wizard functionality
+- **Uses**: Example text, validation messages, instructional content
+- **Interface**: Content API for dynamic text retrieval
 
-### → Theme System
-- **Provides:** Interactive state requiring visual feedback
-- **Receives:** Theme-aware styling for interactive elements
-- **Interface:** CSS class toggling, animation property coordination
+### → THEME_SYSTEM
+- **Sends**: Manual theme toggle requests from UI controls
+- **Receives**: Current theme state for component styling
+- **Interface**: Theme update functions, state subscription
 
-### → Layout System  
-- **Provides:** Interactive element dimensions and positioning needs
-- **Receives:** Responsive interaction patterns (touch vs mouse)
-- **Interface:** Adaptive interaction zones, mobile gesture support
+### → LAYOUT_SYSTEM  
+- **Provides**: Interactive components for embedding in page structure
+- **Interface**: Component mounting points, responsive behavior requirements
 
-### → Framework Integration
-- **Provides:** Client-side JavaScript requirements
-- **Receives:** Astro hydration directives and component boundaries
-- **Interface:** Component state management, progressive enhancement
+## External Dependencies
 
-## Internal Structure
+### Browser APIs
+- **Event Handling**: For user interaction capture and processing
+- **Local Storage**: For temporary session state (wizard progress only)
+- **Animation APIs**: For smooth transitions and interactive feedback
 
-### Core Components
-1. **Hierarchy Explorer**
-   - Level expansion/collapse logic
-   - Visual connection rendering
-   - Example content switching
-   - Reference highlighting on hover
+### UI Framework
+- **Component Library**: For consistent interactive element styling
+- **State Management**: For complex interaction state coordination
+- **Event System**: For interaction event propagation and handling
 
-2. **Spec Wizard**
-   - Multi-step form management
-   - Input validation and sanitization  
-   - Template-based output generation
-   - Progress tracking and navigation
+## Internal Architecture
 
-3. **Before/After Comparison**
-   - Content toggle mechanics
-   - Smooth transition animations
-   - State persistence across sessions
-   - Accessibility-friendly controls
+### Component Structure
+- **Hierarchy Explorer**: Multi-level interactive tree with reference highlighting
+- **Wizard Controller**: Multi-step form with validation and progress tracking
+- **Comparison Interface**: Side-by-side view with smooth toggle transitions
+- **Feedback System**: Success/error messaging and visual confirmation
 
-### State Management
-- Local component state for immediate feedback
-- Session storage for wizard progress
-- No external API dependencies
-- Client-side only data processing
+### Interaction Processing
+1. **Input Phase**: Capture user interactions and validate input
+2. **Processing Phase**: Update internal state and trigger appropriate responses
+3. **Feedback Phase**: Provide immediate visual and textual feedback
+4. **State Phase**: Maintain interaction state for continued user engagement
 
-## Quality Assurance
+## Feature Implementation
 
-### Interaction Standards
-- All interactive elements keyboard accessible
-- Touch targets minimum 44px for mobile
-- Clear focus indicators for navigation
-- Logical tab order throughout interfaces
+### Hierarchy Explorer
+- **Level Selection**: Click/keyboard navigation through RootSpec levels
+- **Reference Visualization**: Highlight permitted reference connections
+- **Content Expansion**: Progressive disclosure of level details and examples
+- **Accessibility**: Full keyboard navigation and screen reader support
 
-### Performance Requirements
-- Interactive elements load progressively
-- No blocking JavaScript for core functionality  
-- Smooth animations at 60fps on standard devices
-- Graceful degradation when JavaScript disabled
+### Spec Your Idea Wizard
+- **Step Progression**: Guided workflow through mission → pillars → interaction
+- **Input Validation**: Real-time feedback on user input quality and completeness
+- **Template Selection**: Structured options with custom input alternatives
+- **Output Generation**: Client-side skeleton spec creation from collected inputs
 
-### Error Handling
-- Input validation with clear error messages
-- Fallback content when interactive elements fail
-- Recovery mechanisms for incomplete wizard sessions
-- Accessibility-compliant error announcements
+### Before/After Comparison
+- **Toggle Interface**: Smooth transition between traditional vs RootSpec approaches
+- **Content Synchronization**: Aligned sections for direct comparison
+- **Difference Highlighting**: Visual emphasis on key methodology benefits
+- **Responsive Behavior**: Appropriate interaction patterns for mobile devices
+
+## Error Handling & Recovery
+
+### Input Validation
+- **Incomplete inputs**: Inline validation with helpful completion guidance
+- **Invalid formats**: Clear error messages with correct format examples
+- **Required fields**: Progressive disclosure of requirements with visual indicators
+
+### Interaction Failures
+- **Component loading errors**: Graceful degradation to static content with explanation
+- **State corruption**: Reset functionality with clear user communication
+- **Browser compatibility**: Alternative interaction paths for unsupported features
+- **Accessibility barriers**: Multiple input methods and clear navigation alternatives

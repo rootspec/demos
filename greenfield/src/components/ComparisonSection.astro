@@ -1,0 +1,111 @@
+---
+// Comparison section showing traditional vs RootSpec approaches
+---
+
+<section data-test="comparison-section" class="py-16 bg-gray-50 dark:bg-gray-800">
+  <div class="container mx-auto px-4 max-w-6xl">
+    <h3 class="text-3xl font-bold text-center mb-12">Traditional vs RootSpec Approach</h3>
+
+    <div id="comparison-app">
+      <!-- React component will mount here -->
+    </div>
+  </div>
+</section>
+
+<script>
+  import { createRoot } from 'react-dom/client';
+  import React from 'react';
+
+  function ComparisonApp() {
+    const [showRootSpec, setShowRootSpec] = React.useState(false);
+
+    const traditionalContent = {
+      title: 'Traditional Specification',
+      items: [
+        'Scattered requirements across multiple documents',
+        'No clear hierarchy or relationship between different specification levels',
+        'Implementation details mixed with high-level strategy',
+        'Manual testing that may not match original requirements',
+        'Documentation that becomes outdated as code evolves'
+      ]
+    };
+
+    const rootspecContent = {
+      title: 'RootSpec Approach',
+      items: [
+        'Structured hierarchy from Philosophy to Implementation',
+        'Clear reference constraints prevent circular dependencies',
+        'Separation of concerns across five distinct levels',
+        'Automated test generation from user stories',
+        'Living documentation that stays synchronized with code'
+      ]
+    };
+
+    const currentContent = showRootSpec ? rootspecContent : traditionalContent;
+
+    return React.createElement('div', { className: 'space-y-8' },
+      // Toggle control
+      React.createElement('div', { className: 'flex justify-center mb-8' },
+        React.createElement('div', { className: 'bg-white dark:bg-gray-700 p-2 rounded-lg shadow' },
+          React.createElement('div', { className: 'flex items-center space-x-4' },
+            React.createElement('button',
+              {
+                className: `px-4 py-2 rounded ${!showRootSpec ? 'bg-blue-600 text-white' : 'text-gray-600 dark:text-gray-300'}`,
+                onClick: () => setShowRootSpec(false)
+              },
+              'Traditional'
+            ),
+            React.createElement('button',
+              {
+                'data-test': 'comparison-toggle',
+                className: `px-4 py-2 rounded ${showRootSpec ? 'bg-blue-600 text-white' : 'text-gray-600 dark:text-gray-300'}`,
+                onClick: () => setShowRootSpec(true)
+              },
+              'RootSpec'
+            )
+          )
+        )
+      ),
+
+      // Content display
+      React.createElement('div', { className: 'bg-white dark:bg-gray-700 p-8 rounded-lg shadow min-h-[400px]' },
+        React.createElement('h4', { className: 'text-2xl font-bold mb-6 text-center' }, currentContent.title),
+
+        showRootSpec
+          ? React.createElement('div', { 'data-test': 'rootspec-approach' },
+              React.createElement('p', { className: 'text-lg mb-6 text-center text-gray-600 dark:text-gray-300' },
+                'RootSpec methodology provides a structured hierarchy with clear boundaries:'
+              ),
+              React.createElement('ul', { className: 'space-y-4' },
+                currentContent.items.map((item, index) =>
+                  React.createElement('li', { key: index, className: 'flex items-start space-x-3' },
+                    React.createElement('span', { className: 'text-green-500 mt-1' }, '✓'),
+                    React.createElement('span', {}, item)
+                  )
+                )
+              )
+            )
+          : React.createElement('div', { 'data-test': 'traditional-approach' },
+              React.createElement('p', { className: 'text-lg mb-6 text-center text-gray-600 dark:text-gray-300' },
+                'Traditional requirements gathering often leads to:'
+              ),
+              React.createElement('ul', { className: 'space-y-4' },
+                currentContent.items.map((item, index) =>
+                  React.createElement('li', { key: index, className: 'flex items-start space-x-3' },
+                    React.createElement('span', { className: 'text-red-500 mt-1' }, '⚠'),
+                    React.createElement('span', {}, item)
+                  )
+                )
+              )
+            )
+      )
+    );
+  }
+
+  // Mount React component
+  const container = document.getElementById('comparison-app');
+  if (container) {
+    const root = createRoot(container);
+    root.render(React.createElement(ComparisonApp));
+  }
+</script>

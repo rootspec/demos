@@ -1,161 +1,188 @@
 # =============================================================================
-# USER STORY: Mobile-Responsive Layout
+# USER STORY: Responsive & Accessibility Features
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: ACCESSIBILITY
-# @systems: [LAYOUT_SYSTEM, THEME_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
-
-id: US-401
-title: Site adapts to mobile viewport sizes
-requirement_id: R-401
-
-acceptance_criteria:
-  - id: AC-401-1
-    title: Content readable on mobile screens
-    narrative: |
-      Given I am viewing the site on a mobile device
-      When I read the content
-      Then I should see properly sized text and layouts
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-section]' }
-      - shouldContain: { selector: '[data-test=hero-description]', text: 'specification' }
-
-  - id: AC-401-2
-    title: Interactive elements are touch-friendly
-    narrative: |
-      Given I am using touch interaction
-      When I tap interactive elements
-      Then I should have appropriately sized touch targets
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=theme-toggle]' }
-    then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
-
-  - id: AC-401-3
-    title: Navigation works on small screens
-    narrative: |
-      Given I am viewing the site on mobile
-      When I navigate through sections
-      Then I should be able to access all functionality
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=spec-wizard-start]' }
-    then:
-      - shouldExist: { selector: '[data-test=product-idea-input]' }
-
----
-
-# =============================================================================
-# USER STORY: Keyboard Accessibility
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: ACCESSIBILITY
+# @journey: UNIVERSAL_ACCESS
 # @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, THEME_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
+# @last_updated: 2026-04-08T02:55:27Z
 
-id: US-402
-title: Complete keyboard navigation support
-requirement_id: R-402
+- id: US-201
+  title: Use site effectively on mobile devices
+  requirement_id: R-201
 
-acceptance_criteria:
-  - id: AC-402-1
-    title: Tab order follows logical content flow
-    narrative: |
-      Given I am using keyboard-only navigation
-      When I tab through the page elements
-      Then I should move through content in a logical order
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hero-section]' }
-    then:
-      - shouldExist: { selector: '[data-test=hero-section]:focus-within' }
+  acceptance_criteria:
+    - id: AC-201-1
+      title: Mobile layout is readable and functional
+      narrative: |
+        Given I visit the site on a mobile device
+        When the page loads
+        Then all content should be readable and interactive elements touchable
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=mobile-layout]' }
+        - shouldExist: { selector: '[data-test=hero-tagline]' }
 
-  - id: AC-402-2
-    title: All interactive elements keyboard accessible
-    narrative: |
-      Given I am using keyboard navigation
-      When I encounter interactive elements
-      Then I should be able to activate them with keyboard
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-explorer]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-explorer]:focus-within' }
+    - id: AC-201-2
+      title: Interactive features work on touch devices
+      narrative: |
+        Given I am using a mobile device
+        When I interact with the hierarchy explorer
+        Then touch interactions should work smoothly
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=hierarchy-explorer]' }
+        - click: { selector: '[data-test=level-1]' }
+      then:
+        - shouldExist: { selector: '[data-test=level-1-content]' }
 
-  - id: AC-402-3
-    title: Skip links available for screen readers
-    narrative: |
-      Given I am using assistive technology
-      When I navigate the page
-      Then I should have skip links to main content areas
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: 'main' }
+    - id: AC-201-3
+      title: Wizard is usable on mobile
+      narrative: |
+        Given I am completing the wizard on mobile
+        When I navigate through the steps
+        Then the interface should be touch-friendly
+      given:
+        - visit: '/'
+        - click: { selector: '[data-test=spec-wizard]' }
+      when:
+        - click: { selector: '[data-test=mission-template]' }
+        - click: { selector: '[data-test=wizard-next]' }
+      then:
+        - shouldExist: { selector: '[data-test=wizard-step-2]' }
 
----
+- id: US-202
+  title: Navigate site using only keyboard
+  requirement_id: R-202
 
-# =============================================================================
-# USER STORY: Cross-Device Consistency
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: ACCESSIBILITY
-# @systems: [LAYOUT_SYSTEM, CONTENT_SYSTEM, FRAMEWORK_INTEGRATION]
-# @last_updated: 2026-04-08T00:59:00Z
+  acceptance_criteria:
+    - id: AC-202-1
+      title: All interactive elements are keyboard accessible
+      narrative: |
+        Given I am navigating with keyboard only
+        When I use tab to move through elements
+        Then I should be able to reach all interactive features
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=theme-toggle]' }
+        - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
+        - shouldExist: { selector: '[data-test=spec-wizard]' }
 
-id: US-403
-title: Consistent functionality across device types
-requirement_id: R-403
+    - id: AC-202-2
+      title: Focus indicators are clearly visible
+      narrative: |
+        Given I am navigating with keyboard
+        When I tab to interactive elements
+        Then focus should be clearly indicated visually
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=theme-toggle]' }
+      then:
+        - shouldExist: { selector: '[data-test=focus-indicator]' }
 
-acceptance_criteria:
-  - id: AC-403-1
-    title: Core functionality works without JavaScript
-    narrative: |
-      Given JavaScript is disabled or fails to load
-      When I visit the site
-      Then I should still be able to read core content
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-section]' }
-      - shouldContain: { selector: '[data-test=hero-description]', text: 'specification' }
+    - id: AC-202-3
+      title: Skip links provide efficient navigation
+      narrative: |
+        Given I want to navigate efficiently with keyboard
+        When I use skip links
+        Then I should be able to jump to main content
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=skip-link]' }
 
-  - id: AC-403-2
-    title: Progressive enhancement adds interactivity
-    narrative: |
-      Given JavaScript loads successfully
-      When interactive elements become available
-      Then I should have enhanced functionality while maintaining core features
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=spec-wizard-start]' }
-    then:
-      - shouldExist: { selector: '[data-test=product-idea-input]' }
+- id: US-203
+  title: Access site with assistive technologies
+  requirement_id: R-203
 
-  - id: AC-403-3
-    title: Consistent visual presentation across browsers
-    narrative: |
-      Given I am using different modern browsers
-      When I view the site
-      Then I should see consistent layout and styling
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-section]' }
-      - shouldExist: { selector: '[data-test=meta-banner]' }
+  acceptance_criteria:
+    - id: AC-203-1
+      title: Screen reader users understand page structure
+      narrative: |
+        Given I am using a screen reader
+        When I navigate the page
+        Then headings and landmarks should be properly structured
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=main-heading]' }
+        - shouldExist: { selector: '[data-test=navigation-landmark]' }
+
+    - id: AC-203-2
+      title: Interactive elements have descriptive labels
+      narrative: |
+        Given I am using assistive technology
+        When I encounter interactive elements
+        Then they should have clear, descriptive labels
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=theme-toggle]' }
+        - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
+
+    - id: AC-203-3
+      title: Form controls in wizard are properly labeled
+      narrative: |
+        Given I am using assistive technology in the wizard
+        When I encounter form fields
+        Then each should have associated labels
+      given:
+        - visit: '/'
+        - click: { selector: '[data-test=spec-wizard]' }
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=form-label]' }
+
+- id: US-204
+  title: Respect user accessibility preferences
+  requirement_id: R-204
+
+  acceptance_criteria:
+    - id: AC-204-1
+      title: Reduced motion preference is respected
+      narrative: |
+        Given I have reduced motion preference enabled
+        When I interact with animated elements
+        Then animations should be minimal or disabled
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=hierarchy-explorer]' }
+        - click: { selector: '[data-test=level-1]' }
+      then:
+        - shouldExist: { selector: '[data-test=reduced-motion-indicator]' }
+
+    - id: AC-204-2
+      title: High contrast mode works with themes
+      narrative: |
+        Given I am using high contrast mode
+        When I switch between light and dark themes
+        Then contrast should remain appropriate for accessibility
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=theme-toggle]' }
+      then:
+        - shouldExist: { selector: '[data-test=high-contrast-indicator]' }
+
+    - id: AC-204-3
+      title: Text remains readable at increased sizes
+      narrative: |
+        Given I have increased text size in my browser
+        When I view the site content
+        Then layout should adapt without breaking
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=scalable-text]' }
+        - shouldContain: { selector: '[data-test=hero-tagline]', text: 'philosophy' }

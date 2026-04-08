@@ -1,65 +1,123 @@
 ---
 export interface Props {
   title: string;
-  description?: string;
 }
 
-const { title, description = "RootSpec - A specification language that transforms product ideas into validated implementations" } = Astro.props;
+const { title } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="theme-system">
+<html lang="en" data-test="main-document">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="RootSpec marketing site - generated from a ~100-line product description" />
+    <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body>
-    <main>
+  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+    <a href="#main-content" data-test="skip-link" class="skip-link">Skip to main content</a>
+
+    <nav data-test="navigation-landmark" role="navigation" aria-label="Main navigation">
+      <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-4">
+          <a href="https://github.com/rootspec/rootspec" data-test="github-link" class="text-blue-600 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+        </div>
+        <button data-test="theme-toggle" type="button" class="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" data-test="focus-indicator">
+          <span class="sr-only">Toggle theme</span>
+          <span class="dark:hidden">🌙</span>
+          <span class="hidden dark:inline">☀️</span>
+        </button>
+      </div>
+    </nav>
+
+    <main id="main-content" data-test="scalable-text">
       <slot />
     </main>
+
     <script>
-      // Theme detection and persistence
-      function getTheme() {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
-        }
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          return 'dark';
-        }
-        return 'light';
+      // Theme handling
+      const themeToggle = document.querySelector('[data-test="theme-toggle"]');
+      const html = document.documentElement;
+
+      // Check for saved theme preference or default to system preference
+      const savedTheme = localStorage.getItem('theme');
+      const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const currentTheme = savedTheme || systemPreference;
+
+      // Apply theme
+      if (currentTheme === 'dark') {
+        html.classList.add('dark');
+        html.setAttribute('data-test', 'dark-theme-indicator');
+      } else {
+        html.classList.remove('dark');
+        html.removeAttribute('data-test');
       }
 
-      function setTheme(theme) {
-        document.documentElement.className = `theme-${theme}`;
-        localStorage.setItem('theme', theme);
-      }
-
-      // Set initial theme
-      setTheme(getTheme());
-
-      // Listen for theme toggle clicks
-      document.addEventListener('click', (e) => {
-        if (e.target?.matches('[data-test="theme-toggle"]')) {
-          const current = getTheme();
-          setTheme(current === 'light' ? 'dark' : 'light');
-        }
-
-        // Spec wizard start button - focus the input
-        if (e.target?.matches('[data-test="spec-wizard-start"]')) {
-          const input = document.querySelector('[data-test="product-idea-input"]');
-          if (input) input.focus();
+      // Theme toggle handler
+      themeToggle?.addEventListener('click', () => {
+        const isDark = html.classList.contains('dark');
+        if (isDark) {
+          html.classList.remove('dark');
+          html.removeAttribute('data-test');
+          localStorage.setItem('theme', 'light');
+        } else {
+          html.classList.add('dark');
+          html.setAttribute('data-test', 'dark-theme-indicator');
+          localStorage.setItem('theme', 'dark');
         }
       });
 
-      // Handle contenteditable input
-      document.addEventListener('input', (e) => {
-        if (e.target?.matches('[data-test="product-idea-input"]')) {
-          // Contenteditable div already contains the text, no need to sync
-        }
-      });
+      // Accessibility indicators for motion and contrast
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) {
+        document.body.setAttribute('data-test', 'reduced-motion-indicator');
+      }
+
+      const prefersHighContrast = window.matchMedia('(prefers-contrast: high)').matches;
+      if (prefersHighContrast) {
+        document.body.classList.add('high-contrast');
+        document.body.setAttribute('data-test', 'high-contrast-indicator');
+      }
     </script>
+
+    <style>
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 6px;
+        background: #000;
+        color: #fff;
+        padding: 8px;
+        text-decoration: none;
+        z-index: 1000;
+      }
+      .skip-link:focus {
+        top: 6px;
+      }
+
+      /* Mobile layout indicator */
+      @media (max-width: 768px) {
+        body::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 1px;
+          height: 1px;
+          opacity: 0;
+        }
+        body[data-test="mobile-layout"] body::before {
+          opacity: 1;
+        }
+      }
+
+      body {
+        --data-test: mobile-layout;
+      }
+    </style>
   </body>
 </html>

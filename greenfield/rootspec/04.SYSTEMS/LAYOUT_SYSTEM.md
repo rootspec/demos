@@ -1,117 +1,119 @@
-# L4: Layout System
+# Layout System
 
 ## Responsibility
-Manages responsive design, accessibility features, spatial relationships, and adaptive layouts that ensure the site works effectively across all device types and user needs.
 
-## Boundaries
+Manages page structure, responsive design, navigation coordination, and overall visual organization. Provides the foundational framework for content presentation and interactive feature integration across all devices.
 
-### Owns
-- Responsive grid systems and breakpoint management
-- Component spacing and spatial relationships
-- Accessibility features (focus management, screen reader support)
-- Mobile-first responsive design patterns
-- Layout adaptation for different viewport sizes
-- Keyboard navigation and interaction patterns
+## System Boundaries
 
-### Does Not Own
-- Visual styling and color schemes (managed by Theme System)
-- Content structure and copy (managed by Content System)
-- Interactive widget logic (managed by Interactive System)  
-- Framework-specific rendering (managed by Framework Integration)
+**Owns:**
+- Page structure and section organization
+- Responsive breakpoint management
+- Navigation state and scroll coordination  
+- Component layout and positioning
+- Accessibility infrastructure
+
+**Does NOT own:**
+- Content creation or management
+- Interactive feature implementation
+- Theme preference logic
+- Data processing or business logic
 
 ## Data Ownership
 
-### Layout Metrics
-- Viewport dimensions and orientation
-- Responsive breakpoint thresholds
-- Component size and positioning calculations
-- Touch target validation measurements
-- Scroll position and visibility states
+### Layout State
+- **Page structure**: Section organization, header/footer coordination, main content areas
+- **Navigation state**: Current section visibility, scroll position, menu state
+- **Responsive context**: Active breakpoint, viewport dimensions, orientation
+- **Component positioning**: Interactive feature mounting points, content flow coordination
 
-### Accessibility State
-- Keyboard focus position and management
-- Screen reader context and announcements
-- Tab order sequence across interactive elements
-- Skip link navigation targets
-- ARIA attributes and semantic markup
+### Layout Configuration
+- **Breakpoint definitions**: Mobile, tablet, and desktop layout thresholds
+- **Grid systems**: Content organization patterns and responsive behavior
+- **Spacing systems**: Consistent margin, padding, and component separation
+- **Accessibility settings**: Focus management, keyboard navigation paths
 
 ## Interactions with Other Systems
 
-### → Content System
-- **Provides:** Responsive content layout and hierarchy
-- **Receives:** Content structure requiring spatial organization
-- **Interface:** Grid placement, content flow, reading order
+### ← THEME_SYSTEM
+- **Receives**: Theme state for layout component styling
+- **Uses**: Color tokens, spacing adjustments, animation preferences
+- **Interface**: Theme context subscription, style token consumption
 
-### → Interactive System
-- **Provides:** Touch-friendly interaction zones and keyboard navigation
-- **Receives:** Interactive element positioning requirements
-- **Interface:** Adaptive interaction patterns, accessibility enhancements
+### ← CONTENT_SYSTEM  
+- **Receives**: Section content and navigation structure
+- **Uses**: Content hierarchy for layout organization and responsive adaptation
+- **Interface**: Content API, section metadata, navigation requirements
 
-### → Theme System
-- **Provides:** Layout context for responsive theme adaptations
-- **Receives:** Theme-aware spacing and sizing adjustments
-- **Interface:** Breakpoint-specific styling, layout-informed design tokens
+### ← INTERACTIVE_SYSTEM
+- **Receives**: Interactive components for embedding in page structure
+- **Provides**: Mounting points and responsive context for interactive features
+- **Interface**: Component mounting API, responsive behavior coordination
 
-### → Framework Integration
-- **Provides:** Layout architecture and component arrangement
-- **Receives:** Astro component structure and rendering constraints  
-- **Interface:** Page layouts, component composition, responsive directives
+## External Dependencies
 
-## Internal Structure
+### Framework Integration
+- **Astro Framework**: For component composition and static generation
+- **CSS Framework**: For responsive utilities and layout primitives
+- **Responsive Images**: For optimized media delivery across devices
 
-### Responsive Breakpoints
-1. **Mobile First (320px+)**
-   - Single column layouts
-   - Touch-optimized interactions
-   - Simplified navigation patterns
-   - Stacked interactive elements
+### Browser APIs
+- **Intersection Observer**: For scroll-based navigation and section tracking
+- **Media Queries**: For responsive breakpoint detection and adaptation
+- **Focus Management**: For accessibility and keyboard navigation coordination
 
-2. **Tablet (768px+)**
-   - Two-column content areas  
-   - Enhanced interactive elements
-   - Side-by-side comparisons
-   - Expanded navigation options
+## Internal Architecture
 
-3. **Desktop (1024px+)**
-   - Multi-column layouts
-   - Full interactive experiences
-   - Hover states and advanced interactions
-   - Maximum content width constraints
+### Layout Components
+- **Header System**: Navigation, theme toggle, version display coordination
+- **Main Content**: Section organization, scroll management, content flow
+- **Section Controllers**: Individual section layout and responsive behavior
+- **Footer System**: Attribution, links, and secondary navigation
 
-### Accessibility Framework
-- **Semantic HTML:** Proper heading hierarchy, landmark regions
-- **Keyboard Navigation:** Logical tab order, skip links, focus management
-- **Screen Reader Support:** ARIA labels, live regions, descriptive text
-- **Motor Accessibility:** Large touch targets, reduced motion options
+### Responsive Management
+1. **Breakpoint Detection**: Monitor viewport changes and update layout context
+2. **Content Adaptation**: Adjust content presentation for different screen sizes
+3. **Component Scaling**: Coordinate interactive feature responsive behavior
+4. **Navigation Adjustment**: Modify navigation patterns for touch and keyboard
 
-### Layout Patterns
-- **Content Grids:** Flexible grid systems for different content types
-- **Interactive Zones:** Consistent positioning for user interaction
-- **Visual Hierarchy:** Size, spacing, and positioning for content importance
-- **Progressive Enhancement:** Core functionality without JavaScript
+## Layout Strategy
 
-## Quality Assurance
+### Progressive Enhancement
+- **Mobile-first approach**: Base layout optimized for smallest screens
+- **Adaptive scaling**: Content and interaction scaling for larger viewports  
+- **Graceful degradation**: Functional layout even when advanced features fail
+- **Accessibility foundation**: Semantic structure independent of visual presentation
 
-### Responsive Testing
-- Breakpoint behavior validation across device types
-- Touch target size verification (minimum 44px)
-- Content readability at all viewport sizes
-- Interactive element accessibility on mobile
+### Content Flow Management
+- **Section organization**: Logical content progression supporting **Incremental Mastery**
+- **Visual hierarchy**: Clear information architecture supporting **Philosophical Clarity**
+- **Interactive integration**: Seamless embedding of hands-on features
+- **Cross-references**: Layout support for connections between related content
 
-### Accessibility Validation
-- Keyboard navigation testing for complete functionality
-- Screen reader compatibility across all content
-- Color contrast verification in layout contexts  
-- Focus indicator visibility in all states
+### Performance Optimization
+- **Lazy loading**: Progressive content loading for improved initial page performance
+- **Critical path**: Prioritize above-the-fold content and essential interactions
+- **Resource coordination**: Efficient loading of theme, content, and interactive dependencies
+- **Responsive images**: Optimized media delivery based on device capabilities
 
-### Performance Standards
-- Layout shift minimization during load and interactions
-- Efficient responsive image loading
-- Touch response times under 100ms
-- Smooth scrolling and animation performance
+## Accessibility Implementation
 
-### Cross-Device Consistency
-- Consistent functionality across input methods
-- Predictable layout behavior during orientation changes
-- Graceful degradation for older browsers
-- Progressive enhancement maintaining core features
+### Keyboard Navigation
+- **Tab order**: Logical progression through all interactive elements
+- **Skip links**: Direct access to main content and navigation landmarks
+- **Focus management**: Clear focus indication and logical focus flow
+- **Keyboard shortcuts**: Efficient navigation for power users
+
+### Screen Reader Support
+- **Semantic markup**: Proper heading hierarchy and landmark roles
+- **ARIA coordination**: Labels, descriptions, and state announcements
+- **Content structure**: Logical reading order independent of visual layout
+- **Dynamic updates**: Appropriate announcements for interactive state changes
+
+## Error Handling
+
+### Layout Failures
+- **CSS loading errors**: Maintain readable content with basic browser styling
+- **Component mounting failures**: Graceful degradation to static content alternatives  
+- **Responsive breakage**: Fallback layouts for unexpected viewport conditions
+- **Interactive integration errors**: Preserve content access when features fail

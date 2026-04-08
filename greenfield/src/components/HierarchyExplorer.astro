@@ -1,0 +1,117 @@
+---
+// Hierarchy Explorer - interactive component to explore RootSpec levels
+---
+
+<section data-test="hierarchy-explorer" class="py-16 bg-gray-50 dark:bg-gray-800">
+  <div class="container mx-auto px-4 max-w-6xl">
+    <h3 class="text-3xl font-bold text-center mb-12">Explore the RootSpec Hierarchy</h3>
+
+    <div id="hierarchy-app">
+      <!-- React component will mount here -->
+    </div>
+  </div>
+</section>
+
+<script>
+  import { createRoot } from 'react-dom/client';
+  import React from 'react';
+
+  function HierarchyApp() {
+    const [selectedLevel, setSelectedLevel] = React.useState(null);
+
+    const levels = [
+      {
+        id: 1,
+        name: 'Philosophy',
+        description: 'Core beliefs and mission that guide all decisions',
+        canReference: [],
+        content: 'The fundamental beliefs and values that define why this product should exist and what principles guide its development.'
+      },
+      {
+        id: 2,
+        name: 'Truths',
+        description: 'Factual constraints and realities',
+        canReference: [1],
+        content: 'Objective facts about users, market, technology, and business constraints that influence design decisions.'
+      },
+      {
+        id: 3,
+        name: 'Interactions',
+        description: 'How users accomplish their goals',
+        canReference: [1, 2],
+        content: 'User workflows, journeys, and behavioral patterns that define how people interact with the product.'
+      },
+      {
+        id: 4,
+        name: 'Systems',
+        description: 'Components and their relationships',
+        canReference: [1, 2, 3],
+        content: 'Technical systems, data models, and architectural components that support the user interactions.'
+      },
+      {
+        id: 5,
+        name: 'Implementation',
+        description: 'Specific technical details and fine-tuning',
+        canReference: [1, 2, 3, 4],
+        content: 'User stories, acceptance criteria, and specific implementation details that bring the systems to life.'
+      }
+    ];
+
+    const selectLevel = (level) => {
+      setSelectedLevel(level);
+    };
+
+    return React.createElement('div', { className: 'space-y-8' },
+      // Level buttons
+      React.createElement('div', { className: 'grid grid-cols-1 md:grid-cols-5 gap-4' },
+        levels.map(level =>
+          React.createElement('button',
+            {
+              key: level.id,
+              'data-test': `level-${level.id}`,
+              className: `p-6 bg-white dark:bg-gray-700 rounded-lg shadow hover:shadow-lg transition-all border-2 ${
+                selectedLevel?.id === level.id
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900'
+                  : 'border-gray-200 dark:border-gray-600'
+              }`,
+              onClick: () => selectLevel(level)
+            },
+            React.createElement('div', { className: 'text-center' },
+              React.createElement('div', { className: 'text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2' }, `L${level.id}`),
+              React.createElement('h4', { className: 'font-semibold mb-2' }, level.name),
+              React.createElement('p', { className: 'text-sm text-gray-600 dark:text-gray-300' }, level.description)
+            )
+          )
+        )
+      ),
+
+      // Selected level content
+      selectedLevel && React.createElement('div', { 'data-test': `level-${selectedLevel.id}-content`, className: 'bg-white dark:bg-gray-700 p-8 rounded-lg shadow' },
+        React.createElement('h4', { className: 'text-2xl font-bold mb-4' }, `Level ${selectedLevel.id}: ${selectedLevel.name}`),
+        React.createElement('p', { className: 'text-lg mb-6 text-gray-600 dark:text-gray-300' }, selectedLevel.content),
+
+        selectedLevel.canReference.length > 0 && React.createElement('div', { 'data-test': 'reference-highlight' },
+          React.createElement('h5', { className: 'font-semibold mb-2' }, 'Can reference levels:'),
+          React.createElement('div', { className: 'flex space-x-2' },
+            selectedLevel.canReference.map(refLevel =>
+              React.createElement('span',
+                {
+                  key: refLevel,
+                  className: 'px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm'
+                },
+                `L${refLevel}`
+              )
+            )
+          )
+        )
+      )
+    );
+  }
+
+  // Mount React component
+  const container = document.getElementById('hierarchy-app');
+  if (container) {
+    const root = createRoot(container);
+    root.render(React.createElement(HierarchyApp));
+  }
+</script>

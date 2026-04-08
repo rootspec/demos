@@ -1,0 +1,174 @@
+# =============================================================================
+# USER STORY: Marketing Site Core Functionality
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: METHODOLOGY_DISCOVERY
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM, THEME_SYSTEM]
+# @last_updated: 2026-04-08T02:55:27Z
+
+- id: US-001
+  title: View RootSpec marketing site with clear purpose
+  requirement_id: R-001
+
+  acceptance_criteria:
+    - id: AC-001-1
+      title: Meta banner explains demo nature
+      narrative: |
+        Given I visit the RootSpec marketing site
+        When the page loads
+        Then I should see a banner explaining this is a generated demo
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=meta-banner]' }
+        - shouldContain: { selector: '[data-test=meta-banner]', text: 'generated from a ~100-line product description' }
+
+    - id: AC-001-2
+      title: Hero section communicates value proposition
+      narrative: |
+        Given I visit the RootSpec marketing site
+        When the page loads
+        Then I should see the tagline and explanation
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=hero-tagline]' }
+        - shouldContain: { selector: '[data-test=hero-tagline]', text: 'philosophy guides implementation' }
+
+    - id: AC-001-3
+      title: Version information is prominently displayed
+      narrative: |
+        Given I visit the RootSpec marketing site
+        When the page loads
+        Then I should see the current RootSpec version
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=version-badge]' }
+        - shouldContain: { selector: '[data-test=version-badge]', text: 'v' }
+
+- id: US-002
+  title: Understand the problem RootSpec solves
+  requirement_id: R-002
+
+  acceptance_criteria:
+    - id: AC-002-1
+      title: Problem section identifies specification issues
+      narrative: |
+        Given I am viewing the marketing site
+        When I scroll to the problem section
+        Then I should see common specification challenges
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=problem-section]' }
+      then:
+        - shouldExist: { selector: '[data-test=problem-content]' }
+        - shouldContain: { selector: '[data-test=problem-content]', text: 'spec drift' }
+
+    - id: AC-002-2
+      title: Solution overview explains methodology
+      narrative: |
+        Given I am viewing the problem section
+        When I continue reading
+        Then I should see how RootSpec addresses these issues
+      given:
+        - visit: '/'
+        - click: { selector: '[data-test=problem-section]' }
+      when:
+        - click: { selector: '[data-test=solution-section]' }
+      then:
+        - shouldExist: { selector: '[data-test=solution-content]' }
+        - shouldContain: { selector: '[data-test=solution-content]', text: 'init → spec → impl → validate' }
+
+- id: US-003
+  title: Switch between dark and light themes
+  requirement_id: R-003
+
+  acceptance_criteria:
+    - id: AC-003-1
+      title: Theme toggle is accessible
+      narrative: |
+        Given I am viewing the site
+        When I look for theme controls
+        Then I should see a theme toggle button
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+    - id: AC-003-2
+      title: Manual theme switching works
+      narrative: |
+        Given I am viewing the site with light theme
+        When I click the theme toggle
+        Then the site should switch to dark theme
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=theme-toggle]' }
+      then:
+        - shouldExist: { selector: '[data-test=dark-theme-indicator]' }
+
+    - id: AC-003-3
+      title: Theme preference persists across sessions
+      narrative: |
+        Given I have set my theme preference to dark
+        When I visit the site again
+        Then it should remember my dark theme preference
+      given:
+        - visit: '/'
+        - click: { selector: '[data-test=theme-toggle]' }
+      when:
+        - visit: '/'
+      then:
+        - shouldExist: { selector: '[data-test=dark-theme-indicator]' }
+
+- id: US-004
+  title: Access GitHub repository and documentation
+  requirement_id: R-004
+
+  acceptance_criteria:
+    - id: AC-004-1
+      title: GitHub links are prominently displayed
+      narrative: |
+        Given I want to explore RootSpec further
+        When I look for repository links
+        Then I should find GitHub repository access
+      given:
+        - visit: '/'
+      when: []
+      then:
+        - shouldExist: { selector: '[data-test=github-link]' }
+        - shouldContain: { selector: '[data-test=github-link]', text: 'GitHub' }
+
+    - id: AC-004-2
+      title: SEED.md link is accessible from meta banner
+      narrative: |
+        Given I want to see the source specification
+        When I click the seed link in the meta banner
+        Then I should be directed to the SEED.md file
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=seed-link]' }
+      then:
+        - shouldExist: { selector: '[data-test=external-link-indicator]' }
+
+    - id: AC-004-3
+      title: Spec files link is accessible from meta banner
+      narrative: |
+        Given I want to see the generated specification
+        When I click the spec link in the meta banner
+        Then I should be directed to the rootspec directory
+      given:
+        - visit: '/'
+      when:
+        - click: { selector: '[data-test=spec-link]' }
+      then:
+        - shouldExist: { selector: '[data-test=external-link-indicator]' }

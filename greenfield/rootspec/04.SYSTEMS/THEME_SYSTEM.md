@@ -1,104 +1,84 @@
-# L4: Theme System
+# Theme System
 
 ## Responsibility
-Manages visual design consistency, dark/light theme implementation, and aesthetic presentation that supports RootSpec's "clarity over convenience" design pillar.
 
-## Boundaries
+Manages visual theme state, user preferences, and system-level appearance coordination. Ensures consistent theming across all components while respecting user accessibility preferences and system defaults.
 
-### Owns
-- Color palette definitions and theme switching
-- Typography scales and font loading
-- Spacing system and visual rhythm
-- Animation timing and motion design
-- Visual hierarchy and design tokens
-- Theme preference detection and persistence
+## System Boundaries
 
-### Does Not Own  
-- Content structure and information architecture (managed by Content System)
-- Interactive behavior and state management (managed by Interactive System)
-- Responsive layout and grid systems (managed by Layout System)
-- Component rendering and hydration (managed by Framework Integration)
+**Owns:**
+- Theme preference detection and storage
+- Dark/light mode state management  
+- Color token computation and distribution
+- Accessibility preference integration
+- Theme transition animations
+
+**Does NOT own:**
+- Component-specific styling implementations
+- Layout structure or positioning
+- Interactive behavior outside theme controls
+- Content presentation logic
 
 ## Data Ownership
 
-### Design Tokens
-- Color palette (primary, secondary, neutral, semantic colors)
-- Typography scale (font sizes, weights, line heights)  
-- Spacing system (margin, padding, gap values)
-- Animation properties (durations, easing curves, delays)
-- Border radius, shadows, and surface treatments
+### Primary Data
+- **Current theme preference**: User-selected or system-detected theme mode
+- **System preference state**: Browser/OS preference detection results
+- **Theme transition state**: Animation and transition timing control
+- **Accessibility preferences**: Reduced motion, high contrast requirements
+- **Theme persistence**: Local storage of user overrides
 
-### Theme State
-- Current theme preference (light/dark/system)
-- System theme detection results
-- User override preferences
-- Theme-specific asset references
+### Computed Data
+- **Active color tokens**: Resolved color values based on current theme
+- **Theme-dependent spacing**: Adjusted spacing values for different themes
+- **Animation preferences**: Computed timing and duration based on accessibility settings
 
 ## Interactions with Other Systems
 
-### → Content System
-- **Provides:** Visual styling for content hierarchy and readability
-- **Receives:** Content structure requiring thematic treatment
-- **Interface:** CSS custom properties, component styling classes
+### → LAYOUT_SYSTEM
+- **Provides**: Theme state for layout component styling
+- **Interface**: Theme context provider, color token exports
+- **Frequency**: Continuous during theme changes, cached otherwise
 
-### → Interactive System
-- **Provides:** Visual feedback styling for interactive states
-- **Receives:** Interactive state changes requiring visual updates
-- **Interface:** State-based styling, animation coordination
+### → INTERACTIVE_SYSTEM  
+- **Receives**: Manual theme toggle requests from UI controls
+- **Provides**: Current theme state for interactive element styling
+- **Interface**: Theme update functions, state subscription
 
-### → Layout System  
-- **Provides:** Theme-aware responsive styling adjustments
-- **Receives:** Breakpoint context for theme adaptations
-- **Interface:** Responsive design tokens, conditional styling
+### → CONTENT_SYSTEM
+- **Provides**: Theme context for content rendering adaptation
+- **Interface**: Theme metadata for content that adapts to visual mode
 
-### → Framework Integration
-- **Provides:** CSS architecture and build-time style processing
-- **Receives:** Astro component styling requirements
-- **Interface:** Scoped styles, global CSS custom properties
+## External Dependencies
 
-## Internal Structure
+### Browser APIs
+- **matchMedia API**: For system preference detection
+- **localStorage**: For preference persistence across sessions
+- **CSS Custom Properties**: For dynamic theme value application
 
-### Color System
-1. **Light Theme**
-   - Background: Clean whites and warm grays
-   - Text: High contrast dark grays and blacks  
-   - Accent: Professional blue with accessibility compliance
-   - Interactive: Clear hover and focus states
+### Framework Integration
+- **Astro Theme Provider**: For server-side theme coordination
+- **CSS Framework**: For theme token distribution and application
+- **Component Props**: For theme state propagation
 
-2. **Dark Theme**
-   - Background: Rich dark grays and near-blacks
-   - Text: Warm whites and light grays
-   - Accent: Brightened blue maintaining contrast ratios
-   - Interactive: Subtle glow effects for feedback
+## Internal Architecture
 
-### Typography Hierarchy
-- **Primary Font:** Modern sans-serif for readability
-- **Code Font:** Monospace for technical content
-- **Heading Scale:** Clear hierarchy supporting content structure
-- **Body Text:** Optimized for extended reading
+### State Management
+- **Theme Store**: Central state container for current preferences
+- **Preference Detector**: System preference monitoring and updates
+- **Storage Manager**: Persistence layer for user preferences
+- **Transition Controller**: Animation coordination during theme changes
 
-### Motion Design
-- **Micro-interactions:** Button hovers, focus indicators  
-- **Content Transitions:** Smooth section reveals, theme switching
-- **Interactive Feedback:** Immediate response to user actions
-- **Respect Motion Preferences:** Reduced motion support
+### Processing Pipeline
+1. **Detection Phase**: Monitor system preferences and user overrides
+2. **Resolution Phase**: Compute active theme from available preferences  
+3. **Distribution Phase**: Propagate theme state to dependent systems
+4. **Persistence Phase**: Store user preferences for future sessions
 
-## Quality Assurance
+## Error Handling
 
-### Accessibility Standards
-- WCAG AA contrast ratios in both themes
-- Focus indicators clearly visible in all contexts
-- Motion respects user system preferences
-- Color not sole means of conveying information
-
-### Design Consistency  
-- Design tokens prevent arbitrary styling
-- Component styles inherit from central system
-- Visual rhythm maintained across all breakpoints
-- Theme switching preserves layout and functionality
-
-### Performance Optimization
-- Critical CSS inlined for fast initial render
-- Theme switching without layout shift
-- Font loading optimized to prevent FOIT/FOUT
-- CSS custom properties for efficient theme updates
+### Graceful Degradation
+- **Storage failures**: Default to system preference without persistence
+- **API unavailability**: Fall back to default light theme
+- **CSS loading errors**: Provide basic styling without theme features
+- **JavaScript failures**: Maintain readable content with default styling

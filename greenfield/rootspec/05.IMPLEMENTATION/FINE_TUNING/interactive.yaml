@@ -1,0 +1,125 @@
+# =============================================================================
+# FINE-TUNING: Interactive System
+# =============================================================================
+# @spec_version: 1.0.0
+# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+# @last_updated: 2026-04-08T02:55:27Z
+
+# Hierarchy Explorer
+level_expansion_duration:
+  value: 300
+  # @unit: milliseconds
+  # @rationale: Smooth expansion that doesn't feel sluggish
+  # @constraint: min=200, max=500
+
+reference_highlight_delay:
+  value: 150
+  # @unit: milliseconds
+  # @rationale: Brief delay to make connections feel deliberate
+  # @constraint: min=50, max=300
+
+max_expanded_levels:
+  value: 2
+  # @unit: count
+  # @rationale: Prevent overwhelming UI with too many open sections
+  # @constraint: min=1, max=5
+
+connection_line_thickness:
+  value: 2
+  # @unit: pixels
+  # @rationale: Visible without being distracting
+  # @constraint: min=1, max=4
+
+# Wizard Flow
+wizard_step_transition:
+  value: 400
+  # @unit: milliseconds
+  # @rationale: Smooth progression that feels purposeful
+  # @constraint: min=200, max=800
+
+validation_debounce:
+  value: 500
+  # @unit: milliseconds
+  # @rationale: Avoid excessive validation while user is typing
+  # @constraint: min=200, max=1000
+
+progress_animation_duration:
+  value: 600
+  # @unit: milliseconds
+  # @rationale: Satisfying feedback for step completion
+  # @constraint: min=300, max=1000
+
+max_input_length:
+  value: 500
+  # @unit: characters
+  # @rationale: Prevent overly long inputs that break layout
+  # @constraint: min=100, max=1000
+
+# Comparison Interface
+toggle_animation_duration:
+  value: 250
+  # @unit: milliseconds
+  # @rationale: Quick enough for immediate feedback
+  # @constraint: min=100, max=500
+
+content_fade_duration:
+  value: 150
+  # @unit: milliseconds
+  # @rationale: Fast content swap to maintain engagement
+  # @constraint: min=50, max=300
+
+panel_slide_distance:
+  value: 20
+  # @unit: pixels
+  # @rationale: Subtle motion that enhances transition
+  # @constraint: min=10, max=50
+
+highlight_pulse_duration:
+  value: 1200
+  # @unit: milliseconds
+  # @rationale: Attention-grabbing without being annoying
+  # @constraint: min=800, max=2000
+
+# User Feedback
+success_message_duration:
+  value: 3000
+  # @unit: milliseconds
+  # @rationale: Long enough to read, short enough not to clutter
+  # @constraint: min=2000, max=5000
+
+error_message_duration:
+  value: 5000
+  # @unit: milliseconds
+  # @rationale: Error messages need more time for user to process
+  # @constraint: min=3000, max=10000
+
+tooltip_show_delay:
+  value: 800
+  # @unit: milliseconds
+  # @rationale: Avoid accidental tooltip triggers
+  # @constraint: min=500, max=1500
+
+tooltip_hide_delay:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Quick hiding when user moves away
+  # @constraint: min=100, max=500
+
+# Performance
+interaction_throttle:
+  value: 100
+  # @unit: milliseconds
+  # @rationale: Prevent excessive event handling during rapid interactions
+  # @constraint: min=50, max=300
+
+state_cache_size:
+  value: 10
+  # @unit: count
+  # @rationale: Remember recent states for smooth back/forward navigation
+  # @constraint: min=5, max=20
+
+animation_frame_budget:
+  value: 16
+  # @unit: milliseconds
+  # @rationale: Target 60fps for smooth animations
+  # @constraint: min=8, max=33

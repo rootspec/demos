@@ -1,0 +1,73 @@
+# =============================================================================
+# FINE-TUNING: Theme System
+# =============================================================================
+# @spec_version: 1.0.0
+# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# @last_updated: 2026-04-08T02:55:27Z
+
+# Theme transition timing
+theme_transition_duration:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Fast enough to feel immediate, slow enough to perceive the change
+  # @constraint: min=100, max=500
+
+color_token_cache_duration:
+  value: 300000
+  # @unit: milliseconds
+  # @rationale: 5-minute cache balances performance with dynamic updates
+  # @constraint: min=60000, max=600000
+
+# System preference polling
+preference_poll_interval:
+  value: 1000
+  # @unit: milliseconds
+  # @rationale: Responsive to system changes without excessive polling
+  # @constraint: min=500, max=5000
+
+# Theme persistence
+storage_key_prefix:
+  value: "rootspec-theme"
+  # @unit: string
+  # @rationale: Namespaced to avoid conflicts with other apps
+  # @inviolable: true
+
+# Accessibility
+reduced_motion_threshold:
+  value: 0.5
+  # @unit: ratio
+  # @rationale: Conservative threshold for reduced motion detection
+  # @constraint: min=0.1, max=1.0
+
+high_contrast_ratio_minimum:
+  value: 7.0
+  # @unit: ratio
+  # @rationale: WCAG AAA compliance for high contrast mode
+  # @constraint: min=4.5, max=21.0
+  # @ethical_review: accessibility-team-approved
+
+# Color calculations
+dark_theme_opacity:
+  value: 0.9
+  # @unit: ratio
+  # @rationale: Slight transparency for depth without losing readability
+  # @constraint: min=0.7, max=1.0
+
+light_theme_saturation:
+  value: 0.85
+  # @unit: ratio
+  # @rationale: Rich colors without being overwhelming
+  # @constraint: min=0.5, max=1.0
+
+# Animation preferences
+transition_easing:
+  value: "cubic-bezier(0.2, 0.0, 0.38, 0.9)"
+  # @unit: css-easing
+  # @rationale: Smooth, natural feeling transitions
+  # @constraint: must be valid CSS cubic-bezier
+
+fade_in_delay:
+  value: 50
+  # @unit: milliseconds
+  # @rationale: Slight stagger for perceived performance
+  # @constraint: min=0, max=200

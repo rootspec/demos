@@ -1,0 +1,126 @@
+# =============================================================================
+# FINE-TUNING: Content System
+# =============================================================================
+# @spec_version: 1.0.0
+# @spec_source: 04.SYSTEMS/CONTENT_SYSTEM.md
+# @last_updated: 2026-04-08T02:55:27Z
+
+# Version management
+version_display_format:
+  value: "v{major}.{minor}.{patch}"
+  # @unit: string
+  # @rationale: Standard semantic versioning format for clear communication
+  # @inviolable: true
+
+version_update_check_interval:
+  value: 86400000
+  # @unit: milliseconds
+  # @rationale: Daily check prevents stale version display
+  # @constraint: min=3600000, max=604800000
+
+# Content organization
+max_section_nesting:
+  value: 3
+  # @unit: levels
+  # @rationale: Prevent overly complex content hierarchy
+  # @constraint: min=2, max=5
+
+heading_hierarchy_max:
+  value: 4
+  # @unit: levels
+  # @rationale: Maintain clear document structure (H1-H4)
+  # @constraint: min=3, max=6
+  # @ethical_review: accessibility-team-approved
+
+# Asset optimization
+image_lazy_load_threshold:
+  value: 300
+  # @unit: pixels
+  # @rationale: Load images before they enter viewport
+  # @constraint: min=100, max=800
+
+image_quality_default:
+  value: 85
+  # @unit: percentage
+  # @rationale: Balance between file size and visual quality
+  # @constraint: min=70, max=95
+
+image_max_width:
+  value: 1200
+  # @unit: pixels
+  # @rationale: Maximum useful size for content images
+  # @constraint: min=800, max=2000
+
+# Content caching
+static_cache_duration:
+  value: 3600
+  # @unit: seconds
+  # @rationale: 1-hour cache balances performance with content freshness
+  # @constraint: min=300, max=86400
+
+asset_cache_duration:
+  value: 86400
+  # @unit: seconds
+  # @rationale: 24-hour cache for static assets
+  # @constraint: min=3600, max=2592000
+
+# SEO optimization
+meta_description_max_length:
+  value: 160
+  # @unit: characters
+  # @rationale: Google's recommended maximum for search snippets
+  # @constraint: min=120, max=200
+  # @inviolable: true
+
+meta_title_max_length:
+  value: 60
+  # @unit: characters
+  # @rationale: Prevent title truncation in search results
+  # @constraint: min=30, max=80
+  # @inviolable: true
+
+# Accessibility content
+alt_text_max_length:
+  value: 125
+  # @unit: characters
+  # @rationale: Screen reader optimal length for image descriptions
+  # @constraint: min=50, max=200
+  # @ethical_review: accessibility-team-approved
+
+reading_time_words_per_minute:
+  value: 200
+  # @unit: words
+  # @rationale: Average adult reading speed for technical content
+  # @constraint: min=150, max=300
+
+# Link management
+external_link_cache_duration:
+  value: 7200
+  # @unit: seconds
+  # @rationale: 2-hour cache for link validation
+  # @constraint: min=1800, max=86400
+
+broken_link_retry_attempts:
+  value: 3
+  # @unit: count
+  # @rationale: Reasonable retry attempts before marking as broken
+  # @constraint: min=1, max=5
+
+link_timeout_duration:
+  value: 5000
+  # @unit: milliseconds
+  # @rationale: Reasonable timeout for external link validation
+  # @constraint: min=3000, max=10000
+
+# Content validation
+spell_check_enabled:
+  value: true
+  # @unit: boolean
+  # @rationale: Maintain content quality and professionalism
+  # @inviolable: true
+
+content_freshness_threshold:
+  value: 30
+  # @unit: days
+  # @rationale: Flag content for review after 30 days
+  # @constraint: min=7, max=90

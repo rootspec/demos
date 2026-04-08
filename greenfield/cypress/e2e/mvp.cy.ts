@@ -22,436 +22,98 @@ function loadAndRun(yamlContent: string) {
   }
 }
 
-// US-101: Display hero section with RootSpec tagline and explanation
-const stories_101 = `
-id: US-101
-title: Display hero section with RootSpec tagline and explanation
+// US-001: View RootSpec marketing site with clear purpose
+const stories_001 = `
+id: US-001
+title: View RootSpec marketing site with clear purpose
 acceptance_criteria:
-  - id: AC-101-1
-    title: Hero section clearly explains what RootSpec is
+  - id: AC-001-1
+    title: Meta banner explains demo nature
     given:
       - visit: /
     then:
       - shouldExist:
-          selector: '[data-test=hero-section]'
+          selector: '[data-test=meta-banner]'
+      - shouldContain:
+          selector: '[data-test=meta-banner]'
+          text: generated from a ~100-line product description
+    when: []
+  - id: AC-001-2
+    title: Hero section communicates value proposition
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=hero-tagline]'
       - shouldContain:
           selector: '[data-test=hero-tagline]'
-          text: RootSpec
-      - shouldContain:
-          selector: '[data-test=hero-description]'
-          text: specification language
+          text: philosophy guides implementation
     when: []
-  - id: AC-101-2
-    title: Version number displayed prominently
+  - id: AC-001-3
+    title: Version information is prominently displayed
     given:
       - visit: /
     then:
       - shouldExist:
-          selector: '[data-test=version-display]'
+          selector: '[data-test=version-badge]'
       - shouldContain:
-          selector: '[data-test=version-display]'
-          text: v6.2.0
+          selector: '[data-test=version-badge]'
+          text: v
     when: []
 `;
-loadAndRun(stories_101);
+loadAndRun(stories_001);
 
-// US-102: Display meta banner explaining this site is a RootSpec demo
-const stories_102 = `
-id: US-102
-title: Display meta banner explaining this site is a RootSpec demo
+// US-002: Understand the problem RootSpec solves
+const stories_002 = `
+id: US-002
+title: Understand the problem RootSpec solves
 acceptance_criteria:
-  - id: AC-102-1
-    title: Demo banner explains site generation process
+  - id: AC-002-1
+    title: Problem section identifies specification issues
     given:
       - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=meta-banner]'
-      - shouldContain:
-          selector: '[data-test=meta-banner]'
-          text: generated from
-      - shouldContain:
-          selector: '[data-test=meta-banner]'
-          text: four commands
-    when: []
-  - id: AC-102-2
-    title: Links to spec and seed files in GitHub
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=spec-link]'
-      - shouldExist:
-          selector: '[data-test=seed-link]'
-    when: []
-`;
-loadAndRun(stories_102);
-
-// US-103: Explain why existing specification approaches fail
-const stories_103 = `
-id: US-103
-title: Explain why existing specification approaches fail
-acceptance_criteria:
-  - id: AC-103-1
-    title: Problem section identifies specification pain points
-    given:
-      - visit: /
-    then:
-      - shouldExist:
+    when:
+      - click:
           selector: '[data-test=problem-section]'
+    then:
+      - shouldExist:
+          selector: '[data-test=problem-content]'
       - shouldContain:
-          selector: '[data-test=problem-section]'
+          selector: '[data-test=problem-content]'
           text: spec drift
-      - shouldContain:
+  - id: AC-002-2
+    title: Solution overview explains methodology
+    given:
+      - visit: /
+      - click:
           selector: '[data-test=problem-section]'
-          text: philosophy-implementation gap
+    when:
+      - click:
+          selector: '[data-test=solution-section]'
+    then:
+      - shouldExist:
+          selector: '[data-test=solution-content]'
       - shouldContain:
-          selector: '[data-test=problem-section]'
-          text: unreliable AI output
-    when: []
+          selector: '[data-test=solution-content]'
+          text: init → spec → impl → validate
 `;
-loadAndRun(stories_103);
+loadAndRun(stories_002);
 
-// US-104: Display visual walkthrough of four RootSpec skills
-const stories_104 = `
-id: US-104
-title: Display visual walkthrough of four RootSpec skills
-acceptance_criteria:
-  - id: AC-104-1
-    title: How it works shows four-step process
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=how-it-works]'
-      - shouldContain:
-          selector: '[data-test=workflow-step]'
-          text: rs-init
-      - shouldContain:
-          selector: '[data-test=workflow-step]'
-          text: rs-spec
-      - shouldContain:
-          selector: '[data-test=workflow-step]'
-          text: rs-impl
-      - shouldContain:
-          selector: '[data-test=workflow-step]'
-          text: rs-validate
-    when: []
-`;
-loadAndRun(stories_104);
-
-// US-105: Show GitHub repository link and getting started information
-const stories_105 = `
-id: US-105
-title: Show GitHub repository link and getting started information
-acceptance_criteria:
-  - id: AC-105-1
-    title: Clear call-to-action for GitHub repository
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=github-cta]'
-      - shouldContain:
-          selector: '[data-test=github-cta]'
-          text: GitHub
-    when: []
-  - id: AC-105-2
-    title: Attribution footer identifies site builder
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=attribution]'
-      - shouldContain:
-          selector: '[data-test=attribution]'
-          text: built
-    when: []
-`;
-loadAndRun(stories_105);
-
-// US-201: Explore RootSpec hierarchy interactively
-const stories_201 = `
-id: US-201
-title: Explore RootSpec hierarchy interactively
-acceptance_criteria:
-  - id: AC-201-1
-    title: Hierarchy levels expand to show example content
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=hierarchy-level-1]'
-    then:
-      - shouldExist:
-          selector: '[data-test=level-content]'
-      - shouldContain:
-          selector: '[data-test=level-content]'
-          text: Philosophy
-  - id: AC-201-2
-    title: Visual connections show upward-only references
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=hierarchy-level-3]'
-    then:
-      - shouldExist:
-          selector: '[data-test=reference-connection]'
-  - id: AC-201-3
-    title: Hierarchy explorer is keyboard accessible
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=hierarchy-explorer]'
-    then:
-      - shouldExist:
-          selector: '[data-test=hierarchy-explorer]:focus-within'
-`;
-loadAndRun(stories_201);
-
-// US-202: Walk through mini specification wizard
-const stories_202 = `
-id: US-202
-title: Walk through mini specification wizard
-acceptance_criteria:
-  - id: AC-202-1
-    title: Wizard collects product idea input
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=spec-wizard-start]'
-      - fill:
-          selector: '[data-test=product-idea-input]'
-          value: Task management app
-    then:
-      - shouldContain:
-          selector: '[data-test=product-idea-input]'
-          text: Task management app
-  - id: AC-202-2
-    title: Mission template selection available
-    given:
-      - visit: /
-      - click:
-          selector: '[data-test=spec-wizard-start]'
-      - fill:
-          selector: '[data-test=product-idea-input]'
-          value: Task app
-    when:
-      - click:
-          selector: '[data-test=next-step]'
-    then:
-      - shouldExist:
-          selector: '[data-test=mission-templates]'
-  - id: AC-202-3
-    title: Design pillars selection from suggestions
-    given:
-      - visit: /
-      - click:
-          selector: '[data-test=spec-wizard-start]'
-      - fill:
-          selector: '[data-test=product-idea-input]'
-          value: Task app
-      - click:
-          selector: '[data-test=next-step]'
-    when:
-      - click:
-          selector: '[data-test=next-step]'
-    then:
-      - shouldExist:
-          selector: '[data-test=design-pillars]'
-  - id: AC-202-4
-    title: Wizard generates skeleton spec output
-    given:
-      - visit: /
-      - click:
-          selector: '[data-test=spec-wizard-start]'
-      - fill:
-          selector: '[data-test=product-idea-input]'
-          value: Task app
-      - click:
-          selector: '[data-test=next-step]'
-      - click:
-          selector: '[data-test=next-step]'
-    when:
-      - click:
-          selector: '[data-test=finish-wizard]'
-    then:
-      - shouldExist:
-          selector: '[data-test=spec-output]'
-      - shouldContain:
-          selector: '[data-test=spec-output]'
-          text: L1
-`;
-loadAndRun(stories_202);
-
-// US-203: Compare development with and without RootSpec
-const stories_203 = `
-id: US-203
-title: Compare development with and without RootSpec
-acceptance_criteria:
-  - id: AC-203-1
-    title: Toggle between without and with RootSpec views
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=comparison-toggle]'
-    then:
-      - shouldExist:
-          selector: '[data-test=comparison-content]'
-  - id: AC-203-2
-    title: Without spec shows vague requirements
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=without-spec]'
-    then:
-      - shouldExist:
-          selector: '[data-test=vague-requirements]'
-      - shouldContain:
-          selector: '[data-test=vague-requirements]'
-          text: vague
-  - id: AC-203-3
-    title: With RootSpec shows structured hierarchy
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=with-rootspec]'
-    then:
-      - shouldExist:
-          selector: '[data-test=structured-hierarchy]'
-      - shouldContain:
-          selector: '[data-test=structured-hierarchy]'
-          text: design pillar
-`;
-loadAndRun(stories_203);
-
-// US-401: Site adapts to mobile viewport sizes
-const stories_401 = `
-id: US-401
-title: Site adapts to mobile viewport sizes
-acceptance_criteria:
-  - id: AC-401-1
-    title: Content readable on mobile screens
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=hero-section]'
-      - shouldContain:
-          selector: '[data-test=hero-description]'
-          text: specification
-    when: []
-  - id: AC-401-2
-    title: Interactive elements are touch-friendly
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=theme-toggle]'
-    then:
-      - shouldExist:
-          selector: '[data-test=theme-toggle]'
-  - id: AC-401-3
-    title: Navigation works on small screens
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=spec-wizard-start]'
-    then:
-      - shouldExist:
-          selector: '[data-test=product-idea-input]'
-`;
-loadAndRun(stories_401);
-
-// US-402: Complete keyboard navigation support
-const stories_402 = `
-id: US-402
-title: Complete keyboard navigation support
-acceptance_criteria:
-  - id: AC-402-1
-    title: Tab order follows logical content flow
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=hero-section]'
-    then:
-      - shouldExist:
-          selector: '[data-test=hero-section]:focus-within'
-  - id: AC-402-2
-    title: All interactive elements keyboard accessible
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=hierarchy-explorer]'
-    then:
-      - shouldExist:
-          selector: '[data-test=hierarchy-explorer]:focus-within'
-  - id: AC-402-3
-    title: Skip links available for screen readers
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: main
-    when: []
-`;
-loadAndRun(stories_402);
-
-// US-403: Consistent functionality across device types
-const stories_403 = `
-id: US-403
-title: Consistent functionality across device types
-acceptance_criteria:
-  - id: AC-403-1
-    title: Core functionality works without JavaScript
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=hero-section]'
-      - shouldContain:
-          selector: '[data-test=hero-description]'
-          text: specification
-    when: []
-  - id: AC-403-2
-    title: Progressive enhancement adds interactivity
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=spec-wizard-start]'
-    then:
-      - shouldExist:
-          selector: '[data-test=product-idea-input]'
-  - id: AC-403-3
-    title: Consistent visual presentation across browsers
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=hero-section]'
-      - shouldExist:
-          selector: '[data-test=meta-banner]'
-    when: []
-`;
-loadAndRun(stories_403);
-
-// US-301: Switch between dark and light themes
-const stories_301 = `
-id: US-301
+// US-003: Switch between dark and light themes
+const stories_003 = `
+id: US-003
 title: Switch between dark and light themes
 acceptance_criteria:
-  - id: AC-301-1
-    title: Theme toggle changes visual appearance
+  - id: AC-003-1
+    title: Theme toggle is accessible
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=theme-toggle]'
+    when: []
+  - id: AC-003-2
+    title: Manual theme switching works
     given:
       - visit: /
     when:
@@ -459,16 +121,8 @@ acceptance_criteria:
           selector: '[data-test=theme-toggle]'
     then:
       - shouldExist:
-          selector: '[data-test=theme-toggle]'
-  - id: AC-301-2
-    title: System preference detected on first visit
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: body
-    when: []
-  - id: AC-301-3
+          selector: '[data-test=dark-theme-indicator]'
+  - id: AC-003-3
     title: Theme preference persists across sessions
     given:
       - visit: /
@@ -478,39 +132,56 @@ acceptance_criteria:
       - visit: /
     then:
       - shouldExist:
-          selector: '[data-test=theme-toggle]'
-  - id: AC-301-4
-    title: Smooth transition between themes
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=theme-toggle]'
-    then:
-      - shouldExist:
-          selector: '[data-test=theme-toggle]'
+          selector: '[data-test=dark-theme-indicator]'
 `;
-loadAndRun(stories_301);
+loadAndRun(stories_003);
 
-// US-302: All components respect current theme selection
-const stories_302 = `
-id: US-302
-title: All components respect current theme selection
+// US-004: Access GitHub repository and documentation
+const stories_004 = `
+id: US-004
+title: Access GitHub repository and documentation
 acceptance_criteria:
-  - id: AC-302-1
-    title: Interactive elements styled for current theme
+  - id: AC-004-1
+    title: GitHub links are prominently displayed
     given:
       - visit: /
-      - click:
-          selector: '[data-test=theme-toggle]'
-    when:
-      - click:
-          selector: '[data-test=spec-wizard-start]'
     then:
       - shouldExist:
-          selector: '[data-test=spec-wizard-start]'
-  - id: AC-302-2
-    title: Focus indicators visible in both themes
+          selector: '[data-test=github-link]'
+      - shouldContain:
+          selector: '[data-test=github-link]'
+          text: GitHub
+    when: []
+  - id: AC-004-2
+    title: SEED.md link is accessible from meta banner
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=seed-link]'
+    then:
+      - shouldExist:
+          selector: '[data-test=external-link-indicator]'
+  - id: AC-004-3
+    title: Spec files link is accessible from meta banner
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=spec-link]'
+    then:
+      - shouldExist:
+          selector: '[data-test=external-link-indicator]'
+`;
+loadAndRun(stories_004);
+
+// US-101: Explore RootSpec hierarchy interactively
+const stories_101 = `
+id: US-101
+title: Explore RootSpec hierarchy interactively
+acceptance_criteria:
+  - id: AC-101-1
+    title: Hierarchy explorer is visible and accessible
     given:
       - visit: /
     when:
@@ -518,9 +189,263 @@ acceptance_criteria:
           selector: '[data-test=hierarchy-explorer]'
     then:
       - shouldExist:
-          selector: '[data-test=hierarchy-explorer]:focus-within'
-  - id: AC-302-3
-    title: Text remains readable in both themes
+          selector: '[data-test=level-1]'
+      - shouldExist:
+          selector: '[data-test=level-2]'
+      - shouldExist:
+          selector: '[data-test=level-3]'
+      - shouldExist:
+          selector: '[data-test=level-4]'
+      - shouldExist:
+          selector: '[data-test=level-5]'
+  - id: AC-101-2
+    title: Level selection reveals content and connections
+    given:
+      - visit: /
+      - click:
+          selector: '[data-test=hierarchy-explorer]'
+    when:
+      - click:
+          selector: '[data-test=level-1]'
+    then:
+      - shouldExist:
+          selector: '[data-test=level-1-content]'
+      - shouldContain:
+          selector: '[data-test=level-1-content]'
+          text: Philosophy
+  - id: AC-101-3
+    title: Reference highlighting shows permitted connections
+    given:
+      - visit: /
+      - click:
+          selector: '[data-test=hierarchy-explorer]'
+      - click:
+          selector: '[data-test=level-3]'
+    then:
+      - shouldExist:
+          selector: '[data-test=reference-highlight]'
+    when: []
+  - id: AC-101-4
+    title: Keyboard navigation works through hierarchy
+    given:
+      - visit: /
+      - click:
+          selector: '[data-test=hierarchy-explorer]'
+    when:
+      - click:
+          selector: '[data-test=level-2]'
+    then:
+      - shouldExist:
+          selector: '[data-test=level-2-content]'
+`;
+loadAndRun(stories_101);
+
+// US-102: Complete Spec Your Idea wizard
+const stories_102 = `
+id: US-102
+title: Complete Spec Your Idea wizard
+acceptance_criteria:
+  - id: AC-102-1
+    title: Wizard is accessible and starts properly
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=spec-wizard]'
+    then:
+      - shouldExist:
+          selector: '[data-test=wizard-step-1]'
+      - shouldContain:
+          selector: '[data-test=wizard-step-1]'
+          text: mission
+  - id: AC-102-2
+    title: Mission selection step works
+    given:
+      - visit: /
+      - click:
+          selector: '[data-test=spec-wizard]'
+    when:
+      - click:
+          selector: '[data-test=mission-template]'
+      - click:
+          selector: '[data-test=wizard-next]'
+    then:
+      - shouldExist:
+          selector: '[data-test=wizard-step-2]'
+      - shouldContain:
+          selector: '[data-test=wizard-step-2]'
+          text: design pillars
+  - id: AC-102-3
+    title: Design pillars selection works
+    given:
+      - visit: /
+      - click:
+          selector: '[data-test=spec-wizard]'
+      - click:
+          selector: '[data-test=mission-template]'
+      - click:
+          selector: '[data-test=wizard-next]'
+    when:
+      - click:
+          selector: '[data-test=pillar-suggestion]'
+      - click:
+          selector: '[data-test=wizard-next]'
+    then:
+      - shouldExist:
+          selector: '[data-test=wizard-step-3]'
+      - shouldContain:
+          selector: '[data-test=wizard-step-3]'
+          text: interaction
+  - id: AC-102-4
+    title: Wizard completion generates skeleton spec
+    given:
+      - visit: /
+      - click:
+          selector: '[data-test=spec-wizard]'
+      - click:
+          selector: '[data-test=mission-template]'
+      - click:
+          selector: '[data-test=wizard-next]'
+      - click:
+          selector: '[data-test=pillar-suggestion]'
+      - click:
+          selector: '[data-test=wizard-next]'
+    when:
+      - fill:
+          selector: '[data-test=interaction-input]'
+          value: User clicks button to see results
+      - click:
+          selector: '[data-test=wizard-complete]'
+    then:
+      - shouldExist:
+          selector: '[data-test=generated-spec]'
+      - shouldContain:
+          selector: '[data-test=generated-spec]'
+          text: L1
+  - id: AC-102-5
+    title: Wizard validation prevents incomplete submission
+    given:
+      - visit: /
+      - click:
+          selector: '[data-test=spec-wizard]'
+    when:
+      - click:
+          selector: '[data-test=wizard-next]'
+    then:
+      - shouldExist:
+          selector: '[data-test=validation-message]'
+`;
+loadAndRun(stories_102);
+
+// US-103: Compare traditional vs RootSpec approaches
+const stories_103 = `
+id: US-103
+title: Compare traditional vs RootSpec approaches
+acceptance_criteria:
+  - id: AC-103-1
+    title: Comparison interface is accessible
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=comparison-section]'
+    then:
+      - shouldExist:
+          selector: '[data-test=comparison-toggle]'
+  - id: AC-103-2
+    title: Toggle between before and after views
+    given:
+      - visit: /
+      - click:
+          selector: '[data-test=comparison-section]'
+    when:
+      - click:
+          selector: '[data-test=comparison-toggle]'
+    then:
+      - shouldExist:
+          selector: '[data-test=rootspec-approach]'
+      - shouldContain:
+          selector: '[data-test=rootspec-approach]'
+          text: structured hierarchy
+  - id: AC-103-3
+    title: Comparison content is substantive, not placeholder
+    given:
+      - visit: /
+      - click:
+          selector: '[data-test=comparison-section]'
+    then:
+      - shouldExist:
+          selector: '[data-test=traditional-approach]'
+      - shouldContain:
+          selector: '[data-test=traditional-approach]'
+          text: requirements
+    when: []
+`;
+loadAndRun(stories_103);
+
+// US-201: Use site effectively on mobile devices
+const stories_201 = `
+id: US-201
+title: Use site effectively on mobile devices
+acceptance_criteria:
+  - id: AC-201-1
+    title: Mobile layout is readable and functional
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=mobile-layout]'
+      - shouldExist:
+          selector: '[data-test=hero-tagline]'
+    when: []
+  - id: AC-201-2
+    title: Interactive features work on touch devices
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=hierarchy-explorer]'
+      - click:
+          selector: '[data-test=level-1]'
+    then:
+      - shouldExist:
+          selector: '[data-test=level-1-content]'
+  - id: AC-201-3
+    title: Wizard is usable on mobile
+    given:
+      - visit: /
+      - click:
+          selector: '[data-test=spec-wizard]'
+    when:
+      - click:
+          selector: '[data-test=mission-template]'
+      - click:
+          selector: '[data-test=wizard-next]'
+    then:
+      - shouldExist:
+          selector: '[data-test=wizard-step-2]'
+`;
+loadAndRun(stories_201);
+
+// US-202: Navigate site using only keyboard
+const stories_202 = `
+id: US-202
+title: Navigate site using only keyboard
+acceptance_criteria:
+  - id: AC-202-1
+    title: All interactive elements are keyboard accessible
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=theme-toggle]'
+      - shouldExist:
+          selector: '[data-test=hierarchy-explorer]'
+      - shouldExist:
+          selector: '[data-test=spec-wizard]'
+    when: []
+  - id: AC-202-2
+    title: Focus indicators are clearly visible
     given:
       - visit: /
     when:
@@ -528,9 +453,93 @@ acceptance_criteria:
           selector: '[data-test=theme-toggle]'
     then:
       - shouldExist:
-          selector: '[data-test=hero-description]'
-      - shouldContain:
-          selector: '[data-test=hero-description]'
-          text: specification
+          selector: '[data-test=focus-indicator]'
+  - id: AC-202-3
+    title: Skip links provide efficient navigation
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=skip-link]'
+    when: []
 `;
-loadAndRun(stories_302);
+loadAndRun(stories_202);
+
+// US-203: Access site with assistive technologies
+const stories_203 = `
+id: US-203
+title: Access site with assistive technologies
+acceptance_criteria:
+  - id: AC-203-1
+    title: Screen reader users understand page structure
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=main-heading]'
+      - shouldExist:
+          selector: '[data-test=navigation-landmark]'
+    when: []
+  - id: AC-203-2
+    title: Interactive elements have descriptive labels
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=theme-toggle]'
+      - shouldExist:
+          selector: '[data-test=hierarchy-explorer]'
+    when: []
+  - id: AC-203-3
+    title: Form controls in wizard are properly labeled
+    given:
+      - visit: /
+      - click:
+          selector: '[data-test=spec-wizard]'
+    then:
+      - shouldExist:
+          selector: '[data-test=form-label]'
+    when: []
+`;
+loadAndRun(stories_203);
+
+// US-204: Respect user accessibility preferences
+const stories_204 = `
+id: US-204
+title: Respect user accessibility preferences
+acceptance_criteria:
+  - id: AC-204-1
+    title: Reduced motion preference is respected
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=hierarchy-explorer]'
+      - click:
+          selector: '[data-test=level-1]'
+    then:
+      - shouldExist:
+          selector: '[data-test=reduced-motion-indicator]'
+  - id: AC-204-2
+    title: High contrast mode works with themes
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=theme-toggle]'
+    then:
+      - shouldExist:
+          selector: '[data-test=high-contrast-indicator]'
+  - id: AC-204-3
+    title: Text remains readable at increased sizes
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=scalable-text]'
+      - shouldContain:
+          selector: '[data-test=hero-tagline]'
+          text: philosophy
+    when: []
+`;
+loadAndRun(stories_204);

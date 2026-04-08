@@ -1,0 +1,58 @@
+---
+// Solution section explaining RootSpec methodology
+---
+
+<section data-test="solution-section" class="py-16">
+  <div class="container mx-auto px-4 max-w-4xl">
+    <h3 class="text-3xl font-bold text-center mb-12">The RootSpec Solution</h3>
+
+    <div data-test="solution-content" class="space-y-8">
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center space-x-4 bg-blue-50 dark:bg-blue-900 px-8 py-4 rounded-lg">
+          <span class="text-xl font-bold text-blue-600 dark:text-blue-400">init</span>
+          <span class="text-gray-400">→</span>
+          <span class="text-xl font-bold text-green-600 dark:text-green-400">spec</span>
+          <span class="text-gray-400">→</span>
+          <span class="text-xl font-bold text-purple-600 dark:text-purple-400">impl</span>
+          <span class="text-gray-400">→</span>
+          <span class="text-xl font-bold text-orange-600 dark:text-orange-400">validate</span>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">Four-step methodology for specification-driven development</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="p-6 bg-green-50 dark:bg-green-900 rounded-lg">
+          <h4 class="text-xl font-semibold mb-3 text-green-700 dark:text-green-300">Structured Hierarchy</h4>
+          <p class="text-gray-700 dark:text-gray-300">
+            Five distinct levels from Philosophy to Fine-tuning create clear separation
+            of concerns and prevent implementation details from polluting strategic decisions.
+          </p>
+        </div>
+
+        <div class="p-6 bg-green-50 dark:bg-green-900 rounded-lg">
+          <h4 class="text-xl font-semibold mb-3 text-green-700 dark:text-green-300">Validated Implementation</h4>
+          <p class="text-gray-700 dark:text-gray-300">
+            User stories directly generate executable tests, ensuring the final product
+            matches the original specification with measurable validation.
+          </p>
+        </div>
+
+        <div class="p-6 bg-green-50 dark:bg-green-900 rounded-lg">
+          <h4 class="text-xl font-semibold mb-3 text-green-700 dark:text-green-300">Reference Constraints</h4>
+          <p class="text-gray-700 dark:text-gray-300">
+            Each level can only reference certain other levels, preventing circular
+            dependencies and maintaining clear information flow.
+          </p>
+        </div>
+
+        <div class="p-6 bg-green-50 dark:bg-green-900 rounded-lg">
+          <h4 class="text-xl font-semibold mb-3 text-green-700 dark:text-green-300">Living Documentation</h4>
+          <p class="text-gray-700 dark:text-gray-300">
+            Specifications stay synchronized with implementation through automated
+            testing, eliminating spec drift and documentation decay.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

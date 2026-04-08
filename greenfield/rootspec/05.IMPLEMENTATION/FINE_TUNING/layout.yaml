@@ -1,0 +1,105 @@
+# =============================================================================
+# FINE-TUNING: Layout System
+# =============================================================================
+# @spec_version: 1.0.0
+# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# @last_updated: 2026-04-08T02:55:27Z
+
+# Responsive breakpoints
+mobile_breakpoint:
+  value: 768
+  # @unit: pixels
+  # @rationale: Standard mobile-first breakpoint covering most phones and small tablets
+  # @constraint: min=320, max=1024
+
+tablet_breakpoint:
+  value: 1024
+  # @unit: pixels
+  # @rationale: Covers tablets and small laptops in portrait
+  # @constraint: min=768, max=1200
+
+desktop_breakpoint:
+  value: 1200
+  # @unit: pixels
+  # @rationale: Standard desktop threshold for full-width layouts
+  # @constraint: min=1024, max=1440
+
+# Content spacing
+section_spacing:
+  value: 80
+  # @unit: pixels
+  # @rationale: Generous whitespace for visual breathing room
+  # @constraint: min=40, max=120
+
+paragraph_spacing:
+  value: 24
+  # @unit: pixels
+  # @rationale: Comfortable reading rhythm between paragraphs
+  # @constraint: min=16, max=40
+
+# Component layout
+max_content_width:
+  value: 1200
+  # @unit: pixels
+  # @rationale: Optimal line length for readability on large screens
+  # @constraint: min=800, max=1600
+
+sidebar_width:
+  value: 280
+  # @unit: pixels
+  # @rationale: Wide enough for navigation, narrow enough to preserve content
+  # @constraint: min=200, max=400
+
+# Grid system
+grid_columns:
+  value: 12
+  # @unit: count
+  # @rationale: Standard 12-column grid provides flexible layout options
+  # @constraint: min=8, max=16
+  # @inviolable: true
+
+grid_gutter:
+  value: 24
+  # @unit: pixels
+  # @rationale: Comfortable spacing between grid items
+  # @constraint: min=16, max=40
+
+# Interactive elements
+touch_target_minimum:
+  value: 44
+  # @unit: pixels
+  # @rationale: Apple and Android accessibility guidelines minimum
+  # @constraint: min=44, max=64
+  # @ethical_review: accessibility-team-approved
+
+focus_outline_width:
+  value: 2
+  # @unit: pixels
+  # @rationale: Visible but not overwhelming focus indication
+  # @constraint: min=1, max=4
+
+# Scroll behavior
+scroll_padding_top:
+  value: 80
+  # @unit: pixels
+  # @rationale: Account for sticky header when jumping to sections
+  # @constraint: min=40, max=120
+
+smooth_scroll_duration:
+  value: 800
+  # @unit: milliseconds
+  # @rationale: Smooth but not sluggish section transitions
+  # @constraint: min=300, max=1500
+
+# Layout performance
+lazy_load_threshold:
+  value: 200
+  # @unit: pixels
+  # @rationale: Start loading before element enters viewport
+  # @constraint: min=50, max=500
+
+intersection_threshold:
+  value: 0.1
+  # @unit: ratio
+  # @rationale: Trigger navigation updates when 10% of section is visible
+  # @constraint: min=0.05, max=0.5

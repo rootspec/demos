@@ -4,6 +4,8 @@
   "description": "A marketing site for RootSpec, built entirely from specification using the RootSpec methodology. Demonstrates the full pipeline from product idea to deployed, validated site — including interactive features like a hierarchy explorer and spec wizard.",
   "main": "index.js",
   "dependencies": {
+    "@astrojs/react": "^5.0.3",
+    "@astrojs/tailwind": "^6.0.2",
     "acorn": "^8.16.0",
     "aggregate-error": "^3.1.0",
     "ansi-align": "^3.0.1",
@@ -453,16 +455,11 @@
     "zod-to-ts": "^1.2.0",
     "zwitch": "^2.0.4"
   },
-  "devDependencies": {},
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "cypress": "cypress run",
-    "dev:start": "./scripts/dev.sh start",
-    "dev:stop": "./scripts/dev.sh stop",
-    "dev:restart": "./scripts/dev.sh restart"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",

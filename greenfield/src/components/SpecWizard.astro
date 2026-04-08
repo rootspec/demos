@@ -1,0 +1,252 @@
+---
+// Spec Wizard - interactive component for creating a skeleton spec
+---
+
+<section data-test="spec-wizard" class="py-16">
+  <div class="container mx-auto px-4 max-w-4xl">
+    <h3 class="text-3xl font-bold text-center mb-12">Spec Your Idea</h3>
+    <p class="text-center text-gray-600 dark:text-gray-300 mb-8">
+      Experience RootSpec methodology by creating a skeleton specification for your own product idea.
+    </p>
+
+    <div id="wizard-app">
+      <!-- React component will mount here -->
+    </div>
+  </div>
+</section>
+
+<script>
+  import { createRoot } from 'react-dom/client';
+  import React from 'react';
+
+  function SpecWizardApp() {
+    const [currentStep, setCurrentStep] = React.useState(1);
+    const [formData, setFormData] = React.useState({
+      mission: '',
+      pillars: [],
+      interaction: ''
+    });
+    const [errors, setErrors] = React.useState({});
+
+    const missionTemplates = [
+      'Build a platform that helps [target users] achieve [primary goal] through [key differentiator]',
+      'Create a tool that solves [specific problem] for [user segment] by providing [solution approach]',
+      'Develop an experience that enables [user benefit] while maintaining [core principle]'
+    ];
+
+    const pillarSuggestions = [
+      'User Privacy',
+      'Simplicity',
+      'Performance',
+      'Accessibility',
+      'Transparency',
+      'Collaboration',
+      'Scalability',
+      'Security',
+      'Innovation',
+      'Reliability'
+    ];
+
+    const validateStep = () => {
+      const newErrors = {};
+
+      if (currentStep === 1 && !formData.mission.trim()) {
+        newErrors.mission = 'Mission statement is required';
+      }
+      if (currentStep === 2 && formData.pillars.length === 0) {
+        newErrors.pillars = 'At least one design pillar is required';
+      }
+      if (currentStep === 3 && !formData.interaction.trim()) {
+        newErrors.interaction = 'Interaction description is required';
+      }
+
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    };
+
+    const nextStep = () => {
+      if (validateStep()) {
+        setCurrentStep(curr => curr + 1);
+        setErrors({});
+      }
+    };
+
+    const prevStep = () => {
+      setCurrentStep(curr => curr - 1);
+      setErrors({});
+    };
+
+    const selectTemplate = (template) => {
+      setFormData(prev => ({ ...prev, mission: template }));
+    };
+
+    const togglePillar = (pillar) => {
+      setFormData(prev => ({
+        ...prev,
+        pillars: prev.pillars.includes(pillar)
+          ? prev.pillars.filter(p => p !== pillar)
+          : [...prev.pillars, pillar]
+      }));
+    };
+
+    const generateSpec = () => {
+      if (validateStep()) {
+        setCurrentStep(4);
+      }
+    };
+
+    return React.createElement('div', { className: 'space-y-8' },
+      // Progress indicator
+      React.createElement('div', { className: 'flex justify-center mb-8' },
+        React.createElement('div', { className: 'flex items-center space-x-4' },
+          [1, 2, 3].map(step =>
+            React.createElement('div',
+              {
+                key: step,
+                className: `w-8 h-8 rounded-full flex items-center justify-center ${
+                  step === currentStep
+                    ? 'bg-blue-600 text-white'
+                    : step < currentStep
+                    ? 'bg-green-600 text-white'
+                    : 'bg-gray-300 text-gray-600'
+                }`
+              },
+              step
+            )
+          )
+        )
+      ),
+
+      // Step 1: Mission
+      currentStep === 1 && React.createElement('div', { 'data-test': 'wizard-step-1', className: 'bg-white dark:bg-gray-700 p-8 rounded-lg shadow' },
+        React.createElement('h4', { className: 'text-xl font-bold mb-4' }, 'Step 1: Define Your Mission'),
+        React.createElement('p', { className: 'text-gray-600 dark:text-gray-300 mb-6' },
+          'What is the core mission of your product? This becomes your L1 Philosophy.'
+        ),
+
+        React.createElement('div', { className: 'space-y-4 mb-6' },
+          React.createElement('h5', { className: 'font-semibold' }, 'Quick templates:'),
+          missionTemplates.map((template, index) =>
+            React.createElement('button',
+              {
+                key: index,
+                'data-test': 'mission-template',
+                className: 'block w-full text-left p-4 bg-gray-50 dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500',
+                onClick: () => selectTemplate(template)
+              },
+              template
+            )
+          )
+        ),
+
+        React.createElement('textarea',
+          {
+            className: 'w-full h-32 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800',
+            placeholder: 'Or write your own mission statement...',
+            value: formData.mission,
+            onChange: (e) => setFormData(prev => ({ ...prev, mission: e.target.value }))
+          }
+        ),
+
+        errors.mission && React.createElement('div', { 'data-test': 'validation-message', className: 'text-red-600 mt-2' }, errors.mission)
+      ),
+
+      // Step 2: Design Pillars
+      currentStep === 2 && React.createElement('div', { 'data-test': 'wizard-step-2', className: 'bg-white dark:bg-gray-700 p-8 rounded-lg shadow' },
+        React.createElement('h4', { className: 'text-xl font-bold mb-4' }, 'Step 2: Choose Design Pillars'),
+        React.createElement('p', { className: 'text-gray-600 dark:text-gray-300 mb-6' },
+          'Select 2-4 design pillars that will guide your product decisions. These become part of your L1 Philosophy.'
+        ),
+
+        React.createElement('div', { className: 'grid grid-cols-2 md:grid-cols-3 gap-3 mb-6' },
+          pillarSuggestions.map(pillar =>
+            React.createElement('button',
+              {
+                key: pillar,
+                'data-test': 'pillar-suggestion',
+                className: `p-3 rounded-lg border-2 transition-colors ${
+                  formData.pillars.includes(pillar)
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+                    : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
+                }`,
+                onClick: () => togglePillar(pillar)
+              },
+              pillar
+            )
+          )
+        ),
+
+        errors.pillars && React.createElement('div', { 'data-test': 'validation-message', className: 'text-red-600 mb-4' }, errors.pillars),
+
+        React.createElement('div', { className: 'flex justify-between' },
+          React.createElement('button', {
+            className: 'px-6 py-2 bg-gray-200 dark:bg-gray-600 rounded hover:bg-gray-300 dark:hover:bg-gray-500',
+            onClick: prevStep
+          }, 'Back'),
+          React.createElement('button', {
+            'data-test': 'wizard-next',
+            className: 'px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700',
+            onClick: nextStep
+          }, 'Next')
+        )
+      ),
+
+      // Step 3: Interaction
+      currentStep === 3 && React.createElement('div', { 'data-test': 'wizard-step-3', className: 'bg-white dark:bg-gray-700 p-8 rounded-lg shadow' },
+        React.createElement('h4', { className: 'text-xl font-bold mb-4' }, 'Step 3: Describe Key Interaction'),
+        React.createElement('p', { className: 'text-gray-600 dark:text-gray-300 mb-6' },
+          'Describe one core user interaction or workflow. This becomes your L3 Interactions.'
+        ),
+
+        React.createElement('textarea',
+          {
+            'data-test': 'interaction-input',
+            className: 'w-full h-32 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800',
+            placeholder: 'Example: User clicks the search button, enters their query, and sees filtered results within 2 seconds...',
+            value: formData.interaction,
+            onChange: (e) => setFormData(prev => ({ ...prev, interaction: e.target.value }))
+          }
+        ),
+
+        errors.interaction && React.createElement('div', { 'data-test': 'validation-message', className: 'text-red-600 mt-2' }, errors.interaction),
+
+        React.createElement('div', { className: 'flex justify-between mt-6' },
+          React.createElement('button', {
+            className: 'px-6 py-2 bg-gray-200 dark:bg-gray-600 rounded hover:bg-gray-300 dark:hover:bg-gray-500',
+            onClick: prevStep
+          }, 'Back'),
+          React.createElement('button', {
+            'data-test': 'wizard-complete',
+            className: 'px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700',
+            onClick: generateSpec
+          }, 'Generate Spec')
+        )
+      ),
+
+      // Step 4: Generated Spec
+      currentStep === 4 && React.createElement('div', { 'data-test': 'generated-spec', className: 'bg-white dark:bg-gray-700 p-8 rounded-lg shadow' },
+        React.createElement('h4', { className: 'text-xl font-bold mb-4' }, 'Your RootSpec Skeleton'),
+        React.createElement('div', { className: 'space-y-6 font-mono text-sm' },
+          React.createElement('div', {},
+            React.createElement('h5', { className: 'font-bold text-blue-600 dark:text-blue-400' }, '# L1: PHILOSOPHY'),
+            React.createElement('p', { className: 'mt-2 whitespace-pre-wrap' }, `Mission: ${formData.mission}\n\nDesign Pillars:\n${formData.pillars.map(p => `- ${p}`).join('\n')}`)
+          ),
+          React.createElement('div', {},
+            React.createElement('h5', { className: 'font-bold text-green-600 dark:text-green-400' }, '# L3: INTERACTIONS'),
+            React.createElement('p', { className: 'mt-2 whitespace-pre-wrap' }, formData.interaction)
+          )
+        ),
+        React.createElement('p', { className: 'mt-6 text-center text-gray-600 dark:text-gray-300' },
+          'This is your starting point! Use the RootSpec CLI to expand this into a full specification.'
+        )
+      )
+    );
+  }
+
+  // Mount React component
+  const container = document.getElementById('wizard-app');
+  if (container) {
+    const root = createRoot(container);
+    root.render(React.createElement(SpecWizardApp));
+  }
+</script>
