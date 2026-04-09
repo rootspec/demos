@@ -19,6 +19,21 @@ stats() {
   jq '{turns: .num_turns, cost_usd: .total_cost_usd, duration_ms: .duration_ms, input_tokens: (.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens), output_tokens: .usage.output_tokens}' "$file"
 }
 
+# Inject cost/turns from claude JSON output into the last stats.json entry
+inject_cost() {
+  local claude_json="$1"
+  local stats_file="$DEMO/rootspec/stats.json"
+  [ -f "$claude_json" ] || return 0
+  [ -f "$stats_file" ] || return 0
+  local cost turns
+  cost=$(jq -r '.total_cost_usd // 0' "$claude_json" 2>/dev/null || echo 0)
+  turns=$(jq -r '.num_turns // 0' "$claude_json" 2>/dev/null || echo 0)
+  jq --arg cost "$cost" --arg turns "$turns" \
+    '.runs[-1].costUsd = ($cost | tonumber) | .runs[-1].turns = ($turns | tonumber)' \
+    "$stats_file" > "$stats_file.tmp"
+  mv "$stats_file.tmp" "$stats_file"
+}
+
 run_reset() {
   echo "=== Reset: $DEMO ==="
   cd "$DEMO"
@@ -42,6 +57,8 @@ run_reset() {
       # Prerequisites (created by rs-init)
       rm -rf scripts/
       rm -f .rootspec.json .dev-server.pid .dev-server.log cypress-output.log
+      # Orphaned node_modules from previous build
+      rm -rf node_modules
       ;;
     scaffold)
       cd ..
@@ -110,6 +127,7 @@ run_spec() {
 
   stats "$STATS_DIR/spec.json"
   cd ..
+  inject_cost "$STATS_DIR/spec.json"
 }
 
 run_impl() {
@@ -131,6 +149,7 @@ run_impl() {
 
   stats "$STATS_DIR/impl.json"
   cd ..
+  inject_cost "$STATS_DIR/impl.json"
 }
 
 run_validate() {
@@ -148,6 +167,7 @@ run_validate() {
 
   stats "$STATS_DIR/validate.json" 2>/dev/null || true
   cd ..
+  inject_cost "$STATS_DIR/validate.json"
 }
 
 print_summary() {

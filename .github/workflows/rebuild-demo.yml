@@ -32,20 +32,14 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Install dependencies
-        working-directory: ${{ inputs.demo }}
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            echo "No package-lock.json — deps will be installed during pipeline"
-          fi
-
       - name: Create rebuild branch
         run: |
           BRANCH="rebuild/${{ inputs.demo }}-$(date +%Y%m%d%H%M)"
           git checkout -b "$BRANCH"
           echo "branch=${BRANCH}" >> "$GITHUB_ENV"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
       # ── Reset phase ──────────────────────────────────────
 
@@ -78,6 +72,9 @@ jobs:
           rm -rf scripts/
           rm -f .rootspec.json
           rm -f .dev-server.pid .dev-server.log cypress-output.log
+
+          # Orphaned node_modules from previous build
+          rm -rf node_modules
 
           echo "Greenfield reset to blank slate"
 
@@ -133,6 +130,15 @@ jobs:
             npm install
           fi
 
+      - name: "Commit: init"
+        if: inputs.demo == 'greenfield'
+        run: |
+          git add -A
+          git diff --cached --quiet && exit 0
+          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-init.json 2>/dev/null || echo "?")
+          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-init.json 2>/dev/null || echo "?")
+          git commit -m "rs-init: project setup and prerequisites (${TURNS} turns, \$${COST})"
+
       - name: "Build: spec (greenfield/scaffold)"
         if: inputs.demo != 'brownfield'
         working-directory: ${{ inputs.demo }}
@@ -169,6 +175,26 @@ jobs:
           echo "--- Stats ---"
           jq '{turns: .num_turns, cost_usd: .total_cost_usd, duration_ms: .duration_ms, input_tokens: (.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens), output_tokens: .usage.output_tokens}' /tmp/claude-spec.json
 
+      - name: "Record: spec cost"
+        working-directory: ${{ inputs.demo }}
+        run: |
+          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-spec.json 2>/dev/null || echo 0)
+          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-spec.json 2>/dev/null || echo 0)
+          if [ -f rootspec/stats.json ]; then
+            jq --arg cost "$COST" --arg turns "$TURNS" \
+              '.runs[-1].costUsd = ($cost | tonumber) | .runs[-1].turns = ($turns | tonumber)' \
+              rootspec/stats.json > rootspec/stats.json.tmp
+            mv rootspec/stats.json.tmp rootspec/stats.json
+          fi
+
+      - name: "Commit: spec"
+        run: |
+          git add -A
+          git diff --cached --quiet && exit 0
+          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-spec.json 2>/dev/null || echo "?")
+          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-spec.json 2>/dev/null || echo "?")
+          git commit -m "rs-spec: specification from SEED.md (${TURNS} turns, \$${COST})"
+
       - name: "Build: implement (greenfield/scaffold only)"
         if: inputs.demo != 'brownfield'
         working-directory: ${{ inputs.demo }}
@@ -185,6 +211,29 @@ jobs:
             | tee /tmp/claude-impl.json | jq -r '.result'
           echo "--- Stats ---"
           jq '{turns: .num_turns, cost_usd: .total_cost_usd, duration_ms: .duration_ms, input_tokens: (.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens), output_tokens: .usage.output_tokens}' /tmp/claude-impl.json
+
+      - name: "Record: impl cost"
+        if: inputs.demo != 'brownfield'
+        working-directory: ${{ inputs.demo }}
+        run: |
+          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-impl.json 2>/dev/null || echo 0)
+          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-impl.json 2>/dev/null || echo 0)
+          if [ -f rootspec/stats.json ]; then
+            jq --arg cost "$COST" --arg turns "$TURNS" \
+              '.runs[-1].costUsd = ($cost | tonumber) | .runs[-1].turns = ($turns | tonumber)' \
+              rootspec/stats.json > rootspec/stats.json.tmp
+            mv rootspec/stats.json.tmp rootspec/stats.json
+          fi
+
+      - name: "Commit: impl"
+        if: inputs.demo != 'brownfield'
+        run: |
+          rm -rf ${{ inputs.demo }}/cypress/screenshots ${{ inputs.demo }}/cypress/videos
+          git add -A
+          git diff --cached --quiet && exit 0
+          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-impl.json 2>/dev/null || echo "?")
+          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-impl.json 2>/dev/null || echo "?")
+          git commit -m "rs-impl: implementation and tests (${TURNS} turns, \$${COST})"
 
       - name: "Build: validate"
         working-directory: ${{ inputs.demo }}
@@ -203,37 +252,36 @@ jobs:
           echo "--- Stats ---"
           jq '{turns: .num_turns, cost_usd: .total_cost_usd, duration_ms: .duration_ms, input_tokens: (.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens), output_tokens: .usage.output_tokens}' /tmp/claude-validate.json 2>/dev/null || true
 
+      - name: "Record: validate cost"
+        working-directory: ${{ inputs.demo }}
+        run: |
+          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-validate.json 2>/dev/null || echo 0)
+          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-validate.json 2>/dev/null || echo 0)
+          if [ -f rootspec/stats.json ]; then
+            jq --arg cost "$COST" --arg turns "$TURNS" \
+              '.runs[-1].costUsd = ($cost | tonumber) | .runs[-1].turns = ($turns | tonumber)' \
+              rootspec/stats.json > rootspec/stats.json.tmp
+            mv rootspec/stats.json.tmp rootspec/stats.json
+          fi
+
+      - name: "Commit: validate"
+        run: |
+          rm -f ${{ inputs.demo }}/rootspec/tests-status.json.bak
+          git add -A
+          git diff --cached --quiet && exit 0
+          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-validate.json 2>/dev/null || echo "?")
+          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-validate.json 2>/dev/null || echo "?")
+          git commit -m "rs-validate: test results (${TURNS} turns, \$${COST})"
+
       # ── PR phase ─────────────────────────────────────────
 
-      - name: Commit and create PR
+      - name: Push and create PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          DEMO="${{ inputs.demo }}"
-
-          # Clean up artifacts that shouldn't be committed
-          rm -f "$DEMO"/rootspec/tests-status.json.bak
-          rm -rf "$DEMO"/cypress/screenshots "$DEMO"/cypress/videos
-
-          git add -A
-
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-            exit 0
-          fi
-
-          if [ "$DEMO" = "brownfield" ]; then
-            MSG="Rebuild ${DEMO} spec from existing code"
-          else
-            MSG="Rebuild ${DEMO} from SEED.md (spec + impl + validate)"
-          fi
-
-          git commit -m "$MSG"
           git push origin "${{ env.branch }}"
 
+          DEMO="${{ inputs.demo }}"
           if [ "$DEMO" = "brownfield" ]; then
             BODY="Spec-only rebuild — derived from existing brownfield codebase."
           else
