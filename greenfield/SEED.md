@@ -80,7 +80,7 @@ Real content in both panels — not lorem ipsum.
 
 ### Version Badge
 
-The current RootSpec version (v6.2.0) should be displayed prominently — in the hero section and/or site header. This is a demo of the framework, so the version it was built with is a key detail. The version should be easy to update (single constant or config value).
+The current RootSpec version should be displayed prominently — in the hero section and/or site header. Read the version from `.rootspec.json` (the `version` field) at build or render time. This is a demo of the framework, so the version it was built with is a key detail.
 
 ### Open Source CTA
 
