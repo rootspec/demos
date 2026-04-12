@@ -3,76 +3,40 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
-# @last_updated: 2026-04-08T00:59:00Z
+# @last_updated: 2026-04-12T00:00:00Z
 
-breakpoint_mobile:
-  value: 320
+section_transition_duration:
+  value: 300
+  # @unit: milliseconds
+  # @rationale: Smooth enough to signal section entry without slowing the reader
+  # @constraint: min=150, max=600
+
+section_transition_translate_y:
+  value: 12
   # @unit: pixels
-  # @rationale: Accommodates smallest common smartphone screens in portrait mode
-  # @constraint: min=320, max=480
+  # @rationale: Subtle vertical shift reinforces content entering from below; too large feels theatrical
+  # @constraint: min=4, max=32
 
-breakpoint_tablet:
+mobile_breakpoint:
   value: 768
-  # @unit: pixels
-  # @rationale: Standard tablet width and common responsive design breakpoint
-  # @constraint: min=640, max=1024
+  # @unit: pixels (viewport width)
+  # @rationale: Standard tablet/mobile boundary; aligns with interactive system breakpoint
+  # @constraint: min=640, max=960
 
-breakpoint_desktop:
-  value: 1024
-  # @unit: pixels
-  # @rationale: Ensures adequate space for multi-column layouts and enhanced interactions
+desktop_breakpoint:
+  value: 1200
+  # @unit: pixels (viewport width)
+  # @rationale: Wide enough for two-column layouts in comparison and explorer sections
   # @constraint: min=1024, max=1440
 
 max_content_width:
-  value: 1200
+  value: 1140
   # @unit: pixels
-  # @rationale: Prevents excessively wide lines that reduce readability on large screens
-  # @constraint: min=1000, max=1600
+  # @rationale: Keeps line lengths readable and layout centered on wide monitors
+  # @constraint: min=900, max=1400
 
-section_spacing_mobile:
-  value: 32
+nav_height:
+  value: 56
   # @unit: pixels
-  # @rationale: Adequate visual separation on small screens without wasting space
-  # @constraint: min=24, max=48
-
-section_spacing_desktop:
-  value: 64
-  # @unit: pixels
-  # @rationale: Generous breathing room that feels professional on large screens
-  # @constraint: min=48, max=96
-
-grid_gap_base:
-  value: 24
-  # @unit: pixels
-  # @rationale: Provides clear separation between content blocks without excessive whitespace
-  # @constraint: min=16, max=32
-
-navigation_height:
-  value: 64
-  # @unit: pixels
-  # @rationale: Comfortable touch target height that doesn't dominate viewport on mobile
+  # @rationale: Compact enough to not compete with content; tall enough for comfortable tap targets
   # @constraint: min=48, max=80
-
-focus_outline_offset:
-  value: 2
-  # @unit: pixels
-  # @rationale: Prevents outline from overlapping with element borders while remaining visible
-  # @constraint: min=1, max=4
-
-scroll_margin_top:
-  value: 80
-  # @unit: pixels
-  # @rationale: Accounts for sticky navigation when jumping to anchored sections
-  # @constraint: min=60, max=120
-
-content_padding_mobile:
-  value: 16
-  # @unit: pixels
-  # @rationale: Minimal but adequate spacing from screen edges on mobile devices
-  # @constraint: min=12, max=24
-
-content_padding_desktop:
-  value: 32
-  # @unit: pixels
-  # @rationale: Comfortable margins that don't waste space but provide visual breathing room
-  # @constraint: min=24, max=48

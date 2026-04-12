@@ -3,8 +3,8 @@
   "specDirectory": "rootspec",
   "prerequisites": {
     "devServer": "./scripts/dev.sh",
-    "preCommitHook": "./scripts/pre-commit.sh",
-    "releaseScript": "./scripts/release.sh",
-    "validationScript": "npm run cypress"
+    "preCommitHook": null,
+    "releaseScript": null,
+    "validationScript": "./scripts/test.sh"
   }
 }

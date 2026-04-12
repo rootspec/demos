@@ -1,0 +1,113 @@
+{
+  "lastReview": "2026-04-12T20:01:12Z",
+  "status": "fail",
+  "summary": {
+    "blockers": 1,
+    "warnings": 3,
+    "nitpicks": 3
+  },
+  "issues": [
+    {
+      "id": "REV-001",
+      "severity": "blocker",
+      "category": "impl_error",
+      "story": "US-003",
+      "file": "src/pages/index.astro",
+      "line": null,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-004--AC-004-1.png",
+      "description": "SEED.md explicitly requires a RootSpec methodology diagram: 'if possible, create an image that depicts the RootSpec methodology in a simple way: a spec surrounding the development cycle and only allowing valid solutions to pass through. If an image is not possible, create a diagram using SVG.' No SVG, no image, and no diagram of any kind exists in the source. The How It Works section uses only text cards.",
+      "expected": "A visual diagram (SVG or image) depicting the RootSpec methodology — spec surrounding the development cycle, showing only valid solutions passing through",
+      "actual": "No diagram present. The How It Works section shows four text cards (/rs-init, /rs-spec, /rs-impl, /rs-validate) with no accompanying visual",
+      "suggestion": "Add an inline <svg> element to the How It Works section or as a standalone section, depicting the five-level spec hierarchy or the spec-as-validation-gate concept"
+    },
+    {
+      "id": "REV-002",
+      "severity": "warning",
+      "category": "visual_quality",
+      "story": "US-201",
+      "file": "src/components/HierarchyExplorer.tsx",
+      "line": 51,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-201--AC-201-1.png",
+      "description": "SEED.md specifies the hierarchy explorer should show 'Visual connections show which levels each can reference (arrows flow upward only). Hovering a level highlights its allowed references.' The implementation is a plain accordion with expand/collapse chevrons (▼/▲) only — no upward-flow arrows, no inter-level connector lines, no hover reference highlighting.",
+      "expected": "Visual arrows showing upward-only reference flow between levels, and hover states that highlight which levels are referenceable from the hovered level",
+      "actual": "A plain accordion with ▼/▲ chevrons. Clicking expands text content. No arrows, no hover-based reference highlighting, no inter-level visual connections",
+      "suggestion": "Add CSS arrows or connector lines between level cards, and a hover interaction that dims non-referenceable levels (e.g. hovering L3 dims L4 and L5 since they cannot be referenced upward)"
+    },
+    {
+      "id": "REV-003",
+      "severity": "warning",
+      "category": "broken_links",
+      "story": "US-001",
+      "file": "src/pages/index.astro",
+      "line": 17,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-001--AC-001-2.png",
+      "description": "Meta banner links point to https://github.com/rootspec/demos/blob/main/greenfield/SEED.md and https://github.com/rootspec/demos/tree/main/greenfield/rootspec. The CTA GitHub link points to https://github.com/rootspec/rootspec. SEED.md says to link to the GitHub repo but does not specify the exact URL. These URLs cannot be verified without network access and could be hallucinated paths.",
+      "expected": "Links should point to confirmed, real GitHub URLs for this project's repo",
+      "actual": "Uses assumed org 'rootspec' with repo 'demos' for spec/seed links and repo 'rootspec' for the CTA. The org 'rootspec' is internally consistent with the CLAUDE.md context describing 'rootspec/demos' as the demos repo, but cannot be verified",
+      "suggestion": "Confirm https://github.com/rootspec/demos and https://github.com/rootspec/rootspec are live repos; update URLs if the actual GitHub location differs"
+    },
+    {
+      "id": "REV-004",
+      "severity": "warning",
+      "category": "accessibility",
+      "story": "US-101",
+      "file": "src/components/ThemeToggle.tsx",
+      "line": 36,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-101--AC-101-1.png",
+      "description": "The theme toggle renders '◗ Dark' when in dark mode (showing the option to switch to dark, i.e. currently in light mode). The '◗' character (U+25D7, right-half black circle) is not a recognizable dark-mode or moon icon. In contrast '☀ Light' (sun) is immediately recognizable. This creates visual inconsistency in iconography.",
+      "expected": "A recognizable dark-mode symbol pairing the ☀ sun icon — typically a moon/crescent (🌙) or similar well-understood icon",
+      "actual": "'◗ Dark' — uses a geometric half-circle that does not conventionally represent nighttime or dark mode",
+      "suggestion": "Replace '◗' with '🌙' or '●' or drop the icon and use plain text 'Dark' / 'Light' labels with consistent treatment"
+    },
+    {
+      "id": "REV-005",
+      "severity": "nitpick",
+      "category": "accessibility",
+      "story": "US-005",
+      "file": "src/pages/index.astro",
+      "line": 42,
+      "screenshot": null,
+      "description": "Two distinct anchor elements share data-test='github-link': one in the hero section (line 42) and one in the CTA section (line 135). Duplicate data-test values make automated test selectors ambiguous — Cypress will match the first occurrence, which is the hero link, not the intended CTA link tested by US-005.",
+      "expected": "Unique data-test attributes per element so test selectors unambiguously target the intended element",
+      "actual": "data-test='github-link' on both line 42 (hero 'GitHub →' button) and line 135 (CTA '★ Star on GitHub' link)",
+      "suggestion": "Rename the hero link to data-test='hero-github-link'; keep data-test='github-link' on the CTA link which is what US-005 tests"
+    },
+    {
+      "id": "REV-006",
+      "severity": "nitpick",
+      "category": "accessibility",
+      "story": "US-203",
+      "file": "src/components/BeforeAfter.tsx",
+      "line": 73,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-203--AC-203-1.png",
+      "description": "The 'After' button in the Before/After toggle has no data-test attribute. The 'Before' button has data-test='before-after-toggle' but the sibling 'After' button is untagged. This inconsistency makes the After button untargetable by data-test selectors in future tests.",
+      "expected": "Both Before and After buttons should have data-test attributes for consistent and maintainable test targeting",
+      "actual": "Only the 'Before' button has data-test='before-after-toggle'; the 'After' button (line 73) has no data-test",
+      "suggestion": "Add data-test='before-after-toggle-after' to the After button, and consider renaming the Before button's selector to data-test='before-after-toggle-before' for symmetry"
+    },
+    {
+      "id": "REV-007",
+      "severity": "nitpick",
+      "category": "visual_quality",
+      "story": "US-001",
+      "file": "src/pages/index.astro",
+      "line": 15,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-001--AC-001-1.png",
+      "description": "SEED.md says the meta banner should be 'persistent, visible'. The banner is in normal document flow above the sticky header — it scrolls out of view when the user scrolls down the page. The sticky header only includes the nav bar (logo + theme toggle), not the meta banner.",
+      "expected": "Meta banner should remain visible (persistent) as specified in SEED.md: 'A persistent, visible banner'",
+      "actual": "Banner scrolls out of view on scroll; only the nav bar is sticky",
+      "suggestion": "Consider making the meta banner sticky by adding it inside or above the sticky header, or accept this as a known limitation and document it"
+    }
+  ],
+  "qualityScore": {
+    "score": 78,
+    "breakdown": {
+      "content": 25,
+      "visual": 20,
+      "alignment": 20,
+      "accessibility": 8,
+      "polish": 5
+    },
+    "notes": "content: -5 for unverifiable GitHub URLs (REV-003). visual: -5 for missing methodology diagram visual (REV-001). alignment: -5 for missing SEED.md-specified diagram (REV-001 spec requirement). accessibility: -2 for unclear dark icon (REV-004). polish: -5 for duplicate data-test='github-link' across hero and CTA (REV-005). Overall strong implementation with key content requirements met."
+  }
+}

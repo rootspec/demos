@@ -3,59 +3,34 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-# @last_updated: 2026-04-08T00:59:00Z
+# @last_updated: 2026-04-12T00:00:00Z
 
-animation_duration:
-  value: 300
-  # @unit: milliseconds
-  # @rationale: Fast enough to feel instant while allowing visual transitions to be perceived
-  # @constraint: min=200, max=500
+wizard_idea_max_chars:
+  value: 200
+  # @unit: characters
+  # @rationale: Long enough to express a real idea; short enough to force concision
+  # @constraint: min=100, max=500
 
-hierarchy_expansion_delay:
-  value: 150
-  # @unit: milliseconds
-  # @rationale: Provides visual feedback that interaction was registered before content appears
-  # @constraint: min=100, max=300
+wizard_min_pillars:
+  value: 3
+  # @unit: count
+  # @rationale: Three pillars is the minimum for meaningful design differentiation
+  # @constraint: min=2, max=3
 
-wizard_step_transition:
-  value: 400
-  # @unit: milliseconds
-  # @rationale: Longer than micro-interactions to give users time to process step changes
-  # @constraint: min=300, max=600
+wizard_max_pillars:
+  value: 5
+  # @unit: count
+  # @rationale: Five pillars is the RootSpec recommended maximum before pillars become noise
+  # @constraint: max=7
 
-touch_target_minimum:
-  value: 44
-  # @unit: pixels
-  # @rationale: WCAG AA standard for touch accessibility on mobile devices
-  # @constraint: min=44, max=64
-  # @inviolable: true
-
-keyboard_focus_outline:
-  value: 2
-  # @unit: pixels
-  # @rationale: Visible enough for accessibility while not overwhelming the design
-  # @constraint: min=1, max=4
-
-debounce_delay:
+hierarchy_animation_duration:
   value: 250
   # @unit: milliseconds
-  # @rationale: Prevents rapid-fire inputs while feeling responsive to user interaction
+  # @rationale: Expansion should feel physical but not slow; 250ms is the sweet spot for expand/collapse
   # @constraint: min=150, max=500
 
-wizard_progress_persistence:
-  value: 1440
-  # @unit: minutes
-  # @rationale: 24 hours allows users to return within a day without losing progress
-  # @constraint: min=60, max=10080
-
-error_message_display:
-  value: 5000
-  # @unit: milliseconds
-  # @rationale: Long enough to read but not permanently blocking the interface
-  # @constraint: min=3000, max=10000
-
-content_fade_in:
-  value: 200
-  # @unit: milliseconds
-  # @rationale: Subtle enough not to delay perceived performance while providing polish
-  # @constraint: min=100, max=400
+before_after_mobile_breakpoint:
+  value: 768
+  # @unit: pixels (viewport width)
+  # @rationale: Below this width, slider mode is hidden and toggle mode is used exclusively
+  # @constraint: min=480, max=1024

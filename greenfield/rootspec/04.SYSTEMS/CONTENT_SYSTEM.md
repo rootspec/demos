@@ -1,83 +1,37 @@
 # L4: Content System
 
 ## Responsibility
-Manages all static and dynamic content presentation, including marketing copy, meta information, and educational materials that explain RootSpec methodology.
+
+Owns all static page content: copy, section order, meta banner, hero, problem statement, how-it-works walkthrough, before/after panel content, and the footer attribution. Renders content into the page in the correct sequence.
 
 ## Boundaries
 
-### Owns
-- Hero section content (tagline, description)
-- Meta banner (demo acknowledgment, links to spec/seed)
-- Problem/solution section copy
-- How it works explanatory content
-- Open source CTA and attribution footer
-- Version number display and management
-
-### Does Not Own
-- Interactive widget content (managed by Interactive System)
-- Visual styling and theming (managed by Theme System)
-- Layout and responsive behavior (managed by Layout System)
-- User input processing (managed by Interactive System)
+- Owns: All written copy and structured content data
+- Does not own: Theme state, interactive widget state, layout decisions
+- Does not call: Any external services or APIs
+- Receives from: FRAMEWORK_INTEGRATION — the RootSpec version string at build time
 
 ## Data Ownership
 
-### Static Content
-- Marketing copy stored in Astro components/pages
-- Version number as configuration constant
-- Attribution information (builder name, build date)
-- GitHub repository links and metadata
+| Data | Format | Source |
+|------|--------|--------|
+| Meta banner copy | Inline string with template slot for version | Hardcoded with version injected at build |
+| Hero tagline and subhead | Short strings | Hardcoded |
+| Problem section copy | Structured list + prose | Hardcoded |
+| How It Works steps | Ordered array of {step, title, description} | Hardcoded |
+| Before/After panel content | Two structured objects with labeled fields | Hardcoded |
+| Footer attribution | Builder name + build date | Builder name hardcoded; date from build time |
+| GitHub links (seed, spec) | URLs to repo files | Hardcoded to repo paths |
 
-### Dynamic Content
-- Section visibility state based on user scroll position
-- Reading progress indicators
-- Content adaptation based on theme/layout context
+## Key Behaviors
+
+- The meta banner renders above the fold on all screen sizes. It is not dismissable.
+- GitHub links in the meta banner point to the actual SEED.md and rootspec/ directory in the repository.
+- The footer names the builder (Claude, built with RootSpec) and the build date.
+- Before/After panel content uses real, representative copy — no lorem ipsum.
+- Version string passed from FRAMEWORK_INTEGRATION appears in the meta banner and is forwarded to LAYOUT_SYSTEM for the version badge.
 
 ## Interactions with Other Systems
 
-### → Interactive System
-- **Provides:** Section trigger points for wizard activation
-- **Receives:** State updates that affect content visibility
-- **Interface:** Event-based content show/hide, wizard data integration
-
-### → Theme System  
-- **Provides:** Content structure requiring visual treatment
-- **Receives:** Theme-aware content variants (if applicable)
-- **Interface:** CSS class application, content readability optimization
-
-### → Layout System
-- **Provides:** Content hierarchy and semantic structure
-- **Receives:** Responsive content adaptations
-- **Interface:** Content reflow, mobile-optimized copy variants
-
-### → Framework Integration
-- **Provides:** Static content for build-time processing
-- **Receives:** Astro component structure and hydration points
-- **Interface:** Component props, slot content, static generation directives
-
-## Internal Structure
-
-### Content Types
-1. **Hero Content:** Mission statement, value proposition, immediate call-to-action
-2. **Educational Content:** Problem definition, methodology explanation, workflow walkthrough  
-3. **Meta Content:** Demo disclaimer, transparency about rough edges, development attribution
-4. **CTA Content:** GitHub links, getting started instructions, community resources
-
-### Content Management
-- Version-controlled in component files
-- Single source of truth for all copy
-- Build-time validation for broken links
-- Consistent tone and voice across all sections
-
-## Quality Assurance
-
-### Content Standards
-- Technical accuracy about RootSpec methodology
-- Tone alignment with "confident but not preachy" guideline
-- No buzzwords or corporate marketing speak
-- Specific examples rather than abstract concepts
-
-### Validation Rules  
-- All external links functional at build time
-- Version number consistency across displays
-- Attribution completeness (builder name, date)
-- Content accessibility (reading level, structure)
+- **→ LAYOUT_SYSTEM:** Provides section list and order; section content determines scroll regions
+- **← FRAMEWORK_INTEGRATION:** Receives version string at build time for injection into meta banner

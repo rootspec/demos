@@ -1,188 +1,205 @@
 # =============================================================================
-# USER STORY: Display Hero Section with Clear Value Proposition
+# USER STORY: View Meta Banner
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, THEME_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
+# @journey: LANDING
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-12T00:00:00Z
 
-id: US-101
-title: Display hero section with RootSpec tagline and explanation
-requirement_id: R-101
-
-acceptance_criteria:
-  - id: AC-101-1
-    title: Hero section clearly explains what RootSpec is
-    narrative: |
-      Given I am a developer visiting the RootSpec marketing site
-      When I arrive at the landing page
-      Then I should immediately understand what RootSpec is
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-section]' }
-      - shouldContain: { selector: '[data-test=hero-tagline]', text: 'RootSpec' }
-      - shouldContain: { selector: '[data-test=hero-description]', text: 'specification language' }
-
-  - id: AC-101-2
-    title: Version number displayed prominently
-    narrative: |
-      Given I am viewing the hero section
-      When I look for version information
-      Then I should see the current RootSpec version clearly displayed
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=version-display]' }
-      - shouldContain: { selector: '[data-test=version-display]', text: 'v6.2.0' }
-
----
-
-# =============================================================================
-# USER STORY: Show Meta Banner with Demo Context
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, THEME_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
-
-id: US-102
-title: Display meta banner explaining this site is a RootSpec demo
-requirement_id: R-102
+id: US-001
+title: Visitor understands the demo context from the meta banner
+requirement_id: R-001
 
 acceptance_criteria:
-  - id: AC-102-1
-    title: Demo banner explains site generation process
+  - id: AC-001-1
+    title: Meta banner is visible on page load
     narrative: |
-      Given I am viewing the marketing site
-      When I see the meta banner
-      Then I should understand this site was generated from a product description
+      Given I visit the homepage
+      When the page loads
+      Then I should see the meta banner with demo context text
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldContain: { selector: '[data-test=meta-banner]', text: 'generated from' }
-      - shouldContain: { selector: '[data-test=meta-banner]', text: 'four commands' }
+      - shouldContain: { selector: '[data-test=meta-banner]', text: 'RootSpec pipeline' }
 
-  - id: AC-102-2
-    title: Links to spec and seed files in GitHub
+  - id: AC-001-2
+    title: Meta banner contains link to seed file
     narrative: |
-      Given I am reading the meta banner
-      When I want to see the source specification
-      Then I should find links to the spec and seed files
+      Given I visit the homepage
+      When the page loads
+      Then I should see a link to the SEED.md file in the meta banner
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=spec-link]' }
-      - shouldExist: { selector: '[data-test=seed-link]' }
+      - shouldExist: { selector: '[data-test=meta-banner-seed-link]' }
+
+  - id: AC-001-3
+    title: Meta banner contains link to spec files
+    narrative: |
+      Given I visit the homepage
+      When the page loads
+      Then I should see a link to the spec files in the meta banner
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=meta-banner-spec-link]' }
 
 ---
-
 # =============================================================================
-# USER STORY: Present Problem Section with Developer Pain Points
+# USER STORY: Read Hero Section
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, THEME_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
+# @journey: LANDING
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-12T00:00:00Z
 
-id: US-103
-title: Explain why existing specification approaches fail
-requirement_id: R-103
+id: US-002
+title: Visitor understands what RootSpec is from the hero section
+requirement_id: R-002
 
 acceptance_criteria:
-  - id: AC-103-1
-    title: Problem section identifies specification pain points
+  - id: AC-002-1
+    title: Hero tagline and subhead are visible
     narrative: |
-      Given I am a developer with spec experience
-      When I read the problem section
-      Then I should recognize familiar challenges
+      Given I visit the homepage
+      When the page loads
+      Then I should see the hero tagline and a one-sentence explanation
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=hero-tagline]' }
+      - shouldExist: { selector: '[data-test=hero-subhead]' }
+
+  - id: AC-002-2
+    title: Version badge is visible in or near the hero
+    narrative: |
+      Given I visit the homepage
+      When the page loads
+      Then I should see the RootSpec version badge
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=version-badge]' }
+      - shouldContain: { selector: '[data-test=version-badge]', text: 'v' }
+
+---
+# =============================================================================
+# USER STORY: Read Problem Section
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: LANDING
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-12T00:00:00Z
+
+id: US-003
+title: Visitor recognizes their pain points in the problem section
+requirement_id: R-003
+
+acceptance_criteria:
+  - id: AC-003-1
+    title: Problem section is present on the page
+    narrative: |
+      Given I visit the homepage
+      When the page loads
+      Then I should see the problem section with at least one described failure mode
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=problem-section]' }
-      - shouldContain: { selector: '[data-test=problem-section]', text: 'spec drift' }
-      - shouldContain: { selector: '[data-test=problem-section]', text: 'philosophy-implementation gap' }
-      - shouldContain: { selector: '[data-test=problem-section]', text: 'unreliable AI output' }
 
 ---
-
 # =============================================================================
-# USER STORY: Show How It Works Section with Workflow
+# USER STORY: Read How It Works Section
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, THEME_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
+# @journey: LANDING
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-12T00:00:00Z
 
-id: US-104
-title: Display visual walkthrough of four RootSpec skills
-requirement_id: R-104
+id: US-004
+title: Visitor understands the four RootSpec skills from the how-it-works section
+requirement_id: R-004
 
 acceptance_criteria:
-  - id: AC-104-1
-    title: How it works shows four-step process
+  - id: AC-004-1
+    title: How It Works section shows all four skills
     narrative: |
-      Given I want to understand the RootSpec workflow
-      When I view the how it works section
-      Then I should see the four core skills explained
+      Given I visit the homepage
+      When I scroll to the how-it-works section
+      Then I should see all four skill names listed
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=how-it-works]' }
-      - shouldContain: { selector: '[data-test=workflow-step]', text: 'rs-init' }
-      - shouldContain: { selector: '[data-test=workflow-step]', text: 'rs-spec' }
-      - shouldContain: { selector: '[data-test=workflow-step]', text: 'rs-impl' }
-      - shouldContain: { selector: '[data-test=workflow-step]', text: 'rs-validate' }
+      - shouldExist: { selector: '[data-test=how-it-works-section]' }
+      - shouldContain: { selector: '[data-test=how-it-works-section]', text: 'rs-init' }
+      - shouldContain: { selector: '[data-test=how-it-works-section]', text: 'rs-spec' }
+      - shouldContain: { selector: '[data-test=how-it-works-section]', text: 'rs-impl' }
+      - shouldContain: { selector: '[data-test=how-it-works-section]', text: 'rs-validate' }
 
 ---
-
 # =============================================================================
-# USER STORY: Display Open Source CTA and Attribution
+# USER STORY: View Open Source CTA
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, THEME_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
+# @journey: LANDING
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-12T00:00:00Z
 
-id: US-105
-title: Show GitHub repository link and getting started information
-requirement_id: R-105
+id: US-005
+title: Visitor finds the GitHub link and getting started instructions
+requirement_id: R-005
 
 acceptance_criteria:
-  - id: AC-105-1
-    title: Clear call-to-action for GitHub repository
+  - id: AC-005-1
+    title: Open source CTA section is present with GitHub link
     narrative: |
-      Given I want to start using RootSpec
-      When I look for next steps
-      Then I should find a clear link to the GitHub repository
+      Given I visit the homepage
+      When I scroll to the bottom area
+      Then I should see a section with a link to GitHub
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=github-cta]' }
-      - shouldContain: { selector: '[data-test=github-cta]', text: 'GitHub' }
+      - shouldExist: { selector: '[data-test=cta-section]' }
+      - shouldExist: { selector: '[data-test=github-link]' }
 
-  - id: AC-105-2
-    title: Attribution footer identifies site builder
+---
+# =============================================================================
+# USER STORY: Read Footer Attribution
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: LANDING
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-12T00:00:00Z
+
+id: US-006
+title: Visitor sees footer attribution identifying the site builder and build date
+requirement_id: R-006
+
+acceptance_criteria:
+  - id: AC-006-1
+    title: Footer contains builder name and build date
     narrative: |
-      Given I am viewing the site footer
-      When I look for attribution information
-      Then I should see who built the site and when
+      Given I visit the homepage
+      When I scroll to the footer
+      Then I should see a footer with builder attribution and a date
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=attribution]' }
-      - shouldContain: { selector: '[data-test=attribution]', text: 'built' }
+      - shouldExist: { selector: '[data-test=footer]' }
+      - shouldExist: { selector: '[data-test=footer-attribution]' }

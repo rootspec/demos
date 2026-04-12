@@ -2,76 +2,48 @@
 
 ## System Map
 
-```
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   CONTENT       │    │   INTERACTIVE    │    │     THEME       │
-│   SYSTEM        │────│     SYSTEM       │────│    SYSTEM       │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
-         │                       │                       │
-         │                       │                       │
-         └───────────────────────┼───────────────────────┘
-                                 │
-                    ┌─────────────────────────┐
-                    │    LAYOUT SYSTEM        │
-                    └─────────────────────────┘
-                                 │
-                    ┌─────────────────────────┐  
-                    │  FRAMEWORK INTEGRATION  │
-                    └─────────────────────────┘
-```
+| System | Responsibility | Data Owned |
+|--------|---------------|------------|
+| **CONTENT_SYSTEM** | Static page content, section rendering, meta banner | Markdown/structured copy, section order |
+| **THEME_SYSTEM** | Dark/light mode state, system preference detection, persistence | Theme preference (localStorage) |
+| **INTERACTIVE_SYSTEM** | Hierarchy Explorer, Spec Wizard, Before/After Comparison | Wizard state, explorer expanded state, comparison mode |
+| **LAYOUT_SYSTEM** | Responsive layout, navigation, scroll behavior, version badge | None (presentational only) |
+| **FRAMEWORK_INTEGRATION** | Build pipeline, static generation, asset bundling | Version from `.rootspec.json` |
 
 ## System Interactions
 
-| From System | To System | Interaction Type | Data Flow |
-|-------------|-----------|------------------|-----------|
-| Content | Interactive | Event triggers | Section visibility, wizard data |
-| Content | Theme | Style application | Content styling, readability |
-| Interactive | Content | State updates | Wizard output, explorer selections |
-| Interactive | Theme | Visual feedback | Animation states, focus indicators |
-| Theme | Layout | Responsive styling | Breakpoint adjustments, contrast |
-| Layout | Framework | Component structure | Page templates, routing |
-| Framework | Content | Static generation | Build-time content processing |
-| Framework | Interactive | Client hydration | JavaScript enhancement |
+| From | To | Interaction |
+|------|----|-------------|
+| FRAMEWORK_INTEGRATION | CONTENT_SYSTEM | Injects RootSpec version at build time |
+| FRAMEWORK_INTEGRATION | LAYOUT_SYSTEM | Provides version string for version badge |
+| THEME_SYSTEM | LAYOUT_SYSTEM | Exposes active theme class/attribute to root element |
+| THEME_SYSTEM | INTERACTIVE_SYSTEM | Active theme affects interactive component styling |
+| INTERACTIVE_SYSTEM | LAYOUT_SYSTEM | Wizard output and explorer expansion trigger layout reflows |
+| CONTENT_SYSTEM | LAYOUT_SYSTEM | Section content determines scroll regions |
 
 ## Data Flow
 
-### Content Flow
-Static Markdown/YAML → Astro processing → HTML generation → Client rendering → User consumption
+```
+.rootspec.json
+    └─► FRAMEWORK_INTEGRATION (reads version at build)
+            ├─► CONTENT_SYSTEM (version in meta banner copy)
+            └─► LAYOUT_SYSTEM (version badge value)
 
-### Interaction Flow  
-User input → JavaScript handlers → Local state management → Visual feedback → Content updates
+User OS preference
+    └─► THEME_SYSTEM (initial theme on first visit)
+            └─► localStorage (persist choice)
+                    └─► THEME_SYSTEM (restore on revisit)
 
-### Theme Flow
-System preference detection → Local storage → CSS custom properties → Component styling → User experience
+User interaction (click/keypress)
+    └─► INTERACTIVE_SYSTEM
+            ├─► Hierarchy Explorer state (which level expanded)
+            ├─► Wizard state (step, form values, output)
+            └─► Before/After mode (toggle/slider position)
+```
 
-### Layout Flow
-Viewport detection → Responsive breakpoints → Component adaptation → Accessibility enhancements → Rendered interface
+## Boundaries
 
-## Calculated Values
-
-### Content Metrics
-- Reading time estimation based on word count
-- Section progress tracking for long-form content
-- Hierarchy depth calculation for visual organization
-
-### Interactive Metrics  
-- Wizard completion percentage
-- Explorer engagement time
-- Before/after toggle frequency
-
-### Theme Metrics
-- Contrast ratio calculations for accessibility
-- Animation duration based on user motion preferences  
-- Color scheme derivation from base palette
-
-### Layout Metrics
-- Responsive breakpoint determination
-- Touch target size validation
-- Keyboard navigation order calculation
-
-## External Dependencies
-
-- **Astro Framework:** Static site generation, component hydration, build optimization
-- **System APIs:** Prefers-color-scheme detection, local storage access
-- **Web Standards:** CSS Grid/Flexbox, Intersection Observer, Custom Properties
-- **Accessibility APIs:** Screen reader compatibility, keyboard event handling
+- **No system makes external network requests** — all data is local, static, or derived from build-time injection.
+- **INTERACTIVE_SYSTEM** owns all mutable runtime state; other systems are effectively stateless at runtime.
+- **THEME_SYSTEM** is the sole writer to localStorage.
+- **FRAMEWORK_INTEGRATION** produces artifacts at build time only — it has no runtime presence.

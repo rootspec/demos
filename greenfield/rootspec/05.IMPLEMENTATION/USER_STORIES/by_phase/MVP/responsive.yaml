@@ -1,161 +1,54 @@
 # =============================================================================
-# USER STORY: Mobile-Responsive Layout
+# USER STORY: Keyboard Navigation - Hierarchy Explorer
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: ACCESSIBILITY
-# @systems: [LAYOUT_SYSTEM, THEME_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
+# @systems: [INTERACTIVE_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-12T00:00:00Z
 
-id: US-401
-title: Site adapts to mobile viewport sizes
-requirement_id: R-401
+id: US-301
+title: Keyboard user can navigate the hierarchy explorer without a mouse
+requirement_id: R-301
 
 acceptance_criteria:
-  - id: AC-401-1
-    title: Content readable on mobile screens
+  - id: AC-301-1
+    title: Hierarchy level items are focusable via keyboard
     narrative: |
-      Given I am viewing the site on a mobile device
-      When I read the content
-      Then I should see properly sized text and layouts
+      Given I visit the homepage
+      When I tab to the hierarchy explorer
+      Then the level items should be keyboard focusable
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=hero-section]' }
-      - shouldContain: { selector: '[data-test=hero-description]', text: 'specification' }
-
-  - id: AC-401-2
-    title: Interactive elements are touch-friendly
-    narrative: |
-      Given I am using touch interaction
-      When I tap interactive elements
-      Then I should have appropriately sized touch targets
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=theme-toggle]' }
-    then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
-
-  - id: AC-401-3
-    title: Navigation works on small screens
-    narrative: |
-      Given I am viewing the site on mobile
-      When I navigate through sections
-      Then I should be able to access all functionality
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=spec-wizard-start]' }
-    then:
-      - shouldExist: { selector: '[data-test=product-idea-input]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-1][tabindex]' }
 
 ---
-
 # =============================================================================
-# USER STORY: Keyboard Accessibility
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: ACCESSIBILITY
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, THEME_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
-
-id: US-402
-title: Complete keyboard navigation support
-requirement_id: R-402
-
-acceptance_criteria:
-  - id: AC-402-1
-    title: Tab order follows logical content flow
-    narrative: |
-      Given I am using keyboard-only navigation
-      When I tab through the page elements
-      Then I should move through content in a logical order
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hero-section]' }
-    then:
-      - shouldExist: { selector: '[data-test=hero-section]:focus-within' }
-
-  - id: AC-402-2
-    title: All interactive elements keyboard accessible
-    narrative: |
-      Given I am using keyboard navigation
-      When I encounter interactive elements
-      Then I should be able to activate them with keyboard
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-explorer]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-explorer]:focus-within' }
-
-  - id: AC-402-3
-    title: Skip links available for screen readers
-    narrative: |
-      Given I am using assistive technology
-      When I navigate the page
-      Then I should have skip links to main content areas
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: 'main' }
-
----
-
-# =============================================================================
-# USER STORY: Cross-Device Consistency
+# USER STORY: No External Network Requests
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: ACCESSIBILITY
-# @systems: [LAYOUT_SYSTEM, CONTENT_SYSTEM, FRAMEWORK_INTEGRATION]
-# @last_updated: 2026-04-08T00:59:00Z
+# @journey: PERFORMANCE
+# @systems: [FRAMEWORK_INTEGRATION, INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-12T00:00:00Z
 
-id: US-403
-title: Consistent functionality across device types
-requirement_id: R-403
+id: US-302
+title: The page functions fully without external network requests after load
+requirement_id: R-302
 
 acceptance_criteria:
-  - id: AC-403-1
-    title: Core functionality works without JavaScript
+  - id: AC-302-1
+    title: Page renders key content without any dynamic data fetching
     narrative: |
-      Given JavaScript is disabled or fails to load
-      When I visit the site
-      Then I should still be able to read core content
+      Given I visit the homepage
+      When the page loads completely
+      Then all interactive sections should be present without requiring API calls
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=hero-section]' }
-      - shouldContain: { selector: '[data-test=hero-description]', text: 'specification' }
-
-  - id: AC-403-2
-    title: Progressive enhancement adds interactivity
-    narrative: |
-      Given JavaScript loads successfully
-      When interactive elements become available
-      Then I should have enhanced functionality while maintaining core features
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=spec-wizard-start]' }
-    then:
-      - shouldExist: { selector: '[data-test=product-idea-input]' }
-
-  - id: AC-403-3
-    title: Consistent visual presentation across browsers
-    narrative: |
-      Given I am using different modern browsers
-      When I view the site
-      Then I should see consistent layout and styling
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-section]' }
-      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
+      - shouldExist: { selector: '[data-test=spec-wizard]' }
+      - shouldExist: { selector: '[data-test=before-after-section]' }
