@@ -1,112 +1,46 @@
-# L4: Framework Integration
+# Level 4: Framework Integration System
+# RootSpec Marketing Site
 
-## Responsibility  
-Manages Astro framework-specific concerns including static site generation, component hydration, build optimization, and integration with the broader web platform.
+## Responsibility
 
-## Boundaries
+The Framework Integration System handles all build-time concerns: reading project configuration, injecting values into the build output, and producing the static site artifact. It has no runtime presence beyond the values it injects during build.
 
-### Owns
-- Astro component architecture and organization
-- Static site generation configuration and optimization
-- Client-side hydration strategy for interactive elements
-- Build process configuration and performance optimization
-- Routing and page template management
-- Framework-specific tooling integration
+## Data Owned
 
-### Does Not Own
-- Content creation and management (managed by Content System)
-- Interactive widget implementation logic (managed by Interactive System)
-- Visual design and theming (managed by Theme System)
-- Layout patterns and accessibility (managed by Layout System)
+| Key | Source | Destination | Timing |
+|-----|--------|-------------|--------|
+| `version` | `.rootspec.json` → `version` field | Hero version badge, site header | Build time |
+| `buildDate` | Build environment timestamp | Footer attribution | Build time |
 
-## Data Ownership
+## Build-Time Process
 
-### Build-Time Data
-- Static site generation configuration
-- Component dependencies and import resolution
-- Asset optimization and bundling instructions
-- Route generation and page template associations
-- Environment-specific build variables
+1. Read `.rootspec.json` from project root
+2. Extract `version` field (string)
+3. Inject `version` into the template/component that renders the version badge
+4. Capture current UTC date at build time
+5. Inject `buildDate` into the footer template
+6. Static site generator produces final HTML with values baked in
 
-### Runtime Integration
-- Client-side hydration boundaries and strategies
-- Progressive enhancement coordination
-- Framework-specific performance monitoring
-- Browser compatibility and polyfill management
+## Rules
 
-## Interactions with Other Systems
+- Version must be read from `.rootspec.json` — it cannot be hardcoded in source
+- If `version` field is missing or unreadable, the badge renders as "version unknown" — it does not error or crash the build
+- `buildDate` is formatted as a human-readable date string (e.g., "April 12, 2026") — not an ISO timestamp
+- FRAMEWORK_INTEGRATION writes nothing at runtime — all its work is done before the page serves
+- No other config values from `.rootspec.json` are exposed to the page
 
-### → Content System
-- **Provides:** Static generation capabilities for content processing
-- **Receives:** Content structure requiring build-time optimization
-- **Interface:** Component props, slots, and static content processing
+## Interactions With Other Systems
 
-### → Interactive System  
-- **Provides:** Client-side hydration for interactive components
-- **Receives:** JavaScript requirements and state management needs
-- **Interface:** Hydration directives, component boundaries, progressive enhancement
+| System | Interaction |
+|--------|-------------|
+| CONTENT_SYSTEM | Supplies `version` and `buildDate` as values that CONTENT_SYSTEM renders |
+| All other systems | None — FRAMEWORK_INTEGRATION is build-time only; no runtime coupling |
 
-### → Theme System
-- **Provides:** CSS processing and optimization during build
-- **Receives:** Styling requirements and theme switching logic
-- **Interface:** Scoped styles, global CSS variables, build-time style processing
+## Stack Constraint
 
-### → Layout System
-- **Provides:** Component structure and page template framework
-- **Receives:** Layout requirements and responsive component needs
-- **Interface:** Page layouts, component composition, responsive utilities
+The static site generator must support:
+- Reading JSON files at build time
+- String interpolation into HTML/component templates
+- Producing fully static output (no server-side rendering at request time)
 
-## Internal Structure
-
-### Component Architecture
-1. **Page Components**
-   - Landing page template with section organization
-   - Layout wrapper with theme and navigation
-   - SEO metadata and structured data
-
-2. **Feature Components**  
-   - Hierarchy explorer with progressive enhancement
-   - Spec wizard with client-side state management
-   - Before/after comparison with smooth transitions
-
-3. **Shared Components**
-   - Theme toggle with system preference detection
-   - Navigation and footer with accessibility features
-   - Version display with configuration management
-
-### Build Configuration
-- **Static Generation:** Pre-render all pages for optimal performance
-- **Asset Optimization:** Image compression, CSS minification, JavaScript bundling
-- **Progressive Enhancement:** Core functionality without JavaScript
-- **SEO Optimization:** Meta tags, structured data, sitemap generation
-
-### Hydration Strategy
-- **Selective Hydration:** Only interactive components receive client-side JavaScript
-- **Performance Budget:** Minimal JavaScript bundle size for fast loading
-- **Fallback Support:** Graceful degradation when JavaScript fails or is disabled
-
-## Quality Assurance
-
-### Build Performance
-- Build time optimization for development workflow
-- Bundle size monitoring and optimization
-- Asset delivery optimization (compression, caching)
-- Core Web Vitals compliance (LCP, FID, CLS)
-
-### Framework Best Practices
-- Component reusability and maintainability
-- Proper separation of concerns across component boundaries
-- TypeScript integration for type safety
-- Astro-specific performance optimizations
-
-### Integration Testing
-- Build process validation across environments
-- Component hydration testing
-- Progressive enhancement verification
-- Cross-browser compatibility testing
-
-### Developer Experience
-- Clear component organization and naming conventions
-- Comprehensive error handling and debugging support
-- Hot reload functionality for development efficiency
-- Documentation integration with framework patterns
+The specific framework choice is an implementation detail; the system's contract is the above behavior.

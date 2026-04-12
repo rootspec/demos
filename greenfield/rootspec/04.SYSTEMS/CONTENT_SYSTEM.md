@@ -1,83 +1,77 @@
-# L4: Content System
+# Level 4: Content System
+# RootSpec Marketing Site
 
 ## Responsibility
-Manages all static and dynamic content presentation, including marketing copy, meta information, and educational materials that explain RootSpec methodology.
 
-## Boundaries
+The Content System owns all user-facing text, real examples, and static page content. It is the single source of truth for:
+- All section copy (meta banner, hero, problem, how-it-works, CTA, footer)
+- The five hierarchy level descriptions and example content shown in the explorer
+- The before/after panel content (real spec artifacts and vague doc artifacts)
+- The wizard template text (mission templates, design pillar suggestions, output skeleton)
+- All data-test selectors on content elements (for test traceability)
 
-### Owns
-- Hero section content (tagline, description)
-- Meta banner (demo acknowledgment, links to spec/seed)
-- Problem/solution section copy
-- How it works explanatory content
-- Open source CTA and attribution footer
-- Version number display and management
+## What It Does NOT Own
 
-### Does Not Own
-- Interactive widget content (managed by Interactive System)
-- Visual styling and theming (managed by Theme System)
-- Layout and responsive behavior (managed by Layout System)
-- User input processing (managed by Interactive System)
+- Visual styling (owned by LAYOUT_SYSTEM and THEME_SYSTEM)
+- Interactive state (owned by INTERACTIVE_SYSTEM)
+- Version string (injected by FRAMEWORK_INTEGRATION at build time)
 
-## Data Ownership
+## Content Entities
 
-### Static Content
-- Marketing copy stored in Astro components/pages
-- Version number as configuration constant
-- Attribution information (builder name, build date)
-- GitHub repository links and metadata
+### Page Sections
+Each section is a named content unit:
 
-### Dynamic Content
-- Section visibility state based on user scroll position
-- Reading progress indicators
-- Content adaptation based on theme/layout context
+| Section ID | Content Type | Notes |
+|------------|-------------|-------|
+| `meta-banner` | Static prose + 2 links | Links to SEED.md and spec files on GitHub |
+| `hero` | Tagline + 1-sentence description + version badge | Version injected at build time |
+| `problem` | 4-5 problem descriptions with headers | Real pain points, no placeholder |
+| `how-it-works` | 4-skill walkthrough (init, spec, impl, validate) | Each skill has name + description |
+| `hierarchy-explorer` | 5 level definitions with example content | Consumed by INTERACTIVE_SYSTEM |
+| `wizard` | Step labels, template options, pillar suggestions, output skeleton template | Consumed by INTERACTIVE_SYSTEM |
+| `before-after` | Two panels: "without spec" doc, "with RootSpec" doc | Both panels contain real, distinct content |
+| `open-source-cta` | GitHub link + getting started text | External link to repo |
+| `footer` | Builder attribution + build date | Built by [name], [date] |
 
-## Interactions with Other Systems
+### Hierarchy Level Definitions
+Five content objects, one per RootSpec level:
 
-### → Interactive System
-- **Provides:** Section trigger points for wizard activation
-- **Receives:** State updates that affect content visibility
-- **Interface:** Event-based content show/hide, wizard data integration
+| Level | ID | Fields |
+|-------|----|--------|
+| L1 | `philosophy` | Name, description, example content, reference rules summary |
+| L2 | `truths` | Name, description, example content, reference rules summary |
+| L3 | `interactions` | Name, description, example content, reference rules summary |
+| L4 | `systems` | Name, description, example content, reference rules summary |
+| L5 | `implementation` | Name, description, example content, reference rules summary |
 
-### → Theme System  
-- **Provides:** Content structure requiring visual treatment
-- **Receives:** Theme-aware content variants (if applicable)
-- **Interface:** CSS class application, content readability optimization
+### Wizard Content Templates
+- **Mission templates** (3-4 options): short declarative sentences with a blank to fill
+- **Design pillar suggestions** (8-10 options): short emotional phrases users can select
+- **Output skeleton template**: a string template that maps user inputs into formatted L1-L3 skeleton
+  - Template uses user's mission, selected pillars, and described interaction
+  - Output is formatted spec-like text, not a real file — purely illustrative
 
-### → Layout System
-- **Provides:** Content hierarchy and semantic structure
-- **Receives:** Responsive content adaptations
-- **Interface:** Content reflow, mobile-optimized copy variants
+### Before/After Panel Content
+- **Without spec panel**: Contains a realistic vague requirements document — prose, ambiguous user stories, decisions buried in bullet points, no traceability
+- **With RootSpec panel**: Contains a real (simplified) RootSpec L1+L5 excerpt with design pillars, user stories, and acceptance criteria
 
-### → Framework Integration
-- **Provides:** Static content for build-time processing
-- **Receives:** Astro component structure and hydration points
-- **Interface:** Component props, slot content, static generation directives
+## Content Rules
 
-## Internal Structure
+- All section content is authored in the source, not fetched at runtime
+- No lorem ipsum anywhere in the final product
+- Links to GitHub spec files and SEED.md must be accurate (not placeholder URLs)
+- The footer attribution must include the builder's name and the actual build date
+- Content strings that contain technical terms (e.g., command names like `/rs-spec`) are rendered with code formatting
 
-### Content Types
-1. **Hero Content:** Mission statement, value proposition, immediate call-to-action
-2. **Educational Content:** Problem definition, methodology explanation, workflow walkthrough  
-3. **Meta Content:** Demo disclaimer, transparency about rough edges, development attribution
-4. **CTA Content:** GitHub links, getting started instructions, community resources
+## Data-Test Attribute Convention
 
-### Content Management
-- Version-controlled in component files
-- Single source of truth for all copy
-- Build-time validation for broken links
-- Consistent tone and voice across all sections
+Every content element that is tested must have a `data-test` attribute matching the pattern:
+`[section-id]-[element-type]`
 
-## Quality Assurance
-
-### Content Standards
-- Technical accuracy about RootSpec methodology
-- Tone alignment with "confident but not preachy" guideline
-- No buzzwords or corporate marketing speak
-- Specific examples rather than abstract concepts
-
-### Validation Rules  
-- All external links functional at build time
-- Version number consistency across displays
-- Attribution completeness (builder name, date)
-- Content accessibility (reading level, structure)
+Examples:
+- `[data-test=meta-banner-text]`
+- `[data-test=hero-tagline]`
+- `[data-test=version-badge]`
+- `[data-test=hierarchy-explorer-level]`
+- `[data-test=wizard-output]`
+- `[data-test=before-after-toggle]`

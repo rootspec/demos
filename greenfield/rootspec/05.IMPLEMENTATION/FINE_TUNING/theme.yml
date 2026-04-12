@@ -1,67 +1,22 @@
 # =============================================================================
-# FINE-TUNING: Theme System
+# LEVEL 5: FINE TUNING - Theme System
 # =============================================================================
 # @spec_version: 1.0.0
+# @system: THEME_SYSTEM
+# @last_updated: 2026-04-12T00:00:00Z
+# @status: draft
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
-# @last_updated: 2026-04-08T00:59:00Z
 
-color_contrast_ratio:
-  value: 4.5
-  # @unit: ratio
-  # @rationale: WCAG AA standard ensures readability for users with visual impairments
-  # @constraint: min=4.5, max=7.0
-  # @inviolable: true
+# -----------------------------------------------------------------------------
+# Theme Transition
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
-theme_transition_duration:
-  value: 200
-  # @unit: milliseconds
-  # @rationale: Fast enough to feel instant but visible enough to provide feedback
-  # @constraint: min=150, max=400
+transitions:
+  theme_switch_duration: 150
+  # @rationale: Fast enough to feel instantaneous; slow enough to avoid jarring flash
+  # @constraints: min=0, max=300, type=integer, unit=ms
+  # @alternatives: [0, 100, 200]
 
-font_size_base:
-  value: 16
-  # @unit: pixels
-  # @rationale: Browser default provides familiar reading experience across devices
-  # @constraint: min=14, max=18
-
-line_height_body:
-  value: 1.6
-  # @unit: ratio
-  # @rationale: Optimal for readability of long-form content without excessive spacing
-  # @constraint: min=1.4, max=1.8
-
-border_radius_base:
-  value: 8
-  # @unit: pixels
-  # @rationale: Modern appearance without being overly rounded for technical content
-  # @constraint: min=4, max=12
-
-shadow_blur_subtle:
-  value: 8
-  # @unit: pixels
-  # @rationale: Provides depth without overwhelming content or competing with text
-  # @constraint: min=4, max=16
-
-spacing_base:
-  value: 16
-  # @unit: pixels
-  # @rationale: Aligns with typography base for consistent visual rhythm
-  # @constraint: min=12, max=20
-
-color_primary_hue:
-  value: 210
-  # @unit: degrees
-  # @rationale: Professional blue that conveys trust and technical competence
-  # @constraint: min=200, max=220
-
-color_primary_saturation:
-  value: 85
-  # @unit: percentage
-  # @rationale: Rich enough to be engaging while maintaining professional appearance
-  # @constraint: min=70, max=100
-
-animation_easing:
-  value: 'cubic-bezier(0.4, 0.0, 0.2, 1)'
-  # @unit: CSS timing function
-  # @rationale: Material Design easing provides natural feeling motion
-  # @constraint: Must be valid CSS timing function
+  css_property: color
+  # @rationale: Only color values transition; layout is instant to avoid reflow flicker

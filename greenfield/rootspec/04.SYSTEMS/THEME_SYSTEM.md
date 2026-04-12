@@ -1,104 +1,49 @@
-# L4: Theme System
+# Level 4: Theme System
+# RootSpec Marketing Site
 
 ## Responsibility
-Manages visual design consistency, dark/light theme implementation, and aesthetic presentation that supports RootSpec's "clarity over convenience" design pillar.
 
-## Boundaries
+The Theme System manages the visual mode state (dark or light) across the entire page. It detects initial preference from the operating system, allows manual override via toggle, and persists the user's choice within the session and across refreshes.
 
-### Owns
-- Color palette definitions and theme switching
-- Typography scales and font loading
-- Spacing system and visual rhythm
-- Animation timing and motion design
-- Visual hierarchy and design tokens
-- Theme preference detection and persistence
+## Data Owned
 
-### Does Not Own  
-- Content structure and information architecture (managed by Content System)
-- Interactive behavior and state management (managed by Interactive System)
-- Responsive layout and grid systems (managed by Layout System)
-- Component rendering and hydration (managed by Framework Integration)
+| Key | Type | Source | Persistence |
+|-----|------|--------|-------------|
+| `theme` | enum: `dark` \| `light` | OS detection or user toggle | `localStorage` |
+| `system-preference` | enum: `dark` \| `light` | `window.matchMedia('prefers-color-scheme: dark')` | Not persisted — re-evaluated on each load |
 
-## Data Ownership
+## State Model
 
-### Design Tokens
-- Color palette (primary, secondary, neutral, semantic colors)
-- Typography scale (font sizes, weights, line heights)  
-- Spacing system (margin, padding, gap values)
-- Animation properties (durations, easing curves, delays)
-- Border radius, shadows, and surface treatments
+### Initial Load Sequence
+1. Read `localStorage.theme`
+2. If present: apply that theme
+3. If absent: read `window.matchMedia('prefers-color-scheme: dark')`
+4. Apply detected theme to root element
+5. Render toggle control in matching state
 
-### Theme State
-- Current theme preference (light/dark/system)
-- System theme detection results
-- User override preferences
-- Theme-specific asset references
+### Toggle Interaction
+1. User activates toggle (click or keyboard)
+2. Current theme flips: `dark` → `light` or `light` → `dark`
+3. Root element attribute updated immediately
+4. New theme written to `localStorage`
+5. Toggle control visual state updates to reflect new mode
 
-## Interactions with Other Systems
+### Boundaries
+- Theme is applied as a root-level attribute (`data-theme` on `<html>` or equivalent)
+- All CSS color tokens respond to the root attribute — no component-level theme logic
+- THEME_SYSTEM owns only the attribute and localStorage key; LAYOUT_SYSTEM owns CSS tokens
+- System preference changes (e.g., OS switches to dark mode while page is open) update the displayed theme only if the user has not set a manual override
 
-### → Content System
-- **Provides:** Visual styling for content hierarchy and readability
-- **Receives:** Content structure requiring thematic treatment
-- **Interface:** CSS custom properties, component styling classes
+## Interactions With Other Systems
 
-### → Interactive System
-- **Provides:** Visual feedback styling for interactive states
-- **Receives:** Interactive state changes requiring visual updates
-- **Interface:** State-based styling, animation coordination
+| System | Interaction |
+|--------|-------------|
+| LAYOUT_SYSTEM | Reads root theme attribute; all color/surface CSS tokens are theme-scoped |
+| INTERACTIVE_SYSTEM | Interactive component styles must also respond to root theme attribute; no component-level overrides |
 
-### → Layout System  
-- **Provides:** Theme-aware responsive styling adjustments
-- **Receives:** Breakpoint context for theme adaptations
-- **Interface:** Responsive design tokens, conditional styling
+## Rules
 
-### → Framework Integration
-- **Provides:** CSS architecture and build-time style processing
-- **Receives:** Astro component styling requirements
-- **Interface:** Scoped styles, global CSS custom properties
-
-## Internal Structure
-
-### Color System
-1. **Light Theme**
-   - Background: Clean whites and warm grays
-   - Text: High contrast dark grays and blacks  
-   - Accent: Professional blue with accessibility compliance
-   - Interactive: Clear hover and focus states
-
-2. **Dark Theme**
-   - Background: Rich dark grays and near-blacks
-   - Text: Warm whites and light grays
-   - Accent: Brightened blue maintaining contrast ratios
-   - Interactive: Subtle glow effects for feedback
-
-### Typography Hierarchy
-- **Primary Font:** Modern sans-serif for readability
-- **Code Font:** Monospace for technical content
-- **Heading Scale:** Clear hierarchy supporting content structure
-- **Body Text:** Optimized for extended reading
-
-### Motion Design
-- **Micro-interactions:** Button hovers, focus indicators  
-- **Content Transitions:** Smooth section reveals, theme switching
-- **Interactive Feedback:** Immediate response to user actions
-- **Respect Motion Preferences:** Reduced motion support
-
-## Quality Assurance
-
-### Accessibility Standards
-- WCAG AA contrast ratios in both themes
-- Focus indicators clearly visible in all contexts
-- Motion respects user system preferences
-- Color not sole means of conveying information
-
-### Design Consistency  
-- Design tokens prevent arbitrary styling
-- Component styles inherit from central system
-- Visual rhythm maintained across all breakpoints
-- Theme switching preserves layout and functionality
-
-### Performance Optimization
-- Critical CSS inlined for fast initial render
-- Theme switching without layout shift
-- Font loading optimized to prevent FOIT/FOUT
-- CSS custom properties for efficient theme updates
+- Theme applies to all visual elements simultaneously; no mixed-mode regions
+- Toggle is always visible and reachable by keyboard
+- Theme change must be instantaneous — no fade or delay on the root color transition beyond [short duration]
+- The system does not read or write any other localStorage keys

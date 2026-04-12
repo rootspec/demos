@@ -1,12 +1,21 @@
 {
   "runs": [
   {
-    "skill": "rs-validate",
-    "startedAt": "2026-04-08T01:16:34Z",
-    "completedAt": "2026-04-08T01:17:38Z",
-    "durationSeconds": 64,
-    "iterations": 1,
+    "skill": "rs-spec",
+    "startedAt": "2026-04-12T15:49:43Z",
+    "completedAt": "2026-04-12T15:55:43Z",
+    "durationSeconds": 360,
+    "iterations": null,
     "stories": null
+  }
+,
+  {
+    "skill": "rs-impl",
+    "startedAt": "2026-04-12T15:56:07Z",
+    "completedAt": "2026-04-12T16:08:04Z",
+    "durationSeconds": 717,
+    "iterations": 4,
+    "stories": {"US-101":{"attempts":1},"US-102":{"attempts":1},"US-103":{"attempts":1},"US-104":{"attempts":1},"US-105":{"attempts":1},"US-201":{"attempts":1},"US-202":{"attempts":1},"US-301":{"attempts":2},"US-302":{"attempts":1},"US-303":{"attempts":1},"US-401":{"attempts":1},"US-402":{"attempts":1},"US-403":{"attempts":1}}
   }
   ]
 }

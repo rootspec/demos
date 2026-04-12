@@ -1,52 +1,48 @@
-# Visual Conventions
+## Color Tokens
 
-## Color Palette
-
-### Light Theme
-- **Background:** `#ffffff`, `#f8fafc`
-- **Text:** `#1e293b`, `#475569`
-- **Primary:** `hsl(210, 85%, 55%)` (Professional blue)
-- **Accent:** `#0ea5e9`
-
-### Dark Theme  
-- **Background:** `#0f172a`, `#1e293b`
-- **Text:** `#f1f5f9`, `#cbd5e1`
-- **Primary:** `hsl(210, 85%, 65%)` (Brighter blue for contrast)
-- **Accent:** `#38bdf8`
+- **Background:** `--color-bg` (light: #ffffff, dark: #0f0e17)
+- **Surface:** `--color-surface` (light: #f8f9fa, dark: #1a1826)
+- **Border:** `--color-border` (light: #e2e8f0, dark: #2d2a40)
+- **Text:** `--color-text` (light: #1a202c, dark: #fffffe)
+- **Text Muted:** `--color-text-muted` (light: #4a5568, dark: #a7a9be)
+- **Primary:** `--color-primary` (light: #4f46e5, dark: #7c6cf0)
+- **Primary Hover:** `--color-primary-hover` (light: #4338ca, dark: #9585f5)
+- **Code Background:** `--color-code-bg` (light: #1e1b4b, dark: #13111f)
+- **Code Text:** `--color-code-text` (#a5b4fc both themes)
 
 ## Typography
-- **Primary Font:** System font stack (-apple-system, BlinkMacSystemFont, "Segoe UI")
-- **Code Font:** "Fira Code", "SF Mono", Consolas, monospace
-- **Base Size:** 16px
-- **Line Height:** 1.6 for body text, 1.2 for headings
-- **Scale:** 1.25 ratio (16, 20, 25, 31, 39, 49px)
 
-## Spacing System
-- **Base Unit:** 16px
-- **Scale:** 0.5x, 1x, 1.5x, 2x, 3x, 4x (8, 16, 24, 32, 48, 64px)
-- **Section Spacing:** 64px desktop, 32px mobile
-- **Component Spacing:** 24px internal, 16px between elements
+- **Body Font:** system-ui, -apple-system, sans-serif
+- **Mono Font:** JetBrains Mono, Fira Code, monospace
+- **Hero Size:** clamp(2rem, 5vw, 3.25rem)
+- **Body Size:** 1rem (line-height 1.6)
+- **Muted text:** 0.85rem–0.95rem
 
-## Layout Grid
-- **Max Width:** 1200px
-- **Breakpoints:** 320px (mobile), 768px (tablet), 1024px (desktop)
-- **Grid Gap:** 24px
-- **Content Padding:** 32px desktop, 16px mobile
+## Spacing
 
-## Interactive Elements
-- **Border Radius:** 8px (buttons), 4px (inputs)
-- **Touch Targets:** Minimum 44px
-- **Focus Outline:** 2px solid primary, 2px offset
-- **Hover States:** Subtle opacity or color shifts
+- **Section Padding:** 4rem 0 (mobile: 2.5rem 0)
+- **Container Max-Width:** 1100px with 1.5rem side padding
+- **Component Gap:** 8px–16px
 
-## Animation
-- **Duration:** 300ms standard, 200ms fast, 400ms slow
-- **Easing:** `cubic-bezier(0.4, 0.0, 0.2, 1)` (Material easing)
-- **Motion:** Respect `prefers-reduced-motion`
-- **Transitions:** Opacity, transform, color changes
+## Interactive States
 
-## Accessibility
-- **Contrast:** Minimum 4.5:1 (WCAG AA)
-- **Focus Management:** Visible focus indicators
-- **Semantic HTML:** Proper heading hierarchy, landmarks
-- **Screen Readers:** Descriptive labels and live regions
+- **Focus:** 2px solid `--color-primary`, 2px offset, 2px border-radius
+- **Transitions:** 0.15s–0.2s for color/border/box-shadow changes
+- **Hover:** border-color change + box-shadow on explorer levels
+
+## Meta Banner
+
+- **Background:** #1e1b4b (fixed, not theme-aware)
+- **Text:** #e0e7ff
+- **Links:** #a5b4fc with underline
+
+## Border Radius
+
+- **Default:** 6px
+- **Large:** 8px–12px
+- **Pill:** 999px (version badge)
+
+## Theme Toggle
+
+- **Position:** Top-right navigation area
+- **Style:** Button with border, sun/moon emoji icon

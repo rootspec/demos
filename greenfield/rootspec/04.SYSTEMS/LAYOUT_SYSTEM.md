@@ -1,117 +1,77 @@
-# L4: Layout System
+# Level 4: Layout System
+# RootSpec Marketing Site
 
 ## Responsibility
-Manages responsive design, accessibility features, spatial relationships, and adaptive layouts that ensure the site works effectively across all device types and user needs.
 
-## Boundaries
+The Layout System owns page structure, visual spacing, responsive behavior, scroll mechanics, and the CSS design token layer. It provides the scaffolding within which all other systems render their content.
 
-### Owns
-- Responsive grid systems and breakpoint management
-- Component spacing and spatial relationships
-- Accessibility features (focus management, screen reader support)
-- Mobile-first responsive design patterns
-- Layout adaptation for different viewport sizes
-- Keyboard navigation and interaction patterns
+## Page Structure
 
-### Does Not Own
-- Visual styling and color schemes (managed by Theme System)
-- Content structure and copy (managed by Content System)
-- Interactive widget logic (managed by Interactive System)  
-- Framework-specific rendering (managed by Framework Integration)
+```
+<page>
+  ├── <sticky-header>       — Logo, nav anchors, theme toggle (appears after hero scrolls out)
+  ├── <meta-banner>         — Always visible at top; cannot be dismissed
+  ├── <hero>                — Full-viewport-height section; version badge, tagline, CTA
+  ├── <problem>             — Standard content section
+  ├── <how-it-works>        — Standard content section with step indicators
+  ├── <hierarchy-explorer>  — Interactive section (INTERACTIVE_SYSTEM renders here)
+  ├── <wizard>              — Interactive section (INTERACTIVE_SYSTEM renders here)
+  ├── <before-after>        — Interactive section (INTERACTIVE_SYSTEM renders here)
+  ├── <open-source-cta>     — Standard content section
+  └── <footer>              — Attribution, build date
+```
 
-## Data Ownership
+## Responsive Breakpoints
 
-### Layout Metrics
-- Viewport dimensions and orientation
-- Responsive breakpoint thresholds
-- Component size and positioning calculations
-- Touch target validation measurements
-- Scroll position and visibility states
+| Name | Min Width | Layout Changes |
+|------|-----------|----------------|
+| `mobile` | [mobile minimum] | Single column; stacked components; before/after as toggle |
+| `tablet` | [tablet minimum] | Two-column grid for some sections; wider content |
+| `desktop` | [desktop minimum] | Full layout; before/after side-by-side; sticky nav visible |
 
-### Accessibility State
-- Keyboard focus position and management
-- Screen reader context and announcements
-- Tab order sequence across interactive elements
-- Skip link navigation targets
-- ARIA attributes and semantic markup
+All interactive components receive the current breakpoint name as context (see INTERACTIVE_SYSTEM).
 
-## Interactions with Other Systems
+## Design Token Layer
 
-### → Content System
-- **Provides:** Responsive content layout and hierarchy
-- **Receives:** Content structure requiring spatial organization
-- **Interface:** Grid placement, content flow, reading order
+All visual values are expressed as CSS custom properties (design tokens). Two token sets exist — one for each theme. THEME_SYSTEM switches between them by updating the root attribute.
 
-### → Interactive System
-- **Provides:** Touch-friendly interaction zones and keyboard navigation
-- **Receives:** Interactive element positioning requirements
-- **Interface:** Adaptive interaction patterns, accessibility enhancements
+Token categories:
+- **Color:** surface, text, accent, border, shadow — all theme-scoped
+- **Typography:** font-family (monospace for code, sans-serif for body), size scale, line-height
+- **Spacing:** consistent scale for padding, margin, gap
+- **Motion:** transition durations — [short duration] for micro-interactions, [medium duration] for section animations
+- **Radius:** border-radius values for cards, buttons, badges
 
-### → Theme System
-- **Provides:** Layout context for responsive theme adaptations
-- **Receives:** Theme-aware spacing and sizing adjustments
-- **Interface:** Breakpoint-specific styling, layout-informed design tokens
+## Scroll Behavior
 
-### → Framework Integration
-- **Provides:** Layout architecture and component arrangement
-- **Receives:** Astro component structure and rendering constraints  
-- **Interface:** Page layouts, component composition, responsive directives
+- **Smooth scroll** on all in-page anchor links
+- **Section entry animation:** each section fades/slides in on first scroll entry; animation does not repeat on scroll-out
+- **Sticky header:** hidden on initial load (hero is visible); appears when hero bottom edge exits viewport
+- **Active section tracking:** sticky nav highlights the section currently occupying the most viewport area
 
-## Internal Structure
+## SVG Diagram
 
-### Responsive Breakpoints
-1. **Mobile First (320px+)**
-   - Single column layouts
-   - Touch-optimized interactions
-   - Simplified navigation patterns
-   - Stacked interactive elements
+The RootSpec methodology is represented as an SVG diagram (not an image file) embedded inline. The diagram depicts:
+- A circular development cycle in the center (code → build → test → deploy)
+- The spec hierarchy surrounding and filtering the cycle
+- Arrows indicating valid solutions passing through the spec gate
+- Invalid paths blocked at the spec boundary
 
-2. **Tablet (768px+)**
-   - Two-column content areas  
-   - Enhanced interactive elements
-   - Side-by-side comparisons
-   - Expanded navigation options
+The SVG is theme-aware — its colors respond to the root theme attribute via CSS custom properties.
 
-3. **Desktop (1024px+)**
-   - Multi-column layouts
-   - Full interactive experiences
-   - Hover states and advanced interactions
-   - Maximum content width constraints
+## Interactions With Other Systems
 
-### Accessibility Framework
-- **Semantic HTML:** Proper heading hierarchy, landmark regions
-- **Keyboard Navigation:** Logical tab order, skip links, focus management
-- **Screen Reader Support:** ARIA labels, live regions, descriptive text
-- **Motor Accessibility:** Large touch targets, reduced motion options
+| System | Interaction |
+|--------|-------------|
+| THEME_SYSTEM | Layout token layer responds to root theme attribute; no direct coupling |
+| INTERACTIVE_SYSTEM | Provides breakpoint context; wraps interactive components in section containers |
+| CONTENT_SYSTEM | Section containers are the scaffold; CONTENT_SYSTEM provides the content within |
+| FRAMEWORK_INTEGRATION | None at runtime; FRAMEWORK_INTEGRATION is build-time only |
 
-### Layout Patterns
-- **Content Grids:** Flexible grid systems for different content types
-- **Interactive Zones:** Consistent positioning for user interaction
-- **Visual Hierarchy:** Size, spacing, and positioning for content importance
-- **Progressive Enhancement:** Core functionality without JavaScript
+## Rules
 
-## Quality Assurance
-
-### Responsive Testing
-- Breakpoint behavior validation across device types
-- Touch target size verification (minimum 44px)
-- Content readability at all viewport sizes
-- Interactive element accessibility on mobile
-
-### Accessibility Validation
-- Keyboard navigation testing for complete functionality
-- Screen reader compatibility across all content
-- Color contrast verification in layout contexts  
-- Focus indicator visibility in all states
-
-### Performance Standards
-- Layout shift minimization during load and interactions
-- Efficient responsive image loading
-- Touch response times under 100ms
-- Smooth scrolling and animation performance
-
-### Cross-Device Consistency
-- Consistent functionality across input methods
-- Predictable layout behavior during orientation changes
-- Graceful degradation for older browsers
-- Progressive enhancement maintaining core features
+- No section has a fixed pixel height (except the hero, which is [viewport height unit]-based)
+- All interactive containers provide sufficient space for their largest responsive state
+- Focus indicators must be visible in both themes — no focus style that disappears in dark mode
+- The meta-banner must not be conditionally rendered — it is always in the DOM and always visible
+- Section animation must not run before the JavaScript bundle is loaded — elements start in their non-animated state (visible, no offset)

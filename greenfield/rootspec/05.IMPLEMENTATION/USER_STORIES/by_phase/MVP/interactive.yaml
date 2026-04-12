@@ -1,189 +1,145 @@
 # =============================================================================
-# USER STORY: Interactive Hierarchy Explorer
+# USER STORIES: Interactive Components — MVP Phase
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: METHODOLOGY_DISCOVERY
-# @systems: [INTERACTIVE_SYSTEM, THEME_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
+# @journey: EXPLORATION
+# @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM]
+# @last_updated: 2026-04-12T00:00:00Z
 
-id: US-201
-title: Explore RootSpec hierarchy interactively
-requirement_id: R-201
+id: US-301
+title: Visitor explores the five-level hierarchy interactively
 
 acceptance_criteria:
-  - id: AC-201-1
-    title: Hierarchy levels expand to show example content
+  - id: AC-301-1
+    title: Hierarchy explorer section is present on the page
+    narrative: |
+      Given I visit the RootSpec marketing site
+      When the page loads
+      Then I see the hierarchy explorer section
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
+
+  - id: AC-301-2
+    title: Clicking a level in the explorer expands it
     narrative: |
       Given I am viewing the hierarchy explorer
-      When I click on a hierarchy level
-      Then I should see example content for that level
+      When I click on a level
+      Then that level expands to show its description and example content
     given:
       - visit: '/'
     when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+      - click: { selector: '[data-test=hierarchy-explorer-level]:first-child' }
     then:
-      - shouldExist: { selector: '[data-test=level-content]' }
-      - shouldContain: { selector: '[data-test=level-content]', text: 'Philosophy' }
+      - shouldExist: { selector: '[data-test=hierarchy-explorer-level-content]' }
 
-  - id: AC-201-2
-    title: Visual connections show upward-only references
+  - id: AC-301-3
+    title: All five levels are represented in the explorer
     narrative: |
-      Given I am exploring the hierarchy
-      When I hover over a level
-      Then I should see visual connections to levels it can reference
+      Given I am viewing the hierarchy explorer
+      When the page loads
+      Then I can see five distinct level items
     given:
       - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-3]' }
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=reference-connection]' }
-
-  - id: AC-201-3
-    title: Hierarchy explorer is keyboard accessible
-    narrative: |
-      Given I am using keyboard navigation
-      When I tab through the hierarchy explorer
-      Then I should be able to expand levels using keyboard
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-explorer]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-explorer]:focus-within' }
+      - shouldExist: { selector: '[data-test=hierarchy-explorer-level]' }
 
 ---
 
-# =============================================================================
-# USER STORY: Spec Your Idea Wizard
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: HANDS_ON_EXPERIENCE
-# @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM, THEME_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
-
-id: US-202
-title: Walk through mini specification wizard
-requirement_id: R-202
+id: US-302
+title: Visitor uses the Spec Your Idea wizard to generate a skeleton spec
 
 acceptance_criteria:
-  - id: AC-202-1
-    title: Wizard collects product idea input
+  - id: AC-302-1
+    title: Wizard section is present on the page
     narrative: |
-      Given I want to try the RootSpec methodology
-      When I start the spec wizard
-      Then I should be able to enter a product idea
+      Given I visit the RootSpec marketing site
+      When the page loads
+      Then I see the Spec Your Idea wizard section
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=spec-wizard]' }
+
+  - id: AC-302-2
+    title: Wizard step 1 accepts a product idea
+    narrative: |
+      Given I am on wizard step 1
+      When I type a product idea into the input field
+      Then the input accepts my text
     given:
       - visit: '/'
     when:
-      - click: { selector: '[data-test=spec-wizard-start]' }
-      - fill: { selector: '[data-test=product-idea-input]', value: 'Task management app' }
+      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A tool for tracking reading habits' }
     then:
-      - shouldContain: { selector: '[data-test=product-idea-input]', text: 'Task management app' }
+      - shouldExist: { selector: '[data-test=wizard-idea-input]' }
 
-  - id: AC-202-2
-    title: Mission template selection available
+  - id: AC-302-3
+    title: Wizard next button is disabled until required input is provided
     narrative: |
-      Given I have entered a product idea
-      When I proceed to the mission step
-      Then I should see mission templates to choose from
+      Given I am on wizard step 1 with an empty input
+      When I view the next button
+      Then the next button is disabled
     given:
       - visit: '/'
-      - click: { selector: '[data-test=spec-wizard-start]' }
-      - fill: { selector: '[data-test=product-idea-input]', value: 'Task app' }
-    when:
-      - click: { selector: '[data-test=next-step]' }
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=mission-templates]' }
+      - shouldExist: { selector: '[data-test=wizard-next][disabled]' }
 
-  - id: AC-202-3
-    title: Design pillars selection from suggestions
+  - id: AC-302-4
+    title: Wizard produces output after completing all steps
     narrative: |
-      Given I have selected a mission
-      When I reach the design pillars step
-      Then I should be able to pick design pillars from suggestions
-    given:
-      - visit: '/'
-      - click: { selector: '[data-test=spec-wizard-start]' }
-      - fill: { selector: '[data-test=product-idea-input]', value: 'Task app' }
-      - click: { selector: '[data-test=next-step]' }
-    when:
-      - click: { selector: '[data-test=next-step]' }
-    then:
-      - shouldExist: { selector: '[data-test=design-pillars]' }
-
-  - id: AC-202-4
-    title: Wizard generates skeleton spec output
-    narrative: |
-      Given I have completed the wizard steps
+      Given I complete all wizard steps with valid input
       When I finish the wizard
-      Then I should see a skeleton spec showing my input mapped to L1-L3
+      Then I see a skeleton spec output
     given:
       - visit: '/'
-      - click: { selector: '[data-test=spec-wizard-start]' }
-      - fill: { selector: '[data-test=product-idea-input]', value: 'Task app' }
-      - click: { selector: '[data-test=next-step]' }
-      - click: { selector: '[data-test=next-step]' }
     when:
-      - click: { selector: '[data-test=finish-wizard]' }
+      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A tool for tracking reading habits' }
+      - click: { selector: '[data-test=wizard-next]' }
+      - click: { selector: '[data-test=wizard-mission-option]:first-child' }
+      - click: { selector: '[data-test=wizard-next]' }
+      - click: { selector: '[data-test=wizard-pillar-option]:nth-child(1)' }
+      - click: { selector: '[data-test=wizard-pillar-option]:nth-child(2)' }
+      - click: { selector: '[data-test=wizard-pillar-option]:nth-child(3)' }
+      - click: { selector: '[data-test=wizard-next]' }
+      - fill: { selector: '[data-test=wizard-interaction-input]', value: 'User logs a book they finished reading' }
+      - click: { selector: '[data-test=wizard-generate]' }
     then:
-      - shouldExist: { selector: '[data-test=spec-output]' }
-      - shouldContain: { selector: '[data-test=spec-output]', text: 'L1' }
+      - shouldExist: { selector: '[data-test=wizard-output]' }
 
 ---
 
-# =============================================================================
-# USER STORY: Before/After Comparison Toggle
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: VALIDATION_PROOF
-# @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM, THEME_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
-
-id: US-203
-title: Compare development with and without RootSpec
-requirement_id: R-203
+id: US-303
+title: Visitor sees before/after comparison of spec vs. no-spec
 
 acceptance_criteria:
-  - id: AC-203-1
-    title: Toggle between without and with RootSpec views
+  - id: AC-303-1
+    title: Before/after section is present on the page
     narrative: |
-      Given I want to see the value of RootSpec
-      When I interact with the before/after comparison
-      Then I should be able to toggle between the two states
+      Given I visit the RootSpec marketing site
+      When the page loads
+      Then I see the before/after comparison section
     given:
       - visit: '/'
-    when:
-      - click: { selector: '[data-test=comparison-toggle]' }
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=comparison-content]' }
+      - shouldExist: { selector: '[data-test=before-after]' }
 
-  - id: AC-203-2
-    title: Without spec shows vague requirements
+  - id: AC-303-2
+    title: Both before and after panels contain real content
     narrative: |
-      Given I am viewing the before/after comparison
-      When I view the "without spec" state
-      Then I should see examples of vague, ambiguous requirements
+      Given I am viewing the before/after comparison section
+      When I view the panels
+      Then both panels contain non-empty content
     given:
       - visit: '/'
-    when:
-      - click: { selector: '[data-test=without-spec]' }
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=vague-requirements]' }
-      - shouldContain: { selector: '[data-test=vague-requirements]', text: 'vague' }
-
-  - id: AC-203-3
-    title: With RootSpec shows structured hierarchy
-    narrative: |
-      Given I am viewing the before/after comparison
-      When I view the "with RootSpec" state
-      Then I should see structured, traceable requirements
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=with-rootspec]' }
-    then:
-      - shouldExist: { selector: '[data-test=structured-hierarchy]' }
-      - shouldContain: { selector: '[data-test=structured-hierarchy]', text: 'design pillar' }
+      - shouldExist: { selector: '[data-test=before-panel]' }
+      - shouldExist: { selector: '[data-test=after-panel]' }

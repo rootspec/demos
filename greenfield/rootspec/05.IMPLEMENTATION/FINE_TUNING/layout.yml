@@ -1,78 +1,57 @@
 # =============================================================================
-# FINE-TUNING: Layout System
+# LEVEL 5: FINE TUNING - Layout System
 # =============================================================================
 # @spec_version: 1.0.0
+# @system: LAYOUT_SYSTEM
+# @last_updated: 2026-04-12T00:00:00Z
+# @status: draft
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
-# @last_updated: 2026-04-08T00:59:00Z
 
-breakpoint_mobile:
-  value: 320
-  # @unit: pixels
-  # @rationale: Accommodates smallest common smartphone screens in portrait mode
-  # @constraint: min=320, max=480
+# -----------------------------------------------------------------------------
+# Responsive Breakpoints
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
 
-breakpoint_tablet:
-  value: 768
-  # @unit: pixels
-  # @rationale: Standard tablet width and common responsive design breakpoint
-  # @constraint: min=640, max=1024
+breakpoints:
+  mobile_min: 320
+  # @rationale: Minimum supported mobile width; covers virtually all smartphones
+  # @constraints: min=320, max=480, type=integer, unit=px
 
-breakpoint_desktop:
-  value: 1024
-  # @unit: pixels
-  # @rationale: Ensures adequate space for multi-column layouts and enhanced interactions
-  # @constraint: min=1024, max=1440
+  tablet_min: 768
+  # @rationale: Standard tablet breakpoint; matches common CSS frameworks
+  # @constraints: min=640, max=900, type=integer, unit=px
 
-max_content_width:
-  value: 1200
-  # @unit: pixels
-  # @rationale: Prevents excessively wide lines that reduce readability on large screens
-  # @constraint: min=1000, max=1600
+  desktop_min: 1024
+  # @rationale: Standard desktop breakpoint; side-by-side layout becomes viable
+  # @constraints: min=960, max=1280, type=integer, unit=px
 
-section_spacing_mobile:
-  value: 32
-  # @unit: pixels
-  # @rationale: Adequate visual separation on small screens without wasting space
-  # @constraint: min=24, max=48
+# -----------------------------------------------------------------------------
+# Spacing Scale
+# -----------------------------------------------------------------------------
 
-section_spacing_desktop:
-  value: 64
-  # @unit: pixels
-  # @rationale: Generous breathing room that feels professional on large screens
-  # @constraint: min=48, max=96
+spacing:
+  base: 4
+  # @rationale: 4px base gives a clean 4/8/16/24/32/48/64 scale
+  # @constraints: min=4, max=8, type=integer, unit=px
 
-grid_gap_base:
-  value: 24
-  # @unit: pixels
-  # @rationale: Provides clear separation between content blocks without excessive whitespace
-  # @constraint: min=16, max=32
+  section_vertical_padding: 80
+  # @rationale: Enough breathing room between sections for visual separation
+  # @constraints: min=48, max=120, type=integer, unit=px
+  # @alternatives: [64, 96]
 
-navigation_height:
-  value: 64
-  # @unit: pixels
-  # @rationale: Comfortable touch target height that doesn't dominate viewport on mobile
-  # @constraint: min=48, max=80
+  content_max_width: 1200
+  # @rationale: Wide enough for side-by-side content; narrow enough to read comfortably
+  # @constraints: min=900, max=1440, type=integer, unit=px
 
-focus_outline_offset:
-  value: 2
-  # @unit: pixels
-  # @rationale: Prevents outline from overlapping with element borders while remaining visible
-  # @constraint: min=1, max=4
+# -----------------------------------------------------------------------------
+# Sticky Header
+# -----------------------------------------------------------------------------
 
-scroll_margin_top:
-  value: 80
-  # @unit: pixels
-  # @rationale: Accounts for sticky navigation when jumping to anchored sections
-  # @constraint: min=60, max=120
+sticky_header:
+  scroll_threshold: 100
+  # @rationale: Appears after user has scrolled past the top hero content
+  # @constraints: min=50, max=300, type=integer, unit=px
 
-content_padding_mobile:
-  value: 16
-  # @unit: pixels
-  # @rationale: Minimal but adequate spacing from screen edges on mobile devices
-  # @constraint: min=12, max=24
-
-content_padding_desktop:
-  value: 32
-  # @unit: pixels
-  # @rationale: Comfortable margins that don't waste space but provide visual breathing room
-  # @constraint: min=24, max=48
+  height: 56
+  # @rationale: Compact enough to not consume too much vertical space on scroll
+  # @constraints: min=40, max=80, type=integer, unit=px

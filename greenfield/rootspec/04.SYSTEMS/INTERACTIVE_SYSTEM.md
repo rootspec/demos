@@ -1,103 +1,102 @@
-# L4: Interactive System
+# Level 4: Interactive System
+# RootSpec Marketing Site
 
 ## Responsibility
-Manages all client-side interactive elements that allow users to experience RootSpec methodology hands-on, including the hierarchy explorer, spec wizard, and before/after comparison.
 
-## Boundaries
+The Interactive System owns all client-side stateful UI components. It manages component state, handles user input, and renders dynamic output using static content from CONTENT_SYSTEM. It has no backend, makes no API calls, and persists no data beyond the current session (except THEME_SYSTEM's localStorage key, which is out of scope here).
 
-### Owns
-- Hierarchy explorer visualization and interaction logic
-- "Spec Your Idea" wizard flow and data processing
-- Before/after comparison toggle functionality
-- User input validation and feedback
-- Interactive element state management
-- Animation and transition coordination
+## Components
 
-### Does Not Own
-- Static content presentation (managed by Content System)
-- Visual styling and color schemes (managed by Theme System)  
-- Responsive layout behavior (managed by Layout System)
-- Framework component structure (managed by Framework Integration)
+### 1. Hierarchy Explorer
 
-## Data Ownership
+**Purpose:** Let visitors experience the five-level RootSpec hierarchy interactively — clicking levels to expand them and seeing reference directionality visualized.
 
-### User Input Data
-- Wizard form state (product idea, mission, design pillars, interactions)
-- Hierarchy explorer selection state
-- Before/after comparison toggle state
-- User preferences (completed wizard steps, explorer bookmarks)
+**State:**
+- `expandedLevel`: enum `null | 'L1' | 'L2' | 'L3' | 'L4' | 'L5'` — which level is currently expanded
+- `hoveredLevel`: enum `null | 'L1' | 'L2' | 'L3' | 'L4' | 'L5'` — which level is being hovered (desktop only)
 
-### Generated Content
-- Skeleton spec output from wizard inputs
-- Dynamic hierarchy example content
-- Interactive feedback messages
-- Progress tracking across multi-step flows
+**Behavior:**
+- Clicking a level expands it and collapses any previously expanded level (single-expand accordion)
+- Hovering a level highlights the reference arrows relevant to that level (which it can reference; which it cannot)
+- Reference arrows are SVG elements; they animate on hover/focus to indicate directionality (upward only)
+- Keyboard: Tab moves between levels; Enter/Space expands/collapses focused level; arrows are decorative only (not separately focusable)
+- On mobile: hover state does not apply; tap expands; reference directionality shown in expanded content text
 
-## Interactions with Other Systems
+**State transitions:**
+- `expandedLevel = null` → click Level N → `expandedLevel = 'LN'`
+- `expandedLevel = 'LN'` → click Level N → `expandedLevel = null` (toggle off)
+- `expandedLevel = 'LN'` → click Level M → `expandedLevel = 'LM'`
 
-### → Content System
-- **Provides:** Dynamic content updates based on user interactions
-- **Receives:** Static content templates and trigger points
-- **Interface:** Event-driven content injection, template population
+**Content source:** CONTENT_SYSTEM — level names, descriptions, and example content
 
-### → Theme System
-- **Provides:** Interactive state requiring visual feedback
-- **Receives:** Theme-aware styling for interactive elements
-- **Interface:** CSS class toggling, animation property coordination
+### 2. Spec Your Idea Wizard
 
-### → Layout System  
-- **Provides:** Interactive element dimensions and positioning needs
-- **Receives:** Responsive interaction patterns (touch vs mouse)
-- **Interface:** Adaptive interaction zones, mobile gesture support
+**Purpose:** Guide a visitor through a structured 4-step process to produce a skeleton spec skeleton, making the methodology feel approachable.
 
-### → Framework Integration
-- **Provides:** Client-side JavaScript requirements
-- **Receives:** Astro hydration directives and component boundaries
-- **Interface:** Component state management, progressive enhancement
+**State:**
+```
+currentStep: integer (1–4)
+inputs:
+  productIdea: string
+  missionChoice: enum (template_A | template_B | template_C | custom)
+  missionCustomText: string (if missionChoice = custom)
+  selectedPillars: array of string (3–5 items)
+  keyInteraction: string
+output:
+  skeletonSpec: string (generated from inputs + templates)
+```
 
-## Internal Structure
+**Step rules:**
+- Step 1: `productIdea` must be non-empty to advance
+- Step 2: `missionChoice` must be selected (or `missionCustomText` non-empty if custom) to advance
+- Step 3: `selectedPillars` must have between [minimum pillars] and [maximum pillars] items to advance
+- Step 4: `keyInteraction` must be non-empty to generate output
+- Output is rendered after Step 4 completion; not visible before
 
-### Core Components
-1. **Hierarchy Explorer**
-   - Level expansion/collapse logic
-   - Visual connection rendering
-   - Example content switching
-   - Reference highlighting on hover
+**Back navigation:** permitted at any step; prior inputs preserved in state
 
-2. **Spec Wizard**
-   - Multi-step form management
-   - Input validation and sanitization  
-   - Template-based output generation
-   - Progress tracking and navigation
+**Output generation rule:** Apply `skeletonTemplate` from CONTENT_SYSTEM, substituting:
+- `{productIdea}` → Step 1 input
+- `{mission}` → resolved mission text (template text or custom text)
+- `{pillars}` → selected pillar names as list
+- `{interaction}` → Step 4 input
 
-3. **Before/After Comparison**
-   - Content toggle mechanics
-   - Smooth transition animations
-   - State persistence across sessions
-   - Accessibility-friendly controls
+**Copyable output:** Output panel provides a copy-to-clipboard control. No toast or confirmation — the control itself shows a "Copied!" label for [short duration] then resets.
 
-### State Management
-- Local component state for immediate feedback
-- Session storage for wizard progress
-- No external API dependencies
-- Client-side only data processing
+**Reset:** Wizard resets to Step 1 with empty state on page reload. No persistence.
 
-## Quality Assurance
+**Failure modes:**
+- Advancing with missing required input: "Next" button disabled; error state on unfilled field
+- More than [maximum pillars] pillars selected: additional selections are rejected (checkbox becomes inactive)
+- Clipboard API unavailable: copy button hidden; output text is still selectable manually
 
-### Interaction Standards
-- All interactive elements keyboard accessible
-- Touch targets minimum 44px for mobile
-- Clear focus indicators for navigation
-- Logical tab order throughout interfaces
+### 3. Before/After Comparison
 
-### Performance Requirements
-- Interactive elements load progressively
-- No blocking JavaScript for core functionality  
-- Smooth animations at 60fps on standard devices
-- Graceful degradation when JavaScript disabled
+**Purpose:** Show side-by-side (desktop) or toggled (mobile) real content comparing a vague spec doc to a RootSpec-structured doc.
 
-### Error Handling
-- Input validation with clear error messages
-- Fallback content when interactive elements fail
-- Recovery mechanisms for incomplete wizard sessions
-- Accessibility-compliant error announcements
+**State:**
+- `activePanel`: enum `'before' | 'after'` — used on mobile toggle; ignored on desktop (both visible)
+- `layout`: enum `'side-by-side' | 'toggle'` — derived from viewport; mobile = toggle, desktop = side-by-side
+
+**Behavior (desktop):** Both panels always visible; no toggle; no state change needed
+**Behavior (mobile):** One panel visible at a time; toggle button switches between them
+
+**Keyboard (mobile):** Toggle button operable via Enter/Space; focus does not trap
+
+**Content source:** CONTENT_SYSTEM — panel text is real spec artifacts, not placeholder content
+
+## Interactions With Other Systems
+
+| System | Interaction |
+|--------|-------------|
+| CONTENT_SYSTEM | Reads level descriptions, wizard templates, panel content; never writes |
+| LAYOUT_SYSTEM | Receives viewport breakpoint context to determine mobile vs. desktop layout |
+| THEME_SYSTEM | Components inherit theme from root attribute; no component-level theme override |
+
+## Rules
+
+- No external API calls from any component
+- No persistence beyond current page session (wizard state is ephemeral)
+- All interactive components must have visible focus indicators at all times
+- All state changes must produce immediate visual feedback — no loading states for client-side operations
+- Components must function correctly with JavaScript enabled; graceful static fallback required when JavaScript is disabled (see L3)

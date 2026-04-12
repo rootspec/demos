@@ -1,61 +1,66 @@
 # =============================================================================
-# FINE-TUNING: Interactive System
+# LEVEL 5: FINE TUNING - Interactive System
 # =============================================================================
 # @spec_version: 1.0.0
+# @system: INTERACTIVE_SYSTEM
+# @last_updated: 2026-04-12T00:00:00Z
+# @status: draft
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-# @last_updated: 2026-04-08T00:59:00Z
 
-animation_duration:
-  value: 300
-  # @unit: milliseconds
-  # @rationale: Fast enough to feel instant while allowing visual transitions to be perceived
-  # @constraint: min=200, max=500
+# -----------------------------------------------------------------------------
+# Hierarchy Explorer Animations
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
-hierarchy_expansion_delay:
-  value: 150
-  # @unit: milliseconds
-  # @rationale: Provides visual feedback that interaction was registered before content appears
-  # @constraint: min=100, max=300
+hierarchy_explorer:
+  expand_duration: 250
+  # @rationale: Accordion open feels responsive without being jarring
+  # @constraints: min=100, max=500, type=integer, unit=ms
+  # @alternatives: [150, 200, 300]
 
-wizard_step_transition:
-  value: 400
-  # @unit: milliseconds
-  # @rationale: Longer than micro-interactions to give users time to process step changes
-  # @constraint: min=300, max=600
+  collapse_duration: 200
+  # @rationale: Slightly faster than expand — closing feels crisper
+  # @constraints: min=100, max=400, type=integer, unit=ms
 
-touch_target_minimum:
-  value: 44
-  # @unit: pixels
-  # @rationale: WCAG AA standard for touch accessibility on mobile devices
-  # @constraint: min=44, max=64
-  # @inviolable: true
+# -----------------------------------------------------------------------------
+# Wizard
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
-keyboard_focus_outline:
-  value: 2
-  # @unit: pixels
-  # @rationale: Visible enough for accessibility while not overwhelming the design
-  # @constraint: min=1, max=4
+wizard:
+  min_pillars: 3
+  # @rationale: Fewer than 3 pillars doesn't give meaningful output; matches L1 guidance
+  # @constraints: min=1, max=5, type=integer
+  # @inviolable: false
 
-debounce_delay:
-  value: 250
-  # @unit: milliseconds
-  # @rationale: Prevents rapid-fire inputs while feeling responsive to user interaction
-  # @constraint: min=150, max=500
+  max_pillars: 5
+  # @rationale: Matches L1 recommendation of 3-5 design pillars; enforces discipline
+  # @constraints: min=3, max=8, type=integer
+  # @spec_source: 01.PHILOSOPHY.md
 
-wizard_progress_persistence:
-  value: 1440
-  # @unit: minutes
-  # @rationale: 24 hours allows users to return within a day without losing progress
-  # @constraint: min=60, max=10080
+  product_idea_max_chars: 200
+  # @rationale: Forces concise framing; long inputs produce poor skeleton output
+  # @constraints: min=50, max=500, type=integer
 
-error_message_display:
-  value: 5000
-  # @unit: milliseconds
-  # @rationale: Long enough to read but not permanently blocking the interface
-  # @constraint: min=3000, max=10000
+  copy_confirmation_duration: 2000
+  # @rationale: Long enough to notice "Copied!" label; short enough to reset cleanly
+  # @constraints: min=1000, max=4000, type=integer, unit=ms
 
-content_fade_in:
-  value: 200
-  # @unit: milliseconds
-  # @rationale: Subtle enough not to delay perceived performance while providing polish
-  # @constraint: min=100, max=400
+# -----------------------------------------------------------------------------
+# Section Entry Animations
+# -----------------------------------------------------------------------------
+# @spec_source: 03.INTERACTIONS.md
+
+section_animations:
+  entry_duration: 400
+  # @rationale: Smooth but not slow; keeps reading flow intact
+  # @constraints: min=200, max=800, type=integer, unit=ms
+  # @alternatives: [300, 500]
+
+  entry_offset_px: 20
+  # @rationale: Subtle upward slide; noticeable without being theatrical
+  # @constraints: min=0, max=60, type=integer, unit=px
+
+  intersection_threshold: 0.15
+  # @rationale: Animation triggers when 15% of section is visible — early enough to feel natural
+  # @constraints: min=0.05, max=0.5, type=float
