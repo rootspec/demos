@@ -14,7 +14,15 @@ on:
       max_budget:
         description: "Max AI budget in USD"
         required: false
-        default: "20"
+        default: "10"
+      model:
+        description: "Claude model to use"
+        required: false
+        default: "claude-sonnet-4-6"
+      phases:
+        description: "Comma-separated phases"
+        required: false
+        default: "init,spec,impl,validate,review"
 
 permissions:
   contents: write
@@ -23,6 +31,7 @@ permissions:
 jobs:
   rebuild:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
         with:
@@ -54,9 +63,10 @@ jobs:
           rm -rf rootspec/01.* rootspec/02.* rootspec/03.* rootspec/04.SYSTEMS rootspec/05.IMPLEMENTATION
           rm -rf rootspec/CONVENTIONS rootspec/DERIVED_ARTIFACTS
           rm -f rootspec/spec-status.json rootspec/tests-status.json rootspec/stats.json
+          rm -f rootspec/review-status.json
 
           # Source code and build artifacts
-          rm -rf src/ dist/ .astro/ .next/
+          rm -rf src/ dist/ .astro/ .next/ public/
 
           # Cypress / test infrastructure
           rm -rf cypress/ cypress.config.ts
@@ -72,6 +82,9 @@ jobs:
           rm -rf scripts/
           rm -f .rootspec.json
           rm -f .dev-server.pid .dev-server.log cypress-output.log
+
+          # Orchestrator state from previous runs
+          rm -rf .rootspec-orchestrator
 
           # Orphaned node_modules from previous build
           rm -rf node_modules
@@ -93,187 +106,133 @@ jobs:
                  rootspec/05.IMPLEMENTATION \
                  rootspec/DERIVED_ARTIFACTS \
                  rootspec/spec-status.json \
-                 rootspec/tests-status.json
+                 rootspec/tests-status.json \
+                 rootspec/review-status.json
 
           # Remove generated tests
           rm -rf cypress/e2e
+
+          # Orchestrator state
+          rm -rf .rootspec-orchestrator
 
           echo "Scaffold reset to skeleton state"
 
       # Brownfield: no reset — spec-only rebuild
 
-      # ── AI rebuild phase ─────────────────────────────────
+      # ── Setup orchestrator ───────────────────────────────
+
+      - name: Clone RootSpec framework
+        run: git clone --depth 1 https://github.com/rootspec/rootspec.git /tmp/rootspec
+
+      - name: Build orchestrator
+        run: cd /tmp/rootspec/orchestrator && npm ci && npm run build
 
       - name: Install Claude Code
         run: curl -fsSL https://claude.ai/install.sh | bash
 
-      - name: "Build: init (greenfield only)"
-        if: inputs.demo == 'greenfield'
-        working-directory: greenfield
+      # ── Run orchestrator ─────────────────────────────────
+
+      - name: "Build: ${{ inputs.demo }}"
+        working-directory: ${{ inputs.demo }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          claude -p \
-            --dangerously-skip-permissions \
-            --output-format json \
-            --max-turns 20 \
-            --max-budget-usd 3 \
-            --model claude-sonnet-4-20250514 \
-            "Run /rs-init. This is non-interactive — do not ask questions.
-            There is no package.json yet — create one with npm init -y first." \
-            | tee /tmp/claude-init.json | jq -r '.result'
-          echo "--- Stats ---"
-          jq '{turns: .num_turns, cost_usd: .total_cost_usd}' /tmp/claude-init.json
+          node /tmp/rootspec/orchestrator/dist/bin/rs-orchestrate.js \
+            --project-dir "${{ github.workspace }}/${{ inputs.demo }}" \
+            --rootspec-dir /tmp/rootspec \
+            --budget "${{ inputs.max_budget }}" \
+            --model "${{ inputs.model }}" \
+            --phases "${{ inputs.phases }}" \
+            2>&1 | tee /tmp/orchestrator-output.log || true
 
-          # Install deps that rs-init set up (Cypress, etc.)
-          if [ -f package.json ]; then
-            npm install
+      # ── Extract results ──────────────────────────────────
+
+      - name: Extract summary
+        id: summary
+        working-directory: ${{ inputs.demo }}
+        run: |
+          STATE=".rootspec-orchestrator/state.json"
+          REVIEW="rootspec/review-status.json"
+
+          # Overall status
+          STATUS="unknown"
+          COST="?"
+          if [ -f "$STATE" ]; then
+            STATUS=$(jq -r '.phaseResults | to_entries | map(select(.value.status != "success" and .value.status != "skipped")) | if length == 0 then "success" else "failed" end' "$STATE" 2>/dev/null || echo "unknown")
+            COST=$(jq -r '.totalCostUsd // 0 | . * 100 | round / 100' "$STATE" 2>/dev/null || echo "?")
           fi
 
-      - name: "Commit: init"
-        if: inputs.demo == 'greenfield'
-        run: |
-          git add -A
-          git diff --cached --quiet && exit 0
-          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-init.json 2>/dev/null || echo "?")
-          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-init.json 2>/dev/null || echo "?")
-          git commit -m "rs-init: project setup and prerequisites (${TURNS} turns, \$${COST})"
-
-      - name: "Build: spec (greenfield/scaffold)"
-        if: inputs.demo != 'brownfield'
-        working-directory: ${{ inputs.demo }}
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          claude -p \
-            --dangerously-skip-permissions \
-            --output-format json \
-            --max-turns 50 \
-            --max-budget-usd 6 \
-            --model claude-sonnet-4-20250514 \
-            "Run /rs-spec. Read SEED.md for context and skip the interview.
-            This is non-interactive — do not ask questions." \
-            | tee /tmp/claude-spec.json | jq -r '.result'
-          echo "--- Stats ---"
-          jq '{turns: .num_turns, cost_usd: .total_cost_usd, duration_ms: .duration_ms, input_tokens: (.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens), output_tokens: .usage.output_tokens}' /tmp/claude-spec.json
-
-      - name: "Build: spec (brownfield)"
-        if: inputs.demo == 'brownfield'
-        working-directory: ${{ inputs.demo }}
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          claude -p \
-            --dangerously-skip-permissions \
-            --output-format json \
-            --max-turns 50 \
-            --max-budget-usd 12 \
-            --model claude-sonnet-4-20250514 \
-            "Run /rs-spec. Skip the interview — derive the spec from existing code.
-            This is non-interactive — do not ask questions." \
-            | tee /tmp/claude-spec.json | jq -r '.result'
-          echo "--- Stats ---"
-          jq '{turns: .num_turns, cost_usd: .total_cost_usd, duration_ms: .duration_ms, input_tokens: (.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens), output_tokens: .usage.output_tokens}' /tmp/claude-spec.json
-
-      - name: "Record: spec cost"
-        working-directory: ${{ inputs.demo }}
-        run: |
-          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-spec.json 2>/dev/null || echo 0)
-          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-spec.json 2>/dev/null || echo 0)
-          if [ -f rootspec/stats.json ]; then
-            jq --arg cost "$COST" --arg turns "$TURNS" \
-              '.runs[-1].costUsd = ($cost | tonumber) | .runs[-1].turns = ($turns | tonumber)' \
-              rootspec/stats.json > rootspec/stats.json.tmp
-            mv rootspec/stats.json.tmp rootspec/stats.json
+          # Quality score
+          SCORE="n/a"
+          BLOCKERS="?"
+          WARNINGS="?"
+          if [ -f "$REVIEW" ]; then
+            SCORE=$(jq -r '.score // "n/a"' "$REVIEW" 2>/dev/null || echo "n/a")
+            BLOCKERS=$(jq -r '.summary.blockers // 0' "$REVIEW" 2>/dev/null || echo "?")
+            WARNINGS=$(jq -r '.summary.warnings // 0' "$REVIEW" 2>/dev/null || echo "?")
           fi
 
-      - name: "Commit: spec"
-        run: |
-          git add -A
-          git diff --cached --quiet && exit 0
-          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-spec.json 2>/dev/null || echo "?")
-          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-spec.json 2>/dev/null || echo "?")
-          git commit -m "rs-spec: specification from SEED.md (${TURNS} turns, \$${COST})"
-
-      - name: "Build: implement (greenfield/scaffold only)"
-        if: inputs.demo != 'brownfield'
-        working-directory: ${{ inputs.demo }}
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          claude -p \
-            --dangerously-skip-permissions \
-            --output-format json \
-            --max-turns 100 \
-            --max-budget-usd 15 \
-            --model claude-sonnet-4-20250514 \
-            "Run /rs-impl. This is non-interactive — do not ask questions." \
-            | tee /tmp/claude-impl.json | jq -r '.result'
-          echo "--- Stats ---"
-          jq '{turns: .num_turns, cost_usd: .total_cost_usd, duration_ms: .duration_ms, input_tokens: (.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens), output_tokens: .usage.output_tokens}' /tmp/claude-impl.json
-
-      - name: "Record: impl cost"
-        if: inputs.demo != 'brownfield'
-        working-directory: ${{ inputs.demo }}
-        run: |
-          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-impl.json 2>/dev/null || echo 0)
-          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-impl.json 2>/dev/null || echo 0)
-          if [ -f rootspec/stats.json ]; then
-            jq --arg cost "$COST" --arg turns "$TURNS" \
-              '.runs[-1].costUsd = ($cost | tonumber) | .runs[-1].turns = ($turns | tonumber)' \
-              rootspec/stats.json > rootspec/stats.json.tmp
-            mv rootspec/stats.json.tmp rootspec/stats.json
+          # Test pass rate
+          TESTS="?"
+          if [ -f "rootspec/tests-status.json" ]; then
+            TOTAL=$(jq '[.stories[]] | length' rootspec/tests-status.json 2>/dev/null || echo 0)
+            PASSING=$(jq '[.stories[] | select(.status == "pass")] | length' rootspec/tests-status.json 2>/dev/null || echo 0)
+            TESTS="${PASSING}/${TOTAL}"
           fi
 
-      - name: "Commit: impl"
-        if: inputs.demo != 'brownfield'
+          # Phase breakdown table
+          TABLE=""
+          if [ -f "$STATE" ]; then
+            TABLE=$(jq -r '
+              .phaseResults | to_entries[] |
+              "\(.key | ascii_upcase[0:1] + .key[1:]) | \(.value.status) | $\(.value.costUsd | . * 100 | round / 100) | \(.value.numTurns) | \(.value.durationMs / 1000 | round)s"
+            ' "$STATE" 2>/dev/null || echo "")
+          fi
+
+          # Write to outputs using heredoc
+          {
+            echo "status=${STATUS}"
+            echo "cost=${COST}"
+            echo "score=${SCORE}"
+            echo "blockers=${BLOCKERS}"
+            echo "warnings=${WARNINGS}"
+            echo "tests=${TESTS}"
+          } >> "$GITHUB_OUTPUT"
+
+          # Write table to file for multiline output
+          echo "$TABLE" > /tmp/phase-table.txt
+
+      # ── Artifacts (before commit cleanup) ─────────────────
+
+      - name: Upload orchestrator state
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orchestrator-state
+          path: |
+            ${{ inputs.demo }}/.rootspec-orchestrator/
+            /tmp/orchestrator-output.log
+          if-no-files-found: ignore
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: ${{ inputs.demo }}/cypress/screenshots/
+          if-no-files-found: ignore
+
+      # ── Commit and PR ────────────────────────────────────
+
+      - name: Commit results
         run: |
+          # Clean up artifacts that shouldn't be committed
           rm -rf ${{ inputs.demo }}/cypress/screenshots ${{ inputs.demo }}/cypress/videos
+          rm -rf ${{ inputs.demo }}/.rootspec-orchestrator
+
           git add -A
-          git diff --cached --quiet && exit 0
-          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-impl.json 2>/dev/null || echo "?")
-          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-impl.json 2>/dev/null || echo "?")
-          git commit -m "rs-impl: implementation and tests (${TURNS} turns, \$${COST})"
-
-      - name: "Build: validate"
-        working-directory: ${{ inputs.demo }}
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          claude -p \
-            --dangerously-skip-permissions \
-            --output-format json \
-            --max-turns 40 \
-            --max-budget-usd 5 \
-            --model claude-sonnet-4-20250514 \
-            "Run /rs-validate. This is non-interactive — do not ask questions." \
-            | tee /tmp/claude-validate.json | jq -r '.result' \
-            || echo "Validate step exited with $? — continuing to PR"
-          echo "--- Stats ---"
-          jq '{turns: .num_turns, cost_usd: .total_cost_usd, duration_ms: .duration_ms, input_tokens: (.usage.input_tokens + .usage.cache_read_input_tokens + .usage.cache_creation_input_tokens), output_tokens: .usage.output_tokens}' /tmp/claude-validate.json 2>/dev/null || true
-
-      - name: "Record: validate cost"
-        working-directory: ${{ inputs.demo }}
-        run: |
-          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-validate.json 2>/dev/null || echo 0)
-          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-validate.json 2>/dev/null || echo 0)
-          if [ -f rootspec/stats.json ]; then
-            jq --arg cost "$COST" --arg turns "$TURNS" \
-              '.runs[-1].costUsd = ($cost | tonumber) | .runs[-1].turns = ($turns | tonumber)' \
-              rootspec/stats.json > rootspec/stats.json.tmp
-            mv rootspec/stats.json.tmp rootspec/stats.json
-          fi
-
-      - name: "Commit: validate"
-        run: |
-          rm -f ${{ inputs.demo }}/rootspec/tests-status.json.bak
-          git add -A
-          git diff --cached --quiet && exit 0
-          COST=$(jq -r '.total_cost_usd // 0' /tmp/claude-validate.json 2>/dev/null || echo "?")
-          TURNS=$(jq -r '.num_turns // 0' /tmp/claude-validate.json 2>/dev/null || echo "?")
-          git commit -m "rs-validate: test results (${TURNS} turns, \$${COST})"
-
-      # ── PR phase ─────────────────────────────────────────
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "rebuild(${{ inputs.demo }}): orchestrator run — ${{ steps.summary.outputs.status }} (${{ steps.summary.outputs.tests }} tests, \$${{ steps.summary.outputs.cost }})"
 
       - name: Push and create PR
         env:
@@ -281,22 +240,33 @@ jobs:
         run: |
           git push origin "${{ env.branch }}"
 
-          DEMO="${{ inputs.demo }}"
-          if [ "$DEMO" = "brownfield" ]; then
-            BODY="Spec-only rebuild — derived from existing brownfield codebase."
-          else
-            BODY="Full rebuild from SEED.md: rs-spec → rs-impl → rs-validate."
+          # Read phase table
+          TABLE=$(cat /tmp/phase-table.txt 2>/dev/null || echo "")
+
+          PHASE_ROWS=""
+          if [ -n "$TABLE" ]; then
+            PHASE_ROWS=$(echo "$TABLE" | while IFS='|' read -r phase status cost turns time; do
+              echo "| $phase | $status | $cost | $turns | $time |"
+            done)
           fi
 
           gh pr create \
-            --title "Rebuild: ${DEMO}" \
-            --body "## Summary
-          ${BODY}
+            --title "Rebuild: ${{ inputs.demo }}" \
+            --body "$(cat <<EOF
+          ## Summary
+          - **Status**: ${{ steps.summary.outputs.status }}
+          - **Quality score**: ${{ steps.summary.outputs.score }}/100 (${{ steps.summary.outputs.blockers }} blockers, ${{ steps.summary.outputs.warnings }} warnings)
+          - **Tests**: ${{ steps.summary.outputs.tests }} passing
+          - **Cost**: \$${{ steps.summary.outputs.cost }} / \$${{ inputs.max_budget }} budget
+          - **Model**: ${{ inputs.model }}
 
-          ## What happened
-          - Reset ${DEMO} to pre-implementation state
-          - Ran RootSpec pipeline via Claude Code CLI
-          - Budget: \$${{ inputs.max_budget }}
+          ## Phase breakdown
+          | Phase | Status | Cost | Turns | Time |
+          |-------|--------|------|-------|------|
+          ${PHASE_ROWS}
 
-          🤖 Generated with [Claude Code](https://claude.ai/claude-code)" \
+          🤖 Generated with [RootSpec Orchestrator](https://github.com/rootspec/rootspec)
+          EOF
+          )" \
             --label rebuild,ai-generated || true
+
