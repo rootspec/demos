@@ -4,8 +4,8 @@ import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
   integrations: [react(), tailwind()],
-  output: 'static',
   server: {
-    port: 4321
-  }
+    port: 3000,
+    host: true,
+  },
 });

@@ -1,65 +1,50 @@
 ---
-export interface Props {
-  title: string;
-  description?: string;
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
 }
 
-const { title, description = "RootSpec - A specification language that transforms product ideas into validated implementations" } = Astro.props;
+const { title = 'RootSpec — Specification Methodology' } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="theme-system">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
+    <script is:inline>
+      // Apply theme before first paint to avoid FOUC
+      (function() {
+        var stored = localStorage.getItem('rootspec-theme');
+        var theme = stored;
+        if (!theme) {
+          theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
   </head>
   <body>
-    <main>
-      <slot />
-    </main>
+    <slot />
     <script>
-      // Theme detection and persistence
-      function getTheme() {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
-        }
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          return 'dark';
-        }
-        return 'light';
-      }
+      // Intersection observer for section animations
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
 
-      function setTheme(theme) {
-        document.documentElement.className = `theme-${theme}`;
-        localStorage.setItem('theme', theme);
-      }
-
-      // Set initial theme
-      setTheme(getTheme());
-
-      // Listen for theme toggle clicks
-      document.addEventListener('click', (e) => {
-        if (e.target?.matches('[data-test="theme-toggle"]')) {
-          const current = getTheme();
-          setTheme(current === 'light' ? 'dark' : 'light');
-        }
-
-        // Spec wizard start button - focus the input
-        if (e.target?.matches('[data-test="spec-wizard-start"]')) {
-          const input = document.querySelector('[data-test="product-idea-input"]');
-          if (input) input.focus();
-        }
+      document.querySelectorAll('section').forEach(el => {
+        observer.observe(el);
       });
 
-      // Handle contenteditable input
-      document.addEventListener('input', (e) => {
-        if (e.target?.matches('[data-test="product-idea-input"]')) {
-          // Contenteditable div already contains the text, no need to sync
-        }
-      });
+      // Make the first section visible immediately
+      const firstSection = document.querySelector('section');
+      if (firstSection) firstSection.classList.add('visible');
     </script>
   </body>
 </html>

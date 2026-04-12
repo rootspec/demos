@@ -1,37 +1,24 @@
-# Technical Conventions
+## Framework
+- **Framework:** Astro 6 with React islands + TailwindCSS
+- **Language:** TypeScript (TSX for interactive components)
+- **Package manager:** npm
+- **Dev server:** `astro dev --port 3000`
+- **Build:** `astro build`
 
-## Stack
-- **Framework:** Astro 4.x
-- **Language:** TypeScript
-- **Styling:** CSS with custom properties
-- **Build:** Vite (Astro default)
-- **Package Manager:** npm
+## Project Structure
+- **Pages:** `src/pages/` — Astro pages (SSG)
+- **Layouts:** `src/layouts/` — Astro layout wrappers
+- **Components:** `src/components/` — React TSX interactive components (`.tsx`)
+- **Styles:** `src/styles/global.css` — Global CSS + CSS custom properties
 
-## File Organization
-- **Pages:** `src/pages/` (Astro routing)
-- **Components:** `src/components/` (Astro + TypeScript)
-- **Layouts:** `src/layouts/` (page templates)
-- **Styles:** `src/styles/` (global CSS)
-- **Assets:** `src/assets/` (images, fonts)
+## Patterns
+- **Interactive components:** Use `client:load` hydration directive in `.astro` pages
+- **Theme:** Applied via `data-theme` attribute on `<html>` element; CSS custom properties under `[data-theme]` selectors
+- **Theme storage:** `localStorage` key `rootspec-theme`; inline script in `<head>` prevents FOUC
+- **Section animations:** IntersectionObserver adds `.visible` class for fade-in + translateY effect
+- **Testing:** Cypress + `data-test` attributes; test file at `cypress/e2e/mvp.cy.ts`
 
-## Component Patterns
-- **Astro Components:** `.astro` files for static + lightly interactive content
-- **Interactive Components:** `.tsx` files for client-side interactivity
-- **Client Hydration:** Selective with `client:load` directive
-- **Data Attributes:** `data-test` for test selectors
-
-## Testing Strategy
-- **E2E Testing:** Cypress with RootSpec integration
-- **Test Selectors:** `[data-test="element-name"]` pattern
-- **Test Organization:** By user story and system
-
-## TypeScript Configuration
-- **Strict Mode:** Enabled for type safety
-- **Path Mapping:** `@/` for `src/` directory
-- **ESM Modules:** Full ES module support
-
-## Performance
-- **Static Generation:** All pages pre-rendered
-- **Progressive Enhancement:** Core functionality without JavaScript
-- **Lazy Loading:** Images and non-critical components
-- **Bundle Splitting:** Automatic via Vite
+## Configuration
+- **Astro config:** `astro.config.mjs` — integrations: react, tailwind
+- **Cypress config:** `cypress.config.ts` — baseUrl `http://localhost:3000`
+- **TypeScript:** Managed by Astro; no separate tsconfig needed at root
