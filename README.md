@@ -12,14 +12,30 @@ Demonstrates the RootSpec spec-to-code pipeline across three project scenarios. 
 
 ## How It Works
 
-Each demo runs the four RootSpec skills in order:
+Each demo is rebuilt from scratch using the [RootSpec Orchestrator](https://github.com/rootspec/rootspec/tree/main/orchestrator) — a single command that runs the full pipeline:
 
-1. `/rs-init` — Set up RootSpec directory structure
-2. `/rs-spec` — Define the specification through interview
-3. `/rs-impl` — Implement from the spec, test-driven
-4. `/rs-validate` — Run tests and prove it works
+```
+rs-orchestrate --budget 10 --phases init,spec,impl,validate,review
+```
 
-The resulting apps deploy to GitHub Pages via CI.
+The orchestrator runs five phases:
+
+1. **Init** — Set up project structure, prerequisites, dev scripts
+2. **Spec** — Derive a full specification from `SEED.md`
+3. **Impl** — Implement from the spec, test-driven
+4. **Validate** — Run Cypress tests, capture screenshots
+5. **Review** — AI quality review with fix cycles (screenshots + source inspection)
+
+Quality gates between phases enforce pass rates, and the review-fix loop catches visual bugs, broken links, and placeholder content that functional tests miss.
+
+## CI Rebuild
+
+Trigger a rebuild from the [Actions tab](https://github.com/rootspec/demos/actions/workflows/rebuild-demo.yml) (`Rebuild Demo` workflow). It:
+
+- Resets the selected demo to a blank slate
+- Clones the RootSpec framework and builds the orchestrator
+- Runs the full pipeline (init → spec → impl → validate → review)
+- Opens a PR with the results, quality score, and cost breakdown
 
 ## Live Demos
 
