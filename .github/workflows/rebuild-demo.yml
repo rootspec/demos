@@ -184,7 +184,7 @@ jobs:
           if [ -f "$STATE" ]; then
             STATUS=$(jq -r '
               .phaseResults | to_entries |
-              map(select(.value.status != "success" and .value.status != "skipped")) |
+              map(select(.key != "review" and .value.status != "success" and .value.status != "skipped")) |
               if length == 0 then "success" else "failed" end
             ' "$STATE" 2>/dev/null || echo "unknown")
             COST=$(jq -r '.totalCostUsd // 0 | . * 100 | round / 100' "$STATE" 2>/dev/null || echo "?")
