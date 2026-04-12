@@ -1,0 +1,126 @@
+{
+  "lastReview": "2026-04-12T16:18:04Z",
+  "status": "fail",
+  "summary": {
+    "blockers": 1,
+    "warnings": 4,
+    "nitpicks": 3
+  },
+  "issues": [
+    {
+      "id": "REV-001",
+      "severity": "blocker",
+      "category": "impl_error",
+      "story": "US-103",
+      "file": "src/pages/index.astro",
+      "line": 102,
+      "screenshot": null,
+      "description": "The 'How It Works' section (four-skill walkthrough: /rs-init → /rs-spec → /rs-impl → /rs-validate) is entirely absent from the implementation.",
+      "expected": "SEED.md specifies a 'How It Works' section: 'Visual walkthrough of the four skills (init → spec → impl → validate) with clear before/after.' L3 spec describes it as section 4 in the page flow: 'Read the four-skill walkthrough (init → spec → impl → validate). Visual indicators show progression through skills.'",
+      "actual": "Page goes directly from the Problem section (stats cards) to the Hierarchy Explorer. No four-skill walkthrough exists anywhere in the source.",
+      "suggestion": "Add a 'How It Works' section between the Problem and Hierarchy Explorer sections, showing the four commands (/rs-init, /rs-spec, /rs-impl, /rs-validate) with brief descriptions of what each does."
+    },
+    {
+      "id": "REV-002",
+      "severity": "warning",
+      "category": "impl_error",
+      "story": "US-301",
+      "file": "src/components/HierarchyExplorer.tsx",
+      "line": 130,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-301--AC-301-2.png",
+      "description": "The hierarchy explorer shows reference directionality as plain text ('References: upward only → L1, L2, ...') rather than visual arrows. The spec requires visual connection arrows that animate on hover.",
+      "expected": "SEED.md: 'Visual connections show which levels each can reference (arrows flow upward only). Hovering a level highlights its allowed references.' L3: 'Reference arrows animate to show allowed/forbidden directions.'",
+      "actual": "A static text string is displayed below each expanded level: 'References: upward only → L1, L2, L3, ...' No graphical arrows, no hover-triggered highlighting, no animation.",
+      "suggestion": "Add SVG arrows or a visual indicator between levels that animate on hover/expand to reinforce the upward-only reference constraint."
+    },
+    {
+      "id": "REV-003",
+      "severity": "warning",
+      "category": "impl_error",
+      "story": "US-303",
+      "file": "src/components/BeforeAfter.tsx",
+      "line": 56,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-302--AC-302-4.png",
+      "description": "The Before/After comparison on desktop shows both panels side-by-side with no toggle or slider — the specified interaction is a toggle/slider mechanism, not a static two-panel layout.",
+      "expected": "SEED.md: 'Side-by-side view with a slider or toggle.' L3: 'Interaction: Toggle or slider between Without spec and With RootSpec views. Keyboard: Toggle via Space bar or Enter when focused.'",
+      "actual": "On desktop, both panels are permanently visible side-by-side. There is no toggle or slider control on desktop. The mobile tab buttons (Before/After) are hidden on desktop. There is no keyboard toggle mechanism on desktop.",
+      "suggestion": "Add a toggle button (or slider) on desktop that switches between the two panels, with keyboard support (Space/Enter to toggle when focused)."
+    },
+    {
+      "id": "REV-004",
+      "severity": "warning",
+      "category": "impl_error",
+      "story": null,
+      "file": "src/pages/index.astro",
+      "line": null,
+      "screenshot": null,
+      "description": "No RootSpec methodology diagram is present. SEED.md requires a simple image or SVG depicting the spec surrounding the development cycle.",
+      "expected": "SEED.md: 'Simple RootSpec diagram — if possible, create an image that depicts the RootSpec methodology in a simple way: a spec surrounding the development cycle and only allowing valid solutions to pass through. If an image is not possible, create a diagram using SVG.'",
+      "actual": "No diagram of any kind exists in the source. The site is text and interactive components only.",
+      "suggestion": "Add an SVG diagram — it need not be complex. A simple circle or box labeled 'RootSpec Spec' with arrows showing the development cycle (code → test → validate) passing through a filter gate would satisfy this requirement."
+    },
+    {
+      "id": "REV-005",
+      "severity": "warning",
+      "category": "visual_quality",
+      "story": null,
+      "file": "src/pages/index.astro",
+      "line": 44,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-201--AC-201-2.png",
+      "description": "The navigation bar is not sticky. After the hero scrolls out of view, the nav disappears. No active section indicator is implemented.",
+      "expected": "L3: 'Sticky header with navigation anchors becomes visible after hero scrolls out of view. Active section indicator highlights current section in sticky nav.'",
+      "actual": "The nav is a static element at the top of the page with no sticky positioning. It scrolls away with the page. No active section highlighting is present.",
+      "suggestion": "Add `position: sticky; top: 0;` to the nav element and implement an Intersection Observer to highlight the active section in the nav links."
+    },
+    {
+      "id": "REV-006",
+      "severity": "nitpick",
+      "category": "impl_error",
+      "story": "US-302",
+      "file": "src/components/SpecWizard.tsx",
+      "line": 9,
+      "screenshot": null,
+      "description": "The design pillars list has 7 options. SEED.md specifies 8-10 suggestions.",
+      "expected": "SEED.md: 'Pick 3-5 design pillars from suggestions (checkbox grid of 8-10 suggestions).'",
+      "actual": "Only 7 pillar options are listed: Speed & Efficiency, Clarity & Transparency, Accessibility & Inclusion, Reliability & Trust, Collaboration & Sharing, Customization & Control, Discovery & Exploration.",
+      "suggestion": "Add 1-3 more design pillar options to reach the 8-10 specified in SEED.md (e.g., 'Privacy & Security', 'Simplicity & Focus', 'Scalability & Performance')."
+    },
+    {
+      "id": "REV-007",
+      "severity": "nitpick",
+      "category": "accessibility",
+      "story": "US-403",
+      "file": "src/pages/index.astro",
+      "line": 50,
+      "screenshot": null,
+      "description": "Navigation links have no aria-current attribute to indicate the active section, and anchor links lack accessible labels describing their destination beyond the link text.",
+      "expected": "L3: 'Active section indicator highlights current section in sticky nav.' Implied: keyboard and screen-reader users should know which section is active.",
+      "actual": "Nav links are plain anchor tags with no aria-current='page' or dynamic class for active state.",
+      "suggestion": "Use an Intersection Observer to set aria-current='true' on the active nav link as sections scroll into view."
+    },
+    {
+      "id": "REV-008",
+      "severity": "nitpick",
+      "category": "accessibility",
+      "story": null,
+      "file": "src/components/BeforeAfter.tsx",
+      "line": 80,
+      "screenshot": null,
+      "description": "The mobile Before/After tab buttons have no aria-selected or role='tab' attributes to communicate their state to screen readers.",
+      "expected": "Interactive toggle buttons that switch visible panels should use appropriate ARIA roles (role='tablist', role='tab', aria-selected) so screen readers announce the active panel.",
+      "actual": "Plain <button> elements with visual-only active state (border color change). No ARIA roles or aria-selected attributes.",
+      "suggestion": "Wrap the tab buttons in a div with role='tablist' and add role='tab' and aria-selected to each button. Add aria-controls pointing to the panel IDs."
+    }
+  ],
+  "qualityScore": {
+    "score": 72,
+    "breakdown": {
+      "content": 25,
+      "visual": 20,
+      "alignment": 17,
+      "accessibility": 7,
+      "polish": 3
+    },
+    "notes": "Content accuracy is strong — no broken links, version badge reads correctly from .rootspec.json (v7.1.1), real content in before/after panels, footer attribution present. Visual fidelity loses points for absent methodology diagram (-5) and missing sticky nav (-5) relative to spec. Spec alignment loses 8 points for the missing How It Works section (-10 for missing specified feature, partially offset by strong coverage of other stories). Accessibility gaps in before/after ARIA roles and nav active state cost 3 points. Polish loses points for the reference direction display being text-only rather than visual as specified."
+  }
+}

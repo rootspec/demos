@@ -65,56 +65,93 @@ export default function BeforeAfter() {
     return () => mq.removeEventListener('change', handler);
   }, []);
 
+  function togglePanel() {
+    setActivePanel(prev => prev === 'before' ? 'after' : 'before');
+  }
+
+  function handleToggleKey(e: React.KeyboardEvent) {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      togglePanel();
+    }
+  }
+
   const panelStyle = (isActive: boolean) => ({
     flex: 1,
     background: 'var(--color-bg)',
     border: '1px solid var(--color-border)',
     borderRadius: '8px',
     padding: '1.25rem',
-    display: (!isMobile || (isMobile && isActive)) ? 'block' : 'none',
+    display: isActive ? 'block' : 'none',
   });
 
   return (
     <div data-test="before-after">
-      {isMobile && (
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '1rem', justifyContent: 'center' }}>
-          <button
-            onClick={() => setActivePanel('before')}
-            style={{
-              padding: '6px 16px',
-              border: `2px solid ${activePanel === 'before' ? 'var(--color-primary)' : 'var(--color-border)'}`,
-              borderRadius: '6px',
-              background: activePanel === 'before' ? 'var(--color-primary)' : 'none',
-              color: activePanel === 'before' ? '#fff' : 'var(--color-text)',
-              cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: '0.85rem',
-            }}
-          >
-            Before
-          </button>
-          <button
-            onClick={() => setActivePanel('after')}
-            style={{
-              padding: '6px 16px',
-              border: `2px solid ${activePanel === 'after' ? 'var(--color-primary)' : 'var(--color-border)'}`,
-              borderRadius: '6px',
-              background: activePanel === 'after' ? 'var(--color-primary)' : 'none',
-              color: activePanel === 'after' ? '#fff' : 'var(--color-text)',
-              cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: '0.85rem',
-            }}
-          >
-            After
-          </button>
-        </div>
-      )}
+      {/* Toggle controls — shown on both mobile and desktop */}
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '1rem', justifyContent: 'center', alignItems: 'center' }}>
+        <button
+          onClick={() => setActivePanel('before')}
+          style={{
+            padding: '6px 16px',
+            border: `2px solid ${activePanel === 'before' ? 'var(--color-primary)' : 'var(--color-border)'}`,
+            borderRadius: '6px',
+            background: activePanel === 'before' ? 'var(--color-primary)' : 'transparent',
+            color: activePanel === 'before' ? '#fff' : 'var(--color-text)',
+            cursor: 'pointer',
+            fontWeight: 600,
+            fontSize: '0.85rem',
+            fontFamily: 'inherit',
+          }}
+        >
+          Before
+        </button>
+        <button
+          aria-label="Toggle between before and after"
+          onClick={togglePanel}
+          onKeyDown={handleToggleKey}
+          title="Toggle (Space / Enter)"
+          style={{
+            padding: '4px 10px',
+            border: '1px solid var(--color-border)',
+            borderRadius: '6px',
+            background: 'var(--color-surface)',
+            color: 'var(--color-text-muted)',
+            cursor: 'pointer',
+            fontWeight: 700,
+            fontSize: '1rem',
+            fontFamily: 'inherit',
+            lineHeight: 1,
+          }}
+        >
+          ⇄
+        </button>
+        <button
+          onClick={() => setActivePanel('after')}
+          style={{
+            padding: '6px 16px',
+            border: `2px solid ${activePanel === 'after' ? 'var(--color-primary)' : 'var(--color-border)'}`,
+            borderRadius: '6px',
+            background: activePanel === 'after' ? 'var(--color-primary)' : 'transparent',
+            color: activePanel === 'after' ? '#fff' : 'var(--color-text)',
+            cursor: 'pointer',
+            fontWeight: 600,
+            fontSize: '0.85rem',
+            fontFamily: 'inherit',
+          }}
+        >
+          After
+        </button>
+        {!isMobile && (
+          <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginLeft: '8px' }}>
+            (or press Space / Enter on toggle to switch)
+          </span>
+        )}
+      </div>
 
       <div style={{ display: 'flex', gap: '1.5rem', flexDirection: isMobile ? 'column' : 'row' }}>
         <div
           data-test="before-panel"
-          style={panelStyle(!isMobile || activePanel === 'before')}
+          style={panelStyle(activePanel === 'before')}
         >
           <div style={{
             display: 'flex',
@@ -151,7 +188,7 @@ export default function BeforeAfter() {
 
         <div
           data-test="after-panel"
-          style={panelStyle(!isMobile || activePanel === 'after')}
+          style={panelStyle(activePanel === 'after')}
         >
           <div style={{
             display: 'flex',

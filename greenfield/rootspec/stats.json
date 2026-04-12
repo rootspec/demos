@@ -17,5 +17,41 @@
     "iterations": 4,
     "stories": {"US-101":{"attempts":1},"US-102":{"attempts":1},"US-103":{"attempts":1},"US-104":{"attempts":1},"US-105":{"attempts":1},"US-201":{"attempts":1},"US-202":{"attempts":1},"US-301":{"attempts":2},"US-302":{"attempts":1},"US-303":{"attempts":1},"US-401":{"attempts":1},"US-402":{"attempts":1},"US-403":{"attempts":1}}
   }
+,
+  {
+    "skill": "rs-validate",
+    "startedAt": "2026-04-12T16:08:42Z",
+    "completedAt": "2026-04-12T16:10:10Z",
+    "durationSeconds": 88,
+    "iterations": null,
+    "stories": null
+  }
+,
+  {
+    "skill": "rs-validate",
+    "startedAt": "2026-04-12T16:14:59Z",
+    "completedAt": "2026-04-12T16:16:25Z",
+    "durationSeconds": 86,
+    "iterations": null,
+    "stories": null
+  }
+,
+  {
+    "skill": "rs-review",
+    "startedAt": "2026-04-12T16:16:38Z",
+    "completedAt": "2026-04-12T16:18:49Z",
+    "durationSeconds": 131,
+    "iterations": null,
+    "stories": null
+  }
+,
+  {
+    "skill": "rs-validate",
+    "startedAt": "2026-04-12T16:21:50Z",
+    "completedAt": "2026-04-12T16:23:21Z",
+    "durationSeconds": 91,
+    "iterations": null,
+    "stories": null
+  }
   ]
 }

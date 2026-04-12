@@ -41,19 +41,57 @@ const buildDate = new Date().toLocaleDateString('en-US', {
   </div>
 
   <!-- Nav -->
-  <nav style="border-bottom: 1px solid var(--color-border); padding: 14px 0;">
+  <nav id="main-nav" style="border-bottom: 1px solid var(--color-border); padding: 14px 0; position: sticky; top: 0; z-index: 100; background: var(--color-bg);">
     <div class="container" style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
       <div style="font-weight: 700; font-size: 1.05rem; letter-spacing: -0.02em; color: var(--color-text);">
         RootSpec
       </div>
       <div style="display: flex; align-items: center; gap: 1rem;">
-        <a href="#hierarchy" style="font-size: 0.875rem; color: var(--color-text-muted);">Hierarchy</a>
-        <a href="#wizard" style="font-size: 0.875rem; color: var(--color-text-muted);">Wizard</a>
-        <a href="#comparison" style="font-size: 0.875rem; color: var(--color-text-muted);">Compare</a>
+        <a id="nav-how-it-works" href="#how-it-works" style="font-size: 0.875rem; color: var(--color-text-muted); text-decoration: none; transition: color 0.15s;">How It Works</a>
+        <a id="nav-hierarchy" href="#hierarchy" style="font-size: 0.875rem; color: var(--color-text-muted); text-decoration: none; transition: color 0.15s;">Hierarchy</a>
+        <a id="nav-wizard" href="#wizard" style="font-size: 0.875rem; color: var(--color-text-muted); text-decoration: none; transition: color 0.15s;">Wizard</a>
+        <a id="nav-comparison" href="#comparison" style="font-size: 0.875rem; color: var(--color-text-muted); text-decoration: none; transition: color 0.15s;">Compare</a>
         <ThemeToggle client:load />
       </div>
     </div>
   </nav>
+
+  <script>
+    // Active section tracking via IntersectionObserver
+    const sectionNavMap: Record<string, string> = {
+      'how-it-works': 'nav-how-it-works',
+      'hierarchy': 'nav-hierarchy',
+      'wizard': 'nav-wizard',
+      'comparison': 'nav-comparison',
+    };
+
+    function setActiveNav(sectionId: string) {
+      for (const [, navId] of Object.entries(sectionNavMap)) {
+        const el = document.getElementById(navId);
+        if (el) el.style.color = 'var(--color-text-muted)';
+      }
+      const activeNavId = sectionNavMap[sectionId];
+      if (activeNavId) {
+        const el = document.getElementById(activeNavId);
+        if (el) el.style.color = 'var(--color-primary)';
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveNav(entry.target.id);
+          }
+        }
+      },
+      { rootMargin: '-20% 0px -60% 0px', threshold: 0 }
+    );
+
+    document.querySelectorAll('section[id]').forEach((section) => {
+      observer.observe(section);
+    });
+  </script>
 
   <!-- Hero -->
   <section
@@ -125,6 +163,101 @@ const buildDate = new Date().toLocaleDateString('en-US', {
     </div>
   </section>
 
+  <!-- How It Works -->
+  <section id="how-it-works" data-test="how-it-works" style="padding: 5rem 0;">
+    <div class="container">
+      <div style="text-align: center; margin-bottom: 3rem;">
+        <h2 style="font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.75rem;">
+          How It Works
+        </h2>
+        <p style="color: var(--color-text-muted); max-width: 560px; margin: 0 auto; font-size: 0.95rem; line-height: 1.6;">
+          Four skills take a product from vague idea to running, tested implementation — with full traceability at every step.
+        </p>
+      </div>
+
+      <!-- Methodology diagram -->
+      <div style="max-width: 520px; margin: 0 auto 3.5rem; text-align: center;">
+        <svg viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg" aria-label="RootSpec methodology: spec surrounds the development cycle" role="img" style="width: 100%; height: auto;">
+          <!-- Outer spec ring -->
+          <ellipse cx="260" cy="90" rx="240" ry="78" fill="none" stroke="var(--color-primary, #4f46e5)" stroke-width="2.5" stroke-dasharray="6 4" opacity="0.6"/>
+          <text x="260" y="18" text-anchor="middle" font-size="13" font-weight="700" fill="var(--color-primary, #4f46e5)" font-family="system-ui,sans-serif">RootSpec Spec</text>
+
+          <!-- Inner dev cycle arrows -->
+          <!-- code box -->
+          <rect x="60" y="62" width="90" height="36" rx="6" fill="var(--color-surface, #f8f8f8)" stroke="var(--color-border, #e5e7eb)" stroke-width="1.5"/>
+          <text x="105" y="84" text-anchor="middle" font-size="12" font-weight="600" fill="var(--color-text, #111)" font-family="system-ui,sans-serif">Code</text>
+
+          <!-- test box -->
+          <rect x="215" y="62" width="90" height="36" rx="6" fill="var(--color-surface, #f8f8f8)" stroke="var(--color-border, #e5e7eb)" stroke-width="1.5"/>
+          <text x="260" y="84" text-anchor="middle" font-size="12" font-weight="600" fill="var(--color-text, #111)" font-family="system-ui,sans-serif">Test</text>
+
+          <!-- validate box -->
+          <rect x="370" y="62" width="90" height="36" rx="6" fill="var(--color-surface, #f8f8f8)" stroke="var(--color-border, #e5e7eb)" stroke-width="1.5"/>
+          <text x="415" y="84" text-anchor="middle" font-size="12" font-weight="600" fill="var(--color-text, #111)" font-family="system-ui,sans-serif">Validate</text>
+
+          <!-- code → test arrow -->
+          <path d="M152 80 L213 80" stroke="var(--color-primary, #4f46e5)" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+          <!-- test → validate arrow -->
+          <path d="M307 80 L368 80" stroke="var(--color-primary, #4f46e5)" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+          <!-- validate → code curved return -->
+          <path d="M415 98 Q415 148 260 148 Q105 148 105 98" stroke="var(--color-primary, #4f46e5)" stroke-width="2" fill="none" marker-end="url(#arr)" opacity="0.5"/>
+
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="var(--color-primary, #4f46e5)"/>
+            </marker>
+          </defs>
+        </svg>
+        <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 0.5rem;">The spec wraps every stage — code, test, and validation all trace back to it.</p>
+      </div>
+
+      <!-- Four skills walkthrough -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto;">
+        {[
+          {
+            cmd: '/rs-init',
+            step: '01',
+            title: 'Initialise',
+            desc: 'Scaffolds the RootSpec directory structure and config. One command sets up everything needed to start speccing.',
+          },
+          {
+            cmd: '/rs-spec',
+            step: '02',
+            title: 'Specify',
+            desc: 'Turns a seed document (plain English product description) into a full five-level spec with user stories and acceptance criteria.',
+          },
+          {
+            cmd: '/rs-impl',
+            step: '03',
+            title: 'Implement',
+            desc: 'Reads the spec and generates a working implementation — components, pages, and tests all scaffolded in one pass.',
+          },
+          {
+            cmd: '/rs-validate',
+            step: '04',
+            title: 'Validate',
+            desc: 'Runs the generated Cypress tests against the implementation and reports pass/fail against every acceptance criterion.',
+          },
+        ].map((skill) => (
+          <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; padding: 1.5rem; position: relative; overflow: hidden;">
+            <div style="font-size: 2.5rem; font-weight: 900; color: var(--color-border); position: absolute; top: 12px; right: 16px; line-height: 1; pointer-events: none; user-select: none;">
+              {skill.step}
+            </div>
+            <div style="font-family: monospace; font-size: 0.85rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; background: var(--color-bg); border: 1px solid var(--color-border); display: inline-block; padding: 2px 10px; border-radius: 4px;">
+              {skill.cmd}
+            </div>
+            <h3 style="font-size: 1rem; font-weight: 700; margin: 0.5rem 0 0.4rem; color: var(--color-text);">
+              {skill.title}
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;">
+              {skill.desc}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- Hierarchy Explorer -->
   <section id="hierarchy" style="padding: 5rem 0;">
     <div class="container">
@@ -192,7 +325,7 @@ const buildDate = new Date().toLocaleDateString('en-US', {
           rel="noopener noreferrer"
           style="display: inline-flex; align-items: center; gap: 8px; background: var(--color-text); color: var(--color-bg); padding: 12px 28px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; text-decoration: none;"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
           </svg>
           View on GitHub
@@ -211,7 +344,7 @@ const buildDate = new Date().toLocaleDateString('en-US', {
         data-test="footer-attribution"
         style="font-size: 0.85rem; color: var(--color-text-muted);"
       >
-        Built by RootSpec · Generated {buildDate} · <a href="https://github.com/rootspec/demos" style="color: var(--color-text-muted);">GitHub</a>
+        Built by Claude (Anthropic) · Generated {buildDate} · <a href="https://github.com/rootspec/demos" style="color: var(--color-text-muted);">GitHub</a>
       </div>
       <div style="font-size: 0.8rem; color: var(--color-text-muted); font-family: monospace;">
         v{version}

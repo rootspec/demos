@@ -127,8 +127,45 @@ export default function HierarchyExplorer() {
                 }}>
                   {level.example}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '8px' }}>
-                  References: upward only → {index > 0 ? LEVELS.slice(0, index).map(l => l.id).join(', ') : 'none (top level)'}
+                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                  <span>References upward:</span>
+                  {index > 0 ? (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      {LEVELS.slice(0, index).map((l, i) => (
+                        <span key={l.id} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          {i > 0 && (
+                            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" style={{ flexShrink: 0 }}>
+                              <path d="M3 7 L11 7 M8 4 L11 7 L8 10" stroke="var(--color-primary)" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          )}
+                          <span style={{
+                            background: 'var(--color-bg)',
+                            border: '1px solid var(--color-primary)',
+                            color: 'var(--color-primary)',
+                            borderRadius: '4px',
+                            padding: '1px 6px',
+                            fontSize: '0.72rem',
+                            fontWeight: 600,
+                            fontFamily: 'monospace',
+                          }}>{l.id}</span>
+                        </span>
+                      ))}
+                      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" style={{ flexShrink: 0 }}>
+                        <path d="M3 7 L11 7 M8 4 L11 7 L8 10" stroke="var(--color-primary)" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <span style={{
+                        background: 'var(--color-primary)',
+                        color: '#fff',
+                        borderRadius: '4px',
+                        padding: '1px 6px',
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        fontFamily: 'monospace',
+                      }}>{level.id}</span>
+                    </span>
+                  ) : (
+                    <span style={{ fontStyle: 'italic' }}>none — top level</span>
+                  )}
                 </div>
               </div>
           </button>
