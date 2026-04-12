@@ -3,9 +3,14 @@ import Layout from '../layouts/Layout.astro';
 import MetaBanner from '../components/MetaBanner.astro';
 import Header from '../components/Header.astro';
 import HeroSection from '../components/HeroSection.astro';
-import ComparisonSection from '../components/ComparisonSection.astro';
+import ProblemSection from '../components/ProblemSection.astro';
+import WorkflowSection from '../components/WorkflowSection.astro';
 import HierarchySection from '../components/HierarchySection.astro';
+import ComparisonSection from '../components/ComparisonSection.astro';
 import WizardSection from '../components/WizardSection.astro';
+import CTASection from '../components/CTASection.astro';
+import rootspec from '../../.rootspec.json';
+const version = rootspec.version;
 ---
 
 <Layout title="RootSpec — Spec-first development methodology">
@@ -13,14 +18,18 @@ import WizardSection from '../components/WizardSection.astro';
   <Header />
   <main>
     <HeroSection />
-    <ComparisonSection />
+    <ProblemSection />
+    <WorkflowSection />
     <HierarchySection />
+    <ComparisonSection />
     <WizardSection />
+    <CTASection />
   </main>
   <footer class="site-footer">
     <div class="container footer-inner">
-      <span>RootSpec <span data-test="footer-version">v7.2.0</span> — Open-source spec methodology</span>
-      <a href="https://github.com/rootspec/rootspec" target="_blank" rel="noopener noreferrer" data-test="cta-github" class="footer-link">
+      <span>RootSpec <span data-test="footer-version">v{version}</span> — Open-source spec methodology</span>
+      <span data-test="builder-attribution" class="builder-attribution">Built by Claude on 2026-04-12</span>
+      <a href="https://github.com/rootspec/demos" target="_blank" rel="noopener noreferrer" data-test="cta-github" class="footer-link">
         GitHub →
       </a>
     </div>
@@ -42,6 +51,10 @@ import WizardSection from '../components/WizardSection.astro';
     color: var(--color-text-secondary);
     flex-wrap: wrap;
     gap: 0.75rem;
+  }
+
+  .builder-attribution {
+    font-style: italic;
   }
 
   .footer-link {

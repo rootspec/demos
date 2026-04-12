@@ -38,7 +38,14 @@ export default function SpecWizard() {
     setStep('pillars');
   };
 
+  const [pillarError, setPillarError] = useState(false);
+
   const handleNextFromPillars = () => {
+    if (pillars.length < 3) {
+      setPillarError(true);
+      return;
+    }
+    setPillarError(false);
     setStep('interaction');
   };
 
@@ -58,23 +65,19 @@ export default function SpecWizard() {
 ## Mission
 ${MISSIONS[mission ?? 0]}
 
-## Pillars
+# L2: Truths
+## Design Principles
 ${pillarList || '  - (none selected)'}
 
-# L3: Core Interaction
+## Trade-offs
+  - Prioritise clarity over flexibility
+  - Favour explicit over implicit decisions
+
+# L3: Interactions
+## Core Flow
 GIVEN a user opens the app
 WHEN ${interaction || 'they perform a key action'}
-THEN the system responds appropriately
-
-# L5: User Story
-id: US-001
-title: Core feature
-acceptance_criteria:
-  - id: AC-001-1
-    given:
-      - visit: '/'
-    then:
-      - shouldExist: { selector: '[data-test=main]' }`;
+THEN the system responds appropriately`;
   };
 
   return (
@@ -132,19 +135,24 @@ acceptance_criteria:
 
       {step === 'pillars' && (
         <div className="wizard-pane">
-          <p className="wizard-prompt">Select up to 3 design pillars:</p>
+          <p className="wizard-prompt">Select 3–5 design pillars:</p>
           <div className="wizard-options">
             {PILLARS.map((p, i) => (
               <button
                 key={i}
                 data-test={`wizard-pillar-${i}`}
                 className={`wizard-option ${pillars.includes(i) ? 'wizard-option-selected' : ''}`}
-                onClick={() => togglePillar(i)}
+                onClick={() => { togglePillar(i); if (pillarError) setPillarError(false); }}
               >
                 {p}
               </button>
             ))}
           </div>
+          {pillarError && (
+            <p data-test="wizard-pillar-error" className="wizard-error">
+              Please select at least 3 pillars to continue.
+            </p>
+          )}
           <button
             data-test="wizard-next"
             className="wizard-btn wizard-btn-primary"

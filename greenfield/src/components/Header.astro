@@ -1,5 +1,6 @@
 ---
-const version = '7.2.0';
+import rootspec from '../../.rootspec.json';
+const version = rootspec.version;
 ---
 
 <header>
@@ -14,10 +15,10 @@ const version = '7.2.0';
         data-test="theme-toggle"
         id="theme-toggle"
         class="theme-toggle"
-        aria-label="Switch theme"
+        aria-label="Switch to dark mode"
       >
-        <span class="theme-icon light-icon">☀️</span>
-        <span class="theme-icon dark-icon">🌙</span>
+        <span class="theme-icon light-icon" aria-hidden="true">☀️</span>
+        <span class="theme-icon dark-icon" aria-hidden="true">🌙</span>
       </button>
     </div>
   </div>
@@ -36,9 +37,18 @@ const version = '7.2.0';
     try { localStorage.setItem('rootspec-theme', theme); } catch(e) {}
   }
 
+  function updateAriaLabel() {
+    if (btn) {
+      const nextTheme = getTheme() === 'dark' ? 'light' : 'dark';
+      btn.setAttribute('aria-label', `Switch to ${nextTheme} mode`);
+    }
+  }
+
   if (btn) {
+    updateAriaLabel();
     btn.addEventListener('click', () => {
       setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+      updateAriaLabel();
     });
   }
 </script>

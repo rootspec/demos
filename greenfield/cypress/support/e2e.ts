@@ -10,3 +10,5 @@ Cypress.Commands.overwrite('visit', (originalFn: any, url: any, options?: any) =
     cy.get('astro-island[ssr]', { timeout: 10000 }).should('not.exist');
   });
 });
+
+import "./screenshot-hook";
