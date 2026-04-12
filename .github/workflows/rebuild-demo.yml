@@ -125,7 +125,7 @@ jobs:
         run: git clone --depth 1 https://github.com/rootspec/rootspec.git /tmp/rootspec
 
       - name: Build orchestrator
-        run: cd /tmp/rootspec/orchestrator && npm ci && npm run build
+        run: cd /tmp/rootspec/orchestrator && npm install && npm run build
 
       - name: Install Claude Code
         run: curl -fsSL https://claude.ai/install.sh | bash
