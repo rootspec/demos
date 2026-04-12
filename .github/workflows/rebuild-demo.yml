@@ -23,6 +23,10 @@ on:
         description: "Comma-separated phases"
         required: false
         default: "init,spec,impl,validate,review"
+      rootspec_version:
+        description: "RootSpec version (default: auto-detect from installed skills)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -121,8 +125,27 @@ jobs:
 
       # ── Setup orchestrator ───────────────────────────────
 
+      - name: Detect RootSpec version
+        id: rs-version
+        working-directory: ${{ inputs.demo }}
+        run: |
+          # Use explicit input if provided, otherwise read from installed skills
+          if [ -n "${{ inputs.rootspec_version }}" ]; then
+            VERSION="${{ inputs.rootspec_version }}"
+          else
+            VERSION=$(grep -oP '(?<=\*\*Version:\*\* )\S+' .agents/skills/rs-shared/00.FRAMEWORK.md 2>/dev/null || echo "")
+          fi
+
+          if [ -z "$VERSION" ]; then
+            echo "ref=main" >> "$GITHUB_OUTPUT"
+            echo "No version detected — using main"
+          else
+            echo "ref=v${VERSION}" >> "$GITHUB_OUTPUT"
+            echo "Using RootSpec v${VERSION}"
+          fi
+
       - name: Clone RootSpec framework
-        run: git clone --depth 1 https://github.com/rootspec/rootspec.git /tmp/rootspec
+        run: git clone --depth 1 --branch ${{ steps.rs-version.outputs.ref }} https://github.com/rootspec/rootspec.git /tmp/rootspec
 
       - name: Build orchestrator
         run: cd /tmp/rootspec/orchestrator && npm install && npm run build
