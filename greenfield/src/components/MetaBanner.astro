@@ -1,0 +1,56 @@
+---
+const seedUrl = 'https://github.com/rootspec/demos/blob/main/greenfield/SEED.md';
+const specUrl = 'https://github.com/rootspec/demos/tree/main/greenfield/rootspec';
+---
+
+<div data-test="meta-banner" class="meta-banner">
+  <div class="container meta-inner">
+    <span class="meta-icon">⚡</span>
+    <p class="meta-text">
+      This site was generated from a
+      <a data-test="seed-link" href={seedUrl} target="_blank" rel="noopener noreferrer">sparse product description (SEED.md)</a>
+      using the RootSpec methodology. Browse the
+      <a data-test="spec-link" href={specUrl} target="_blank" rel="noopener noreferrer">full spec files</a>
+      to see how it works.
+    </p>
+  </div>
+</div>
+
+<style>
+  .meta-banner {
+    background: var(--color-meta-bg);
+    border-bottom: 1px solid var(--color-meta-border);
+    padding: 0.625rem 0;
+  }
+
+  .meta-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+  }
+
+  .meta-icon {
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    margin-top: 0.125rem;
+  }
+
+  .meta-text {
+    font-size: 0.875rem;
+    color: var(--color-meta-text);
+    line-height: 1.5;
+  }
+
+  .meta-text a {
+    color: var(--color-meta-text);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .meta-text {
+      font-size: 0.8125rem;
+    }
+  }
+</style>

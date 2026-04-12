@@ -1,0 +1,124 @@
+---
+const version = '7.2.0';
+---
+
+<header>
+  <div class="container header-inner">
+    <a href="/" class="logo">
+      <span class="logo-mark">RS</span>
+      <span class="logo-text">RootSpec</span>
+    </a>
+    <div class="header-right">
+      <span data-test="version-badge" class="version-badge">v{version}</span>
+      <button
+        data-test="theme-toggle"
+        id="theme-toggle"
+        class="theme-toggle"
+        aria-label="Switch theme"
+      >
+        <span class="theme-icon light-icon">☀️</span>
+        <span class="theme-icon dark-icon">🌙</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+
+  function getTheme(): string {
+    return root.getAttribute('data-theme') || 'light';
+  }
+
+  function setTheme(theme: string) {
+    root.setAttribute('data-theme', theme);
+    try { localStorage.setItem('rootspec-theme', theme); } catch(e) {}
+  }
+
+  if (btn) {
+    btn.addEventListener('click', () => {
+      setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+    });
+  }
+</script>
+
+<style>
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.75rem 0;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .logo-mark {
+    background: var(--color-accent);
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .version-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    padding: 0.25rem 0.625rem;
+    border-radius: 1rem;
+    font-family: monospace;
+  }
+
+  .theme-toggle {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    padding: 0.375rem 0.625rem;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .theme-icon {
+    display: none;
+  }
+
+  :root[data-theme="light"] .light-icon,
+  :root:not([data-theme]) .light-icon {
+    display: inline;
+  }
+
+  :root[data-theme="dark"] .dark-icon {
+    display: inline;
+  }
+</style>

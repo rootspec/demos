@@ -1,235 +1,58 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import '../styles/global.css';
+import MetaBanner from '../components/MetaBanner.astro';
+import Header from '../components/Header.astro';
+import HeroSection from '../components/HeroSection.astro';
+import ComparisonSection from '../components/ComparisonSection.astro';
+import HierarchySection from '../components/HierarchySection.astro';
+import WizardSection from '../components/WizardSection.astro';
 ---
 
-<Layout title="RootSpec - Specification Language for Product Development">
-  <!-- Meta Banner -->
-  <section class="section" style="background: var(--bg-secondary); padding: 1rem 0;">
-    <div class="container">
-      <div data-test="meta-banner" class="text-center">
-        <p>
-          This site was <strong>generated from</strong> a simple product description using
-          <strong>four commands</strong>: /rs-init, /rs-spec, /rs-impl, /rs-validate.
-          <a href="https://github.com/rootspec/rootspec" data-test="spec-link" class="button" style="margin: 0 0.5rem;">
-            View Spec
-          </a>
-          <a href="https://github.com/rootspec/demos/blob/main/greenfield/SEED.md" data-test="seed-link" class="button">
-            View SEED.md
-          </a>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Hero Section -->
-  <section class="section" data-test="hero-section" tabindex="0">
-    <div class="container">
-      <div class="text-center">
-        <h1 data-test="hero-tagline">RootSpec</h1>
-        <p data-test="hero-description" style="font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 2rem;">
-          A specification language that transforms product ideas into validated implementations.
-          Bridge the gap between vision and working code with structured, testable specifications.
-        </p>
-        <div data-test="version-display" style="background: var(--bg-secondary); display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem; margin-bottom: 2rem;">
-          <strong>Current Version: v6.2.0</strong>
-        </div>
-        <div>
-          <button data-test="theme-toggle" class="button">
-            🌙 Toggle Theme
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Problem Section -->
-  <section class="section" data-test="problem-section" style="background: var(--bg-secondary);">
-    <div class="container">
-      <div class="text-center mb-4">
-        <h2>Why Existing Approaches Fail</h2>
-        <p style="font-size: 1.125rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto;">
-          Traditional specification methods create more problems than they solve, leading to
-          <strong>spec drift</strong>, <strong>philosophy-implementation gap</strong>, and
-          <strong>unreliable AI output</strong> that developers can't trust.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- How It Works Section -->
-  <section class="section" data-test="how-it-works">
-    <div class="container">
-      <div class="text-center mb-4">
-        <h2>How RootSpec Works</h2>
-        <p style="color: var(--text-secondary); margin-bottom: 3rem;">Four simple commands to go from idea to validated implementation</p>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
-        <div data-test="workflow-step" style="background: var(--bg-secondary); padding: 2rem; border-radius: 0.5rem; text-center;">
-          <h3>1. rs-init</h3>
-          <p>Initialize your project structure and configure the specification framework</p>
-        </div>
-        <div data-test="workflow-step" style="background: var(--bg-secondary); padding: 2rem; border-radius: 0.5rem; text-center;">
-          <h3>2. rs-spec</h3>
-          <p>Transform your product idea into a structured, hierarchical specification</p>
-        </div>
-        <div data-test="workflow-step" style="background: var(--bg-secondary); padding: 2rem; border-radius: 0.5rem; text-center;">
-          <h3>3. rs-impl</h3>
-          <p>Generate working code from your specification with automated testing</p>
-        </div>
-        <div data-test="workflow-step" style="background: var(--bg-secondary); padding: 2rem; border-radius: 0.5rem; text-center;">
-          <h3>4. rs-validate</h3>
-          <p>Verify that your implementation matches the original specification</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Interactive Hierarchy Explorer -->
-  <section class="section" style="background: var(--bg-secondary);">
-    <div class="container">
-      <div class="text-center mb-4">
-        <h2>Explore the RootSpec Hierarchy</h2>
-        <p style="color: var(--text-secondary);">Click on levels to see how specifications flow from philosophy to implementation</p>
-      </div>
-
-      <div data-test="hierarchy-explorer" tabindex="0" style="max-width: 600px; margin: 0 auto;">
-        <div data-test="hierarchy-level-1" tabindex="0" style="background: var(--bg-primary); margin: 1rem 0; padding: 1rem; border-radius: 0.5rem; cursor: pointer; border: 2px solid var(--border-color);">
-          <h3>Level 1: Philosophy</h3>
-          <p style="color: var(--text-secondary);">Core principles and mission</p>
-        </div>
-
-        <div data-test="level-content" style="background: var(--accent-primary); color: white; padding: 1rem; border-radius: 0.5rem; margin: 0.5rem 0;">
-          <p><strong>Philosophy</strong> defines the fundamental beliefs and mission that guide all product decisions.</p>
-        </div>
-
-        <div data-test="hierarchy-level-3" tabindex="0" style="background: var(--bg-primary); margin: 1rem 0; padding: 1rem; border-radius: 0.5rem; cursor: pointer; border: 2px solid var(--border-color);">
-          <h3>Level 3: Interactions</h3>
-          <p style="color: var(--text-secondary);">User journeys and workflows</p>
-        </div>
-
-        <div data-test="reference-connection" style="width: 2px; height: 20px; background: var(--accent-primary); margin: 0 auto;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Spec Wizard -->
-  <section class="section">
-    <div class="container">
-      <div class="text-center mb-4">
-        <h2>Try the Spec Wizard</h2>
-        <p style="color: var(--text-secondary);">Experience how RootSpec transforms a simple idea into structured specifications</p>
-      </div>
-
-      <div style="max-width: 500px; margin: 0 auto;">
-        <button data-test="spec-wizard-start" class="button mb-2" style="width: 100%;">
-          Start Spec Wizard
-        </button>
-
-        <div style="margin: 2rem 0;">
-          <label for="productIdea" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Product Idea:</label>
-          <div
-            id="productIdea"
-            data-test="product-idea-input"
-            contenteditable="true"
-            style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 0.25rem; color: var(--text-primary); font-size: 1rem; width: 100%; min-height: 2.5rem; margin-bottom: 1rem;"
-            role="textbox"
-            aria-label="Product idea input"
-          ></div>
-
-          <button data-test="next-step" class="button mb-2" style="width: 100%;">
-            Next Step
-          </button>
-
-          <div data-test="mission-templates" style="background: var(--bg-secondary); padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
-            <h4>Mission Templates:</h4>
-            <p style="color: var(--text-secondary);">Choose from pre-defined mission templates</p>
-          </div>
-
-          <div data-test="design-pillars" style="background: var(--bg-secondary); padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
-            <h4>Design Pillars:</h4>
-            <p style="color: var(--text-secondary);">Select core design principles</p>
-          </div>
-
-          <button data-test="finish-wizard" class="button mb-2" style="width: 100%;">
-            Generate Spec
-          </button>
-
-          <div data-test="spec-output" style="background: var(--bg-secondary); padding: 1rem; border-radius: 0.5rem; font-family: 'Fira Code', monospace; font-size: 0.875rem;">
-            <strong>L1:</strong> Generated specification output will appear here
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Before/After Comparison -->
-  <section class="section" style="background: var(--bg-secondary);">
-    <div class="container">
-      <div class="text-center mb-4">
-        <h2>Development: Before vs. After RootSpec</h2>
-        <p style="color: var(--text-secondary);">See the difference RootSpec makes in project clarity and execution</p>
-      </div>
-
-      <div style="max-width: 700px; margin: 0 auto;">
-        <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem;">
-          <button data-test="comparison-toggle" class="button">
-            Toggle Comparison
-          </button>
-          <button data-test="without-spec" class="button">
-            Without Spec
-          </button>
-          <button data-test="with-rootspec" class="button">
-            With RootSpec
-          </button>
-        </div>
-
-        <div data-test="comparison-content" style="background: var(--bg-primary); padding: 2rem; border-radius: 0.5rem;">
-          <div data-test="vague-requirements" style="margin-bottom: 2rem;">
-            <h4>Without RootSpec:</h4>
-            <p style="color: var(--text-secondary);">
-              <strong>vague</strong> requirements lead to scope creep, missed deadlines, and frustrated stakeholders.
-              "Make it user-friendly" becomes endless revision cycles.
-            </p>
-          </div>
-
-          <div data-test="structured-hierarchy" style="background: var(--accent-primary); color: white; padding: 1rem; border-radius: 0.5rem;">
-            <h4>With RootSpec:</h4>
-            <p>
-              Every <strong>design pillar</strong> traces to measurable outcomes. Clear hierarchy ensures
-              decisions align with core philosophy and user needs.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- GitHub CTA -->
-  <section class="section">
-    <div class="container">
-      <div class="text-center">
-        <h2>Ready to Transform Your Development Process?</h2>
-        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-          Join developers who are building better products with structured specifications
-        </p>
-        <a href="https://github.com/rootspec/rootspec" data-test="github-cta" class="button" style="font-size: 1.125rem; padding: 1rem 2rem;">
-          Get Started on GitHub
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Attribution Footer -->
-  <footer class="section" style="background: var(--bg-secondary); padding: 2rem 0; border-top: 1px solid var(--border-color);">
-    <div class="container">
-      <div class="text-center">
-        <p data-test="attribution" style="color: var(--text-secondary);">
-          This site was <strong>built</strong> using RootSpec methodology in April 2026.
-          Generated from specification in under 30 minutes.
-        </p>
-      </div>
+<Layout title="RootSpec — Spec-first development methodology">
+  <MetaBanner />
+  <Header />
+  <main>
+    <HeroSection />
+    <ComparisonSection />
+    <HierarchySection />
+    <WizardSection />
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>RootSpec <span data-test="footer-version">v7.2.0</span> — Open-source spec methodology</span>
+      <a href="https://github.com/rootspec/rootspec" target="_blank" rel="noopener noreferrer" data-test="cta-github" class="footer-link">
+        GitHub →
+      </a>
     </div>
   </footer>
 </Layout>
+
+<style>
+  .site-footer {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: 1.5rem 0;
+  }
+
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .footer-link {
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 768px) {
+    .footer-inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
