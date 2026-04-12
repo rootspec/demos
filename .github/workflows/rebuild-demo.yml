@@ -176,43 +176,68 @@ jobs:
         run: |
           STATE=".rootspec-orchestrator/state.json"
           REVIEW="rootspec/review-status.json"
+          STATS="rootspec/stats.json"
 
-          # Overall status
+          # Overall status and cost from state.json
           STATUS="unknown"
           COST="?"
           if [ -f "$STATE" ]; then
-            STATUS=$(jq -r '.phaseResults | to_entries | map(select(.value.status != "success" and .value.status != "skipped")) | if length == 0 then "success" else "failed" end' "$STATE" 2>/dev/null || echo "unknown")
+            STATUS=$(jq -r '
+              .phaseResults | to_entries |
+              map(select(.value.status != "success" and .value.status != "skipped")) |
+              if length == 0 then "success" else "failed" end
+            ' "$STATE" 2>/dev/null || echo "unknown")
             COST=$(jq -r '.totalCostUsd // 0 | . * 100 | round / 100' "$STATE" 2>/dev/null || echo "?")
           fi
 
-          # Quality score
+          # Quality score from stats.json (orchestrator's run entry)
           SCORE="n/a"
-          BLOCKERS="?"
-          WARNINGS="?"
-          if [ -f "$REVIEW" ]; then
-            SCORE=$(jq -r '.score // "n/a"' "$REVIEW" 2>/dev/null || echo "n/a")
-            BLOCKERS=$(jq -r '.summary.blockers // 0' "$REVIEW" 2>/dev/null || echo "?")
-            WARNINGS=$(jq -r '.summary.warnings // 0' "$REVIEW" 2>/dev/null || echo "?")
+          if [ -f "$STATS" ]; then
+            SCORE=$(jq -r '.runs[-1].qualityScore // "n/a"' "$STATS" 2>/dev/null || echo "n/a")
+          fi
+          # Fallback: parse from review gate message in state.json
+          if [ "$SCORE" = "n/a" ] || [ "$SCORE" = "null" ]; then
+            if [ -f "$STATE" ]; then
+              SCORE=$(jq -r '
+                .gateResults.review.checks[]? |
+                select(.name == "Review completed") |
+                .message | capture("Score: (?<s>[0-9]+)") | .s
+              ' "$STATE" 2>/dev/null || echo "n/a")
+            fi
           fi
 
-          # Test pass rate
+          # Blockers and warnings from review-status.json
+          BLOCKERS="0"
+          WARNINGS="0"
+          if [ -f "$REVIEW" ]; then
+            BLOCKERS=$(jq -r '.summary.blockers // 0' "$REVIEW" 2>/dev/null || echo "0")
+            WARNINGS=$(jq -r '.summary.warnings // 0' "$REVIEW" 2>/dev/null || echo "0")
+          fi
+
+          # Test pass rate from tests-status.json (stories is an object)
           TESTS="?"
           if [ -f "rootspec/tests-status.json" ]; then
-            TOTAL=$(jq '[.stories[]] | length' rootspec/tests-status.json 2>/dev/null || echo 0)
-            PASSING=$(jq '[.stories[] | select(.status == "pass")] | length' rootspec/tests-status.json 2>/dev/null || echo 0)
+            TOTAL=$(jq '[.stories | to_entries[]] | length' rootspec/tests-status.json 2>/dev/null || echo 0)
+            PASSING=$(jq '[.stories | to_entries[] | select(.value.status == "pass")] | length' rootspec/tests-status.json 2>/dev/null || echo 0)
             TESTS="${PASSING}/${TOTAL}"
           fi
 
-          # Phase breakdown table
+          # Phase breakdown table from state.json
           TABLE=""
           if [ -f "$STATE" ]; then
             TABLE=$(jq -r '
               .phaseResults | to_entries[] |
-              "\(.key | ascii_upcase[0:1] + .key[1:]) | \(.value.status) | $\(.value.costUsd | . * 100 | round / 100) | \(.value.numTurns) | \(.value.durationMs / 1000 | round)s"
+              {
+                phase: .key,
+                status: .value.status,
+                cost: (.value.costUsd | . * 100 | round / 100),
+                turns: .value.numTurns,
+                time: (.value.durationMs / 1000 | round)
+              } |
+              "\(.phase | sub("^(?<a>.)"; (.a | ascii_upcase))) | \(.status) | $\(.cost) | \(.turns) | \(.time)s"
             ' "$STATE" 2>/dev/null || echo "")
           fi
 
-          # Write to outputs using heredoc
           {
             echo "status=${STATUS}"
             echo "cost=${COST}"
@@ -222,7 +247,6 @@ jobs:
             echo "tests=${TESTS}"
           } >> "$GITHUB_OUTPUT"
 
-          # Write table to file for multiline output
           echo "$TABLE" > /tmp/phase-table.txt
 
       # ── Artifacts (before commit cleanup) ─────────────────
@@ -252,6 +276,7 @@ jobs:
           # Clean up artifacts that shouldn't be committed
           rm -rf ${{ inputs.demo }}/cypress/screenshots ${{ inputs.demo }}/cypress/videos
           rm -rf ${{ inputs.demo }}/.rootspec-orchestrator
+          rm -f ${{ inputs.demo }}/rootspec/tests-status.json.bak
 
           git add -A
           git diff --cached --quiet && echo "No changes to commit" && exit 0
