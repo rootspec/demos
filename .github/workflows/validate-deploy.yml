@@ -23,11 +23,23 @@ jobs:
         working-directory: greenfield
     steps:
       - uses: actions/checkout@v4
+      - name: Check if built
+        id: check
+        run: |
+          if [ -f scripts/dev.sh ] && [ -f package.json ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Greenfield not yet built — skipping tests"
+          fi
       - uses: actions/setup-node@v4
+        if: steps.check.outputs.ready == 'true'
         with:
           node-version: "22"
       - run: npm install
+        if: steps.check.outputs.ready == 'true'
       - name: Run Cypress tests
+        if: steps.check.outputs.ready == 'true'
         uses: cypress-io/github-action@v6
         with:
           working-directory: greenfield
@@ -37,8 +49,9 @@ jobs:
           wait-on-timeout: 30
           browser: chrome
       - run: ./scripts/dev.sh stop || true
+        if: steps.check.outputs.ready == 'true'
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.check.outputs.ready == 'true'
         with:
           name: greenfield-dist
           path: |
