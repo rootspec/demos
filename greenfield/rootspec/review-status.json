@@ -1,0 +1,100 @@
+{
+  "lastReview": "2026-04-13T17:56:01Z",
+  "status": "pass",
+  "summary": {
+    "blockers": 0,
+    "warnings": 4,
+    "nitpicks": 2
+  },
+  "issues": [
+    {
+      "id": "REV-001",
+      "severity": "warning",
+      "category": "broken_links",
+      "story": "US-102",
+      "file": "src/components/MetaBanner.astro",
+      "line": 17,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-102--AC-102-2.png",
+      "description": "Meta banner 'View spec' link points to an external GitHub URL that cannot be HTTP-verified in this environment",
+      "expected": "Live URL: https://github.com/rootspec/demos/tree/main/greenfield/rootspec",
+      "actual": "href resolves correctly per SEED.md context (more specific path than the base URL given) but repo existence cannot be confirmed",
+      "suggestion": "Verify that the rootspec/demos GitHub repository exists and the greenfield/rootspec path is accessible before launch"
+    },
+    {
+      "id": "REV-002",
+      "severity": "warning",
+      "category": "broken_links",
+      "story": "US-105",
+      "file": "src/components/CTASection.astro",
+      "line": 15,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-105--AC-105-1.png",
+      "description": "CTA and Hero 'Get Started'/'View on GitHub' links point to https://github.com/rootspec/rootspec — cannot be HTTP-verified as live",
+      "expected": "Live URL per SEED.md: https://github.com/rootspec/rootspec",
+      "actual": "href matches SEED.md exactly but cannot be confirmed as an active repository",
+      "suggestion": "Verify the rootspec/rootspec GitHub repository exists and is publicly accessible before launch"
+    },
+    {
+      "id": "REV-003",
+      "severity": "warning",
+      "category": "accessibility",
+      "story": "US-303",
+      "file": "src/components/ComparisonSection.astro",
+      "line": 28,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-303--AC-303-1.png",
+      "description": "Comparison toggle buttons lack aria-pressed state; screen reader users cannot determine which panel is currently active",
+      "expected": "Toggle buttons should convey active/inactive state via aria-pressed='true'/'false'",
+      "actual": "Buttons use visual background color only to indicate active state — no aria-pressed attribute set or updated via JavaScript",
+      "suggestion": "Add aria-pressed to each button and update it in the onclick handlers alongside the panel display toggling"
+    },
+    {
+      "id": "REV-004",
+      "severity": "warning",
+      "category": "accessibility",
+      "story": "US-103",
+      "file": "src/components/ProblemSection.astro",
+      "line": 43,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-103--AC-103-1.png",
+      "description": "Emoji icons in problem cards (⚠️, 🤖, 📄, 🔄) lack aria-hidden='true', so screen readers announce them with verbose Unicode descriptions alongside the card title",
+      "expected": "Decorative emoji should be hidden from assistive technology since the meaning is conveyed by the adjacent title text",
+      "actual": "Emoji rendered as live text nodes inside a plain <div> with no aria-hidden",
+      "suggestion": "Wrap each icon in <span aria-hidden='true'>⚠️</span> to suppress screen reader announcement"
+    },
+    {
+      "id": "REV-005",
+      "severity": "nitpick",
+      "category": "impl_error",
+      "story": "US-102",
+      "file": "src/components/MetaBanner.astro",
+      "line": 14,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-102--AC-102-1.png",
+      "description": "Meta banner copy is more terse than SEED.md described. SEED.md called for messaging about '~100-line product description', 'no manual code, no design mockups', and 'four commands'",
+      "expected": "Banner conveying the full context per SEED.md: site generated from a sparse seed with no iteration or manual code, via four commands",
+      "actual": "Banner reads: 'This site was built by the RootSpec pipeline — spec-driven, AI-implemented. View spec · View SEED.md'",
+      "suggestion": "Optionally expand banner copy to include '~100-line seed, no manual code, four commands' to fully match SEED.md intent; current copy is functional if minimal"
+    },
+    {
+      "id": "REV-006",
+      "severity": "nitpick",
+      "category": "visual_quality",
+      "story": "US-302",
+      "file": "src/components/SpecWizard.tsx",
+      "line": 207,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-302--AC-302-1.png",
+      "description": "Both step 1 (mission) and step 3 (key interaction) inputs share data-test='wizard-product-input', making future test targeting ambiguous",
+      "expected": "Each distinct input should have a unique data-test identifier",
+      "actual": "Step 1 mission input and step 3 interaction input both use data-test='wizard-product-input'",
+      "suggestion": "Rename step 3 input to data-test='wizard-interaction-input'"
+    }
+  ],
+  "qualityScore": {
+    "score": 88,
+    "breakdown": {
+      "content": 30,
+      "visual": 25,
+      "alignment": 23,
+      "accessibility": 5,
+      "polish": 5
+    },
+    "notes": "Content: full marks — version reads from .rootspec.json, all four skills named, problem section has real copy, comparison has real content (no lorem ipsum), links match SEED.md. Visual: full marks — all icons render as actual emoji/symbols (no literal text), all sections visible and readable, SVG methodology diagram present and rendering. Alignment: -2 for terse meta-banner copy vs SEED.md description of what the banner should say. Accessibility: -5 for missing aria-pressed on comparison toggles and -5 for unannotated decorative emoji in problem cards (total -5, floored at 5). Polish: full marks — no template syntax visible, no TODO/placeholder artifacts in rendered output."
+  }
+}

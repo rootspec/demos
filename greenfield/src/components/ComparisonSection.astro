@@ -21,53 +21,68 @@ const withSpec = [
       <h2 style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; margin: 0 0 0.75rem; color: var(--color-text);">
         With vs. Without RootSpec
       </h2>
-      <p style="color: var(--color-text-muted); font-size: 1.1rem; max-width: 540px; margin: 0 auto;">
+      <p style="color: var(--color-text-muted); font-size: 1.1rem; max-width: 540px; margin: 0 auto 1.5rem;">
         The difference between building on shifting sand and building on a foundation.
       </p>
+      <div style="display: inline-flex; border: 1px solid var(--color-border); border-radius: 0.5rem; overflow: hidden;">
+        <button
+          id="comparison-toggle-without"
+          onclick="document.getElementById('comparison-panel-without').style.display='block';document.getElementById('comparison-panel-with').style.display='none';this.style.background='var(--color-accent)';this.style.color='white';document.getElementById('comparison-toggle-with').style.background='transparent';document.getElementById('comparison-toggle-with').style.color='var(--color-text)';"
+          style="padding: 0.4rem 1.1rem; font-size: 0.875rem; font-family: inherit; cursor: pointer; border: none; background: var(--color-accent); color: white;"
+        >
+          Without RootSpec
+        </button>
+        <button
+          id="comparison-toggle-with"
+          onclick="document.getElementById('comparison-panel-with').style.display='block';document.getElementById('comparison-panel-without').style.display='none';this.style.background='var(--color-accent)';this.style.color='white';document.getElementById('comparison-toggle-without').style.background='transparent';document.getElementById('comparison-toggle-without').style.color='var(--color-text)';"
+          style="padding: 0.4rem 1.1rem; font-size: 0.875rem; font-family: inherit; cursor: pointer; border: none; background: transparent; color: var(--color-text);"
+        >
+          With RootSpec
+        </button>
+      </div>
     </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-      <div
-        data-test="comparison-without"
-        style="
-          background: rgba(239,68,68,0.05);
-          border: 1px solid rgba(239,68,68,0.25);
-          border-radius: 0.75rem;
-          padding: 1.75rem;
-        "
-      >
-        <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 1.25rem; color: #f87171; display: flex; align-items: center; gap: 0.5rem;">
-          <span>✗</span> Without RootSpec
-        </h3>
-        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-          {withoutSpec.map(item => (
-            <li style="display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.45;">
-              <span style="color: #f87171; flex-shrink: 0; margin-top: 0.1rem;">✗</span>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div
-        data-test="comparison-with"
-        style="
-          background: rgba(34,197,94,0.05);
-          border: 1px solid rgba(34,197,94,0.25);
-          border-radius: 0.75rem;
-          padding: 1.75rem;
-        "
-      >
-        <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 1.25rem; color: #4ade80; display: flex; align-items: center; gap: 0.5rem;">
-          <span>✓</span> With RootSpec
-        </h3>
-        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-          {withSpec.map(item => (
-            <li style="display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.45;">
-              <span style="color: #4ade80; flex-shrink: 0; margin-top: 0.1rem;">✓</span>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div id="comparison-panel-without"
+      data-test="comparison-without"
+      style="
+        background: rgba(239,68,68,0.05);
+        border: 1px solid rgba(239,68,68,0.25);
+        border-radius: 0.75rem;
+        padding: 1.75rem;
+      "
+    >
+      <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 1.25rem; color: #f87171; display: flex; align-items: center; gap: 0.5rem;">
+        <span aria-hidden="true">✗</span> Without RootSpec
+      </h3>
+      <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+        {withoutSpec.map(item => (
+          <li style="display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.45;">
+            <span aria-hidden="true" style="color: #f87171; flex-shrink: 0; margin-top: 0.1rem;">✗</span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div id="comparison-panel-with"
+      data-test="comparison-with"
+      style="
+        display: none;
+        background: rgba(34,197,94,0.05);
+        border: 1px solid rgba(34,197,94,0.25);
+        border-radius: 0.75rem;
+        padding: 1.75rem;
+      "
+    >
+      <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 1.25rem; color: #4ade80; display: flex; align-items: center; gap: 0.5rem;">
+        <span aria-hidden="true">✓</span> With RootSpec
+      </h3>
+      <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+        {withSpec.map(item => (
+          <li style="display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.45;">
+            <span aria-hidden="true" style="color: #4ade80; flex-shrink: 0; margin-top: 0.1rem;">✓</span>
+            {item}
+          </li>
+        ))}
+      </ul>
     </div>
   </div>
 </section>

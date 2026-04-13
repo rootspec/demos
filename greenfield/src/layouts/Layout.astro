@@ -15,11 +15,13 @@ const { title = 'RootSpec — Spec-Driven AI Development' } = Astro.props;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script is:inline>
-      // Apply saved theme immediately to avoid flash
+      // Apply saved theme immediately to avoid flash; fall back to system preference
       (function() {
         try {
           var saved = localStorage.getItem('theme');
-          if (saved === 'dark') {
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved === 'dark' || (!saved && prefersDark);
+          if (isDark) {
             document.documentElement.classList.remove('light');
             document.documentElement.classList.add('dark');
           } else {

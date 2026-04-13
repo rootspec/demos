@@ -2,50 +2,48 @@ import React, { useState } from 'react';
 
 const TOTAL_STEPS = 3;
 
-const stepQuestions = [
-  {
-    label: 'What product are you building?',
-    placeholder: 'e.g. A tool for tracking reading habits',
-    field: 'productIdea',
-  },
-  {
-    label: 'Who is it for?',
-    placeholder: 'e.g. Book lovers who want to build a reading habit',
-    field: 'audience',
-  },
-  {
-    label: 'What is the core problem it solves?',
-    placeholder: 'e.g. People forget what they\'ve read and lose momentum',
-    field: 'problem',
-  },
+const MISSION_TEMPLATES = [
+  'Help developers ship faster without losing quality',
+  'Empower non-technical founders to define product requirements clearly',
+  'Give AI coding agents a living contract to eliminate spec drift',
+  'Enable teams to align on intent before writing a single line of code',
+];
+
+const DESIGN_PILLARS = [
+  'Clarity',
+  'Speed',
+  'Trust',
+  'Delight',
+  'Simplicity',
+  'Power',
+  'Accessibility',
+  'Transparency',
 ];
 
 function generateSkeleton(answers: Record<string, string>) {
-  const product = answers.productIdea || 'Your Product';
-  const audience = answers.audience || 'Target users';
-  const problem = answers.problem || 'Core problem';
-  return `# ${product}
+  const mission = answers.mission || 'Define your mission';
+  const pillars = answers.pillars || 'Clarity, Speed, Trust';
+  const interaction = answers.interaction || 'Core interaction';
+  return `# RootSpec Skeleton
 
 ## L1 — Philosophy
-> ${product} exists to help ${audience} overcome: ${problem}.
+> Mission: ${mission}
 
 ## L2 — Truths
-- Users must never lose their data
-- Core actions must complete in under 2 seconds
-- The product must work offline (progressive enhancement)
+${pillars.split(',').map((p: string) => `- ${p.trim()} is a first-class design value`).join('\n')}
 
-## L3 — Interactions
-- User discovers the product and understands value immediately
-- User onboards without friction (no required sign-up for core value)
+## L3 — Key Interaction
+- ${interaction}
 - User completes primary workflow in under 60 seconds
+- User onboards without friction
 
 ## L4 — Systems
 - Content System: manages user-generated data
 - Auth System: optional account creation
-- Notification System: gentle reminders and streaks
+- Feedback System: captures user intent signals
 
 ## L5 — User Stories
-- US-001: ${audience} can complete core action without signing up
+- US-001: User can complete core action without signing up
 - US-002: User data persists across sessions
 - US-003: User can export their data at any time`;
 }
@@ -53,15 +51,20 @@ function generateSkeleton(answers: Record<string, string>) {
 export default function SpecWizard() {
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [selectedPillars, setSelectedPillars] = useState<string[]>([]);
   const [output, setOutput] = useState<string | null>(null);
 
-  const currentQ = stepQuestions[step - 1];
-
   const handleNext = () => {
+    if (step === 2) {
+      setAnswers(prev => ({ ...prev, pillars: selectedPillars.join(', ') }));
+    }
     if (step < TOTAL_STEPS) {
       setStep(s => s + 1);
     } else {
-      setOutput(generateSkeleton(answers));
+      const finalAnswers = step === 2
+        ? { ...answers, pillars: selectedPillars.join(', ') }
+        : answers;
+      setOutput(generateSkeleton(finalAnswers));
     }
   };
 
@@ -69,8 +72,31 @@ export default function SpecWizard() {
     if (step > 1) setStep(s => s - 1);
   };
 
-  const handleChange = (value: string) => {
-    setAnswers(prev => ({ ...prev, [currentQ.field]: value }));
+  const togglePillar = (pillar: string) => {
+    setSelectedPillars(prev =>
+      prev.includes(pillar) ? prev.filter(p => p !== pillar) : prev.length < 5 ? [...prev, pillar] : prev
+    );
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '0.75rem 1rem',
+    background: 'var(--color-bg)',
+    border: '1px solid var(--color-border)',
+    borderRadius: '0.5rem',
+    color: 'var(--color-text)',
+    fontSize: '0.95rem',
+    fontFamily: 'inherit',
+    outline: 'none',
+    boxSizing: 'border-box',
+  };
+
+  const labelStyle: React.CSSProperties = {
+    display: 'block',
+    fontWeight: 600,
+    fontSize: '1rem',
+    color: 'var(--color-text)',
+    marginBottom: '0.75rem',
   };
 
   return (
@@ -149,39 +175,93 @@ export default function SpecWizard() {
                 </div>
               </div>
 
-              {/* Step content */}
-              <div data-test={`wizard-step-${step}`}>
-                <label
-                  style={{
-                    display: 'block',
-                    fontWeight: 600,
-                    fontSize: '1rem',
-                    color: 'var(--color-text)',
-                    marginBottom: '0.75rem',
-                  }}
-                >
-                  {currentQ.label}
-                </label>
-                <input
-                  data-test="wizard-product-input"
-                  type="text"
-                  placeholder={currentQ.placeholder}
-                  value={answers[currentQ.field] || ''}
-                  onChange={e => handleChange(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem',
-                    background: 'var(--color-bg)',
-                    border: '1px solid var(--color-border)',
-                    borderRadius: '0.5rem',
-                    color: 'var(--color-text)',
-                    fontSize: '0.95rem',
-                    fontFamily: 'inherit',
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                  }}
-                />
-              </div>
+              {/* Step 1: Mission selection */}
+              {step === 1 && (
+                <div data-test="wizard-step-1">
+                  <label style={labelStyle}>What's the mission?</label>
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', margin: '0 0 0.75rem' }}>
+                    Choose a template or write your own.
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                    {MISSION_TEMPLATES.map(template => (
+                      <button
+                        key={template}
+                        onClick={() => setAnswers(prev => ({ ...prev, mission: template }))}
+                        style={{
+                          textAlign: 'left',
+                          padding: '0.6rem 0.9rem',
+                          background: answers.mission === template ? 'rgba(99,102,241,0.15)' : 'var(--color-bg)',
+                          border: `1px solid ${answers.mission === template ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                          borderRadius: '0.5rem',
+                          color: 'var(--color-text)',
+                          cursor: 'pointer',
+                          fontFamily: 'inherit',
+                          fontSize: '0.85rem',
+                        }}
+                      >
+                        {template}
+                      </button>
+                    ))}
+                  </div>
+                  <input
+                    data-test="wizard-product-input"
+                    type="text"
+                    placeholder="Or describe your own mission…"
+                    value={answers.mission || ''}
+                    onChange={e => setAnswers(prev => ({ ...prev, mission: e.target.value }))}
+                    style={inputStyle}
+                  />
+                </div>
+              )}
+
+              {/* Step 2: Design pillar picker */}
+              {step === 2 && (
+                <div data-test="wizard-step-2">
+                  <label style={labelStyle}>What should users feel? Pick 3–5 design pillars.</label>
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', margin: '0 0 0.75rem' }}>
+                    Selected: {selectedPillars.length}/5
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    {DESIGN_PILLARS.map(pillar => (
+                      <button
+                        key={pillar}
+                        onClick={() => togglePillar(pillar)}
+                        style={{
+                          padding: '0.4rem 0.9rem',
+                          background: selectedPillars.includes(pillar) ? 'var(--color-accent)' : 'var(--color-bg)',
+                          border: `1px solid ${selectedPillars.includes(pillar) ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                          borderRadius: '9999px',
+                          color: selectedPillars.includes(pillar) ? 'white' : 'var(--color-text)',
+                          cursor: 'pointer',
+                          fontFamily: 'inherit',
+                          fontSize: '0.85rem',
+                          fontWeight: selectedPillars.includes(pillar) ? 600 : 400,
+                        }}
+                      >
+                        {pillar}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: Key interaction description */}
+              {step === 3 && (
+                <div data-test="wizard-step-3">
+                  <label style={labelStyle}>Describe one key interaction.</label>
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', margin: '0 0 0.75rem' }}>
+                    e.g. "User pastes a GitHub URL and instantly sees a spec skeleton"
+                  </p>
+                  <input
+                    data-test="wizard-product-input"
+                    type="text"
+                    placeholder="e.g. User pastes a GitHub URL and instantly sees a spec skeleton"
+                    value={answers.interaction || ''}
+                    onChange={e => setAnswers(prev => ({ ...prev, interaction: e.target.value }))}
+                    style={inputStyle}
+                  />
+                </div>
+              )}
 
               {/* Navigation */}
               <div
@@ -243,7 +323,7 @@ export default function SpecWizard() {
                   Your Skeleton Spec
                 </h3>
                 <button
-                  onClick={() => { setOutput(null); setStep(1); setAnswers({}); }}
+                  onClick={() => { setOutput(null); setStep(1); setAnswers({}); setSelectedPillars([]); }}
                   style={{
                     padding: '0.4rem 0.9rem',
                     background: 'var(--color-bg)',
