@@ -1,134 +1,38 @@
 ---
-import rootspec from '../../.rootspec.json';
-const version = rootspec.version;
 ---
-
-<header>
-  <div class="container header-inner">
-    <a href="/" class="logo">
-      <span class="logo-mark">RS</span>
-      <span class="logo-text">RootSpec</span>
-    </a>
-    <div class="header-right">
-      <span data-test="version-badge" class="version-badge">v{version}</span>
-      <button
-        data-test="theme-toggle"
-        id="theme-toggle"
-        class="theme-toggle"
-        aria-label="Switch to dark mode"
-      >
-        <span class="theme-icon light-icon" aria-hidden="true">☀️</span>
-        <span class="theme-icon dark-icon" aria-hidden="true">🌙</span>
-      </button>
+<header style="position: sticky; top: 0; z-index: 50; background-color: var(--color-bg); border-bottom: 1px solid var(--color-border); padding: 0.75rem 1.5rem;">
+  <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
+    <div style="font-weight: 700; font-size: 1.125rem; color: var(--color-accent-bright);">
+      RootSpec
     </div>
+    <button
+      data-test="theme-toggle"
+      tabindex="0"
+      aria-label="Toggle theme"
+      onclick="
+        var html = document.documentElement;
+        if (html.classList.contains('dark')) {
+          html.classList.remove('dark');
+          html.classList.add('light');
+          try { localStorage.setItem('theme', 'light'); } catch(e) {}
+        } else {
+          html.classList.remove('light');
+          html.classList.add('dark');
+          try { localStorage.setItem('theme', 'dark'); } catch(e) {}
+        }
+      "
+      style="
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        color: var(--color-text);
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-family: inherit;
+      "
+    >
+      Toggle Theme
+    </button>
   </div>
 </header>
-
-<script>
-  const btn = document.getElementById('theme-toggle');
-  const root = document.documentElement;
-
-  function getTheme(): string {
-    return root.getAttribute('data-theme') || 'light';
-  }
-
-  function setTheme(theme: string) {
-    root.setAttribute('data-theme', theme);
-    try { localStorage.setItem('rootspec-theme', theme); } catch(e) {}
-  }
-
-  function updateAriaLabel() {
-    if (btn) {
-      const nextTheme = getTheme() === 'dark' ? 'light' : 'dark';
-      btn.setAttribute('aria-label', `Switch to ${nextTheme} mode`);
-    }
-  }
-
-  if (btn) {
-    updateAriaLabel();
-    btn.addEventListener('click', () => {
-      setTheme(getTheme() === 'dark' ? 'light' : 'dark');
-      updateAriaLabel();
-    });
-  }
-</script>
-
-<style>
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: var(--color-bg);
-    border-bottom: 1px solid var(--color-border);
-    padding: 0.75rem 0;
-  }
-
-  .header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--color-text-primary);
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 1.125rem;
-  }
-
-  .logo-mark {
-    background: var(--color-accent);
-    color: white;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.375rem;
-    font-size: 0.75rem;
-    font-weight: 800;
-  }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .version-badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    color: var(--color-text-secondary);
-    padding: 0.25rem 0.625rem;
-    border-radius: 1rem;
-    font-family: monospace;
-  }
-
-  .theme-toggle {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 0.375rem;
-    padding: 0.375rem 0.625rem;
-    cursor: pointer;
-    font-size: 1rem;
-    line-height: 1;
-  }
-
-  .theme-icon {
-    display: none;
-  }
-
-  :root[data-theme="light"] .light-icon,
-  :root:not([data-theme]) .light-icon {
-    display: inline;
-  }
-
-  :root[data-theme="dark"] .dark-icon {
-    display: inline;
-  }
-</style>

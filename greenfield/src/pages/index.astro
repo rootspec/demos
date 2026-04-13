@@ -1,19 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import MetaBanner from '../components/MetaBanner.astro';
 import Header from '../components/Header.astro';
+import MetaBanner from '../components/MetaBanner.astro';
 import HeroSection from '../components/HeroSection.astro';
 import ProblemSection from '../components/ProblemSection.astro';
 import WorkflowSection from '../components/WorkflowSection.astro';
-import HierarchySection from '../components/HierarchySection.astro';
 import ComparisonSection from '../components/ComparisonSection.astro';
-import WizardSection from '../components/WizardSection.astro';
 import CTASection from '../components/CTASection.astro';
-import rootspec from '../../.rootspec.json';
-const version = rootspec.version;
+import HierarchySection from '../components/HierarchySection.astro';
+import SpecWizard from '../components/SpecWizard';
 ---
-
-<Layout title="RootSpec — Spec-first development methodology">
+<Layout>
   <MetaBanner />
   <Header />
   <main>
@@ -21,51 +18,17 @@ const version = rootspec.version;
     <ProblemSection />
     <WorkflowSection />
     <HierarchySection />
+    <SpecWizard client:only="react" />
     <ComparisonSection />
-    <WizardSection />
     <CTASection />
   </main>
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <span>RootSpec <span data-test="footer-version">v{version}</span> — Open-source spec methodology</span>
-      <span data-test="builder-attribution" class="builder-attribution">Built by Claude on 2026-04-12</span>
-      <a href="https://github.com/rootspec/demos" target="_blank" rel="noopener noreferrer" data-test="cta-github" class="footer-link">
-        GitHub →
-      </a>
-    </div>
+  <footer style="
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+  ">
+    <p style="margin: 0;">RootSpec v7.2.1 &mdash; Spec-Driven AI Development &mdash; Built by Claude &mdash; 2026-04-13</p>
   </footer>
 </Layout>
-
-<style>
-  .site-footer {
-    background: var(--color-surface);
-    border-top: 1px solid var(--color-border);
-    padding: 1.5rem 0;
-  }
-
-  .footer-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 0.875rem;
-    color: var(--color-text-secondary);
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .builder-attribution {
-    font-style: italic;
-  }
-
-  .footer-link {
-    font-weight: 600;
-    color: var(--color-accent);
-  }
-
-  @media (max-width: 768px) {
-    .footer-inner {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
-</style>

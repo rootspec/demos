@@ -1,291 +1,88 @@
 ---
+const withoutSpec = [
+  'Specs live in Notion / Google Docs',
+  'AI agents guess at requirements',
+  'Features drift from original intent',
+  'Rework discovered late in development',
+  'Every team member has a different mental model',
+];
+
+const withSpec = [
+  'Specs live in git alongside code',
+  'AI agents implement from verified stories',
+  'Every feature maps to a living spec',
+  'Acceptance criteria catch drift immediately',
+  'One truth, accessible to everyone',
+];
 ---
-
-<section id="comparison" class="comparison-section">
-  <div class="container">
-    <div class="section-label">Before vs After</div>
-    <h2>The same feature, two ways</h2>
-    <p class="section-desc">See how RootSpec transforms vague requirements into implementation-ready specs.</p>
-
-    <div class="comparison-grid">
-      <!-- Toggle for mobile -->
-      <div class="comparison-toggle-wrap">
-        <button data-test="comparison-toggle" id="comparison-toggle" class="comparison-toggle" aria-label="Toggle comparison view">
-          <span class="toggle-label active" id="toggle-before">Without RootSpec</span>
-          <span class="toggle-divider">|</span>
-          <span class="toggle-label" id="toggle-after">With RootSpec</span>
+<section data-test="comparison-section" id="comparison" style="padding: 5rem 1.5rem; background-color: var(--color-surface);">
+  <div style="max-width: 1000px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <h2 style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; margin: 0 0 0.75rem; color: var(--color-text);">
+        With vs. Without RootSpec
+      </h2>
+      <p style="color: var(--color-text-muted); font-size: 1.1rem; max-width: 540px; margin: 0 auto 1.5rem;">
+        The difference between building on shifting sand and building on a foundation.
+      </p>
+      <div style="display: inline-flex; border: 1px solid var(--color-border); border-radius: 0.5rem; overflow: hidden;">
+        <button
+          id="comparison-toggle-without"
+          onclick="document.getElementById('comparison-panel-without').style.display='block';document.getElementById('comparison-panel-with').style.display='none';this.style.background='var(--color-accent)';this.style.color='white';document.getElementById('comparison-toggle-with').style.background='transparent';document.getElementById('comparison-toggle-with').style.color='var(--color-text)';"
+          style="padding: 0.4rem 1.1rem; font-size: 0.875rem; font-family: inherit; cursor: pointer; border: none; background: var(--color-accent); color: white;"
+        >
+          Without RootSpec
+        </button>
+        <button
+          id="comparison-toggle-with"
+          onclick="document.getElementById('comparison-panel-with').style.display='block';document.getElementById('comparison-panel-without').style.display='none';this.style.background='var(--color-accent)';this.style.color='white';document.getElementById('comparison-toggle-without').style.background='transparent';document.getElementById('comparison-toggle-without').style.color='var(--color-text)';"
+          style="padding: 0.4rem 1.1rem; font-size: 0.875rem; font-family: inherit; cursor: pointer; border: none; background: transparent; color: var(--color-text);"
+        >
+          With RootSpec
         </button>
       </div>
-
-      <div class="panels-wrapper" id="panels-wrapper">
-        <div data-test="before-panel" id="before-panel" class="panel panel-before">
-          <div class="panel-header panel-header-before">
-            <span class="panel-icon">✗</span>
-            <span class="panel-title">Without RootSpec</span>
-          </div>
-          <div class="panel-body">
-            <p class="panel-label muted">Ticket #247 — User Story</p>
-            <blockquote class="bad-quote">
-              "As a user, I want to be able to filter my tasks so I can find them easier."
-            </blockquote>
-            <div class="problems">
-              <p class="problems-title">Problems:</p>
-              <ul>
-                <li>What filters exist? Status? Priority? Assignee?</li>
-                <li>Does filtering persist across sessions?</li>
-                <li>What happens with zero results?</li>
-                <li>Is filtering real-time or on-submit?</li>
-                <li>Where does the filter UI live on mobile?</li>
-              </ul>
-            </div>
-            <p class="outcome bad">
-              Dev interprets it one way. Designer another. QA writes tests for a third. Sprint ends with rework.
-            </p>
-          </div>
-        </div>
-
-        <div data-test="after-panel" id="after-panel" class="panel panel-after">
-          <div class="panel-header panel-header-after">
-            <span class="panel-icon">✓</span>
-            <span class="panel-title">With RootSpec</span>
-          </div>
-          <div class="panel-body">
-            <p class="panel-label">US-247 · Filter Tasks by Status</p>
-            <pre class="spec-block"><code>acceptance_criteria:
-  - id: AC-247-1
-    title: Filter applies in real-time
-    given:
-      - visit: '/tasks'
-    when:
-      - click: &#123;selector: '[data-test=filter-status]'&#125;
-      - click: &#123;selector: '[data-test=filter-in-progress]'&#125;
-    then:
-      - shouldExist: &#123;selector: '[data-test=task-list]'&#125;
-      - shouldContain:
-          selector: '[data-test=task-count]'
-          text: '3 tasks'</code></pre>
-            <p class="outcome good">
-              Dev, designer, and QA all read the same thing. Filter is real-time, shows count, no ambiguity.
-            </p>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div id="comparison-panel-without"
+      data-test="comparison-without"
+      style="
+        background: rgba(239,68,68,0.05);
+        border: 1px solid rgba(239,68,68,0.25);
+        border-radius: 0.75rem;
+        padding: 1.75rem;
+      "
+    >
+      <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 1.25rem; color: #f87171; display: flex; align-items: center; gap: 0.5rem;">
+        <span aria-hidden="true">✗</span> Without RootSpec
+      </h3>
+      <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+        {withoutSpec.map(item => (
+          <li style="display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.45;">
+            <span aria-hidden="true" style="color: #f87171; flex-shrink: 0; margin-top: 0.1rem;">✗</span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div id="comparison-panel-with"
+      data-test="comparison-with"
+      style="
+        display: none;
+        background: rgba(34,197,94,0.05);
+        border: 1px solid rgba(34,197,94,0.25);
+        border-radius: 0.75rem;
+        padding: 1.75rem;
+      "
+    >
+      <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 1.25rem; color: #4ade80; display: flex; align-items: center; gap: 0.5rem;">
+        <span aria-hidden="true">✓</span> With RootSpec
+      </h3>
+      <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+        {withSpec.map(item => (
+          <li style="display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.45;">
+            <span aria-hidden="true" style="color: #4ade80; flex-shrink: 0; margin-top: 0.1rem;">✓</span>
+            {item}
+          </li>
+        ))}
+      </ul>
     </div>
   </div>
 </section>
-
-<script>
-  const toggleBtn = document.getElementById('comparison-toggle');
-  const beforePanel = document.getElementById('before-panel');
-  const afterPanel = document.getElementById('after-panel');
-  const toggleBefore = document.getElementById('toggle-before');
-  const toggleAfter = document.getElementById('toggle-after');
-
-  let showingAfter = false;
-
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
-      showingAfter = !showingAfter;
-      if (beforePanel && afterPanel && toggleBefore && toggleAfter) {
-        if (showingAfter) {
-          beforePanel.classList.add('panel-hidden');
-          afterPanel.classList.remove('panel-hidden');
-          toggleBefore.classList.remove('active');
-          toggleAfter.classList.add('active');
-        } else {
-          beforePanel.classList.remove('panel-hidden');
-          afterPanel.classList.add('panel-hidden');
-          toggleBefore.classList.add('active');
-          toggleAfter.classList.remove('active');
-        }
-      }
-    });
-  }
-</script>
-
-<style>
-  .comparison-section {
-    background: var(--color-surface);
-  }
-
-  .comparison-section h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-  }
-
-  .section-desc {
-    color: var(--color-text-secondary);
-    font-size: 1.0625rem;
-    margin-bottom: 3rem;
-    max-width: 540px;
-  }
-
-  .comparison-toggle-wrap {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-  }
-
-  .comparison-toggle {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: 2rem;
-    padding: 0.5rem 1.25rem;
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-  }
-
-  .toggle-label.active {
-    color: var(--color-accent);
-    font-weight: 700;
-  }
-
-  .toggle-divider {
-    color: var(--color-border);
-  }
-
-  .panels-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-
-  .panel {
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: 0.75rem;
-    overflow: hidden;
-  }
-
-  .panel-header {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-    padding: 0.875rem 1.25rem;
-    font-weight: 600;
-    font-size: 0.9375rem;
-  }
-
-  .panel-header-before {
-    background: #fff1f2;
-    color: #be123c;
-  }
-
-  [data-theme="dark"] .panel-header-before {
-    background: #3f0a15;
-    color: #fda4af;
-  }
-
-  .panel-header-after {
-    background: #f0fdf4;
-    color: #15803d;
-  }
-
-  [data-theme="dark"] .panel-header-after {
-    background: #052e16;
-    color: #86efac;
-  }
-
-  .panel-body {
-    padding: 1.25rem;
-  }
-
-  .panel-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-text-secondary);
-    margin-bottom: 0.75rem;
-  }
-
-  .panel-label.muted {
-    color: #ef4444;
-  }
-
-  .bad-quote {
-    background: var(--color-surface);
-    border-left: 3px solid #f87171;
-    padding: 0.75rem 1rem;
-    border-radius: 0 0.375rem 0.375rem 0;
-    font-style: italic;
-    color: var(--color-text-primary);
-    margin-bottom: 1rem;
-    font-size: 0.9375rem;
-  }
-
-  .problems {
-    margin-bottom: 1rem;
-  }
-
-  .problems-title {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: #ef4444;
-    margin-bottom: 0.375rem;
-  }
-
-  .problems ul {
-    padding-left: 1.25rem;
-    font-size: 0.875rem;
-    color: var(--color-text-secondary);
-    line-height: 1.7;
-  }
-
-  .outcome {
-    font-size: 0.875rem;
-    padding: 0.75rem;
-    border-radius: 0.375rem;
-    line-height: 1.6;
-  }
-
-  .outcome.bad {
-    background: #fff1f2;
-    color: #be123c;
-  }
-
-  [data-theme="dark"] .outcome.bad {
-    background: #3f0a15;
-    color: #fda4af;
-  }
-
-  .outcome.good {
-    background: #f0fdf4;
-    color: #15803d;
-  }
-
-  [data-theme="dark"] .outcome.good {
-    background: #052e16;
-    color: #86efac;
-  }
-
-  .spec-block {
-    font-size: 0.8125rem;
-    margin-bottom: 1rem;
-    border: 1px solid var(--color-border);
-  }
-
-  .panel-hidden {
-    display: none;
-  }
-
-  @media (max-width: 768px) {
-    .comparison-toggle-wrap {
-      display: flex;
-    }
-
-    .panels-wrapper {
-      grid-template-columns: 1fr;
-    }
-
-    #after-panel {
-      display: none;
-    }
-  }
-</style>

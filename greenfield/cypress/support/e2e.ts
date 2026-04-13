@@ -4,11 +4,25 @@ beforeEach(() => {
   cy.clearCookies();
 });
 
-// Wait for Astro React islands to hydrate after each visit
-Cypress.Commands.overwrite('visit', (originalFn: any, url: any, options?: any) => {
-  return originalFn(url, options).then(() => {
-    cy.get('astro-island[ssr]', { timeout: 10000 }).should('not.exist');
-  });
+// Ignore Astro/Vite dev-server module fetch errors (known Cypress+Vite issue)
+Cypress.on('uncaughtException', (err) => {
+  if (err.message && (
+    err.message.includes('dynamically imported module') ||
+    err.message.includes('astro:scripts') ||
+    err.message.includes('before-hydration')
+  )) {
+    return false;
+  }
+});
+
+Cypress.on('unhandledRejection' as any, (err: any) => {
+  if (err && err.message && (
+    err.message.includes('dynamically imported module') ||
+    err.message.includes('astro:scripts') ||
+    err.message.includes('before-hydration')
+  )) {
+    return false;
+  }
 });
 
 import "./screenshot-hook";

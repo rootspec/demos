@@ -1,32 +1,21 @@
 # =============================================================================
 # LEVEL 5: FINE TUNING - Theme System
 # =============================================================================
-# @spec_version: 1.0.0
+# @spec_version: 7.2.1
 # @system: THEME_SYSTEM
-# @last_updated: 2026-04-12T22:10:43Z
+# @last_updated: 2026-04-13T17:12:20Z
 # @status: draft
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Transition
+# Theme Transition
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
-transition:
-  duration_ms: 200
-  # @rationale: Fast enough that the theme change feels instant, slow enough that CSS custom property
-  #   transitions animate smoothly rather than snapping
-  # @constraints: min=0, max=400, type=integer
-  # @unit: milliseconds
+transitions:
+  duration: 200
+  # @rationale: Fast enough to feel responsive, long enough to perceive as smooth
+  # @constraints: min=100, max=400, type=integer
+  # @reference: Nielsen Norman Group - Response Time Limits
 
-# -----------------------------------------------------------------------------
-# Default Theme
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md, 02.TRUTHS.md
-
-defaults:
-  fallback_theme: light
-  # @rationale: Light is the conventional default; dark is applied only when explicitly requested
-  #   (system preference or user toggle). Prevents jarring dark flash for users without a preference.
-  # @inviolable: false
-  # @constraints: enum=[light, dark]
+  easing: ease-in-out
+  # @rationale: Symmetric easing appropriate for toggle (not directional)

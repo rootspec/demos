@@ -1,75 +1,84 @@
 # Level 4: Framework System
 
-**System:** FRAMEWORK_SYSTEM
-**Last Updated:** 2026-04-12
-
----
+*References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md*
 
 ## Responsibility
 
-The Framework System owns the build pipeline, static site generation, development server, and deployment configuration. It is the bridge between the spec and the running application. It reads build-time configuration (`.rootspec.json`, `package.json`) and makes derived values (like the RootSpec version string) available to other systems at build time.
-
----
+Manages the build framework, component model, development server, and asset pipeline. This system is the infrastructure layer that all other systems run on top of.
 
 ## Boundaries
 
-- **Owns:** Build scripts, static generation configuration, development server, asset pipeline, deployment config
-- **Does not own:** Content copy, interactive behavior, theme state, layout structure
-- **Reads at build time:** `.rootspec.json` (version field), `package.json` (project metadata)
-- **Provides at build time:** Version string → LAYOUT_SYSTEM (version badge), CONTENT_SYSTEM (footer)
+- **Owns:** Build configuration, routing, component primitives, CSS pipeline, dev/build scripts
+- **Does not own:** Content (CONTENT_SYSTEM), visual tokens (LAYOUT_SYSTEM), interactive state (INTERACTIVE_SYSTEM)
+- **Provides to:** All other systems — the runtime environment and component API
 
----
+## Technology Commitments
 
-## Build-Time Data
+- **Static site framework:** Astro (island architecture; minimal JavaScript shipped by default)
+- **UI components:** React (for interactive islands in INTERACTIVE_SYSTEM)
+- **Styling:** Tailwind CSS (utility classes; CSS custom properties for theme tokens)
+- **Language:** TypeScript throughout
+- **Build output:** Static HTML + minimal JS; no server runtime required
 
-| Source | Field | Consumed by | Purpose |
-|--------|-------|-------------|---------|
-| `.rootspec.json` | `version` | LAYOUT_SYSTEM, CONTENT_SYSTEM | Display current RootSpec version in header and footer |
-| `package.json` | `name`, `version` | Build metadata | Internal build identification |
+*Rationale: Aligns with the "philosophy as foundation" pillar — Astro ships zero JavaScript for static content while enabling React islands for interactive features. The methodology site should itself demonstrate good architecture.*
 
----
+## File Structure
 
-## Static Generation
+```
+greenfield/
+├── src/
+│   ├── components/         # Astro components (static sections)
+│   ├── pages/              # Astro pages (index.astro is the single page)
+│   ├── styles/             # Global CSS, Tailwind config
+│   └── [interactive]/      # React component files (.tsx)
+├── public/                 # Static assets
+├── rootspec/               # Spec files (this directory)
+├── .rootspec.json          # Framework config; version field
+├── astro.config.mjs        # Astro configuration
+├── tailwind.config.mjs     # Tailwind configuration
+├── tsconfig.json           # TypeScript config
+└── package.json
+```
 
-The site is statically generated. All pages are pre-rendered to HTML at build time. There are no server-side routes, no API endpoints, and no database queries.
+## Build Pipeline
 
-**Rationale:** Enforces the "no external API calls" inviolable principle. Maximizes performance and availability. Simplifies deployment to any static host.
+1. **`/rs-init`** — Initializes `.rootspec.json`, rootspec directory, installs deps
+2. **`/rs-spec`** — Writes spec files to `rootspec/`
+3. **`/rs-impl`** — Implements application code in `src/`
+4. **`/rs-validate`** — Runs Cypress tests against the running dev server
 
----
+**Dev server command:** As configured in `.rootspec.json` `devCommand` field
+**Build command:** As configured in `.rootspec.json` `buildCommand` field
+**Test command:** Cypress; as configured in `.rootspec.json` `testCommand` field
 
-## Development Server
+## Version Data Access
 
-The development server is configured in `scripts/dev.sh`. It serves the static output with hot reload during development. The server is local-only and not used in production.
+The CONTENT_SYSTEM reads `.rootspec.json` at build time to extract the `version` field. In Astro, this happens in the frontmatter of the relevant `.astro` component:
 
----
+```
+// In .astro component frontmatter:
+import rootspecConfig from '../../.rootspec.json';
+const version = rootspecConfig.version;
+```
 
-## Asset Pipeline
+The version is baked into the static HTML at build time — no runtime fetch.
 
-- **JavaScript:** Bundled and tree-shaken at build time. Interactive sections load as lightweight client-side modules.
-- **CSS:** Custom properties for theming; critical CSS inlined in `<head>` to prevent flash of unstyled content.
-- **SVG diagrams:** Treated as source files; inlined or referenced depending on usage context.
-- **Images:** Optimized at build time. No images from external CDNs at runtime.
+## Component Model
 
----
+- **Static sections:** Astro components (`.astro` files) — render to HTML, zero client JS
+- **Interactive sections:** React components (`.tsx` files) — hydrated client-side via Astro islands
+- **Props contract:** Astro components pass static data as props; React components manage their own state
+
+## CSS Architecture
+
+- Tailwind utility classes for layout and spacing
+- CSS custom properties (`--color-*`, etc.) for theme tokens defined in global CSS
+- THEME_SYSTEM's class on `<html>` switches token values via CSS selector override
+- No CSS-in-JS; no styled-components
 
 ## Deployment
 
-The build output is a static directory. It can be served from any static hosting provider (GitHub Pages, Netlify, Vercel, S3). The CI/CD pipeline (`.github/workflows/validate-deploy.yml`) handles build and deployment on push to the main branch.
-
----
-
-## Configuration Files
-
-| File | Purpose |
-|------|---------|
-| `.rootspec.json` | RootSpec version and spec directory configuration |
-| `package.json` | Project scripts and dependencies |
-| `scripts/dev.sh` | Development server management |
-| `scripts/test.sh` | Test runner (Cypress) |
-| `scripts/release.sh` | Release workflow |
-
----
-
-## Framework Choice
-
-The specific static site framework is selected at implementation time based on the CONVENTIONS files. Candidate frameworks for greenfield static marketing sites include Astro, Next.js (static export), and SvelteKit (static adapter). The choice is constrained by: no server-side runtime, good support for component-based architecture, and straightforward build-time data injection.
+- Output: static HTML/CSS/JS files
+- Hosting: any static host (GitHub Pages, Netlify, Vercel, etc.)
+- No server-side runtime required
+- CI/CD: a GitHub Actions workflow handles build → test → deploy pipeline

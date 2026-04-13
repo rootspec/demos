@@ -1,31 +1,35 @@
 ## Framework
-- **Runtime:** Astro 6 with React integration (`@astrojs/react`)
-- **Rendering:** SSR (server-side rendering) + client hydration for interactive components
-- **Hydration strategy:** `client:load` for interactive React islands (HierarchyExplorer, SpecWizard)
-- **Output:** Static HTML with lightweight JS bundles
+- **Stack:** Astro v6 + React v19 + Tailwind CSS v4
+- **Build tool:** Vite (via Astro)
+- **Language:** TypeScript (strict mode, JSX via react-jsx transform)
+- **Entry:** `src/pages/index.astro`
 
-## Structure
-- **Pages:** `src/pages/` — Astro page files (`.astro`)
-- **Layouts:** `src/layouts/Layout.astro` — root HTML shell with theme flash-prevention script
-- **Components:** `src/components/` — `.astro` for static, `.tsx` for interactive React islands
-- **Styles:** `src/styles/global.css` — global CSS with theme custom properties
+## Component Patterns
+- **Static sections:** Pure Astro components (`*.astro`) — no client-side JS
+- **Interactive components:** React TSX with `client:only="react"` for stateful multi-step components
+- **Accordion/expand:** Use native HTML `<details>/<summary>` in Astro for zero-JS expand/collapse — eliminates React hydration race conditions
+- **Always import React** in `.tsx` files: `import React, { useState } from 'react'`
 
 ## Styling
-- **Approach:** Plain CSS with CSS custom properties (no CSS framework)
-- **Scoping:** Astro component-scoped styles + global custom properties
-- **No utility classes:** Plain semantic CSS only
+- **Approach:** Inline styles using CSS custom properties for theme-awareness
+- **No utility classes in components** (Tailwind loaded globally, not used in component markup)
+- **CSS variables:** Defined in `src/styles/global.css` under `:root` (dark default) and `html.light` overrides
+
+## Theme System
+- **Default theme:** Light (`html.light`)
+- **Dark theme:** `html.dark`
+- **Persistence:** `localStorage.setItem('theme', 'dark'|'light')`
+- **Inline script** in `Layout.astro` applies saved theme immediately to avoid flash
+- **Toggle:** In `Header.astro` — reads `classList.contains('dark')` to determine current theme
 
 ## Testing
-- **Framework:** Cypress 15 with TypeScript
-- **Test file:** `cypress/e2e/mvp.cy.ts` — all MVP user stories embedded as YAML string literals
-- **Hydration guard:** `cy.visit()` overwritten in `cypress/support/e2e.ts` to wait for `astro-island[ssr]` to be removed before proceeding
-- **DSL:** RootSpec step DSL (`visit`, `click`, `fill`, `shouldExist`, `shouldContain`)
+- **Runner:** Cypress 15
+- **Config:** `cypress.config.ts`, base URL `http://localhost:3000`
+- **Support:** `cypress/support/e2e.ts` — suppresses Astro/Vite dev-server HMR module errors
+- **Pattern:** `loadAndRun()` with embedded YAML string literals in `cypress/e2e/mvp.cy.ts`
+- **Dev server:** HMR disabled in `astro.config.mjs` (`vite.server.hmr: false`) for stable Cypress runs
 
-## Build
-- **Dev command:** `npx astro dev --port 3000 --host` (via `scripts/dev.sh`)
-- **Build command:** `astro build`
-- **Test command:** `./scripts/test.sh` (starts dev server, runs Cypress, stops server)
-
-## Data
-- **Version source:** `.rootspec.json` — version `7.2.0` hardcoded at build time in Header and HeroSection
-- **No external APIs:** All content is static; no runtime data fetching
+## Dev Server
+- **Command:** `npm run dev` → `astro dev --port 3000`
+- **Management:** `./scripts/dev.sh start|stop|restart`
+- **Port:** 3000

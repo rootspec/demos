@@ -1,74 +1,58 @@
 # Level 4: Systems Overview
 
-**Product:** RootSpec Marketing Site
-**Version:** 1.0.0
-**Last Updated:** 2026-04-12
-
----
+*References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md*
 
 ## System Map
 
-The RootSpec Marketing Site is composed of five systems. All systems are client-side; there is no backend.
+The RootSpec marketing site is a static site with client-side interactivity. All systems run in the browser; there are no external API calls or server-side data processing.
 
-| System | Responsibility | Primary Section(s) |
-|--------|---------------|-------------------|
-| **CONTENT_SYSTEM** | Static page sections, copy, and structure | Hero, Problem, How It Works, CTA, Footer |
-| **THEME_SYSTEM** | Dark/light mode preference, CSS tokens, system preference detection | Site-wide |
-| **INTERACTIVE_SYSTEM** | Hierarchy Explorer, Spec Wizard, Before/After Comparison | Interactive sections |
-| **LAYOUT_SYSTEM** | Responsive layout, navigation, meta banner, version badge | Site-wide |
-| **FRAMEWORK_SYSTEM** | Build pipeline, static generation, deployment, asset serving | Infrastructure |
-
----
+| System | Responsibility | File |
+|--------|---------------|------|
+| **CONTENT_SYSTEM** | Static page content, copywriting structure, version data | CONTENT_SYSTEM.md |
+| **THEME_SYSTEM** | Dark/light mode detection, manual toggle, persistence | THEME_SYSTEM.md |
+| **LAYOUT_SYSTEM** | Responsive layout, navigation, section structure | LAYOUT_SYSTEM.md |
+| **INTERACTIVE_SYSTEM** | Hierarchy Explorer, Spec Wizard, Before/After Comparison | INTERACTIVE_SYSTEM.md |
+| **FRAMEWORK_SYSTEM** | Build framework, component model, asset pipeline | FRAMEWORK_SYSTEM.md |
 
 ## System Interactions
 
-| From | To | Interaction |
-|------|----|----|
-| LAYOUT_SYSTEM | CONTENT_SYSTEM | Layout wraps content sections; version badge reads from build-time config |
-| LAYOUT_SYSTEM | THEME_SYSTEM | Header contains theme toggle; layout applies theme class to root element |
-| THEME_SYSTEM | CONTENT_SYSTEM | Theme tokens applied to all content elements via CSS custom properties |
-| THEME_SYSTEM | INTERACTIVE_SYSTEM | Interactive sections consume theme tokens; no direct coupling |
-| INTERACTIVE_SYSTEM | CONTENT_SYSTEM | Wizard output displays as formatted spec content in the interactive section |
-| FRAMEWORK_SYSTEM | LAYOUT_SYSTEM | Framework renders layout at build time; provides routing and asset pipeline |
-| FRAMEWORK_SYSTEM | CONTENT_SYSTEM | Framework reads `.rootspec.json` version at build time; passes to content |
-
----
+| Source System | Interacts With | Interaction |
+|--------------|----------------|-------------|
+| CONTENT_SYSTEM | LAYOUT_SYSTEM | Provides content to render into layout slots |
+| CONTENT_SYSTEM | FRAMEWORK_SYSTEM | Reads `.rootspec.json` for version badge data |
+| THEME_SYSTEM | LAYOUT_SYSTEM | Applies theme class to root element; layout responds |
+| THEME_SYSTEM | INTERACTIVE_SYSTEM | Interactive components observe theme state |
+| LAYOUT_SYSTEM | INTERACTIVE_SYSTEM | Provides responsive breakpoint context |
+| INTERACTIVE_SYSTEM | THEME_SYSTEM | Reads current theme to style interactive components |
+| FRAMEWORK_SYSTEM | All systems | Provides build pipeline, routing, component primitives |
 
 ## Data Flow
 
 ```
-Build time:
-  .rootspec.json → FRAMEWORK_SYSTEM → version string → LAYOUT_SYSTEM (version badge)
+.rootspec.json
+    ↓ (build-time read)
+CONTENT_SYSTEM → version badge data → LAYOUT_SYSTEM → rendered hero/header
 
-Runtime (client):
-  System preference (prefers-color-scheme) → THEME_SYSTEM → CSS custom properties → all systems
-  User toggle click → THEME_SYSTEM → localStorage → persisted preference
-
-Runtime (wizard):
-  User text input → INTERACTIVE_SYSTEM → template engine → skeleton spec output
-  User pillar selections → INTERACTIVE_SYSTEM → skeleton spec output
-
-Runtime (explorer):
-  User click/keyboard → INTERACTIVE_SYSTEM → expanded level state → DOM update
-
-Runtime (before/after):
-  User slider/toggle → INTERACTIVE_SYSTEM → visible panel state → DOM update
+User loads page
+    ↓
+THEME_SYSTEM detects system preference → applies class to <html>
+    ↓
+LAYOUT_SYSTEM renders responsive structure
+    ↓
+INTERACTIVE_SYSTEM mounts React components into Astro layout
+    ↓
+User interacts → INTERACTIVE_SYSTEM handles state → no external calls
 ```
-
----
 
 ## Boundaries
 
-- **CONTENT_SYSTEM** owns all marketing copy and static section structure. It does not manage state.
-- **THEME_SYSTEM** owns the single source of truth for the active theme. All other systems read from CSS custom properties — they do not check localStorage directly.
-- **INTERACTIVE_SYSTEM** owns all client-side state for interactive sections. It does not modify global layout or theme.
-- **LAYOUT_SYSTEM** owns the wrapper structure: header, footer, navigation, meta banner. It does not own section content.
-- **FRAMEWORK_SYSTEM** owns the build pipeline and static generation configuration. It is the only system with access to build-time environment and config files.
+- **No external API calls** — All data is static or generated client-side from user input
+- **No authentication** — Anonymous visitors only
+- **No persistence except theme** — Theme preference stored in `localStorage`; wizard state is session-only
+- **No server-side rendering of interactive state** — React components hydrate client-side
 
----
+## Key Constraints
 
-## Key Shared Concerns
-
-- **Accessibility:** All systems must produce accessible output. ARIA attributes, keyboard focus management, and screen reader labels are the responsibility of the system that renders the relevant element.
-- **Responsive behavior:** LAYOUT_SYSTEM defines breakpoints as CSS custom properties. All other systems inherit responsive behavior through the shared layout grid and token system.
-- **No external dependencies at runtime:** No system may make HTTP requests at runtime. All data is either build-time static or derived from user input via client-side templates.
+- Build-time: Read `.rootspec.json` version at build time; bake into rendered output (not runtime fetch)
+- Runtime: Interactive features must function without network access after initial page load
+- Progressive: Core marketing content must be readable without JavaScript

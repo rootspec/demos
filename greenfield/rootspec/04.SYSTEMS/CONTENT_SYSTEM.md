@@ -1,101 +1,92 @@
 # Level 4: Content System
 
-**System:** CONTENT_SYSTEM
-**Last Updated:** 2026-04-12
-
----
+*References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md*
 
 ## Responsibility
 
-The Content System owns all static marketing copy and page section structure. It defines what is said on each section of the page — the words, the examples, the real before/after content, and the call-to-action messaging. It does not manage any client-side state.
-
----
+Owns all static marketing content on the site: copy, section structure, messaging hierarchy, version data, and external links. The content system defines WHAT is said on every section of the page.
 
 ## Boundaries
 
-- **Owns:** Section copy, section structure, before/after panel content, CTA links, footer attribution
-- **Does not own:** Theme tokens, layout wrappers, interactive behavior, build pipeline
-- **Reads from:** FRAMEWORK_SYSTEM (version string at build time, for the version badge in the hero)
-- **Read by:** LAYOUT_SYSTEM (wraps sections), THEME_SYSTEM (applies tokens to content elements)
+- **Owns:** Page copy, section content, meta-banner text, CTA links, footer attribution
+- **Does not own:** Layout or styling decisions (LAYOUT_SYSTEM), interactive state (INTERACTIVE_SYSTEM)
+- **Read-only data:** Reads `.rootspec.json` at build time to extract `version` field for the version badge
 
----
-
-## Sections
+## Page Sections
 
 ### Meta Banner
-A persistent banner visible above or immediately below the hero. Contains:
-- Explicit statement that this site is a RootSpec demo
-- What was used to generate it (a sparse product description)
-- Honest acknowledgment that rough edges reflect minimal human guidance
-- Link to SEED.md in GitHub repo
-- Link to the spec files in the GitHub repo
+- Persistent banner visible above or immediately below the hero
+- Message: Explains this site was generated from a ~100-line product description via the RootSpec pipeline
+- Must be honest about what automated output looks like — rough edges are evidence, not failures
+- Links: `[View the spec →]` pointing to `https://github.com/rootspec/demos/tree/main/greenfield/rootspec` and `[View the seed →]` pointing to `https://github.com/rootspec/demos/tree/main/greenfield/SEED.md`
+- Tone: Direct and contextualizing, not apologetic
 
-The banner must not be dismissible. It is structural, not promotional.
+### Hero Section
+- Primary headline: communicates the core value proposition of RootSpec in one line
+- Subheadline: one sentence expanding on what RootSpec is
+- Version badge: displays current version read from `.rootspec.json`
+- Primary CTA: link to GitHub repo (`https://github.com/rootspec/rootspec`)
 
-### Hero
-- Tagline: short, memorable, expresses the core value proposition
-- One-sentence explanation of what RootSpec is
-- Version badge (reads from build-time version string provided by FRAMEWORK_SYSTEM)
-- Primary CTA linking to the getting started section or GitHub
+### Problem Section
+- Four specific pain points developers recognize:
+  1. Spec drift — docs that nobody keeps in sync
+  2. Philosophy-implementation gap — foundational decisions get lost
+  3. Unreliable AI output — no validation layer means confident wrong answers
+  4. Google Docs graveyard — specs with no executable weight
+- Tone: Resonant, not accusatory. "You know this problem" not "here's what you're doing wrong"
 
-### The Problem
-Content explains why existing approaches fail:
-- Spec drift and the Google Doc nobody reads
-- Philosophy-implementation gap in AI-assisted development
-- Unvalidatable requirements
-- The gap between knowing what to build and being able to prove it was built correctly
+### How It Works Section
+- Visual walkthrough of four skills: `/rs-init` → `/rs-spec` → `/rs-impl` → `/rs-validate`
+- Each skill gets: name, one-line description, what it produces
+- Before/after framing: before using RootSpec vs. after
 
-Uses concrete language — names the failure modes rather than vague "pain points."
+### Hierarchy Explorer Section
+- Section heading and introductory sentence explaining the five-level hierarchy
+- Interactive component (INTERACTIVE_SYSTEM handles behavior)
+- Example content for each level derived from the RootSpec methodology itself
 
-### How It Works
-Visual walkthrough of the four RootSpec skills in sequence:
-- `/rs-init` — initializes the framework in a project
-- `/rs-spec` — interview-driven spec creation across five levels
-- `/rs-impl` — implements each user story against the spec
-- `/rs-validate` — validates implementation against the spec
+### Spec Wizard Section
+- Section heading: positions wizard as "try the methodology on your own idea"
+- Introductory text setting expectations: this generates a skeleton spec, not a complete one
+- Interactive component (INTERACTIVE_SYSTEM handles behavior)
+- Wizard template options for missions and design pillars (content-owned, behavior-owned by INTERACTIVE_SYSTEM)
 
-Each skill has a short description and one concrete example of what it does. The section frames this as "before you had these commands" vs. "after."
+### Before/After Comparison Section
+- Section heading
+- Content for both panels uses a fictional "TaskManager" product for concrete familiarity
+- **Without-spec panel:** Vague requirements — prose descriptions, ambiguous stories ("the app should be fast"), no traceability
+- **With-spec panel:** Structured L1-L5 hierarchy — mission statement, design pillars, testable stories with pillar references
 
-### Open Source CTA
-- Link to GitHub repository
-- Getting started instructions (the four commands a developer runs to begin)
-- Community links (if applicable)
-- Direct, not promotional — assumes the visitor is ready to start
+### CTA Section
+- Heading: directs to open source repo
+- Link: `https://github.com/rootspec/rootspec`
+- Supporting copy: getting started instructions, community context
 
 ### Footer
-- Attribution: name of the builder (the AI agent that generated the site)
-- Build date
-- Link to RootSpec GitHub repository
-- Current RootSpec version
+- Attribution: identifies the site builder (Claude, Anthropic's AI assistant) and the build date
+- Framework version acknowledgment
 
----
+## Version Data
 
-## Before/After Comparison Content
+- Source: `.rootspec.json` → `version` field
+- Read at: build time
+- Displayed in: hero section and/or site header
+- Format: `v[version]` (e.g., `v7.2.1`)
+- Fallback: if `.rootspec.json` is missing or unparseable, display `v?.?.?`
 
-The before/after comparison must use real content. Both panels contain actual specification artifacts:
+## External Links
 
-**Without RootSpec panel:**
-- Vague requirements excerpt: a poorly-structured user story with ambiguous acceptance criteria
-- A feature request that can't be traced to a business goal
-- A spec document that has diverged from the implemented behavior
-- An untestable "the system should be fast" requirement
+| Destination | URL | Used In |
+|-------------|-----|---------|
+| RootSpec GitHub repo | `https://github.com/rootspec/rootspec` | Hero CTA, CTA section |
+| Demos repo (greenfield) | `https://github.com/rootspec/demos/tree/main/greenfield` | Meta banner |
+| Spec files | `https://github.com/rootspec/demos/tree/main/greenfield/rootspec` | Meta banner |
+| SEED.md | `https://github.com/rootspec/demos/tree/main/greenfield/SEED.md` | Meta banner |
 
-**With RootSpec panel:**
-- The same feature expressed as a five-level hierarchy excerpt
-- A user story with testable acceptance criteria
-- A design pillar referenced by the feature
-- A validation gate showing the feature traces back to a specific L1 principle
+## Content Tone Rules
 
----
-
-## Data Attributes
-
-All interactive content targets require `data-test` attributes for Cypress test compatibility. Content sections that are asserted in user stories must have stable, semantic `data-test` selectors.
-
-Key selectors (to be established during implementation):
-- `[data-test=hero-tagline]` — hero headline
-- `[data-test=meta-banner]` — meta banner container
-- `[data-test=version-badge]` — displayed version string
-- `[data-test=before-panel]` — before/after "without" panel
-- `[data-test=after-panel]` — before/after "with RootSpec" panel
-- `[data-test=cta-github]` — primary GitHub link
+- Confident but not preachy
+- Technical but accessible
+- No buzzwords or corporate language
+- Show concrete examples over abstract descriptions
+- Audience: developers and technical leads who've been burned by scope drift

@@ -1,106 +1,100 @@
 {
-  "lastReview": "2026-04-12T22:38:01Z",
-  "status": "fail",
+  "lastReview": "2026-04-13T17:56:01Z",
+  "status": "pass",
   "summary": {
-    "blockers": 3,
-    "warnings": 2,
-    "nitpicks": 1
+    "blockers": 0,
+    "warnings": 4,
+    "nitpicks": 2
   },
   "issues": [
     {
       "id": "REV-001",
-      "severity": "blocker",
+      "severity": "warning",
       "category": "broken_links",
       "story": "US-102",
       "file": "src/components/MetaBanner.astro",
-      "line": 2,
+      "line": 17,
       "screenshot": "cypress/screenshots/mvp.cy.ts/US-102--AC-102-2.png",
-      "description": "The seed-link URL (https://github.com/rootspec/demos/blob/main/greenfield/SEED.md) is not traceable to SEED.md. SEED.md says link to SEED.md and spec files in the GitHub repo but provides no repository URL. The org/repo name 'rootspec/demos' does not appear anywhere in SEED.md or the spec.",
-      "expected": "A URL verifiably traceable to SEED.md or an authoritative spec document",
-      "actual": "Hardcoded https://github.com/rootspec/demos/blob/main/greenfield/SEED.md — 'rootspec/demos' is not confirmed by any spec or seed document",
-      "suggestion": "Verify the correct GitHub repository URL and update MetaBanner.astro lines 2-3 with the real repo path"
+      "description": "Meta banner 'View spec' link points to an external GitHub URL that cannot be HTTP-verified in this environment",
+      "expected": "Live URL: https://github.com/rootspec/demos/tree/main/greenfield/rootspec",
+      "actual": "href resolves correctly per SEED.md context (more specific path than the base URL given) but repo existence cannot be confirmed",
+      "suggestion": "Verify that the rootspec/demos GitHub repository exists and the greenfield/rootspec path is accessible before launch"
     },
     {
       "id": "REV-002",
-      "severity": "blocker",
+      "severity": "warning",
       "category": "broken_links",
-      "story": "US-104",
-      "file": "src/components/HeroSection.astro",
-      "line": 17,
-      "screenshot": "cypress/screenshots/mvp.cy.ts/US-104--AC-104-1.png",
-      "description": "The GitHub CTA links (https://github.com/rootspec/rootspec) used in HeroSection.astro, CTASection.astro, and index.astro are not traceable to SEED.md. SEED.md specifies linking to 'the GitHub repo' and mentions getting started instructions, but provides no repository URL. 'rootspec/rootspec' does not appear anywhere in SEED.md or spec files.",
-      "expected": "A verified GitHub URL from SEED.md or the spec",
-      "actual": "Hardcoded https://github.com/rootspec/rootspec — repo name not confirmed by any spec or seed document",
-      "suggestion": "Verify the correct GitHub repository URL and update all three files (HeroSection.astro:17, CTASection.astro:21, index.astro:32) accordingly"
+      "story": "US-105",
+      "file": "src/components/CTASection.astro",
+      "line": 15,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-105--AC-105-1.png",
+      "description": "CTA and Hero 'Get Started'/'View on GitHub' links point to https://github.com/rootspec/rootspec — cannot be HTTP-verified as live",
+      "expected": "Live URL per SEED.md: https://github.com/rootspec/rootspec",
+      "actual": "href matches SEED.md exactly but cannot be confirmed as an active repository",
+      "suggestion": "Verify the rootspec/rootspec GitHub repository exists and is publicly accessible before launch"
     },
     {
       "id": "REV-003",
-      "severity": "blocker",
-      "category": "impl_error",
-      "story": "US-104",
-      "file": "src/components/CTASection.astro",
-      "line": 20,
-      "screenshot": "cypress/screenshots/mvp.cy.ts/US-104--AC-104-1.png",
-      "description": "US-104 tests [data-test=cta-github] and passes because that attribute exists in HeroSection.astro:17 — not in the CTA section. CTASection.astro uses data-test='cta-github-section' on its GitHub link. The story narrative says 'scroll to the open source CTA section' but the test selector resolves to the hero button, not the CTA section. The CTA section's GitHub link is de facto untested by the story it's meant to satisfy.",
-      "expected": "data-test='cta-github' on the primary GitHub link in CTASection.astro so the CTA-section button is what the story validates",
-      "actual": "CTASection.astro uses data-test='cta-github-section'; only HeroSection.astro has data-test='cta-github'",
-      "suggestion": "Change data-test='cta-github-section' to data-test='cta-github' in CTASection.astro:20 (or add the attribute alongside the existing one)"
+      "severity": "warning",
+      "category": "accessibility",
+      "story": "US-303",
+      "file": "src/components/ComparisonSection.astro",
+      "line": 28,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-303--AC-303-1.png",
+      "description": "Comparison toggle buttons lack aria-pressed state; screen reader users cannot determine which panel is currently active",
+      "expected": "Toggle buttons should convey active/inactive state via aria-pressed='true'/'false'",
+      "actual": "Buttons use visual background color only to indicate active state — no aria-pressed attribute set or updated via JavaScript",
+      "suggestion": "Add aria-pressed to each button and update it in the onclick handlers alongside the panel display toggling"
     },
     {
       "id": "REV-004",
       "severity": "warning",
-      "category": "impl_error",
-      "story": "US-202",
-      "file": "src/components/SpecWizard.tsx",
-      "line": 63,
-      "screenshot": "cypress/screenshots/mvp.cy.ts/US-202--AC-202-3.png",
-      "description": "The generated skeleton spec jumps from L1 (Philosophy) directly to L3 (Core Interaction) and L5 (User Story), skipping L2 (Truths). SEED.md specifies the output should show 'how their input maps to L1-L3'. The pillars selected by the user are placed under L1 instead of being framed as L2 Truths/principles.",
-      "expected": "Skeleton spec output covering L1 (Philosophy/Mission), L2 (Truths derived from pillars), and L3 (Interaction) per SEED.md's 'showing how their input maps to L1-L3'",
-      "actual": "generateSpec() in SpecWizard.tsx produces L1 (with pillars listed under it), L3, and L5 — L2 Truths level is absent, and L5 was not part of SEED.md's described wizard output",
-      "suggestion": "Update generateSpec() to produce a proper L2 section using the selected pillars as Truths/principles, and consider whether L5 belongs in the output given SEED.md says L1-L3 only"
+      "category": "accessibility",
+      "story": "US-103",
+      "file": "src/components/ProblemSection.astro",
+      "line": 43,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-103--AC-103-1.png",
+      "description": "Emoji icons in problem cards (⚠️, 🤖, 📄, 🔄) lack aria-hidden='true', so screen readers announce them with verbose Unicode descriptions alongside the card title",
+      "expected": "Decorative emoji should be hidden from assistive technology since the meaning is conveyed by the adjacent title text",
+      "actual": "Emoji rendered as live text nodes inside a plain <div> with no aria-hidden",
+      "suggestion": "Wrap each icon in <span aria-hidden='true'>⚠️</span> to suppress screen reader announcement"
     },
     {
       "id": "REV-005",
-      "severity": "warning",
-      "category": "accessibility",
-      "story": "US-301",
-      "file": "src/components/Header.astro",
-      "line": 20,
-      "screenshot": "cypress/screenshots/mvp.cy.ts/US-301--AC-301-2.png",
-      "description": "The theme toggle emoji spans (☀️ and 🌙) lack aria-hidden='true'. Screen readers may announce both the emoji character name and the button's aria-label, producing redundant or confusing output (e.g. 'sun Switch to dark mode'). The aria-label on the button itself is correct and updates on toggle.",
-      "expected": "Emoji icon spans should be aria-hidden='true' to prevent redundant screen reader announcements. 03.INTERACTIONS.md requires the toggle to 'announce state change to screen readers' cleanly.",
-      "actual": "<span class='theme-icon light-icon'>☀️</span> — no aria-hidden attribute",
-      "suggestion": "Add aria-hidden='true' to both .theme-icon spans in Header.astro lines 20-21"
+      "severity": "nitpick",
+      "category": "impl_error",
+      "story": "US-102",
+      "file": "src/components/MetaBanner.astro",
+      "line": 14,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-102--AC-102-1.png",
+      "description": "Meta banner copy is more terse than SEED.md described. SEED.md called for messaging about '~100-line product description', 'no manual code, no design mockups', and 'four commands'",
+      "expected": "Banner conveying the full context per SEED.md: site generated from a sparse seed with no iteration or manual code, via four commands",
+      "actual": "Banner reads: 'This site was built by the RootSpec pipeline — spec-driven, AI-implemented. View spec · View SEED.md'",
+      "suggestion": "Optionally expand banner copy to include '~100-line seed, no manual code, four commands' to fully match SEED.md intent; current copy is functional if minimal"
     },
     {
       "id": "REV-006",
       "severity": "nitpick",
-      "category": "impl_error",
-      "story": "US-202",
+      "category": "visual_quality",
+      "story": "US-302",
       "file": "src/components/SpecWizard.tsx",
-      "line": 191,
-      "screenshot": "cypress/screenshots/mvp.cy.ts/US-202--AC-202-3.png",
-      "description": "The wizard output step has no copy-to-clipboard button. 03.INTERACTIONS.md Loop 4 explicitly states the output is copyable: 'copy action copies full text'. The acceptance criteria only check for wizard-output existence, so the test passes, but the copy feature is not present.",
-      "expected": "A 'Copy' button on the wizard output step that copies the full skeleton spec text to the clipboard",
-      "actual": "Only a 'Start over' button is present; no copy mechanism exists",
-      "suggestion": "Add a copy-to-clipboard button using navigator.clipboard.writeText() in the output step of SpecWizard.tsx"
+      "line": 207,
+      "screenshot": "cypress/screenshots/mvp.cy.ts/US-302--AC-302-1.png",
+      "description": "Both step 1 (mission) and step 3 (key interaction) inputs share data-test='wizard-product-input', making future test targeting ambiguous",
+      "expected": "Each distinct input should have a unique data-test identifier",
+      "actual": "Step 1 mission input and step 3 interaction input both use data-test='wizard-product-input'",
+      "suggestion": "Rename step 3 input to data-test='wizard-interaction-input'"
     }
   ],
   "qualityScore": {
-    "score": 67,
+    "score": 88,
     "breakdown": {
-      "content": 20,
+      "content": 30,
       "visual": 25,
-      "alignment": 15,
-      "accessibility": 7,
-      "polish": 0
+      "alignment": 23,
+      "accessibility": 5,
+      "polish": 5
     },
-    "notes": {
-      "content": "Deducted 10 points for two unverifiable GitHub URLs (REV-001, REV-002) — meta-banner links and CTA GitHub link not traceable to SEED.md",
-      "visual": "Full marks — no placeholder text, no literal icon text, no broken layout, all sections render correctly with real content",
-      "alignment": "Deducted 10 points for CTA story (US-104) resolving against hero selector instead of CTA section (REV-003). Deducted 5 for wizard spec output missing L2 level (REV-004)",
-      "accessibility": "Minor deduction for emoji without aria-hidden on theme toggle icons (REV-005). The button aria-label is correct and updates dynamically.",
-      "polish": "Deducted 5 for missing copy feature explicitly called out in interaction architecture (REV-006)"
-    }
+    "notes": "Content: full marks — version reads from .rootspec.json, all four skills named, problem section has real copy, comparison has real content (no lorem ipsum), links match SEED.md. Visual: full marks — all icons render as actual emoji/symbols (no literal text), all sections visible and readable, SVG methodology diagram present and rendering. Alignment: -2 for terse meta-banner copy vs SEED.md description of what the banner should say. Accessibility: -5 for missing aria-pressed on comparison toggles and -5 for unannotated decorative emoji in problem cards (total -5, floored at 5). Polish: full marks — no template syntax visible, no TODO/placeholder artifacts in rendered output."
   }
 }
