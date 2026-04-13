@@ -1,50 +1,63 @@
 # =============================================================================
 # LEVEL 5: FINE TUNING - Layout System
 # =============================================================================
-# @spec_version: 1.0.0
+# @spec_version: 7.2.1
 # @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-12T22:10:43Z
+# @last_updated: 2026-04-13T17:12:20Z
 # @status: draft
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
 
 # -----------------------------------------------------------------------------
 # Responsive Breakpoints
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
 
 breakpoints:
-  mobile_max_px: 767
-  # @rationale: 767px covers all phone-sized viewports; 768px and above gets the mid/desktop layout
-  # @constraints: min=480, max=1023, type=integer
-  # @unit: pixels
+  sm: 640
+  # @rationale: Mobile breakpoint following Tailwind defaults
+  # @constraints: type=integer, unit=px
 
-  desktop_min_px: 1024
-  # @rationale: 1024px is the conventional tablet-landscape / small-desktop boundary;
-  #   before/after slider activates at this width
-  # @constraints: min=768, max=1280, type=integer
-  # @unit: pixels
+  md: 768
+  # @rationale: Tablet breakpoint; two-column layouts enabled above this
+  # @constraints: type=integer, unit=px
+
+  lg: 1024
+  # @rationale: Desktop breakpoint; full layout with max-width container
+  # @constraints: type=integer, unit=px
 
 # -----------------------------------------------------------------------------
-# Content Column
+# Content Constraints
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
 
-content_column:
-  max_width_px: 900
-  # @rationale: ~900px provides a comfortable reading line length (~80 chars at 16px base font)
-  #   without content appearing too narrow on large monitors
-  # @reference: Baymard Institute — Optimal Line Length for Reading (50-75 chars)
-  # @constraints: min=640, max=1200, type=integer
-  # @unit: pixels
+content:
+  max_width: 1200
+  # @rationale: Prevents excessively wide line lengths on large monitors
+  # @reference: WCAG 2.1 - Reflow; optimal line length for reading
+  # @constraints: min=800, max=1600, type=integer, unit=px
+
+  header_height: 64
+  # @rationale: Standard header height; sufficient for logo + nav + toggle
+  # @constraints: min=48, max=96, type=integer, unit=px
 
 # -----------------------------------------------------------------------------
 # Section Spacing
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
 
-section_spacing:
-  vertical_gap_px: 80
-  # @rationale: Generous spacing ensures sections feel distinct and gives the eye room to rest
-  #   between concept-dense sections
-  # @constraints: min=40, max=160, type=integer
-  # @unit: pixels
+sections:
+  vertical_padding: 80
+  # @rationale: Generous whitespace between sections for visual clarity
+  # @constraints: min=40, max=160, type=integer, unit=px
+
+# -----------------------------------------------------------------------------
+# Animation
+# -----------------------------------------------------------------------------
+
+animation:
+  duration: 400
+  # @rationale: Scroll-triggered animations; visible but not slow
+  # @reference: Material Design motion guidance
+  # @constraints: min=200, max=800, type=integer, unit=ms
+
+  reduced_motion_duration: 0
+  # @rationale: Respect prefers-reduced-motion; disable animations entirely
+  # @inviolable: false
+  # @spec_source: 01.PHILOSOPHY.md - Approachable Without Being Simple pillar

@@ -1,84 +1,68 @@
 # Level 4: Theme System
 
-**System:** THEME_SYSTEM
-**Last Updated:** 2026-04-12
-
----
+*References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md*
 
 ## Responsibility
 
-The Theme System owns the active theme state and the design token layer. It detects system color-scheme preference, exposes a manual toggle, persists the user's choice, and applies the active theme by setting a class or attribute on the document root. All other systems consume theme values through CSS custom properties — they do not interact with localStorage or the toggle directly.
-
----
+Manages the dark/light color theme state for the entire site. Handles system preference detection, manual override, and persistence across sessions.
 
 ## Boundaries
 
-- **Owns:** Active theme state, theme toggle button behavior, localStorage read/write for preference, CSS custom property definitions for both themes
-- **Does not own:** Layout structure, content copy, interactive section behavior
-- **Reads from:** Browser `prefers-color-scheme` media query (system preference), localStorage (persisted preference)
-- **Read by:** All systems (via CSS custom properties), LAYOUT_SYSTEM (renders the toggle button)
+- **Owns:** Theme state, preference detection, manual toggle, `localStorage` persistence
+- **Does not own:** Visual design tokens (LAYOUT_SYSTEM manages CSS variables), component rendering (LAYOUT_SYSTEM + INTERACTIVE_SYSTEM)
+- **Exposes:** Current theme value (`light` | `dark`) to all other systems via CSS class on `<html>` element
 
----
+## State
 
-## Theme States
+| Property | Type | Values | Default |
+|----------|------|--------|---------|
+| `theme` | enum | `light`, `dark` | Detected from system, fallback `light` |
+| `override` | boolean | true if manually set | false |
 
-| State | Description |
-|-------|-------------|
-| `light` | Default for users with no system preference or `prefers-color-scheme: light` |
-| `dark` | Applied for users with `prefers-color-scheme: dark` or manual dark toggle |
+## Theme Detection
 
----
-
-## Preference Resolution
-
-Priority order (highest to lowest):
-1. Persisted user preference (localStorage)
-2. System preference (`prefers-color-scheme`)
-3. Default: `light`
-
-On every page load, the system reads localStorage first. If a value is found, it is applied immediately (before first paint, to prevent flash). If no persisted value exists, the system reads `prefers-color-scheme`.
-
----
-
-## Toggle Behavior
-
-- Toggle button is rendered by LAYOUT_SYSTEM (in the header)
-- Clicking the toggle flips the active theme
-- New theme is written to localStorage
-- Theme class is updated on the document root element
-- All themed elements update immediately via CSS custom properties (no reload)
-
-**Accessibility requirements:**
-- Toggle button has `aria-label` describing the action (e.g., "Switch to dark mode")
-- State change is announced via `aria-live` or equivalent
-- Toggle is reachable via keyboard (Tab), operable via Enter or Space
-
----
-
-## CSS Custom Properties
-
-The Theme System defines a set of custom properties that all other systems consume. Actual hex/color values are defined at implementation time. Placeholder names are established here:
-
-| Token | Role |
-|-------|------|
-| `--color-bg` | Page background |
-| `--color-surface` | Card/section background |
-| `--color-border` | Borders and dividers |
-| `--color-text-primary` | Body text |
-| `--color-text-secondary` | Secondary/muted text |
-| `--color-accent` | Primary interactive elements, links, highlights |
-| `--color-accent-hover` | Hover state for accent |
-| `--color-code-bg` | Inline code background |
-| `--color-code-text` | Inline code text |
-
----
+1. On page load, check `localStorage` for stored preference
+2. If stored preference exists, apply it immediately (before first paint)
+3. If no stored preference, read `window.matchMedia('(prefers-color-scheme: dark)')`
+4. Apply detected or stored theme by adding class to `<html>` element: `class="dark"` or `class="light"`
 
 ## Flash Prevention
 
-The theme must be applied synchronously before first paint to prevent a white flash in dark mode. This requires a small inline script in the document `<head>` that reads localStorage and sets the theme attribute before the stylesheet renders.
+The theme detection script must execute before the page renders to prevent a light-flash on dark-preference visits:
 
----
+- Inject an inline `<script>` in the `<head>` (before any CSS or body content)
+- This script reads localStorage and applies the class synchronously
+- No async operations allowed in this script
 
-## Failure Mode
+## Manual Toggle
 
-If localStorage is unavailable (private browsing, storage quota exceeded), the toggle still works for the duration of the session. The preference is not persisted. System preference continues to be honored on subsequent page loads.
+- Toggle button in site header
+- Clicking toggle: flip current theme (`light` → `dark` or `dark` → `light`)
+- After toggle: write new preference to `localStorage`
+- Update `<html>` class immediately
+- Toggle button renders appropriate icon for current state (sun for light, moon for dark)
+
+## Persistence
+
+- Storage key: `rootspec-theme`
+- Storage mechanism: `localStorage`
+- Stored value: `"light"` or `"dark"` (string)
+- Cleared when: never (user must manually toggle back)
+
+## CSS Class Contract
+
+The theme system exposes exactly one class on `<html>`:
+
+| Theme | Class on `<html>` |
+|-------|-------------------|
+| Dark | `dark` |
+| Light | `light` (or no class, if light is default) |
+
+All visual systems consume this class via CSS selectors (`.dark body { ... }`). This is the single point of truth for theme state.
+
+## Transition
+
+- Theme change triggers a CSS transition on `background-color` and `color`
+- Transition duration: `[short duration]`
+- Transition easing: ease-in-out
+- No transition on initial load (prevent flash of transition)

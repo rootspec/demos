@@ -1,43 +1,30 @@
 {
   "runs": [
-    {
-      "runId": "0e048602",
-      "startedAt": "2026-04-12T22:10:38.149Z",
-      "completedAt": "2026-04-12T22:45:25.591Z",
-      "totalCostUsd": 6.47,
-      "phases": {
-        "init": {
-          "status": "success",
-          "costUsd": 0,
-          "turns": 0,
-          "durationSeconds": 0
-        },
-        "spec": {
-          "status": "success",
-          "costUsd": 1.81,
-          "turns": 55,
-          "durationSeconds": 468
-        },
-        "impl": {
-          "status": "success",
-          "costUsd": 2.25,
-          "turns": 102,
-          "durationSeconds": 838
-        },
-        "validate": {
-          "status": "success",
-          "costUsd": 0.78,
-          "turns": 56,
-          "durationSeconds": 322
-        },
-        "review": {
-          "status": "max_turns",
-          "costUsd": 1.62,
-          "turns": 146,
-          "durationSeconds": 454
-        }
-      },
-      "qualityScore": 67
-    }
+  {
+    "skill": "rs-spec",
+    "startedAt": "2026-04-13T17:12:20Z",
+    "completedAt": "2026-04-13T17:20:00Z",
+    "durationSeconds": 460,
+    "iterations": null,
+    "stories": null
+  }
+,
+  {
+    "skill": "rs-spec",
+    "startedAt": "2026-04-13T17:20:08Z",
+    "completedAt": "2026-04-13T17:20:30Z",
+    "durationSeconds": 22,
+    "iterations": null,
+    "stories": null
+  }
+,
+  {
+    "skill": "rs-impl",
+    "startedAt": "2026-04-13T17:20:50Z",
+    "completedAt": "2026-04-13T17:38:25Z",
+    "durationSeconds": 1055,
+    "iterations": 4,
+    "stories": {"US-101":{"attempts":1},"US-102":{"attempts":1},"US-103":{"attempts":1},"US-104":{"attempts":1},"US-105":{"attempts":1},"US-201":{"attempts":1},"US-202":{"attempts":2},"US-301":{"attempts":2},"US-302":{"attempts":2},"US-303":{"attempts":1},"US-304":{"attempts":1},"US-401":{"attempts":1}}
+  }
   ]
 }

@@ -1,104 +1,165 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-const LEVELS = [
+const levels = [
   {
-    num: 1,
-    name: 'Philosophy',
-    tagline: 'Why we build this way',
-    example: `# Why does this product exist?
-What problem are we solving?
-What change do we want in the world?
-What will we never do?`,
-    description: 'The immutable "why" — product mission, values, and principles that every decision flows from.',
+    id: 1,
+    name: 'L1 — Philosophy',
+    tagline: 'The unchanging "why" behind the product.',
+    detail: 'Philosophy defines core beliefs, values, and the fundamental problem being solved. It never changes without a major pivot. All other levels must align with L1.',
   },
   {
-    num: 2,
-    name: 'Truths',
-    tagline: 'What we know to be true',
-    example: `## Inviolable Principles
-- No third-party API calls at runtime
-- All data stays on the user's device
-- Every feature must have a failing test before code`,
-    description: 'Hard constraints and non-negotiable truths that the spec never violates.',
+    id: 2,
+    name: 'L2 — Truths',
+    tagline: 'Invariant facts that always hold.',
+    detail: 'Truths capture constraints and non-negotiables: "users must never lose data," "response time under 200ms." They act as guardrails for every implementation decision.',
   },
   {
-    num: 3,
-    name: 'Interactions',
-    tagline: 'How users flow through the product',
-    example: `## Core Journey: First Use
-GIVEN a new visitor lands on the page
-WHEN they view the hero section
-THEN they understand the product in under 10 seconds`,
-    description: 'User journeys and interaction flows in plain language — no implementation details.',
+    id: 3,
+    name: 'L3 — Interactions',
+    tagline: 'How users engage with the system.',
+    detail: 'Interactions describe the user journey — flows, states, transitions, and error conditions. They form the behavioral contract between product and engineering.',
   },
   {
-    num: 4,
-    name: 'Systems',
-    tagline: 'What owns what',
-    example: `## CONTENT_SYSTEM
-**Owns:** Hero, meta banner, comparison section
-**Reads from:** .rootspec.json (version)
-**Provides to:** LAYOUT_SYSTEM (rendered sections)`,
-    description: 'System boundaries, ownership, and contracts between system components.',
+    id: 4,
+    name: 'L4 — Systems',
+    tagline: 'Subsystems and their responsibilities.',
+    detail: 'Systems define the logical architecture: what each subsystem owns, its interfaces, and how it communicates with others. This is where design decisions live.',
   },
   {
-    num: 5,
-    name: 'Implementation',
-    tagline: 'Testable acceptance criteria',
-    example: `id: US-101
-title: Understand what RootSpec is
-acceptance_criteria:
-  - id: AC-101-1
-    given: [visit: '/']
-    then:
-      - shouldExist:
-          selector: '[data-test=hero-tagline]'`,
-    description: 'Machine-readable user stories with given/when/then acceptance criteria. These become your Cypress tests.',
+    id: 5,
+    name: 'L5 — Implementation',
+    tagline: 'Testable user stories and fine-tuning.',
+    detail: 'Implementation stories are the atomic unit of work: given/when/then acceptance criteria that drive Cypress tests and guide AI coding agents story by story.',
   },
 ];
 
 export default function HierarchyExplorer() {
   const [expanded, setExpanded] = useState<number | null>(null);
 
-  const toggle = (num: number) => {
-    setExpanded(prev => prev === num ? null : num);
+  const toggle = (id: number) => {
+    setExpanded(prev => (prev === id ? null : id));
   };
 
   return (
-    <div className="hierarchy-explorer">
-      {LEVELS.map((level) => {
-        const isExpanded = expanded === level.num;
-        return (
-          <div key={level.num} className={`level-item ${isExpanded ? 'level-expanded' : ''}`}>
-            <button
-              data-test={`hierarchy-level-${level.num}`}
-              aria-expanded={isExpanded}
-              className="level-header"
-              onClick={() => toggle(level.num)}
-            >
-              <div className="level-left">
-                <span className="level-num">L{level.num}</span>
-                <div className="level-text">
-                  <span className="level-name">{level.name}</span>
-                  <span className="level-tagline">{level.tagline}</span>
-                </div>
-              </div>
-              <span className="level-chevron" aria-hidden="true">
-                {isExpanded ? '▲' : '▼'}
-              </span>
-            </button>
-            {isExpanded && (
+    <section
+      style={{
+        padding: '5rem 1.5rem',
+        backgroundColor: 'var(--color-surface)',
+      }}
+    >
+      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <h2
+            style={{
+              fontSize: 'clamp(1.5rem, 3vw, 2.25rem)',
+              fontWeight: 700,
+              margin: '0 0 0.75rem',
+              color: 'var(--color-text)',
+            }}
+          >
+            The Five-Level Hierarchy
+          </h2>
+          <p
+            style={{
+              color: 'var(--color-text-muted)',
+              fontSize: '1.1rem',
+              maxWidth: '520px',
+              margin: '0 auto',
+            }}
+          >
+            Every RootSpec project is structured across five levels — from timeless philosophy down to executable tests.
+          </p>
+        </div>
+
+        <div
+          data-test="hierarchy-explorer"
+          style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
+        >
+          {levels.map(level => {
+            const isExpanded = expanded === level.id;
+            return (
               <div
-                data-test={`hierarchy-level-${level.num}-content`}
-                className="level-content"
+                key={level.id}
+                style={{
+                  border: `1px solid ${isExpanded ? 'rgba(99,102,241,0.5)' : 'var(--color-border)'}`,
+                  borderRadius: '0.625rem',
+                  overflow: 'hidden',
+                  transition: 'border-color 0.2s',
+                  backgroundColor: 'var(--color-bg)',
+                }}
               >
-                <p className="level-description">{level.description}</p>
-                <pre className="level-example"><code>{level.example}</code></pre>
+                <button
+                  data-test={`hierarchy-level-${level.id}`}
+                  aria-expanded={isExpanded}
+                  tabIndex={0}
+                  onClick={() => toggle(level.id)}
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '1rem 1.25rem',
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: 'var(--color-text)',
+                    fontFamily: 'inherit',
+                    textAlign: 'left',
+                  }}
+                >
+                  <div>
+                    <div
+                      style={{
+                        fontWeight: 600,
+                        fontSize: '0.975rem',
+                        color: isExpanded ? 'var(--color-accent-bright)' : 'var(--color-text)',
+                      }}
+                    >
+                      {level.name}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '0.825rem',
+                        color: 'var(--color-text-muted)',
+                        marginTop: '0.15rem',
+                      }}
+                    >
+                      {level.tagline}
+                    </div>
+                  </div>
+                  <span
+                    style={{
+                      fontSize: '1.1rem',
+                      color: 'var(--color-text-muted)',
+                      transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.2s',
+                      flexShrink: 0,
+                      marginLeft: '1rem',
+                    }}
+                  >
+                    ▾
+                  </span>
+                </button>
+                {isExpanded && (
+                  <div
+                    data-test={`hierarchy-level-${level.id}-content`}
+                    style={{
+                      padding: '0 1.25rem 1.25rem',
+                      color: 'var(--color-text-muted)',
+                      fontSize: '0.9rem',
+                      lineHeight: '1.6',
+                      borderTop: '1px solid var(--color-border)',
+                      paddingTop: '1rem',
+                    }}
+                  >
+                    {level.detail}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }

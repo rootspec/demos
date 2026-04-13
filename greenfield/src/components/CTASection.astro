@@ -1,141 +1,35 @@
 ---
 ---
-
-<section class="cta-section" data-test="cta-section">
-  <div class="container cta-inner">
-    <div class="cta-content">
-      <div class="section-label">Open Source</div>
-      <h2 class="cta-heading">Start speccing today</h2>
-      <p class="cta-body">RootSpec is free and open source. Add it to any project in minutes — no account, no lock-in.</p>
-      <div class="cta-commands">
-        <div class="command-block">
-          <span class="command-label">Get started</span>
-          <code class="command-line"># 1. Clone and add to your project<br />git clone https://github.com/rootspec/demos</code>
-          <code class="command-line"># 2. Initialize in your repo<br />/rs-init</code>
-          <code class="command-line"># 3. Spec your first feature<br />/rs-spec</code>
-        </div>
-      </div>
-      <div class="cta-links">
-        <a
-          data-test="cta-github"
-          href="https://github.com/rootspec/demos"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn btn-primary"
-        >
-          View on GitHub
-        </a>
-        <a
-          href="https://github.com/rootspec/demos/discussions"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn btn-secondary"
-        >
-          Join the community
-        </a>
-      </div>
+<section data-test="cta-section" id="get-started" style="padding: 5rem 1.5rem; background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(139,92,246,0.1) 100%); border-top: 1px solid var(--color-border);">
+  <div style="max-width: 700px; margin: 0 auto; text-align: center;">
+    <h2 style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; margin: 0 0 1rem; color: var(--color-text);">
+      Start Building with Confidence
+    </h2>
+    <p style="color: var(--color-text-muted); font-size: 1.1rem; margin: 0 0 2.5rem; line-height: 1.6;">
+      RootSpec gives your AI coding agents a living contract. No more drift. No more guessing.
+      Every feature ships aligned with intent.
+    </p>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <a
+        data-test="cta-github-link"
+        href="https://github.com/rootspec/demos"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="
+          background: var(--color-accent);
+          color: white;
+          padding: 0.875rem 2rem;
+          border-radius: 0.5rem;
+          font-weight: 600;
+          font-size: 1.05rem;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+        "
+      >
+        View on GitHub
+      </a>
     </div>
   </div>
 </section>
-
-<style>
-  .cta-section {
-    padding: 5rem 0;
-    background: var(--color-bg);
-    border-top: 1px solid var(--color-border);
-  }
-
-  .cta-inner {
-    max-width: 720px;
-  }
-
-  .cta-heading {
-    font-size: clamp(1.5rem, 3vw, 2.25rem);
-    font-weight: 800;
-    color: var(--color-text-primary);
-    margin-bottom: 0.75rem;
-    margin-top: 0.5rem;
-  }
-
-  .cta-body {
-    font-size: 1.0625rem;
-    color: var(--color-text-secondary);
-    line-height: 1.7;
-    margin-bottom: 2rem;
-  }
-
-  .cta-commands {
-    margin-bottom: 2rem;
-  }
-
-  .command-block {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 0.75rem;
-    padding: 1.25rem 1.5rem;
-  }
-
-  .command-label {
-    display: block;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-text-secondary);
-    margin-bottom: 0.75rem;
-  }
-
-  .command-line {
-    display: block;
-    font-family: monospace;
-    font-size: 0.875rem;
-    color: var(--color-text-primary);
-    margin-bottom: 0.5rem;
-    white-space: pre;
-  }
-
-  .command-line:last-child {
-    margin-bottom: 0;
-  }
-
-  .cta-links {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    font-size: 0.9375rem;
-    text-decoration: none;
-    transition: all 0.15s ease;
-  }
-
-  .btn-primary {
-    background: var(--color-accent);
-    color: white;
-  }
-
-  .btn-primary:hover {
-    background: var(--color-accent-hover);
-    color: white;
-    text-decoration: none;
-  }
-
-  .btn-secondary {
-    background: var(--color-surface);
-    color: var(--color-text-primary);
-    border: 1px solid var(--color-border);
-  }
-
-  .btn-secondary:hover {
-    background: var(--color-border);
-    color: var(--color-text-primary);
-    text-decoration: none;
-  }
-</style>

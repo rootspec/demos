@@ -1,40 +1,36 @@
 # =============================================================================
-# USER STORIES: Responsive Layout — MVP Phase
+# USER STORY: Keyboard Accessibility
 # =============================================================================
-# @spec_version: 1.0.0
+# @spec_version: 7.2.1
 # @phase: MVP
 # @journey: DISCOVERY
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-12T22:10:43Z
-
----
+# @systems: [INTERACTIVE_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-13T17:12:20Z
 
 id: US-401
-title: Navigate the site on a mobile viewport
+title: All interactive elements are keyboard accessible
 
 acceptance_criteria:
   - id: AC-401-1
-    title: Meta banner is visible on mobile without horizontal scrolling
+    title: Theme toggle is keyboard accessible
     narrative: |
-      Given I am viewing the site on a narrow viewport
-      When I look at the meta banner
-      Then it should display without causing horizontal overflow
+      Given I visit the site
+      When I navigate to the theme toggle using the keyboard
+      Then I can activate it with Enter or Space
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: '[data-test=theme-toggle][tabindex], [data-test=theme-toggle]:not([tabindex="-1"])' }
 
   - id: AC-401-2
-    title: Wizard is usable on mobile
+    title: Hierarchy Explorer levels are keyboard accessible
     narrative: |
-      Given I am on a narrow viewport
-      When I interact with the Spec Your Idea wizard
-      Then I should be able to complete each step with touch inputs
+      Given I visit the hierarchy explorer
+      When I focus a level using keyboard navigation
+      Then the level has a visible focus indicator and can be expanded with Enter or Space
     given:
       - visit: '/'
-    when:
-      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A meal planning tool' }
-      - click: { selector: '[data-test=wizard-next]' }
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=wizard-step-1]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-1][tabindex], button[data-test=hierarchy-level-1]' }

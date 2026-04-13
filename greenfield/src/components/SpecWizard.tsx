@@ -1,210 +1,285 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-const MISSIONS = [
-  'Help teams ship features faster with less rework',
-  'Replace ambiguous tickets with machine-readable specs',
-  'Make product decisions explicit and traceable',
-  'Enable AI agents to write code from specs',
+const TOTAL_STEPS = 3;
+
+const stepQuestions = [
+  {
+    label: 'What product are you building?',
+    placeholder: 'e.g. A tool for tracking reading habits',
+    field: 'productIdea',
+  },
+  {
+    label: 'Who is it for?',
+    placeholder: 'e.g. Book lovers who want to build a reading habit',
+    field: 'audience',
+  },
+  {
+    label: 'What is the core problem it solves?',
+    placeholder: 'e.g. People forget what they\'ve read and lose momentum',
+    field: 'problem',
+  },
 ];
 
-const PILLARS = [
-  'Testability — every feature has an acceptance test',
-  'Clarity — requirements are unambiguous',
-  'Traceability — decisions trace back to principles',
-  'Automation — specs drive code generation',
-  'Collaboration — shared language across roles',
-];
+function generateSkeleton(answers: Record<string, string>) {
+  const product = answers.productIdea || 'Your Product';
+  const audience = answers.audience || 'Target users';
+  const problem = answers.problem || 'Core problem';
+  return `# ${product}
 
-type WizardStep = 'idea' | 'mission' | 'pillars' | 'interaction' | 'output';
+## L1 — Philosophy
+> ${product} exists to help ${audience} overcome: ${problem}.
+
+## L2 — Truths
+- Users must never lose their data
+- Core actions must complete in under 2 seconds
+- The product must work offline (progressive enhancement)
+
+## L3 — Interactions
+- User discovers the product and understands value immediately
+- User onboards without friction (no required sign-up for core value)
+- User completes primary workflow in under 60 seconds
+
+## L4 — Systems
+- Content System: manages user-generated data
+- Auth System: optional account creation
+- Notification System: gentle reminders and streaks
+
+## L5 — User Stories
+- US-001: ${audience} can complete core action without signing up
+- US-002: User data persists across sessions
+- US-003: User can export their data at any time`;
+}
 
 export default function SpecWizard() {
-  const [step, setStep] = useState<WizardStep>('idea');
-  const [idea, setIdea] = useState('');
-  const [ideaError, setIdeaError] = useState(false);
-  const [mission, setMission] = useState<number | null>(null);
-  const [pillars, setPillars] = useState<number[]>([]);
-  const [interaction, setInteraction] = useState('');
+  const [step, setStep] = useState(1);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [output, setOutput] = useState<string | null>(null);
 
-  const handleNextFromIdea = () => {
-    if (!idea.trim()) {
-      setIdeaError(true);
-      return;
+  const currentQ = stepQuestions[step - 1];
+
+  const handleNext = () => {
+    if (step < TOTAL_STEPS) {
+      setStep(s => s + 1);
+    } else {
+      setOutput(generateSkeleton(answers));
     }
-    setIdeaError(false);
-    setStep('mission');
   };
 
-  const handleNextFromMission = () => {
-    setStep('pillars');
+  const handleBack = () => {
+    if (step > 1) setStep(s => s - 1);
   };
 
-  const [pillarError, setPillarError] = useState(false);
-
-  const handleNextFromPillars = () => {
-    if (pillars.length < 3) {
-      setPillarError(true);
-      return;
-    }
-    setPillarError(false);
-    setStep('interaction');
-  };
-
-  const handleNextFromInteraction = () => {
-    setStep('output');
-  };
-
-  const togglePillar = (idx: number) => {
-    setPillars(prev =>
-      prev.includes(idx) ? prev.filter(p => p !== idx) : [...prev, idx]
-    );
-  };
-
-  const generateSpec = () => {
-    const pillarList = pillars.map(p => `  - ${PILLARS[p]}`).join('\n');
-    return `# L1: Philosophy
-## Mission
-${MISSIONS[mission ?? 0]}
-
-# L2: Truths
-## Design Principles
-${pillarList || '  - (none selected)'}
-
-## Trade-offs
-  - Prioritise clarity over flexibility
-  - Favour explicit over implicit decisions
-
-# L3: Interactions
-## Core Flow
-GIVEN a user opens the app
-WHEN ${interaction || 'they perform a key action'}
-THEN the system responds appropriately`;
+  const handleChange = (value: string) => {
+    setAnswers(prev => ({ ...prev, [currentQ.field]: value }));
   };
 
   return (
-    <div className="spec-wizard">
-      {step === 'idea' && (
-        <div className="wizard-pane">
-          <p className="wizard-prompt">What are you building?</p>
-          <textarea
-            data-test="wizard-idea-input"
-            className={`wizard-textarea ${ideaError ? 'wizard-textarea-error' : ''}`}
-            placeholder="Describe your product idea in a sentence or two..."
-            value={idea}
-            onChange={e => { setIdea(e.target.value); if (ideaError) setIdeaError(false); }}
-            rows={3}
-          />
-          {ideaError && (
-            <p data-test="wizard-idea-error" className="wizard-error">
-              Please enter a product idea to continue.
-            </p>
-          )}
-          <button
-            data-test="wizard-next"
-            className="wizard-btn wizard-btn-primary"
-            onClick={handleNextFromIdea}
-          >
-            Continue →
-          </button>
-        </div>
-      )}
-
-      {step === 'mission' && (
-        <div data-test="wizard-step-1" className="wizard-pane">
-          <p className="wizard-prompt">Choose the mission that best fits your product:</p>
-          <div className="wizard-options">
-            {MISSIONS.map((m, i) => (
-              <button
-                key={i}
-                data-test={`wizard-mission-${i}`}
-                className={`wizard-option ${mission === i ? 'wizard-option-selected' : ''}`}
-                onClick={() => setMission(i)}
-              >
-                {m}
-              </button>
-            ))}
-          </div>
-          <button
-            data-test="wizard-next"
-            className="wizard-btn wizard-btn-primary"
-            onClick={handleNextFromMission}
-          >
-            Continue →
-          </button>
-        </div>
-      )}
-
-      {step === 'pillars' && (
-        <div className="wizard-pane">
-          <p className="wizard-prompt">Select 3–5 design pillars:</p>
-          <div className="wizard-options">
-            {PILLARS.map((p, i) => (
-              <button
-                key={i}
-                data-test={`wizard-pillar-${i}`}
-                className={`wizard-option ${pillars.includes(i) ? 'wizard-option-selected' : ''}`}
-                onClick={() => { togglePillar(i); if (pillarError) setPillarError(false); }}
-              >
-                {p}
-              </button>
-            ))}
-          </div>
-          {pillarError && (
-            <p data-test="wizard-pillar-error" className="wizard-error">
-              Please select at least 3 pillars to continue.
-            </p>
-          )}
-          <button
-            data-test="wizard-next"
-            className="wizard-btn wizard-btn-primary"
-            onClick={handleNextFromPillars}
-          >
-            Continue →
-          </button>
-        </div>
-      )}
-
-      {step === 'interaction' && (
-        <div className="wizard-pane">
-          <p className="wizard-prompt">Describe a core user interaction:</p>
-          <input
-            data-test="wizard-interaction-input"
-            className="wizard-input"
-            type="text"
-            placeholder="e.g. User marks a book as finished"
-            value={interaction}
-            onChange={e => setInteraction(e.target.value)}
-          />
-          <button
-            data-test="wizard-next"
-            className="wizard-btn wizard-btn-primary"
-            onClick={handleNextFromInteraction}
-          >
-            Generate Spec →
-          </button>
-        </div>
-      )}
-
-      {step === 'output' && (
-        <div className="wizard-pane">
-          <p className="wizard-prompt wizard-prompt-success">Your skeleton spec:</p>
-          <div data-test="wizard-output" className="wizard-output">
-            <pre><code>{generateSpec()}</code></pre>
-          </div>
-          <button
-            data-test="wizard-next"
-            className="wizard-btn wizard-btn-secondary"
-            onClick={() => {
-              setStep('idea');
-              setIdea('');
-              setMission(null);
-              setPillars([]);
-              setInteraction('');
+    <section
+      style={{
+        padding: '5rem 1.5rem',
+        backgroundColor: 'var(--color-bg)',
+      }}
+    >
+      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <h2
+            style={{
+              fontSize: 'clamp(1.5rem, 3vw, 2.25rem)',
+              fontWeight: 700,
+              margin: '0 0 0.75rem',
+              color: 'var(--color-text)',
             }}
           >
-            Start over
-          </button>
+            Try the Spec Wizard
+          </h2>
+          <p
+            style={{
+              color: 'var(--color-text-muted)',
+              fontSize: '1.1rem',
+              maxWidth: '500px',
+              margin: '0 auto',
+            }}
+          >
+            Answer three questions and generate a skeleton RootSpec in seconds.
+          </p>
         </div>
-      )}
-    </div>
+
+        <div
+          data-test="spec-wizard"
+          style={{
+            background: 'var(--color-surface)',
+            border: '1px solid var(--color-border)',
+            borderRadius: '0.875rem',
+            padding: '2rem',
+          }}
+        >
+          {!output ? (
+            <>
+              {/* Progress */}
+              <div style={{ marginBottom: '1.5rem' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    fontSize: '0.8rem',
+                    color: 'var(--color-text-muted)',
+                    marginBottom: '0.5rem',
+                  }}
+                >
+                  <span>Step {step} of {TOTAL_STEPS}</span>
+                  <span>{Math.round((step / TOTAL_STEPS) * 100)}%</span>
+                </div>
+                <div
+                  style={{
+                    height: '4px',
+                    background: 'var(--color-border)',
+                    borderRadius: '2px',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <div
+                    style={{
+                      height: '100%',
+                      width: `${(step / TOTAL_STEPS) * 100}%`,
+                      background: 'var(--color-accent)',
+                      borderRadius: '2px',
+                      transition: 'width 0.3s ease',
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Step content */}
+              <div data-test={`wizard-step-${step}`}>
+                <label
+                  style={{
+                    display: 'block',
+                    fontWeight: 600,
+                    fontSize: '1rem',
+                    color: 'var(--color-text)',
+                    marginBottom: '0.75rem',
+                  }}
+                >
+                  {currentQ.label}
+                </label>
+                <input
+                  data-test="wizard-product-input"
+                  type="text"
+                  placeholder={currentQ.placeholder}
+                  value={answers[currentQ.field] || ''}
+                  onChange={e => handleChange(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    background: 'var(--color-bg)',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: '0.5rem',
+                    color: 'var(--color-text)',
+                    fontSize: '0.95rem',
+                    fontFamily: 'inherit',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                  }}
+                />
+              </div>
+
+              {/* Navigation */}
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '0.75rem',
+                  marginTop: '1.5rem',
+                  justifyContent: step > 1 ? 'space-between' : 'flex-end',
+                }}
+              >
+                {step > 1 && (
+                  <button
+                    data-test="wizard-back"
+                    onClick={handleBack}
+                    style={{
+                      padding: '0.625rem 1.25rem',
+                      background: 'var(--color-bg)',
+                      border: '1px solid var(--color-border)',
+                      borderRadius: '0.5rem',
+                      color: 'var(--color-text)',
+                      cursor: 'pointer',
+                      fontFamily: 'inherit',
+                      fontSize: '0.9rem',
+                    }}
+                  >
+                    Back
+                  </button>
+                )}
+                <button
+                  data-test="wizard-next"
+                  onClick={handleNext}
+                  style={{
+                    padding: '0.625rem 1.5rem',
+                    background: 'var(--color-accent)',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                    fontSize: '0.9rem',
+                    fontWeight: 600,
+                  }}
+                >
+                  {step === TOTAL_STEPS ? 'Generate Spec' : 'Next'}
+                </button>
+              </div>
+            </>
+          ) : (
+            <div data-test="wizard-output">
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '1rem',
+                }}
+              >
+                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 600, color: 'var(--color-text)' }}>
+                  Your Skeleton Spec
+                </h3>
+                <button
+                  onClick={() => { setOutput(null); setStep(1); setAnswers({}); }}
+                  style={{
+                    padding: '0.4rem 0.9rem',
+                    background: 'var(--color-bg)',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: '0.375rem',
+                    color: 'var(--color-text-muted)',
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                    fontSize: '0.8rem',
+                  }}
+                >
+                  Reset
+                </button>
+              </div>
+              <pre
+                style={{
+                  background: 'var(--color-bg)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '0.5rem',
+                  padding: '1.25rem',
+                  fontSize: '0.8rem',
+                  lineHeight: '1.6',
+                  color: 'var(--color-text-muted)',
+                  overflowX: 'auto',
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word',
+                  margin: 0,
+                  fontFamily: 'ui-monospace, monospace',
+                }}
+              >
+                {output}
+              </pre>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
   );
 }

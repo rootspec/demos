@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "./scripts/dev.sh start",
+    "dev": "astro dev --port 3000",
     "dev:start": "./scripts/dev.sh start",
     "dev:stop": "./scripts/dev.sh stop",
     "dev:restart": "./scripts/dev.sh restart",
@@ -14,15 +14,15 @@
   "devDependencies": {
     "cypress": "^15.13.1",
     "js-yaml": "^4.1.1",
-    "typescript": "^5.9.3",
     "zod": "^4.3.6"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.3",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
+    "@tailwindcss/vite": "^4.2.2",
     "astro": "^6.1.5",
     "react": "^19.2.5",
-    "react-dom": "^19.2.5"
+    "react-dom": "^19.2.5",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5.9.3"
   }
 }

@@ -1,54 +1,49 @@
 # =============================================================================
 # LEVEL 5: FINE TUNING - Interactive System
 # =============================================================================
-# @spec_version: 1.0.0
+# @spec_version: 7.2.1
 # @system: INTERACTIVE_SYSTEM
-# @last_updated: 2026-04-12T22:10:43Z
+# @last_updated: 2026-04-13T17:12:20Z
 # @status: draft
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
 # -----------------------------------------------------------------------------
 # Hierarchy Explorer
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
 hierarchy_explorer:
-  animation_duration_ms: 200
-  # @rationale: Short enough to feel snappy, long enough for the expand animation to be perceptible
-  # @constraints: min=100, max=500, type=integer
-  # @unit: milliseconds
+  expand_duration: 250
+  # @rationale: Fast expand for exploratory UI; should feel snappy
+  # @constraints: min=100, max=500, type=integer, unit=ms
+
+  levels_count: 5
+  # @rationale: Fixed by RootSpec methodology; not a tunable parameter
+  # @inviolable: true
+  # @spec_source: 01.PHILOSOPHY.md - The five-level hierarchy is the core mechanism
 
 # -----------------------------------------------------------------------------
-# Spec Your Idea Wizard
+# Spec Wizard
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
 wizard:
-  min_pillars: 3
-  # @rationale: RootSpec philosophy requires 3-5 design pillars; fewer than 3 is too narrow to be meaningful
-  # @spec_source: 01.PHILOSOPHY.md (Design Pillars guidance)
-  # @constraints: min=2, max=3, type=integer
+  steps_count: 3
+  # @rationale: Three steps balances completeness with approachability
+  # @inviolable: false
+  # @constraints: min=2, max=5, type=integer
 
-  max_pillars: 5
-  # @rationale: More than 5 design pillars dilutes focus; the framework guidance recommends 3-5
-  # @spec_source: 01.PHILOSOPHY.md (Design Pillars guidance), 00.FRAMEWORK.md
-  # @constraints: min=5, max=8, type=integer
+  mission_template_count: 5
+  # @rationale: Enough variety to cover main product categories without overwhelming
+  # @constraints: min=3, max=10, type=integer
 
-  step_count: 4
-  # @rationale: Three input steps (mission, pillars, interaction) plus one output step = 4 total
-  # @constraints: type=integer
+  pillar_suggestion_count: 12
+  # @rationale: Grid of suggestions; visitor selects 3-5; enough variety to feel personal
+  # @constraints: min=6, max=20, type=integer
+
+  pillar_min_selection: 3
+  # @rationale: Three pillars minimum to demonstrate the multi-pillar concept
+  # @constraints: min=1, max=3, type=integer
+
+  pillar_max_selection: 5
+  # @rationale: Five pillars maximum per L1 specification guidelines
   # @inviolable: true
-
-# -----------------------------------------------------------------------------
-# Before/After Comparison
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-
-before_after:
-  slider_default_position: 0.5
-  # @rationale: Center is the neutral starting point; neither panel is privileged
-  # @constraints: min=0.1, max=0.9, type=float
-
-  slider_keyboard_step: 0.1
-  # @rationale: 10% increments allow fine control without requiring too many keystrokes to traverse
-  # @constraints: min=0.05, max=0.25, type=float
+  # @spec_source: 01.PHILOSOPHY.md - Design Pillars (3-5 core experiences)

@@ -1,127 +1,98 @@
 # Level 4: Layout System
 
-**System:** LAYOUT_SYSTEM
-**Last Updated:** 2026-04-12
-
----
+*References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md, THEME_SYSTEM.md*
 
 ## Responsibility
 
-The Layout System owns the structural wrapper of every page: the header, the footer, the meta banner, the navigation, and the responsive grid. It decides how sections are ordered, how wide the content column is, and what persistent elements (version badge, theme toggle) appear on every page view. It does not own content copy or interactive behavior.
-
----
+Manages the structural layout of the page: responsive grid, section sequencing, header and footer, typography scale, color tokens, and spacing. Renders content provided by CONTENT_SYSTEM into a coherent visual structure. Consumes theme state from THEME_SYSTEM.
 
 ## Boundaries
 
-- **Owns:** Header, footer, navigation, meta banner, main content wrapper, responsive breakpoints, z-index stack
-- **Does not own:** Section content, interactive section behavior, theme token values
-- **Reads from:** FRAMEWORK_SYSTEM (version string at build time), THEME_SYSTEM (applies active theme class to root)
-- **Wraps:** CONTENT_SYSTEM sections and INTERACTIVE_SYSTEM sections
-
----
+- **Owns:** CSS variables/tokens, page scaffold, section structure, responsive breakpoints, typography, header, footer
+- **Does not own:** Content copy (CONTENT_SYSTEM), interactive component behavior (INTERACTIVE_SYSTEM), theme state (THEME_SYSTEM)
+- **Provides to:** All other systems — the base visual environment they operate within
 
 ## Page Structure
 
 ```
-<html [data-theme]>
-  <head>
-    <!-- inline theme script (THEME_SYSTEM) -->
-  </head>
+<html class="dark|light">
+  <head> [theme detection script, fonts, global CSS] </head>
   <body>
-    <header>
-      <!-- Logo / site name -->
-      <!-- Version badge -->
-      <!-- Theme toggle (THEME_SYSTEM renders; LAYOUT_SYSTEM positions) -->
-      <!-- Navigation anchors -->
-    </header>
-
-    <div class="meta-banner" data-test="meta-banner">
-      <!-- Meta banner content (CONTENT_SYSTEM) -->
-    </div>
-
+    <Header> [logo, nav, theme toggle, version badge] </Header>
     <main>
-      <!-- Hero section -->
-      <!-- Problem section -->
-      <!-- How It Works section -->
-      <!-- Hierarchy Explorer section (INTERACTIVE_SYSTEM) -->
-      <!-- Spec Wizard section (INTERACTIVE_SYSTEM) -->
-      <!-- Before/After section (INTERACTIVE_SYSTEM) -->
-      <!-- Open Source CTA section -->
+      <MetaBanner />
+      <HeroSection />
+      <ProblemSection />
+      <HowItWorksSection />
+      <HierarchySection />    [contains HierarchyExplorer interactive component]
+      <WizardSection />       [contains SpecWizard interactive component]
+      <ComparisonSection />   [contains BeforeAfter interactive component]
+      <CTASection />
     </main>
-
-    <footer>
-      <!-- Attribution, version, links -->
-    </footer>
+    <Footer />
   </body>
 </html>
 ```
 
----
-
 ## Header
 
-| Element | Purpose |
-|---------|---------|
-| Site name / logo | Identifies the product; links to top of page |
-| Version badge | Displays RootSpec version from `.rootspec.json` (build-time); `data-test=version-badge` |
-| Theme toggle | Button rendered in header; THEME_SYSTEM handles behavior |
-| Navigation anchors | Skip-links to major sections; visible on focus for keyboard users |
+- Fixed or sticky at top of viewport
+- Contains: site wordmark/logo, primary nav (anchor links to sections), theme toggle button, version badge
+- Responsive: collapses gracefully on mobile (no hamburger menu required if anchors fit)
+- Height: `[header height]`
 
-The header is sticky (visible while scrolling). It does not contain the meta banner.
+## Color Tokens
 
----
+All colors defined as CSS custom properties on `:root`. THEME_SYSTEM's class on `<html>` overrides tokens for dark mode:
 
-## Meta Banner
+| Token | Purpose |
+|-------|---------|
+| `--color-bg` | Page background |
+| `--color-surface` | Card/panel background |
+| `--color-text-primary` | Primary body text |
+| `--color-text-secondary` | Secondary/muted text |
+| `--color-accent` | Brand accent (links, highlights, buttons) |
+| `--color-border` | Dividers and borders |
+| `--color-code-bg` | Inline code background |
 
-- Rendered immediately below the header (or as a persistent top-of-page element, above the hero)
-- Full viewport width; not dismissible
-- Distinguishable from the hero (different background color from both header and page body)
-- Contains: the demo disclosure text + two links (SEED.md, spec files)
-- `data-test=meta-banner`
+## Typography Scale
 
----
+| Name | Usage |
+|------|-------|
+| `text-hero` | Hero headline |
+| `text-h1` | Section headings |
+| `text-h2` | Subsection headings |
+| `text-body` | Default body copy |
+| `text-small` | Captions, meta text |
+| `text-code` | Inline code, technical labels |
 
-## Responsive Layout
+Font stack: system UI font or a single loaded sans-serif. No decorative fonts. Code elements use monospace system stack.
 
-| Viewport | Behavior |
-|----------|----------|
-| Narrow (mobile) | Single column; sections stack vertically; before/after uses toggle instead of slider |
-| Mid (tablet) | Single column with slightly wider content area |
-| Wide (desktop) | Centered content column with max-width; before/after uses side-by-side slider |
+## Responsive Breakpoints
 
-Breakpoints are defined as CSS custom properties. Actual pixel values are set at implementation time (placeholders: `[mobile-breakpoint]`, `[desktop-breakpoint]`).
+| Name | Min Width | Layout change |
+|------|-----------|---------------|
+| `sm` | [small breakpoint] | Single column, stacked sections |
+| `md` | [medium breakpoint] | Two-column layouts enabled |
+| `lg` | [large breakpoint] | Full layout, max-width container |
 
----
+Max content width: `[max content width]`; centered with horizontal padding.
 
-## Section Ordering
+## Section Spacing
 
-Sections appear in this order from top to bottom:
-1. Header (sticky)
-2. Meta Banner
-3. Hero
-4. The Problem
-5. How It Works
-6. Hierarchy Explorer
-7. Spec Your Idea Wizard
-8. Before/After Comparison
-9. Open Source CTA
-10. Footer
+Each section separated by consistent vertical rhythm:
+- Section padding top/bottom: `[section vertical padding]`
+- Inner content max-width constrained for readability
 
----
+## Animation
 
-## Z-Index Stack
+- Scroll-triggered fade-in on sections: opacity 0 → 1 as section enters viewport
+- Animation duration: `[animation duration]`
+- Respect `prefers-reduced-motion`: no animations if user prefers reduced motion
 
-| Layer | Element | Priority |
-|-------|---------|---------|
-| Top | Sticky header | Highest |
-| Mid | Meta banner (if overlapping) | Secondary |
-| Base | Page content | Normal |
+## Footer
 
----
-
-## Accessibility
-
-- Skip navigation link appears as the first focusable element; visible on focus
-- All sections have appropriate landmark roles (`<header>`, `<main>`, `<footer>`, `<nav>`)
-- Section headings follow a logical `<h1>` → `<h2>` → `<h3>` hierarchy
-- Focus is not trapped anywhere except within wizard steps (intentional modal-like behavior)
+- Attribution: site builder name and build date
+- Framework version
+- Links: GitHub repo
+- Simple single-row layout on desktop; stacked on mobile
