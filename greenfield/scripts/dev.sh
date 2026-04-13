@@ -6,8 +6,8 @@
 set -euo pipefail
 
 # --- Configuration (edit these) ---
-DEV_CMD="npm run dev"
-PORT="${PORT:-4321}"
+DEV_CMD="npx astro dev --port 3000 --host"
+PORT="${PORT:-3000}"
 
 # --- Internal ---
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"

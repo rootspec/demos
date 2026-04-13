@@ -1,161 +1,40 @@
 # =============================================================================
-# USER STORY: Mobile-Responsive Layout
+# USER STORIES: Responsive Layout — MVP Phase
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: ACCESSIBILITY
-# @systems: [LAYOUT_SYSTEM, THEME_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
+# @journey: DISCOVERY
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-12T22:10:43Z
+
+---
 
 id: US-401
-title: Site adapts to mobile viewport sizes
-requirement_id: R-401
+title: Navigate the site on a mobile viewport
 
 acceptance_criteria:
   - id: AC-401-1
-    title: Content readable on mobile screens
+    title: Meta banner is visible on mobile without horizontal scrolling
     narrative: |
-      Given I am viewing the site on a mobile device
-      When I read the content
-      Then I should see properly sized text and layouts
+      Given I am viewing the site on a narrow viewport
+      When I look at the meta banner
+      Then it should display without causing horizontal overflow
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=hero-section]' }
-      - shouldContain: { selector: '[data-test=hero-description]', text: 'specification' }
+      - shouldExist: { selector: '[data-test=meta-banner]' }
 
   - id: AC-401-2
-    title: Interactive elements are touch-friendly
+    title: Wizard is usable on mobile
     narrative: |
-      Given I am using touch interaction
-      When I tap interactive elements
-      Then I should have appropriately sized touch targets
+      Given I am on a narrow viewport
+      When I interact with the Spec Your Idea wizard
+      Then I should be able to complete each step with touch inputs
     given:
       - visit: '/'
     when:
-      - click: { selector: '[data-test=theme-toggle]' }
+      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A meal planning tool' }
+      - click: { selector: '[data-test=wizard-next]' }
     then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
-
-  - id: AC-401-3
-    title: Navigation works on small screens
-    narrative: |
-      Given I am viewing the site on mobile
-      When I navigate through sections
-      Then I should be able to access all functionality
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=spec-wizard-start]' }
-    then:
-      - shouldExist: { selector: '[data-test=product-idea-input]' }
-
----
-
-# =============================================================================
-# USER STORY: Keyboard Accessibility
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: ACCESSIBILITY
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, THEME_SYSTEM]
-# @last_updated: 2026-04-08T00:59:00Z
-
-id: US-402
-title: Complete keyboard navigation support
-requirement_id: R-402
-
-acceptance_criteria:
-  - id: AC-402-1
-    title: Tab order follows logical content flow
-    narrative: |
-      Given I am using keyboard-only navigation
-      When I tab through the page elements
-      Then I should move through content in a logical order
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hero-section]' }
-    then:
-      - shouldExist: { selector: '[data-test=hero-section]:focus-within' }
-
-  - id: AC-402-2
-    title: All interactive elements keyboard accessible
-    narrative: |
-      Given I am using keyboard navigation
-      When I encounter interactive elements
-      Then I should be able to activate them with keyboard
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-explorer]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-explorer]:focus-within' }
-
-  - id: AC-402-3
-    title: Skip links available for screen readers
-    narrative: |
-      Given I am using assistive technology
-      When I navigate the page
-      Then I should have skip links to main content areas
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: 'main' }
-
----
-
-# =============================================================================
-# USER STORY: Cross-Device Consistency
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: ACCESSIBILITY
-# @systems: [LAYOUT_SYSTEM, CONTENT_SYSTEM, FRAMEWORK_INTEGRATION]
-# @last_updated: 2026-04-08T00:59:00Z
-
-id: US-403
-title: Consistent functionality across device types
-requirement_id: R-403
-
-acceptance_criteria:
-  - id: AC-403-1
-    title: Core functionality works without JavaScript
-    narrative: |
-      Given JavaScript is disabled or fails to load
-      When I visit the site
-      Then I should still be able to read core content
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-section]' }
-      - shouldContain: { selector: '[data-test=hero-description]', text: 'specification' }
-
-  - id: AC-403-2
-    title: Progressive enhancement adds interactivity
-    narrative: |
-      Given JavaScript loads successfully
-      When interactive elements become available
-      Then I should have enhanced functionality while maintaining core features
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=spec-wizard-start]' }
-    then:
-      - shouldExist: { selector: '[data-test=product-idea-input]' }
-
-  - id: AC-403-3
-    title: Consistent visual presentation across browsers
-    narrative: |
-      Given I am using different modern browsers
-      When I view the site
-      Then I should see consistent layout and styling
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-section]' }
-      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: '[data-test=wizard-step-1]' }

@@ -1,117 +1,127 @@
-# L4: Layout System
+# Level 4: Layout System
+
+**System:** LAYOUT_SYSTEM
+**Last Updated:** 2026-04-12
+
+---
 
 ## Responsibility
-Manages responsive design, accessibility features, spatial relationships, and adaptive layouts that ensure the site works effectively across all device types and user needs.
+
+The Layout System owns the structural wrapper of every page: the header, the footer, the meta banner, the navigation, and the responsive grid. It decides how sections are ordered, how wide the content column is, and what persistent elements (version badge, theme toggle) appear on every page view. It does not own content copy or interactive behavior.
+
+---
 
 ## Boundaries
 
-### Owns
-- Responsive grid systems and breakpoint management
-- Component spacing and spatial relationships
-- Accessibility features (focus management, screen reader support)
-- Mobile-first responsive design patterns
-- Layout adaptation for different viewport sizes
-- Keyboard navigation and interaction patterns
+- **Owns:** Header, footer, navigation, meta banner, main content wrapper, responsive breakpoints, z-index stack
+- **Does not own:** Section content, interactive section behavior, theme token values
+- **Reads from:** FRAMEWORK_SYSTEM (version string at build time), THEME_SYSTEM (applies active theme class to root)
+- **Wraps:** CONTENT_SYSTEM sections and INTERACTIVE_SYSTEM sections
 
-### Does Not Own
-- Visual styling and color schemes (managed by Theme System)
-- Content structure and copy (managed by Content System)
-- Interactive widget logic (managed by Interactive System)  
-- Framework-specific rendering (managed by Framework Integration)
+---
 
-## Data Ownership
+## Page Structure
 
-### Layout Metrics
-- Viewport dimensions and orientation
-- Responsive breakpoint thresholds
-- Component size and positioning calculations
-- Touch target validation measurements
-- Scroll position and visibility states
+```
+<html [data-theme]>
+  <head>
+    <!-- inline theme script (THEME_SYSTEM) -->
+  </head>
+  <body>
+    <header>
+      <!-- Logo / site name -->
+      <!-- Version badge -->
+      <!-- Theme toggle (THEME_SYSTEM renders; LAYOUT_SYSTEM positions) -->
+      <!-- Navigation anchors -->
+    </header>
 
-### Accessibility State
-- Keyboard focus position and management
-- Screen reader context and announcements
-- Tab order sequence across interactive elements
-- Skip link navigation targets
-- ARIA attributes and semantic markup
+    <div class="meta-banner" data-test="meta-banner">
+      <!-- Meta banner content (CONTENT_SYSTEM) -->
+    </div>
 
-## Interactions with Other Systems
+    <main>
+      <!-- Hero section -->
+      <!-- Problem section -->
+      <!-- How It Works section -->
+      <!-- Hierarchy Explorer section (INTERACTIVE_SYSTEM) -->
+      <!-- Spec Wizard section (INTERACTIVE_SYSTEM) -->
+      <!-- Before/After section (INTERACTIVE_SYSTEM) -->
+      <!-- Open Source CTA section -->
+    </main>
 
-### → Content System
-- **Provides:** Responsive content layout and hierarchy
-- **Receives:** Content structure requiring spatial organization
-- **Interface:** Grid placement, content flow, reading order
+    <footer>
+      <!-- Attribution, version, links -->
+    </footer>
+  </body>
+</html>
+```
 
-### → Interactive System
-- **Provides:** Touch-friendly interaction zones and keyboard navigation
-- **Receives:** Interactive element positioning requirements
-- **Interface:** Adaptive interaction patterns, accessibility enhancements
+---
 
-### → Theme System
-- **Provides:** Layout context for responsive theme adaptations
-- **Receives:** Theme-aware spacing and sizing adjustments
-- **Interface:** Breakpoint-specific styling, layout-informed design tokens
+## Header
 
-### → Framework Integration
-- **Provides:** Layout architecture and component arrangement
-- **Receives:** Astro component structure and rendering constraints  
-- **Interface:** Page layouts, component composition, responsive directives
+| Element | Purpose |
+|---------|---------|
+| Site name / logo | Identifies the product; links to top of page |
+| Version badge | Displays RootSpec version from `.rootspec.json` (build-time); `data-test=version-badge` |
+| Theme toggle | Button rendered in header; THEME_SYSTEM handles behavior |
+| Navigation anchors | Skip-links to major sections; visible on focus for keyboard users |
 
-## Internal Structure
+The header is sticky (visible while scrolling). It does not contain the meta banner.
 
-### Responsive Breakpoints
-1. **Mobile First (320px+)**
-   - Single column layouts
-   - Touch-optimized interactions
-   - Simplified navigation patterns
-   - Stacked interactive elements
+---
 
-2. **Tablet (768px+)**
-   - Two-column content areas  
-   - Enhanced interactive elements
-   - Side-by-side comparisons
-   - Expanded navigation options
+## Meta Banner
 
-3. **Desktop (1024px+)**
-   - Multi-column layouts
-   - Full interactive experiences
-   - Hover states and advanced interactions
-   - Maximum content width constraints
+- Rendered immediately below the header (or as a persistent top-of-page element, above the hero)
+- Full viewport width; not dismissible
+- Distinguishable from the hero (different background color from both header and page body)
+- Contains: the demo disclosure text + two links (SEED.md, spec files)
+- `data-test=meta-banner`
 
-### Accessibility Framework
-- **Semantic HTML:** Proper heading hierarchy, landmark regions
-- **Keyboard Navigation:** Logical tab order, skip links, focus management
-- **Screen Reader Support:** ARIA labels, live regions, descriptive text
-- **Motor Accessibility:** Large touch targets, reduced motion options
+---
 
-### Layout Patterns
-- **Content Grids:** Flexible grid systems for different content types
-- **Interactive Zones:** Consistent positioning for user interaction
-- **Visual Hierarchy:** Size, spacing, and positioning for content importance
-- **Progressive Enhancement:** Core functionality without JavaScript
+## Responsive Layout
 
-## Quality Assurance
+| Viewport | Behavior |
+|----------|----------|
+| Narrow (mobile) | Single column; sections stack vertically; before/after uses toggle instead of slider |
+| Mid (tablet) | Single column with slightly wider content area |
+| Wide (desktop) | Centered content column with max-width; before/after uses side-by-side slider |
 
-### Responsive Testing
-- Breakpoint behavior validation across device types
-- Touch target size verification (minimum 44px)
-- Content readability at all viewport sizes
-- Interactive element accessibility on mobile
+Breakpoints are defined as CSS custom properties. Actual pixel values are set at implementation time (placeholders: `[mobile-breakpoint]`, `[desktop-breakpoint]`).
 
-### Accessibility Validation
-- Keyboard navigation testing for complete functionality
-- Screen reader compatibility across all content
-- Color contrast verification in layout contexts  
-- Focus indicator visibility in all states
+---
 
-### Performance Standards
-- Layout shift minimization during load and interactions
-- Efficient responsive image loading
-- Touch response times under 100ms
-- Smooth scrolling and animation performance
+## Section Ordering
 
-### Cross-Device Consistency
-- Consistent functionality across input methods
-- Predictable layout behavior during orientation changes
-- Graceful degradation for older browsers
-- Progressive enhancement maintaining core features
+Sections appear in this order from top to bottom:
+1. Header (sticky)
+2. Meta Banner
+3. Hero
+4. The Problem
+5. How It Works
+6. Hierarchy Explorer
+7. Spec Your Idea Wizard
+8. Before/After Comparison
+9. Open Source CTA
+10. Footer
+
+---
+
+## Z-Index Stack
+
+| Layer | Element | Priority |
+|-------|---------|---------|
+| Top | Sticky header | Highest |
+| Mid | Meta banner (if overlapping) | Secondary |
+| Base | Page content | Normal |
+
+---
+
+## Accessibility
+
+- Skip navigation link appears as the first focusable element; visible on focus
+- All sections have appropriate landmark roles (`<header>`, `<main>`, `<footer>`, `<nav>`)
+- Section headings follow a logical `<h1>` → `<h2>` → `<h3>` hierarchy
+- Focus is not trapped anywhere except within wizard steps (intentional modal-like behavior)

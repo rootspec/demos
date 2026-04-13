@@ -1,83 +1,101 @@
-# L4: Content System
+# Level 4: Content System
+
+**System:** CONTENT_SYSTEM
+**Last Updated:** 2026-04-12
+
+---
 
 ## Responsibility
-Manages all static and dynamic content presentation, including marketing copy, meta information, and educational materials that explain RootSpec methodology.
+
+The Content System owns all static marketing copy and page section structure. It defines what is said on each section of the page — the words, the examples, the real before/after content, and the call-to-action messaging. It does not manage any client-side state.
+
+---
 
 ## Boundaries
 
-### Owns
-- Hero section content (tagline, description)
-- Meta banner (demo acknowledgment, links to spec/seed)
-- Problem/solution section copy
-- How it works explanatory content
-- Open source CTA and attribution footer
-- Version number display and management
+- **Owns:** Section copy, section structure, before/after panel content, CTA links, footer attribution
+- **Does not own:** Theme tokens, layout wrappers, interactive behavior, build pipeline
+- **Reads from:** FRAMEWORK_SYSTEM (version string at build time, for the version badge in the hero)
+- **Read by:** LAYOUT_SYSTEM (wraps sections), THEME_SYSTEM (applies tokens to content elements)
 
-### Does Not Own
-- Interactive widget content (managed by Interactive System)
-- Visual styling and theming (managed by Theme System)
-- Layout and responsive behavior (managed by Layout System)
-- User input processing (managed by Interactive System)
+---
 
-## Data Ownership
+## Sections
 
-### Static Content
-- Marketing copy stored in Astro components/pages
-- Version number as configuration constant
-- Attribution information (builder name, build date)
-- GitHub repository links and metadata
+### Meta Banner
+A persistent banner visible above or immediately below the hero. Contains:
+- Explicit statement that this site is a RootSpec demo
+- What was used to generate it (a sparse product description)
+- Honest acknowledgment that rough edges reflect minimal human guidance
+- Link to SEED.md in GitHub repo
+- Link to the spec files in the GitHub repo
 
-### Dynamic Content
-- Section visibility state based on user scroll position
-- Reading progress indicators
-- Content adaptation based on theme/layout context
+The banner must not be dismissible. It is structural, not promotional.
 
-## Interactions with Other Systems
+### Hero
+- Tagline: short, memorable, expresses the core value proposition
+- One-sentence explanation of what RootSpec is
+- Version badge (reads from build-time version string provided by FRAMEWORK_SYSTEM)
+- Primary CTA linking to the getting started section or GitHub
 
-### → Interactive System
-- **Provides:** Section trigger points for wizard activation
-- **Receives:** State updates that affect content visibility
-- **Interface:** Event-based content show/hide, wizard data integration
+### The Problem
+Content explains why existing approaches fail:
+- Spec drift and the Google Doc nobody reads
+- Philosophy-implementation gap in AI-assisted development
+- Unvalidatable requirements
+- The gap between knowing what to build and being able to prove it was built correctly
 
-### → Theme System  
-- **Provides:** Content structure requiring visual treatment
-- **Receives:** Theme-aware content variants (if applicable)
-- **Interface:** CSS class application, content readability optimization
+Uses concrete language — names the failure modes rather than vague "pain points."
 
-### → Layout System
-- **Provides:** Content hierarchy and semantic structure
-- **Receives:** Responsive content adaptations
-- **Interface:** Content reflow, mobile-optimized copy variants
+### How It Works
+Visual walkthrough of the four RootSpec skills in sequence:
+- `/rs-init` — initializes the framework in a project
+- `/rs-spec` — interview-driven spec creation across five levels
+- `/rs-impl` — implements each user story against the spec
+- `/rs-validate` — validates implementation against the spec
 
-### → Framework Integration
-- **Provides:** Static content for build-time processing
-- **Receives:** Astro component structure and hydration points
-- **Interface:** Component props, slot content, static generation directives
+Each skill has a short description and one concrete example of what it does. The section frames this as "before you had these commands" vs. "after."
 
-## Internal Structure
+### Open Source CTA
+- Link to GitHub repository
+- Getting started instructions (the four commands a developer runs to begin)
+- Community links (if applicable)
+- Direct, not promotional — assumes the visitor is ready to start
 
-### Content Types
-1. **Hero Content:** Mission statement, value proposition, immediate call-to-action
-2. **Educational Content:** Problem definition, methodology explanation, workflow walkthrough  
-3. **Meta Content:** Demo disclaimer, transparency about rough edges, development attribution
-4. **CTA Content:** GitHub links, getting started instructions, community resources
+### Footer
+- Attribution: name of the builder (the AI agent that generated the site)
+- Build date
+- Link to RootSpec GitHub repository
+- Current RootSpec version
 
-### Content Management
-- Version-controlled in component files
-- Single source of truth for all copy
-- Build-time validation for broken links
-- Consistent tone and voice across all sections
+---
 
-## Quality Assurance
+## Before/After Comparison Content
 
-### Content Standards
-- Technical accuracy about RootSpec methodology
-- Tone alignment with "confident but not preachy" guideline
-- No buzzwords or corporate marketing speak
-- Specific examples rather than abstract concepts
+The before/after comparison must use real content. Both panels contain actual specification artifacts:
 
-### Validation Rules  
-- All external links functional at build time
-- Version number consistency across displays
-- Attribution completeness (builder name, date)
-- Content accessibility (reading level, structure)
+**Without RootSpec panel:**
+- Vague requirements excerpt: a poorly-structured user story with ambiguous acceptance criteria
+- A feature request that can't be traced to a business goal
+- A spec document that has diverged from the implemented behavior
+- An untestable "the system should be fast" requirement
+
+**With RootSpec panel:**
+- The same feature expressed as a five-level hierarchy excerpt
+- A user story with testable acceptance criteria
+- A design pillar referenced by the feature
+- A validation gate showing the feature traces back to a specific L1 principle
+
+---
+
+## Data Attributes
+
+All interactive content targets require `data-test` attributes for Cypress test compatibility. Content sections that are asserted in user stories must have stable, semantic `data-test` selectors.
+
+Key selectors (to be established during implementation):
+- `[data-test=hero-tagline]` — hero headline
+- `[data-test=meta-banner]` — meta banner container
+- `[data-test=version-badge]` — displayed version string
+- `[data-test=before-panel]` — before/after "without" panel
+- `[data-test=after-panel]` — before/after "with RootSpec" panel
+- `[data-test=cta-github]` — primary GitHub link

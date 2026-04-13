@@ -3,7 +3,7 @@ import { rootspecReporter } from './cypress/support/rootspec-reporter';
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:4321',
+    baseUrl: 'http://localhost:3000',
     supportFile: 'cypress/support/e2e.ts',
     specPattern: 'cypress/e2e/**/*.cy.ts',
     video: false,
