@@ -38,6 +38,8 @@ jobs:
           node-version: "22"
       - run: npm install
         if: steps.check.outputs.ready == 'true'
+      - run: chmod +x scripts/dev.sh scripts/test.sh
+        if: steps.check.outputs.ready == 'true'
       - name: Run Cypress tests
         if: steps.check.outputs.ready == 'true'
         uses: cypress-io/github-action@v6
