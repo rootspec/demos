@@ -41,7 +41,7 @@ A persistent, visible banner (top of page or below the hero) that explains this 
 
 > "This site was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups. The spec, the code, and the tests were all produced by running four commands. [View the spec →] [View the seed →]"
 
-Link to the SEED.md and spec files in the GitHub repo. This is critical — visitors must understand that any rough edges are the result of minimal human guidance, not carelessness. The banner should be honest and direct: this is what you get from a sparse seed with no iteration.
+Link to the SEED.md and spec files in the GitHub repo at https://github.com/rootspec/demos/tree/main/greenfield. This is critical — visitors must understand that any rough edges are the result of minimal human guidance, not carelessness. The banner should be honest and direct: this is what you get from a sparse seed with no iteration.
 
 ### Hero
 
@@ -84,7 +84,7 @@ The current RootSpec version should be displayed prominently — in the hero sec
 
 ### Open Source CTA
 
-Link to GitHub repo, getting started instructions, community links.
+Link to the framework GitHub repo at https://github.com/rootspec/rootspec — getting started instructions, community links.
 
 ## Interactive & Visual Requirements
 
