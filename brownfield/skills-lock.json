@@ -19,7 +19,7 @@
     "rs-shared": {
       "source": "rootspec/rootspec",
       "sourceType": "github",
-      "computedHash": "dacb5ea9cabe4af880526d4d3f2936de95e657b5297379bcc27789604b2bbfa7"
+      "computedHash": "a23d716bf69525353d301117d29172c8cf85f62105dc09af07470d77ef4d315a"
     },
     "rs-spec": {
       "source": "rootspec/rootspec",
