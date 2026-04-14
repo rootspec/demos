@@ -1,38 +1,35 @@
 ---
-import '../styles/global.css';
-interface Props {
+export interface Props {
   title?: string;
 }
-const { title = 'RootSpec — Spec-Driven AI Development' } = Astro.props;
+
+const { title = 'RootSpec — Purpose-Aligned Specification' } = Astro.props;
 ---
-<!DOCTYPE html>
-<html lang="en" class="light">
+
+<!doctype html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="RootSpec: specification language where philosophy guides implementation. Turn a product description into executable specs, tests, and code." />
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
     <script is:inline>
-      // Apply saved theme immediately to avoid flash; fall back to system preference
-      (function() {
-        try {
-          var saved = localStorage.getItem('theme');
-          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var isDark = saved === 'dark' || (!saved && prefersDark);
-          if (isDark) {
-            document.documentElement.classList.remove('light');
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.classList.remove('dark');
-            document.documentElement.classList.add('light');
-          }
-        } catch(e) {}
-      })();
+      // Apply theme immediately to avoid flash
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (stored === 'dark' || (!stored && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
     </script>
   </head>
-  <body>
+  <body class="min-h-screen">
     <slot />
   </body>
 </html>
+
+<style is:global>
+  @import '../styles/global.css';
+</style>

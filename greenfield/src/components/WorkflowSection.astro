@@ -1,158 +1,86 @@
 ---
 const skills = [
   {
+    command: '/rs-init',
     name: 'rs-init',
-    tagline: 'Initialize',
-    description: 'Scaffold a RootSpec project with all required directories, config files, and CI/CD hooks in one command.',
+    title: 'Initialize',
+    color: 'from-blue-500 to-blue-600',
+    description: 'Sets up the spec directory structure. Creates axioms, framework anchors, and placeholder files for all five levels.',
     step: '01',
   },
   {
+    command: '/rs-spec',
     name: 'rs-spec',
-    tagline: 'Specify',
-    description: 'Transform a product idea into a five-level living specification — from philosophy down to testable user stories.',
+    title: 'Specify',
+    color: 'from-violet-500 to-violet-600',
+    description: 'Reads your product description and generates the full spec hierarchy — philosophy through implementation. Produces testable user stories.',
     step: '02',
   },
   {
+    command: '/rs-impl',
     name: 'rs-impl',
-    tagline: 'Implement',
-    description: 'Build features autonomously from validated user stories, driven by Cypress tests that prove each acceptance criterion.',
+    title: 'Implement',
+    color: 'from-emerald-500 to-emerald-600',
+    description: 'Turns stories into working code with Cypress tests. Implements one story at a time, verifying each against acceptance criteria.',
     step: '03',
   },
   {
+    command: '/rs-validate',
     name: 'rs-validate',
-    tagline: 'Validate',
-    description: 'Run the full test suite, generate a coverage report, and confirm all stories pass before shipping.',
+    title: 'Validate',
+    color: 'from-orange-500 to-orange-600',
+    description: 'Runs the full test suite and produces a coverage report. Identifies gaps between what\'s specified and what\'s tested.',
     step: '04',
   },
 ];
 ---
-<section data-test="how-it-works-section" id="how-it-works" style="padding: 5rem 1.5rem;">
-  <div style="max-width: 1100px; margin: 0 auto;">
-    <div style="text-align: center; margin-bottom: 3rem;">
-      <h2 style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; margin: 0 0 0.75rem; color: var(--color-text);">
-        How It Works
+
+<section id="how-it-works" data-test="how-it-works-section" class="py-20 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
+        How it works
       </h2>
-      <p style="color: var(--color-text-muted); font-size: 1.1rem; max-width: 560px; margin: 0 auto;">
-        Four skills. One workflow. From idea to verified implementation.
+      <p class="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+        Four skills drive every workflow. Run them in sequence or independently.
+        Each command is idempotent — run it again at any time.
       </p>
     </div>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;">
-      {skills.map(s => (
-        <div style="
-          background: var(--color-surface);
-          border: 1px solid var(--color-border);
-          border-radius: 0.75rem;
-          padding: 1.75rem 1.5rem;
-          position: relative;
-          overflow: hidden;
-        ">
-          <div style="
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 3rem;
-            font-weight: 800;
-            color: rgba(99,102,241,0.1);
-            line-height: 1;
-          ">{s.step}</div>
-          <div style="
-            font-family: monospace;
-            font-size: 0.9rem;
-            color: var(--color-accent-bright);
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-            background: rgba(99,102,241,0.1);
-            display: inline-block;
-            padding: 0.2rem 0.6rem;
-            border-radius: 0.25rem;
-          ">{s.name}</div>
-          <h3 style="font-size: 1.1rem; font-weight: 600; margin: 0.5rem 0; color: var(--color-text);">{s.tagline}</h3>
-          <p style="color: var(--color-text-muted); font-size: 0.875rem; line-height: 1.55; margin: 0;">{s.description}</p>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {skills.map((skill, i) => (
+        <div class="relative group">
+          {i < skills.length - 1 && (
+            <div class="hidden lg:block absolute top-8 left-full w-full h-px bg-gradient-to-r from-slate-200 to-transparent dark:from-slate-700 z-10 -translate-x-3" />
+          )}
+          <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 h-full">
+            <div class={`inline-flex w-10 h-10 rounded-lg bg-gradient-to-br ${skill.color} items-center justify-center text-white font-bold text-sm mb-4`}>
+              {skill.step}
+            </div>
+            <code class="block text-sm font-mono font-semibold text-brand-600 dark:text-brand-400 mb-1">
+              {skill.command}
+            </code>
+            <h3 class="font-semibold text-slate-900 dark:text-white mb-2">{skill.name}</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{skill.description}</p>
+          </div>
         </div>
       ))}
     </div>
 
-    <!-- RootSpec methodology diagram: spec gate surrounding the development cycle -->
-    <div data-test="methodology-diagram" style="margin-top: 3.5rem; text-align: center;">
-      <p style="color: var(--color-text-muted); font-size: 0.85rem; margin: 0 0 1rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600;">The Spec Gate</p>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 560 320"
-        role="img"
-        aria-label="RootSpec methodology diagram: a spec gate surrounding the development cycle, filtering out invalid solutions"
-        style="max-width: 560px; width: 100%; height: auto; display: inline-block;"
-      >
-        <!-- Outer spec gate border -->
-        <rect x="10" y="10" width="540" height="300" rx="24" ry="24"
-          fill="none" stroke="#6366f1" stroke-width="2.5" stroke-dasharray="8 4" opacity="0.7"/>
-        <!-- Spec gate label -->
-        <text x="280" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#818cf8">SPEC GATE</text>
-
-        <!-- Dev cycle nodes -->
-        <!-- Idea -->
-        <circle cx="100" cy="160" r="36" fill="rgba(99,102,241,0.15)" stroke="#6366f1" stroke-width="1.5"/>
-        <text x="100" y="155" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#a5b4fc">Idea</text>
-        <text x="100" y="170" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#6366f1">rs-spec</text>
-
-        <!-- Spec -->
-        <circle cx="220" cy="80" r="36" fill="rgba(99,102,241,0.15)" stroke="#6366f1" stroke-width="1.5"/>
-        <text x="220" y="75" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#a5b4fc">Spec</text>
-        <text x="220" y="90" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#6366f1">stories</text>
-
-        <!-- Impl -->
-        <circle cx="360" cy="80" r="36" fill="rgba(99,102,241,0.15)" stroke="#6366f1" stroke-width="1.5"/>
-        <text x="360" y="75" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#a5b4fc">Impl</text>
-        <text x="360" y="90" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#6366f1">rs-impl</text>
-
-        <!-- Validate -->
-        <circle cx="460" cy="160" r="36" fill="rgba(99,102,241,0.15)" stroke="#6366f1" stroke-width="1.5"/>
-        <text x="460" y="155" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#a5b4fc">Validate</text>
-        <text x="460" y="170" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#6366f1">rs-validate</text>
-
-        <!-- Ship -->
-        <circle cx="360" cy="240" r="36" fill="rgba(34,197,94,0.15)" stroke="#22c55e" stroke-width="1.5"/>
-        <text x="360" y="235" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#86efac">Ship</text>
-        <text x="360" y="250" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#22c55e">valid only</text>
-
-        <!-- Invalid path (blocked) -->
-        <circle cx="220" cy="240" r="36" fill="rgba(239,68,68,0.1)" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5 3"/>
-        <text x="220" y="235" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#fca5a5">Invalid</text>
-        <text x="220" y="250" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#ef4444">blocked</text>
-
-        <!-- Arrows: cycle flow -->
-        <!-- Idea -> Spec -->
-        <line x1="133" y1="143" x2="187" y2="97" stroke="#6366f1" stroke-width="1.5" marker-end="url(#arr)"/>
-        <!-- Spec -> Impl -->
-        <line x1="256" y1="80" x2="324" y2="80" stroke="#6366f1" stroke-width="1.5" marker-end="url(#arr)"/>
-        <!-- Impl -> Validate -->
-        <line x1="393" y1="97" x2="427" y2="143" stroke="#6366f1" stroke-width="1.5" marker-end="url(#arr)"/>
-        <!-- Validate -> Ship (pass) -->
-        <line x1="435" y1="190" x2="390" y2="218" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arr-green)"/>
-        <!-- Validate -> Invalid (fail) -->
-        <line x1="425" y1="190" x2="253" y2="236" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr-red)"/>
-        <!-- Invalid -> back to Spec (loop) -->
-        <path d="M 190 228 Q 150 260 185 105" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr-red)"/>
-
-        <!-- Pass / Fail labels -->
-        <text x="448" y="215" font-family="Inter,sans-serif" font-size="9" fill="#22c55e" font-weight="600">PASS</text>
-        <text x="338" y="218" font-family="Inter,sans-serif" font-size="9" fill="#ef4444" font-weight="600">FAIL</text>
-
-        <!-- Arrow marker definitions -->
-        <defs>
-          <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L8,3 z" fill="#6366f1"/>
-          </marker>
-          <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L8,3 z" fill="#22c55e"/>
-          </marker>
-          <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L8,3 z" fill="#ef4444"/>
-          </marker>
-        </defs>
-      </svg>
-      <p style="color: var(--color-text-muted); font-size: 0.8rem; margin: 0.75rem 0 0; max-width: 400px; display: inline-block;">
-        The spec gate wraps every step — only implementations that satisfy the living spec are allowed to ship.
-      </p>
+    <!-- Key messages -->
+    <div class="mt-12 grid sm:grid-cols-3 gap-4">
+      <div class="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-5 border border-slate-200 dark:border-slate-700">
+        <p class="text-sm font-medium text-slate-900 dark:text-white mb-1">Declarative, not prescriptive</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400">You declare what the product is and why it exists. The spec derives everything else.</p>
+      </div>
+      <div class="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-5 border border-slate-200 dark:border-slate-700">
+        <p class="text-sm font-medium text-slate-900 dark:text-white mb-1">Philosophy-stable</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400">Implementation changes don't break the spec. Philosophy only changes when your mission changes.</p>
+      </div>
+      <div class="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-5 border border-slate-200 dark:border-slate-700">
+        <p class="text-sm font-medium text-slate-900 dark:text-white mb-1">AI-compatible</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400">AI executes implementation. Humans supply philosophy. The spec bridges the gap reliably.</p>
+      </div>
     </div>
   </div>
 </section>

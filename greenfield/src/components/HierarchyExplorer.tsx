@@ -1,163 +1,181 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const levels = [
   {
     id: 1,
-    name: 'L1 — Philosophy',
-    tagline: 'The unchanging "why" behind the product.',
-    detail: 'Philosophy defines core beliefs, values, and the fundamental problem being solved. It never changes without a major pivot. All other levels must align with L1.',
+    label: 'L1: Philosophy',
+    subtitle: 'WHY · Mission · Design Pillars',
+    color: 'border-blue-400 dark:border-blue-500',
+    headerBg: 'bg-blue-50 dark:bg-blue-900/30',
+    textColor: 'text-blue-700 dark:text-blue-300',
+    content: {
+      heading: 'Philosophy — The foundation',
+      description: 'Defines WHY the product exists and WHAT experience it creates. All other levels derive from this.',
+      example: `mission: "Help readers build lasting habits through frictionless reflection"
+
+design_pillars:
+  - Friction-free: Every interaction costs < 2 taps
+  - Reflective: Prompt users to think, not just log
+  - Personal: Data stays private, no social pressure
+
+reference_policy: Cannot reference lower levels`,
+    },
   },
   {
     id: 2,
-    name: 'L2 — Truths',
-    tagline: 'Invariant facts that always hold.',
-    detail: 'Truths capture constraints and non-negotiables: "users must never lose data," "response time under 200ms." They act as guardrails for every implementation decision.',
+    label: 'L2: Truths',
+    subtitle: 'WHAT · Trade-offs · Commitments',
+    color: 'border-violet-400 dark:border-violet-500',
+    headerBg: 'bg-violet-50 dark:bg-violet-900/30',
+    textColor: 'text-violet-700 dark:text-violet-300',
+    content: {
+      heading: 'Truths — Strategic constraints',
+      description: 'Defines WHAT the product will and won\'t do. Trade-offs are explicit and tied to philosophy.',
+      example: `success_criteria:
+  - 60% of users log within 48h of finishing a book
+
+trade_offs:
+  - No social features in v1 (violates "Personal" pillar)
+  - Depth over breadth: one great logging flow
+
+references: L1 design pillars`,
+    },
   },
   {
     id: 3,
-    name: 'L3 — Interactions',
-    tagline: 'How users engage with the system.',
-    detail: 'Interactions describe the user journey — flows, states, transitions, and error conditions. They form the behavioral contract between product and engineering.',
+    label: 'L3: Interactions',
+    subtitle: 'HOW users · UX Patterns',
+    color: 'border-indigo-400 dark:border-indigo-500',
+    headerBg: 'bg-indigo-50 dark:bg-indigo-900/30',
+    textColor: 'text-indigo-700 dark:text-indigo-300',
+    content: {
+      heading: 'Interactions — User flows',
+      description: 'Defines HOW users interact with the product. Flows, patterns, feedback loops.',
+      example: `flows:
+  log_book:
+    trigger: User taps "Log it"
+    steps:
+      1. Show reflection prompt (< 500ms)
+      2. User writes or skips
+      3. Book added to library
+    feedback: Celebration animation
+
+references: L1 pillars, L2 trade-offs`,
+    },
   },
   {
     id: 4,
-    name: 'L4 — Systems',
-    tagline: 'Subsystems and their responsibilities.',
-    detail: 'Systems define the logical architecture: what each subsystem owns, its interfaces, and how it communicates with others. This is where design decisions live.',
+    label: 'L4: Systems',
+    subtitle: 'HOW it\'s built · Architecture',
+    color: 'border-sky-400 dark:border-sky-500',
+    headerBg: 'bg-sky-50 dark:bg-sky-900/30',
+    textColor: 'text-sky-700 dark:text-sky-300',
+    content: {
+      heading: 'Systems — Technical boundaries',
+      description: 'Defines HOW it\'s built. Architecture decisions, data models, system boundaries.',
+      example: `stack: Next.js + Supabase
+auth: Email magic link (no passwords)
+
+data_model:
+  book_log:
+    fields: [isbn, title, finished_at, reflection]
+    storage: user-scoped, encrypted
+
+references: L1-L3`,
+    },
   },
   {
     id: 5,
-    name: 'L5 — Implementation',
-    tagline: 'Testable user stories and fine-tuning.',
-    detail: 'Implementation stories are the atomic unit of work: given/when/then acceptance criteria that drive Cypress tests and guide AI coding agents story by story.',
+    label: 'L5: Implementation',
+    subtitle: 'User stories · Tests · Code',
+    color: 'border-teal-400 dark:border-teal-500',
+    headerBg: 'bg-teal-50 dark:bg-teal-900/30',
+    textColor: 'text-teal-700 dark:text-teal-300',
+    content: {
+      heading: 'Implementation — Testable stories',
+      description: 'Concrete user stories with acceptance criteria. Every story traces to a design pillar.',
+      example: `id: US-047
+title: Log a completed book
+
+acceptance_criteria:
+  - id: AC-047-1
+    given: I finish a book
+    when: I tap "Log it"
+    then: I see a reflection prompt in < 500ms
+    traces_to: friction-free pillar
+
+references: L1-L4`,
+    },
   },
 ];
 
 export default function HierarchyExplorer() {
-  const [expanded, setExpanded] = useState<number | null>(null);
+  const [openLevel, setOpenLevel] = useState<number | null>(null);
 
-  const toggle = (id: number) => {
-    setExpanded(prev => (prev === id ? null : id));
+  const handleLevelClick = (id: number) => {
+    setOpenLevel(prev => prev === id ? null : id);
   };
 
   return (
-    <section
-      style={{
-        padding: '5rem 1.5rem',
-        backgroundColor: 'var(--color-surface)',
-      }}
-    >
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <h2
-            style={{
-              fontSize: 'clamp(1.5rem, 3vw, 2.25rem)',
-              fontWeight: 700,
-              margin: '0 0 0.75rem',
-              color: 'var(--color-text)',
-            }}
-          >
-            The Five-Level Hierarchy
+    <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
+            The five-level hierarchy
           </h2>
-          <p
-            style={{
-              color: 'var(--color-text-muted)',
-              fontSize: '1.1rem',
-              maxWidth: '520px',
-              margin: '0 auto',
-            }}
-          >
-            Every RootSpec project is structured across five levels — from timeless philosophy down to executable tests.
+          <p className="text-lg text-slate-600 dark:text-slate-300">
+            Click a level to see what it contains. Each level can only reference higher levels — never lower.
           </p>
         </div>
 
         <div
           data-test="hierarchy-explorer"
-          style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
+          className="space-y-3"
         >
-          {levels.map(level => {
-            const isExpanded = expanded === level.id;
-            return (
-              <div
-                key={level.id}
-                style={{
-                  border: `1px solid ${isExpanded ? 'rgba(99,102,241,0.5)' : 'var(--color-border)'}`,
-                  borderRadius: '0.625rem',
-                  overflow: 'hidden',
-                  transition: 'border-color 0.2s',
-                  backgroundColor: 'var(--color-bg)',
-                }}
+          {levels.map((level) => (
+            <div
+              key={level.id}
+              className={`rounded-xl border-2 ${level.color} overflow-hidden transition-all duration-200`}
+            >
+              <button
+                data-test={`hierarchy-level-${level.id}`}
+                onClick={() => handleLevelClick(level.id)}
+                className={`w-full flex items-center justify-between px-6 py-4 ${level.headerBg} text-left transition-colors hover:opacity-90`}
+                aria-expanded={openLevel === level.id}
               >
-                <button
-                  data-test={`hierarchy-level-${level.id}`}
-                  aria-expanded={isExpanded}
-                  tabIndex={0}
-                  onClick={() => toggle(level.id)}
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '1rem 1.25rem',
-                    background: 'transparent',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: 'var(--color-text)',
-                    fontFamily: 'inherit',
-                    textAlign: 'left',
-                  }}
+                <div>
+                  <span className={`font-semibold font-mono ${level.textColor}`}>{level.label}</span>
+                  <span className="ml-3 text-sm text-slate-500 dark:text-slate-400">{level.subtitle}</span>
+                </div>
+                <svg
+                  className={`w-5 h-5 ${level.textColor} transition-transform duration-200 ${openLevel === level.id ? 'rotate-180' : ''}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
                 >
-                  <div>
-                    <div
-                      style={{
-                        fontWeight: 600,
-                        fontSize: '0.975rem',
-                        color: isExpanded ? 'var(--color-accent-bright)' : 'var(--color-text)',
-                      }}
-                    >
-                      {level.name}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: '0.825rem',
-                        color: 'var(--color-text-muted)',
-                        marginTop: '0.15rem',
-                      }}
-                    >
-                      {level.tagline}
-                    </div>
-                  </div>
-                  <span
-                    style={{
-                      fontSize: '1.1rem',
-                      color: 'var(--color-text-muted)',
-                      transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                      transition: 'transform 0.2s',
-                      flexShrink: 0,
-                      marginLeft: '1rem',
-                    }}
-                  >
-                    ▾
-                  </span>
-                </button>
-                {isExpanded && (
-                  <div
-                    data-test={`hierarchy-level-${level.id}-content`}
-                    style={{
-                      padding: '0 1.25rem 1.25rem',
-                      color: 'var(--color-text-muted)',
-                      fontSize: '0.9rem',
-                      lineHeight: '1.6',
-                      borderTop: '1px solid var(--color-border)',
-                      paddingTop: '1rem',
-                    }}
-                  >
-                    {level.detail}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+
+              {openLevel === level.id && (
+                <div
+                  data-test={`hierarchy-level-${level.id}-content`}
+                  className="px-6 py-5 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700"
+                >
+                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2">
+                    {level.content.heading}
+                  </h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">
+                    {level.content.description}
+                  </p>
+                  <pre className="text-xs font-mono bg-slate-50 dark:bg-slate-800 rounded-lg p-4 overflow-x-auto text-slate-700 dark:text-slate-300 leading-relaxed">
+                    {level.content.example}
+                  </pre>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -1,48 +1,45 @@
 ---
 const problems = [
   {
-    icon: '⚠️',
-    title: 'Spec Drift',
-    description: 'Requirements evolve but documentation doesn\'t. AI agents implement yesterday\'s spec, not today\'s intent.',
+    icon: '🔀',
+    title: 'Spec drift',
+    description: 'Requirements change but the spec doesn\'t. Code diverges from intent. Nobody knows what\'s actually supposed to happen.',
   },
   {
     icon: '🤖',
-    title: 'AI Reliability Gap',
-    description: 'Without a structured contract, AI coding agents hallucinate features, skip edge cases, and break on updates.',
+    title: 'Unreliable AI output',
+    description: 'AI generates code confidently. Without a validation gate, you can\'t tell if it followed your intent or invented something plausible.',
   },
   {
     icon: '📄',
-    title: 'Documentation Failures',
-    description: 'Specs live in Google Docs, Notion pages, or heads of engineers — never trusted, always out of date.',
+    title: 'Google Docs nobody reads',
+    description: 'Long-form specs that live in Notion or Confluence. Outdated the moment they\'re written. Ignored during development.',
   },
   {
-    icon: '🔄',
-    title: 'Rework Cycles',
-    description: 'Teams ship, then discover misalignment late. Costly rewrites replace features that were "done."',
+    icon: '🌀',
+    title: 'Philosophy-implementation gap',
+    description: 'Why the product exists and how it\'s built become disconnected. Features get added that contradict the original vision.',
   },
 ];
 ---
-<section data-test="problem-section" id="problem" style="padding: 5rem 1.5rem; background-color: var(--color-surface);">
-  <div style="max-width: 1100px; margin: 0 auto;">
-    <div style="text-align: center; margin-bottom: 3rem;">
-      <h2 style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; margin: 0 0 0.75rem; color: var(--color-text);">
-        Sound Familiar?
+
+<section data-test="problem-section" class="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-800/50">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
+        The problems specs are supposed to solve
       </h2>
-      <p style="color: var(--color-text-muted); font-size: 1.1rem; max-width: 560px; margin: 0 auto;">
-        Every team building with AI faces the same painful patterns.
+      <p class="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+        Most teams have a spec process. Few have one that actually works when it counts.
       </p>
     </div>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
-      {problems.map(p => (
-        <div style="
-          background: var(--color-bg);
-          border: 1px solid var(--color-border);
-          border-radius: 0.75rem;
-          padding: 1.5rem;
-        ">
-          <div style="font-size: 1.75rem; margin-bottom: 0.75rem;">{p.icon}</div>
-          <h3 style="font-size: 1rem; font-weight: 600; margin: 0 0 0.5rem; color: var(--color-text);">{p.title}</h3>
-          <p style="color: var(--color-text-muted); font-size: 0.9rem; line-height: 1.5; margin: 0;">{p.description}</p>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {problems.map((problem) => (
+        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
+          <div class="text-3xl mb-4">{problem.icon}</div>
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-2">{problem.title}</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{problem.description}</p>
         </div>
       ))}
     </div>
