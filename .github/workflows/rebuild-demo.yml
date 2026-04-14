@@ -122,7 +122,30 @@ jobs:
 
           echo "Scaffold reset to skeleton state"
 
-      # Brownfield: no reset — spec-only rebuild
+      - name: "Reset: brownfield"
+        if: inputs.demo == 'brownfield'
+        working-directory: brownfield
+        run: |
+          # Keep source code, framework files, and project config
+          # Remove spec files (keep 00.*)
+          rm -rf rootspec/01.PHILOSOPHY.md \
+                 rootspec/02.TRUTHS.md \
+                 rootspec/03.INTERACTIONS.md \
+                 rootspec/04.SYSTEMS \
+                 rootspec/05.IMPLEMENTATION \
+                 rootspec/CONVENTIONS \
+                 rootspec/DERIVED_ARTIFACTS \
+                 rootspec/spec-status.json \
+                 rootspec/tests-status.json \
+                 rootspec/review-status.json
+
+          # Remove generated tests
+          rm -rf cypress/e2e
+
+          # Orchestrator state
+          rm -rf .rootspec-orchestrator
+
+          echo "Brownfield reset — spec and tests removed, source code preserved"
 
       # ── Setup orchestrator ───────────────────────────────
 
