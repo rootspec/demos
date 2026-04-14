@@ -1,54 +1,73 @@
-# System: PROFILE_SYSTEM
-<!-- L4: References L1-3 + Sibling L4 + External -->
+# PROFILE_SYSTEM
+
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md, DATA_SYSTEM.md
+
+---
 
 ## Responsibility
 
-Manages user profile display and follow state. When a visitor navigates to a user profile, this system renders the user's bio, stats, and posts, and manages the client-side follow/unfollow toggle.
+Owns the user profile view and follow/unfollow interaction state. Renders a user's identity, bio, stats, and post history.
+
+---
 
 ## State Owned
 
-All state lives in `src/lib/stores/profile.svelte.ts` as a Svelte 5 reactive class (`ProfileState`):
-
 | State | Type | Description |
 |-------|------|-------------|
-| `followedIds` | `string[]` | IDs of users the current session user follows (session only) |
+| followedUsers | Set\<string\> | User IDs followed this session |
 
-## Derived Values
+Follow state is component-local and ephemeral — it resets on page reload.
 
-- `isFollowing(id)` — returns true if the user ID is in `followedIds`
-- Follow button label: "Follow" or "Following" based on `isFollowing`
+---
 
-## Behaviors
+## Rules
 
 ### Profile Display
-The profile page (`/profile/[handle]`) renders:
-- User display name (large, heading)
-- Handle (@handle, subdued)
-- Bio text
-- Follower and following counts (from mock data, static)
-- Follow/unfollow button
-
-### Post List
-All posts authored by the profile user are listed below the bio section in reverse chronological order. Each post links to its detail page.
+- Profile page is pre-rendered for each user handle in `users.json`
+- Displays: avatar, display name, handle, bio, follower count, following count
+- Follower count adjusts (increments or decrements by one) based on local follow state
 
 ### Follow Toggle
-Clicking "Follow" adds the user's ID to `followedIds` and updates the button to "Following" with a different visual style. Clicking "Following" removes the ID and reverts the button. The follower count displayed does not change (it is read from static mock data).
+- Initial state: not following (unless additional logic is added)
+- Clicking "Follow" adds user ID to `followedUsers`, increments displayed follower count
+- Clicking "Unfollow" removes user ID, decrements displayed follower count
+- Button label and style reflect current follow state
 
-### Not Found
-If the handle in the URL does not match any user in the data, a "User not found" message is displayed.
+### Posts List
+- Shows all posts by this user (from `posts.json` filtered by `authorId === user.id`)
+- Displayed in reverse-chronological order
+- Each post links to its post detail page
 
-## Boundaries
+---
 
-**Reads from:**
-- DATA_SYSTEM: `data.user`, `data.posts` (via profile page load function)
+## Data Consumed
 
-**Does not:**
-- Manage like/bookmark state (owned by FEED_SYSTEM)
-- Handle search or explore (owned by DISCOVERY_SYSTEM)
-- Persist follow state (session only)
+- `users[]` from DATA_SYSTEM — to find the profile user by handle
+- `posts[]` from DATA_SYSTEM — to filter posts by this user's ID
 
-## Key Files
+---
 
-- `src/lib/stores/profile.svelte.ts` — ProfileState class
-- `src/routes/profile/[handle]/+page.svelte` — Profile route
-- `src/routes/profile/[handle]/+page.ts` — Profile load function
+## Route
+
+- `/profile/[handle]` — pre-rendered for each handle in `users.json`
+- Page loader receives `handle` param and finds matching user; if no match, renders fallback (though this case should not occur for known handles)
+
+---
+
+## Interactions with Other Systems
+
+- Profile page links back to post detail routes (FEED_SYSTEM post cards)
+- Does not manage like/bookmark state — those belong to FEED_SYSTEM
+- Does not communicate with DISCOVERY_SYSTEM directly
+
+---
+
+## Rendered Elements (Key)
+
+- Avatar image
+- Display name (large, prominent)
+- Handle (subdued, @prefixed)
+- Bio text
+- Follower count / Following count
+- Follow / Unfollow button with live count update
+- Post list with link-to-detail for each post

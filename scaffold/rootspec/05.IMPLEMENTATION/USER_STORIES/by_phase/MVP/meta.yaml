@@ -1,94 +1,161 @@
 # =============================================================================
-# USER STORIES: Meta / Demo Transparency
+# USER STORIES: Meta / View System — Navigation, Banner, Footer
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: META
-# @systems: [VIEW_SYSTEM]
+# @journey: TRANSPARENCY
+# @systems: [VIEW_SYSTEM, THEME_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
 ---
 
-id: US-401
-title: See meta banner on every page
-requirement_id: R-401
+id: US-001
+title: See the meta banner on the home page
 
 acceptance_criteria:
-  - id: AC-401-1
-    title: Meta banner is visible on the home page
+  - id: AC-001-1
+    title: Meta banner is visible on home page
     narrative: |
       Given I visit the home page
       When the page loads
-      Then I should see the meta banner explaining this is a RootSpec demo
+      Then I see the meta banner explaining RootFeed is a RootSpec scaffold demo
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
 
-  - id: AC-401-2
-    title: Meta banner is visible on the explore page
+  - id: AC-001-2
+    title: Meta banner contains link to scaffold commit
     narrative: |
-      Given I visit the explore page
-      When the page loads
-      Then I should see the meta banner
+      Given I visit the home page
+      When I look at the meta banner
+      Then I see a link to view the scaffold commit
     given:
-      - visit: '/demos/scaffold/explore'
+      - visit: '/demos/scaffold/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: '[data-test=banner-scaffold-link]' }
 
-  - id: AC-401-3
-    title: Meta banner is visible on the search page
+  - id: AC-001-3
+    title: Meta banner contains link to the spec
     narrative: |
-      Given I visit the search page
-      When the page loads
-      Then I should see the meta banner
+      Given I visit the home page
+      When I look at the meta banner
+      Then I see a link to view the spec
     given:
-      - visit: '/demos/scaffold/search'
+      - visit: '/demos/scaffold/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: '[data-test=banner-spec-link]' }
+
+  - id: AC-001-4
+    title: Meta banner contains link to the seed
+    narrative: |
+      Given I visit the home page
+      When I look at the meta banner
+      Then I see a link to view the seed
+    given:
+      - visit: '/demos/scaffold/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=banner-seed-link]' }
 
 ---
 
-id: US-402
-title: Navigate to seed and spec from banner
-requirement_id: R-402
+id: US-002
+title: See the RootSpec version in the navigation
 
 acceptance_criteria:
-  - id: AC-402-1
-    title: Meta banner contains seed link
+  - id: AC-002-1
+    title: RootSpec version badge is visible in nav
     narrative: |
-      Given I am on any page
-      When I look at the meta banner
-      Then I should see a link to view the seed
+      Given I visit any page
+      When I look at the navigation bar
+      Then I see the RootSpec version displayed
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=seed-link]' }
+      - shouldExist: { selector: '[data-test=version-badge]' }
 
-  - id: AC-402-2
-    title: Meta banner contains spec link
-    narrative: |
-      Given I am on any page
-      When I look at the meta banner
-      Then I should see a link to view the spec
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=spec-link]' }
+---
 
-  - id: AC-402-3
-    title: Meta banner contains scaffold commit link
+id: US-003
+title: Navigate between main routes using the navigation bar
+
+acceptance_criteria:
+  - id: AC-003-1
+    title: Navigation bar shows Home, Explore, and Search links
     narrative: |
-      Given I am on any page
-      When I look at the meta banner
-      Then I should see a link to the scaffold commit
+      Given I visit the home page
+      When I look at the navigation bar
+      Then I see links for Home, Explore, and Search
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=scaffold-link]' }
+      - shouldExist: { selector: '[data-test=nav-home]' }
+      - shouldExist: { selector: '[data-test=nav-explore]' }
+      - shouldExist: { selector: '[data-test=nav-search]' }
+
+---
+
+id: US-004
+title: See the footer attribution on every page
+
+acceptance_criteria:
+  - id: AC-004-1
+    title: Footer is visible on home page
+    narrative: |
+      Given I visit the home page
+      When the page loads
+      Then I see a footer with RootSpec attribution
+    given:
+      - visit: '/demos/scaffold/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=footer]' }
+
+  - id: AC-004-2
+    title: Footer contains RootSpec version
+    narrative: |
+      Given I visit the home page
+      When I look at the footer
+      Then I see the RootSpec version string
+    given:
+      - visit: '/demos/scaffold/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=footer-version]' }
+
+---
+
+id: US-005
+title: Toggle between dark and light theme
+
+acceptance_criteria:
+  - id: AC-005-1
+    title: Theme toggle button is visible in the navigation bar
+    narrative: |
+      Given I visit the home page
+      When I look at the navigation bar
+      Then I see a theme toggle button
+    given:
+      - visit: '/demos/scaffold/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+  - id: AC-005-2
+    title: Clicking the theme toggle switches the active theme
+    narrative: |
+      Given I visit the home page
+      When I click the theme toggle button
+      Then the page theme changes
+    given:
+      - visit: '/demos/scaffold/'
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldExist: { selector: '[data-test=theme-toggle]' }

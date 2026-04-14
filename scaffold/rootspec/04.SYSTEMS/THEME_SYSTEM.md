@@ -1,51 +1,64 @@
-# System: THEME_SYSTEM
-<!-- L4: References L1-3 + Sibling L4 + External -->
+# THEME_SYSTEM
+
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md
+
+---
 
 ## Responsibility
 
-Detects the user's color scheme preference, manages the active theme state (light or dark), and persists the user's explicit choice across sessions via localStorage. Applies the theme by toggling the `dark` class on the document root.
+Owns dark/light theme detection and switching. Reads system preference on first load, allows user override via toggle, and persists preference to localStorage.
+
+---
 
 ## State Owned
 
-Lives in `src/lib/stores/theme.svelte.ts`:
+| State | Type | Source | Description |
+|-------|------|--------|-------------|
+| theme | "light" or "dark" | Derived | Current active theme |
+| userPreference | "light" or "dark" or null | localStorage | Manually set preference; null means use system |
+| systemPreference | "light" or "dark" | `prefers-color-scheme` | OS/browser preference |
 
-| State | Type | Description |
-|-------|------|-------------|
-| `theme.current` | `'light' \| 'dark'` | Active theme value |
+---
 
-## Initialization Logic
+## Rules
 
-On first load (browser only):
-1. Read `localStorage.getItem('rootfeed-theme')`
-2. If stored value is `'light'` or `'dark'`, use it
-3. Otherwise, detect `window.matchMedia('(prefers-color-scheme: dark)')` and use the result
+### Theme Resolution
 
-## Behaviors
+Priority order (highest first):
+1. `userPreference` (from localStorage) — if set, use it
+2. `systemPreference` (from `prefers-color-scheme` media query)
+3. Default: `"light"`
 
-### Theme Toggle
-`toggleTheme()` flips `theme.current` between `'light'` and `'dark'`, writes the new value to localStorage, and toggles the `dark` class on `document.documentElement`.
+### Applying Theme
 
-### Theme Initialization
-`initTheme()` applies the current theme class to `document.documentElement` on layout mount. This prevents flash of wrong theme on navigation.
+- Active theme is applied as a class on the `<html>` or `<body>` element: `class="dark"` or `class="light"`
+- Tailwind CSS `darkMode: 'class'` strategy is used for all dark-mode styling
 
-### Persistence
-The user's explicit choice is stored in localStorage under the key `rootfeed-theme`. It survives page reloads and new sessions. System preference is only used as a fallback when no stored value exists.
+### Toggle Behavior
 
-## Integration with VIEW_SYSTEM
+- User clicks theme toggle button in VIEW_SYSTEM nav bar
+- `userPreference` flips between "light" and "dark"
+- New preference is written to localStorage under key `"theme"`
+- Theme class on root element updates immediately
 
-The layout (`+layout.svelte`) calls `initTheme()` on mount and renders a toggle button in the navigation bar that calls `toggleTheme()`. All Tailwind dark mode classes (`dark:bg-gray-900`, etc.) respond to the `dark` class on `<html>`.
+### Initial Load
 
-## Boundaries
+- Read `localStorage.getItem("theme")` on mount
+- If present, set as `userPreference`
+- If absent, read `window.matchMedia("(prefers-color-scheme: dark)").matches`
+- Apply resolved theme before first paint (to avoid flash)
 
-**Does not:**
-- Depend on any data or content system
-- Handle any social interactions
-- Manage any route-level state
+---
 
-**Used by:**
-- VIEW_SYSTEM: layout and navigation toggle control
+## Interactions with Other Systems
 
-## Key Files
+- VIEW_SYSTEM renders the toggle button and calls THEME_SYSTEM's toggle function
+- VIEW_SYSTEM applies the theme class from THEME_SYSTEM to the root layout element
+- No other system depends on THEME_SYSTEM
 
-- `src/lib/stores/theme.svelte.ts` — ThemeState and toggle/init functions
-- `src/routes/+layout.svelte` — Calls `initTheme()`, renders toggle button
+---
+
+## Rendered Elements
+
+- Theme toggle button (owned by VIEW_SYSTEM, triggers THEME_SYSTEM logic)
+- Theme class on root element (applied by THEME_SYSTEM, consumed by all component styles)

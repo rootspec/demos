@@ -80,6 +80,16 @@
     "tags": ["security", "psa"]
   },
   {
+    "id": "p1r1",
+    "authorId": "u2",
+    "content": "Been there! The classic 'works on my machine' situation, but with CSS.",
+    "createdAt": "2026-04-03T15:00:00Z",
+    "likeCount": 12,
+    "repostCount": 2,
+    "parentId": "p1",
+    "tags": ["webdev"]
+  },
+  {
     "id": "p9",
     "authorId": "u1",
     "content": "@carol.systems 100%. We rewrote our 'microservices' back into a monolith last quarter. Deployment went from 45 min to 3 min.",

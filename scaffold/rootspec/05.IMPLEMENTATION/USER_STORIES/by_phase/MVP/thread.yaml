@@ -1,40 +1,87 @@
 # =============================================================================
-# USER STORIES: Theme
+# USER STORIES: Thread / Post Detail View
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: THEME
-# @systems: [THEME_SYSTEM, VIEW_SYSTEM]
+# @journey: THREAD_READING
+# @systems: [FEED_SYSTEM, DATA_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
 ---
 
-id: US-501
-title: Toggle dark and light mode
-requirement_id: R-501
+id: US-040
+title: View a single post and its replies
 
 acceptance_criteria:
-  - id: AC-501-1
-    title: Theme toggle button is visible in navigation
+  - id: AC-040-1
+    title: Post detail page shows the main post content
     narrative: |
-      Given I visit the home page
+      Given I navigate to a post detail page
       When the page loads
-      Then I should see a theme toggle button in the navigation
+      Then I see the post content
+    given:
+      - visit: '/demos/scaffold/post/p1'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=post-detail-content]' }
+
+  - id: AC-040-2
+    title: Post detail page shows the author
+    narrative: |
+      Given I navigate to a post detail page
+      When the page loads
+      Then I see the author display name and handle
+    given:
+      - visit: '/demos/scaffold/post/p1'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=post-detail-author]' }
+
+  - id: AC-040-3
+    title: Post detail page shows replies when they exist
+    narrative: |
+      Given I navigate to a post detail page that has replies
+      When the page loads
+      Then I see the replies listed below the main post
+    given:
+      - visit: '/demos/scaffold/post/p1'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=reply-card]' }
+
+---
+
+id: US-041
+title: Navigate to a post detail page from the feed
+
+acceptance_criteria:
+  - id: AC-041-1
+    title: Post content in feed card links to post detail
+    narrative: |
+      Given I visit the home feed
+      When I see a post card
+      Then there is a link to the post detail page
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
+      - shouldExist: { selector: '[data-test=post-card-link]' }
 
-  - id: AC-501-2
-    title: Clicking theme toggle switches between light and dark mode
+---
+
+id: US-042
+title: See like and repost counts on a post detail page
+
+acceptance_criteria:
+  - id: AC-042-1
+    title: Post detail shows like and repost counts
     narrative: |
-      Given I am on the home page in light mode
-      When I click the theme toggle
-      Then the page should switch to dark mode
+      Given I navigate to a post detail page
+      When the page loads
+      Then I see the like count and repost count for the post
     given:
-      - visit: '/demos/scaffold/'
-    when:
-      - click: { selector: '[data-test=theme-toggle]' }
+      - visit: '/demos/scaffold/post/p1'
+    when: []
     then:
-      - shouldExist: { selector: 'html.dark' }
+      - shouldExist: { selector: '[data-test=post-detail-like-count]' }
+      - shouldExist: { selector: '[data-test=post-detail-repost-count]' }
