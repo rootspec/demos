@@ -1,49 +1,47 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Interactive System
+# FINE-TUNING: Interactive System
 # =============================================================================
-# @spec_version: 7.2.1
-# @system: INTERACTIVE_SYSTEM
-# @last_updated: 2026-04-13T17:12:20Z
-# @status: draft
+# @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-
-# -----------------------------------------------------------------------------
-# Hierarchy Explorer
-# -----------------------------------------------------------------------------
+# @last_updated: 2026-04-14T00:00:00Z
 
 hierarchy_explorer:
-  expand_duration: 250
-  # @rationale: Fast expand for exploratory UI; should feel snappy
-  # @constraints: min=100, max=500, type=integer, unit=ms
+  expand_animation_duration:
+    value: 250
+    # @unit: milliseconds
+    # @rationale: Feels snappy without jarring; gives user time to notice the expansion
+    # @constraint: min=150, max=500
 
-  levels_count: 5
-  # @rationale: Fixed by RootSpec methodology; not a tunable parameter
-  # @inviolable: true
-  # @spec_source: 01.PHILOSOPHY.md - The five-level hierarchy is the core mechanism
+  reference_highlight_delay:
+    value: 80
+    # @unit: milliseconds
+    # @rationale: Slight delay prevents highlights from flickering during fast mouse movement
+    # @constraint: min=0, max=200
 
-# -----------------------------------------------------------------------------
-# Spec Wizard
-# -----------------------------------------------------------------------------
+spec_wizard:
+  product_idea_max_length:
+    value: 200
+    # @unit: characters
+    # @rationale: Long enough for a complete sentence; short enough to keep focus
 
-wizard:
-  steps_count: 3
-  # @rationale: Three steps balances completeness with approachability
-  # @inviolable: false
-  # @constraints: min=2, max=5, type=integer
+  pillar_count_min:
+    value: 1
+    # @unit: count
+    # @rationale: Must select at least one pillar to produce meaningful output
 
-  mission_template_count: 5
-  # @rationale: Enough variety to cover main product categories without overwhelming
-  # @constraints: min=3, max=10, type=integer
+  pillar_count_max:
+    value: 5
+    # @unit: count
+    # @rationale: Matches L1 spec guidance; more than 5 pillars dilutes focus
 
-  pillar_suggestion_count: 12
-  # @rationale: Grid of suggestions; visitor selects 3-5; enough variety to feel personal
-  # @constraints: min=6, max=20, type=integer
+layout:
+  scroll_animation_duration:
+    value: 400
+    # @unit: milliseconds
+    # @rationale: Smooth but not slow; matches common scroll reveal patterns
+    # @constraint: min=200, max=600
 
-  pillar_min_selection: 3
-  # @rationale: Three pillars minimum to demonstrate the multi-pillar concept
-  # @constraints: min=1, max=3, type=integer
-
-  pillar_max_selection: 5
-  # @rationale: Five pillars maximum per L1 specification guidelines
-  # @inviolable: true
-  # @spec_source: 01.PHILOSOPHY.md - Design Pillars (3-5 core experiences)
+  min_viewport_width:
+    value: 320
+    # @unit: pixels
+    # @rationale: Minimum width to support without horizontal scroll (iPhone SE)

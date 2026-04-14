@@ -1,58 +1,67 @@
 # Level 4: Systems Overview
 
-*References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md*
+**Product:** RootSpec Marketing Site
+**Level:** L4 — HOW It's Built (System Map)
+**References:** L1-3 + Sibling L4 + External
+
+---
 
 ## System Map
 
-The RootSpec marketing site is a static site with client-side interactivity. All systems run in the browser; there are no external API calls or server-side data processing.
+| System | Responsibility | Primary Output |
+|--------|---------------|----------------|
+| CONTENT_SYSTEM | Static marketing copy, section structure, the meta banner | Rendered HTML sections |
+| THEME_SYSTEM | Dark/light mode detection, manual toggle, persistence | CSS variables, body class |
+| INTERACTIVE_SYSTEM | Hierarchy Explorer, Spec Wizard, Before/After Comparison | React island components |
+| LAYOUT_SYSTEM | Page structure, responsive behavior, section ordering | Astro layout and page wrapper |
+| FRAMEWORK_SYSTEM | Build-time version reading, GitHub link generation | Injected version string |
 
-| System | Responsibility | File |
-|--------|---------------|------|
-| **CONTENT_SYSTEM** | Static page content, copywriting structure, version data | CONTENT_SYSTEM.md |
-| **THEME_SYSTEM** | Dark/light mode detection, manual toggle, persistence | THEME_SYSTEM.md |
-| **LAYOUT_SYSTEM** | Responsive layout, navigation, section structure | LAYOUT_SYSTEM.md |
-| **INTERACTIVE_SYSTEM** | Hierarchy Explorer, Spec Wizard, Before/After Comparison | INTERACTIVE_SYSTEM.md |
-| **FRAMEWORK_SYSTEM** | Build framework, component model, asset pipeline | FRAMEWORK_SYSTEM.md |
+---
 
 ## System Interactions
 
-| Source System | Interacts With | Interaction |
-|--------------|----------------|-------------|
-| CONTENT_SYSTEM | LAYOUT_SYSTEM | Provides content to render into layout slots |
-| CONTENT_SYSTEM | FRAMEWORK_SYSTEM | Reads `.rootspec.json` for version badge data |
-| THEME_SYSTEM | LAYOUT_SYSTEM | Applies theme class to root element; layout responds |
-| THEME_SYSTEM | INTERACTIVE_SYSTEM | Interactive components observe theme state |
-| LAYOUT_SYSTEM | INTERACTIVE_SYSTEM | Provides responsive breakpoint context |
-| INTERACTIVE_SYSTEM | THEME_SYSTEM | Reads current theme to style interactive components |
-| FRAMEWORK_SYSTEM | All systems | Provides build pipeline, routing, component primitives |
+| From | To | Interaction |
+|------|----|-------------|
+| LAYOUT_SYSTEM | CONTENT_SYSTEM | Renders content sections in defined order |
+| LAYOUT_SYSTEM | INTERACTIVE_SYSTEM | Mounts React islands at designated positions |
+| LAYOUT_SYSTEM | THEME_SYSTEM | Applies theme class at root; toggle button rendered in header |
+| FRAMEWORK_SYSTEM | CONTENT_SYSTEM | Provides version string to hero and header at build time |
+| FRAMEWORK_SYSTEM | CONTENT_SYSTEM | Provides GitHub repo URLs to meta banner and CTA |
+| THEME_SYSTEM | INTERACTIVE_SYSTEM | Interactive components respect inherited CSS variables |
+
+---
 
 ## Data Flow
 
 ```
-.rootspec.json
-    ↓ (build-time read)
-CONTENT_SYSTEM → version badge data → LAYOUT_SYSTEM → rendered hero/header
+Build time:
+  .rootspec.json → FRAMEWORK_SYSTEM → version string → CONTENT_SYSTEM (hero, header)
 
-User loads page
-    ↓
-THEME_SYSTEM detects system preference → applies class to <html>
-    ↓
-LAYOUT_SYSTEM renders responsive structure
-    ↓
-INTERACTIVE_SYSTEM mounts React components into Astro layout
-    ↓
-User interacts → INTERACTIVE_SYSTEM handles state → no external calls
+Runtime (page load):
+  prefers-color-scheme → THEME_SYSTEM → body class → CSS variables
+  localStorage → THEME_SYSTEM → persisted preference overrides system
+
+Runtime (user interaction):
+  User action → INTERACTIVE_SYSTEM → component state → rendered output
+  Theme toggle → THEME_SYSTEM → body class update → localStorage write
 ```
+
+---
 
 ## Boundaries
 
-- **No external API calls** — All data is static or generated client-side from user input
-- **No authentication** — Anonymous visitors only
-- **No persistence except theme** — Theme preference stored in `localStorage`; wizard state is session-only
-- **No server-side rendering of interactive state** — React components hydrate client-side
+- **FRAMEWORK_SYSTEM** operates only at build time. It has no runtime behavior.
+- **THEME_SYSTEM** operates only in the browser. The server renders with a neutral/default state; hydration applies the correct theme without flash.
+- **INTERACTIVE_SYSTEM** is entirely client-side. No server rendering of dynamic interaction states.
+- **CONTENT_SYSTEM** is static — no runtime data fetching, no CMS.
+- **LAYOUT_SYSTEM** is the Astro shell; it coordinates all other systems but owns no business logic.
 
-## Key Constraints
+---
 
-- Build-time: Read `.rootspec.json` version at build time; bake into rendered output (not runtime fetch)
-- Runtime: Interactive features must function without network access after initial page load
-- Progressive: Core marketing content must be readable without JavaScript
+## Technology Anchors
+
+- Astro (static site generator, island architecture)
+- React (interactive island components)
+- Tailwind CSS (styling via utility classes)
+- `localStorage` (theme preference persistence)
+- `.rootspec.json` (build-time version source)

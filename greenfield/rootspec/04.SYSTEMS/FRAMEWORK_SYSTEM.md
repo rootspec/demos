@@ -1,84 +1,58 @@
 # Level 4: Framework System
 
-*References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md*
+**System:** FRAMEWORK_SYSTEM
+**References:** L1-3, Sibling L4, External
+
+---
 
 ## Responsibility
 
-Manages the build framework, component model, development server, and asset pipeline. This system is the infrastructure layer that all other systems run on top of.
+Provides build-time data that connects the site to the RootSpec framework version and source code. Reads `.rootspec.json` at build time to extract the framework version. Constructs GitHub repository URLs. Has no runtime behavior.
+
+---
+
+## Data Owned
+
+- **version:** The RootSpec framework version string read from `.rootspec.json` (the `version` field)
+- **repo_base_url:** The GitHub URL base for this demo's spec and seed files: `https://github.com/rootspec/demos/tree/main/greenfield`
+- **framework_repo_url:** The RootSpec framework GitHub URL: `https://github.com/rootspec/rootspec`
+
+---
+
+## Build-Time Behavior
+
+1. At build time, read `.rootspec.json` from the project root
+2. Extract the `version` field
+3. If the file is missing or the field is absent, use a fallback indicator (e.g., `"unknown"`) and emit a build warning
+4. Pass the version string and URLs as Astro props or component constants to:
+   - The header component (version badge)
+   - The hero section (version display)
+   - The meta banner (links to spec and seed)
+   - The CTA section (framework repo link)
+
+---
 
 ## Boundaries
 
-- **Owns:** Build configuration, routing, component primitives, CSS pipeline, dev/build scripts
-- **Does not own:** Content (CONTENT_SYSTEM), visual tokens (LAYOUT_SYSTEM), interactive state (INTERACTIVE_SYSTEM)
-- **Provides to:** All other systems — the runtime environment and component API
+- Operates only at build time — no runtime file reads, no API calls
+- Does not own the visual rendering of version or links (CONTENT_SYSTEM and LAYOUT_SYSTEM own that)
+- Does not own the GitHub repository itself
 
-## Technology Commitments
+---
 
-- **Static site framework:** Astro (island architecture; minimal JavaScript shipped by default)
-- **UI components:** React (for interactive islands in INTERACTIVE_SYSTEM)
-- **Styling:** Tailwind CSS (utility classes; CSS custom properties for theme tokens)
-- **Language:** TypeScript throughout
-- **Build output:** Static HTML + minimal JS; no server runtime required
+## Interactions with Other Systems
 
-*Rationale: Aligns with the "philosophy as foundation" pillar — Astro ships zero JavaScript for static content while enabling React islands for interactive features. The methodology site should itself demonstrate good architecture.*
+| System | Nature |
+|--------|--------|
+| CONTENT_SYSTEM | Supplies version string and GitHub URLs as build-time props |
+| LAYOUT_SYSTEM | Supplies version string for header badge |
 
-## File Structure
+---
 
-```
-greenfield/
-├── src/
-│   ├── components/         # Astro components (static sections)
-│   ├── pages/              # Astro pages (index.astro is the single page)
-│   ├── styles/             # Global CSS, Tailwind config
-│   └── [interactive]/      # React component files (.tsx)
-├── public/                 # Static assets
-├── rootspec/               # Spec files (this directory)
-├── .rootspec.json          # Framework config; version field
-├── astro.config.mjs        # Astro configuration
-├── tailwind.config.mjs     # Tailwind configuration
-├── tsconfig.json           # TypeScript config
-└── package.json
-```
+## Failure Handling
 
-## Build Pipeline
-
-1. **`/rs-init`** — Initializes `.rootspec.json`, rootspec directory, installs deps
-2. **`/rs-spec`** — Writes spec files to `rootspec/`
-3. **`/rs-impl`** — Implements application code in `src/`
-4. **`/rs-validate`** — Runs Cypress tests against the running dev server
-
-**Dev server command:** As configured in `.rootspec.json` `devCommand` field
-**Build command:** As configured in `.rootspec.json` `buildCommand` field
-**Test command:** Cypress; as configured in `.rootspec.json` `testCommand` field
-
-## Version Data Access
-
-The CONTENT_SYSTEM reads `.rootspec.json` at build time to extract the `version` field. In Astro, this happens in the frontmatter of the relevant `.astro` component:
-
-```
-// In .astro component frontmatter:
-import rootspecConfig from '../../.rootspec.json';
-const version = rootspecConfig.version;
-```
-
-The version is baked into the static HTML at build time — no runtime fetch.
-
-## Component Model
-
-- **Static sections:** Astro components (`.astro` files) — render to HTML, zero client JS
-- **Interactive sections:** React components (`.tsx` files) — hydrated client-side via Astro islands
-- **Props contract:** Astro components pass static data as props; React components manage their own state
-
-## CSS Architecture
-
-- Tailwind utility classes for layout and spacing
-- CSS custom properties (`--color-*`, etc.) for theme tokens defined in global CSS
-- THEME_SYSTEM's class on `<html>` switches token values via CSS selector override
-- No CSS-in-JS; no styled-components
-
-## Deployment
-
-- Output: static HTML/CSS/JS files
-- Hosting: any static host (GitHub Pages, Netlify, Vercel, etc.)
-- No server-side runtime required
-- CI/CD: a GitHub Actions workflow handles build → test → deploy pipeline
+If `.rootspec.json` is unreadable at build time:
+- Build continues (not a fatal error)
+- Version displays as `[version unknown]`
+- GitHub links use the hardcoded base URL (still valid)
+- A warning is logged to the build console
