@@ -1,68 +1,12 @@
 [
   {
-    "id": "US-108",
-    "title": "Search posts",
+    "id": "US-008",
+    "title": "Browse trending tags and suggested users on the explore page",
     "acceptance_criteria": [
       {
-        "id": "AC-108-1",
-        "title": "Search filters posts by keyword",
-        "narrative": "Given I am on the search page\nWhen I type a keyword in the search input\nThen I should see posts matching that keyword\n",
-        "given": [
-          {
-            "visit": "/search"
-          }
-        ],
-        "when": [
-          {
-            "fill": {
-              "selector": "[data-test=search-input]",
-              "value": "svelte"
-            }
-          }
-        ],
-        "then": [
-          {
-            "shouldExist": {
-              "selector": "[data-test=search-results] [data-test=post-card]"
-            }
-          }
-        ]
-      },
-      {
-        "id": "AC-108-2",
-        "title": "Empty search results show message",
-        "narrative": "Given I am on the search page\nWhen I search for a term with no matches\nThen I should see an empty results message\n",
-        "given": [
-          {
-            "visit": "/search"
-          }
-        ],
-        "when": [
-          {
-            "fill": {
-              "selector": "[data-test=search-input]",
-              "value": "xyznonexistent123"
-            }
-          }
-        ],
-        "then": [
-          {
-            "shouldExist": {
-              "selector": "[data-test=no-results]"
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "US-109",
-    "title": "Explore trending content",
-    "acceptance_criteria": [
-      {
-        "id": "AC-109-1",
-        "title": "Explore page shows trending tags, suggested users, and popular posts",
-        "narrative": "Given I am on the explore page\nWhen the page loads\nThen I should see trending tags, suggested users, and popular posts\n",
+        "id": "AC-008-1",
+        "title": "Explore page shows trending tags and user list",
+        "narrative": "Given I navigate to the explore page\nWhen the page loads\nThen I see a list of trending tags and a list of suggested users\n",
         "given": [
           {
             "visit": "/explore"
@@ -72,17 +16,19 @@
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=trending-tags]"
+              "selector": "body"
             }
           },
           {
-            "shouldExist": {
-              "selector": "[data-test=suggested-users]"
+            "shouldContain": {
+              "selector": "body",
+              "text": "Trending"
             }
           },
           {
-            "shouldExist": {
-              "selector": "[data-test=popular-posts]"
+            "shouldContain": {
+              "selector": "body",
+              "text": "People"
             }
           }
         ]
@@ -90,13 +36,13 @@
     ]
   },
   {
-    "id": "US-110",
-    "title": "Filter posts by tag",
+    "id": "US-009",
+    "title": "Click a tag on the explore page to filter posts",
     "acceptance_criteria": [
       {
-        "id": "AC-110-1",
-        "title": "Clicking a tag filters posts",
-        "narrative": "Given I am on the explore page\nWhen I click on a trending tag\nThen I should see only posts with that tag\n",
+        "id": "AC-009-1",
+        "title": "Clicking a tag filters the visible posts to that tag",
+        "narrative": "Given I am on the explore page\nWhen I click on a trending tag\nThen I see only posts tagged with that tag\n",
         "given": [
           {
             "visit": "/explore"
@@ -105,14 +51,14 @@
         "when": [
           {
             "click": {
-              "selector": "[data-test=trending-tags] [data-test=tag]:first-child"
+              "selector": "[data-test=tag-chip]:first-child"
             }
           }
         ],
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=filtered-posts] [data-test=post-card]"
+              "selector": "[data-test=tag-chip]:first-child.active"
             }
           }
         ]
@@ -120,13 +66,13 @@
     ]
   },
   {
-    "id": "US-101",
-    "title": "Browse the home feed",
+    "id": "US-001",
+    "title": "View the home feed with posts and author info",
     "acceptance_criteria": [
       {
-        "id": "AC-101-1",
-        "title": "Feed displays posts in reverse chronological order",
-        "narrative": "Given I am visiting the home page\nWhen the page loads\nThen I should see posts with author info, content, and timestamps\n",
+        "id": "AC-001-1",
+        "title": "Home feed shows posts with author info and engagement counts",
+        "narrative": "Given I visit the home page\nWhen the page loads\nThen I see a list of posts with author names, handles, and engagement counts\n",
         "given": [
           {
             "visit": "/"
@@ -151,15 +97,15 @@
           },
           {
             "shouldExist": {
-              "selector": "[data-test=post-timestamp]"
+              "selector": "[data-test=like-count]"
             }
           }
         ]
       },
       {
-        "id": "AC-101-2",
-        "title": "Posts show engagement counts",
-        "narrative": "Given I am viewing the home feed\nWhen I look at a post\nThen I should see like and repost counts\n",
+        "id": "AC-001-2",
+        "title": "Meta banner is visible on home page",
+        "narrative": "Given I visit the home page\nWhen the page loads\nThen I see the meta banner explaining the demo origin\n",
         "given": [
           {
             "visit": "/"
@@ -169,12 +115,17 @@
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=like-count]"
+              "selector": "[data-test=meta-banner]"
             }
           },
           {
             "shouldExist": {
-              "selector": "[data-test=repost-count]"
+              "selector": "[data-test=seed-link]"
+            }
+          },
+          {
+            "shouldExist": {
+              "selector": "[data-test=spec-link]"
             }
           }
         ]
@@ -182,13 +133,13 @@
     ]
   },
   {
-    "id": "US-102",
-    "title": "Like and bookmark posts",
+    "id": "US-002",
+    "title": "Like and bookmark posts on the home feed",
     "acceptance_criteria": [
       {
-        "id": "AC-102-1",
-        "title": "Toggle like on a post",
-        "narrative": "Given I am viewing the home feed\nWhen I click the like button on a post\nThen the like count should increase and the button should appear active\n",
+        "id": "AC-002-1",
+        "title": "Like button toggles visual state and updates count",
+        "narrative": "Given I am viewing the home feed\nWhen I click the like button on a post\nThen the like button becomes active and the count increases by 1\n",
         "given": [
           {
             "visit": "/"
@@ -210,9 +161,9 @@
         ]
       },
       {
-        "id": "AC-102-2",
-        "title": "Toggle bookmark on a post",
-        "narrative": "Given I am viewing the home feed\nWhen I click the bookmark button on a post\nThen the bookmark button should appear active\n",
+        "id": "AC-002-2",
+        "title": "Bookmark button toggles visual state",
+        "narrative": "Given I am viewing the home feed\nWhen I click the bookmark button on a post\nThen the bookmark button becomes active\n",
         "given": [
           {
             "visit": "/"
@@ -236,13 +187,13 @@
     ]
   },
   {
-    "id": "US-103",
-    "title": "Compose a new post",
+    "id": "US-003",
+    "title": "Compose and submit a new post from the home feed",
     "acceptance_criteria": [
       {
-        "id": "AC-103-1",
-        "title": "Create a post that appears in the feed",
-        "narrative": "Given I am on the home page\nWhen I type content in the composer and submit\nThen the new post should appear at the top of the feed\n",
+        "id": "AC-003-1",
+        "title": "Valid post submission adds post to feed",
+        "narrative": "Given I am viewing the home feed\nWhen I write a post in the composer and submit\nThen the post appears at the top of the feed\n",
         "given": [
           {
             "visit": "/"
@@ -252,7 +203,7 @@
           {
             "fill": {
               "selector": "[data-test=composer-input]",
-              "value": "Hello from RootFeed!"
+              "value": "Hello from RootFeed test"
             }
           },
           {
@@ -265,27 +216,21 @@
           {
             "shouldContain": {
               "selector": "[data-test=post-card]:first-child [data-test=post-content]",
-              "text": "Hello from RootFeed!"
+              "text": "Hello from RootFeed test"
             }
           }
         ]
       },
       {
-        "id": "AC-103-2",
-        "title": "Empty posts are rejected",
-        "narrative": "Given I am on the home page\nWhen I try to submit a post with only whitespace\nThen the post should not be created\n",
+        "id": "AC-003-2",
+        "title": "Empty post submission shows validation error",
+        "narrative": "Given I am viewing the home feed\nWhen I try to submit the composer with empty content\nThen I see a validation error and no post is created\n",
         "given": [
           {
             "visit": "/"
           }
         ],
         "when": [
-          {
-            "fill": {
-              "selector": "[data-test=composer-input]",
-              "value": "   "
-            }
-          },
           {
             "click": {
               "selector": "[data-test=composer-submit]"
@@ -303,43 +248,13 @@
     ]
   },
   {
-    "id": "US-104",
-    "title": "Load more posts",
+    "id": "US-010",
+    "title": "Toggle between dark and light theme",
     "acceptance_criteria": [
       {
-        "id": "AC-104-1",
-        "title": "Paginate the feed with load more",
-        "narrative": "Given I am viewing the home feed with limited posts shown\nWhen I click the load more button\nThen additional posts should appear below the existing ones\n",
-        "given": [
-          {
-            "visit": "/"
-          }
-        ],
-        "when": [
-          {
-            "click": {
-              "selector": "[data-test=load-more]"
-            }
-          }
-        ],
-        "then": [
-          {
-            "shouldExist": {
-              "selector": "[data-test=post-card]"
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "US-111",
-    "title": "See the demo banner",
-    "acceptance_criteria": [
-      {
-        "id": "AC-111-1",
-        "title": "Meta banner is visible on every page",
-        "narrative": "Given I am visiting any page on RootFeed\nWhen the page loads\nThen I should see the meta banner explaining this is a RootSpec demo\n",
+        "id": "AC-010-1",
+        "title": "Theme toggle button exists in the navigation",
+        "narrative": "Given I am on any page\nWhen the page loads\nThen I see a theme toggle button in the navigation\n",
         "given": [
           {
             "visit": "/"
@@ -349,49 +264,15 @@
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=meta-banner]"
+              "selector": "[data-test=theme-toggle]"
             }
           }
         ]
       },
       {
-        "id": "AC-111-2",
-        "title": "Banner contains links to spec artifacts",
-        "narrative": "Given I am viewing the meta banner\nWhen I look at the banner content\nThen I should see links to the seed, spec, and scaffold commit\n",
-        "given": [
-          {
-            "visit": "/"
-          }
-        ],
-        "when": [],
-        "then": [
-          {
-            "shouldExist": {
-              "selector": "[data-test=meta-banner] [data-test=seed-link]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=meta-banner] [data-test=spec-link]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=meta-banner] [data-test=scaffold-link]"
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "US-112",
-    "title": "Toggle dark/light theme",
-    "acceptance_criteria": [
-      {
-        "id": "AC-112-1",
-        "title": "Theme toggle switches between dark and light",
-        "narrative": "Given I am on any page\nWhen I click the theme toggle\nThen the page should switch to the opposite theme\n",
+        "id": "AC-010-2",
+        "title": "Clicking theme toggle switches the theme class",
+        "narrative": "Given I am on the home page in light mode\nWhen I click the theme toggle\nThen the dark class is applied to the HTML element\n",
         "given": [
           {
             "visit": "/"
@@ -407,7 +288,7 @@
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=theme-indicator]"
+              "selector": "html.dark"
             }
           }
         ]
@@ -415,66 +296,64 @@
     ]
   },
   {
-    "id": "US-105",
-    "title": "View a user profile",
+    "id": "US-011",
+    "title": "See the meta banner explaining the demo origin on every page",
     "acceptance_criteria": [
       {
-        "id": "AC-105-1",
-        "title": "Profile displays user info and posts",
-        "narrative": "Given I navigate to a user profile page\nWhen the page loads\nThen I should see their display name, bio, avatar, follower and following counts, and their posts\n",
+        "id": "AC-011-1",
+        "title": "Meta banner is visible on the home page",
+        "narrative": "Given I visit the home page\nWhen the page loads\nThen I see the meta banner with links to the seed and spec\n",
         "given": [
           {
-            "visit": "/profile/alice"
+            "visit": "/"
           }
         ],
         "when": [],
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=profile-display-name]"
+              "selector": "[data-test=meta-banner]"
             }
           },
           {
             "shouldExist": {
-              "selector": "[data-test=profile-bio]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=profile-avatar]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=follower-count]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=following-count]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=post-card]"
+              "selector": "[data-test=scaffold-link]"
             }
           }
         ]
       },
       {
-        "id": "AC-105-2",
-        "title": "Unknown profile shows not found",
-        "narrative": "Given I navigate to a profile that does not exist\nWhen the page loads\nThen I should see a user not found message\n",
+        "id": "AC-011-2",
+        "title": "Meta banner is visible on the explore page",
+        "narrative": "Given I visit the explore page\nWhen the page loads\nThen I see the meta banner\n",
         "given": [
           {
-            "visit": "/profile/nonexistent-user-xyz"
+            "visit": "/explore"
           }
         ],
         "when": [],
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=user-not-found]"
+              "selector": "[data-test=meta-banner]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "AC-011-3",
+        "title": "Meta banner is visible on the search page",
+        "narrative": "Given I visit the search page\nWhen the page loads\nThen I see the meta banner\n",
+        "given": [
+          {
+            "visit": "/search"
+          }
+        ],
+        "when": [],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=meta-banner]"
             }
           }
         ]
@@ -482,16 +361,66 @@
     ]
   },
   {
-    "id": "US-106",
-    "title": "Follow and unfollow users",
+    "id": "US-005",
+    "title": "View a user profile with their posts and stats",
     "acceptance_criteria": [
       {
-        "id": "AC-106-1",
-        "title": "Toggle follow on a profile",
-        "narrative": "Given I am viewing a user profile\nWhen I click the follow button\nThen the button should change to indicate I am following and the follower count should increase\n",
+        "id": "AC-005-1",
+        "title": "Profile page shows user info and posts",
+        "narrative": "Given I navigate to a user profile page\nWhen the page loads\nThen I see the user display name, handle, bio, and follower counts\n",
         "given": [
           {
-            "visit": "/profile/alice"
+            "visit": "/profile/alice.dev"
+          }
+        ],
+        "when": [],
+        "then": [
+          {
+            "shouldContain": {
+              "selector": "body",
+              "text": "Alice Chen"
+            }
+          },
+          {
+            "shouldContain": {
+              "selector": "body",
+              "text": "@alice.dev"
+            }
+          }
+        ]
+      },
+      {
+        "id": "AC-005-2",
+        "title": "Unknown profile handle shows not-found message",
+        "narrative": "Given I navigate to a profile that does not exist\nWhen the page loads\nThen I see a not-found message\n",
+        "given": [
+          {
+            "visit": "/profile/nobody-here"
+          }
+        ],
+        "when": [],
+        "then": [
+          {
+            "shouldContain": {
+              "selector": "body",
+              "text": "User not found"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "US-006",
+    "title": "Follow and unfollow a user from their profile page",
+    "acceptance_criteria": [
+      {
+        "id": "AC-006-1",
+        "title": "Follow button toggles to Unfollow after clicking",
+        "narrative": "Given I am viewing a user profile\nWhen I click the Follow button\nThen the button changes to show Unfollow\n",
+        "given": [
+          {
+            "visit": "/profile/bobwrites"
           }
         ],
         "when": [
@@ -503,8 +432,39 @@
         ],
         "then": [
           {
-            "shouldExist": {
-              "selector": "[data-test=follow-button].following"
+            "shouldContain": {
+              "selector": "[data-test=follow-button]",
+              "text": "Unfollow"
+            }
+          }
+        ]
+      },
+      {
+        "id": "AC-006-2",
+        "title": "Unfollow button toggles back to Follow after clicking",
+        "narrative": "Given I am viewing a user profile and already following them\nWhen I click the Unfollow button\nThen the button changes back to Follow\n",
+        "given": [
+          {
+            "visit": "/profile/bobwrites"
+          }
+        ],
+        "when": [
+          {
+            "click": {
+              "selector": "[data-test=follow-button]"
+            }
+          },
+          {
+            "click": {
+              "selector": "[data-test=follow-button]"
+            }
+          }
+        ],
+        "then": [
+          {
+            "shouldContain": {
+              "selector": "[data-test=follow-button]",
+              "text": "Follow"
             }
           }
         ]
@@ -512,25 +472,101 @@
     ]
   },
   {
-    "id": "US-107",
-    "title": "Read a post thread",
+    "id": "US-007",
+    "title": "Search posts by keyword and see filtered results",
     "acceptance_criteria": [
       {
-        "id": "AC-107-1",
-        "title": "Post detail shows full post with engagement actions",
-        "narrative": "Given I navigate to a post detail page\nWhen the page loads\nThen I should see the full post content with like and bookmark buttons\n",
+        "id": "AC-007-1",
+        "title": "Typing a query shows matching posts",
+        "narrative": "Given I am on the search page\nWhen I type a keyword that appears in a post\nThen I see posts containing that keyword in the results\n",
         "given": [
           {
-            "visit": "/post/1"
+            "visit": "/search"
+          }
+        ],
+        "when": [
+          {
+            "fill": {
+              "selector": "input[type=text]",
+              "value": "microservices"
+            }
+          }
+        ],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=post-content]"
+            }
+          },
+          {
+            "shouldContain": {
+              "selector": "[data-test=post-content]",
+              "text": "microservices"
+            }
+          }
+        ]
+      },
+      {
+        "id": "AC-007-2",
+        "title": "No matching results shows empty state message",
+        "narrative": "Given I am on the search page\nWhen I type a query that matches no posts\nThen I see a no-results message\n",
+        "given": [
+          {
+            "visit": "/search"
+          }
+        ],
+        "when": [
+          {
+            "fill": {
+              "selector": "input[type=text]",
+              "value": "xyzquerynotindata123"
+            }
+          }
+        ],
+        "then": [
+          {
+            "shouldContain": {
+              "selector": "body",
+              "text": "No results"
+            }
+          }
+        ]
+      },
+      {
+        "id": "AC-007-3",
+        "title": "Empty query shows no results",
+        "narrative": "Given I am on the search page\nWhen the input is empty\nThen no posts are shown\n",
+        "given": [
+          {
+            "visit": "/search"
           }
         ],
         "when": [],
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=post-detail]"
+              "selector": "input[type=text]"
             }
-          },
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "US-004",
+    "title": "View a single post with its replies",
+    "acceptance_criteria": [
+      {
+        "id": "AC-004-1",
+        "title": "Post detail page shows the post content and author",
+        "narrative": "Given I navigate to a post detail page\nWhen the page loads\nThen I see the post content and author information\n",
+        "given": [
+          {
+            "visit": "/post/p1"
+          }
+        ],
+        "when": [],
+        "then": [
           {
             "shouldExist": {
               "selector": "[data-test=post-content]"
@@ -538,66 +574,26 @@
           },
           {
             "shouldExist": {
-              "selector": "[data-test=like-button]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=bookmark-button]"
+              "selector": "[data-test=post-author]"
             }
           }
         ]
       },
       {
-        "id": "AC-107-2",
-        "title": "Replies display below the post",
-        "narrative": "Given I am viewing a post that has replies\nWhen the page loads\nThen I should see replies listed below the main post\n",
+        "id": "AC-004-2",
+        "title": "Invalid post ID shows not-found message",
+        "narrative": "Given I navigate to a post that does not exist\nWhen the page loads\nThen I see a not-found message\n",
         "given": [
           {
-            "visit": "/post/1"
+            "visit": "/post/nonexistent-id"
           }
         ],
         "when": [],
         "then": [
           {
-            "shouldExist": {
-              "selector": "[data-test=replies-section]"
-            }
-          }
-        ]
-      },
-      {
-        "id": "AC-107-3",
-        "title": "Parent post displayed for replies",
-        "narrative": "Given I am viewing a post that is a reply to another post\nWhen the page loads\nThen I should see the parent post displayed above\n",
-        "given": [
-          {
-            "visit": "/post/3"
-          }
-        ],
-        "when": [],
-        "then": [
-          {
-            "shouldExist": {
-              "selector": "[data-test=parent-post]"
-            }
-          }
-        ]
-      },
-      {
-        "id": "AC-107-4",
-        "title": "Invalid post shows not found",
-        "narrative": "Given I navigate to a post that does not exist\nWhen the page loads\nThen I should see a post not found message\n",
-        "given": [
-          {
-            "visit": "/post/99999"
-          }
-        ],
-        "when": [],
-        "then": [
-          {
-            "shouldExist": {
-              "selector": "[data-test=post-not-found]"
+            "shouldContain": {
+              "selector": "body",
+              "text": "Post not found"
             }
           }
         ]

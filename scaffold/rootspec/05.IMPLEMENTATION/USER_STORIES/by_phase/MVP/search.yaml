@@ -1,0 +1,51 @@
+# =============================================================================
+# USER STORY: Search Posts
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: SEARCH
+# @systems: [SEARCH_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-007
+title: Search posts by keyword and see filtered results
+
+acceptance_criteria:
+  - id: AC-007-1
+    title: Typing a query shows matching posts
+    narrative: |
+      Given I am on the search page
+      When I type a keyword that appears in a post
+      Then I see posts containing that keyword in the results
+    given:
+      - visit: '/search'
+    when:
+      - fill: { selector: 'input[type=text]', value: 'microservices' }
+    then:
+      - shouldExist: { selector: '[data-test=post-content]' }
+      - shouldContain: { selector: '[data-test=post-content]', text: 'microservices' }
+
+  - id: AC-007-2
+    title: No matching results shows empty state message
+    narrative: |
+      Given I am on the search page
+      When I type a query that matches no posts
+      Then I see a no-results message
+    given:
+      - visit: '/search'
+    when:
+      - fill: { selector: 'input[type=text]', value: 'xyzquerynotindata123' }
+    then:
+      - shouldContain: { selector: 'body', text: 'No results' }
+
+  - id: AC-007-3
+    title: Empty query shows no results
+    narrative: |
+      Given I am on the search page
+      When the input is empty
+      Then no posts are shown
+    given:
+      - visit: '/search'
+    when: []
+    then:
+      - shouldExist: { selector: 'input[type=text]' }

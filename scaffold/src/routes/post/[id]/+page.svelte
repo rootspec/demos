@@ -1,34 +1,36 @@
 <script lang="ts">
-	import PostCard from '$lib/components/PostCard.svelte';
-
 	let { data } = $props();
 
 	function getAuthor(authorId: string) {
-		return data.users.find((u) => u.id === authorId);
+		return data.users.find((u: { id: string }) => u.id === authorId);
 	}
 </script>
 
 {#if data.post}
-	{#if data.parent}
-		<div data-test="parent-post" class="mb-2 border-l-2 border-gray-300 pl-4 dark:border-gray-600">
-			<PostCard post={data.parent} author={getAuthor(data.parent.authorId)} />
+	{@const author = getAuthor(data.post.authorId)}
+	<div class="mb-6">
+		<div data-test="post-author" class="mb-1 text-sm text-gray-500 dark:text-gray-400">
+			<a href="/profile/{author?.handle}" class="font-medium text-gray-900 dark:text-gray-100">{author?.displayName}</a>
+			<span>@{author?.handle}</span>
 		</div>
-	{/if}
-
-	<div data-test="post-detail">
-		<PostCard post={data.post} author={getAuthor(data.post.authorId)} />
+		<p data-test="post-content" class="text-lg">{data.post.content}</p>
+		<div class="mt-2 text-sm text-gray-400">
+			{data.post.likeCount} likes &middot; {data.post.repostCount} reposts
+		</div>
 	</div>
 
 	{#if data.replies.length > 0}
-		<div data-test="replies-section" class="mt-4">
-			<h2 class="mb-2 font-bold">Replies</h2>
-			{#each data.replies as reply (reply.id)}
-				<div class="pl-4">
-					<PostCard post={reply} author={getAuthor(reply.authorId)} />
+		<h2 class="mb-2 font-bold">Replies</h2>
+		{#each data.replies as reply}
+			{@const replyAuthor = getAuthor(reply.authorId)}
+			<div class="border-t border-gray-200 py-3 pl-4 dark:border-gray-700">
+				<div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
+					<a href="/profile/{replyAuthor?.handle}" class="font-medium text-gray-900 dark:text-gray-100">{replyAuthor?.displayName}</a>
 				</div>
-			{/each}
-		</div>
+				<p>{reply.content}</p>
+			</div>
+		{/each}
 	{/if}
 {:else}
-	<p data-test="post-not-found">Post not found.</p>
+	<p>Post not found</p>
 {/if}

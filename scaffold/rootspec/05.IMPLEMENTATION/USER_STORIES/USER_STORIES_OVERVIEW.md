@@ -1,44 +1,36 @@
 # User Stories Overview
 
+**RootFeed — Level 5 User Stories**
+
+---
+
 ## Organization
 
-All stories belong to a single phase: **MVP**. RootFeed is a demo — there is no post-launch roadmap.
+Stories are organized in `by_phase/MVP/` since this is a single-phase demo. All stories represent the complete implemented feature set — there are no future phases.
 
-### By Phase
-- `by_phase/MVP/` — All stories
+## Phase Definitions
 
-### By Journey
-- `by_journey/FEED_BROWSING/` — Home feed, post interactions, composer, pagination
-- `by_journey/DISCOVERY/` — Search, explore, tag filtering
-- `by_journey/META/` — Banner, theme, attribution
-
-### By System
-- `by_system/FEED_SYSTEM/` — Feed rendering, like, bookmark, composer, pagination
-- `by_system/PROFILE_SYSTEM/` — Profile display, follow/unfollow
-- `by_system/THREAD_SYSTEM/` — Thread assembly, post detail
-- `by_system/DISCOVERY_SYSTEM/` — Search, tags, explore
-- `by_system/META_SYSTEM/` — Banner, theme, footer
+| Phase | Description |
+|-------|-------------|
+| MVP | The full RootFeed demo — all five routes implemented and tested |
 
 ## Story Index
 
-| ID | Title | Systems | Journey |
-|----|-------|---------|---------|
-| US-101 | Browse the home feed | FEED_SYSTEM | FEED_BROWSING |
-| US-102 | Like and bookmark posts | FEED_SYSTEM | FEED_BROWSING |
-| US-103 | Compose a new post | FEED_SYSTEM | FEED_BROWSING |
-| US-104 | Load more posts | FEED_SYSTEM | FEED_BROWSING |
-| US-105 | View a user profile | PROFILE_SYSTEM | FEED_BROWSING |
-| US-106 | Follow and unfollow users | PROFILE_SYSTEM | FEED_BROWSING |
-| US-107 | Read a post thread | THREAD_SYSTEM | FEED_BROWSING |
-| US-108 | Search posts | DISCOVERY_SYSTEM | DISCOVERY |
-| US-109 | Explore trending content | DISCOVERY_SYSTEM | DISCOVERY |
-| US-110 | Filter posts by tag | DISCOVERY_SYSTEM | DISCOVERY |
-| US-111 | See the demo banner | META_SYSTEM | META |
-| US-112 | Toggle dark/light theme | META_SYSTEM | META |
+| ID | Title | File | Systems |
+|----|-------|------|---------|
+| US-001 | View home feed | by_phase/MVP/feed.yaml | FEED_SYSTEM |
+| US-002 | Like and bookmark posts | by_phase/MVP/feed.yaml | FEED_SYSTEM |
+| US-003 | Compose a new post | by_phase/MVP/feed.yaml | FEED_SYSTEM |
+| US-004 | View post detail and replies | by_phase/MVP/thread.yaml | THREAD_SYSTEM |
+| US-005 | View user profile | by_phase/MVP/profile.yaml | PROFILE_SYSTEM |
+| US-006 | Follow and unfollow a user | by_phase/MVP/profile.yaml | PROFILE_SYSTEM |
+| US-007 | Search posts | by_phase/MVP/search.yaml | SEARCH_SYSTEM |
+| US-008 | Explore trending tags | by_phase/MVP/discovery.yaml | DISCOVERY_SYSTEM |
+| US-009 | Filter posts by tag | by_phase/MVP/discovery.yaml | DISCOVERY_SYSTEM |
+| US-010 | Toggle theme | by_phase/MVP/meta.yaml | META_SYSTEM |
+| US-011 | See meta banner on every page | by_phase/MVP/meta.yaml | META_SYSTEM |
 
-## Test Suites
+## Test Suite
 
-- `cypress/e2e/mvp.cy.ts` — loads `by_phase/MVP/**/*.yaml`
-- `cypress/e2e/feed.cy.ts` — loads `by_journey/FEED_BROWSING/**/*.yaml`
-- `cypress/e2e/discovery.cy.ts` — loads `by_journey/DISCOVERY/**/*.yaml`
-- `cypress/e2e/meta.cy.ts` — loads `by_journey/META/**/*.yaml`
+The MVP test suite runs: `cypress run --spec 'cypress/e2e/mvp.cy.ts'`
+The mvp.cy.ts file should load `rootspec/05.IMPLEMENTATION/USER_STORIES/by_phase/MVP/**/*.yaml`

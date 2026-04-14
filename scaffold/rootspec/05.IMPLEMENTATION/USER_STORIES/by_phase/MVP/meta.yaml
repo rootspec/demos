@@ -1,65 +1,88 @@
 # =============================================================================
-# USER STORY: See the Demo Banner
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: META
-# @systems: [META_SYSTEM]
-# @last_updated: 2026-04-03T00:00:00Z
-
-id: US-111
-title: See the demo banner
-
-acceptance_criteria:
-  - id: AC-111-1
-    title: Meta banner is visible on every page
-    narrative: |
-      Given I am visiting any page on RootFeed
-      When the page loads
-      Then I should see the meta banner explaining this is a RootSpec demo
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-
-  - id: AC-111-2
-    title: Banner contains links to spec artifacts
-    narrative: |
-      Given I am viewing the meta banner
-      When I look at the banner content
-      Then I should see links to the seed, spec, and scaffold commit
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=meta-banner] [data-test=seed-link]' }
-      - shouldExist: { selector: '[data-test=meta-banner] [data-test=spec-link]' }
-      - shouldExist: { selector: '[data-test=meta-banner] [data-test=scaffold-link]' }
-
----
-# =============================================================================
 # USER STORY: Toggle Dark/Light Theme
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: META
 # @systems: [META_SYSTEM]
-# @last_updated: 2026-04-03T00:00:00Z
+# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-112
-title: Toggle dark/light theme
+id: US-010
+title: Toggle between dark and light theme
 
 acceptance_criteria:
-  - id: AC-112-1
-    title: Theme toggle switches between dark and light
+  - id: AC-010-1
+    title: Theme toggle button exists in the navigation
     narrative: |
       Given I am on any page
+      When the page loads
+      Then I see a theme toggle button in the navigation
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+  - id: AC-010-2
+    title: Clicking theme toggle switches the theme class
+    narrative: |
+      Given I am on the home page in light mode
       When I click the theme toggle
-      Then the page should switch to the opposite theme
+      Then the dark class is applied to the HTML element
     given:
       - visit: '/'
     when:
       - click: { selector: '[data-test=theme-toggle]' }
     then:
-      - shouldExist: { selector: '[data-test=theme-indicator]' }
+      - shouldExist: { selector: 'html.dark' }
+
+---
+# =============================================================================
+# USER STORY: Meta Banner on Every Page
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: META
+# @systems: [META_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-011
+title: See the meta banner explaining the demo origin on every page
+
+acceptance_criteria:
+  - id: AC-011-1
+    title: Meta banner is visible on the home page
+    narrative: |
+      Given I visit the home page
+      When the page loads
+      Then I see the meta banner with links to the seed and spec
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: '[data-test=scaffold-link]' }
+
+  - id: AC-011-2
+    title: Meta banner is visible on the explore page
+    narrative: |
+      Given I visit the explore page
+      When the page loads
+      Then I see the meta banner
+    given:
+      - visit: '/explore'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=meta-banner]' }
+
+  - id: AC-011-3
+    title: Meta banner is visible on the search page
+    narrative: |
+      Given I visit the search page
+      When the page loads
+      Then I see the meta banner
+    given:
+      - visit: '/search'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=meta-banner]' }

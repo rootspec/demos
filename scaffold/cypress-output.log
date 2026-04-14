@@ -1,0 +1,148 @@
+[35m[95mWarning:[39m[35m The [33mallowCypressEnv[39m[35m configuration option is enabled. This allows any browser code to read values from [33mCypress.env()[39m[35m. This is insecure and will be removed in a future major version.[39m
+[35m[39m
+[35m1. Replace [33mCypress.env()[39m[35m calls with [33mcy.env()[39m[35m (for sensitive values) or [33mCypress.expose()[39m[35m (for public configuration)[39m
+[35m2. Set [33mallowCypressEnv: false[39m[35m in your Cypress configuration to disable [33mCypress.env()[39m[35m[39m
+[35m[39m
+[35mLearn more: https://on.cypress.io/cypress-env-migration[39m
+[35m[39m
+
+[90m====================================================================================================[39m
+
+[0m  ([4m[1mRun Starting[22m[24m)[0m
+
+[90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
+[90m  │[39m [90mCypress:[39m        15.13.0                                                                        [90m│[39m
+[90m  │[39m [90mBrowser:[39m        Electron 138 [90m(headless)[39m                                                        [90m│[39m
+[90m  │[39m [90mNode Version:[39m   [0mv22.22.2 [90m(/opt/hostedtoolcache/node/22.22.2/x64/bin/node)[39m[0m                      [90m│[39m
+[90m  │[39m [90mSpecs:[39m          [0m1 found (mvp.cy.ts)[0m                                                            [90m│[39m
+[90m  │[39m [90mSearched:[39m       [0mcypress/e2e/**/*.cy.ts[0m                                                         [90m│[39m
+[90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
+
+
+[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m
+                                                                                                    
+  Running:  [90mmvp.cy.ts[39m                                                                       [90m(1 of 1)[39m
+
+[0m[0m
+[0m  US-008: Browse trending tags and suggested users on the explore page[0m
+  [32m  ✓[0m[90m AC-008-1: Explore page shows trending tags and user list[0m[90m (809ms)[0m
+
+[0m  US-009: Click a tag on the explore page to filter posts[0m
+  [32m  ✓[0m[90m AC-009-1: Clicking a tag filters the visible posts to that tag[0m[90m (274ms)[0m
+
+[0m  US-001: View the home feed with posts and author info[0m
+  [32m  ✓[0m[90m AC-001-1: Home feed shows posts with author info and engagement counts[0m[90m (205ms)[0m
+  [32m  ✓[0m[90m AC-001-2: Meta banner is visible on home page[0m[90m (181ms)[0m
+
+[0m  US-002: Like and bookmark posts on the home feed[0m
+  [32m  ✓[0m[90m AC-002-1: Like button toggles visual state and updates count[0m[90m (265ms)[0m
+  [32m  ✓[0m[90m AC-002-2: Bookmark button toggles visual state[0m[90m (283ms)[0m
+
+[0m  US-003: Compose and submit a new post from the home feed[0m
+  [32m  ✓[0m[90m AC-003-1: Valid post submission adds post to feed[0m[90m (718ms)[0m
+  [32m  ✓[0m[90m AC-003-2: Empty post submission shows validation error[0m[90m (271ms)[0m
+
+[0m  US-010: Toggle between dark and light theme[0m
+  [32m  ✓[0m[90m AC-010-1: Theme toggle button exists in the navigation[0m[90m (195ms)[0m
+  [32m  ✓[0m[90m AC-010-2: Clicking theme toggle switches the theme class[0m[90m (240ms)[0m
+
+[0m  US-011: See the meta banner explaining the demo origin on every page[0m
+  [32m  ✓[0m[90m AC-011-1: Meta banner is visible on the home page[0m[90m (191ms)[0m
+  [32m  ✓[0m[90m AC-011-2: Meta banner is visible on the explore page[0m[90m (169ms)[0m
+  [32m  ✓[0m[90m AC-011-3: Meta banner is visible on the search page[0m[90m (186ms)[0m
+
+[0m  US-005: View a user profile with their posts and stats[0m
+  [32m  ✓[0m[90m AC-005-1: Profile page shows user info and posts[0m[90m (164ms)[0m
+  [32m  ✓[0m[90m AC-005-2: Unknown profile handle shows not-found message[0m[90m (161ms)[0m
+
+[0m  US-006: Follow and unfollow a user from their profile page[0m
+  [32m  ✓[0m[90m AC-006-1: Follow button toggles to Unfollow after clicking[0m[90m (258ms)[0m
+  [32m  ✓[0m[90m AC-006-2: Unfollow button toggles back to Follow after clicking[0m[90m (310ms)[0m
+
+[0m  US-007: Search posts by keyword and see filtered results[0m
+  [32m  ✓[0m[90m AC-007-1: Typing a query shows matching posts[0m[90m (490ms)[0m
+  [32m  ✓[0m[90m AC-007-2: No matching results shows empty state message[0m[90m (556ms)[0m
+  [32m  ✓[0m[90m AC-007-3: Empty query shows no results[0m[90m (160ms)[0m
+
+[0m  US-004: View a single post with its replies[0m
+  [32m  ✓[0m[90m AC-004-1: Post detail page shows the post content and author[0m[90m (166ms)[0m
+  [32m  ✓[0m[90m AC-004-2: Invalid post ID shows not-found message[0m[90m (188ms)[0m
+
+
+[92m [0m[32m 22 passing[0m[90m (24s)[0m
+
+
+[32m  ([4m[1mResults[22m[24m)[39m
+
+[90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
+[90m  │[39m [90mTests:[39m        [32m22[39m                                                                               [90m│[39m
+[90m  │[39m [90mPassing:[39m      [32m22[39m                                                                               [90m│[39m
+[90m  │[39m [90mFailing:[39m      [32m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mPending:[39m      [32m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mSkipped:[39m      [32m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mScreenshots:[39m  [32m22[39m                                                                               [90m│[39m
+[90m  │[39m [90mVideo:[39m        [32mfalse[39m                                                                            [90m│[39m
+[90m  │[39m [90mDuration:[39m     [32m24 seconds[39m                                                                       [90m│[39m
+[90m  │[39m [90mSpec Ran:[39m     [32m[32mmvp.cy.ts[32m[39m                                                                        [90m│[39m
+[90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
+
+
+[33m  ([4m[1mScreenshots[22m[24m)[39m
+
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-008--AC-[0m     [90m[90m(1000x934)[90m[39m
+[90m [39m    [0m008-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-009--AC-[0m    [90m[90m(1000x1376)[90m[39m
+[90m [39m    [0m009-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-001--AC-[0m    [90m[90m(1000x3801)[90m[39m
+[90m [39m    [0m001-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-001--AC-[0m    [90m[90m(1000x3801)[90m[39m
+[90m [39m    [0m001-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-002--AC-[0m    [90m[90m(1000x3801)[90m[39m
+[90m [39m    [0m002-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-002--AC-[0m    [90m[90m(1000x3801)[90m[39m
+[90m [39m    [0m002-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-003--AC-[0m    [90m[90m(1000x3914)[90m[39m
+[90m [39m    [0m003-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-003--AC-[0m    [90m[90m(1000x3829)[90m[39m
+[90m [39m    [0m003-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-010--AC-[0m    [90m[90m(1000x3801)[90m[39m
+[90m [39m    [0m010-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-010--AC-[0m    [90m[90m(1000x3801)[90m[39m
+[90m [39m    [0m010-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-011--AC-[0m    [90m[90m(1000x3801)[90m[39m
+[90m [39m    [0m011-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-011--AC-[0m     [90m[90m(1000x934)[90m[39m
+[90m [39m    [0m011-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-011--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m011-3.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-005--AC-[0m     [90m[90m(1000x710)[90m[39m
+[90m [39m    [0m005-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-005--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m005-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-006--AC-[0m     [90m[90m(1000x686)[90m[39m
+[90m [39m    [0m006-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-006--AC-[0m     [90m[90m(1000x686)[90m[39m
+[90m [39m    [0m006-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-007--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m007-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-007--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m007-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-007--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m007-3.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-004--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m004-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-004--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m004-2.png[0m                                                                                      
+
+
+[90m====================================================================================================[39m
+
+[0m  ([4m[1mRun Finished[22m[24m)[0m
+
+
+[90m   [39m    [90mSpec[39m                                              [90mTests[39m  [90mPassing[39m  [90mFailing[39m  [90mPending[39m  [90mSkipped[39m [90m [39m
+[90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
+[90m  │[39m [32m✔[39m  [0mmvp.cy.ts[0m                                [90m00:24[39m       [0m22[0m       [32m22[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m│[39m
+[90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
+[90m   [39m [32m✔[39m  [32mAll specs passed![39m                        [90m00:24[39m       [0m22[0m       [32m22[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m [39m
+

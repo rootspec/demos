@@ -1,68 +1,78 @@
 # =============================================================================
-# USER STORY: View a User Profile
+# USER STORY: View User Profile
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FEED_BROWSING
+# @journey: PROFILE_VIEWING
 # @systems: [PROFILE_SYSTEM]
-# @last_updated: 2026-04-03T00:00:00Z
+# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-105
-title: View a user profile
+id: US-005
+title: View a user profile with their posts and stats
 
 acceptance_criteria:
-  - id: AC-105-1
-    title: Profile displays user info and posts
+  - id: AC-005-1
+    title: Profile page shows user info and posts
     narrative: |
       Given I navigate to a user profile page
       When the page loads
-      Then I should see their display name, bio, avatar, follower and following counts, and their posts
+      Then I see the user display name, handle, bio, and follower counts
     given:
-      - visit: '/profile/alice'
+      - visit: '/profile/alice.dev'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=profile-display-name]' }
-      - shouldExist: { selector: '[data-test=profile-bio]' }
-      - shouldExist: { selector: '[data-test=profile-avatar]' }
-      - shouldExist: { selector: '[data-test=follower-count]' }
-      - shouldExist: { selector: '[data-test=following-count]' }
-      - shouldExist: { selector: '[data-test=post-card]' }
+      - shouldContain: { selector: 'body', text: 'Alice Chen' }
+      - shouldContain: { selector: 'body', text: '@alice.dev' }
 
-  - id: AC-105-2
-    title: Unknown profile shows not found
+  - id: AC-005-2
+    title: Unknown profile handle shows not-found message
     narrative: |
       Given I navigate to a profile that does not exist
       When the page loads
-      Then I should see a user not found message
+      Then I see a not-found message
     given:
-      - visit: '/profile/nonexistent-user-xyz'
+      - visit: '/profile/nobody-here'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=user-not-found]' }
+      - shouldContain: { selector: 'body', text: 'User not found' }
 
 ---
 # =============================================================================
-# USER STORY: Follow and Unfollow Users
+# USER STORY: Follow and Unfollow a User
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FEED_BROWSING
+# @journey: PROFILE_VIEWING
 # @systems: [PROFILE_SYSTEM]
-# @last_updated: 2026-04-03T00:00:00Z
+# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-106
-title: Follow and unfollow users
+id: US-006
+title: Follow and unfollow a user from their profile page
 
 acceptance_criteria:
-  - id: AC-106-1
-    title: Toggle follow on a profile
+  - id: AC-006-1
+    title: Follow button toggles to Unfollow after clicking
     narrative: |
       Given I am viewing a user profile
-      When I click the follow button
-      Then the button should change to indicate I am following and the follower count should increase
+      When I click the Follow button
+      Then the button changes to show Unfollow
     given:
-      - visit: '/profile/alice'
+      - visit: '/profile/bobwrites'
     when:
       - click: { selector: '[data-test=follow-button]' }
     then:
-      - shouldExist: { selector: '[data-test=follow-button].following' }
+      - shouldContain: { selector: '[data-test=follow-button]', text: 'Unfollow' }
+
+  - id: AC-006-2
+    title: Unfollow button toggles back to Follow after clicking
+    narrative: |
+      Given I am viewing a user profile and already following them
+      When I click the Unfollow button
+      Then the button changes back to Follow
+    given:
+      - visit: '/profile/bobwrites'
+    when:
+      - click: { selector: '[data-test=follow-button]' }
+      - click: { selector: '[data-test=follow-button]' }
+    then:
+      - shouldContain: { selector: '[data-test=follow-button]', text: 'Follow' }

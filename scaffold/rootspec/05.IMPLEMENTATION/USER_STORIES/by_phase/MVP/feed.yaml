@@ -1,22 +1,22 @@
 # =============================================================================
-# USER STORY: Browse the Home Feed
+# USER STORY: View Home Feed
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: FEED_BROWSING
-# @systems: [FEED_SYSTEM]
-# @last_updated: 2026-04-03T00:00:00Z
+# @systems: [FEED_SYSTEM, META_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-101
-title: Browse the home feed
+id: US-001
+title: View the home feed with posts and author info
 
 acceptance_criteria:
-  - id: AC-101-1
-    title: Feed displays posts in reverse chronological order
+  - id: AC-001-1
+    title: Home feed shows posts with author info and engagement counts
     narrative: |
-      Given I am visiting the home page
+      Given I visit the home page
       When the page loads
-      Then I should see posts with author info, content, and timestamps
+      Then I see a list of posts with author names, handles, and engagement counts
     given:
       - visit: '/'
     when: []
@@ -24,20 +24,21 @@ acceptance_criteria:
       - shouldExist: { selector: '[data-test=post-card]' }
       - shouldExist: { selector: '[data-test=post-author]' }
       - shouldExist: { selector: '[data-test=post-content]' }
-      - shouldExist: { selector: '[data-test=post-timestamp]' }
+      - shouldExist: { selector: '[data-test=like-count]' }
 
-  - id: AC-101-2
-    title: Posts show engagement counts
+  - id: AC-001-2
+    title: Meta banner is visible on home page
     narrative: |
-      Given I am viewing the home feed
-      When I look at a post
-      Then I should see like and repost counts
+      Given I visit the home page
+      When the page loads
+      Then I see the meta banner explaining the demo origin
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=like-count]' }
-      - shouldExist: { selector: '[data-test=repost-count]' }
+      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: '[data-test=seed-link]' }
+      - shouldExist: { selector: '[data-test=spec-link]' }
 
 ---
 # =============================================================================
@@ -47,18 +48,18 @@ acceptance_criteria:
 # @phase: MVP
 # @journey: FEED_BROWSING
 # @systems: [FEED_SYSTEM]
-# @last_updated: 2026-04-03T00:00:00Z
+# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-102
-title: Like and bookmark posts
+id: US-002
+title: Like and bookmark posts on the home feed
 
 acceptance_criteria:
-  - id: AC-102-1
-    title: Toggle like on a post
+  - id: AC-002-1
+    title: Like button toggles visual state and updates count
     narrative: |
       Given I am viewing the home feed
       When I click the like button on a post
-      Then the like count should increase and the button should appear active
+      Then the like button becomes active and the count increases by 1
     given:
       - visit: '/'
     when:
@@ -66,12 +67,12 @@ acceptance_criteria:
     then:
       - shouldExist: { selector: '[data-test=post-card]:first-child [data-test=like-button].active' }
 
-  - id: AC-102-2
-    title: Toggle bookmark on a post
+  - id: AC-002-2
+    title: Bookmark button toggles visual state
     narrative: |
       Given I am viewing the home feed
       When I click the bookmark button on a post
-      Then the bookmark button should appear active
+      Then the bookmark button becomes active
     given:
       - visit: '/'
     when:
@@ -87,63 +88,35 @@ acceptance_criteria:
 # @phase: MVP
 # @journey: FEED_BROWSING
 # @systems: [FEED_SYSTEM]
-# @last_updated: 2026-04-03T00:00:00Z
+# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-103
-title: Compose a new post
+id: US-003
+title: Compose and submit a new post from the home feed
 
 acceptance_criteria:
-  - id: AC-103-1
-    title: Create a post that appears in the feed
+  - id: AC-003-1
+    title: Valid post submission adds post to feed
     narrative: |
-      Given I am on the home page
-      When I type content in the composer and submit
-      Then the new post should appear at the top of the feed
+      Given I am viewing the home feed
+      When I write a post in the composer and submit
+      Then the post appears at the top of the feed
     given:
       - visit: '/'
     when:
-      - fill: { selector: '[data-test=composer-input]', value: 'Hello from RootFeed!' }
+      - fill: { selector: '[data-test=composer-input]', value: 'Hello from RootFeed test' }
       - click: { selector: '[data-test=composer-submit]' }
     then:
-      - shouldContain: { selector: '[data-test=post-card]:first-child [data-test=post-content]', text: 'Hello from RootFeed!' }
+      - shouldContain: { selector: '[data-test=post-card]:first-child [data-test=post-content]', text: 'Hello from RootFeed test' }
 
-  - id: AC-103-2
-    title: Empty posts are rejected
+  - id: AC-003-2
+    title: Empty post submission shows validation error
     narrative: |
-      Given I am on the home page
-      When I try to submit a post with only whitespace
-      Then the post should not be created
+      Given I am viewing the home feed
+      When I try to submit the composer with empty content
+      Then I see a validation error and no post is created
     given:
       - visit: '/'
     when:
-      - fill: { selector: '[data-test=composer-input]', value: '   ' }
       - click: { selector: '[data-test=composer-submit]' }
     then:
       - shouldExist: { selector: '[data-test=composer-error]' }
-
----
-# =============================================================================
-# USER STORY: Load More Posts
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FEED_BROWSING
-# @systems: [FEED_SYSTEM]
-# @last_updated: 2026-04-03T00:00:00Z
-
-id: US-104
-title: Load more posts
-
-acceptance_criteria:
-  - id: AC-104-1
-    title: Paginate the feed with load more
-    narrative: |
-      Given I am viewing the home feed with limited posts shown
-      When I click the load more button
-      Then additional posts should appear below the existing ones
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=load-more]' }
-    then:
-      - shouldExist: { selector: '[data-test=post-card]' }

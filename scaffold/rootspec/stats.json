@@ -1,0 +1,37 @@
+{
+  "runs": [
+    {
+      "runId": "8d0a950c",
+      "startedAt": "2026-04-14T16:36:04.062Z",
+      "completedAt": "2026-04-14T16:53:03.001Z",
+      "totalCostUsd": 3.55,
+      "phases": {
+        "init": {
+          "status": "success",
+          "costUsd": 0,
+          "turns": 0,
+          "durationSeconds": 0
+        },
+        "spec": {
+          "status": "success",
+          "costUsd": 1.87,
+          "turns": 68,
+          "durationSeconds": 472
+        },
+        "impl": {
+          "status": "success",
+          "costUsd": 1.36,
+          "turns": 72,
+          "durationSeconds": 441
+        },
+        "validate": {
+          "status": "success",
+          "costUsd": 0.32,
+          "turns": 19,
+          "durationSeconds": 101
+        }
+      },
+      "qualityScore": null
+    }
+  ]
+}
