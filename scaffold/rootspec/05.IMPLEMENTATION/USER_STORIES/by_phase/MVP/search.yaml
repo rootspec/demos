@@ -1,5 +1,5 @@
 # =============================================================================
-# USER STORIES: Search — Keyword Search
+# USER STORY: Search posts by keyword
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
@@ -7,58 +7,127 @@
 # @systems: [DISCOVERY_SYSTEM, DATA_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
----
-
-id: US-050
+id: US-011
 title: Search posts by keyword
 
 acceptance_criteria:
-  - id: AC-050-1
-    title: Search page has a text input
+  - id: AC-011-1
+    title: Typing in search box shows matching posts
     narrative: |
       Given I visit the search page
-      When the page loads
-      Then I see a search input field
-    given:
-      - visit: '/demos/scaffold/search'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=search-input]' }
-
-  - id: AC-050-2
-    title: Typing a keyword shows matching posts
-    narrative: |
-      Given I visit the search page
-      When I type a keyword that exists in post content
-      Then I see matching posts in the results
+      When I type a keyword into the search box
+      Then I should see posts containing that keyword
     given:
       - visit: '/demos/scaffold/search'
     when:
-      - fill: { selector: '[data-test=search-input]', value: 'the' }
+      - fill: { selector: '[data-test=search-input]', value: 'CSS' }
     then:
       - shouldExist: { selector: '[data-test=search-result]' }
 
-  - id: AC-050-3
-    title: Typing a keyword with no matches shows an empty state message
+  - id: AC-011-2
+    title: Search results link to post detail
     narrative: |
-      Given I visit the search page
-      When I type a keyword that matches no posts
-      Then I see an empty state message
+      Given I have typed a search query with results
+      When the results appear
+      Then each result should be a link to the post detail page
     given:
       - visit: '/demos/scaffold/search'
     when:
-      - fill: { selector: '[data-test=search-input]', value: 'xyzzy_no_match_12345' }
+      - fill: { selector: '[data-test=search-input]', value: 'CSS' }
     then:
-      - shouldExist: { selector: '[data-test=search-empty]' }
+      - shouldExist: { selector: '[data-test=search-result] a' }
 
-  - id: AC-050-4
-    title: Empty search input shows no results
+---
+
+# =============================================================================
+# USER STORY: Search with no results shows message
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: SEARCH
+# @systems: [DISCOVERY_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-018
+title: Search with no results shows message
+
+acceptance_criteria:
+  - id: AC-018-1
+    title: No-results message appears for unmatched query
     narrative: |
-      Given I visit the search page with no query entered
-      When the page loads
-      Then no result cards are shown
+      Given I visit the search page
+      When I type a query that matches no posts
+      Then I should see a no-results message
+    given:
+      - visit: '/demos/scaffold/search'
+    when:
+      - fill: { selector: '[data-test=search-input]', value: 'zxqwerty12345notarealword' }
+    then:
+      - shouldExist: { selector: '[data-test=search-no-results]' }
+
+---
+
+# =============================================================================
+# USER STORY: Empty search shows no results
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: SEARCH
+# @systems: [DISCOVERY_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-019
+title: Empty search shows no results
+
+acceptance_criteria:
+  - id: AC-019-1
+    title: Empty search box shows no result items
+    narrative: |
+      Given I visit the search page
+      When I have not typed anything
+      Then no search results should be shown
     given:
       - visit: '/demos/scaffold/search'
     when: []
     then:
       - shouldExist: { selector: '[data-test=search-input]' }
+
+---
+
+# =============================================================================
+# USER STORY: Toggle dark/light theme
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: INTERACTIVE_EXPLORATION
+# @systems: [THEME_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-012
+title: Toggle dark/light theme
+
+acceptance_criteria:
+  - id: AC-012-1
+    title: Theme toggle button is present in nav
+    narrative: |
+      Given I visit the home feed
+      When the page loads
+      Then I should see a theme toggle button in the navigation
+    given:
+      - visit: '/demos/scaffold/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+  - id: AC-012-2
+    title: Clicking theme toggle switches the theme
+    narrative: |
+      Given I visit the home feed
+      When I click the theme toggle button
+      Then the page should switch to the other theme
+    given:
+      - visit: '/demos/scaffold/'
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldExist: { selector: 'html[data-theme]' }

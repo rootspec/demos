@@ -1,89 +1,60 @@
 # DISCOVERY_SYSTEM
 
-**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md, DATA_SYSTEM.md
+**Responsibility:** Explore page (trending tags, suggested people, popular posts with tag filtering) and search page (live keyword search).
+
+**Depends on:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, DATA_SYSTEM
 
 ---
 
-## Responsibility
+## Routes Owned
 
-Owns the explore and search surfaces. Manages tag filtering state on the explore page and reactive keyword search on the search page.
-
----
-
-## State Owned
-
-### Explore Page State
-
-| State | Type | Description |
-|-------|------|-------------|
-| activeTag | string or null | Currently selected tag filter; null means show all |
-
-### Search Page State
-
-| State | Type | Description |
-|-------|------|-------------|
-| searchQuery | string | Current text in the search input |
-
-All state is component-local and ephemeral.
+| Route | File | Purpose |
+|---|---|---|
+| `/explore` | `src/routes/explore/+page.svelte` | Trending tags, suggested people, popular posts with tag filter |
+| `/search` | `src/routes/search/+page.svelte` | Live keyword search across post content |
 
 ---
 
-## Rules
+## State Managed
 
-### Explore Page
-
-- Renders trending tags, suggested users, and a filterable post list
-- Tags are rendered from `tags.json`, sorted by `postCount` descending (highest first)
-- Suggested users are rendered from `users[]` (all users shown as suggestions)
-- Post list shows all posts by default; filters to matching posts when a tag is active
-- Tag matching: post must include the tag name in its `tags[]` array
-- Clicking an active tag deselects it (sets `activeTag` to null)
-- Clicking a different tag switches the active filter
-
-### Search Page
-
-- Search input filters posts reactively as `searchQuery` changes
-- Matching: case-insensitive substring match on `post.content`
-- No results shown when `searchQuery` is empty
-- Empty state message shown when query is non-empty but yields no matches
-- Each result shows author name, handle, and post content with link to post detail
+| State | Type | Default | Description |
+|---|---|---|---|
+| `activeTag` | `string \| null` | `null` | Currently selected tag filter on explore page |
+| `searchQuery` | `string` | `''` | Current search input value |
 
 ---
 
-## Data Consumed
+## Responsibilities
 
-- `tags[]` from DATA_SYSTEM — tag list for explore
-- `users[]` from DATA_SYSTEM — user suggestions for explore and author resolution for search results
-- `posts[]` from DATA_SYSTEM — post list for tag filtering and keyword search
+### Explore (`/explore`)
+1. **Trending tags:** Display all tags from `tags.json` as clickable tag chips showing name and post count.
+2. **Tag filter:** Clicking a tag sets `activeTag`; posts section shows only posts containing that tag; clicking same tag deselects (returns to all posts); selected tag is visually highlighted.
+3. **Suggested people:** List all users with display name, handle, bio, linking to `/profile/[handle]`.
+4. **Popular posts section:** Shows posts filtered by active tag (or all posts sorted by like count if no tag selected).
+5. **Empty tag state:** If a tag has no matching posts, show "No posts tagged #[tag]".
+
+### Search (`/search`)
+1. **Search input:** Text input, placeholder "Search posts..."; results update on every keystroke.
+2. **Live filtering:** Case-insensitive substring match against `post.content` for all posts.
+3. **Empty state:** No results shown when query is empty.
+4. **No results:** Show "No results for '[query]'" when query has no matches.
+5. **Result display:** Each result shows author display name (linked to profile), post content (linked to post detail).
 
 ---
 
-## Routes
+## Boundaries
 
-- `/explore` — trending tags, suggested users, filterable posts
-- `/search` — keyword search across posts
+- Does NOT manage like/bookmark state — those live in FEED_SYSTEM.
+- Does NOT manage follow state — that lives in PROFILE_SYSTEM.
+- Search matches post content only (not handles, display names, or tags).
 
 ---
 
 ## Interactions with Other Systems
 
-- Explore page links to PROFILE_SYSTEM routes via user handles in suggested users list
-- Search results link to FEED_SYSTEM post detail routes
-- Does not manage like/bookmark state or follow state
-
----
-
-## Rendered Elements (Key)
-
-### Explore
-
-- Tag chips: `#tagname (postCount)` — clickable, active tag has distinct style
-- User suggestion cards: avatar, display name, handle, bio, link to profile
-- Post list: filtered post cards with author and content, link to post detail
-- Clear filter affordance when a tag is active
-
-### Search
-
-- Search input with placeholder text
-- Reactive post results list
-- Empty state message: "No results for '[query]'"
+| System | Interaction |
+|---|---|
+| DATA_SYSTEM | Receives tags, users, and posts via SvelteKit `data` prop |
+| VIEW_SYSTEM | Renders within the shared layout |
+| FEED_SYSTEM | Post results link to `/post/[id]` (FEED_SYSTEM route) |
+| PROFILE_SYSTEM | User cards and author links point to `/profile/[handle]` (PROFILE_SYSTEM route) |

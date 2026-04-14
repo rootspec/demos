@@ -1,74 +1,56 @@
 # FEED_SYSTEM
 
-**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md, DATA_SYSTEM.md
+**Responsibility:** Home feed rendering, post pagination, post composer, post detail/thread view, like and bookmark client-side state.
+
+**Depends on:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, DATA_SYSTEM
 
 ---
 
-## Responsibility
+## Routes Owned
 
-Owns the home feed experience: rendering posts, managing pagination, handling post engagement state (likes, bookmarks), and providing the post composer for new posts.
-
----
-
-## State Owned
-
-| State | Type | Description |
-|-------|------|-------------|
-| visibleCount | number | Number of posts currently shown (paginated) |
-| likedPosts | Set\<string\> | Post IDs the user has liked this session |
-| bookmarkedPosts | Set\<string\> | Post IDs the user has bookmarked this session |
-| composedPosts | Post[] | Posts created in this session via composer |
-| composerOpen | boolean | Whether the composer panel is open |
-| composerContent | string | Current text in the composer input |
-
-All state is component-local and ephemeral — it resets on page reload.
+| Route | File | Purpose |
+|---|---|---|
+| `/` | `src/routes/+page.svelte` | Home feed with pagination and composer |
+| `/post/[id]` | `src/routes/post/[id]/+page.svelte` | Single post with thread (parent + replies) |
 
 ---
 
-## Rules
+## State Managed
 
-### Pagination
-- Initial load shows first [N] posts (e.g., 10)
-- "Load more" button appears when more posts exist beyond `visibleCount`
-- Each click of "Load more" increments `visibleCount` by [N]
-- Posts are displayed in reverse-chronological order (newest first)
+All state is local to the page component (Svelte 5 `$state` runes):
 
-### Like Toggle
-- Clicking like on a post adds its ID to `likedPosts` and increments displayed count
-- Clicking again removes it and decrements the count
-- Initial count comes from `post.likeCount` in DATA_SYSTEM
-
-### Bookmark Toggle
-- Clicking bookmark adds/removes post ID from `bookmarkedPosts`
-- No count displayed — only icon state changes
-
-### Post Composer
-- Composer is accessible from the feed header
-- Character limit: [N] characters
-- On submit: prepend new post to the feed with a session author identity (e.g., "You" or the first user in mock data)
-- New posts have 0 likes, 0 reposts, and current timestamp
-- Composer resets after submit
+| State | Type | Default | Description |
+|---|---|---|---|
+| `likedPosts` | `Set<string>` | empty | Post IDs the user has liked |
+| `bookmarkedPosts` | `Set<string>` | empty | Post IDs the user has bookmarked |
+| `visibleCount` | `number` | 10 | Number of posts visible in feed |
+| `composerText` | `string` | `''` | Text in the post composer |
+| `composerPosts` | `Post[]` | `[]` | Posts created in this session |
 
 ---
 
-## Data Consumed
+## Responsibilities
 
-- `posts[]` from DATA_SYSTEM — full post list for the home feed
-- `users[]` from DATA_SYSTEM — for resolving `authorId` to display names and handles
+1. **Render feed:** Display posts in reverse-chronological order (newest first), showing avatar, display name, handle, content, timestamp, like count, repost count, like button, bookmark button.
+2. **Pagination:** Show first `visibleCount` posts; "Load more" button appends 10 more; button hides when `visibleCount >= totalPosts`.
+3. **Like toggle:** On like click, toggle post ID in `likedPosts`; display count reflects base count ± client adjustment.
+4. **Bookmark toggle:** On bookmark click, toggle post ID in `bookmarkedPosts`; icon reflects state.
+5. **Post composer:** Text area for new post; submit creates a new post object prepended to the feed; composer resets after submit; empty submissions are ignored.
+6. **Thread view:** `/post/[id]` displays parent post (if `parentId` is set), the main post, and all direct replies.
+
+---
+
+## Boundaries
+
+- Does NOT own user data — resolves authors by looking up `authorId` in the users array received from DATA_SYSTEM.
+- Does NOT persist state — all interaction state resets on page reload.
+- Does NOT own tag filtering — that lives in DISCOVERY_SYSTEM.
 
 ---
 
 ## Interactions with Other Systems
 
-- Provides post cards that link to PROFILE_SYSTEM routes (via author handle)
-- Provides post cards that link to post detail routes (post ID)
-- Does not communicate with DISCOVERY_SYSTEM or THEME_SYSTEM directly
-
----
-
-## Rendered Elements (Key)
-
-- Post card: avatar, display name, handle, content, timestamp, like count, repost count, like button, bookmark button
-- "Load more" button at bottom of feed
-- Post composer: textarea, character count, submit button, cancel/collapse affordance
-- Feed header with "New Post" / compose trigger
+| System | Interaction |
+|---|---|
+| DATA_SYSTEM | Receives posts and users via SvelteKit `data` prop |
+| VIEW_SYSTEM | Renders within the shared layout; post cards are internal components |

@@ -1,191 +1,209 @@
 # =============================================================================
-# USER STORIES: Feed System — Home Feed, Pagination, Engagement, Composer
+# USER STORY: View home feed with posts and authors
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FEED_BROWSING
+# @journey: FIRST_TIME_DEVELOPER_VISIT
 # @systems: [FEED_SYSTEM, DATA_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
----
-
-id: US-010
-title: See a list of posts on the home feed
+id: US-001
+title: View home feed with posts and authors
 
 acceptance_criteria:
-  - id: AC-010-1
-    title: Home feed displays posts
+  - id: AC-001-1
+    title: Feed displays posts
     narrative: |
-      Given I visit the home page
+      Given I visit the home feed
       When the page loads
-      Then I see a list of posts in the feed
+      Then I should see a list of posts
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=post-card]' }
+      - shouldExist: { selector: '[data-test=post-item]' }
 
-  - id: AC-010-2
-    title: Posts show author display name and handle
+  - id: AC-001-2
+    title: Posts show author display name
     narrative: |
-      Given I visit the home page
-      When I look at a post card
-      Then I see the author display name and handle
+      Given I visit the home feed
+      When the page loads
+      Then each post should show the author display name
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=post-author-name]' }
-      - shouldExist: { selector: '[data-test=post-author-handle]' }
+      - shouldExist: { selector: '[data-test=post-author]' }
 
-  - id: AC-010-3
-    title: Posts show like and repost counts
+  - id: AC-001-3
+    title: Posts show like count
     narrative: |
-      Given I visit the home page
-      When I look at a post card
-      Then I see like count and repost count
+      Given I visit the home feed
+      When the page loads
+      Then each post should show a like count
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=post-like-count]' }
-      - shouldExist: { selector: '[data-test=post-repost-count]' }
 
 ---
 
-id: US-011
-title: Load more posts by clicking "Load more"
+# =============================================================================
+# USER STORY: Load more posts in feed
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: INTERACTIVE_EXPLORATION
+# @systems: [FEED_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-002
+title: Load more posts in feed
 
 acceptance_criteria:
-  - id: AC-011-1
-    title: Load more button is visible when more posts exist
+  - id: AC-002-1
+    title: Load more button is visible
     narrative: |
-      Given I visit the home page
-      When more posts exist beyond the initial page
-      Then I see a Load more button
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=load-more-btn]' }
-
-  - id: AC-011-2
-    title: Clicking Load more shows additional posts
-    narrative: |
-      Given I visit the home page and see the Load more button
-      When I click Load more
-      Then more post cards appear in the feed
-    given:
-      - visit: '/demos/scaffold/'
-    when:
-      - click: { selector: '[data-test=load-more-btn]' }
-    then:
-      - shouldExist: { selector: '[data-test=post-card]' }
-
----
-
-id: US-012
-title: Like a post to toggle like state
-
-acceptance_criteria:
-  - id: AC-012-1
-    title: Like button is visible on each post
-    narrative: |
-      Given I visit the home page
-      When I look at a post card
-      Then I see a like button
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=like-btn]' }
-
-  - id: AC-012-2
-    title: Clicking like toggles the liked state
-    narrative: |
-      Given I visit the home page
-      When I click the like button on a post
-      Then the like button shows active state
-    given:
-      - visit: '/demos/scaffold/'
-    when:
-      - click: { selector: '[data-test=like-btn]' }
-    then:
-      - shouldExist: { selector: '[data-test=like-btn][data-liked=true]' }
-
----
-
-id: US-013
-title: Bookmark a post to toggle bookmark state
-
-acceptance_criteria:
-  - id: AC-013-1
-    title: Bookmark button is visible on each post
-    narrative: |
-      Given I visit the home page
-      When I look at a post card
-      Then I see a bookmark button
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=bookmark-btn]' }
-
-  - id: AC-013-2
-    title: Clicking bookmark toggles the bookmarked state
-    narrative: |
-      Given I visit the home page
-      When I click the bookmark button on a post
-      Then the bookmark button shows active state
-    given:
-      - visit: '/demos/scaffold/'
-    when:
-      - click: { selector: '[data-test=bookmark-btn]' }
-    then:
-      - shouldExist: { selector: '[data-test=bookmark-btn][data-bookmarked=true]' }
-
----
-
-id: US-014
-title: Compose and publish a new post in the feed
-
-acceptance_criteria:
-  - id: AC-014-1
-    title: Compose button is visible on home feed
-    narrative: |
-      Given I visit the home page
+      Given I visit the home feed with more than 10 posts in mock data
       When the page loads
-      Then I see a button to compose a new post
+      Then I should see a load more button
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=compose-btn]' }
+      - shouldExist: { selector: '[data-test=load-more]' }
 
-  - id: AC-014-2
-    title: Clicking compose reveals the composer input
+  - id: AC-002-2
+    title: Clicking load more shows additional posts
     narrative: |
-      Given I visit the home page
-      When I click the compose button
-      Then I see a text input for writing a post
+      Given I visit the home feed
+      When I click the load more button
+      Then I should see more posts in the feed
     given:
       - visit: '/demos/scaffold/'
     when:
-      - click: { selector: '[data-test=compose-btn]' }
+      - click: { selector: '[data-test=load-more]' }
     then:
-      - shouldExist: { selector: '[data-test=composer-input]' }
+      - shouldExist: { selector: '[data-test=post-item]' }
 
-  - id: AC-014-3
-    title: Submitting a composed post adds it to the feed
+---
+
+# =============================================================================
+# USER STORY: Like a post
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: INTERACTIVE_EXPLORATION
+# @systems: [FEED_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-003
+title: Like a post
+
+acceptance_criteria:
+  - id: AC-003-1
+    title: Like button is present on posts
     narrative: |
-      Given I have opened the composer and typed a message
-      When I submit the post
-      Then my new post appears at the top of the feed
+      Given I visit the home feed
+      When the page loads
+      Then each post should have a like button
+    given:
+      - visit: '/demos/scaffold/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=like-button]' }
+
+  - id: AC-003-2
+    title: Clicking like toggles active state
+    narrative: |
+      Given I visit the home feed
+      When I click the like button on a post
+      Then the like button should show active state
     given:
       - visit: '/demos/scaffold/'
     when:
-      - click: { selector: '[data-test=compose-btn]' }
-      - fill: { selector: '[data-test=composer-input]', value: 'Hello from the composer!' }
+      - click: { selector: '[data-test=like-button]' }
+    then:
+      - shouldExist: { selector: '[data-test=like-button][data-liked=true]' }
+
+---
+
+# =============================================================================
+# USER STORY: Bookmark a post
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: INTERACTIVE_EXPLORATION
+# @systems: [FEED_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-004
+title: Bookmark a post
+
+acceptance_criteria:
+  - id: AC-004-1
+    title: Bookmark button is present on posts
+    narrative: |
+      Given I visit the home feed
+      When the page loads
+      Then each post should have a bookmark button
+    given:
+      - visit: '/demos/scaffold/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=bookmark-button]' }
+
+  - id: AC-004-2
+    title: Clicking bookmark toggles active state
+    narrative: |
+      Given I visit the home feed
+      When I click the bookmark button on a post
+      Then the bookmark button should show active state
+    given:
+      - visit: '/demos/scaffold/'
+    when:
+      - click: { selector: '[data-test=bookmark-button]' }
+    then:
+      - shouldExist: { selector: '[data-test=bookmark-button][data-bookmarked=true]' }
+
+---
+
+# =============================================================================
+# USER STORY: Compose and submit a new post
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: INTERACTIVE_EXPLORATION
+# @systems: [FEED_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-005
+title: Compose and submit a new post
+
+acceptance_criteria:
+  - id: AC-005-1
+    title: Post composer is accessible on home feed
+    narrative: |
+      Given I visit the home feed
+      When the page loads
+      Then I should see a way to compose a new post
+    given:
+      - visit: '/demos/scaffold/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=composer]' }
+
+  - id: AC-005-2
+    title: Submitting a post adds it to the feed
+    narrative: |
+      Given I visit the home feed
+      When I type a post and submit it
+      Then the new post should appear in the feed
+    given:
+      - visit: '/demos/scaffold/'
+    when:
+      - fill: { selector: '[data-test=composer-input]', value: 'Hello from the composer' }
       - click: { selector: '[data-test=composer-submit]' }
     then:
-      - shouldContain: { selector: '[data-test=post-card]', text: 'Hello from the composer!' }
+      - shouldContain: { selector: '[data-test=post-item]', text: 'Hello from the composer' }

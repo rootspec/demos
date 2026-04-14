@@ -1,4 +1,4 @@
-import type { Post, Tag, User } from '$lib/types';
+import type { Tag, User, Post } from '$lib/types';
 import tags from '$lib/data/tags.json';
 import users from '$lib/data/users.json';
 import posts from '$lib/data/posts.json';

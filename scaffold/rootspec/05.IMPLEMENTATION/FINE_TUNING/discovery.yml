@@ -1,26 +1,27 @@
 # =============================================================================
-# FINE TUNING: Discovery System
+# FINE-TUNING: Discovery System
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
 # @last_updated: 2026-04-14T00:00:00Z
-# @status: production
 
 search:
   min_query_length:
     value: 1
     # @unit: characters
-    # @rationale: Show results immediately on first keypress; no debounce needed for static data
-    # @constraint: min=1, max=3, type=integer
+    # @rationale: Show results as soon as any character is typed; empty box shows nothing
+
+  debounce_ms:
+    value: 0
+    # @unit: milliseconds
+    # @rationale: Mock data is synchronous and client-side; no debounce needed for JSON filtering
 
 explore:
-  suggested_users_count:
-    value: 8
+  max_suggested_users:
+    value: 10
     # @unit: users
-    # @rationale: Show all users from mock data (8 users in dataset)
-    # @constraint: min=3, max=10, type=integer
+    # @rationale: Show all users from mock data (8-10); no truncation needed at this scale
 
-  tag_sort:
-    value: "postCount_desc"
-    # @rationale: Most active tags shown first for better discoverability
-    # @alternatives: ["alphabetical", "postCount_asc"]
+  popular_posts_sort:
+    value: "likeCount"
+    # @rationale: Most liked posts surface first when no tag filter is active; matches social media convention
