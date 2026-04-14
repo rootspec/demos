@@ -1,58 +1,59 @@
-# Feed System
-
-**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, DATA_SYSTEM.md
-
----
+# System: FEED_SYSTEM
+<!-- L4: References L1-3 + Sibling L4 + External -->
 
 ## Responsibility
 
-The Feed System manages all mutable state related to the home feed experience: which posts the visitor has liked, which they've bookmarked, and any posts they've composed during the session. It also owns feed pagination — how many posts are currently visible.
+Manages the home feed experience: displaying posts, paginating through them, composing new posts, and tracking like/bookmark state. The FEED_SYSTEM is the primary interactive surface of the app and the core demonstration of RootSpec's scaffold workflow.
 
-## Boundaries
+## State Owned
 
-- **Owns:** `src/lib/stores/feed.svelte.ts`
-- **Reads from:** DATA SYSTEM (posts via route load)
-- **Does not own:** User identity, follow state (PROFILE SYSTEM), tag/search state (DISCOVERY SYSTEM)
+All state lives in `src/lib/stores/feed.svelte.ts` as a Svelte 5 reactive class (`FeedState`):
 
-## State
-
-| State | Type | Default | Description |
-|---|---|---|---|
-| `likedIds` | `string[]` | `[]` | IDs of posts the visitor has liked this session |
-| `bookmarkedIds` | `string[]` | `[]` | IDs of posts the visitor has bookmarked this session |
-| `userPosts` | `Post[]` | `[]` | Posts composed by the visitor this session |
-
-All state is in-memory only. Resets on page reload. This ephemerality is intentional and aligns with Radical Transparency.
+| State | Type | Description |
+|-------|------|-------------|
+| `likedIds` | `string[]` | IDs of posts the user has liked (session only) |
+| `bookmarkedIds` | `string[]` | IDs of posts the user has bookmarked (session only) |
+| `userPosts` | `Post[]` | Posts composed in the current session, prepended to feed |
 
 ## Derived Values
 
-- `isLiked(id)` — boolean derived from `likedIds`
-- `isBookmarked(id)` — boolean derived from `bookmarkedIds`
-- Displayed like count = base `post.likeCount` incremented by one if the visitor has liked the post — computed in VIEW SYSTEM at render time
+- `isLiked(id)` — returns true if the post ID is in `likedIds`
+- `isBookmarked(id)` — returns true if the post ID is in `bookmarkedIds`
+- Displayed like count = `post.likeCount + (isLiked(id) ? 1 : 0)`
 
-## Operations
+## Behaviors
 
-### toggleLike(postId)
-- If `postId` is in `likedIds`: removes it
-- Otherwise: appends it
-- No network call, no persistence
+### Feed Display
+Posts are rendered via `PostCard` component. Each card shows: avatar, display name, handle, relative timestamp, content, like button with count, repost count (read-only), bookmark button.
 
-### toggleBookmark(postId)
-- If `postId` is in `bookmarkedIds`: removes it
-- Otherwise: appends it
+### Pagination
+Home feed shows [initial_posts_count] posts initially. A "Load more" control loads [load_more_count] additional posts per click. When all posts are shown, the control is hidden.
 
-### addPost(content)
-- Creates a new `Post` object with a unique ID (`user-{timestamp}`), `authorId: 'u1'`, current ISO timestamp, empty counts, null parentId, empty tags
-- Prepends to `userPosts`
-- The new post appears at the top of the feed immediately via Svelte reactivity
+Combined post list = `userPosts` (new session posts first) + paginated slice of `data.posts`.
 
-## Feed Composition
+### Like Toggle
+Clicking the like button: adds/removes post ID from `likedIds`, updates the displayed count immediately, renders filled/outlined heart icon.
 
-The home feed shows: `userPosts` (prepended) + `posts from DATA SYSTEM` (paginated). The first [initial_post_count] DATA SYSTEM posts are shown; clicking "Load more" reveals the next [page_size].
+### Bookmark Toggle
+Clicking the bookmark button: adds/removes post ID from `bookmarkedIds`, renders filled/outlined bookmark icon.
 
-## Interactions with Other Systems
+### Post Composition
+The `Composer` component renders above the feed. A textarea accepts content up to [max_post_length] characters. A character counter displays `n/[max_post_length]`. Submitting adds the post to `userPosts` prepended to the feed. Submitting empty content shows an inline error.
 
-| System | Interaction |
-|---|---|
-| DATA SYSTEM | Receives posts array from route `load()` |
-| VIEW SYSTEM | `feed` store imported in `+page.svelte` for like/bookmark buttons and composer |
+## Boundaries
+
+**Reads from:**
+- DATA_SYSTEM: `data.posts`, `data.users` (via page load function)
+
+**Does not:**
+- Manage follow state (owned by PROFILE_SYSTEM)
+- Handle search or tag filtering (owned by DISCOVERY_SYSTEM)
+- Persist state to localStorage (except THEME_SYSTEM owns that pattern)
+
+## Key Files
+
+- `src/lib/stores/feed.svelte.ts` — FeedState class
+- `src/lib/components/Composer.svelte` — Post composer component
+- `src/lib/components/PostCard.svelte` — Post display component
+- `src/routes/+page.svelte` — Home feed route
+- `src/routes/+page.ts` — Home page load function

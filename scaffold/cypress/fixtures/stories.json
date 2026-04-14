@@ -1,12 +1,95 @@
 [
   {
-    "id": "US-010",
-    "title": "Browse trending tags on the Explore page and filter posts by tag",
+    "id": "US-301",
+    "title": "Search posts by keyword",
+    "requirement_id": "R-301",
     "acceptance_criteria": [
       {
-        "id": "AC-010-1",
+        "id": "AC-301-1",
+        "title": "Typing in search input shows matching posts",
+        "narrative": "Given I am on the search page\nWhen I type a keyword that matches post content\nThen I should see matching posts in the results\n",
+        "given": [
+          {
+            "visit": "/demos/scaffold/search"
+          }
+        ],
+        "when": [
+          {
+            "fill": {
+              "selector": "[data-test=search-input]",
+              "value": "TypeScript"
+            }
+          }
+        ],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=search-result]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "AC-301-2",
+        "title": "Search input is visible on search page",
+        "narrative": "Given I visit the search page\nWhen the page loads\nThen I should see a search input field\n",
+        "given": [
+          {
+            "visit": "/demos/scaffold/search"
+          }
+        ],
+        "when": [],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=search-input]"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "US-302",
+    "title": "Search empty state",
+    "requirement_id": "R-302",
+    "acceptance_criteria": [
+      {
+        "id": "AC-302-1",
+        "title": "Searching with no matches shows empty state message",
+        "narrative": "Given I am on the search page\nWhen I type a query that matches no posts\nThen I should see a no results message\n",
+        "given": [
+          {
+            "visit": "/demos/scaffold/search"
+          }
+        ],
+        "when": [
+          {
+            "fill": {
+              "selector": "[data-test=search-input]",
+              "value": "xyzzy_no_match_12345"
+            }
+          }
+        ],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=search-empty]"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "US-303",
+    "title": "View explore page",
+    "requirement_id": "R-303",
+    "acceptance_criteria": [
+      {
+        "id": "AC-303-1",
         "title": "Explore page shows trending tags",
-        "narrative": "Given I navigate to the Explore page\nWhen the page loads\nThen I should see a list of trending tag chips\n",
+        "narrative": "Given I visit the explore page\nWhen the page loads\nThen I should see trending tags\n",
         "given": [
           {
             "visit": "/demos/scaffold/explore"
@@ -22,38 +105,9 @@
         ]
       },
       {
-        "id": "AC-010-2",
-        "title": "Clicking a tag filters the posts shown",
-        "narrative": "Given I am on the Explore page\nWhen I click a tag chip\nThen I should see filtered posts and the tag should appear selected\n",
-        "given": [
-          {
-            "visit": "/demos/scaffold/explore"
-          }
-        ],
-        "when": [
-          {
-            "click": {
-              "selector": "[data-test=tag-chip]"
-            }
-          }
-        ],
-        "then": [
-          {
-            "shouldExist": {
-              "selector": "[data-test=tag-chip].selected"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=filtered-posts]"
-            }
-          }
-        ]
-      },
-      {
-        "id": "AC-010-3",
+        "id": "AC-303-2",
         "title": "Explore page shows suggested users",
-        "narrative": "Given I navigate to the Explore page\nWhen the page loads\nThen I should see a list of users in the People section\n",
+        "narrative": "Given I visit the explore page\nWhen the page loads\nThen I should see suggested users\n",
         "given": [
           {
             "visit": "/demos/scaffold/explore"
@@ -71,16 +125,79 @@
     ]
   },
   {
-    "id": "US-001",
-    "title": "View home feed with posts and author info",
+    "id": "US-304",
+    "title": "Filter explore by tag",
+    "requirement_id": "R-304",
     "acceptance_criteria": [
       {
-        "id": "AC-001-1",
-        "title": "Home feed shows posts with author and content",
-        "narrative": "Given I visit the home page\nWhen the page loads\nThen I should see post cards with author names and post content\n",
+        "id": "AC-304-1",
+        "title": "Clicking a tag filters the explore posts",
+        "narrative": "Given I am on the explore page\nWhen I click a tag chip\nThen the posts section should filter to that tag\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/explore"
+          }
+        ],
+        "when": [
+          {
+            "click": {
+              "selector": "[data-test=tag-chip]"
+            }
+          }
+        ],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=active-tag]"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "US-305",
+    "title": "Navigate from explore to profile",
+    "requirement_id": "R-305",
+    "acceptance_criteria": [
+      {
+        "id": "AC-305-1",
+        "title": "Clicking a suggested user navigates to their profile",
+        "narrative": "Given I am on the explore page\nWhen I click on a suggested user\nThen I should be on that user's profile page\n",
+        "given": [
+          {
+            "visit": "/demos/scaffold/explore"
+          }
+        ],
+        "when": [
+          {
+            "click": {
+              "selector": "[data-test=suggested-user-link]"
+            }
+          }
+        ],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=profile-name]"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "US-101",
+    "title": "View home feed with posts",
+    "requirement_id": "R-101",
+    "acceptance_criteria": [
+      {
+        "id": "AC-101-1",
+        "title": "Home feed shows posts with author and content",
+        "narrative": "Given I visit the home page\nWhen the page loads\nThen I should see posts with author names and post content\n",
+        "given": [
+          {
+            "visit": "/demos/scaffold/"
           }
         ],
         "when": [],
@@ -103,12 +220,12 @@
         ]
       },
       {
-        "id": "AC-001-2",
-        "title": "Posts show timestamp and engagement counts",
-        "narrative": "Given I visit the home page\nWhen the page loads\nThen I should see timestamps and like counts on post cards\n",
+        "id": "AC-101-2",
+        "title": "Home feed shows post timestamps",
+        "narrative": "Given I visit the home page\nWhen the page loads\nThen I should see relative timestamps on posts\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/"
           }
         ],
         "when": [],
@@ -117,15 +234,23 @@
             "shouldExist": {
               "selector": "[data-test=post-timestamp]"
             }
-          },
+          }
+        ]
+      },
+      {
+        "id": "AC-101-3",
+        "title": "Home feed shows like counts",
+        "narrative": "Given I visit the home page\nWhen the page loads\nThen I should see like counts on posts\n",
+        "given": [
+          {
+            "visit": "/demos/scaffold/"
+          }
+        ],
+        "when": [],
+        "then": [
           {
             "shouldExist": {
               "selector": "[data-test=like-count]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=repost-count]"
             }
           }
         ]
@@ -133,16 +258,17 @@
     ]
   },
   {
-    "id": "US-002",
-    "title": "Like a post on the home feed",
+    "id": "US-102",
+    "title": "Like a post",
+    "requirement_id": "R-102",
     "acceptance_criteria": [
       {
-        "id": "AC-002-1",
-        "title": "Like button toggles active state",
-        "narrative": "Given I am on the home page\nWhen I click the like button on a post\nThen the like button should have the active class\n",
+        "id": "AC-102-1",
+        "title": "Like button toggles and updates count",
+        "narrative": "Given I am on the home page\nWhen I click the like button on a post\nThen the like count should increase by 1\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/"
           }
         ],
         "when": [
@@ -163,16 +289,17 @@
     ]
   },
   {
-    "id": "US-003",
-    "title": "Bookmark a post on the home feed",
+    "id": "US-103",
+    "title": "Bookmark a post",
+    "requirement_id": "R-103",
     "acceptance_criteria": [
       {
-        "id": "AC-003-1",
-        "title": "Bookmark button toggles active state",
-        "narrative": "Given I am on the home page\nWhen I click the bookmark button on a post\nThen the bookmark button should have the active class\n",
+        "id": "AC-103-1",
+        "title": "Bookmark button toggles on click",
+        "narrative": "Given I am on the home page\nWhen I click the bookmark button on a post\nThen the bookmark should become active\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/"
           }
         ],
         "when": [
@@ -193,16 +320,17 @@
     ]
   },
   {
-    "id": "US-004",
-    "title": "Compose a new post that appears in the feed",
+    "id": "US-104",
+    "title": "Compose a new post",
+    "requirement_id": "R-104",
     "acceptance_criteria": [
       {
-        "id": "AC-004-1",
-        "title": "Composer is present on home page",
-        "narrative": "Given I visit the home page\nWhen the page loads\nThen I should see the composer textarea and submit button\n",
+        "id": "AC-104-1",
+        "title": "Composer is visible on home page",
+        "narrative": "Given I visit the home page\nWhen the page loads\nThen I should see the post composer\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/"
           }
         ],
         "when": [],
@@ -216,28 +344,23 @@
             "shouldExist": {
               "selector": "[data-test=composer-input]"
             }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=composer-submit]"
-            }
           }
         ]
       },
       {
-        "id": "AC-004-2",
-        "title": "Composing a post adds it to the feed",
-        "narrative": "Given I am on the home page\nWhen I type a post and click submit\nThen the new post content should appear in the feed\n",
+        "id": "AC-104-2",
+        "title": "Submitting a post adds it to the feed",
+        "narrative": "Given I am on the home page\nWhen I type a post and click the Post button\nThen the new post should appear in the feed\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/"
           }
         ],
         "when": [
           {
             "fill": {
               "selector": "[data-test=composer-input]",
-              "value": "Hello from the composer"
+              "value": "Hello from the composer test"
             }
           },
           {
@@ -250,18 +373,18 @@
           {
             "shouldContain": {
               "selector": "[data-test=post-content]",
-              "text": "Hello from the composer"
+              "text": "Hello from the composer test"
             }
           }
         ]
       },
       {
-        "id": "AC-004-3",
-        "title": "Submitting empty post shows error",
-        "narrative": "Given I am on the home page and the composer is empty\nWhen I click the submit button without typing anything\nThen I should see an error message\n",
+        "id": "AC-104-3",
+        "title": "Submitting an empty post shows an error",
+        "narrative": "Given I am on the home page\nWhen I click the Post button without typing anything\nThen I should see an error message\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/"
           }
         ],
         "when": [
@@ -282,29 +405,24 @@
     ]
   },
   {
-    "id": "US-005",
-    "title": "Load additional posts by clicking Load more",
+    "id": "US-105",
+    "title": "Load more posts",
+    "requirement_id": "R-105",
     "acceptance_criteria": [
       {
-        "id": "AC-005-1",
-        "title": "Load more button appears and loads additional posts",
-        "narrative": "Given I am on the home page\nWhen I click the Load more button\nThen more post cards should be visible\n",
+        "id": "AC-105-1",
+        "title": "Load more button exists on home page",
+        "narrative": "Given I visit the home page\nWhen the page loads\nThen I should see a load more button\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/"
           }
         ],
-        "when": [
-          {
-            "click": {
-              "selector": "[data-test=load-more]"
-            }
-          }
-        ],
+        "when": [],
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=post-card]"
+              "selector": "[data-test=load-more]"
             }
           }
         ]
@@ -312,16 +430,48 @@
     ]
   },
   {
-    "id": "US-011",
-    "title": "Toggle between dark and light mode using the theme button in the nav",
+    "id": "US-106",
+    "title": "View post detail and thread",
+    "requirement_id": "R-106",
     "acceptance_criteria": [
       {
-        "id": "AC-011-1",
-        "title": "Meta banner is present on every page",
-        "narrative": "Given I visit the home page\nWhen the page loads\nThen I should see the meta banner with links to the seed and spec\n",
+        "id": "AC-106-1",
+        "title": "Post detail page shows full post content",
+        "narrative": "Given I visit the home page\nWhen I click on a post\nThen I should see the full post detail\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/"
+          }
+        ],
+        "when": [
+          {
+            "click": {
+              "selector": "[data-test=post-content]"
+            }
+          }
+        ],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=post-content]"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "US-401",
+    "title": "See meta banner on every page",
+    "requirement_id": "R-401",
+    "acceptance_criteria": [
+      {
+        "id": "AC-401-1",
+        "title": "Meta banner is visible on the home page",
+        "narrative": "Given I visit the home page\nWhen the page loads\nThen I should see the meta banner explaining this is a RootSpec demo\n",
+        "given": [
+          {
+            "visit": "/demos/scaffold/"
           }
         ],
         "when": [],
@@ -330,62 +480,41 @@
             "shouldExist": {
               "selector": "[data-test=meta-banner]"
             }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=seed-link]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=spec-link]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=scaffold-link]"
-            }
           }
         ]
       },
       {
-        "id": "AC-011-2",
-        "title": "Theme toggle button is present in navigation",
-        "narrative": "Given I visit the home page\nWhen the page loads\nThen I should see a theme toggle button in the navigation\n",
+        "id": "AC-401-2",
+        "title": "Meta banner is visible on the explore page",
+        "narrative": "Given I visit the explore page\nWhen the page loads\nThen I should see the meta banner\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/explore"
           }
         ],
         "when": [],
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=theme-toggle]"
+              "selector": "[data-test=meta-banner]"
             }
           }
         ]
       },
       {
-        "id": "AC-011-3",
-        "title": "Clicking theme toggle switches the active class on html element",
-        "narrative": "Given I am on the home page\nWhen I click the theme toggle button\nThen the html element should have the dark class applied\n",
+        "id": "AC-401-3",
+        "title": "Meta banner is visible on the search page",
+        "narrative": "Given I visit the search page\nWhen the page loads\nThen I should see the meta banner\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/search"
           }
         ],
-        "when": [
-          {
-            "click": {
-              "selector": "[data-test=theme-toggle]"
-            }
-          }
-        ],
+        "when": [],
         "then": [
           {
             "shouldExist": {
-              "selector": "html.dark"
+              "selector": "[data-test=meta-banner]"
             }
           }
         ]
@@ -393,47 +522,75 @@
     ]
   },
   {
-    "id": "US-007",
-    "title": "View a user profile with bio, counts, and posts",
+    "id": "US-402",
+    "title": "Navigate to seed and spec from banner",
+    "requirement_id": "R-402",
     "acceptance_criteria": [
       {
-        "id": "AC-007-1",
-        "title": "Profile page shows user info and posts",
-        "narrative": "Given I click on an author name from the home feed\nWhen the profile page loads\nThen I should see the user display name, handle, bio, and their posts\n",
+        "id": "AC-402-1",
+        "title": "Meta banner contains seed link",
+        "narrative": "Given I am on any page\nWhen I look at the meta banner\nThen I should see a link to view the seed\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/"
           }
         ],
-        "when": [
-          {
-            "click": {
-              "selector": "[data-test=post-author]"
-            }
-          }
-        ],
+        "when": [],
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=user-display-name]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=user-handle]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=user-bio]"
+              "selector": "[data-test=seed-link]"
             }
           }
         ]
       },
       {
-        "id": "AC-007-2",
-        "title": "Profile page shows follower counts",
-        "narrative": "Given I navigate to a user profile page\nWhen the page loads\nThen I should see follower and following counts\n",
+        "id": "AC-402-2",
+        "title": "Meta banner contains spec link",
+        "narrative": "Given I am on any page\nWhen I look at the meta banner\nThen I should see a link to view the spec\n",
+        "given": [
+          {
+            "visit": "/demos/scaffold/"
+          }
+        ],
+        "when": [],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=spec-link]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "AC-402-3",
+        "title": "Meta banner contains scaffold commit link",
+        "narrative": "Given I am on any page\nWhen I look at the meta banner\nThen I should see a link to the scaffold commit\n",
+        "given": [
+          {
+            "visit": "/demos/scaffold/"
+          }
+        ],
+        "when": [],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=scaffold-link]"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "US-201",
+    "title": "View a user profile",
+    "requirement_id": "R-201",
+    "acceptance_criteria": [
+      {
+        "id": "AC-201-1",
+        "title": "Profile page shows user display name and handle",
+        "narrative": "Given I visit a user profile page\nWhen the page loads\nThen I should see the user's display name and handle\n",
         "given": [
           {
             "visit": "/demos/scaffold/profile/alice.dev"
@@ -443,12 +600,48 @@
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=follower-count]"
+              "selector": "[data-test=profile-name]"
             }
           },
           {
             "shouldExist": {
-              "selector": "[data-test=following-count]"
+              "selector": "[data-test=profile-handle]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "AC-201-2",
+        "title": "Profile page shows user posts",
+        "narrative": "Given I visit a user profile page\nWhen the page loads\nThen I should see posts by that user\n",
+        "given": [
+          {
+            "visit": "/demos/scaffold/profile/alice.dev"
+          }
+        ],
+        "when": [],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=post-card]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "AC-201-3",
+        "title": "Unknown profile shows not found message",
+        "narrative": "Given I visit a profile page for a nonexistent handle\nWhen the page loads\nThen I should see a not found message\n",
+        "given": [
+          {
+            "visit": "/demos/scaffold/profile/doesnotexist"
+          }
+        ],
+        "when": [],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=profile-not-found]"
             }
           }
         ]
@@ -456,34 +649,17 @@
     ]
   },
   {
-    "id": "US-008",
-    "title": "Follow and unfollow a user from their profile page",
+    "id": "US-202",
+    "title": "Follow a user",
+    "requirement_id": "R-202",
     "acceptance_criteria": [
       {
-        "id": "AC-008-1",
-        "title": "Follow button is present on profile pages",
-        "narrative": "Given I navigate to a user profile page\nWhen the page loads\nThen I should see a follow button\n",
+        "id": "AC-202-1",
+        "title": "Follow button appears on profile and toggles to following state",
+        "narrative": "Given I visit a user profile page\nWhen I click the follow button\nThen the button should show following state\n",
         "given": [
           {
-            "visit": "/demos/scaffold/profile/bobwrites"
-          }
-        ],
-        "when": [],
-        "then": [
-          {
-            "shouldExist": {
-              "selector": "[data-test=follow-button]"
-            }
-          }
-        ]
-      },
-      {
-        "id": "AC-008-2",
-        "title": "Clicking follow updates button to Following state",
-        "narrative": "Given I am on a user profile page\nWhen I click the follow button\nThen the button should display Following\n",
-        "given": [
-          {
-            "visit": "/demos/scaffold/profile/bobwrites"
+            "visit": "/demos/scaffold/profile/alice.dev"
           }
         ],
         "when": [
@@ -505,73 +681,36 @@
     ]
   },
   {
-    "id": "US-009",
-    "title": "Search for posts using a keyword and see results update live",
+    "id": "US-203",
+    "title": "Unfollow a user",
+    "requirement_id": "R-203",
     "acceptance_criteria": [
       {
-        "id": "AC-009-1",
-        "title": "Search input is present on search page",
-        "narrative": "Given I navigate to the search page\nWhen the page loads\nThen I should see a search input field\n",
+        "id": "AC-203-1",
+        "title": "Clicking following button unfollows the user",
+        "narrative": "Given I am following a user on their profile page\nWhen I click the following button\nThen the button should revert to follow state\n",
         "given": [
           {
-            "visit": "/demos/scaffold/search"
-          }
-        ],
-        "when": [],
-        "then": [
-          {
-            "shouldExist": {
-              "selector": "[data-test=search-input]"
-            }
-          }
-        ]
-      },
-      {
-        "id": "AC-009-2",
-        "title": "Typing a keyword shows matching posts",
-        "narrative": "Given I am on the search page\nWhen I type a keyword that matches post content\nThen I should see matching post results\n",
-        "given": [
-          {
-            "visit": "/demos/scaffold/search"
+            "visit": "/demos/scaffold/profile/alice.dev"
           }
         ],
         "when": [
           {
-            "fill": {
-              "selector": "[data-test=search-input]",
-              "value": "rust"
+            "click": {
+              "selector": "[data-test=follow-button]"
+            }
+          },
+          {
+            "click": {
+              "selector": "[data-test=follow-button]"
             }
           }
         ],
         "then": [
           {
-            "shouldExist": {
-              "selector": "[data-test=search-result]"
-            }
-          }
-        ]
-      },
-      {
-        "id": "AC-009-3",
-        "title": "Searching with no matches shows empty state message",
-        "narrative": "Given I am on the search page\nWhen I type a query that has no matching posts\nThen I should see a no results message\n",
-        "given": [
-          {
-            "visit": "/demos/scaffold/search"
-          }
-        ],
-        "when": [
-          {
-            "fill": {
-              "selector": "[data-test=search-input]",
-              "value": "xyzzy12345notaword"
-            }
-          }
-        ],
-        "then": [
-          {
-            "shouldExist": {
-              "selector": "[data-test=search-empty]"
+            "shouldContain": {
+              "selector": "[data-test=follow-button]",
+              "text": "Follow"
             }
           }
         ]
@@ -579,34 +718,48 @@
     ]
   },
   {
-    "id": "US-006",
-    "title": "View a single post with its full thread context",
+    "id": "US-501",
+    "title": "Toggle dark and light mode",
+    "requirement_id": "R-501",
     "acceptance_criteria": [
       {
-        "id": "AC-006-1",
-        "title": "Post detail page shows post content and author",
-        "narrative": "Given I click on a post from the home feed\nWhen the post detail page loads\nThen I should see the post content and author information\n",
+        "id": "AC-501-1",
+        "title": "Theme toggle button is visible in navigation",
+        "narrative": "Given I visit the home page\nWhen the page loads\nThen I should see a theme toggle button in the navigation\n",
         "given": [
           {
-            "visit": "/demos/scaffold"
+            "visit": "/demos/scaffold/"
+          }
+        ],
+        "when": [],
+        "then": [
+          {
+            "shouldExist": {
+              "selector": "[data-test=theme-toggle]"
+            }
+          }
+        ]
+      },
+      {
+        "id": "AC-501-2",
+        "title": "Clicking theme toggle switches between light and dark mode",
+        "narrative": "Given I am on the home page in light mode\nWhen I click the theme toggle\nThen the page should switch to dark mode\n",
+        "given": [
+          {
+            "visit": "/demos/scaffold/"
           }
         ],
         "when": [
           {
             "click": {
-              "selector": "[data-test=post-content]"
+              "selector": "[data-test=theme-toggle]"
             }
           }
         ],
         "then": [
           {
             "shouldExist": {
-              "selector": "[data-test=post-content]"
-            }
-          },
-          {
-            "shouldExist": {
-              "selector": "[data-test=post-author]"
+              "selector": "html.dark"
             }
           }
         ]

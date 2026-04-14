@@ -1,34 +1,39 @@
 # User Stories Overview
 
-**References:** 01.PHILOSOPHY.md through 04.SYSTEMS/
+## Phases
 
----
+| Phase | Description |
+|-------|-------------|
+| **MVP** | Full scaffold demo experience — all routes, interactions, and meta elements |
 
-## Phase: MVP
+## Journey Map
 
-All stories below are in the MVP phase. They cover the full surface area of RootFeed as spec'd and implemented.
+| Journey | Stories | Phase |
+|---------|---------|-------|
+| FEED | US-101 through US-106 | MVP |
+| PROFILE | US-201 through US-203 | MVP |
+| DISCOVERY | US-301 through US-305 | MVP |
+| META | US-401 through US-402 | MVP |
+| THEME | US-501 | MVP |
 
-| ID | Title | Systems | Journey |
-|---|---|---|---|
-| US-001 | View home feed | FEED, VIEW, DATA | FEED |
-| US-002 | Like a post | FEED, VIEW | FEED |
-| US-003 | Bookmark a post | FEED, VIEW | FEED |
-| US-004 | Compose and publish a post | FEED, VIEW | FEED |
-| US-005 | Load more posts | FEED, VIEW, DATA | FEED |
-| US-006 | View post detail and thread | VIEW, DATA | THREAD |
-| US-007 | View a user profile | PROFILE, VIEW, DATA | PROFILE |
-| US-008 | Follow and unfollow a user | PROFILE, VIEW | PROFILE |
-| US-009 | Search posts by keyword | DISCOVERY, VIEW, DATA | SEARCH |
-| US-010 | Explore trending tags and filter posts | DISCOVERY, VIEW, DATA | DISCOVERY |
-| US-011 | Toggle dark/light theme | THEME, VIEW | META |
+## Story Index
 
-## Story Files
-
-Stories are organized by system domain:
-
-- `by_phase/MVP/feed.yaml` — Feed interactions (US-001 through US-005)
-- `by_phase/MVP/thread.yaml` — Thread/post detail (US-006)
-- `by_phase/MVP/profile.yaml` — Profile and follow (US-007, US-008)
-- `by_phase/MVP/search.yaml` — Search (US-009)
-- `by_phase/MVP/discovery.yaml` — Explore and tag filter (US-010)
-- `by_phase/MVP/meta.yaml` — Theme toggle and meta banner (US-011)
+| ID | Title | Phase | Systems |
+|----|-------|-------|---------|
+| US-101 | View home feed with posts | MVP | FEED_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM |
+| US-102 | Like a post | MVP | FEED_SYSTEM, VIEW_SYSTEM |
+| US-103 | Bookmark a post | MVP | FEED_SYSTEM, VIEW_SYSTEM |
+| US-104 | Compose a new post | MVP | FEED_SYSTEM, VIEW_SYSTEM |
+| US-105 | Load more posts | MVP | FEED_SYSTEM, VIEW_SYSTEM |
+| US-106 | View post detail and thread | MVP | DISCOVERY_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM |
+| US-201 | View a user profile | MVP | PROFILE_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM |
+| US-202 | Follow a user | MVP | PROFILE_SYSTEM, VIEW_SYSTEM |
+| US-203 | Unfollow a user | MVP | PROFILE_SYSTEM, VIEW_SYSTEM |
+| US-301 | Search posts by keyword | MVP | DISCOVERY_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM |
+| US-302 | Search empty state | MVP | DISCOVERY_SYSTEM, VIEW_SYSTEM |
+| US-303 | View explore page | MVP | DISCOVERY_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM |
+| US-304 | Filter explore by tag | MVP | DISCOVERY_SYSTEM, VIEW_SYSTEM |
+| US-305 | Navigate from explore to profile | MVP | DISCOVERY_SYSTEM, PROFILE_SYSTEM, VIEW_SYSTEM |
+| US-401 | See meta banner on every page | MVP | VIEW_SYSTEM |
+| US-402 | Navigate to seed and spec from banner | MVP | VIEW_SYSTEM |
+| US-501 | Toggle dark/light mode | MVP | THEME_SYSTEM, VIEW_SYSTEM |

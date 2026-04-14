@@ -3,20 +3,16 @@
 
 	let { data } = $props();
 
-	let selectedTag = $state<string | null>(null);
+	let activeTag = $state<string | null>(null);
 
 	let filteredPosts = $derived(
-		selectedTag
-			? data.posts.filter((p: { tags: string[] }) => p.tags.includes(selectedTag!))
-			: []
+		activeTag
+			? data.posts?.filter((p: { tags: string[] }) => p.tags.includes(activeTag!)) ?? []
+			: data.posts ?? []
 	);
 
-	function getAuthor(authorId: string) {
-		return data.users.find((u: { id: string }) => u.id === authorId);
-	}
-
 	function selectTag(name: string) {
-		selectedTag = selectedTag === name ? null : name;
+		activeTag = activeTag === name ? null : name;
 	}
 </script>
 
@@ -28,11 +24,10 @@
 		<button
 			onclick={() => selectTag(tag.name)}
 			class="rounded px-2 py-1 text-sm"
-			class:selected={selectedTag === tag.name}
-			class:bg-blue-600={selectedTag === tag.name}
-			class:text-white={selectedTag === tag.name}
-			class:bg-gray-100={selectedTag !== tag.name}
-			class:text-gray-700={selectedTag !== tag.name}
+			class:bg-blue-600={activeTag === tag.name}
+			class:text-white={activeTag === tag.name}
+			class:active={activeTag === tag.name}
+			class:bg-gray-100={activeTag !== tag.name}
 			data-test="tag-chip"
 		>
 			#{tag.name} <span class="opacity-70">({tag.postCount})</span>
@@ -40,27 +35,26 @@
 	{/each}
 </div>
 
-{#if selectedTag}
-	<h2 class="mb-2 font-bold">Posts tagged #{selectedTag}</h2>
-	<div data-test="filtered-posts">
+{#if activeTag}
+	<div class="mb-2 text-sm font-medium text-blue-600" data-test="active-tag">
+		Showing posts tagged #{activeTag}
+		<button onclick={() => { activeTag = null; }} class="ml-2 text-gray-400 hover:text-gray-600">✕</button>
+	</div>
+	{#if filteredPosts.length === 0}
+		<p class="text-gray-400">No posts for this tag.</p>
+	{:else}
 		{#each filteredPosts as post}
-			{@const author = getAuthor(post.authorId)}
-			<div class="border-b border-gray-200 py-3 dark:border-gray-700">
-				<div class="mb-1 text-sm text-gray-500">
-					<a href="{base}/profile/{author?.handle}" class="font-medium text-gray-900 dark:text-gray-100">{author?.displayName}</a>
-				</div>
-				<a href="{base}/post/{post.id}">
-					<p class="text-gray-900 dark:text-gray-100">{post.content}</p>
-				</a>
+			<div class="border-b border-gray-200 py-3 dark:border-gray-700" data-test="explore-post">
+				<p class="text-gray-900 dark:text-gray-100">{post.content}</p>
 			</div>
 		{/each}
-	</div>
+	{/if}
 {/if}
 
-<h2 class="mb-2 mt-6 font-bold">People</h2>
+<h2 class="mb-2 font-bold">People</h2>
 {#each data.users as user}
 	<div class="border-b border-gray-200 py-3 dark:border-gray-700" data-test="suggested-user">
-		<a href="{base}/profile/{user.handle}" class="font-medium">{user.displayName}</a>
+		<a href="{base}/profile/{user.handle}" class="font-medium text-gray-900 hover:underline dark:text-gray-100" data-test="suggested-user-link">{user.displayName}</a>
 		<span class="text-sm text-gray-500">@{user.handle}</span>
 		<p class="text-sm text-gray-600 dark:text-gray-400">{user.bio}</p>
 	</div>
