@@ -1,55 +1,52 @@
 # =============================================================================
-# USER STORIES: Discovery / Explore
+# USER STORY: Explore trending tags and filter posts
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: DISCOVERY
-# @systems: [DISCOVERY_SYSTEM, VIEW_SYSTEM, DATA_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @systems: [DISCOVERY_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-14T18:52:50Z
 
----
-
-# =============================================================================
-# US-010: Explore trending tags and filter posts
-# =============================================================================
-id: US-010
-title: Browse trending tags on the Explore page and filter posts by tag
+id: US-009
+title: Explore trending tags and filter posts
 
 acceptance_criteria:
-  - id: AC-010-1
+  - id: AC-009-1
     title: Explore page shows trending tags
     narrative: |
-      Given I navigate to the Explore page
+      Given I navigate to the explore page
       When the page loads
-      Then I should see a list of trending tag chips
+      Then I should see a list of trending tags
     given:
-      - visit: '/demos/scaffold/explore'
+      - visit: '/scaffold/explore'
     when: []
     then:
+      - shouldExist: { selector: '[data-test=trending-tags]' }
       - shouldExist: { selector: '[data-test=tag-chip]' }
 
-  - id: AC-010-2
-    title: Clicking a tag filters the posts shown
+  - id: AC-009-2
+    title: Explore page shows suggested users
     narrative: |
-      Given I am on the Explore page
-      When I click a tag chip
-      Then I should see filtered posts and the tag should appear selected
+      Given I navigate to the explore page
+      When the page loads
+      Then I should see suggested users to follow
     given:
-      - visit: '/demos/scaffold/explore'
+      - visit: '/scaffold/explore'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=suggested-users]' }
+      - shouldExist: { selector: '[data-test=user-card]' }
+
+  - id: AC-009-3
+    title: Clicking a tag chip filters popular posts
+    narrative: |
+      Given I am on the explore page
+      When I click a trending tag chip
+      Then the popular posts section should show only posts with that tag
+    given:
+      - visit: '/scaffold/explore'
     when:
       - click: { selector: '[data-test=tag-chip]' }
     then:
-      - shouldExist: { selector: '[data-test=tag-chip].selected' }
-      - shouldExist: { selector: '[data-test=filtered-posts]' }
-
-  - id: AC-010-3
-    title: Explore page shows suggested users
-    narrative: |
-      Given I navigate to the Explore page
-      When the page loads
-      Then I should see a list of users in the People section
-    given:
-      - visit: '/demos/scaffold/explore'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=suggested-user]' }
+      - shouldExist: { selector: '[data-test=tag-chip][data-active=true]' }
+      - shouldExist: { selector: '[data-test=popular-posts]' }

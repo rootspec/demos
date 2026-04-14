@@ -1,79 +1,92 @@
 # =============================================================================
-# USER STORIES: Profile
+# USER STORY: View a user profile
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: PROFILE
-# @systems: [PROFILE_SYSTEM, VIEW_SYSTEM, DATA_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @systems: [PROFILE_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-14T18:52:50Z
 
----
-
-# =============================================================================
-# US-007: View a user profile
-# =============================================================================
-id: US-007
-title: View a user profile with bio, counts, and posts
+id: US-006
+title: View a user profile
 
 acceptance_criteria:
-  - id: AC-007-1
+  - id: AC-006-1
     title: Profile page shows user info and posts
     narrative: |
-      Given I click on an author name from the home feed
-      When the profile page loads
+      Given I navigate to a user profile page
+      When the page loads
       Then I should see the user display name, handle, bio, and their posts
     given:
-      - visit: '/demos/scaffold'
-    when:
-      - click: { selector: '[data-test=post-author]' }
+      - visit: '/scaffold/profile/alice.dev'
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=user-display-name]' }
-      - shouldExist: { selector: '[data-test=user-handle]' }
-      - shouldExist: { selector: '[data-test=user-bio]' }
+      - shouldExist: { selector: '[data-test=profile-header]' }
+      - shouldExist: { selector: '[data-test=profile-displayname]' }
+      - shouldExist: { selector: '[data-test=profile-handle]' }
+      - shouldExist: { selector: '[data-test=profile-bio]' }
+      - shouldExist: { selector: '[data-test=post-card]' }
 
-  - id: AC-007-2
-    title: Profile page shows follower counts
+  - id: AC-006-2
+    title: Profile shows follower and following counts
     narrative: |
       Given I navigate to a user profile page
       When the page loads
       Then I should see follower and following counts
     given:
-      - visit: '/demos/scaffold/profile/alice.dev'
+      - visit: '/scaffold/profile/alice.dev'
     when: []
     then:
       - shouldExist: { selector: '[data-test=follower-count]' }
       - shouldExist: { selector: '[data-test=following-count]' }
 
----
+  - id: AC-006-3
+    title: Unknown user handle shows not found state
+    narrative: |
+      Given I navigate to a profile with a handle that does not exist
+      When the page loads
+      Then I should see a user not found message
+    given:
+      - visit: '/scaffold/profile/nobody.here'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=user-not-found]' }
 
+---
 # =============================================================================
-# US-008: Follow and unfollow a user
+# USER STORY: Follow and unfollow a user
 # =============================================================================
-id: US-008
-title: Follow and unfollow a user from their profile page
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: PROFILE
+# @systems: [PROFILE_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-14T18:52:50Z
+
+id: US-007
+title: Follow and unfollow a user
 
 acceptance_criteria:
-  - id: AC-008-1
-    title: Follow button is present on profile pages
+  - id: AC-007-1
+    title: Follow button is shown on profile page
     narrative: |
       Given I navigate to a user profile page
       When the page loads
       Then I should see a follow button
     given:
-      - visit: '/demos/scaffold/profile/bobwrites'
+      - visit: '/scaffold/profile/alice.dev'
     when: []
     then:
       - shouldExist: { selector: '[data-test=follow-button]' }
 
-  - id: AC-008-2
-    title: Clicking follow updates button to Following state
+  - id: AC-007-2
+    title: Clicking follow button toggles follow state
     narrative: |
-      Given I am on a user profile page
+      Given I am on a profile page and not following the user
       When I click the follow button
-      Then the button should display Following
+      Then the button should reflect that I am now following the user
     given:
-      - visit: '/demos/scaffold/profile/bobwrites'
+      - visit: '/scaffold/profile/alice.dev'
     when:
       - click: { selector: '[data-test=follow-button]' }
     then:
-      - shouldContain: { selector: '[data-test=follow-button]', text: 'Following' }
+      - shouldExist: { selector: '[data-test=follow-button][data-following=true]' }

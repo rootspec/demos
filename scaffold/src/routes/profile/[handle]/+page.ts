@@ -10,5 +10,5 @@ export function load({ params }: { params: { handle: string } }) {
 				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 		: [];
 
-	return { user, posts: userPosts };
+	return { user, posts: userPosts, users: users as User[] };
 }

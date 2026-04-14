@@ -1,55 +1,50 @@
 # =============================================================================
-# USER STORIES: Search
+# USER STORY: Search posts by keyword
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: SEARCH
-# @systems: [DISCOVERY_SYSTEM, VIEW_SYSTEM, DATA_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @systems: [DISCOVERY_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-14T18:52:50Z
 
----
-
-# =============================================================================
-# US-009: Search posts by keyword
-# =============================================================================
-id: US-009
-title: Search for posts using a keyword and see results update live
+id: US-008
+title: Search posts by keyword
 
 acceptance_criteria:
-  - id: AC-009-1
-    title: Search input is present on search page
+  - id: AC-008-1
+    title: Search input is shown on the search page
     narrative: |
       Given I navigate to the search page
       When the page loads
       Then I should see a search input field
     given:
-      - visit: '/demos/scaffold/search'
+      - visit: '/scaffold/search'
     when: []
     then:
       - shouldExist: { selector: '[data-test=search-input]' }
 
-  - id: AC-009-2
-    title: Typing a keyword shows matching posts
+  - id: AC-008-2
+    title: Typing a query shows matching posts
     narrative: |
       Given I am on the search page
-      When I type a keyword that matches post content
-      Then I should see matching post results
+      When I type a keyword that exists in post content
+      Then I should see matching posts in the results
     given:
-      - visit: '/demos/scaffold/search'
+      - visit: '/scaffold/search'
     when:
-      - fill: { selector: '[data-test=search-input]', value: 'rust' }
+      - fill: { selector: '[data-test=search-input]', value: 'security' }
     then:
       - shouldExist: { selector: '[data-test=search-result]' }
 
-  - id: AC-009-3
-    title: Searching with no matches shows empty state message
+  - id: AC-008-3
+    title: No results state shown when query has no matches
     narrative: |
       Given I am on the search page
-      When I type a query that has no matching posts
+      When I type a query that matches no posts
       Then I should see a no results message
     given:
-      - visit: '/demos/scaffold/search'
+      - visit: '/scaffold/search'
     when:
-      - fill: { selector: '[data-test=search-input]', value: 'xyzzy12345notaword' }
+      - fill: { selector: '[data-test=search-input]', value: 'zzzzunmatchablequery9999' }
     then:
       - shouldExist: { selector: '[data-test=search-empty]' }

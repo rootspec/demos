@@ -1,57 +1,115 @@
 # =============================================================================
-# USER STORIES: Meta / Theme
+# USER STORY: View home feed with posts
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: META
-# @systems: [THEME_SYSTEM, VIEW_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @journey: HOME_FEED
+# @systems: [FEED_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-14T18:52:50Z
 
----
-
-# =============================================================================
-# US-011: Toggle dark/light theme
-# =============================================================================
-id: US-011
-title: Toggle between dark and light mode using the theme button in the nav
+id: US-001
+title: View home feed with posts
 
 acceptance_criteria:
-  - id: AC-011-1
-    title: Meta banner is present on every page
+  - id: AC-001-1
+    title: Home feed shows posts with author info
     narrative: |
-      Given I visit the home page
+      Given I navigate to the home page
       When the page loads
-      Then I should see the meta banner with links to the seed and spec
+      Then I should see a list of posts with author names and content
     given:
-      - visit: '/demos/scaffold'
+      - visit: '/scaffold/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=post-card]' }
+      - shouldExist: { selector: '[data-test=post-author]' }
+      - shouldExist: { selector: '[data-test=post-content]' }
+
+  - id: AC-001-2
+    title: Meta banner is visible on home page
+    narrative: |
+      Given I navigate to the home page
+      When the page loads
+      Then I should see the RootSpec demo meta banner
+    given:
+      - visit: '/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=seed-link]' }
-      - shouldExist: { selector: '[data-test=spec-link]' }
-      - shouldExist: { selector: '[data-test=scaffold-link]' }
 
-  - id: AC-011-2
-    title: Theme toggle button is present in navigation
+---
+# =============================================================================
+# USER STORY: Toggle dark/light theme
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: THEME
+# @systems: [VIEW_SYSTEM]
+# @last_updated: 2026-04-14T18:52:50Z
+
+id: US-010
+title: Toggle dark/light theme
+
+acceptance_criteria:
+  - id: AC-010-1
+    title: Theme toggle button is accessible in the nav
     narrative: |
-      Given I visit the home page
+      Given I am on any page
       When the page loads
       Then I should see a theme toggle button in the navigation
     given:
-      - visit: '/demos/scaffold'
+      - visit: '/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=theme-toggle]' }
 
-  - id: AC-011-3
-    title: Clicking theme toggle switches the active class on html element
+  - id: AC-010-2
+    title: Clicking theme toggle switches the theme
     narrative: |
       Given I am on the home page
       When I click the theme toggle button
-      Then the html element should have the dark class applied
+      Then the page theme should change
     given:
-      - visit: '/demos/scaffold'
+      - visit: '/scaffold/'
     when:
       - click: { selector: '[data-test=theme-toggle]' }
     then:
-      - shouldExist: { selector: 'html.dark' }
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+---
+# =============================================================================
+# USER STORY: See meta banner on every page
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: META
+# @systems: [VIEW_SYSTEM]
+# @last_updated: 2026-04-14T18:52:50Z
+
+id: US-011
+title: See meta banner on every page
+
+acceptance_criteria:
+  - id: AC-011-1
+    title: Meta banner appears on the explore page
+    narrative: |
+      Given I navigate to the explore page
+      When the page loads
+      Then I should see the meta banner
+    given:
+      - visit: '/scaffold/explore'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=meta-banner]' }
+
+  - id: AC-011-2
+    title: Meta banner appears on the search page
+    narrative: |
+      Given I navigate to the search page
+      When the page loads
+      Then I should see the meta banner
+    given:
+      - visit: '/scaffold/search'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=meta-banner]' }

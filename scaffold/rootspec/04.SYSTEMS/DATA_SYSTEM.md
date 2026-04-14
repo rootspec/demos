@@ -1,4 +1,4 @@
-# Data System
+# DATA_SYSTEM
 
 **References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md
 
@@ -6,59 +6,77 @@
 
 ## Responsibility
 
-The Data System owns all static seed content for RootFeed. It provides the raw material — users, posts, and tags — that all other systems consume. It is read-only at runtime. No system writes back to the Data System.
+Owns all raw data: the three JSON files that serve as the mock database, the TypeScript types that describe their shape, and the SvelteKit load functions that make data available to routes. No business logic lives here — only data access and type enforcement.
 
-## Boundaries
+---
 
-- **Owns:** `src/lib/data/users.json`, `src/lib/data/posts.json`, `src/lib/data/tags.json`
-- **Does not own:** Any runtime state, any user-generated content (that belongs to FEED SYSTEM)
-- **Does not call:** Any external APIs or network resources
+## Entities
 
-## Data Ownership
+### User
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique identifier (e.g., `u1`) |
+| `handle` | string | URL-safe username (e.g., `alice.dev`) |
+| `displayName` | string | Human-readable name |
+| `bio` | string | Short profile description |
+| `avatar` | string | URL to avatar image (DiceBear placeholder) |
+| `followerCount` | number | Starting follower count (static; follow actions adjust via store) |
+| `followingCount` | number | Starting following count (static) |
 
-### users.json
-Each user record contains:
-- `id` — unique user identifier (e.g., `u1`)
-- `handle` — URL-safe handle used in routes (e.g., `alice.dev`)
-- `displayName` — rendered name shown in UI
-- `bio` — short bio shown on profile page
-- `avatar` — URL to placeholder avatar image (DiceBear API)
-- `followerCount` — static count (not live-updated by PROFILE SYSTEM)
-- `followingCount` — static count
+### Post
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique identifier (e.g., `p1`) |
+| `authorId` | string | Reference to User.id |
+| `content` | string | Post text content |
+| `createdAt` | string | ISO 8601 timestamp |
+| `likeCount` | number | Starting like count (static; like actions adjust via store) |
+| `repostCount` | number | Starting repost count (static) |
+| `parentId` | string or null | If set, this post is a reply to the referenced post |
+| `tags` | string[] | Array of tag names associated with this post |
 
-[small user count] users total. Content is realistic — tech personas with real-sounding bios and handles.
+### Tag
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | Tag identifier (no `#` prefix) |
+| `postCount` | number | Number of posts using this tag |
 
-### posts.json
-Each post record contains:
-- `id` — unique post identifier
-- `authorId` — reference to a user `id` in users.json
-- `content` — text content of the post
-- `createdAt` — ISO 8601 timestamp
-- `likeCount` — static baseline count (FEED SYSTEM increments it when liked by visitor)
-- `repostCount` — static count
-- `parentId` — if set, this post is a reply to the referenced post ID; null for top-level posts
-- `tags` — array of tag name strings
+---
 
-[small post count] posts total. Mix of top-level posts and replies to create threaded conversations. Content must read like real tech discussion.
+## Data Sources
 
-### tags.json
-Each tag record contains:
-- `name` — tag name without `#` prefix
-- `postCount` — count of posts with this tag
+- `src/lib/data/users.json` — 8 users
+- `src/lib/data/posts.json` — 30 posts (including threaded replies)
+- `src/lib/data/tags.json` — 15 tags
 
-[small tag count] tags total. Tags are pre-computed counts; not calculated dynamically.
+Data is loaded at build time (static adapter) and bundled. No runtime network requests.
+
+---
+
+## Load Functions
+
+Each route has a `+page.ts` (or `+layout.ts`) load function that imports from JSON and returns typed data. Load functions are the boundary between raw JSON and the route's `data` prop.
+
+- `+layout.ts` — Loads all users; makes them available to all routes for handle/avatar lookups
+- `+page.ts` (home) — Returns all posts sorted by `createdAt` descending
+- `+page.ts` (post detail) — Returns single post, its parent (if any), and its replies
+- `+page.ts` (profile) — Returns user by handle, and all posts by that user
+- `+page.ts` (search) — Returns all posts and all users (filtering happens client-side)
+- `+page.ts` (explore) — Returns tags, all users, and top posts by like count
+
+---
+
+## Rules
+
+- All data is read-only at the JSON level. Mutations (like, follow, new post) happen in client-side stores and are never written back to JSON.
+- Post threading is one level deep: a reply can reference a parent post, but a reply to a reply renders as a reply to the top-level post. Deep nesting is not supported.
+- Author resolution (looking up a User by `authorId`) happens in components, not load functions. Load functions pass raw data; components join.
+
+---
 
 ## Interactions with Other Systems
 
-| System | How it uses Data System |
-|---|---|
-| FEED SYSTEM | `+page.ts` loads posts.json via SvelteKit `load()`; merged with FEED SYSTEM's `userPosts` |
-| PROFILE SYSTEM | Profile route `load()` reads users.json to find the user by handle |
-| DISCOVERY SYSTEM | Explore `load()` reads tags.json (sorted by postCount) and users.json |
-| VIEW SYSTEM | Route components receive data as props from `load()` return values |
-
-## Constraints
-
-- Data is bundled at build time by Vite's static import resolution
-- All content must be realistic — no lorem ipsum
-- The "current user" (for the composer) is always `u1` (alice.dev) — this ID is used by FEED SYSTEM when creating new posts
+- **FEED_SYSTEM** reads posts and users from load function output
+- **PROFILE_SYSTEM** reads user record and user's posts from load function output
+- **DISCOVERY_SYSTEM** reads tags, users, and posts from load function output
+- **VIEW_SYSTEM** reads users map for avatar/handle display in shared post components

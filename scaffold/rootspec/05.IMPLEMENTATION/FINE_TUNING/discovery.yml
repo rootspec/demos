@@ -1,24 +1,45 @@
 # =============================================================================
-# FINE-TUNING: Discovery System
+# FINE TUNING: Discovery System
 # =============================================================================
 # @spec_version: 1.0.0
+# @system: DISCOVERY_SYSTEM
+# @last_updated: 2026-04-14T18:52:50Z
+# @status: draft
 # @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
 
-search_min_query_length:
-  value: 1
-  # @unit: characters
-  # @rationale: Results appear immediately on any keystroke; no minimum query length required — keeps the interaction fluid
-  # @constraint: min=1, max=3
+# -----------------------------------------------------------------------------
+# Search
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
 
-explore_max_suggested_users:
-  value: 8
-  # @unit: users
-  # @rationale: Shows a representative set of users without requiring scroll on the explore page
-  # @constraint: min=4, max=10
+search:
+  min_query_length: 2
+  # @rationale: Single character queries produce too many results and feel
+  #   accidental. 2 characters is the minimum meaningful query for content search.
+  # @constraints: min=1, max=5, type=integer
+  # @impact: [DISCOVERY_SYSTEM]
 
-explore_max_trending_tags:
-  value: 15
-  # @unit: tags
-  # @rationale: All tags from the dataset fit comfortably in a wrapped flex row; no pagination needed
-  # @constraint: min=5, max=20
+# -----------------------------------------------------------------------------
+# Explore
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
+
+explore:
+  popular_post_count: 10
+  # @rationale: Show top 10 posts by like count. Enough variety to feel curated,
+  #   not so many that "popular" loses meaning with only 30 mock posts.
+  # @constraints: min=5, max=30, type=integer
+  # @impact: [DISCOVERY_SYSTEM]
+
+# -----------------------------------------------------------------------------
+# View / Layout
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/VIEW_SYSTEM.md
+
+layout:
+  content_max_width: 672
+  # @rationale: 672px (Tailwind max-w-2xl) matches the scaffold's existing layout.
+  #   Comfortable reading width for a single-column social feed on desktop.
+  # @unit: px
+  # @constraints: min=480, max=960, type=integer
+  # @impact: [VIEW_SYSTEM]

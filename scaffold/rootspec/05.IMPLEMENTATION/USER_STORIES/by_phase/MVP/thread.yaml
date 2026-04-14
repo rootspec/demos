@@ -1,31 +1,51 @@
 # =============================================================================
-# USER STORIES: Thread / Post Detail
+# USER STORY: View post detail and replies
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: THREAD
-# @systems: [VIEW_SYSTEM, DATA_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @journey: POST_DETAIL
+# @systems: [FEED_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-14T18:52:50Z
 
----
-
-# =============================================================================
-# US-006: View post detail and thread
-# =============================================================================
-id: US-006
-title: View a single post with its full thread context
+id: US-005
+title: View post detail and replies
 
 acceptance_criteria:
-  - id: AC-006-1
-    title: Post detail page shows post content and author
+  - id: AC-005-1
+    title: Post detail page shows full post content
     narrative: |
-      Given I click on a post from the home feed
-      When the post detail page loads
-      Then I should see the post content and author information
+      Given I navigate to a post detail page
+      When the page loads
+      Then I should see the full post content and author information
     given:
-      - visit: '/demos/scaffold'
-    when:
-      - click: { selector: '[data-test=post-content]' }
+      - visit: '/scaffold/post/p1'
+    when: []
     then:
+      - shouldExist: { selector: '[data-test=post-detail]' }
       - shouldExist: { selector: '[data-test=post-content]' }
       - shouldExist: { selector: '[data-test=post-author]' }
+
+  - id: AC-005-2
+    title: Post detail page shows replies when they exist
+    narrative: |
+      Given I navigate to a post that has replies
+      When the page loads
+      Then I should see the replies listed below the post
+    given:
+      - visit: '/scaffold/post/p2'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=replies-section]' }
+      - shouldExist: { selector: '[data-test=reply-card]' }
+
+  - id: AC-005-3
+    title: Post not found shows graceful error state
+    narrative: |
+      Given I navigate to a post ID that does not exist
+      When the page loads
+      Then I should see a not found message rather than an error
+    given:
+      - visit: '/scaffold/post/nonexistent'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=post-not-found]' }

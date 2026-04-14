@@ -6,72 +6,75 @@
 
 ## System Map
 
-RootFeed is organized into six systems. All systems are client-side only. No backend, no external APIs, no authentication.
+| System | Responsibility | Primary Route(s) |
+|--------|---------------|-----------------|
+| **FEED_SYSTEM** | Post timeline, pagination, post composer | `/` |
+| **PROFILE_SYSTEM** | User data, follow state | `/profile/[handle]` |
+| **DISCOVERY_SYSTEM** | Search, explore, tag filtering | `/search`, `/explore` |
+| **DATA_SYSTEM** | Mock data loading, shared entity types | All routes |
+| **VIEW_SYSTEM** | Layout, navigation, meta banner, theme, post components | All routes |
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        DATA SYSTEM                           │
-│  Static JSON files — posts, users, tags (read-only)          │
-└──────────────────────┬──────────────────────────────────────┘
-                       │ provides seed data to
-          ┌────────────┼────────────────────┐
-          ▼            ▼                    ▼
-┌──────────────┐  ┌──────────────┐  ┌──────────────────┐
-│  FEED SYSTEM │  │PROFILE SYSTEM│  │ DISCOVERY SYSTEM │
-│  Posts +     │  │ Users +      │  │ Tags + Explore + │
-│  Composer +  │  │ Follow state │  │ Search           │
-│  Like/Book-  │  │              │  │                  │
-│  mark state  │  │              │  │                  │
-└──────┬───────┘  └──────┬───────┘  └────────┬─────────┘
-       │                 │                    │
-       └─────────────────┴────────────────────┘
-                         │ consumed by
-          ┌──────────────┼──────────────┐
-          ▼              ▼              ▼
-┌──────────────────────────────────────────────────────────────┐
-│                       VIEW SYSTEM                             │
-│   SvelteKit routes + shared components (PostCard, Composer,  │
-│   MetaBanner) — reads state, renders UI, fires interactions  │
-└──────────────────────────────────────────────────────────────┘
-                         │
-                         ▼
-┌──────────────────────────────────────────────────────────────┐
-│                      THEME SYSTEM                             │
-│   Light/dark toggle — localStorage persistence               │
-└──────────────────────────────────────────────────────────────┘
-```
-
-## Systems
-
-| System | File(s) | Responsibility |
-|---|---|---|
-| DATA SYSTEM | `src/lib/data/*.json` | Owns raw seed data (posts, users, tags). Read-only. |
-| FEED SYSTEM | `src/lib/stores/feed.svelte.ts` | Owns liked/bookmarked state, user-composed posts, feed pagination |
-| PROFILE SYSTEM | `src/lib/stores/profile.svelte.ts` | Owns follow/unfollow state per user ID |
-| DISCOVERY SYSTEM | `src/routes/explore/+page.ts`, `src/routes/search/+page.svelte` | Owns tag-based filtering and keyword search logic |
-| VIEW SYSTEM | `src/routes/**`, `src/lib/components/**` | Owns route rendering, shared UI components, navigation |
-| THEME SYSTEM | `src/lib/stores/theme.svelte.ts` | Owns light/dark preference, localStorage persistence, CSS class application |
+---
 
 ## System Interactions
 
-| Source | Target | Interaction |
-|---|---|---|
-| DATA SYSTEM | FEED SYSTEM | Posts JSON loaded by SvelteKit `load()` function; passed to FEED SYSTEM as initial data |
-| DATA SYSTEM | PROFILE SYSTEM | Users JSON loaded by route `load()` functions; PROFILE SYSTEM reads user IDs for follow state |
-| DATA SYSTEM | DISCOVERY SYSTEM | Tags + Posts + Users JSON loaded by Explore/Search `load()` functions |
-| FEED SYSTEM | VIEW SYSTEM | Feed state (liked, bookmarked, userPosts) read in `+page.svelte` components |
-| PROFILE SYSTEM | VIEW SYSTEM | Follow state read in profile page and explore page |
-| DISCOVERY SYSTEM | VIEW SYSTEM | Tag filter state, search results derived in page components |
-| THEME SYSTEM | VIEW SYSTEM | `theme.current` value applied as `dark` class on `document.documentElement` |
+| From | To | What Flows |
+|------|----|-----------|
+| DATA_SYSTEM | FEED_SYSTEM | Posts array, users map |
+| DATA_SYSTEM | PROFILE_SYSTEM | User record, filtered posts |
+| DATA_SYSTEM | DISCOVERY_SYSTEM | All posts, all users, tags |
+| DATA_SYSTEM | VIEW_SYSTEM | Users map (for avatar/handle lookups) |
+| FEED_SYSTEM | VIEW_SYSTEM | Post cards rendered by shared components |
+| PROFILE_SYSTEM | VIEW_SYSTEM | Profile header, post list |
+| DISCOVERY_SYSTEM | VIEW_SYSTEM | Tag chips, user cards, filtered post list |
+| VIEW_SYSTEM | FEED_SYSTEM | Like/bookmark toggle events |
+| VIEW_SYSTEM | PROFILE_SYSTEM | Follow/unfollow toggle events |
+
+---
 
 ## Data Flow
 
 ```
-Static JSON (DATA)
-  → SvelteKit load() → route data prop
-  → Page component reads data + store state
-  → User interaction → store mutation (FEED/PROFILE/THEME)
-  → Svelte reactivity → UI update (VIEW)
+JSON files (src/lib/data/)
+        ↓
+  DATA_SYSTEM (load + type)
+        ↓
+  ┌─────┼─────┬──────────┐
+  ↓     ↓     ↓          ↓
+FEED  PROFILE  DISCOVERY  VIEW
+SYSTEM SYSTEM   SYSTEM    SYSTEM
+  ↓     ↓          ↓       ↓
+        └──────────────────┘
+              ↓
+         Rendered UI
+              ↓
+    User interaction events
+              ↓
+    Client-side store updates
+              ↓
+    Reactive UI re-render
 ```
 
-No data ever flows back to DATA SYSTEM. DATA SYSTEM is immutable at runtime.
+---
+
+## Shared State
+
+Client-side stores (Svelte stores) hold mutable interaction state. These are the only things that change after initial load:
+
+| Store | Owner | Contents |
+|-------|-------|---------|
+| `likedPostIds` | FEED_SYSTEM | Set of post IDs the user has liked |
+| `bookmarkedPostIds` | FEED_SYSTEM | Set of post IDs the user has bookmarked |
+| `followedUserIds` | PROFILE_SYSTEM | Set of user IDs the user is following |
+| `composedPosts` | FEED_SYSTEM | Array of posts created in this session |
+| `theme` | VIEW_SYSTEM | `'light'` or `'dark'` |
+
+---
+
+## System Files
+
+- [DATA_SYSTEM.md](DATA_SYSTEM.md) — Entity types, JSON loading, data contracts
+- [FEED_SYSTEM.md](FEED_SYSTEM.md) — Post timeline, pagination, composer, like/bookmark
+- [PROFILE_SYSTEM.md](PROFILE_SYSTEM.md) — User profiles, follow/unfollow
+- [DISCOVERY_SYSTEM.md](DISCOVERY_SYSTEM.md) — Search, explore, tag filtering
+- [VIEW_SYSTEM.md](VIEW_SYSTEM.md) — Layout, navigation, meta banner, theme, shared components

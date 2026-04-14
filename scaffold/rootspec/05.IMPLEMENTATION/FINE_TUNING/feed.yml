@@ -1,24 +1,38 @@
 # =============================================================================
-# FINE-TUNING: Feed System
+# FINE TUNING: Feed System
 # =============================================================================
 # @spec_version: 1.0.0
+# @system: FEED_SYSTEM
+# @last_updated: 2026-04-14T18:52:50Z
+# @status: draft
 # @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
 
-initial_post_count:
-  value: 10
-  # @unit: posts
-  # @rationale: Shows enough content to feel like a real feed without overwhelming the page on first load
-  # @constraint: min=5, max=20
+# -----------------------------------------------------------------------------
+# Feed Pagination
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
 
-page_size:
-  value: 10
-  # @unit: posts
-  # @rationale: Consistent with initial_post_count; each "load more" doubles the visible set incrementally
-  # @constraint: min=5, max=20
+pagination:
+  page_size: 10
+  # @rationale: 10 posts per page is a common social feed default. Enough to fill a
+  #   screen without overwhelming the initial load. Load More is visible immediately
+  #   for the 30-post mock dataset.
+  # @constraints: min=5, max=50, type=integer
+  # @impact: [FEED_SYSTEM]
 
-post_max_chars:
-  value: 300
-  # @unit: characters
-  # @rationale: Mirrors Bluesky's character limit; keeps the demo familiar to developers evaluating the spec
-  # @constraint: min=140, max=500
+# -----------------------------------------------------------------------------
+# Post Composer
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
+
+composer:
+  max_post_length: 300
+  # @rationale: Bluesky uses 300 characters. Keeps posts focused, matches the
+  #   Bluesky-like inspiration, and prevents the composer from growing too large.
+  # @constraints: min=100, max=500, type=integer
+  # @impact: [FEED_SYSTEM, VIEW_SYSTEM]
+
+  min_post_length: 1
+  # @rationale: Empty posts are rejected but whitespace-only is also invalid
+  #   (handled by trim validation in the composer logic).
+  # @constraints: min=1, max=10, type=integer

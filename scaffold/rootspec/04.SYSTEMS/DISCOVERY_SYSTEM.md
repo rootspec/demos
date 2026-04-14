@@ -1,4 +1,4 @@
-# Discovery System
+# DISCOVERY_SYSTEM
 
 **References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, DATA_SYSTEM.md
 
@@ -6,51 +6,75 @@
 
 ## Responsibility
 
-The Discovery System owns the explore and search surfaces — the two routes that help users find content they're not already looking at. It manages tag-based filtering (on Explore) and keyword search (on Search). Both are implemented as client-side derived state with no server round-trips.
+Owns the two discovery surfaces: Search (`/search`) and Explore (`/explore`). Search filters posts by keyword and optional tag. Explore surfaces trending tags, suggested users, and popular posts with interactive tag filtering.
 
-## Boundaries
+---
 
-- **Owns:** `src/routes/explore/+page.ts` (load function), `src/routes/explore/+page.svelte` (tag filter state), `src/routes/search/+page.svelte` (search derived state)
-- **Reads from:** DATA SYSTEM (tags, posts, users)
-- **Does not own:** Like/bookmark state (FEED SYSTEM), follow state (PROFILE SYSTEM)
+## Search
 
-## State
+### State
+- Query string (reactive, updates results as user types)
+- Active tag filter (optional; narrows results further)
 
-### Explore Page
-| State | Type | Description |
-|---|---|---|
-| `selectedTag` | `string \| null` | Currently selected tag for filtering; null means no filter active |
+### Behavior
+- Results appear when query length ≥ [min_query_length] characters
+- Filtering is case-insensitive substring match on post content
+- Tag filter (if active) applies on top of text query — results must match both
+- Tag chips are shown below the search input; clicking one activates/deactivates it
+- Only one tag can be active at a time
+- "No results" state shown when query is active but no posts match
+- Empty query state shows a prompt ("Search for posts…") rather than empty space
 
-### Search Page
-| State | Type | Description |
-|---|---|---|
-| `query` | `string` | Live search query string; bound to text input |
-| `results` | Derived `Post[]` | Posts whose content matches `query` (case-insensitive includes) |
+### Result Card
+Each result shows:
+- Author display name (linked to profile)
+- Author handle
+- Post content
+- Post link to detail view
 
-## Operations
+---
 
-### Tag filtering (Explore)
-- User clicks a tag chip → sets `selectedTag` to that tag's name
-- If `selectedTag` is already that tag → clears selection (toggle behavior)
-- Posts section shows only posts whose `tags` array includes `selectedTag`; if null, shows all popular posts
+## Explore
 
-### Keyword search (Search)
-- Input is reactive — results update on every keystroke
-- Filter logic: `post.content.toLowerCase().includes(query.toLowerCase())`
-- Empty query (`query.length === 0`) → no results shown (not an error state)
-- Non-empty query with no matches → "No results for [query]" message shown
+### Sections
+1. **Trending Tags** — All tags sorted by `postCount` descending, displayed as clickable chips
+2. **Suggested Users** — All users sorted by `followerCount` descending, displayed as user cards
+3. **Popular Posts** — Top [explore_popular_post_count] posts by `likeCount`, with tag filter applied
 
-## Explore Page Data
+### State
+- Active tag filter (optional; filters the Popular Posts section)
 
-The Explore `load()` function returns:
-- `tags` — all tags sorted by `postCount` descending
-- `users` — all users (for the "People" / suggested users section)
+### Tag Filtering
+- Clicking a tag chip activates it (visual highlight)
+- The Popular Posts section re-renders to show only posts tagged with the active tag
+- Clicking an already-active tag deactivates it; all popular posts are shown again
+- One active tag at a time
 
-Popular posts (for post listing under tags) are sourced from DATA SYSTEM and filtered in the component.
+### User Card
+Each suggested user shows:
+- Avatar
+- Display name (linked to profile)
+- Handle
+- Bio
+- Follow / Unfollow button (reflects PROFILE_SYSTEM follow store)
+
+### Popular Post Card
+Same PostCard component used in feed — with like/bookmark actions functional.
+
+---
+
+## Rules
+
+- Search filtering is entirely client-side; all posts are loaded once and filtered in memory
+- Explore data is static except for the tag filter state (client-side only)
+- Tag filter state is not persisted between page navigations — it resets when the user leaves and returns to Explore
+- Users are always shown in the Suggested Users section regardless of follow state (follow state is reflected in the button, not by removal from the list)
+
+---
 
 ## Interactions with Other Systems
 
-| System | Interaction |
-|---|---|
-| DATA SYSTEM | Explore `load()` reads tags.json and users.json; Search page receives posts and users from DATA SYSTEM via route load |
-| VIEW SYSTEM | Both explore and search page components render state from this system; tag/search interactions fire state mutations here |
+- **DATA_SYSTEM** provides all posts, all users, and tags via load function
+- **VIEW_SYSTEM** renders tag chips, user cards, and post cards using shared components
+- Follow events from user cards in Explore are handled by PROFILE_SYSTEM's follow store
+- Like/bookmark events from post cards in Explore are handled by FEED_SYSTEM's stores

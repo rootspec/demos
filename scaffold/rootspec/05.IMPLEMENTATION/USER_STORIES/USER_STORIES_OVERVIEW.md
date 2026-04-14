@@ -1,34 +1,30 @@
 # User Stories Overview
 
-**References:** 01.PHILOSOPHY.md through 04.SYSTEMS/
+**Phase:** MVP
+**Total Stories:** 11
+**Organization:** by_phase/MVP/
 
 ---
 
-## Phase: MVP
+## Story Index
 
-All stories below are in the MVP phase. They cover the full surface area of RootFeed as spec'd and implemented.
+| ID | Title | Systems | File |
+|----|-------|---------|------|
+| US-001 | View home feed with posts | FEED_SYSTEM, DATA_SYSTEM | meta.yaml |
+| US-002 | Like and unlike a post | FEED_SYSTEM, VIEW_SYSTEM | feed.yaml |
+| US-003 | Load more posts | FEED_SYSTEM | feed.yaml |
+| US-004 | Compose a new post | FEED_SYSTEM, VIEW_SYSTEM | feed.yaml |
+| US-005 | View post detail and replies | FEED_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM | thread.yaml |
+| US-006 | View a user profile | PROFILE_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM | profile.yaml |
+| US-007 | Follow and unfollow a user | PROFILE_SYSTEM, VIEW_SYSTEM | profile.yaml |
+| US-008 | Search posts by keyword | DISCOVERY_SYSTEM, VIEW_SYSTEM | search.yaml |
+| US-009 | Explore trending tags and filter posts | DISCOVERY_SYSTEM, VIEW_SYSTEM | discovery.yaml |
+| US-010 | Toggle dark/light theme | VIEW_SYSTEM | meta.yaml |
+| US-011 | See meta banner on every page | VIEW_SYSTEM | meta.yaml |
 
-| ID | Title | Systems | Journey |
-|---|---|---|---|
-| US-001 | View home feed | FEED, VIEW, DATA | FEED |
-| US-002 | Like a post | FEED, VIEW | FEED |
-| US-003 | Bookmark a post | FEED, VIEW | FEED |
-| US-004 | Compose and publish a post | FEED, VIEW | FEED |
-| US-005 | Load more posts | FEED, VIEW, DATA | FEED |
-| US-006 | View post detail and thread | VIEW, DATA | THREAD |
-| US-007 | View a user profile | PROFILE, VIEW, DATA | PROFILE |
-| US-008 | Follow and unfollow a user | PROFILE, VIEW | PROFILE |
-| US-009 | Search posts by keyword | DISCOVERY, VIEW, DATA | SEARCH |
-| US-010 | Explore trending tags and filter posts | DISCOVERY, VIEW, DATA | DISCOVERY |
-| US-011 | Toggle dark/light theme | THEME, VIEW | META |
+---
 
-## Story Files
+## Cypress Test Suite
 
-Stories are organized by system domain:
-
-- `by_phase/MVP/feed.yaml` — Feed interactions (US-001 through US-005)
-- `by_phase/MVP/thread.yaml` — Thread/post detail (US-006)
-- `by_phase/MVP/profile.yaml` — Profile and follow (US-007, US-008)
-- `by_phase/MVP/search.yaml` — Search (US-009)
-- `by_phase/MVP/discovery.yaml` — Explore and tag filter (US-010)
-- `by_phase/MVP/meta.yaml` — Theme toggle and meta banner (US-011)
+Test file: `cypress/e2e/mvp.cy.ts`
+Loads: `rootspec/05.IMPLEMENTATION/USER_STORIES/by_phase/MVP/**/*.yaml`

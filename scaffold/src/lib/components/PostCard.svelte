@@ -36,6 +36,7 @@
 			class:active={liked}
 			class:text-red-500={liked}
 			data-test="like-button"
+			data-liked={liked ? 'true' : 'false'}
 			onclick={() => { liked = !liked; }}
 		>
 			<svg class="h-4 w-4" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
