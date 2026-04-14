@@ -1,36 +1,55 @@
 # =============================================================================
-# USER STORY: Keyboard Accessibility
+# USER STORIES: Responsive Layout
 # =============================================================================
-# @spec_version: 7.2.1
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: DISCOVERY
-# @systems: [INTERACTIVE_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-13T17:12:20Z
+# @journey: MOBILE_VISIT
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-401
-title: All interactive elements are keyboard accessible
+---
+
+# =============================================================================
+# USER STORY: View site on mobile
+# =============================================================================
+
+id: US-011
+title: Access the full site content on a mobile device
 
 acceptance_criteria:
-  - id: AC-401-1
-    title: Theme toggle is keyboard accessible
+  - id: AC-011-1
+    title: All key sections are present on narrow viewports
     narrative: |
-      Given I visit the site
-      When I navigate to the theme toggle using the keyboard
-      Then I can activate it with Enter or Space
+      Given I visit the site on a narrow viewport
+      When the page loads
+      Then I see the meta banner, hero, and main sections
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=theme-toggle][tabindex], [data-test=theme-toggle]:not([tabindex="-1"])' }
+      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: '[data-test=hero-tagline]' }
+      - shouldExist: { selector: '[data-test=how-it-works-section]' }
 
-  - id: AC-401-2
-    title: Hierarchy Explorer levels are keyboard accessible
+---
+
+# =============================================================================
+# USER STORY: Use interactive features on mobile
+# =============================================================================
+
+id: US-012
+title: Interact with the hierarchy explorer on touch devices
+
+acceptance_criteria:
+  - id: AC-012-1
+    title: Hierarchy explorer tap interaction works
     narrative: |
-      Given I visit the hierarchy explorer
-      When I focus a level using keyboard navigation
-      Then the level has a visible focus indicator and can be expanded with Enter or Space
+      Given I see the hierarchy explorer on a narrow viewport
+      When I tap on a level
+      Then the level expands to show content
     given:
       - visit: '/'
-    when: []
+    when:
+      - click: { selector: '[data-test=hierarchy-level-1]' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][tabindex], button[data-test=hierarchy-level-1]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }

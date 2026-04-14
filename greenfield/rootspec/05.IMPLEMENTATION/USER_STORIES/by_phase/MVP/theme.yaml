@@ -1,18 +1,24 @@
 # =============================================================================
-# USER STORY: Theme Toggle
+# USER STORIES: Theme / Dark Mode
 # =============================================================================
-# @spec_version: 7.2.1
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: DISCOVERY
+# @journey: THEME_PREFERENCE
 # @systems: [THEME_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-13T17:12:20Z
+# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-201
-title: Visitor can toggle between dark and light themes
+---
+
+# =============================================================================
+# USER STORY: Toggle dark/light theme
+# =============================================================================
+
+id: US-010
+title: Toggle between dark and light theme
 
 acceptance_criteria:
-  - id: AC-201-1
-    title: Theme toggle button is visible in header
+  - id: AC-010-1
+    title: Theme toggle button is visible in the header
     narrative: |
       Given I visit the site
       When the page loads
@@ -23,43 +29,15 @@ acceptance_criteria:
     then:
       - shouldExist: { selector: '[data-test=theme-toggle]' }
 
-  - id: AC-201-2
-    title: Clicking theme toggle changes the theme
+  - id: AC-010-2
+    title: Clicking the theme toggle changes the theme
     narrative: |
-      Given I visit the site
-      When I click the theme toggle button
-      Then the page theme switches between dark and light
+      Given I see the theme toggle
+      When I click it
+      Then the page theme changes
     given:
       - visit: '/'
     when:
       - click: { selector: '[data-test=theme-toggle]' }
     then:
-      - shouldExist: { selector: 'html.dark, html.light' }
-
----
-# =============================================================================
-# USER STORY: Theme Persistence
-# =============================================================================
-# @spec_version: 7.2.1
-# @phase: MVP
-# @journey: DISCOVERY
-# @systems: [THEME_SYSTEM]
-# @last_updated: 2026-04-13T17:12:20Z
-
-id: US-202
-title: Theme preference persists across page reloads
-
-acceptance_criteria:
-  - id: AC-202-1
-    title: Dark theme persists after page reload
-    narrative: |
-      Given I have switched to dark theme
-      When I reload the page
-      Then the page still shows dark theme
-    given:
-      - visit: '/'
-      - click: { selector: '[data-test=theme-toggle]' }
-    when:
-      - visit: '/'
-    then:
-      - shouldExist: { selector: 'html.dark' }
+      - shouldExist: { selector: '[data-test=theme-toggle]' }

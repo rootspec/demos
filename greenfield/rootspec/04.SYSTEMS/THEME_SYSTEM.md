@@ -1,68 +1,59 @@
 # Level 4: Theme System
 
-*References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md*
+**System:** THEME_SYSTEM
+**References:** L1-3, Sibling L4, External
+
+---
 
 ## Responsibility
 
-Manages the dark/light color theme state for the entire site. Handles system preference detection, manual override, and persistence across sessions.
+Manages dark/light mode detection, manual user override, and persistence. Ensures all UI surfaces — static content and interactive components — reflect the current theme without visual flash on load.
 
-## Boundaries
+---
 
-- **Owns:** Theme state, preference detection, manual toggle, `localStorage` persistence
-- **Does not own:** Visual design tokens (LAYOUT_SYSTEM manages CSS variables), component rendering (LAYOUT_SYSTEM + INTERACTIVE_SYSTEM)
-- **Exposes:** Current theme value (`light` | `dark`) to all other systems via CSS class on `<html>` element
+## State Managed
 
-## State
+- **Active theme:** `light` or `dark`
+- **Theme source:** `system` (from `prefers-color-scheme`) or `manual` (user toggled)
+- **Persisted preference:** stored in `localStorage` under a consistent key
 
-| Property | Type | Values | Default |
-|----------|------|--------|---------|
-| `theme` | enum | `light`, `dark` | Detected from system, fallback `light` |
-| `override` | boolean | true if manually set | false |
+---
 
-## Theme Detection
+## Behavior Rules
 
-1. On page load, check `localStorage` for stored preference
-2. If stored preference exists, apply it immediately (before first paint)
-3. If no stored preference, read `window.matchMedia('(prefers-color-scheme: dark)')`
-4. Apply detected or stored theme by adding class to `<html>` element: `class="dark"` or `class="light"`
+1. On page load, check `localStorage` for a persisted manual preference
+2. If no manual preference exists, read `prefers-color-scheme` from the browser
+3. If neither is available, default to `light`
+4. Apply the resolved theme by setting a class on the document root element (e.g., `class="dark"`)
+5. When the user activates the theme toggle, flip the theme, update the root class, and write the new preference to `localStorage`
+6. Theme transitions use a [very brief] CSS crossfade — not an instant flash, not an animated sweep
 
 ## Flash Prevention
 
-The theme detection script must execute before the page renders to prevent a light-flash on dark-preference visits:
+Theme resolution logic runs in a blocking `<script>` tag in the document `<head>`, before any rendering, to prevent a flash of the wrong theme.
 
-- Inject an inline `<script>` in the `<head>` (before any CSS or body content)
-- This script reads localStorage and applies the class synchronously
-- No async operations allowed in this script
+---
 
-## Manual Toggle
+## Data Ownership
 
-- Toggle button in site header
-- Clicking toggle: flip current theme (`light` → `dark` or `dark` → `light`)
-- After toggle: write new preference to `localStorage`
-- Update `<html>` class immediately
-- Toggle button renders appropriate icon for current state (sun for light, moon for dark)
+- Current theme state (`light` | `dark`)
+- Theme source (`system` | `manual`)
+- `localStorage` key for theme persistence
 
-## Persistence
+---
 
-- Storage key: `rootspec-theme`
-- Storage mechanism: `localStorage`
-- Stored value: `"light"` or `"dark"` (string)
-- Cleared when: never (user must manually toggle back)
+## Boundaries
 
-## CSS Class Contract
+- Does not own any visual design tokens (colors, typography) — those are in Tailwind config
+- Does not own the toggle button's visual rendering — LAYOUT_SYSTEM renders it
+- Does not own component-specific dark mode overrides — components use CSS variables that this system controls
 
-The theme system exposes exactly one class on `<html>`:
+---
 
-| Theme | Class on `<html>` |
-|-------|-------------------|
-| Dark | `dark` |
-| Light | `light` (or no class, if light is default) |
+## Interactions with Other Systems
 
-All visual systems consume this class via CSS selectors (`.dark body { ... }`). This is the single point of truth for theme state.
-
-## Transition
-
-- Theme change triggers a CSS transition on `background-color` and `color`
-- Transition duration: `[short duration]`
-- Transition easing: ease-in-out
-- No transition on initial load (prevent flash of transition)
+| System | Nature |
+|--------|--------|
+| LAYOUT_SYSTEM | Toggle button rendered in the header; THEME_SYSTEM provides the handler |
+| INTERACTIVE_SYSTEM | React components inherit CSS variables set by THEME_SYSTEM; no direct coupling |
+| CONTENT_SYSTEM | Static sections inherit theme via root class; no direct coupling |

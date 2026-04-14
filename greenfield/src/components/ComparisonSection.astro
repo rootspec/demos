@@ -1,88 +1,89 @@
 ---
-const withoutSpec = [
-  'Specs live in Notion / Google Docs',
-  'AI agents guess at requirements',
-  'Features drift from original intent',
-  'Rework discovered late in development',
-  'Every team member has a different mental model',
-];
-
-const withSpec = [
-  'Specs live in git alongside code',
-  'AI agents implement from verified stories',
-  'Every feature maps to a living spec',
-  'Acceptance criteria catch drift immediately',
-  'One truth, accessible to everyone',
-];
 ---
-<section data-test="comparison-section" id="comparison" style="padding: 5rem 1.5rem; background-color: var(--color-surface);">
-  <div style="max-width: 1000px; margin: 0 auto;">
-    <div style="text-align: center; margin-bottom: 3rem;">
-      <h2 style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; margin: 0 0 0.75rem; color: var(--color-text);">
-        With vs. Without RootSpec
+
+<section data-test="comparison-section" class="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-800/30">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
+        Before and after
       </h2>
-      <p style="color: var(--color-text-muted); font-size: 1.1rem; max-width: 540px; margin: 0 auto 1.5rem;">
-        The difference between building on shifting sand and building on a foundation.
+      <p class="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+        The same product requirement, two ways. One stays coherent under change.
       </p>
-      <div style="display: inline-flex; border: 1px solid var(--color-border); border-radius: 0.5rem; overflow: hidden;">
-        <button
-          id="comparison-toggle-without"
-          onclick="document.getElementById('comparison-panel-without').style.display='block';document.getElementById('comparison-panel-with').style.display='none';this.style.background='var(--color-accent)';this.style.color='white';document.getElementById('comparison-toggle-with').style.background='transparent';document.getElementById('comparison-toggle-with').style.color='var(--color-text)';"
-          style="padding: 0.4rem 1.1rem; font-size: 0.875rem; font-family: inherit; cursor: pointer; border: none; background: var(--color-accent); color: white;"
-        >
-          Without RootSpec
-        </button>
-        <button
-          id="comparison-toggle-with"
-          onclick="document.getElementById('comparison-panel-with').style.display='block';document.getElementById('comparison-panel-without').style.display='none';this.style.background='var(--color-accent)';this.style.color='white';document.getElementById('comparison-toggle-without').style.background='transparent';document.getElementById('comparison-toggle-without').style.color='var(--color-text)';"
-          style="padding: 0.4rem 1.1rem; font-size: 0.875rem; font-family: inherit; cursor: pointer; border: none; background: transparent; color: var(--color-text);"
-        >
-          With RootSpec
-        </button>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Without spec -->
+      <div data-test="comparison-without" class="rounded-xl border-2 border-red-200 dark:border-red-900 overflow-hidden">
+        <div class="bg-red-50 dark:bg-red-900/30 px-6 py-4 border-b border-red-200 dark:border-red-800">
+          <div class="flex items-center gap-2">
+            <span class="text-red-500 font-bold text-lg">✗</span>
+            <h3 class="font-semibold text-red-900 dark:text-red-200">Without RootSpec</h3>
+          </div>
+          <p class="text-sm text-red-700 dark:text-red-300 mt-1">Vague requirements, ambiguous stories, untraceable decisions</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-6 font-mono text-sm">
+          <div class="mb-4">
+            <div class="text-slate-400 text-xs mb-1">📄 spec.docx</div>
+            <div class="text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 rounded p-3 text-xs leading-relaxed">
+              <p class="text-red-400 font-semibold mb-2"># Reading Tracker App</p>
+              <p class="text-slate-500">Users should be able to track their books.</p>
+              <p class="text-slate-500 mt-1">Make it look nice. Should work on mobile.</p>
+              <p class="text-slate-500 mt-1">Add social features maybe?</p>
+              <p class="text-slate-400 mt-2 italic text-xs">Last updated: 3 months ago</p>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="text-slate-400 text-xs mb-1">🗂️ Jira ticket BOOK-47</div>
+            <div class="bg-slate-50 dark:bg-slate-800 rounded p-3 text-xs">
+              <p class="text-yellow-600 dark:text-yellow-400 font-medium">Story: "Add book logging"</p>
+              <p class="text-slate-500 mt-1">As a user I want to log books</p>
+              <p class="text-slate-400 mt-1 italic">Acceptance criteria: (none)</p>
+              <p class="text-slate-400 italic">Points: 13 (??)</p>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded border border-red-200 dark:border-red-800 text-xs">
+            <p class="text-red-600 dark:text-red-400">⚠ What counts as "logged"? Does mobile mean native app? Social is in scope or not? AI interprets freely.</p>
+          </div>
+        </div>
       </div>
-    </div>
-    <div id="comparison-panel-without"
-      data-test="comparison-without"
-      style="
-        background: rgba(239,68,68,0.05);
-        border: 1px solid rgba(239,68,68,0.25);
-        border-radius: 0.75rem;
-        padding: 1.75rem;
-      "
-    >
-      <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 1.25rem; color: #f87171; display: flex; align-items: center; gap: 0.5rem;">
-        <span aria-hidden="true">✗</span> Without RootSpec
-      </h3>
-      <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-        {withoutSpec.map(item => (
-          <li style="display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.45;">
-            <span aria-hidden="true" style="color: #f87171; flex-shrink: 0; margin-top: 0.1rem;">✗</span>
-            {item}
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div id="comparison-panel-with"
-      data-test="comparison-with"
-      style="
-        display: none;
-        background: rgba(34,197,94,0.05);
-        border: 1px solid rgba(34,197,94,0.25);
-        border-radius: 0.75rem;
-        padding: 1.75rem;
-      "
-    >
-      <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 1.25rem; color: #4ade80; display: flex; align-items: center; gap: 0.5rem;">
-        <span aria-hidden="true">✓</span> With RootSpec
-      </h3>
-      <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-        {withSpec.map(item => (
-          <li style="display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.45;">
-            <span aria-hidden="true" style="color: #4ade80; flex-shrink: 0; margin-top: 0.1rem;">✓</span>
-            {item}
-          </li>
-        ))}
-      </ul>
+
+      <!-- With RootSpec -->
+      <div data-test="comparison-with" class="rounded-xl border-2 border-emerald-200 dark:border-emerald-800 overflow-hidden">
+        <div class="bg-emerald-50 dark:bg-emerald-900/30 px-6 py-4 border-b border-emerald-200 dark:border-emerald-800">
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-500 font-bold text-lg">✓</span>
+            <h3 class="font-semibold text-emerald-900 dark:text-emerald-200">With RootSpec</h3>
+          </div>
+          <p class="text-sm text-emerald-700 dark:text-emerald-300 mt-1">Structured hierarchy, traceable decisions, testable stories</p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 p-6 font-mono text-sm">
+          <div class="mb-3 text-xs">
+            <span class="text-brand-500 font-semibold">L1: Philosophy</span>
+            <div class="mt-1 text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 rounded p-2">
+              Mission: Help readers build lasting habits through <span class="text-brand-400">frictionless reflection</span>.
+            </div>
+          </div>
+          <div class="mb-3 text-xs">
+            <span class="text-violet-500 font-semibold">L2: Truths</span>
+            <div class="mt-1 text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 rounded p-2">
+              Trade-off: Depth over breadth. No social features in v1 — violates focus pillar.
+            </div>
+          </div>
+          <div class="mb-3 text-xs">
+            <span class="text-emerald-500 font-semibold">L5: Story US-47</span>
+            <div class="mt-1 text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 rounded p-2">
+              <p>Given I finish a book</p>
+              <p>When I tap "Log it"</p>
+              <p>Then I see a reflection prompt within 500ms</p>
+              <p class="text-emerald-400">→ Traces to: frictionless reflection pillar</p>
+            </div>
+          </div>
+          <div class="mt-3 p-2 bg-emerald-50 dark:bg-emerald-900/20 rounded border border-emerald-200 dark:border-emerald-800 text-xs">
+            <p class="text-emerald-600 dark:text-emerald-400">✓ Every story traces to a design pillar. "Social features" rejected by L2 trade-off.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>

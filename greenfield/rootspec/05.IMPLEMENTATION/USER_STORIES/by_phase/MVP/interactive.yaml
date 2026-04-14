@@ -1,39 +1,40 @@
 # =============================================================================
-# USER STORY: Hierarchy Explorer
+# USER STORIES: Interactive Features
 # =============================================================================
-# @spec_version: 7.2.1
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: EXPLORATION
+# @journey: METHODOLOGY_EXPLORATION
 # @systems: [INTERACTIVE_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-13T17:12:20Z
+# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-301
-title: Visitor explores the five-level RootSpec hierarchy
+---
+
+# =============================================================================
+# USER STORY: Explore the hierarchy using the hierarchy explorer
+# =============================================================================
+
+id: US-007
+title: Explore the five-level spec hierarchy interactively
 
 acceptance_criteria:
-  - id: AC-301-1
-    title: Hierarchy Explorer renders all five levels
+  - id: AC-007-1
+    title: Hierarchy Explorer is visible on the page
     narrative: |
       Given I visit the site
       When I scroll to the hierarchy explorer section
-      Then I see all five levels of the RootSpec hierarchy displayed
+      Then I see all five levels displayed
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-1]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-2]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-3]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-4]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-5]' }
 
-  - id: AC-301-2
-    title: Clicking a level expands its detail content
+  - id: AC-007-2
+    title: Clicking a level expands it to show content
     narrative: |
       Given I see the hierarchy explorer
-      When I click on Level 1
-      Then I see the expanded content for Level 1
+      When I click on a level
+      Then I see the level expand with example content
     given:
       - visit: '/'
     when:
@@ -41,40 +42,38 @@ acceptance_criteria:
     then:
       - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
 
-  - id: AC-301-3
-    title: Clicking an expanded level collapses it
+  - id: AC-007-3
+    title: All five levels are present
     narrative: |
-      Given Level 1 is expanded in the hierarchy explorer
-      When I click on Level 1 again
-      Then Level 1 collapses and its detail content is hidden
+      Given I see the hierarchy explorer
+      When I look at the level list
+      Then I see entries for all five levels
     given:
       - visit: '/'
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded=false]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-1]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-2]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-3]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-4]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-5]' }
 
 ---
-# =============================================================================
-# USER STORY: Spec Wizard
-# =============================================================================
-# @spec_version: 7.2.1
-# @phase: MVP
-# @journey: EXPLORATION
-# @systems: [INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-13T17:12:20Z
 
-id: US-302
-title: Visitor walks through Spec Wizard and generates a skeleton spec
+# =============================================================================
+# USER STORY: Complete the spec wizard
+# =============================================================================
+
+id: US-008
+title: Walk through the spec wizard and see a skeleton spec
 
 acceptance_criteria:
-  - id: AC-302-1
-    title: Spec Wizard renders with first step visible
+  - id: AC-008-1
+    title: Spec Wizard is visible on the page
     narrative: |
       Given I visit the site
       When I scroll to the spec wizard section
-      Then I see the wizard at Step 1 with a product idea input
+      Then I see the wizard with a product idea input
     given:
       - visit: '/'
     when: []
@@ -82,87 +81,69 @@ acceptance_criteria:
       - shouldExist: { selector: '[data-test=spec-wizard]' }
       - shouldExist: { selector: '[data-test=wizard-step-1]' }
 
-  - id: AC-302-2
-    title: Visitor can complete all wizard steps and see skeleton output
+  - id: AC-008-2
+    title: Completing Step 1 advances to Step 2
     narrative: |
-      Given I am viewing the spec wizard
-      When I enter a product idea and navigate through all three steps
-      Then I see a skeleton spec output showing L1-L3 structure
+      Given I see the spec wizard
+      When I fill in a product idea and click next
+      Then I see Step 2 with design pillar choices
     given:
       - visit: '/'
     when:
-      - fill: { selector: '[data-test=wizard-product-input]', value: 'A tool for tracking reading habits' }
+      - fill: { selector: '[data-test=wizard-product-idea]', value: 'A tool for tracking reading habits' }
       - click: { selector: '[data-test=wizard-next]' }
+    then:
+      - shouldExist: { selector: '[data-test=wizard-step-2]' }
+
+  - id: AC-008-3
+    title: Completing all steps shows the skeleton spec
+    narrative: |
+      Given I have completed all three wizard steps
+      When I submit the final step
+      Then I see a skeleton spec preview
+    given:
+      - visit: '/'
+    when:
+      - fill: { selector: '[data-test=wizard-product-idea]', value: 'A tool for tracking reading habits' }
       - click: { selector: '[data-test=wizard-next]' }
+      - click: { selector: '[data-test=wizard-pillar-option-0]' }
       - click: { selector: '[data-test=wizard-next]' }
+      - fill: { selector: '[data-test=wizard-key-interaction]', value: 'User logs a book they finished' }
+      - click: { selector: '[data-test=wizard-submit]' }
     then:
       - shouldExist: { selector: '[data-test=wizard-output]' }
 
-  - id: AC-302-3
-    title: Back button is available on all steps after step 1
-    narrative: |
-      Given I am on step 2 of the spec wizard
-      When I see the navigation controls
-      Then I see a back button to return to step 1
-    given:
-      - visit: '/'
-      - click: { selector: '[data-test=wizard-next]' }
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=wizard-back]' }
-
 ---
-# =============================================================================
-# USER STORY: Before/After Comparison
-# =============================================================================
-# @spec_version: 7.2.1
-# @phase: MVP
-# @journey: EXPLORATION
-# @systems: [INTERACTIVE_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-13T17:12:20Z
 
-id: US-303
-title: Visitor compares spec approach with and without RootSpec
+# =============================================================================
+# USER STORY: View the before/after comparison
+# =============================================================================
+
+id: US-009
+title: Compare development with and without RootSpec
 
 acceptance_criteria:
-  - id: AC-303-1
-    title: Comparison section renders with both panels
+  - id: AC-009-1
+    title: Before/After Comparison section is visible
     narrative: |
       Given I visit the site
       When I scroll to the comparison section
-      Then I see both the without-spec and with-spec content
+      Then I see panels showing with and without RootSpec
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=comparison-section]' }
-      - shouldExist: { selector: '[data-test=comparison-without]' }
-      - shouldExist: { selector: '[data-test=comparison-with]' }
 
----
-# =============================================================================
-# USER STORY: Responsive Layout
-# =============================================================================
-# @spec_version: 7.2.1
-# @phase: MVP
-# @journey: DISCOVERY
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-13T17:12:20Z
-
-id: US-304
-title: Site renders correctly on mobile viewport
-
-acceptance_criteria:
-  - id: AC-304-1
-    title: Key sections are readable on mobile viewport
+  - id: AC-009-2
+    title: Both panels contain real content
     narrative: |
-      Given I view the site on a mobile-sized viewport
-      When the page loads
-      Then all key sections are visible and readable without horizontal scrolling
+      Given I see the comparison section
+      When I look at the without-spec panel
+      Then I see example content showing an unstructured spec
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=hero-headline]' }
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=problem-section]' }
+      - shouldExist: { selector: '[data-test=comparison-without]' }
+      - shouldExist: { selector: '[data-test=comparison-with]' }

@@ -1,21 +1,17 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Theme System
+# FINE-TUNING: Theme System
 # =============================================================================
-# @spec_version: 7.2.1
-# @system: THEME_SYSTEM
-# @last_updated: 2026-04-13T17:12:20Z
-# @status: draft
+# @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# @last_updated: 2026-04-14T00:00:00Z
 
-# -----------------------------------------------------------------------------
-# Theme Transition
-# -----------------------------------------------------------------------------
+theme_transition_duration:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Long enough to feel intentional, short enough not to delay the user
+  # @constraint: min=100, max=400
 
-transitions:
-  duration: 200
-  # @rationale: Fast enough to feel responsive, long enough to perceive as smooth
-  # @constraints: min=100, max=400, type=integer
-  # @reference: Nielsen Norman Group - Response Time Limits
-
-  easing: ease-in-out
-  # @rationale: Symmetric easing appropriate for toggle (not directional)
+localStorage_key:
+  value: "rootspec-theme"
+  # @unit: string key
+  # @rationale: Namespaced to avoid collision with other localStorage consumers

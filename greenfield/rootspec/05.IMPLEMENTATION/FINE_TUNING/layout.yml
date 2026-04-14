@@ -1,63 +1,33 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Layout System
+# FINE-TUNING: Layout System
 # =============================================================================
-# @spec_version: 7.2.1
-# @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-13T17:12:20Z
-# @status: draft
+# @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# @last_updated: 2026-04-14T00:00:00Z
 
-# -----------------------------------------------------------------------------
-# Responsive Breakpoints
-# -----------------------------------------------------------------------------
+responsive:
+  mobile_breakpoint:
+    value: 640
+    # @unit: pixels
+    # @rationale: Tailwind 'sm' breakpoint — aligns with framework defaults
 
-breakpoints:
-  sm: 640
-  # @rationale: Mobile breakpoint following Tailwind defaults
-  # @constraints: type=integer, unit=px
+  tablet_breakpoint:
+    value: 768
+    # @unit: pixels
+    # @rationale: Tailwind 'md' breakpoint — two-column layout activates here
 
-  md: 768
-  # @rationale: Tablet breakpoint; two-column layouts enabled above this
-  # @constraints: type=integer, unit=px
+  max_content_width:
+    value: 1280
+    # @unit: pixels
+    # @rationale: Wide enough for desktop readers; narrows to avoid overly long lines
 
-  lg: 1024
-  # @rationale: Desktop breakpoint; full layout with max-width container
-  # @constraints: type=integer, unit=px
+section:
+  vertical_padding:
+    value: 96
+    # @unit: pixels
+    # @rationale: Generous spacing makes sections feel distinct and readable
 
-# -----------------------------------------------------------------------------
-# Content Constraints
-# -----------------------------------------------------------------------------
-
-content:
-  max_width: 1200
-  # @rationale: Prevents excessively wide line lengths on large monitors
-  # @reference: WCAG 2.1 - Reflow; optimal line length for reading
-  # @constraints: min=800, max=1600, type=integer, unit=px
-
-  header_height: 64
-  # @rationale: Standard header height; sufficient for logo + nav + toggle
-  # @constraints: min=48, max=96, type=integer, unit=px
-
-# -----------------------------------------------------------------------------
-# Section Spacing
-# -----------------------------------------------------------------------------
-
-sections:
-  vertical_padding: 80
-  # @rationale: Generous whitespace between sections for visual clarity
-  # @constraints: min=40, max=160, type=integer, unit=px
-
-# -----------------------------------------------------------------------------
-# Animation
-# -----------------------------------------------------------------------------
-
-animation:
-  duration: 400
-  # @rationale: Scroll-triggered animations; visible but not slow
-  # @reference: Material Design motion guidance
-  # @constraints: min=200, max=800, type=integer, unit=ms
-
-  reduced_motion_duration: 0
-  # @rationale: Respect prefers-reduced-motion; disable animations entirely
-  # @inviolable: false
-  # @spec_source: 01.PHILOSOPHY.md - Approachable Without Being Simple pillar
+  section_gap:
+    value: 64
+    # @unit: pixels
+    # @rationale: Consistent rhythm between sections

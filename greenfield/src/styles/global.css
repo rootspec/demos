@@ -1,51 +1,42 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --color-bg: #0f172a;
-  --color-surface: #1e293b;
-  --color-accent: #6366f1;
-  --color-accent-bright: #818cf8;
-  --color-text: #f1f5f9;
-  --color-text-muted: #94a3b8;
-  --color-border: #334155;
+  --bg: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --card: #f8fafc;
+  --border: #e2e8f0;
+  --accent: #4f6ef7;
 }
 
-html.light {
-  --color-bg: #f8fafc;
-  --color-surface: #ffffff;
-  --color-accent: #6366f1;
-  --color-accent-bright: #4f46e5;
-  --color-text: #0f172a;
-  --color-text-muted: #64748b;
-  --color-border: #e2e8f0;
-}
-
-html, html.dark {
-  color-scheme: dark;
-}
-
-html.light {
-  color-scheme: light;
+.dark {
+  --bg: #0f172a;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --card: #1e293b;
+  --border: #334155;
+  --accent: #818cf8;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  margin: 0;
-  padding: 0;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  transition: background-color 0.2s, color 0.2s;
 }
 
-a {
-  color: var(--color-accent-bright);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
+@layer utilities {
+  .text-muted { color: var(--muted); }
+  .bg-card { background-color: var(--card); }
+  .border-default { border-color: var(--border); }
 }
