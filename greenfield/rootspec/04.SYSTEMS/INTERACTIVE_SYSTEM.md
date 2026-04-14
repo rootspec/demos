@@ -1,95 +1,90 @@
 # Level 4: Interactive System
-
-> References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md
+<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
 
 ## Responsibility
 
-Owns the three interactive features: Hierarchy Explorer, Spec Wizard, and Before/After Comparison. Each feature is a self-contained client-side component. No shared mutable state between features. No server calls.
+The Interactive System owns all client-side interactive components: the hierarchy explorer, the spec wizard, and the before/after comparison toggle. It manages UI state for these components and handles all user interaction events.
 
-## Boundaries
-
-- **Owns:** Component state, interaction logic, local event handlers for the three interactive features
-- **Does not own:** Page layout (PRESENTATION_SYSTEM), content copy (CONTENT_SYSTEM), design tokens (THEME_SYSTEM), grid/spacing (LAYOUT_SYSTEM)
-- **Receives:** Content data as props from CONTENT_SYSTEM; CSS tokens from THEME_SYSTEM
+---
 
 ## Components
 
-### HierarchyExplorer
+### Hierarchy Explorer
 
-**State:**
-- `expandedLevel: number | null` — Which level is currently expanded (null = none)
-- `hoveredLevel: number | null` — Which level is currently hovered
-
-**Data (received as props):**
-- Array of 5 level objects: `{ id, name, icon, purpose, exampleContent, canReference: number[] }`
+**State owned:**
+- `activeLevel` — which level (if any) is currently expanded
+- `hoveredLevel` — which level (if any) is currently hovered
+- `connectionHighlights` — which reference arrows are currently highlighted
 
 **Behavior:**
-- Click a level: toggles `expandedLevel` (clicking open level collapses it)
-- Hover a level: sets `hoveredLevel`; levels NOT in the hovered level's `canReference` array are visually dimmed
-- Arrow/connection rendering: drawn from each level downward to show allowed references (arrows point up, meaning "L4 references L3" is shown as an arrow from L4 to L3)
-- Keyboard: Tab between level cards, Enter/Space to toggle expand, Escape to collapse all
+- Clicking a level toggles its expanded state
+- Hovering a level highlights its allowed reference connections (upward arrows only)
+- Only one level may be expanded at a time
+- Keyboard: Arrow keys move focus between levels; Enter/Space toggle expansion; Escape collapses
+
+**Content source:** Level names, descriptions, and example content provided by CONTENT_SYSTEM
+
+**Visual output:** Expanded content panels, arrow highlights — rendered using PRESENTATION_SYSTEM tokens
 
 **Accessibility:**
-- Each level card: `role="button"`, `aria-expanded`, `aria-label`
-- Reference arrows: decorative, `aria-hidden="true"`
+- ARIA role="tree" on the explorer container
+- ARIA role="treeitem" on each level
+- ARIA expanded/collapsed state communicated
+- Focus visible on all interactive elements
 
-### SpecWizard
+**Degradation:** If JavaScript unavailable, render all levels as static collapsed summaries
 
-**State:**
-- `currentStep: 1 | 2 | 3` — Active step
-- `productIdea: string` — Free text from step 1
-- `selectedMission: string` — From step 2 (template or custom)
-- `selectedPillars: string[]` — Min 3, max 5 from step 3
-- `output: SpecOutput | null` — Generated after step 3
+---
 
-**Data (received as props):**
-- Mission templates: array of `{ id, text }` (4 options)
-- Pillar suggestions: array of `{ id, label }` ([N] options)
+### Spec Wizard
 
-**Behavior:**
-- Step 1: Text input required before Next is enabled
-- Step 2: One mission selection required (template or free text) before Next is enabled
-- Step 3: ≥3 pillar selections required before output generates
-- Output: Skeleton L1–L3 spec using user's inputs; formatted as code block; copyable to clipboard
-- "Start Over" resets all state to step 1
-
-**Output format:**
-```
-## Mission
-{selectedMission}
-
-## Design Pillars
-{selectedPillars mapped to pillar format}
-
-## Key Interaction
-One core loop derived from productIdea
-```
-
-**Keyboard:** Tab through options, Space to select/deselect, Enter on Next/Back/Start Over
-
-### BeforeAfterComparison
-
-**State:**
-- `activePanel: 'before' | 'after'` — Which panel is emphasized on mobile
-
-**Data (received as props):**
-- `beforeContent: PanelContent` — "Without spec" document
-- `afterContent: PanelContent` — "With RootSpec" document
+**State owned:**
+- `step` — current step (1-4)
+- `productIdea` — free text, step 1
+- `missionSelection` — selected or written mission, step 2
+- `selectedPillars` — array of [min-to-max] pillar selections, step 3
+- `keyInteraction` — free text, step 4
+- `outputVisible` — whether output skeleton is shown
 
 **Behavior:**
-- Desktop: Both panels visible side-by-side with equal weight
-- Mobile: Toggle button switches which panel is in focus (other stacks below or collapses)
-- Content is real examples — a vague requirements doc vs. a RootSpec-structured equivalent
+- Step 1: Text input for product idea; advancing to step 2 requires non-empty input
+- Step 2: Radio or button selection from mission templates, with optional free-text override
+- Step 3: Multi-select of [min-to-max] design pillars from suggestions; custom entry allowed
+- Step 4: Text input for key interaction
+- Output: Generated inline below the form when step 4 is complete; maps inputs to L1-L3 structure
+- No data sent externally; all processing is client-side template substitution
 
-## State Isolation
+**Templates:** Provided by CONTENT_SYSTEM — wizard does not own the copy, only the state
 
-Each component manages its own state. There is no shared store across components. The Wizard does not know the Hierarchy Explorer's state. Theme state flows in from THEME_SYSTEM via CSS, not JavaScript.
+**Keyboard:** Tab between inputs; Enter to advance; Back button navigable via keyboard
 
-## Progressive Enhancement
+**Touch:** Large tap targets ([wcag-minimum-size] minimum); scroll to output on generation
 
-If JavaScript fails or is disabled:
-- HierarchyExplorer: Renders all levels expanded in a static list
-- SpecWizard: Replaced by a static description of the wizard's purpose
-- BeforeAfterComparison: Both panels visible in stacked layout
+**Degradation:** If JavaScript unavailable, show static description of the wizard with link to GitHub
 
-No interactive feature is critical to understanding the site's content. All core information is accessible without JavaScript.
+---
+
+### Before/After Comparison
+
+**State owned:**
+- `activeView` — "before" or "after"
+
+**Behavior:**
+- Toggle button switches between "Without spec" and "With RootSpec" views
+- Both views contain real content (provided by CONTENT_SYSTEM)
+- Transition is smooth (PRESENTATION_SYSTEM animation)
+- On mobile: stacked view with toggle still functional
+
+**Keyboard:** Toggle button is keyboard-focusable; Enter/Space switches view
+
+**Degradation:** Both views rendered stacked if JavaScript unavailable, labeled clearly
+
+---
+
+## Interactions with Other Systems
+
+- Reads initial data from CONTENT_SYSTEM (wizard templates, explorer content)
+- Triggers visual changes via class mutations consumed by PRESENTATION_SYSTEM
+- Sends theme toggle action to THEME_SYSTEM
+- Uses LAYOUT_SYSTEM grid for component placement
+- Does not own copy, colors, or layout tokens

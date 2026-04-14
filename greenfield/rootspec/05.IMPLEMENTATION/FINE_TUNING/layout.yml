@@ -1,58 +1,47 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Layout & Spacing
+# FINE TUNING: Layout System
 # =============================================================================
-# @spec_version: 7.2.4
-# @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-14T00:00:00Z
-# @status: production
+# @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# @last_updated: 2026-04-14T00:00:00Z
+
+content_max_width:
+  value: 1200
+  # @unit: pixels
+  # @rationale: Wide enough for desktop reading; narrow enough to avoid overly long line lengths
+  # @constraint: min=960, max=1440
+
+content_padding_horizontal:
+  value: 24
+  # @unit: pixels
+  # @rationale: Provides breathing room on mobile (min padding); scales up on wider viewports
 
 breakpoints:
-  sm: 640
-  # @rationale: Tailwind sm default; covers small phones in landscape
-  # @constraints: type=integer, unit=px
+  mobile:
+    value: 640
+    # @unit: pixels
+    # @rationale: Standard small screen breakpoint; below this, single-column layout applies
+  tablet:
+    value: 768
+    # @unit: pixels
+    # @rationale: iPad portrait and similar; two-column layouts may apply
+  desktop:
+    value: 1024
+    # @unit: pixels
+    # @rationale: Desktop-first layouts activate; full interactive component widths apply
 
-  md: 768
-  # @rationale: Tablets and large phones; two-column layouts begin here
-  # @constraints: type=integer, unit=px
+section_vertical_spacing:
+  value: 96
+  # @unit: pixels
+  # @rationale: Generous spacing between sections creates visual breathing room and separates conceptual areas
+  # @constraint: min=64, max=128
 
-  lg: 1024
-  # @rationale: Desktop threshold; multi-column sections activate
-  # @constraints: type=integer, unit=px
+meta_banner_z_index:
+  value: 50
+  # @unit: z-index
+  # @rationale: Above page content, below any modal overlays; ensures banner is always readable
 
-  xl: 1280
-  # @rationale: Wide desktop; max-width container kicks in
-  # @constraints: type=integer, unit=px
-
-container:
-  max_width: 1200
-  # @rationale: Comfortable reading width with room for side-by-side content
-  # @alternatives: [960, 1100, 1280]
-  # @constraints: type=integer, unit=px
-
-  padding_mobile: 16
-  # @rationale: Minimum comfortable mobile margin; 1rem standard
-  # @constraints: min=12, max=24, type=integer, unit=px
-
-  padding_desktop: 32
-  # @rationale: More breathing room on larger screens
-  # @constraints: min=24, max=64, type=integer, unit=px
-
-spacing:
-  base_unit: 4
-  # @rationale: 4px base unit; standard for Tailwind and most design systems
-  # @constraints: type=integer, unit=px
-  # @scale: 1=4, 2=8, 3=12, 4=16, 6=24, 8=32, 12=48
-
-typography:
-  base_size: 16
-  # @rationale: Browser default; ensures accessibility for system font scaling
-  # @constraints: min=14, max=18, type=integer, unit=px
-
-  line_height_body: 1.5
-  # @rationale: Optimal readability for long-form copy per typography research
-  # @constraints: min=1.4, max=1.8, type=float
-
-  line_height_headings: 1.2
-  # @rationale: Tighter leading for display text; standard for headings
-  # @constraints: min=1.1, max=1.4, type=float
+header_z_index:
+  value: 40
+  # @unit: z-index
+  # @rationale: Sticky header stays above page content; below meta banner when both visible

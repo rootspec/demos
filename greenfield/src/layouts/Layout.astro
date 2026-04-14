@@ -3,37 +3,36 @@ import '../styles/global.css';
 
 interface Props {
   title?: string;
+  description?: string;
 }
 
-const { title = 'RootSpec — Spec-driven AI Development' } = Astro.props;
+const { title = 'RootSpec — Purpose-Aligned Specification', description = 'A specification language for software where philosophy guides implementation, never vice versa.' } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="RootSpec is a specification methodology for AI-assisted development. Turn product ideas into working code with structured specs." />
-    <title>{title}</title>
+    <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
     <script is:inline>
-      // Apply theme before paint to avoid flash
+      // Prevent flash of incorrect theme
       (function() {
-        const saved = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const html = document.documentElement;
-        if (saved === 'light') {
-          html.classList.remove('dark');
-          html.classList.add('light');
+        var stored = localStorage.getItem('rootspec-theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = stored || (prefersDark ? 'dark' : 'light');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
         } else {
-          // Default: dark
-          html.classList.add('dark');
-          html.classList.remove('light');
+          document.documentElement.classList.remove('dark');
         }
+        document.documentElement.setAttribute('data-theme', theme);
       })();
     </script>
   </head>
-  <body class="bg-[var(--bg-primary)] text-[var(--text-primary)] overflow-x-hidden">
+  <body>
     <slot />
   </body>
 </html>

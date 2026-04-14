@@ -1,54 +1,45 @@
 ---
-const painPoints = [
+const problems = [
   {
-    title: 'Vague prompts, vague results',
-    description: 'Without a spec, AI agents guess what you want. Every run is a gamble — sometimes genius, often garbage.',
+    icon: '📉',
+    title: 'Spec Drift',
+    desc: 'Requirements documents go stale the moment implementation begins. By sprint 3, nobody trusts the spec.',
   },
   {
-    title: 'No shared language between human and AI',
-    description: 'Developers think in user stories; AI thinks in tokens. The translation is lossy. Requirements get dropped silently.',
+    icon: '🤖',
+    title: 'Unreliable AI Output',
+    desc: 'AI has knowledge but not wisdom. Without a validation gate, generated code accumulates decisions nobody made.',
   },
   {
-    title: 'Tests written after the fact',
-    description: 'When tests come last, they test what was built — not what was needed. Bugs ship anyway.',
+    icon: '🔀',
+    title: 'Philosophy-Implementation Gap',
+    desc: 'What the product should feel like gets lost in tickets and PRs. Features ship that contradict the original vision.',
   },
   {
-    title: 'Spec drift kills velocity',
-    description: 'The doc says one thing, the code does another. Teams spend more time debugging misalignment than shipping features.',
-  },
-  {
-    title: 'AI makes confident mistakes',
-    description: 'LLMs confidently implement the wrong thing. Without a ground truth, nobody catches it until production.',
+    icon: '📄',
+    title: 'Google Docs Nobody Reads',
+    desc: 'The spec lives in a shared doc. It\'s never updated, never tested, and never enforced. It\'s decoration.',
   },
 ];
 ---
 
-<section
-  data-test="problem-section"
-  id="problem"
-  class="py-24 px-4"
->
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl sm:text-4xl font-bold mb-4">
-        Why most AI dev workflows break down
-      </h2>
-      <p class="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
-        The problem isn't the AI. It's the missing spec layer between idea and implementation.
+<section data-test="problem-section" class="section-spacing" style="background: var(--card);">
+  <div class="container-content">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--fg);">The problem with how we specify software</h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
+        Every team has a spec process. Most are broken in the same ways.
       </p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {painPoints.map((point) => (
-        <div
-          data-test="pain-point"
-          class="p-6 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:border-brand-primary/40 transition-colors group"
-        >
-          <div class="w-10 h-10 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4 text-red-400 group-hover:bg-red-500/20 transition-colors">
-            ✕
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {problems.map((p) => (
+        <div class="card flex gap-4">
+          <span class="text-3xl flex-shrink-0">{p.icon}</span>
+          <div>
+            <h3 class="font-semibold text-base mb-1" style="color: var(--fg);">{p.title}</h3>
+            <p class="text-sm leading-relaxed" style="color: var(--muted);">{p.desc}</p>
           </div>
-          <h3 class="font-semibold text-base mb-2">{point.title}</h3>
-          <p class="text-sm text-[var(--text-secondary)] leading-relaxed">{point.description}</p>
         </div>
       ))}
     </div>
