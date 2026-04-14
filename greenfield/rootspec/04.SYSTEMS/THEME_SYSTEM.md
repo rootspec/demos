@@ -1,59 +1,67 @@
 # Level 4: Theme System
 
-**System:** THEME_SYSTEM
-**References:** L1-3, Sibling L4, External
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md
 
 ---
 
 ## Responsibility
 
-Manages dark/light mode detection, manual user override, and persistence. Ensures all UI surfaces — static content and interactive components — reflect the current theme without visual flash on load.
+Owns dark/light mode detection, the theme toggle interaction, and preference persistence. Provides the active theme to all other systems via a root CSS class.
 
 ---
 
-## State Managed
+## State
 
-- **Active theme:** `light` or `dark`
-- **Theme source:** `system` (from `prefers-color-scheme`) or `manual` (user toggled)
-- **Persisted preference:** stored in `localStorage` under a consistent key
+| State Key        | Type             | Values              | Persistence     |
+|------------------|------------------|---------------------|-----------------|
+| activeTheme      | enum             | `dark`, `light`     | localStorage    |
+| systemPreference | enum             | `dark`, `light`     | None (API)      |
 
----
-
-## Behavior Rules
-
-1. On page load, check `localStorage` for a persisted manual preference
-2. If no manual preference exists, read `prefers-color-scheme` from the browser
-3. If neither is available, default to `light`
-4. Apply the resolved theme by setting a class on the document root element (e.g., `class="dark"`)
-5. When the user activates the theme toggle, flip the theme, update the root class, and write the new preference to `localStorage`
-6. Theme transitions use a [very brief] CSS crossfade — not an instant flash, not an animated sweep
-
-## Flash Prevention
-
-Theme resolution logic runs in a blocking `<script>` tag in the document `<head>`, before any rendering, to prevent a flash of the wrong theme.
+**Resolution order:**
+1. If localStorage has a saved preference → use it
+2. Else if `prefers-color-scheme` media query returns `dark` → use `dark`
+3. Else → use `light`
 
 ---
 
-## Data Ownership
+## Data Owned
 
-- Current theme state (`light` | `dark`)
-- Theme source (`system` | `manual`)
-- `localStorage` key for theme persistence
-
----
-
-## Boundaries
-
-- Does not own any visual design tokens (colors, typography) — those are in Tailwind config
-- Does not own the toggle button's visual rendering — LAYOUT_SYSTEM renders it
-- Does not own component-specific dark mode overrides — components use CSS variables that this system controls
+- `activeTheme` — current theme in effect
+- localStorage key: `rootspec-theme`
 
 ---
 
-## Interactions with Other Systems
+## Behavior
 
-| System | Nature |
-|--------|--------|
-| LAYOUT_SYSTEM | Toggle button rendered in the header; THEME_SYSTEM provides the handler |
-| INTERACTIVE_SYSTEM | React components inherit CSS variables set by THEME_SYSTEM; no direct coupling |
-| CONTENT_SYSTEM | Static sections inherit theme via root class; no direct coupling |
+### Initial Load
+
+The active theme class must be applied to the `<html>` element before the browser paints. This prevents a flash of incorrect theme (FOUC). The theme resolution script runs inline in the `<head>` — it is synchronous and cannot be deferred.
+
+### Toggle
+
+When the user activates the theme toggle:
+1. `activeTheme` flips (dark → light or light → dark)
+2. Root `<html>` class is updated immediately
+3. New value is written to localStorage
+4. All color transitions use a CSS `transition` on `background-color` and `color` — no class-swap flash
+
+### CSS Strategy
+
+Tailwind CSS `darkMode: 'class'` strategy. The `dark` class on the `<html>` element activates all dark-mode variants. All components use Tailwind's `dark:` prefix for dark-mode styles.
+
+---
+
+## Interfaces
+
+- **Exports to LAYOUT_SYSTEM:** Active theme class applied to root element (read via CSS cascade)
+- **Exports to INTERACTIVE_SYSTEM:** Theme state available to interactive components for consistent styling
+
+---
+
+## Rules
+
+- Theme preference must be applied before first paint (no FOUC)
+- Only THEME_SYSTEM may write to `localStorage` key `rootspec-theme`
+- System preference is always read fresh on load — never cached
+- The toggle must be keyboard accessible (focusable, operable with Enter/Space)
+- Transitions must be smooth — no hard cuts when switching themes

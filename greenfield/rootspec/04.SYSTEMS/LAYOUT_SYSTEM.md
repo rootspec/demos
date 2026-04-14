@@ -1,72 +1,107 @@
 # Level 4: Layout System
 
-**System:** LAYOUT_SYSTEM
-**References:** L1-3, Sibling L4, External
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md
 
 ---
 
 ## Responsibility
 
-Owns the overall page structure, section ordering, responsive layout behavior, and the mounting positions for all other systems' components. The Astro layout shell is the primary artifact of this system.
+Owns the page's structural layout: section ordering, responsive breakpoints, spacing, navigation anchors, and scroll behavior. Does not own content or interactivity — it provides the skeleton into which CONTENT_SYSTEM and INTERACTIVE_SYSTEM render.
 
 ---
 
-## Page Structure (Top to Bottom)
+## Page Structure
 
-1. Meta Banner (CONTENT_SYSTEM)
-2. Header — site name, version badge, theme toggle (THEME_SYSTEM toggle, FRAMEWORK_SYSTEM version)
-3. Hero Section (CONTENT_SYSTEM + FRAMEWORK_SYSTEM)
-4. Problem Section (CONTENT_SYSTEM)
-5. How It Works Section (CONTENT_SYSTEM)
-6. Hierarchy Explorer (INTERACTIVE_SYSTEM)
-7. Spec Wizard (INTERACTIVE_SYSTEM)
-8. Before/After Comparison (INTERACTIVE_SYSTEM)
-9. CTA Section (CONTENT_SYSTEM)
-10. Footer (CONTENT_SYSTEM)
+Sections appear in this order, top to bottom:
 
----
-
-## Responsive Behavior
-
-- Single-column layout on mobile
-- Two-column layouts for comparison panels on desktop
-- Interactive components reflow to touch-friendly single-column on narrow viewports
-- Section padding and typography scale with viewport width via Tailwind responsive classes
-- Minimum supported viewport width: [min_width] — below this, horizontal scrolling is acceptable but not preferred
+1. **Header** — Site name/logo, theme toggle, optional nav anchors (sticky or static)
+2. **Meta Banner** — Always visible; cannot be dismissed
+3. **Hero** — Full-width, above the fold
+4. **Problem Section** — Explains the problem RootSpec solves
+5. **How It Works** — Four-skill walkthrough
+6. **Hierarchy Explorer** — Interactive component slot
+7. **Spec Wizard** — Interactive component slot
+8. **Before/After Comparison** — Interactive component slot
+9. **Open Source CTA** — Call to action
+10. **Footer** — Attribution and links
 
 ---
 
-## Transitions and Animation
+## Layout Constraints
 
-- Section entry animations on scroll (fade-in, translate-up) using CSS or Intersection Observer
-- Animation duration and easing values defined in Tailwind config / CSS variables
-- Respects `prefers-reduced-motion` — all animations disabled when user has this preference
+### Width
 
----
+- Max content width: `[MAX_CONTENT_WIDTH]` (center-aligned on wide screens)
+- Full-width backgrounds allowed for section visual distinction
+- Interactive components span the full content width within their section
 
-## Data Ownership
+### Spacing
 
-- Page document structure (head, body, section order)
-- Global meta tags (title, description, OG tags)
-- Theme toggle button position and markup
-- Scroll behavior and section IDs for anchor links
+- Consistent vertical spacing between sections: `[SECTION_SPACING]`
+- Internal section padding: `[SECTION_PADDING]`
+- Values defined in FINE_TUNING
 
----
+### Responsive Breakpoints
 
-## Boundaries
-
-- Does not own copy or content inside sections (CONTENT_SYSTEM owns that)
-- Does not own theme state (THEME_SYSTEM owns that)
-- Does not own interactive component logic (INTERACTIVE_SYSTEM owns that)
-- Does not own the version string or GitHub URLs (FRAMEWORK_SYSTEM owns that)
+| Breakpoint | Width      | Layout Change                                              |
+|------------|------------|------------------------------------------------------------|
+| Mobile     | <640px     | Single column, stacked sections                            |
+| Tablet     | 640–1023px | Two-column where appropriate (comparison panels side-by-side) |
+| Desktop    | ≥1024px    | Full layout with max-width constraint                      |
 
 ---
 
-## Interactions with Other Systems
+## Navigation
 
-| System | Nature |
-|--------|--------|
-| CONTENT_SYSTEM | Renders static sections in the defined order |
-| INTERACTIVE_SYSTEM | Mounts React islands in designated section slots |
-| THEME_SYSTEM | Applies theme class at root; renders theme toggle button in header |
-| FRAMEWORK_SYSTEM | Receives version string for header display |
+- **Anchor links** in header point to section `id` attributes
+- Smooth scroll behavior for in-page navigation
+- No full-page routing — this is a single page
+- External links (GitHub) use `target="_blank"` with `rel="noopener noreferrer"`
+
+---
+
+## Header
+
+- **Logo/name:** "RootSpec" text or simple wordmark (left-aligned)
+- **Theme toggle:** Right-aligned, keyboard accessible
+- **Optional nav anchors:** Links to major sections (scroll to anchor)
+- **Version badge:** Optionally displayed in header (sourced from FRAMEWORK_SYSTEM)
+
+The header does not require a sticky/fixed position, but if implemented it must not obscure anchor-linked section headings (use scroll padding).
+
+---
+
+## RootSpec Methodology Diagram
+
+A visual diagram of the RootSpec methodology is included — either as an SVG embedded in the layout or as an image asset. The diagram conceptually depicts:
+- A specification layer surrounding a development cycle
+- Only outputs that satisfy the spec pass through
+- Philosophy flows downward; implementation traces upward
+
+If an image asset is not feasible, the diagram is rendered as an inline SVG with styled text and arrows.
+
+---
+
+## Data Owned
+
+- Section order and structure
+- Named section slots (empty containers for CONTENT_SYSTEM and INTERACTIVE_SYSTEM to fill)
+- Responsive breakpoint definitions
+- Scroll behavior settings
+
+---
+
+## Interfaces
+
+- **Receives from THEME_SYSTEM:** Active theme class applied to `<html>` root
+- **Provides to CONTENT_SYSTEM:** Named section containers
+- **Provides to INTERACTIVE_SYSTEM:** Named component slots within sections
+
+---
+
+## Rules
+
+- Section order is fixed — sections cannot be reordered at runtime
+- The meta-banner always appears before the hero, never inside it
+- No section may produce horizontal scroll at any breakpoint ≥320px
+- All touch targets (buttons, links, interactive elements) must be at minimum `[MIN_TOUCH_TARGET]` in height and width

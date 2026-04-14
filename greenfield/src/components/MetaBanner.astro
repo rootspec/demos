@@ -3,30 +3,25 @@
 
 <div
   data-test="meta-banner"
-  class="w-full bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-700 py-2.5 px-4"
+  class="w-full bg-indigo-600 text-white text-sm py-2 px-4 flex items-center justify-center gap-4 flex-wrap"
 >
-  <p class="text-center text-sm text-amber-800 dark:text-amber-300 max-w-5xl mx-auto">
-    <span class="font-semibold">This site is a RootSpec demo.</span>
-    Generated from a ~100-line product description — no manual code, no design mockups. Four commands: init, spec, impl, validate.
-    {' '}
-    <a
-      data-test="meta-banner-seed-link"
-      href="https://github.com/rootspec/demos/tree/main/greenfield/SEED.md"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="underline font-medium hover:text-amber-900 dark:hover:text-amber-200 transition-colors"
-    >
-      View seed →
-    </a>
-    {' '}
-    <a
-      data-test="meta-banner-spec-link"
-      href="https://github.com/rootspec/demos/tree/main/greenfield/rootspec"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="underline font-medium hover:text-amber-900 dark:hover:text-amber-200 transition-colors"
-    >
-      View spec →
-    </a>
-  </p>
+  <span>This site was built using the RootSpec pipeline — spec-driven, AI-implemented.</span>
+  <a
+    data-test="meta-banner-spec-link"
+    href="https://github.com/rootspec/demos/tree/main/greenfield/rootspec"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="underline font-medium hover:text-indigo-200"
+  >
+    View Spec
+  </a>
+  <a
+    data-test="meta-banner-seed-link"
+    href="https://github.com/rootspec/demos/blob/main/greenfield/SEED.md"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="underline font-medium hover:text-indigo-200"
+  >
+    View Seed
+  </a>
 </div>

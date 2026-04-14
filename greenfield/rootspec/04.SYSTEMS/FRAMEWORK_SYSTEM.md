@@ -1,58 +1,60 @@
 # Level 4: Framework System
 
-**System:** FRAMEWORK_SYSTEM
-**References:** L1-3, Sibling L4, External
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md
 
 ---
 
 ## Responsibility
 
-Provides build-time data that connects the site to the RootSpec framework version and source code. Reads `.rootspec.json` at build time to extract the framework version. Constructs GitHub repository URLs. Has no runtime behavior.
+Owns all references to the RootSpec framework itself: the version number (read from `.rootspec.json` at build time), and the canonical GitHub URLs for the framework repository, this demo repository, the spec files, and the seed file. Other systems import these values — they never hardcode them.
 
 ---
 
 ## Data Owned
 
-- **version:** The RootSpec framework version string read from `.rootspec.json` (the `version` field)
-- **repo_base_url:** The GitHub URL base for this demo's spec and seed files: `https://github.com/rootspec/demos/tree/main/greenfield`
-- **framework_repo_url:** The RootSpec framework GitHub URL: `https://github.com/rootspec/rootspec`
+| Data Point          | Source                          | Used By                                    |
+|---------------------|---------------------------------|--------------------------------------------|
+| `version`           | `.rootspec.json` → `version` field | CONTENT_SYSTEM (hero badge, footer), LAYOUT_SYSTEM (header badge) |
+| `frameworkRepoUrl`  | Hardcoded in FRAMEWORK_SYSTEM   | CONTENT_SYSTEM (CTA section)               |
+| `demosRepoUrl`      | Hardcoded in FRAMEWORK_SYSTEM   | CONTENT_SYSTEM (meta-banner)               |
+| `specFileUrl`       | Derived from demosRepoUrl + path | CONTENT_SYSTEM (meta-banner "View spec →") |
+| `seedFileUrl`       | Derived from demosRepoUrl + path | CONTENT_SYSTEM (meta-banner "View seed →") |
 
 ---
 
-## Build-Time Behavior
+## Canonical URLs
 
-1. At build time, read `.rootspec.json` from the project root
+```
+frameworkRepoUrl = "https://github.com/rootspec/rootspec"
+demosRepoUrl     = "https://github.com/rootspec/demos/tree/main/greenfield"
+specFileUrl      = "https://github.com/rootspec/demos/tree/main/greenfield/rootspec"
+seedFileUrl      = "https://github.com/rootspec/demos/tree/main/greenfield/SEED.md"
+```
+
+---
+
+## Version Sourcing
+
+At build time:
+1. Read `.rootspec.json` from the project root
 2. Extract the `version` field
-3. If the file is missing or the field is absent, use a fallback indicator (e.g., `"unknown"`) and emit a build warning
-4. Pass the version string and URLs as Astro props or component constants to:
-   - The header component (version badge)
-   - The hero section (version display)
-   - The meta banner (links to spec and seed)
-   - The CTA section (framework repo link)
+3. Expose as a build-time constant available to all components
+
+If `.rootspec.json` is missing or the `version` field is absent, use `"unknown"` as the fallback — do not fail the build.
 
 ---
 
-## Boundaries
+## Interfaces
 
-- Operates only at build time — no runtime file reads, no API calls
-- Does not own the visual rendering of version or links (CONTENT_SYSTEM and LAYOUT_SYSTEM own that)
-- Does not own the GitHub repository itself
-
----
-
-## Interactions with Other Systems
-
-| System | Nature |
-|--------|--------|
-| CONTENT_SYSTEM | Supplies version string and GitHub URLs as build-time props |
-| LAYOUT_SYSTEM | Supplies version string for header badge |
+- **Reads at build time:** `.rootspec.json` (version field only)
+- **Exports to CONTENT_SYSTEM:** `version`, `frameworkRepoUrl`, `demosRepoUrl`, `specFileUrl`, `seedFileUrl`
+- **Exports to LAYOUT_SYSTEM:** `version` (for header/hero version badge)
 
 ---
 
-## Failure Handling
+## Rules
 
-If `.rootspec.json` is unreadable at build time:
-- Build continues (not a fatal error)
-- Version displays as `[version unknown]`
-- GitHub links use the hardcoded base URL (still valid)
-- A warning is logged to the build console
+- No runtime reads — `.rootspec.json` is read at build time only
+- All GitHub URLs are defined once in FRAMEWORK_SYSTEM, never duplicated in other files
+- URL changes require updating only this system
+- The `version` value must match `.rootspec.json` exactly — no reformatting or truncation

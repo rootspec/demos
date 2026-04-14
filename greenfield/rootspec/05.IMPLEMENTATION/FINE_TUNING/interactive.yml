@@ -3,45 +3,49 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-14T03:28:25Z
 
 hierarchy_explorer:
   expand_animation_duration:
-    value: 250
+    value: 200
     # @unit: milliseconds
-    # @rationale: Feels snappy without jarring; gives user time to notice the expansion
-    # @constraint: min=150, max=500
+    # @rationale: Fast enough to feel snappy, slow enough to be noticeable as intentional
+    # @constraint: min=100, max=500, type=integer
 
-  reference_highlight_delay:
-    value: 80
-    # @unit: milliseconds
-    # @rationale: Slight delay prevents highlights from flickering during fast mouse movement
-    # @constraint: min=0, max=200
+  reference_highlight_opacity_dim:
+    value: 0.3
+    # @unit: ratio (0.0–1.0)
+    # @rationale: Dims non-referenced levels enough to emphasize referenced ones without hiding them
+    # @constraint: min=0.1, max=0.6, type=float
 
 spec_wizard:
-  product_idea_max_length:
-    value: 200
-    # @unit: characters
-    # @rationale: Long enough for a complete sentence; short enough to keep focus
-
-  pillar_count_min:
-    value: 1
+  min_pillars_recommended:
+    value: 3
     # @unit: count
-    # @rationale: Must select at least one pillar to produce meaningful output
+    # @rationale: Matches RootSpec guidance that 3–5 design pillars provides sufficient coverage without dilution
+    # @constraint: min=1, max=5, type=integer
 
-  pillar_count_max:
+  max_pillars_recommended:
     value: 5
     # @unit: count
-    # @rationale: Matches L1 spec guidance; more than 5 pillars dilutes focus
+    # @rationale: More than 5 pillars typically indicates unclear priorities; wizard signals this to the user
+    # @constraint: min=3, max=10, type=integer
 
-layout:
-  scroll_animation_duration:
-    value: 400
+  suggestion_chips_count:
+    value: 10
+    # @unit: count
+    # @rationale: Enough options to feel like a real choice; too many overwhelms and undermines approachability
+    # @constraint: min=6, max=15, type=integer
+
+comparison:
+  toggle_crossfade_duration:
+    value: 150
     # @unit: milliseconds
-    # @rationale: Smooth but not slow; matches common scroll reveal patterns
-    # @constraint: min=200, max=600
+    # @rationale: Crossfade communicates panel switch without being distracting
+    # @constraint: min=50, max=400, type=integer
 
-  min_viewport_width:
-    value: 320
-    # @unit: pixels
-    # @rationale: Minimum width to support without horizontal scroll (iPhone SE)
+  slider_step_size:
+    value: 5
+    # @unit: percent
+    # @rationale: Arrow key step of 5% gives fine control without requiring too many keypresses to traverse
+    # @constraint: min=1, max=20, type=integer

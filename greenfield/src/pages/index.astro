@@ -4,41 +4,26 @@ import MetaBanner from '../components/MetaBanner.astro';
 import Header from '../components/Header.astro';
 import HeroSection from '../components/HeroSection.astro';
 import ProblemSection from '../components/ProblemSection.astro';
-import WorkflowSection from '../components/WorkflowSection.astro';
 import HierarchySection from '../components/HierarchySection.astro';
-import ComparisonSection from '../components/ComparisonSection.astro';
-import CTASection from '../components/CTASection.astro';
 import SpecWizardSection from '../components/SpecWizardSection.astro';
+import WorkflowSection from '../components/WorkflowSection.astro';
+import CTASection from '../components/CTASection.astro';
 ---
 
-<Layout>
-  <MetaBanner />
-  <Header />
-  <main>
-    <HeroSection />
-    <ProblemSection />
-    <WorkflowSection />
-    <HierarchySection />
-    <SpecWizardSection />
-    <ComparisonSection />
-    <CTASection />
-  </main>
-  <footer class="py-10 px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900" data-test="footer">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div data-test="footer-attribution" class="text-sm text-slate-500 dark:text-slate-400 text-center sm:text-left">
-        Built by <span class="font-medium text-slate-700 dark:text-slate-300">Claude (claude-sonnet-4-6)</span> on {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} using the RootSpec pipeline.
-      </div>
-      <div class="flex items-center gap-4 text-sm text-slate-400 dark:text-slate-500">
-        <a href="https://github.com/rootspec/rootspec" target="_blank" rel="noopener noreferrer" class="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
-          GitHub
-        </a>
-        <span>·</span>
-        <span>MIT License</span>
-        <span>·</span>
-        <a href="https://github.com/rootspec/demos/tree/main/greenfield" target="_blank" rel="noopener noreferrer" class="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
-          This demo
-        </a>
-      </div>
-    </div>
-  </footer>
+<Layout title="RootSpec — Spec-first. AI-ready. Actually works.">
+  <div data-test="page-root">
+    <MetaBanner />
+    <Header />
+    <main>
+      <HeroSection />
+      <ProblemSection />
+      <HierarchySection />
+      <SpecWizardSection />
+      <WorkflowSection />
+      <CTASection />
+    </main>
+    <footer class="py-8 px-4 border-t border-slate-200 dark:border-slate-700 text-center text-sm text-slate-500 dark:text-slate-400">
+      <p>Built with RootSpec v7.2.4 &mdash; the spec-first methodology for AI-powered development.</p>
+    </footer>
+  </div>
 </Layout>

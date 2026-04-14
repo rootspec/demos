@@ -3,31 +3,44 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-14T03:28:25Z
+
+content_width:
+  max_content_width:
+    value: 1280
+    # @unit: px
+    # @rationale: Standard wide-screen max-width that prevents overly long line lengths on 4K displays
+    # @constraint: min=960, max=1600, type=integer
+
+spacing:
+  section_vertical_spacing:
+    value: 96
+    # @unit: px
+    # @rationale: Generous spacing between sections creates clear visual separation and breathing room
+    # @constraint: min=48, max=160, type=integer
+
+  section_internal_padding:
+    value: 48
+    # @unit: px
+    # @rationale: Internal padding provides comfortable reading margins without excessive whitespace
+    # @constraint: min=24, max=96, type=integer
 
 responsive:
   mobile_breakpoint:
     value: 640
-    # @unit: pixels
-    # @rationale: Tailwind 'sm' breakpoint — aligns with framework defaults
+    # @unit: px
+    # @rationale: Matches Tailwind sm: breakpoint; covers most smartphones in portrait orientation
+    # @constraint: min=480, max=768, type=integer
 
   tablet_breakpoint:
-    value: 768
-    # @unit: pixels
-    # @rationale: Tailwind 'md' breakpoint — two-column layout activates here
+    value: 1024
+    # @unit: px
+    # @rationale: Matches Tailwind lg: breakpoint; covers large tablets and small laptops
+    # @constraint: min=768, max=1280, type=integer
 
-  max_content_width:
-    value: 1280
-    # @unit: pixels
-    # @rationale: Wide enough for desktop readers; narrows to avoid overly long lines
-
-section:
-  vertical_padding:
-    value: 96
-    # @unit: pixels
-    # @rationale: Generous spacing makes sections feel distinct and readable
-
-  section_gap:
-    value: 64
-    # @unit: pixels
-    # @rationale: Consistent rhythm between sections
+touch_targets:
+  min_touch_target_size:
+    value: 44
+    # @unit: px
+    # @rationale: Apple HIG and WCAG recommend 44x44px minimum for touch targets to prevent mis-taps
+    # @constraint: min=44, max=64, type=integer

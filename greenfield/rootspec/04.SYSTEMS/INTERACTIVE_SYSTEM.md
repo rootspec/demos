@@ -1,103 +1,184 @@
 # Level 4: Interactive System
 
-**System:** INTERACTIVE_SYSTEM
-**References:** L1-3, Sibling L4, External
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md
 
 ---
 
 ## Responsibility
 
-Owns the three interactive features that demonstrate the RootSpec methodology: the Hierarchy Explorer, the Spec Wizard, and the Before/After Comparison. All components are React islands (client-side only). No server state, no API calls.
+Owns the three interactive components: Hierarchy Explorer, Spec Wizard, and Before/After Comparison. Each component is a self-contained React island with local state only — no shared state between components.
 
 ---
 
-## Components
+## Component: Hierarchy Explorer
 
-### Hierarchy Explorer
+### Purpose
 
-**Purpose:** Make the five-level spec hierarchy tangible through direct interaction
-**Data owned:** Five level definitions (name, description, example content, allowed reference targets)
+Makes the five-level RootSpec hierarchy tangible by letting visitors click into each level and see its content and reference rules.
 
-**Behavior:**
-- Renders all five levels simultaneously in a visual layout
-- Each level is expandable — click or keyboard Enter/Space to toggle
-- When a level is active, it shows its example content and highlights the levels it can reference
-- Reference highlights: upward arrows or connectors indicate the dependency direction
-- Only one level expanded at a time (or multiple — designer's choice based on readability)
-- Collapses on Escape key
-- Static fallback: all levels visible without expand/collapse when JS unavailable
+### Data Model
 
-**State:**
-- `activeLevel`: which level is currently expanded (null if none)
-- `hoveredLevel`: which level the cursor/focus is on (for reference highlighting)
+```
+levels: [
+  {
+    id: 'L1',
+    name: 'Foundational Philosophy',
+    icon: '📘',
+    tagline: 'WHY & WHAT EXPERIENCE',
+    description: string,
+    exampleContent: string,
+    canReference: []  // no references (external only)
+  },
+  {
+    id: 'L2',
+    name: 'Stable Truths',
+    icon: '⚙️',
+    tagline: 'WHAT Strategy',
+    description: string,
+    exampleContent: string,
+    canReference: ['L1']
+  },
+  // ... L3, L4, L5
+]
+```
 
----
+All level data is hardcoded in the component — no API calls.
 
-### Spec Wizard
+### State
 
-**Purpose:** Let visitors sketch a minimal spec for their own product idea, experiencing the methodology firsthand
-**Data owned:** Step definitions, pillar suggestion list, output templates
+| State Key       | Type   | Values         |
+|-----------------|--------|----------------|
+| activeLevelId   | string | null, L1–L5    |
 
-**Behavior:**
-- Three-step linear flow
-- Step 1: Free-text product idea input
-- Step 2: Pillar selection (checkboxes or toggle buttons from a suggestion list; option to write custom)
-- Step 3: Free-text key interaction input
-- Each step validates non-empty before advancing
-- On completion, renders a skeleton spec preview labeled by level (L1: mission, L1: pillars, L3: interaction)
-- Back button returns to previous step with inputs preserved
+### Behavior
 
-**State:**
-- `currentStep`: 1, 2, or 3, or `complete`
-- `productIdea`: string
-- `selectedPillars`: array of strings
-- `keyInteraction`: string
-- `validationError`: string or null
+- Default state: no level expanded (`activeLevelId = null`)
+- Click/Enter on a level: sets `activeLevelId` to that level; if already active, collapses to null
+- When a level is active: expands to show description, example content, and reference annotations
+- Reference arrows: SVG lines or CSS-based indicators showing "this level references ↑" — flow is always upward only
+- On hover/focus: highlight the levels this level can reference (dim others)
+- Keyboard: Tab order follows visual top-to-bottom order; Enter/Space toggles expansion
 
-**Constraints:**
-- All output is template-generated; no AI or API involvement
-- No persistence — state resets on page refresh
-- Output is labeled "Skeleton Spec — not a complete RootSpec" to set expectations
+### Responsive Behavior
 
----
-
-### Before/After Comparison
-
-**Purpose:** Show concretely what RootSpec adds to a development workflow
-**Data owned:** "Without" panel content, "With RootSpec" panel content
-
-**Behavior (desktop):** Side-by-side panels, optionally with a drag-handle slider
-**Behavior (mobile):** Toggle switch between "Without" and "With" views
-**Content:** Real methodology examples — a vague requirements fragment vs. its structured equivalent with spec level label, acceptance criterion, and pillar reference
-
-**State:**
-- `activePanel`: `without` | `with` (mobile toggle state)
-- `sliderPosition`: [0–100] percentage (desktop slider, if implemented)
+- Desktop: Levels displayed side-by-side or as a vertical stack with expansion inline
+- Mobile: Vertical stack only; arrows simplify to text label ("References: L1, L2")
 
 ---
 
-## Shared Constraints
+## Component: Spec Wizard
 
-- No external API calls — all data is static or derived from user input
-- No data persistence across page loads
-- All components respect inherited CSS variables from THEME_SYSTEM
-- All components are keyboard accessible per L3 interaction specs
-- All components are touch-friendly (minimum target size, no hover-only states)
+### Purpose
+
+Lets visitors experience the RootSpec intake process by walking through three structured steps with their own product idea, producing a skeleton spec skeleton.
+
+### State
+
+| State Key     | Type       | Values                              |
+|---------------|------------|-------------------------------------|
+| step          | integer    | 1, 2, 3, or 'output'                |
+| productIdea   | string     | Free text (Step 1)                  |
+| mission       | string     | Free text or selected template      |
+| pillars       | string[]   | 1–5 selected or entered strings     |
+| keyInteraction| string     | Free text (Step 3)                  |
+
+### Step 1 — Mission
+
+- Free-text input: "What's your product idea?"
+- Template chips: 3–5 clickable mission starters (e.g., "Help developers...", "Enable teams to...", "Simplify the process of...")
+- Clicking a chip populates the input (user can edit)
+- "Next →" enabled when input is non-empty
+
+### Step 2 — Design Pillars
+
+- Prompt: "What should users feel when using it?"
+- Suggestion chips: ~10 pre-written design pillar starters (e.g., "In control", "Confident", "Focused", "Delighted")
+- User can click chips to select (highlighted state) or type their own
+- "Next →" enabled when at least 1 pillar selected or entered
+- Selected count shown: "X selected (3–5 recommended)"
+
+### Step 3 — Key Interaction
+
+- Free-text input: "Describe one core thing users do in your product"
+- "Generate Spec →" button enabled when input is non-empty
+
+### Output
+
+A formatted spec skeleton displayed as a code block or spec-styled card:
+
+```
+## Mission
+[mission text from Step 1]
+
+## Design Pillars
+- [pillar 1]
+- [pillar 2]
+...
+
+## Key Interaction
+[interaction text from Step 3]
+
+→ This maps to Levels 1–3 in a RootSpec hierarchy.
+```
+
+Accompanied by a brief explanation of what levels this covers and what L4–L5 would contain.
+
+"Start over" button resets all state to Step 1.
+
+### Navigation Rules
+
+- Back button always enabled (except on Step 1)
+- Back preserves all previously entered values
+- No data is persisted to storage; clearing the page clears all state
 
 ---
 
-## Boundaries
+## Component: Before/After Comparison
 
-- Does not own page layout or component mounting positions (LAYOUT_SYSTEM owns that)
-- Does not own theme state (THEME_SYSTEM owns that)
-- Does not own static copy outside the interactive components
+### Purpose
+
+Shows the concrete difference between unstructured requirements and a RootSpec-structured spec for the same product.
+
+### Data Model
+
+Both panels contain real content (not placeholder):
+
+**Without RootSpec panel:**
+- A realistic example of a vague requirements doc: "Users should be able to manage tasks. Tasks should be fast. We'll add analytics later."
+- Ambiguous story: "As a user, I want to manage my tasks so that I can be productive."
+- No traceability, no design rationale
+
+**With RootSpec panel:**
+- Mission statement
+- One design pillar with user perspective
+- One testable story with acceptance criteria referencing the pillar
+- Decision trace: "This feature exists because of [pillar name]"
+
+### State
+
+| State Key   | Type   | Values            |
+|-------------|--------|-------------------|
+| activePanel | string | 'without', 'with' |
+| sliderPct   | number | 0.0–1.0           |
+
+### Behavior
+
+- Default: toggle shows "Without RootSpec" panel active
+- Toggle click: switches `activePanel`, crossfade animation
+- Desktop: drag slider option available; slider position maps to continuous reveal between panels
+- Mobile: toggle only (no drag slider)
+
+### Keyboard
+
+- Toggle button is focusable; Enter/Space switches panels
+- Slider (desktop): arrow keys move slider position by increments
 
 ---
 
-## Interactions with Other Systems
+## Shared Rules for All Components
 
-| System | Nature |
-|--------|--------|
-| LAYOUT_SYSTEM | Mounts React islands at designated section slots |
-| THEME_SYSTEM | Inherits CSS variables via class on root element |
-| CONTENT_SYSTEM | Interactive sections positioned between static content sections |
+- No external API calls — all data is hardcoded or derived from user input
+- No shared state between components — each is an isolated island
+- All interactive elements are keyboard accessible
+- Each component renders a readable fallback if JavaScript fails (static HTML approximation)
+- Components respect the active theme from THEME_SYSTEM (via Tailwind dark: variants)

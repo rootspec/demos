@@ -3,53 +3,54 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: MOBILE_VISIT
+# @journey: ACCESSIBILITY
 # @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-14T03:28:25Z
 
----
-
-# =============================================================================
-# USER STORY: View site on mobile
-# =============================================================================
-
-id: US-011
-title: Access the full site content on a mobile device
+id: US-401
+title: View the page without horizontal scrolling on mobile
 
 acceptance_criteria:
-  - id: AC-011-1
-    title: All key sections are present on narrow viewports
+  - id: AC-401-1
+    title: Page content fits within mobile viewport
     narrative: |
-      Given I visit the site on a narrow viewport
-      When the page loads
-      Then I see the meta banner, hero, and main sections
+      Given I visit the site on a mobile-sized viewport
+      When I view any section
+      Then no horizontal scrollbar appears and all content is readable
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
-      - shouldExist: { selector: '[data-test=how-it-works-section]' }
+      - shouldExist: { selector: '[data-test=page-root]' }
 
 ---
 
-# =============================================================================
-# USER STORY: Use interactive features on mobile
-# =============================================================================
-
-id: US-012
-title: Interact with the hierarchy explorer on touch devices
+id: US-402
+title: Navigate interactive components using keyboard only
 
 acceptance_criteria:
-  - id: AC-012-1
-    title: Hierarchy explorer tap interaction works
+  - id: AC-402-1
+    title: Theme toggle is keyboard accessible
     narrative: |
-      Given I see the hierarchy explorer on a narrow viewport
-      When I tap on a level
-      Then the level expands to show content
+      Given I am navigating the page with keyboard only
+      When I tab to the theme toggle
+      Then I can activate it using the Enter or Space key
     given:
       - visit: '/'
     when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+      - click: { selector: '[data-test=theme-toggle]' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+  - id: AC-402-2
+    title: Spec wizard is keyboard accessible
+    narrative: |
+      Given I am navigating the spec wizard with keyboard
+      When I reach a text input
+      Then I can fill it in and proceed to the next step
+    given:
+      - visit: '/'
+    when:
+      - fill: { selector: '[data-test=wizard-mission-input]', value: 'Test product' }
+    then:
+      - shouldExist: { selector: '[data-test=wizard-next-btn]' }

@@ -1,29 +1,33 @@
 ## Framework
+- **Stack:** Astro 6 + React 19 + Tailwind CSS v4
+- **Router:** Astro file-based routing (src/pages/)
+- **Styles:** Tailwind CSS v4 via @tailwindcss/vite plugin (NOT @astrojs/tailwind)
+- **React hydration:** Use `client:only="react"` for interactive components that require click events in tests (avoids hydration timing issues)
+- **React hydration:** Use `client:load` for read-only interactive components (no click handling needed in tests)
 
-- **Framework:** Astro 4.x with React island integration (`@astrojs/react`)
-- **Styling:** Tailwind CSS v3 via `@astrojs/tailwind`
-- **Language:** TypeScript (strict mode via `astro/tsconfigs/strict`)
-- **Dev command:** `npx astro dev --port 3000` (via `scripts/dev.sh`)
-- **Test command:** `./scripts/test.sh` (Cypress e2e)
+## File Structure
+- **Pages:** src/pages/index.astro
+- **Layouts:** src/layouts/Layout.astro
+- **Astro components:** src/components/*.astro
+- **React components:** src/components/*.tsx
+- **Global styles:** src/styles/global.css
 
-## Project Structure
+## Config
+- **Astro config:** astro.config.mjs (defineConfig with react integration + vite tailwindcss plugin)
+- **TypeScript:** tsconfig.json extends astro/tsconfigs/strict, jsxImportSource: react
+- **Cypress tsconfig:** cypress/tsconfig.json — ES2017 target, ignoreDeprecations: 6.0
 
-- **Pages:** `src/pages/index.astro` — single-page marketing site
-- **Layouts:** `src/layouts/Layout.astro` — base HTML shell with theme init script
-- **Components:** `src/components/` — Astro + React TSX components
-- **Styles:** `src/styles/global.css` — Tailwind base + CSS custom properties
-- **Config:** `astro.config.mjs`, `tailwind.config.mjs`, `tsconfig.json`
-
-## Patterns
-
-- **React islands:** Interactive components (HierarchyExplorer, SpecWizard) use `client:load` directive
-- **Data-test attributes:** All testable elements carry `data-test="..."` attributes
-- **Theme:** Dark mode via `class` strategy; system preference detected inline in `<head>` to avoid flash
-- **Version reading:** `fs.readFileSync` + `JSON.parse` at build time for `.rootspec.json`
+## Dev Server
+- **Command:** npx astro dev --port 3000
+- **Port:** 3000
+- **Start:** ./scripts/dev.sh start
 
 ## Testing
+- **Framework:** Cypress 15
+- **Test file:** cypress/e2e/mvp.cy.ts
+- **Pattern:** loadAndRun() with embedded YAML string literals
 
-- **Framework:** Cypress with rootspec-reporter
-- **Test file:** `cypress/e2e/mvp.cy.ts` — all 12 MVP stories embedded as YAML string literals
-- **DSL steps used:** `visit`, `click`, `fill`, `shouldExist`, `shouldContain`
-- **Status file:** `rootspec/tests-status.json`
+## Theme
+- **Dark mode:** Managed via html.dark class using localStorage + prefers-color-scheme
+- **Toggle:** #theme-toggle button in Header.astro with inline script
+- **Flash prevention:** Inline script in Layout.astro <head> sets dark class before paint

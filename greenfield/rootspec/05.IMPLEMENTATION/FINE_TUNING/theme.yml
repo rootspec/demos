@@ -3,15 +3,22 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-14T03:28:25Z
 
-theme_transition_duration:
-  value: 200
-  # @unit: milliseconds
-  # @rationale: Long enough to feel intentional, short enough not to delay the user
-  # @constraint: min=100, max=400
+transitions:
+  theme_transition_duration:
+    value: 200
+    # @unit: milliseconds
+    # @rationale: Fast enough to feel responsive, slow enough for the color shift to be smooth and intentional
+    # @constraint: min=50, max=500, type=integer
 
-localStorage_key:
-  value: "rootspec-theme"
-  # @unit: string key
-  # @rationale: Namespaced to avoid collision with other localStorage consumers
+  theme_transition_properties:
+    value: "background-color, color, border-color"
+    # @unit: CSS property list
+    # @rationale: Animate only color-related properties to avoid performance issues with layout transitions
+
+storage:
+  localStorage_key:
+    value: "rootspec-theme"
+    # @rationale: Namespaced to avoid collisions with other localStorage keys on the same domain
+    # @inviolable: true — changing this key name loses saved preferences for existing users

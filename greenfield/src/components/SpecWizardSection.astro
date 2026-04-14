@@ -2,6 +2,14 @@
 import SpecWizard from './SpecWizard.tsx';
 ---
 
-<div>
-  <SpecWizard client:load />
-</div>
+<section id="spec-wizard" class="py-16 px-4 bg-white dark:bg-slate-900">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-4 text-slate-800 dark:text-slate-100">
+      Try the Spec Wizard
+    </h2>
+    <p class="text-center text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto">
+      Enter your product idea and see how RootSpec structures it into testable acceptance criteria in seconds.
+    </p>
+    <SpecWizard client:only="react" />
+  </div>
+</section>

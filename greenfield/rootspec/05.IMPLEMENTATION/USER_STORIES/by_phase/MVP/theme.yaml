@@ -1,40 +1,60 @@
 # =============================================================================
-# USER STORIES: Theme / Dark Mode
+# USER STORIES: Theme System
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: THEME_PREFERENCE
+# @journey: THEME
 # @systems: [THEME_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-14T03:28:25Z
+
+id: US-101
+title: View site in system-preferred theme on first visit
+
+acceptance_criteria:
+  - id: AC-101-1
+    title: Dark mode applied when system prefers dark
+    narrative: |
+      Given I am a first-time visitor with no saved theme preference
+      When I visit the site with system dark mode preference active
+      Then the page should render in dark mode without a flash of light content
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldExist: { selector: 'html.dark' }
 
 ---
 
-# =============================================================================
-# USER STORY: Toggle dark/light theme
-# =============================================================================
-
-id: US-010
-title: Toggle between dark and light theme
+id: US-102
+title: Toggle between dark and light mode manually
 
 acceptance_criteria:
-  - id: AC-010-1
-    title: Theme toggle button is visible in the header
+  - id: AC-102-1
+    title: Theme toggles on click
     narrative: |
-      Given I visit the site
-      When the page loads
-      Then I see a theme toggle button in the header
+      Given I am viewing the site
+      When I click the theme toggle button
+      Then the visible theme switches
     given:
       - visit: '/'
-    when: []
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
     then:
       - shouldExist: { selector: '[data-test=theme-toggle]' }
 
-  - id: AC-010-2
-    title: Clicking the theme toggle changes the theme
+---
+
+id: US-103
+title: Theme preference persists across page refreshes
+
+acceptance_criteria:
+  - id: AC-103-1
+    title: Saved theme reapplied on return visit
     narrative: |
-      Given I see the theme toggle
-      When I click it
-      Then the page theme changes
+      Given I have previously toggled the theme to light mode
+      When I visit the site again
+      Then the site renders in light mode without requiring me to toggle again
     given:
       - visit: '/'
     when:
