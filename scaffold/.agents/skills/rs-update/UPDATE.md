@@ -8,6 +8,20 @@ Prerequisite entries are tagged:
 
 ---
 
+## 7.2.4
+
+Summary: Heartbeat timeout — kill hung SDK processes after 5min of silence
+Framework files: Replace (version bump only)
+Prerequisites: None
+Manual: None
+
+## 7.2.3
+
+Summary: Review gate resilience — initialize review-status.json in bash before agent reads
+Framework files: Replace (version bump only)
+Prerequisites: None
+Manual: None
+
 ## 7.2.2
 
 Summary: Review skill turn efficiency — section-based batching, incremental output, turn budget awareness
