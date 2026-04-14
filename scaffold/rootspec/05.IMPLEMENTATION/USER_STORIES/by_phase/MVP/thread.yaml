@@ -1,31 +1,40 @@
 # =============================================================================
-# USER STORIES: Thread / Post Detail
+# USER STORIES: Theme
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: THREAD
-# @systems: [VIEW_SYSTEM, DATA_SYSTEM]
+# @journey: THEME
+# @systems: [THEME_SYSTEM, VIEW_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
 ---
 
-# =============================================================================
-# US-006: View post detail and thread
-# =============================================================================
-id: US-006
-title: View a single post with its full thread context
+id: US-501
+title: Toggle dark and light mode
+requirement_id: R-501
 
 acceptance_criteria:
-  - id: AC-006-1
-    title: Post detail page shows post content and author
+  - id: AC-501-1
+    title: Theme toggle button is visible in navigation
     narrative: |
-      Given I click on a post from the home feed
-      When the post detail page loads
-      Then I should see the post content and author information
+      Given I visit the home page
+      When the page loads
+      Then I should see a theme toggle button in the navigation
     given:
-      - visit: '/demos/scaffold'
-    when:
-      - click: { selector: '[data-test=post-content]' }
+      - visit: '/demos/scaffold/'
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=post-content]' }
-      - shouldExist: { selector: '[data-test=post-author]' }
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+  - id: AC-501-2
+    title: Clicking theme toggle switches between light and dark mode
+    narrative: |
+      Given I am on the home page in light mode
+      When I click the theme toggle
+      Then the page should switch to dark mode
+    given:
+      - visit: '/demos/scaffold/'
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldExist: { selector: 'html.dark' }

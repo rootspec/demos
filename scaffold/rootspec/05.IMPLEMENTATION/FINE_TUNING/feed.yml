@@ -5,20 +5,20 @@
 # @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
 # @last_updated: 2026-04-14T00:00:00Z
 
-initial_post_count:
+initial_posts_count:
   value: 10
   # @unit: posts
-  # @rationale: Shows enough content to feel like a real feed without overwhelming the page on first load
+  # @rationale: Shows enough content to demonstrate the feed without overwhelming. Matches typical social feed initial load.
   # @constraint: min=5, max=20
 
-page_size:
+load_more_count:
   value: 10
   # @unit: posts
-  # @rationale: Consistent with initial_post_count; each "load more" doubles the visible set incrementally
+  # @rationale: Consistent with initial load count for predictable pagination experience.
   # @constraint: min=5, max=20
 
-post_max_chars:
+max_post_length:
   value: 300
   # @unit: characters
-  # @rationale: Mirrors Bluesky's character limit; keeps the demo familiar to developers evaluating the spec
+  # @rationale: Long enough for meaningful tech discussion, short enough to keep the feed readable. Matches Bluesky's limit.
   # @constraint: min=140, max=500

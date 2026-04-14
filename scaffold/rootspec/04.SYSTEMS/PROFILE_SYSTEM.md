@@ -1,47 +1,54 @@
-# Profile System
-
-**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, DATA_SYSTEM.md
-
----
+# System: PROFILE_SYSTEM
+<!-- L4: References L1-3 + Sibling L4 + External -->
 
 ## Responsibility
 
-The Profile System manages the visitor's follow/unfollow state — which user IDs they've followed during the current session. It drives the follow button in the profile page UI.
+Manages user profile display and follow state. When a visitor navigates to a user profile, this system renders the user's bio, stats, and posts, and manages the client-side follow/unfollow toggle.
 
-## Boundaries
+## State Owned
 
-- **Owns:** `src/lib/stores/profile.svelte.ts`
-- **Reads from:** DATA SYSTEM (user records via route load)
-- **Does not own:** User data itself, follower counts (those live in DATA SYSTEM and are static), like/bookmark state (FEED SYSTEM)
+All state lives in `src/lib/stores/profile.svelte.ts` as a Svelte 5 reactive class (`ProfileState`):
 
-## State
-
-| State | Type | Default | Description |
-|---|---|---|---|
-| `followedIds` | `string[]` | `[]` | IDs of users the visitor has followed this session |
-
-All state is in-memory only. Resets on page reload. Follower/following counts shown on profile pages are static from DATA SYSTEM and do not reflect this state.
+| State | Type | Description |
+|-------|------|-------------|
+| `followedIds` | `string[]` | IDs of users the current session user follows (session only) |
 
 ## Derived Values
 
-- `isFollowing(userId)` — boolean derived from `followedIds`
+- `isFollowing(id)` — returns true if the user ID is in `followedIds`
+- Follow button label: "Follow" or "Following" based on `isFollowing`
 
-## Operations
+## Behaviors
 
-### toggleFollow(userId)
-- If `userId` is in `followedIds`: removes it (unfollow)
-- Otherwise: appends it (follow)
-- Follow button label switches between "Follow" and "Following" immediately via Svelte reactivity
+### Profile Display
+The profile page (`/profile/[handle]`) renders:
+- User display name (large, heading)
+- Handle (@handle, subdued)
+- Bio text
+- Follower and following counts (from mock data, static)
+- Follow/unfollow button
 
-## Constraints
+### Post List
+All posts authored by the profile user are listed below the bio section in reverse chronological order. Each post links to its detail page.
 
-- No automatic follow on load — visitor starts with zero followed users each session
-- Follower counts on profile pages are cosmetic/static; they do not update when the visitor follows/unfollows
-- The "current user" (alice.dev) is never shown a follow button on their own profile
+### Follow Toggle
+Clicking "Follow" adds the user's ID to `followedIds` and updates the button to "Following" with a different visual style. Clicking "Following" removes the ID and reverts the button. The follower count displayed does not change (it is read from static mock data).
 
-## Interactions with Other Systems
+### Not Found
+If the handle in the URL does not match any user in the data, a "User not found" message is displayed.
 
-| System | Interaction |
-|---|---|
-| DATA SYSTEM | Profile route `load()` provides user record; PROFILE SYSTEM only tracks the userId from it |
-| VIEW SYSTEM | `profile` store imported in profile page component to toggle and read follow state |
+## Boundaries
+
+**Reads from:**
+- DATA_SYSTEM: `data.user`, `data.posts` (via profile page load function)
+
+**Does not:**
+- Manage like/bookmark state (owned by FEED_SYSTEM)
+- Handle search or explore (owned by DISCOVERY_SYSTEM)
+- Persist follow state (session only)
+
+## Key Files
+
+- `src/lib/stores/profile.svelte.ts` — ProfileState class
+- `src/routes/profile/[handle]/+page.svelte` — Profile route
+- `src/routes/profile/[handle]/+page.ts` — Profile load function

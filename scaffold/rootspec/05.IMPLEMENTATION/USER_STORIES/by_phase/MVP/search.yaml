@@ -3,53 +3,10 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: SEARCH
-# @systems: [DISCOVERY_SYSTEM, VIEW_SYSTEM, DATA_SYSTEM]
+# @journey: DISCOVERY
+# @systems: [DISCOVERY_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
----
-
-# =============================================================================
-# US-009: Search posts by keyword
-# =============================================================================
-id: US-009
-title: Search for posts using a keyword and see results update live
-
-acceptance_criteria:
-  - id: AC-009-1
-    title: Search input is present on search page
-    narrative: |
-      Given I navigate to the search page
-      When the page loads
-      Then I should see a search input field
-    given:
-      - visit: '/demos/scaffold/search'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=search-input]' }
-
-  - id: AC-009-2
-    title: Typing a keyword shows matching posts
-    narrative: |
-      Given I am on the search page
-      When I type a keyword that matches post content
-      Then I should see matching post results
-    given:
-      - visit: '/demos/scaffold/search'
-    when:
-      - fill: { selector: '[data-test=search-input]', value: 'rust' }
-    then:
-      - shouldExist: { selector: '[data-test=search-result]' }
-
-  - id: AC-009-3
-    title: Searching with no matches shows empty state message
-    narrative: |
-      Given I am on the search page
-      When I type a query that has no matching posts
-      Then I should see a no results message
-    given:
-      - visit: '/demos/scaffold/search'
-    when:
-      - fill: { selector: '[data-test=search-input]', value: 'xyzzy12345notaword' }
-    then:
-      - shouldExist: { selector: '[data-test=search-empty]' }
+# Note: Core search stories are in discovery.yaml (US-301, US-302).
+# This file is a placeholder per the MVP story structure requirement.
+# No additional search stories beyond US-301 and US-302 for MVP phase.

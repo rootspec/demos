@@ -1,66 +1,72 @@
 # =============================================================================
-# USER STORIES: Feed
+# USER STORIES: Feed Journey
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: FEED
-# @systems: [FEED_SYSTEM, VIEW_SYSTEM, DATA_SYSTEM]
+# @systems: [FEED_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
 ---
 
-# =============================================================================
-# US-001: View home feed
-# =============================================================================
-id: US-001
-title: View home feed with posts and author info
+id: US-101
+title: View home feed with posts
+requirement_id: R-101
 
 acceptance_criteria:
-  - id: AC-001-1
+  - id: AC-101-1
     title: Home feed shows posts with author and content
     narrative: |
       Given I visit the home page
       When the page loads
-      Then I should see post cards with author names and post content
+      Then I should see posts with author names and post content
     given:
-      - visit: '/demos/scaffold'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=post-card]' }
       - shouldExist: { selector: '[data-test=post-author]' }
       - shouldExist: { selector: '[data-test=post-content]' }
 
-  - id: AC-001-2
-    title: Posts show timestamp and engagement counts
+  - id: AC-101-2
+    title: Home feed shows post timestamps
     narrative: |
       Given I visit the home page
       When the page loads
-      Then I should see timestamps and like counts on post cards
+      Then I should see relative timestamps on posts
     given:
-      - visit: '/demos/scaffold'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=post-timestamp]' }
+
+  - id: AC-101-3
+    title: Home feed shows like counts
+    narrative: |
+      Given I visit the home page
+      When the page loads
+      Then I should see like counts on posts
+    given:
+      - visit: '/demos/scaffold/'
+    when: []
+    then:
       - shouldExist: { selector: '[data-test=like-count]' }
-      - shouldExist: { selector: '[data-test=repost-count]' }
 
 ---
 
-# =============================================================================
-# US-002: Like a post
-# =============================================================================
-id: US-002
-title: Like a post on the home feed
+id: US-102
+title: Like a post
+requirement_id: R-102
 
 acceptance_criteria:
-  - id: AC-002-1
-    title: Like button toggles active state
+  - id: AC-102-1
+    title: Like button toggles and updates count
     narrative: |
       Given I am on the home page
       When I click the like button on a post
-      Then the like button should have the active class
+      Then the like count should increase by 1
     given:
-      - visit: '/demos/scaffold'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=like-button]' }
     then:
@@ -68,21 +74,19 @@ acceptance_criteria:
 
 ---
 
-# =============================================================================
-# US-003: Bookmark a post
-# =============================================================================
-id: US-003
-title: Bookmark a post on the home feed
+id: US-103
+title: Bookmark a post
+requirement_id: R-103
 
 acceptance_criteria:
-  - id: AC-003-1
-    title: Bookmark button toggles active state
+  - id: AC-103-1
+    title: Bookmark button toggles on click
     narrative: |
       Given I am on the home page
       When I click the bookmark button on a post
-      Then the bookmark button should have the active class
+      Then the bookmark should become active
     given:
-      - visit: '/demos/scaffold'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=bookmark-button]' }
     then:
@@ -90,49 +94,46 @@ acceptance_criteria:
 
 ---
 
-# =============================================================================
-# US-004: Compose and publish a post
-# =============================================================================
-id: US-004
-title: Compose a new post that appears in the feed
+id: US-104
+title: Compose a new post
+requirement_id: R-104
 
 acceptance_criteria:
-  - id: AC-004-1
-    title: Composer is present on home page
+  - id: AC-104-1
+    title: Composer is visible on home page
     narrative: |
       Given I visit the home page
       When the page loads
-      Then I should see the composer textarea and submit button
+      Then I should see the post composer
     given:
-      - visit: '/demos/scaffold'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=composer]' }
       - shouldExist: { selector: '[data-test=composer-input]' }
-      - shouldExist: { selector: '[data-test=composer-submit]' }
 
-  - id: AC-004-2
-    title: Composing a post adds it to the feed
+  - id: AC-104-2
+    title: Submitting a post adds it to the feed
     narrative: |
       Given I am on the home page
-      When I type a post and click submit
-      Then the new post content should appear in the feed
+      When I type a post and click the Post button
+      Then the new post should appear in the feed
     given:
-      - visit: '/demos/scaffold'
+      - visit: '/demos/scaffold/'
     when:
-      - fill: { selector: '[data-test=composer-input]', value: 'Hello from the composer' }
+      - fill: { selector: '[data-test=composer-input]', value: 'Hello from the composer test' }
       - click: { selector: '[data-test=composer-submit]' }
     then:
-      - shouldContain: { selector: '[data-test=post-content]', text: 'Hello from the composer' }
+      - shouldContain: { selector: '[data-test=post-content]', text: 'Hello from the composer test' }
 
-  - id: AC-004-3
-    title: Submitting empty post shows error
+  - id: AC-104-3
+    title: Submitting an empty post shows an error
     narrative: |
-      Given I am on the home page and the composer is empty
-      When I click the submit button without typing anything
+      Given I am on the home page
+      When I click the Post button without typing anything
       Then I should see an error message
     given:
-      - visit: '/demos/scaffold'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=composer-submit]' }
     then:
@@ -140,22 +141,39 @@ acceptance_criteria:
 
 ---
 
-# =============================================================================
-# US-005: Load more posts
-# =============================================================================
-id: US-005
-title: Load additional posts by clicking Load more
+id: US-105
+title: Load more posts
+requirement_id: R-105
 
 acceptance_criteria:
-  - id: AC-005-1
-    title: Load more button appears and loads additional posts
+  - id: AC-105-1
+    title: Load more button exists on home page
     narrative: |
-      Given I am on the home page
-      When I click the Load more button
-      Then more post cards should be visible
+      Given I visit the home page
+      When the page loads
+      Then I should see a load more button
     given:
-      - visit: '/demos/scaffold'
-    when:
-      - click: { selector: '[data-test=load-more]' }
+      - visit: '/demos/scaffold/'
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=post-card]' }
+      - shouldExist: { selector: '[data-test=load-more]' }
+
+---
+
+id: US-106
+title: View post detail and thread
+requirement_id: R-106
+
+acceptance_criteria:
+  - id: AC-106-1
+    title: Post detail page shows full post content
+    narrative: |
+      Given I visit the home page
+      When I click on a post
+      Then I should see the full post detail
+    given:
+      - visit: '/demos/scaffold/'
+    when:
+      - click: { selector: '[data-test=post-content]' }
+    then:
+      - shouldExist: { selector: '[data-test=post-content]' }

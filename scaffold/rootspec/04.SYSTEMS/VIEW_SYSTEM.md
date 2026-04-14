@@ -1,73 +1,76 @@
-# View System
-
-**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, DATA_SYSTEM.md, FEED_SYSTEM.md, PROFILE_SYSTEM.md, DISCOVERY_SYSTEM.md, THEME_SYSTEM.md
-
----
+# System: VIEW_SYSTEM
+<!-- L4: References L1-3 + Sibling L4 + External -->
 
 ## Responsibility
 
-The View System owns the complete UI layer: all SvelteKit routes, shared components, and the navigation layout. It reads state from all other systems and renders it. It also fires mutations back to FEED SYSTEM, PROFILE SYSTEM, and THEME SYSTEM in response to user interactions.
+Owns all shared UI components, the application layout, the navigation bar, the meta banner, and the footer. Renders content provided by other systems. Enforces visual consistency across all pages.
+
+## Components Owned
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| `PostCard` | `src/lib/components/PostCard.svelte` | Renders a single post with author, timestamp, content, and engagement actions |
+| `Composer` | `src/lib/components/Composer.svelte` | Post composition textarea with character counter and submit button |
+| `MetaBanner` | `src/lib/components/MetaBanner.svelte` | Persistent demo context banner with links to seed, spec, and scaffold commit |
+| Layout | `src/routes/+layout.svelte` | Navigation bar, theme initialization, page wrapper, footer |
+
+## Layout Structure
+
+Every page renders inside the layout which provides:
+- **Navigation bar**: RootFeed logo (home link), Home/Explore/Search nav links, RootSpec version badge, theme toggle button
+- **Meta banner**: Always visible, not dismissable
+- **Main content area**: `max-w-2xl` centered, with page-level padding
+- **Footer**: RootSpec version, build date, "Built by RootSpec" attribution, link to rootspec/rootspec on GitHub
+
+## PostCard Behavior
+
+PostCard receives `post` and `author` props. It:
+- Renders the author avatar, display name (linked to profile), handle, and relative timestamp
+- Renders post content (linked to post detail page)
+- Renders a like button (heart icon, toggles local `liked` state, shows adjusted count)
+- Renders a bookmark button (bookmark icon, toggles local `bookmarked` state)
+- Renders repost count as read-only text
+- Applies dark mode classes throughout
+- Uses `data-test` attributes for all interactive and observable elements
+
+Note: PostCard owns its own local like/bookmark state. The FEED_SYSTEM's FeedState store also tracks this for cross-page consistency. These are currently separate — PostCard's local state is the source of truth for visual rendering.
+
+## Composer Behavior
+
+Composer renders a textarea with placeholder "What's on your mind?", a character counter, and a "Post" submit button. On submit it calls `feed.addPost(content)` from FEED_SYSTEM. Empty submission shows an inline error message.
+
+## Meta Banner
+
+Always present at the top of the layout (above page content). Contains:
+- Explanatory text about the demo origin
+- "View the seed" link → SEED.md on GitHub
+- "View the spec" link → rootspec/ directory on GitHub
+- "View the scaffold commit" link → specific commit on GitHub
+
+## Base Path Requirement
+
+All internal links use `{base}` from `$app/paths` to resolve correctly under the `/demos/scaffold/` subpath deployment. External links are absolute URLs.
+
+## Dark Mode
+
+All components use Tailwind's dark mode variant classes (`dark:bg-*`, `dark:text-*`, `dark:border-*`). The `dark` class is toggled on `<html>` by THEME_SYSTEM.
 
 ## Boundaries
 
-- **Owns:** `src/routes/**`, `src/lib/components/**`, `src/routes/+layout.svelte`
-- **Reads from:** All systems (data, feed state, profile state, discovery state, theme)
-- **Does not own:** Any persistent state — that lives in the respective systems
+**Uses:**
+- FEED_SYSTEM: `feed` store for like/bookmark/compose operations
+- THEME_SYSTEM: `theme` state, `toggleTheme()`, `initTheme()` functions
 
-## Routes
+**Does not:**
+- Own any data or business logic
+- Handle routing
+- Manage follow state (PROFILE_SYSTEM) or search state (DISCOVERY_SYSTEM)
 
-| Route | File | Data Source | Systems Used |
-|---|---|---|---|
-| `/` | `+page.svelte` + `+page.ts` | posts.json, users.json | FEED SYSTEM (likes, bookmarks, userPosts) |
-| `/post/[id]` | `+page.svelte` + `+page.ts` | posts.json, users.json | FEED SYSTEM (likes on post detail) |
-| `/profile/[handle]` | `+page.svelte` + `+page.ts` | users.json, posts.json | PROFILE SYSTEM (follow state) |
-| `/search` | `+page.svelte` + `+page.ts` | posts.json, users.json | DISCOVERY SYSTEM (search query/results) |
-| `/explore` | `+page.svelte` + `+page.ts` | tags.json, users.json | DISCOVERY SYSTEM (tag filter), PROFILE SYSTEM (follow on user cards) |
+## Key Files
 
-## Shared Components
-
-### `PostCard.svelte`
-- Props: `post: Post`, `author: User | undefined`
-- Renders: avatar, author name+handle, relative timestamp, content, like button, repost count, bookmark button
-- Local state: `liked` (boolean), `bookmarked` (boolean) — NOT connected to FEED SYSTEM store
-- `data-test` attributes: `post-card`, `post-author`, `post-timestamp`, `post-content`, `like-button`, `like-count`, `repost-count`, `bookmark-button`
-
-### `Composer.svelte`
-- Props: none (reads from FEED SYSTEM directly)
-- Renders: textarea, character counter, submit button, error message
-- Calls `feed.addPost(content)` on submit
-- `data-test` attributes: `composer`, `composer-input`, `composer-submit`, `composer-error`
-
-### `MetaBanner.svelte`
-- Props: none
-- Renders: explanatory text + links to seed, spec, scaffold commit
-- Always visible; never dismissable
-- `data-test` attributes: `meta-banner`, `seed-link`, `spec-link`, `scaffold-link`
-
-## Layout
-
-`+layout.svelte` wraps all routes with:
-- Persistent nav: RootFeed logo, Home/Explore/Search links, RootSpec version badge, theme toggle
-- MetaBanner (rendered above main content, below nav)
-- `<main>` wrapper with max-width constraint
-- Dark mode class applied to `html` element via THEME SYSTEM
-
-## Navigation `data-test` attributes
-
-- `nav` — navigation bar container
-- `nav-home`, `nav-explore`, `nav-search` — nav links
-- `theme-toggle` — theme toggle button
-
-## Base Path
-
-All internal links must use `{base}` from `$app/paths` to resolve correctly at `/demos/scaffold/` subpath on GitHub Pages. Components that link to routes (PostCard, layout nav) must prefix with `{base}`.
-
-## Interactions with Other Systems
-
-| System | Interaction |
-|---|---|
-| FEED SYSTEM | Reads `feed.likedIds`, `feed.bookmarkedIds`, `feed.userPosts`; calls `feed.toggleLike`, `feed.toggleBookmark`, `feed.addPost` |
-| PROFILE SYSTEM | Reads `profile.isFollowing(id)`; calls `profile.toggleFollow(id)` |
-| DISCOVERY SYSTEM | Renders search input and tag filter; derived results computed in page component |
-| THEME SYSTEM | Reads `theme.current`; calls `toggleTheme()`; `initTheme()` called in layout `onMount` |
-| DATA SYSTEM | Receives data via SvelteKit `load()` functions as component props |
+- `src/routes/+layout.svelte` — Root layout
+- `src/routes/+layout.ts` — Layout load function (if any)
+- `src/lib/components/PostCard.svelte`
+- `src/lib/components/Composer.svelte`
+- `src/lib/components/MetaBanner.svelte`
+- `src/app.css` — Global styles and Tailwind base

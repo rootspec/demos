@@ -1,50 +1,51 @@
-# Theme System
-
-**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md
-
----
+# System: THEME_SYSTEM
+<!-- L4: References L1-3 + Sibling L4 + External -->
 
 ## Responsibility
 
-The Theme System manages the user's light/dark preference. It handles initial theme detection (from localStorage or system preference), applies the CSS class to the document root, persists the preference across page reloads, and exposes a toggle function to the VIEW SYSTEM.
+Detects the user's color scheme preference, manages the active theme state (light or dark), and persists the user's explicit choice across sessions via localStorage. Applies the theme by toggling the `dark` class on the document root.
+
+## State Owned
+
+Lives in `src/lib/stores/theme.svelte.ts`:
+
+| State | Type | Description |
+|-------|------|-------------|
+| `theme.current` | `'light' \| 'dark'` | Active theme value |
+
+## Initialization Logic
+
+On first load (browser only):
+1. Read `localStorage.getItem('rootfeed-theme')`
+2. If stored value is `'light'` or `'dark'`, use it
+3. Otherwise, detect `window.matchMedia('(prefers-color-scheme: dark)')` and use the result
+
+## Behaviors
+
+### Theme Toggle
+`toggleTheme()` flips `theme.current` between `'light'` and `'dark'`, writes the new value to localStorage, and toggles the `dark` class on `document.documentElement`.
+
+### Theme Initialization
+`initTheme()` applies the current theme class to `document.documentElement` on layout mount. This prevents flash of wrong theme on navigation.
+
+### Persistence
+The user's explicit choice is stored in localStorage under the key `rootfeed-theme`. It survives page reloads and new sessions. System preference is only used as a fallback when no stored value exists.
+
+## Integration with VIEW_SYSTEM
+
+The layout (`+layout.svelte`) calls `initTheme()` on mount and renders a toggle button in the navigation bar that calls `toggleTheme()`. All Tailwind dark mode classes (`dark:bg-gray-900`, etc.) respond to the `dark` class on `<html>`.
 
 ## Boundaries
 
-- **Owns:** `src/lib/stores/theme.svelte.ts`
-- **Reads from:** `localStorage` (key: `rootfeed-theme`), `window.matchMedia('(prefers-color-scheme: dark)')`
-- **Does not own:** Any visual styles (those are Tailwind `dark:` variants in VIEW SYSTEM), routing, or content
+**Does not:**
+- Depend on any data or content system
+- Handle any social interactions
+- Manage any route-level state
 
-## State
+**Used by:**
+- VIEW_SYSTEM: layout and navigation toggle control
 
-| State | Type | Default | Description |
-|---|---|---|---|
-| `theme.current` | `'light' \| 'dark'` | Detected from localStorage or system | Active theme preference |
+## Key Files
 
-## Operations
-
-### `getInitialTheme()` (internal, runs on module load)
-1. If `localStorage['rootfeed-theme']` is `'dark'` or `'light'` → use that
-2. Else if `window.matchMedia('(prefers-color-scheme: dark)').matches` → use `'dark'`
-3. Else → use `'light'`
-- Runs only in browser (guarded by `browser` from `$app/environment`)
-
-### `initTheme()` (called in layout `onMount`)
-- Applies `dark` class to `document.documentElement` based on current theme
-- Ensures correct initial class without a flash of wrong theme
-
-### `toggleTheme()` (called by theme toggle button in nav)
-- Flips `theme.current` between `'light'` and `'dark'`
-- Updates `document.documentElement.classList`
-- Persists new value to `localStorage['rootfeed-theme']`
-
-## Interactions with Other Systems
-
-| System | Interaction |
-|---|---|
-| VIEW SYSTEM | Reads `theme.current` to show current state in toggle button; calls `toggleTheme()` on button click; calls `initTheme()` in layout `onMount` |
-
-## Constraints
-
-- Must be SSR-safe: all browser API access guarded by `browser` check
-- All visual theming is done via Tailwind `dark:` class variants — THEME SYSTEM only manages the `dark` class on the root element
-- Preference key in localStorage: `rootfeed-theme`
+- `src/lib/stores/theme.svelte.ts` — ThemeState and toggle/init functions
+- `src/routes/+layout.svelte` — Calls `initTheme()`, renders toggle button

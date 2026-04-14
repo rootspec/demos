@@ -1,56 +1,59 @@
-# Discovery System
-
-**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, DATA_SYSTEM.md
-
----
+# System: DISCOVERY_SYSTEM
+<!-- L4: References L1-3 + Sibling L4 + External -->
 
 ## Responsibility
 
-The Discovery System owns the explore and search surfaces — the two routes that help users find content they're not already looking at. It manages tag-based filtering (on Explore) and keyword search (on Search). Both are implemented as client-side derived state with no server round-trips.
+Powers the search and explore surfaces. Enables users to find posts by keyword, filter by tag, browse trending tags, and discover users. All filtering is computed client-side from the full mock dataset loaded at page init.
+
+## State Owned
+
+Discovery state is component-local (not in a shared store):
+
+| State | Scope | Description |
+|-------|-------|-------------|
+| `query` | Search page | Current search query string |
+| `activeTag` | Explore page | Currently selected tag filter (null or string) |
+
+## Derived Values
+
+- `results` — posts where `content.toLowerCase().includes(query.toLowerCase())` when query is non-empty
+- `filteredPosts` — on explore page, posts filtered by `tags.includes(activeTag)` when a tag is active
+
+## Behaviors
+
+### Keyword Search (`/search`)
+A text input binds to `query`. As the user types, `results` recomputes reactively. Results show matching posts with author name and a link to the post detail. No minimum query length required. Empty query shows no results (not the full set). "No results" message shown when query is non-empty but `results` is empty.
+
+### Tag Filter (Explore and Search)
+Tags appear as clickable chips. Clicking a tag sets `activeTag`. Clicking the active tag again clears it (returns to unfiltered). Only one tag active at a time.
+
+### Explore Surface (`/explore`)
+The explore page shows three sections:
+1. **Trending Tags** — all tags from `data.tags`, displayed as clickable chips with post count
+2. **Suggested Users** — all users from `data.users`, showing display name, handle, bio, and a profile link
+3. **Popular Posts** — posts from `data.posts`, optionally filtered by `activeTag` when one is selected
+
+### Post Thread Navigation
+Post detail page (`/post/[id]`) is handled by a separate route but uses the same data pattern:
+- Loads the target post by id
+- Loads parent post if `parentId` is not null
+- Loads all replies (posts where `parentId === post.id`)
 
 ## Boundaries
 
-- **Owns:** `src/routes/explore/+page.ts` (load function), `src/routes/explore/+page.svelte` (tag filter state), `src/routes/search/+page.svelte` (search derived state)
-- **Reads from:** DATA SYSTEM (tags, posts, users)
-- **Does not own:** Like/bookmark state (FEED SYSTEM), follow state (PROFILE SYSTEM)
+**Reads from:**
+- DATA_SYSTEM: `data.posts`, `data.users`, `data.tags` (via search/explore load functions)
 
-## State
+**Does not:**
+- Manage like/bookmark state (owned by FEED_SYSTEM)
+- Manage follow state (owned by PROFILE_SYSTEM)
+- Persist search history or tag selections
 
-### Explore Page
-| State | Type | Description |
-|---|---|---|
-| `selectedTag` | `string \| null` | Currently selected tag for filtering; null means no filter active |
+## Key Files
 
-### Search Page
-| State | Type | Description |
-|---|---|---|
-| `query` | `string` | Live search query string; bound to text input |
-| `results` | Derived `Post[]` | Posts whose content matches `query` (case-insensitive includes) |
-
-## Operations
-
-### Tag filtering (Explore)
-- User clicks a tag chip → sets `selectedTag` to that tag's name
-- If `selectedTag` is already that tag → clears selection (toggle behavior)
-- Posts section shows only posts whose `tags` array includes `selectedTag`; if null, shows all popular posts
-
-### Keyword search (Search)
-- Input is reactive — results update on every keystroke
-- Filter logic: `post.content.toLowerCase().includes(query.toLowerCase())`
-- Empty query (`query.length === 0`) → no results shown (not an error state)
-- Non-empty query with no matches → "No results for [query]" message shown
-
-## Explore Page Data
-
-The Explore `load()` function returns:
-- `tags` — all tags sorted by `postCount` descending
-- `users` — all users (for the "People" / suggested users section)
-
-Popular posts (for post listing under tags) are sourced from DATA SYSTEM and filtered in the component.
-
-## Interactions with Other Systems
-
-| System | Interaction |
-|---|---|
-| DATA SYSTEM | Explore `load()` reads tags.json and users.json; Search page receives posts and users from DATA SYSTEM via route load |
-| VIEW SYSTEM | Both explore and search page components render state from this system; tag/search interactions fire state mutations here |
+- `src/routes/search/+page.svelte` — Search route
+- `src/routes/search/+page.ts` — Search load function
+- `src/routes/explore/+page.svelte` — Explore route
+- `src/routes/explore/+page.ts` — Explore load function
+- `src/routes/post/[id]/+page.svelte` — Post detail route
+- `src/routes/post/[id]/+page.ts` — Post detail load function

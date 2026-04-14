@@ -1,55 +1,131 @@
 # =============================================================================
-# USER STORIES: Discovery / Explore
+# USER STORIES: Discovery Journey
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: DISCOVERY
-# @systems: [DISCOVERY_SYSTEM, VIEW_SYSTEM, DATA_SYSTEM]
+# @systems: [DISCOVERY_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
 ---
 
-# =============================================================================
-# US-010: Explore trending tags and filter posts
-# =============================================================================
-id: US-010
-title: Browse trending tags on the Explore page and filter posts by tag
+id: US-301
+title: Search posts by keyword
+requirement_id: R-301
 
 acceptance_criteria:
-  - id: AC-010-1
+  - id: AC-301-1
+    title: Typing in search input shows matching posts
+    narrative: |
+      Given I am on the search page
+      When I type a keyword that matches post content
+      Then I should see matching posts in the results
+    given:
+      - visit: '/demos/scaffold/search'
+    when:
+      - fill: { selector: '[data-test=search-input]', value: 'TypeScript' }
+    then:
+      - shouldExist: { selector: '[data-test=search-result]' }
+
+  - id: AC-301-2
+    title: Search input is visible on search page
+    narrative: |
+      Given I visit the search page
+      When the page loads
+      Then I should see a search input field
+    given:
+      - visit: '/demos/scaffold/search'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=search-input]' }
+
+---
+
+id: US-302
+title: Search empty state
+requirement_id: R-302
+
+acceptance_criteria:
+  - id: AC-302-1
+    title: Searching with no matches shows empty state message
+    narrative: |
+      Given I am on the search page
+      When I type a query that matches no posts
+      Then I should see a no results message
+    given:
+      - visit: '/demos/scaffold/search'
+    when:
+      - fill: { selector: '[data-test=search-input]', value: 'xyzzy_no_match_12345' }
+    then:
+      - shouldExist: { selector: '[data-test=search-empty]' }
+
+---
+
+id: US-303
+title: View explore page
+requirement_id: R-303
+
+acceptance_criteria:
+  - id: AC-303-1
     title: Explore page shows trending tags
     narrative: |
-      Given I navigate to the Explore page
+      Given I visit the explore page
       When the page loads
-      Then I should see a list of trending tag chips
+      Then I should see trending tags
     given:
       - visit: '/demos/scaffold/explore'
     when: []
     then:
       - shouldExist: { selector: '[data-test=tag-chip]' }
 
-  - id: AC-010-2
-    title: Clicking a tag filters the posts shown
-    narrative: |
-      Given I am on the Explore page
-      When I click a tag chip
-      Then I should see filtered posts and the tag should appear selected
-    given:
-      - visit: '/demos/scaffold/explore'
-    when:
-      - click: { selector: '[data-test=tag-chip]' }
-    then:
-      - shouldExist: { selector: '[data-test=tag-chip].selected' }
-      - shouldExist: { selector: '[data-test=filtered-posts]' }
-
-  - id: AC-010-3
+  - id: AC-303-2
     title: Explore page shows suggested users
     narrative: |
-      Given I navigate to the Explore page
+      Given I visit the explore page
       When the page loads
-      Then I should see a list of users in the People section
+      Then I should see suggested users
     given:
       - visit: '/demos/scaffold/explore'
     when: []
     then:
       - shouldExist: { selector: '[data-test=suggested-user]' }
+
+---
+
+id: US-304
+title: Filter explore by tag
+requirement_id: R-304
+
+acceptance_criteria:
+  - id: AC-304-1
+    title: Clicking a tag filters the explore posts
+    narrative: |
+      Given I am on the explore page
+      When I click a tag chip
+      Then the posts section should filter to that tag
+    given:
+      - visit: '/demos/scaffold/explore'
+    when:
+      - click: { selector: '[data-test=tag-chip]' }
+    then:
+      - shouldExist: { selector: '[data-test=active-tag]' }
+
+---
+
+id: US-305
+title: Navigate from explore to profile
+requirement_id: R-305
+
+acceptance_criteria:
+  - id: AC-305-1
+    title: Clicking a suggested user navigates to their profile
+    narrative: |
+      Given I am on the explore page
+      When I click on a suggested user
+      Then I should be on that user's profile page
+    given:
+      - visit: '/demos/scaffold/explore'
+    when:
+      - click: { selector: '[data-test=suggested-user-link]' }
+    then:
+      - shouldExist: { selector: '[data-test=profile-name]' }
