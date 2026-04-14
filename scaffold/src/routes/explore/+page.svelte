@@ -7,12 +7,12 @@
 
 	let filteredPosts = $derived(
 		activeTag
-			? data.posts?.filter((p: { tags: string[] }) => p.tags.includes(activeTag!)) ?? []
-			: data.posts ?? []
+			? data.posts.filter((p: { tags: string[] }) => p.tags.includes(activeTag!))
+			: data.posts
 	);
 
-	function selectTag(name: string) {
-		activeTag = activeTag === name ? null : name;
+	function toggleTag(tagName: string) {
+		activeTag = activeTag === tagName ? null : tagName;
 	}
 </script>
 
@@ -22,40 +22,36 @@
 <div class="mb-6 flex flex-wrap gap-2">
 	{#each data.tags as tag}
 		<button
-			onclick={() => selectTag(tag.name)}
-			class="rounded px-2 py-1 text-sm"
-			class:bg-blue-600={activeTag === tag.name}
-			class:text-white={activeTag === tag.name}
-			class:active={activeTag === tag.name}
-			class:bg-gray-100={activeTag !== tag.name}
 			data-test="tag-chip"
+			data-active={activeTag === tag.name}
+			onclick={() => toggleTag(tag.name)}
+			class="rounded px-2 py-1 text-sm {activeTag === tag.name
+				? 'active bg-blue-600 text-white'
+				: 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200'}"
 		>
-			#{tag.name} <span class="opacity-70">({tag.postCount})</span>
+			#{tag.name} <span data-test="tag-post-count" class="opacity-75">({tag.postCount})</span>
 		</button>
 	{/each}
 </div>
 
-{#if activeTag}
-	<div class="mb-2 text-sm font-medium text-blue-600" data-test="active-tag">
-		Showing posts tagged #{activeTag}
-		<button onclick={() => { activeTag = null; }} class="ml-2 text-gray-400 hover:text-gray-600">✕</button>
+<h2 class="mb-2 font-bold">{activeTag ? `Posts tagged #${activeTag}` : 'Posts'}</h2>
+{#each filteredPosts as post}
+	<div data-test="explore-post" class="border-b border-gray-200 py-3 dark:border-gray-700">
+		<a href="{base}/post/{post.id}" class="block text-gray-900 dark:text-gray-100">{post.content}</a>
 	</div>
-	{#if filteredPosts.length === 0}
-		<p class="text-gray-400">No posts for this tag.</p>
-	{:else}
-		{#each filteredPosts as post}
-			<div class="border-b border-gray-200 py-3 dark:border-gray-700" data-test="explore-post">
-				<p class="text-gray-900 dark:text-gray-100">{post.content}</p>
-			</div>
-		{/each}
-	{/if}
-{/if}
+{/each}
 
 <h2 class="mb-2 font-bold">People</h2>
 {#each data.users as user}
-	<div class="border-b border-gray-200 py-3 dark:border-gray-700" data-test="suggested-user">
-		<a href="{base}/profile/{user.handle}" class="font-medium text-gray-900 hover:underline dark:text-gray-100" data-test="suggested-user-link">{user.displayName}</a>
-		<span class="text-sm text-gray-500">@{user.handle}</span>
+	<div data-test="suggested-user" class="border-b border-gray-200 py-3 dark:border-gray-700">
+		<a
+			data-test="suggested-user-link"
+			href="{base}/profile/{user.handle}"
+			class="font-medium text-gray-900 hover:underline dark:text-gray-100"
+		>
+			<span data-test="suggested-user-name">{user.displayName}</span>
+		</a>
+		<span data-test="suggested-user-handle" class="ml-1 text-sm text-gray-500">@{user.handle}</span>
 		<p class="text-sm text-gray-600 dark:text-gray-400">{user.bio}</p>
 	</div>
 {/each}
