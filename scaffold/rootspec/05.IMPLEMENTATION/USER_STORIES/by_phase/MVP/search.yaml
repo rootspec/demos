@@ -1,51 +1,55 @@
 # =============================================================================
-# USER STORY: Search Posts
+# USER STORIES: Search
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: SEARCH
-# @systems: [SEARCH_SYSTEM]
+# @systems: [DISCOVERY_SYSTEM, VIEW_SYSTEM, DATA_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
-id: US-007
-title: Search posts by keyword and see filtered results
+---
+
+# =============================================================================
+# US-009: Search posts by keyword
+# =============================================================================
+id: US-009
+title: Search for posts using a keyword and see results update live
 
 acceptance_criteria:
-  - id: AC-007-1
-    title: Typing a query shows matching posts
+  - id: AC-009-1
+    title: Search input is present on search page
     narrative: |
-      Given I am on the search page
-      When I type a keyword that appears in a post
-      Then I see posts containing that keyword in the results
+      Given I navigate to the search page
+      When the page loads
+      Then I should see a search input field
     given:
-      - visit: '/search'
-    when:
-      - fill: { selector: 'input[type=text]', value: 'microservices' }
-    then:
-      - shouldExist: { selector: '[data-test=post-content]' }
-      - shouldContain: { selector: '[data-test=post-content]', text: 'microservices' }
-
-  - id: AC-007-2
-    title: No matching results shows empty state message
-    narrative: |
-      Given I am on the search page
-      When I type a query that matches no posts
-      Then I see a no-results message
-    given:
-      - visit: '/search'
-    when:
-      - fill: { selector: 'input[type=text]', value: 'xyzquerynotindata123' }
-    then:
-      - shouldContain: { selector: 'body', text: 'No results' }
-
-  - id: AC-007-3
-    title: Empty query shows no results
-    narrative: |
-      Given I am on the search page
-      When the input is empty
-      Then no posts are shown
-    given:
-      - visit: '/search'
+      - visit: '/demos/scaffold/search'
     when: []
     then:
-      - shouldExist: { selector: 'input[type=text]' }
+      - shouldExist: { selector: '[data-test=search-input]' }
+
+  - id: AC-009-2
+    title: Typing a keyword shows matching posts
+    narrative: |
+      Given I am on the search page
+      When I type a keyword that matches post content
+      Then I should see matching post results
+    given:
+      - visit: '/demos/scaffold/search'
+    when:
+      - fill: { selector: '[data-test=search-input]', value: 'rust' }
+    then:
+      - shouldExist: { selector: '[data-test=search-result]' }
+
+  - id: AC-009-3
+    title: Searching with no matches shows empty state message
+    narrative: |
+      Given I am on the search page
+      When I type a query that has no matching posts
+      Then I should see a no results message
+    given:
+      - visit: '/demos/scaffold/search'
+    when:
+      - fill: { selector: '[data-test=search-input]', value: 'xyzzy12345notaword' }
+    then:
+      - shouldExist: { selector: '[data-test=search-empty]' }

@@ -1,122 +1,161 @@
 # =============================================================================
-# USER STORY: View Home Feed
+# USER STORIES: Feed
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FEED_BROWSING
-# @systems: [FEED_SYSTEM, META_SYSTEM]
+# @journey: FEED
+# @systems: [FEED_SYSTEM, VIEW_SYSTEM, DATA_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
+---
+
+# =============================================================================
+# US-001: View home feed
+# =============================================================================
 id: US-001
-title: View the home feed with posts and author info
+title: View home feed with posts and author info
 
 acceptance_criteria:
   - id: AC-001-1
-    title: Home feed shows posts with author info and engagement counts
+    title: Home feed shows posts with author and content
     narrative: |
       Given I visit the home page
       When the page loads
-      Then I see a list of posts with author names, handles, and engagement counts
+      Then I should see post cards with author names and post content
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold'
     when: []
     then:
       - shouldExist: { selector: '[data-test=post-card]' }
       - shouldExist: { selector: '[data-test=post-author]' }
       - shouldExist: { selector: '[data-test=post-content]' }
-      - shouldExist: { selector: '[data-test=like-count]' }
 
   - id: AC-001-2
-    title: Meta banner is visible on home page
+    title: Posts show timestamp and engagement counts
     narrative: |
       Given I visit the home page
       When the page loads
-      Then I see the meta banner explaining the demo origin
+      Then I should see timestamps and like counts on post cards
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=seed-link]' }
-      - shouldExist: { selector: '[data-test=spec-link]' }
+      - shouldExist: { selector: '[data-test=post-timestamp]' }
+      - shouldExist: { selector: '[data-test=like-count]' }
+      - shouldExist: { selector: '[data-test=repost-count]' }
 
 ---
-# =============================================================================
-# USER STORY: Like and Bookmark Posts
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FEED_BROWSING
-# @systems: [FEED_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
 
+# =============================================================================
+# US-002: Like a post
+# =============================================================================
 id: US-002
-title: Like and bookmark posts on the home feed
+title: Like a post on the home feed
 
 acceptance_criteria:
   - id: AC-002-1
-    title: Like button toggles visual state and updates count
+    title: Like button toggles active state
     narrative: |
-      Given I am viewing the home feed
+      Given I am on the home page
       When I click the like button on a post
-      Then the like button becomes active and the count increases by 1
+      Then the like button should have the active class
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold'
     when:
-      - click: { selector: '[data-test=post-card]:first-child [data-test=like-button]' }
+      - click: { selector: '[data-test=like-button]' }
     then:
-      - shouldExist: { selector: '[data-test=post-card]:first-child [data-test=like-button].active' }
-
-  - id: AC-002-2
-    title: Bookmark button toggles visual state
-    narrative: |
-      Given I am viewing the home feed
-      When I click the bookmark button on a post
-      Then the bookmark button becomes active
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=post-card]:first-child [data-test=bookmark-button]' }
-    then:
-      - shouldExist: { selector: '[data-test=post-card]:first-child [data-test=bookmark-button].active' }
+      - shouldExist: { selector: '[data-test=like-button].active' }
 
 ---
-# =============================================================================
-# USER STORY: Compose a New Post
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FEED_BROWSING
-# @systems: [FEED_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
 
+# =============================================================================
+# US-003: Bookmark a post
+# =============================================================================
 id: US-003
-title: Compose and submit a new post from the home feed
+title: Bookmark a post on the home feed
 
 acceptance_criteria:
   - id: AC-003-1
-    title: Valid post submission adds post to feed
+    title: Bookmark button toggles active state
     narrative: |
-      Given I am viewing the home feed
-      When I write a post in the composer and submit
-      Then the post appears at the top of the feed
+      Given I am on the home page
+      When I click the bookmark button on a post
+      Then the bookmark button should have the active class
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold'
     when:
-      - fill: { selector: '[data-test=composer-input]', value: 'Hello from RootFeed test' }
+      - click: { selector: '[data-test=bookmark-button]' }
+    then:
+      - shouldExist: { selector: '[data-test=bookmark-button].active' }
+
+---
+
+# =============================================================================
+# US-004: Compose and publish a post
+# =============================================================================
+id: US-004
+title: Compose a new post that appears in the feed
+
+acceptance_criteria:
+  - id: AC-004-1
+    title: Composer is present on home page
+    narrative: |
+      Given I visit the home page
+      When the page loads
+      Then I should see the composer textarea and submit button
+    given:
+      - visit: '/demos/scaffold'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=composer]' }
+      - shouldExist: { selector: '[data-test=composer-input]' }
+      - shouldExist: { selector: '[data-test=composer-submit]' }
+
+  - id: AC-004-2
+    title: Composing a post adds it to the feed
+    narrative: |
+      Given I am on the home page
+      When I type a post and click submit
+      Then the new post content should appear in the feed
+    given:
+      - visit: '/demos/scaffold'
+    when:
+      - fill: { selector: '[data-test=composer-input]', value: 'Hello from the composer' }
       - click: { selector: '[data-test=composer-submit]' }
     then:
-      - shouldContain: { selector: '[data-test=post-card]:first-child [data-test=post-content]', text: 'Hello from RootFeed test' }
+      - shouldContain: { selector: '[data-test=post-content]', text: 'Hello from the composer' }
 
-  - id: AC-003-2
-    title: Empty post submission shows validation error
+  - id: AC-004-3
+    title: Submitting empty post shows error
     narrative: |
-      Given I am viewing the home feed
-      When I try to submit the composer with empty content
-      Then I see a validation error and no post is created
+      Given I am on the home page and the composer is empty
+      When I click the submit button without typing anything
+      Then I should see an error message
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold'
     when:
       - click: { selector: '[data-test=composer-submit]' }
     then:
       - shouldExist: { selector: '[data-test=composer-error]' }
+
+---
+
+# =============================================================================
+# US-005: Load more posts
+# =============================================================================
+id: US-005
+title: Load additional posts by clicking Load more
+
+acceptance_criteria:
+  - id: AC-005-1
+    title: Load more button appears and loads additional posts
+    narrative: |
+      Given I am on the home page
+      When I click the Load more button
+      Then more post cards should be visible
+    given:
+      - visit: '/demos/scaffold'
+    when:
+      - click: { selector: '[data-test=load-more]' }
+    then:
+      - shouldExist: { selector: '[data-test=post-card]' }

@@ -1,73 +1,56 @@
-# Level 4: Discovery System
+# Discovery System
 
-**Responsibility:** Explore page — trending tags display, tag-based post filtering, and suggested user list with follow/unfollow (`/explore`).
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, DATA_SYSTEM.md
 
 ---
+
+## Responsibility
+
+The Discovery System owns the explore and search surfaces — the two routes that help users find content they're not already looking at. It manages tag-based filtering (on Explore) and keyword search (on Search). Both are implemented as client-side derived state with no server round-trips.
 
 ## Boundaries
 
-- **Owns:** Tag display and filtering logic, explore-page user list and follow buttons
-- **Does not own:** Tag data authorship (from tags.json), follow state storage (ProfileState from PROFILE_SYSTEM), individual post display (FEED_SYSTEM PostCard)
-- **Route:** `/explore`
+- **Owns:** `src/routes/explore/+page.ts` (load function), `src/routes/explore/+page.svelte` (tag filter state), `src/routes/search/+page.svelte` (search derived state)
+- **Reads from:** DATA SYSTEM (tags, posts, users)
+- **Does not own:** Like/bookmark state (FEED SYSTEM), follow state (PROFILE SYSTEM)
 
----
+## State
 
-## Data Ownership
+### Explore Page
+| State | Type | Description |
+|---|---|---|
+| `selectedTag` | `string \| null` | Currently selected tag for filtering; null means no filter active |
 
-### Tag Entity (from tags.json)
-- `name` — tag name string (without `#` prefix)
-- `postCount` — number of posts with this tag
+### Search Page
+| State | Type | Description |
+|---|---|---|
+| `query` | `string` | Live search query string; bound to text input |
+| `results` | Derived `Post[]` | Posts whose content matches `query` (case-insensitive includes) |
 
-### Explore View State (client-side, in-memory)
-- `selectedTag: string | null` — the currently active tag filter (null means no filter)
+## Operations
 
----
+### Tag filtering (Explore)
+- User clicks a tag chip → sets `selectedTag` to that tag's name
+- If `selectedTag` is already that tag → clears selection (toggle behavior)
+- Posts section shows only posts whose `tags` array includes `selectedTag`; if null, shows all popular posts
 
-## Rules
+### Keyword search (Search)
+- Input is reactive — results update on every keystroke
+- Filter logic: `post.content.toLowerCase().includes(query.toLowerCase())`
+- Empty query (`query.length === 0`) → no results shown (not an error state)
+- Non-empty query with no matches → "No results for [query]" message shown
 
-### Tag Display
-- Tags are sorted by `postCount` descending — highest-volume tags appear first
-- Each tag is displayed as a clickable chip with format: `#[name] ([postCount])`
-- When no tag is selected, all chips are in default (unselected) style
-- When a tag is selected, the active chip is visually highlighted
+## Explore Page Data
 
-### Tag Filtering
-- Clicking an unselected tag sets it as `selectedTag` and filters the post list to posts where `post.tags` includes the tag name
-- Clicking the currently selected tag deselects it (sets `selectedTag` to null) and shows all posts
-- When a tag is selected and no posts match, an empty state message is shown
+The Explore `load()` function returns:
+- `tags` — all tags sorted by `postCount` descending
+- `users` — all users (for the "People" / suggested users section)
 
-### Post List (under tags)
-- When no tag is selected: a section of popular or featured posts is shown (or all posts if no curation is defined)
-- When a tag is selected: only posts tagged with that tag are shown
-- Post display shows: author name, handle, post content, link to post detail
+Popular posts (for post listing under tags) are sourced from DATA SYSTEM and filtered in the component.
 
-### Suggested Users
-- All users from `users.json` are shown in the people section
-- Each user shows: display name, handle, bio, follow/unfollow button
-- Follow/unfollow button reads from and writes to `ProfileState.followedIds` — the same state as PROFILE_SYSTEM
-- Clicking Follow adds the user's ID to `followedIds`; clicking Unfollow removes it
-- No cap on the number of users shown — all users in the data appear
+## Interactions with Other Systems
 
----
-
-## State Transitions
-
-```
-Tag Filter State:
-  no_selection → (click tag) → tag_selected
-  tag_selected → (click same tag) → no_selection
-  tag_selected → (click different tag) → different_tag_selected
-
-Follow State (shared with PROFILE_SYSTEM):
-  not_following → (click Follow) → following
-  following → (click Unfollow) → not_following
-```
-
----
-
-## System Interactions
-
-- **← PROFILE_SYSTEM:** Reads and writes `ProfileState.followedIds` for the follow/unfollow buttons
-- **→ PROFILE_SYSTEM:** Clicking a user name navigates to `/profile/[handle]`
-- **→ THREAD_SYSTEM:** Clicking a post in the filtered list navigates to `/post/[id]`
-- **← SYSTEMS_OVERVIEW:** Reads from shared `tags.json`, `posts.json`, and `users.json`
+| System | Interaction |
+|---|---|
+| DATA SYSTEM | Explore `load()` reads tags.json and users.json; Search page receives posts and users from DATA SYSTEM via route load |
+| VIEW SYSTEM | Both explore and search page components render state from this system; tag/search interactions fire state mutations here |

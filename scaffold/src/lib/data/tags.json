@@ -13,5 +13,6 @@
   { "name": "svelte", "postCount": 2 },
   { "name": "specs", "postCount": 3 },
   { "name": "ux", "postCount": 2 },
-  { "name": "a11y", "postCount": 1 }
+  { "name": "a11y", "postCount": 1 },
+  { "name": "rust", "postCount": 1 }
 ]

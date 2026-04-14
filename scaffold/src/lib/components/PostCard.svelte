@@ -32,7 +32,9 @@
 	</a>
 	<div class="mt-2 flex items-center gap-4 text-sm text-gray-400 dark:text-gray-500">
 		<button
-			class="flex items-center gap-1 hover:text-red-500 {liked ? 'active text-red-500' : ''}"
+			class="flex items-center gap-1 hover:text-red-500"
+			class:active={liked}
+			class:text-red-500={liked}
 			data-test="like-button"
 			onclick={() => { liked = !liked; }}
 		>
@@ -43,7 +45,9 @@
 		</button>
 		<span data-test="repost-count">{post.repostCount} reposts</span>
 		<button
-			class="flex items-center gap-1 hover:text-amber-500 {bookmarked ? 'active text-amber-500' : ''}"
+			class="flex items-center gap-1 hover:text-amber-500"
+			class:active={bookmarked}
+			class:text-amber-500={bookmarked}
 			data-test="bookmark-button"
 			onclick={() => { bookmarked = !bookmarked; }}
 		>

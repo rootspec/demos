@@ -1,88 +1,57 @@
 # =============================================================================
-# USER STORY: Toggle Dark/Light Theme
+# USER STORIES: Meta / Theme
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: META
-# @systems: [META_SYSTEM]
+# @systems: [THEME_SYSTEM, VIEW_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
-id: US-010
-title: Toggle between dark and light theme
+---
+
+# =============================================================================
+# US-011: Toggle dark/light theme
+# =============================================================================
+id: US-011
+title: Toggle between dark and light mode using the theme button in the nav
 
 acceptance_criteria:
-  - id: AC-010-1
-    title: Theme toggle button exists in the navigation
+  - id: AC-011-1
+    title: Meta banner is present on every page
     narrative: |
-      Given I am on any page
+      Given I visit the home page
       When the page loads
-      Then I see a theme toggle button in the navigation
+      Then I should see the meta banner with links to the seed and spec
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: '[data-test=seed-link]' }
+      - shouldExist: { selector: '[data-test=spec-link]' }
+      - shouldExist: { selector: '[data-test=scaffold-link]' }
+
+  - id: AC-011-2
+    title: Theme toggle button is present in navigation
+    narrative: |
+      Given I visit the home page
+      When the page loads
+      Then I should see a theme toggle button in the navigation
+    given:
+      - visit: '/demos/scaffold'
     when: []
     then:
       - shouldExist: { selector: '[data-test=theme-toggle]' }
 
-  - id: AC-010-2
-    title: Clicking theme toggle switches the theme class
+  - id: AC-011-3
+    title: Clicking theme toggle switches the active class on html element
     narrative: |
-      Given I am on the home page in light mode
-      When I click the theme toggle
-      Then the dark class is applied to the HTML element
+      Given I am on the home page
+      When I click the theme toggle button
+      Then the html element should have the dark class applied
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold'
     when:
       - click: { selector: '[data-test=theme-toggle]' }
     then:
       - shouldExist: { selector: 'html.dark' }
-
----
-# =============================================================================
-# USER STORY: Meta Banner on Every Page
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: META
-# @systems: [META_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
-
-id: US-011
-title: See the meta banner explaining the demo origin on every page
-
-acceptance_criteria:
-  - id: AC-011-1
-    title: Meta banner is visible on the home page
-    narrative: |
-      Given I visit the home page
-      When the page loads
-      Then I see the meta banner with links to the seed and spec
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=scaffold-link]' }
-
-  - id: AC-011-2
-    title: Meta banner is visible on the explore page
-    narrative: |
-      Given I visit the explore page
-      When the page loads
-      Then I see the meta banner
-    given:
-      - visit: '/explore'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-
-  - id: AC-011-3
-    title: Meta banner is visible on the search page
-    narrative: |
-      Given I visit the search page
-      When the page loads
-      Then I see the meta banner
-    given:
-      - visit: '/search'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
