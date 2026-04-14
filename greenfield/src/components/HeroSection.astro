@@ -1,145 +1,57 @@
 ---
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
-
-const rootspecPath = resolve(process.cwd(), '.rootspec.json');
-const rootspecData = JSON.parse(readFileSync(rootspecPath, 'utf-8'));
-const version = rootspecData.version ?? '7.2.1';
+const VERSION = '7.2.4';
 ---
 
-<section class="relative pt-20 pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+<section
+  data-test="hero-section"
+  class="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 py-24 overflow-hidden"
+>
   <!-- Background gradient -->
-  <div class="absolute inset-0 bg-gradient-to-br from-brand-50 to-white dark:from-slate-900 dark:to-slate-800 -z-10"></div>
-  <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-100/40 dark:from-brand-900/20 to-transparent -z-10"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-brand-primary/10 via-transparent to-transparent pointer-events-none"></div>
 
-  <div class="max-w-7xl mx-auto">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
-      <!-- Left: Text content -->
-      <div>
-        <div class="flex items-center gap-2 mb-6">
-          <span
-            data-test="version-badge"
-            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-mono font-medium bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-400 border border-brand-200 dark:border-brand-700"
-          >
-            v{version}
-          </span>
-          <span class="text-sm text-slate-500 dark:text-slate-400">Now in stable release</span>
-        </div>
+  <!-- Version badge -->
+  <div
+    data-test="version-badge"
+    class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-primary/40 bg-brand-primary/10 text-brand-primary text-sm font-medium mb-8 animate-fade-in"
+  >
+    <span class="w-2 h-2 rounded-full bg-brand-primary inline-block"></span>
+    v{VERSION}
+  </div>
 
-        <h1
-          data-test="hero-tagline"
-          class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight mb-6"
-        >
-          Philosophy<br/>
-          <span class="text-brand-600 dark:text-brand-400">guides</span> your code.
-        </h1>
+  <!-- Headline -->
+  <h1
+    data-test="hero-headline"
+    class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 max-w-4xl leading-tight"
+  >
+    Spec-driven AI development<br />
+    <span class="text-brand-primary">that actually works</span>
+  </h1>
 
-        <p class="text-xl text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
-          RootSpec is a specification language where <strong>why</strong> drives <strong>what</strong>, and <strong>what</strong> drives <strong>how</strong>.
-          Turn a product description into executable specs, tests, and code — validated at every level.
-        </p>
+  <!-- Subheadline -->
+  <p
+    data-test="hero-subheadline"
+    class="text-lg sm:text-xl text-[var(--text-secondary)] max-w-2xl mb-10 leading-relaxed"
+  >
+    RootSpec turns your product idea into a structured, five-level specification
+    that AI agents can implement, test, and validate — autonomously.
+  </p>
 
-        <div class="flex flex-wrap gap-4">
-          <a
-            href="#how-it-works"
-            class="inline-flex items-center px-6 py-3 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-medium transition-colors"
-          >
-            See how it works
-            <svg class="ml-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-            </svg>
-          </a>
-          <a
-            href="https://github.com/rootspec/rootspec"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center px-6 py-3 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-colors"
-          >
-            <svg class="mr-2 w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
-            </svg>
-            View on GitHub
-          </a>
-        </div>
-      </div>
-
-      <!-- Right: Diagram -->
-      <div class="flex justify-center lg:justify-end">
-        <div data-test="rootspec-diagram" class="w-full max-w-md">
-          <svg viewBox="0 0 400 360" class="w-full h-auto" aria-label="RootSpec methodology diagram">
-            <!-- Outer spec boundary -->
-            <rect x="10" y="10" width="380" height="340" rx="16" fill="none"
-              stroke="currentColor" stroke-opacity="0.15" stroke-width="2" stroke-dasharray="8 4"/>
-
-            <text x="200" y="35" text-anchor="middle" fill="currentColor" fill-opacity="0.4"
-              font-size="11" font-family="monospace" letter-spacing="2">ROOTSPEC</text>
-
-            <!-- Level boxes -->
-            <!-- L1 Philosophy -->
-            <rect x="120" y="48" width="160" height="44" rx="8"
-              fill="#4f6ef7" fill-opacity="0.15" stroke="#4f6ef7" stroke-opacity="0.5" stroke-width="1.5"/>
-            <text x="200" y="65" text-anchor="middle" fill="#4f6ef7"
-              font-size="11" font-weight="600" font-family="monospace">L1: PHILOSOPHY</text>
-            <text x="200" y="82" text-anchor="middle" fill="#4f6ef7" fill-opacity="0.8"
-              font-size="10" font-family="sans-serif">WHY · Design Pillars</text>
-
-            <!-- Arrow L1→L2 -->
-            <line x1="200" y1="92" x2="200" y2="106" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"
-              marker-end="url(#arrow)"/>
-
-            <!-- L2 Truths -->
-            <rect x="100" y="110" width="200" height="44" rx="8"
-              fill="#818cf8" fill-opacity="0.15" stroke="#818cf8" stroke-opacity="0.5" stroke-width="1.5"/>
-            <text x="200" y="127" text-anchor="middle" fill="#818cf8"
-              font-size="11" font-weight="600" font-family="monospace">L2: TRUTHS</text>
-            <text x="200" y="144" text-anchor="middle" fill="#818cf8" fill-opacity="0.8"
-              font-size="10" font-family="sans-serif">WHAT · Trade-offs</text>
-
-            <!-- Arrow L2→L3 -->
-            <line x1="200" y1="154" x2="200" y2="168" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"
-              marker-end="url(#arrow)"/>
-
-            <!-- L3 Interactions -->
-            <rect x="80" y="172" width="240" height="44" rx="8"
-              fill="#a5b4fc" fill-opacity="0.15" stroke="#a5b4fc" stroke-opacity="0.5" stroke-width="1.5"/>
-            <text x="200" y="189" text-anchor="middle" fill="#a5b4fc"
-              font-size="11" font-weight="600" font-family="monospace">L3: INTERACTIONS</text>
-            <text x="200" y="206" text-anchor="middle" fill="#a5b4fc" fill-opacity="0.8"
-              font-size="10" font-family="sans-serif">HOW users · UX patterns</text>
-
-            <!-- Arrow L3→L4 -->
-            <line x1="200" y1="216" x2="200" y2="230" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"
-              marker-end="url(#arrow)"/>
-
-            <!-- L4 Systems -->
-            <rect x="60" y="234" width="280" height="44" rx="8"
-              fill="#c7d2fe" fill-opacity="0.15" stroke="#c7d2fe" stroke-opacity="0.5" stroke-width="1.5"/>
-            <text x="200" y="251" text-anchor="middle" fill="#c7d2fe"
-              font-size="11" font-weight="600" font-family="monospace">L4: SYSTEMS</text>
-            <text x="200" y="268" text-anchor="middle" fill="#c7d2fe" fill-opacity="0.8"
-              font-size="10" font-family="sans-serif">HOW it's built · Architecture</text>
-
-            <!-- Arrow L4→L5 -->
-            <line x1="200" y1="278" x2="200" y2="292" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"
-              marker-end="url(#arrow)"/>
-
-            <!-- L5 Implementation -->
-            <rect x="40" y="296" width="320" height="44" rx="8"
-              fill="#e0e7ff" fill-opacity="0.15" stroke="#e0e7ff" stroke-opacity="0.5" stroke-width="1.5"/>
-            <text x="200" y="313" text-anchor="middle" fill="#e0e7ff"
-              font-size="11" font-weight="600" font-family="monospace">L5: IMPLEMENTATION</text>
-            <text x="200" y="330" text-anchor="middle" fill="#e0e7ff" fill-opacity="0.8"
-              font-size="10" font-family="sans-serif">User stories · Tests · Code</text>
-
-            <!-- Arrow marker -->
-            <defs>
-              <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
-                <path d="M 0 2 L 4 4 L 0 6 Z" fill="currentColor" fill-opacity="0.3"/>
-              </marker>
-            </defs>
-          </svg>
-        </div>
-      </div>
-    </div>
+  <!-- CTA buttons -->
+  <div class="flex flex-col sm:flex-row gap-4 items-center">
+    <a
+      data-test="hero-cta"
+      href="https://github.com/rootspec/rootspec"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg bg-brand-primary hover:bg-brand-secondary text-white font-semibold text-base transition-colors shadow-lg shadow-brand-primary/25"
+    >
+      Get started on GitHub
+    </a>
+    <a
+      href="#workflow"
+      class="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg border border-[var(--border-color)] text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] font-semibold text-base transition-colors"
+    >
+      See how it works
+    </a>
   </div>
 </section>

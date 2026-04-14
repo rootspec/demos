@@ -1,103 +1,95 @@
 # Level 4: Interactive System
 
-**System:** INTERACTIVE_SYSTEM
-**References:** L1-3, Sibling L4, External
-
----
+> References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md
 
 ## Responsibility
 
-Owns the three interactive features that demonstrate the RootSpec methodology: the Hierarchy Explorer, the Spec Wizard, and the Before/After Comparison. All components are React islands (client-side only). No server state, no API calls.
-
----
-
-## Components
-
-### Hierarchy Explorer
-
-**Purpose:** Make the five-level spec hierarchy tangible through direct interaction
-**Data owned:** Five level definitions (name, description, example content, allowed reference targets)
-
-**Behavior:**
-- Renders all five levels simultaneously in a visual layout
-- Each level is expandable — click or keyboard Enter/Space to toggle
-- When a level is active, it shows its example content and highlights the levels it can reference
-- Reference highlights: upward arrows or connectors indicate the dependency direction
-- Only one level expanded at a time (or multiple — designer's choice based on readability)
-- Collapses on Escape key
-- Static fallback: all levels visible without expand/collapse when JS unavailable
-
-**State:**
-- `activeLevel`: which level is currently expanded (null if none)
-- `hoveredLevel`: which level the cursor/focus is on (for reference highlighting)
-
----
-
-### Spec Wizard
-
-**Purpose:** Let visitors sketch a minimal spec for their own product idea, experiencing the methodology firsthand
-**Data owned:** Step definitions, pillar suggestion list, output templates
-
-**Behavior:**
-- Three-step linear flow
-- Step 1: Free-text product idea input
-- Step 2: Pillar selection (checkboxes or toggle buttons from a suggestion list; option to write custom)
-- Step 3: Free-text key interaction input
-- Each step validates non-empty before advancing
-- On completion, renders a skeleton spec preview labeled by level (L1: mission, L1: pillars, L3: interaction)
-- Back button returns to previous step with inputs preserved
-
-**State:**
-- `currentStep`: 1, 2, or 3, or `complete`
-- `productIdea`: string
-- `selectedPillars`: array of strings
-- `keyInteraction`: string
-- `validationError`: string or null
-
-**Constraints:**
-- All output is template-generated; no AI or API involvement
-- No persistence — state resets on page refresh
-- Output is labeled "Skeleton Spec — not a complete RootSpec" to set expectations
-
----
-
-### Before/After Comparison
-
-**Purpose:** Show concretely what RootSpec adds to a development workflow
-**Data owned:** "Without" panel content, "With RootSpec" panel content
-
-**Behavior (desktop):** Side-by-side panels, optionally with a drag-handle slider
-**Behavior (mobile):** Toggle switch between "Without" and "With" views
-**Content:** Real methodology examples — a vague requirements fragment vs. its structured equivalent with spec level label, acceptance criterion, and pillar reference
-
-**State:**
-- `activePanel`: `without` | `with` (mobile toggle state)
-- `sliderPosition`: [0–100] percentage (desktop slider, if implemented)
-
----
-
-## Shared Constraints
-
-- No external API calls — all data is static or derived from user input
-- No data persistence across page loads
-- All components respect inherited CSS variables from THEME_SYSTEM
-- All components are keyboard accessible per L3 interaction specs
-- All components are touch-friendly (minimum target size, no hover-only states)
-
----
+Owns the three interactive features: Hierarchy Explorer, Spec Wizard, and Before/After Comparison. Each feature is a self-contained client-side component. No shared mutable state between features. No server calls.
 
 ## Boundaries
 
-- Does not own page layout or component mounting positions (LAYOUT_SYSTEM owns that)
-- Does not own theme state (THEME_SYSTEM owns that)
-- Does not own static copy outside the interactive components
+- **Owns:** Component state, interaction logic, local event handlers for the three interactive features
+- **Does not own:** Page layout (PRESENTATION_SYSTEM), content copy (CONTENT_SYSTEM), design tokens (THEME_SYSTEM), grid/spacing (LAYOUT_SYSTEM)
+- **Receives:** Content data as props from CONTENT_SYSTEM; CSS tokens from THEME_SYSTEM
 
----
+## Components
 
-## Interactions with Other Systems
+### HierarchyExplorer
 
-| System | Nature |
-|--------|--------|
-| LAYOUT_SYSTEM | Mounts React islands at designated section slots |
-| THEME_SYSTEM | Inherits CSS variables via class on root element |
-| CONTENT_SYSTEM | Interactive sections positioned between static content sections |
+**State:**
+- `expandedLevel: number | null` — Which level is currently expanded (null = none)
+- `hoveredLevel: number | null` — Which level is currently hovered
+
+**Data (received as props):**
+- Array of 5 level objects: `{ id, name, icon, purpose, exampleContent, canReference: number[] }`
+
+**Behavior:**
+- Click a level: toggles `expandedLevel` (clicking open level collapses it)
+- Hover a level: sets `hoveredLevel`; levels NOT in the hovered level's `canReference` array are visually dimmed
+- Arrow/connection rendering: drawn from each level downward to show allowed references (arrows point up, meaning "L4 references L3" is shown as an arrow from L4 to L3)
+- Keyboard: Tab between level cards, Enter/Space to toggle expand, Escape to collapse all
+
+**Accessibility:**
+- Each level card: `role="button"`, `aria-expanded`, `aria-label`
+- Reference arrows: decorative, `aria-hidden="true"`
+
+### SpecWizard
+
+**State:**
+- `currentStep: 1 | 2 | 3` — Active step
+- `productIdea: string` — Free text from step 1
+- `selectedMission: string` — From step 2 (template or custom)
+- `selectedPillars: string[]` — Min 3, max 5 from step 3
+- `output: SpecOutput | null` — Generated after step 3
+
+**Data (received as props):**
+- Mission templates: array of `{ id, text }` (4 options)
+- Pillar suggestions: array of `{ id, label }` ([N] options)
+
+**Behavior:**
+- Step 1: Text input required before Next is enabled
+- Step 2: One mission selection required (template or free text) before Next is enabled
+- Step 3: ≥3 pillar selections required before output generates
+- Output: Skeleton L1–L3 spec using user's inputs; formatted as code block; copyable to clipboard
+- "Start Over" resets all state to step 1
+
+**Output format:**
+```
+## Mission
+{selectedMission}
+
+## Design Pillars
+{selectedPillars mapped to pillar format}
+
+## Key Interaction
+One core loop derived from productIdea
+```
+
+**Keyboard:** Tab through options, Space to select/deselect, Enter on Next/Back/Start Over
+
+### BeforeAfterComparison
+
+**State:**
+- `activePanel: 'before' | 'after'` — Which panel is emphasized on mobile
+
+**Data (received as props):**
+- `beforeContent: PanelContent` — "Without spec" document
+- `afterContent: PanelContent` — "With RootSpec" document
+
+**Behavior:**
+- Desktop: Both panels visible side-by-side with equal weight
+- Mobile: Toggle button switches which panel is in focus (other stacks below or collapses)
+- Content is real examples — a vague requirements doc vs. a RootSpec-structured equivalent
+
+## State Isolation
+
+Each component manages its own state. There is no shared store across components. The Wizard does not know the Hierarchy Explorer's state. Theme state flows in from THEME_SYSTEM via CSS, not JavaScript.
+
+## Progressive Enhancement
+
+If JavaScript fails or is disabled:
+- HierarchyExplorer: Renders all levels expanded in a static list
+- SpecWizard: Replaced by a static description of the wizard's purpose
+- BeforeAfterComparison: Both panels visible in stacked layout
+
+No interactive feature is critical to understanding the site's content. All core information is accessible without JavaScript.

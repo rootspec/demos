@@ -1,55 +1,83 @@
 # =============================================================================
-# USER STORIES: Responsive Layout
+# LEVEL 5: USER STORIES — Responsive Layout
 # =============================================================================
-# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: MOBILE_VISIT
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @systems: [LAYOUT_SYSTEM, PRESENTATION_SYSTEM]
 
 ---
 
-# =============================================================================
-# USER STORY: View site on mobile
-# =============================================================================
-
-id: US-011
-title: Access the full site content on a mobile device
+id: US-401
+title: Visitor on desktop sees multi-column layout in key sections
 
 acceptance_criteria:
-  - id: AC-011-1
-    title: All key sections are present on narrow viewports
+  - id: AC-401-1
+    title: Workflow section shows steps in a grid on desktop
     narrative: |
-      Given I visit the site on a narrow viewport
-      When the page loads
-      Then I see the meta banner, hero, and main sections
+      Given I visit on a 1280px-wide viewport
+      When I scroll to the workflow section
+      Then the four steps are arranged in a grid (2x2 or 4x1)
     given:
+      - viewport: { width: 1280, height: 800 }
       - visit: '/'
-    when: []
+    when:
+      - scrollTo: { selector: '[data-test=workflow-section]' }
     then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
-      - shouldExist: { selector: '[data-test=how-it-works-section]' }
+      - shouldBeVisible: { selector: '[data-test=workflow-steps]' }
+      - shouldExist: { selector: '[data-test=workflow-step]', count: 4 }
+
+  - id: AC-401-2
+    title: Before/After comparison shows panels side by side on desktop
+    narrative: |
+      Given I visit on a desktop viewport
+      When I scroll to the comparison section
+      Then the before and after panels are side by side
+    given:
+      - viewport: { width: 1280, height: 800 }
+      - visit: '/'
+    when:
+      - scrollTo: { selector: '[data-test=comparison-section]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test=panel-before]' }
+      - shouldBeVisible: { selector: '[data-test=panel-after]' }
 
 ---
 
-# =============================================================================
-# USER STORY: Use interactive features on mobile
-# =============================================================================
-
-id: US-012
-title: Interact with the hierarchy explorer on touch devices
+id: US-402
+title: Visitor on tablet sees appropriately adapted layout
 
 acceptance_criteria:
-  - id: AC-012-1
-    title: Hierarchy explorer tap interaction works
+  - id: AC-402-1
+    title: Page is usable at 768px viewport width
     narrative: |
-      Given I see the hierarchy explorer on a narrow viewport
-      When I tap on a level
-      Then the level expands to show content
+      Given I visit on a 768px-wide viewport
+      When I scroll through the page
+      Then all sections are visible and readable without overflow
+    given:
+      - viewport: { width: 768, height: 1024 }
+      - visit: '/'
+    when:
+      - scrollTo: { selector: '[data-test=footer]' }
+    then:
+      - shouldNotOverflow: { selector: 'body', direction: 'x' }
+      - shouldBeVisible: { selector: '[data-test=meta-banner]' }
+      - shouldBeVisible: { selector: '[data-test=footer]' }
+
+---
+
+id: US-403
+title: CTA section links to the correct GitHub repository
+
+acceptance_criteria:
+  - id: AC-403-1
+    title: CTA section has a link to the RootSpec GitHub repo
+    narrative: |
+      Given I scroll to the CTA section
+      When I look for the primary action
+      Then there is a link to https://github.com/rootspec/rootspec
     given:
       - visit: '/'
     when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+      - scrollTo: { selector: '[data-test=cta-section]' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+      - shouldBeVisible: { selector: '[data-test=cta-github-link]' }
+      - shouldHaveAttr: { selector: '[data-test=cta-github-link]', attr: 'href', value: 'https://github.com/rootspec/rootspec' }

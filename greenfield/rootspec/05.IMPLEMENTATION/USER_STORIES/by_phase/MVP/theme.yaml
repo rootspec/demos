@@ -1,43 +1,120 @@
 # =============================================================================
-# USER STORIES: Theme / Dark Mode
+# LEVEL 5: USER STORIES — Theme & Accessibility
 # =============================================================================
-# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: THEME_PREFERENCE
-# @systems: [THEME_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @systems: [THEME_SYSTEM, PRESENTATION_SYSTEM]
 
 ---
 
-# =============================================================================
-# USER STORY: Toggle dark/light theme
-# =============================================================================
-
-id: US-010
-title: Toggle between dark and light theme
+id: US-301
+title: Visitor sees dark theme by default matching their system preference
 
 acceptance_criteria:
-  - id: AC-010-1
+  - id: AC-301-1
+    title: Page applies dark class to html element on load
+    narrative: |
+      Given I visit the site with no saved preference
+      When the page loads
+      Then the html element has the "dark" class or no dark theme override
+    given:
+      - visit: '/'
+    when:
+      - pageLoad: {}
+    then:
+      - shouldExist: { selector: 'html.dark, html:not(.light)' }
+
+  - id: AC-301-2
     title: Theme toggle button is visible in the header
     narrative: |
       Given I visit the site
-      When the page loads
-      Then I see a theme toggle button in the header
+      When I look at the header
+      Then I see a theme toggle button
     given:
       - visit: '/'
-    when: []
+    when:
+      - pageLoad: {}
     then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
+      - shouldBeVisible: { selector: '[data-test=theme-toggle]' }
 
-  - id: AC-010-2
-    title: Clicking the theme toggle changes the theme
+  - id: AC-301-3
+    title: Clicking theme toggle switches between dark and light
     narrative: |
-      Given I see the theme toggle
-      When I click it
-      Then the page theme changes
+      Given the page is in dark mode
+      When I click the theme toggle
+      Then the page switches to light mode
     given:
       - visit: '/'
     when:
       - click: { selector: '[data-test=theme-toggle]' }
     then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
+      - shouldHaveClass: { selector: 'html', class: 'light' }
+
+---
+
+id: US-302
+title: Visitor with reduced motion preference sees no animations
+
+acceptance_criteria:
+  - id: AC-302-1
+    title: Section transitions are disabled with prefers-reduced-motion
+    narrative: |
+      Given I have prefers-reduced-motion enabled
+      When the page loads
+      Then section animations do not play
+    given:
+      - visit: '/'
+      - mediaQuery: { name: 'prefers-reduced-motion', value: 'reduce' }
+    when:
+      - pageLoad: {}
+    then:
+      - shouldHaveStyle: { selector: '[data-test=hero-section]', property: 'animation', value: 'none' }
+
+---
+
+id: US-303
+title: Visitor on mobile can use all interactive features
+
+acceptance_criteria:
+  - id: AC-303-1
+    title: Page has no horizontal overflow on mobile viewport
+    narrative: |
+      Given I visit the site on a 375px-wide viewport
+      When I scroll through the page
+      Then there is no horizontal scrollbar or overflow
+    given:
+      - viewport: { width: 375, height: 812 }
+      - visit: '/'
+    when:
+      - pageLoad: {}
+    then:
+      - shouldNotOverflow: { selector: 'body', direction: 'x' }
+
+  - id: AC-303-2
+    title: Hierarchy Explorer is usable on mobile
+    narrative: |
+      Given I visit on mobile
+      When I tap a hierarchy level
+      Then it expands successfully
+    given:
+      - viewport: { width: 375, height: 812 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - click: { selector: '[data-test=hierarchy-level]:first-child' }
+    then:
+      - shouldHaveClass: { selector: '[data-test=hierarchy-level]:first-child', class: 'expanded' }
+
+  - id: AC-303-3
+    title: Spec Wizard is usable on mobile
+    narrative: |
+      Given I visit on mobile
+      When I scroll to the wizard and interact with it
+      Then I can type and click through steps
+    given:
+      - viewport: { width: 375, height: 812 }
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    when:
+      - type: { selector: '[data-test=wizard-idea-input]', text: 'Mobile test idea' }
+    then:
+      - shouldHaveValue: { selector: '[data-test=wizard-idea-input]', value: 'Mobile test idea' }

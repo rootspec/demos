@@ -1,43 +1,40 @@
-## Color Palette
+# Visual Conventions
 
-- **Brand primary:** `#4f6ef7` (brand-500) — blue-indigo accent
-- **Brand dark:** `#818cf8` (indigo-400) — dark mode accent
-- **Background light:** `#ffffff` / `--bg`
-- **Background dark:** `#0f172a` (slate-900) / `--bg`
-- **Card light:** `#f8fafc` (slate-50) / `--card`
-- **Card dark:** `#1e293b` (slate-800) / `--card`
-- **Text light:** `#0f172a` (slate-900)
-- **Text dark:** `#f1f5f9` (slate-100)
-- **Muted light:** `#64748b` (slate-500)
-- **Muted dark:** `#94a3b8` (slate-400)
-- **Meta banner:** amber-50/amber-900 background, amber-800/amber-300 text
+## Color Palette
+- **Brand primary:** `#6366f1` (Indigo 500) — `brand.primary` in Tailwind
+- **Brand secondary:** `#8b5cf6` (Violet 500) — `brand.secondary` in Tailwind
+- **Dark background:** `#0f0f17` — `var(--bg-primary)`
+- **Dark surface:** `#1a1a2e` — `var(--bg-secondary)`
+- **Light background:** `#f8fafc` — `var(--bg-primary)` in light mode
+- **Light surface:** `#f1f5f9` — `var(--bg-secondary)` in light mode
+- **Border:** `rgba(99, 102, 241, 0.2)` — `var(--border-color)`
 
 ## Typography
-
-- **Headings:** System sans-serif, bold, tight tracking
-- **Body:** System sans-serif, regular
-- **Code/mono:** JetBrains Mono (Google Fonts), fallback Fira Code, monospace
-- **Hero headline:** 4xl–6xl responsive, bold
-- **Section headings:** 3xl–4xl, bold
+- **Body font:** Inter (Google Fonts), fallback: `system-ui, sans-serif`
+- **Mono font:** JetBrains Mono (Google Fonts), fallback: `Fira Code, monospace`
+- **Headline sizes:** `text-4xl sm:text-5xl md:text-6xl lg:text-7xl` (hero), `text-3xl sm:text-4xl` (section)
+- **Font weights:** `font-extrabold` (hero), `font-bold` (section headings), `font-semibold` (CTAs)
 
 ## Layout
+- **Max content width:** `max-w-6xl mx-auto` (sections), `max-w-3xl mx-auto` (wizard/hierarchy)
+- **Section padding:** `py-24 px-4`
+- **Card radius:** `rounded-xl`
+- **Border style:** 1px solid `var(--border-color)` with hover accent effect
 
-- **Max content width:** `max-w-7xl` (80rem) centered
-- **Section padding:** `py-20 px-4 sm:px-6 lg:px-8`
-- **Header:** Sticky, 56px tall, `backdrop-blur` with semi-transparent background
-- **Grid:** 2-col or 4-col responsive grids for cards
+## Component Patterns
+- **Pain points grid:** `sm:grid-cols-2 lg:grid-cols-3`
+- **Workflow grid:** `sm:grid-cols-2 lg:grid-cols-4`
+- **Comparison:** `md:grid-cols-2` side-by-side panels
+- **Before panel:** Red accent (`border-red-500/30`, `bg-red-500/5`)
+- **After panel:** Brand accent (`border-brand-primary/30`, `bg-brand-primary/5`)
 
-## Components
+## Accessibility
+- **Focus management:** `tabIndex={0}`, `role="button"`, `aria-expanded` on interactive divs
+- **Keyboard navigation:** Enter/Space triggers expand/collapse in HierarchyExplorer
+- **Reduced motion:** CSS `@media (prefers-reduced-motion: reduce)` disables all animations
+- **Dark/light class:** Applied to `<html>` element before first paint via inline script
 
-- **Cards:** Rounded-xl, border, shadow-sm, hover:shadow-md/-translate-y-1
-- **Buttons primary:** `bg-brand-600 hover:bg-brand-700 text-white`, rounded-lg
-- **Buttons secondary:** Border + text, rounded-lg
-- **Code blocks:** `bg-slate-50 dark:bg-slate-800`, rounded-lg, font-mono text-xs
-- **Level colors:** L1=blue-400, L2=violet-400, L3=indigo-400, L4=sky-400, L5=teal-400
-- **Comparison panels:** Red for "without", emerald for "with"
-
-## Dark Mode
-
-- **Strategy:** Tailwind `darkMode: 'class'`
-- **Toggle:** Theme toggle button in header, persisted in `localStorage`
-- **Init:** Inline `<script>` in `<head>` reads localStorage and system preference to set class before paint
+## CTA Style
+- **Primary:** `bg-brand-primary hover:bg-brand-secondary text-white` with shadow
+- **Secondary:** `border border-[var(--border-color)] hover:bg-[var(--bg-secondary)]`
+- **Padding:** `px-8 py-3.5 rounded-lg`
