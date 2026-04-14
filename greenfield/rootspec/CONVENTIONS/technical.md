@@ -1,29 +1,39 @@
-## Framework
+# Technical Conventions
 
-- **Framework:** Astro 4.x with React island integration (`@astrojs/react`)
-- **Styling:** Tailwind CSS v3 via `@astrojs/tailwind`
-- **Language:** TypeScript (strict mode via `astro/tsconfigs/strict`)
-- **Dev command:** `npx astro dev --port 3000` (via `scripts/dev.sh`)
-- **Test command:** `./scripts/test.sh` (Cypress e2e)
+## Framework
+- **Framework:** Astro 6 with React 19 islands and Tailwind CSS 3
+- **Language:** TypeScript (strict mode for app code, loose for Cypress)
+- **Node version:** 22.x
+- **Package manager:** npm with --legacy-peer-deps flag (needed for tailwindcss@3 + @astrojs/tailwind@6)
 
 ## Project Structure
+- **Pages:** `src/pages/` — Astro pages
+- **Components:** `src/components/` — `.astro` for static, `.tsx` for interactive React islands
+- **Layouts:** `src/layouts/Layout.astro` — base HTML shell
+- **Styles:** `src/styles/global.css` — Tailwind directives + CSS variables
 
-- **Pages:** `src/pages/index.astro` — single-page marketing site
-- **Layouts:** `src/layouts/Layout.astro` — base HTML shell with theme init script
-- **Components:** `src/components/` — Astro + React TSX components
-- **Styles:** `src/styles/global.css` — Tailwind base + CSS custom properties
-- **Config:** `astro.config.mjs`, `tailwind.config.mjs`, `tsconfig.json`
-
-## Patterns
-
-- **React islands:** Interactive components (HierarchyExplorer, SpecWizard) use `client:load` directive
-- **Data-test attributes:** All testable elements carry `data-test="..."` attributes
-- **Theme:** Dark mode via `class` strategy; system preference detected inline in `<head>` to avoid flash
-- **Version reading:** `fs.readFileSync` + `JSON.parse` at build time for `.rootspec.json`
+## Dev Server
+- **Command:** `npx astro dev --port 3000 --host`
+- **Port:** 3000
+- **Start/stop:** via `./scripts/dev.sh`
 
 ## Testing
+- **Framework:** Cypress 15 with TypeScript
+- **Test file:** `cypress/e2e/mvp.cy.ts`
+- **DSL:** Extended RootSpec DSL — see `cypress/support/schema.ts` for all step types
+- **Cypress tsconfig:** `target: ES2020`, `ignoreDeprecations: "6.0"` (required for TypeScript 6)
 
-- **Framework:** Cypress with rootspec-reporter
-- **Test file:** `cypress/e2e/mvp.cy.ts` — all 12 MVP stories embedded as YAML string literals
-- **DSL steps used:** `visit`, `click`, `fill`, `shouldExist`, `shouldContain`
-- **Status file:** `rootspec/tests-status.json`
+## Interactive Components
+- **Pattern:** React islands using `client:load` directive in Astro
+- **HierarchyExplorer:** `src/components/HierarchyExplorer.tsx` — accordion with `expanded` class
+- **SpecWizard:** `src/components/SpecWizard.tsx` — 4-step multi-page wizard
+
+## Theme
+- **Default:** Dark mode (`html.dark` class set by inline script before paint)
+- **Toggle:** Stores preference in `localStorage` as `'dark'` or `'light'`
+- **CSS variables:** `--bg-primary`, `--bg-secondary`, `--text-primary`, `--text-secondary`, `--border-color`, `--accent`
+
+## Dependencies Added
+- `astro@^6.1.6`, `@astrojs/react@^5.0.3`, `@astrojs/tailwind@^6.0.2`
+- `react@^19.2.5`, `react-dom@^19.2.5`, `tailwindcss@^3.4.19`
+- `typescript@^6.0.2`, `cypress@^15.13.1`, `js-yaml@^4.1.1`, `zod@^4.3.6`

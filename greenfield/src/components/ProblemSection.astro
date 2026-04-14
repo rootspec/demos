@@ -1,45 +1,54 @@
 ---
-const problems = [
+const painPoints = [
   {
-    icon: '🔀',
-    title: 'Spec drift',
-    description: 'Requirements change but the spec doesn\'t. Code diverges from intent. Nobody knows what\'s actually supposed to happen.',
+    title: 'Vague prompts, vague results',
+    description: 'Without a spec, AI agents guess what you want. Every run is a gamble — sometimes genius, often garbage.',
   },
   {
-    icon: '🤖',
-    title: 'Unreliable AI output',
-    description: 'AI generates code confidently. Without a validation gate, you can\'t tell if it followed your intent or invented something plausible.',
+    title: 'No shared language between human and AI',
+    description: 'Developers think in user stories; AI thinks in tokens. The translation is lossy. Requirements get dropped silently.',
   },
   {
-    icon: '📄',
-    title: 'Google Docs nobody reads',
-    description: 'Long-form specs that live in Notion or Confluence. Outdated the moment they\'re written. Ignored during development.',
+    title: 'Tests written after the fact',
+    description: 'When tests come last, they test what was built — not what was needed. Bugs ship anyway.',
   },
   {
-    icon: '🌀',
-    title: 'Philosophy-implementation gap',
-    description: 'Why the product exists and how it\'s built become disconnected. Features get added that contradict the original vision.',
+    title: 'Spec drift kills velocity',
+    description: 'The doc says one thing, the code does another. Teams spend more time debugging misalignment than shipping features.',
+  },
+  {
+    title: 'AI makes confident mistakes',
+    description: 'LLMs confidently implement the wrong thing. Without a ground truth, nobody catches it until production.',
   },
 ];
 ---
 
-<section data-test="problem-section" class="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-800/50">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-14">
-      <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-        The problems specs are supposed to solve
+<section
+  data-test="problem-section"
+  id="problem"
+  class="py-24 px-4"
+>
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+        Why most AI dev workflows break down
       </h2>
-      <p class="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-        Most teams have a spec process. Few have one that actually works when it counts.
+      <p class="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
+        The problem isn't the AI. It's the missing spec layer between idea and implementation.
       </p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {problems.map((problem) => (
-        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
-          <div class="text-3xl mb-4">{problem.icon}</div>
-          <h3 class="font-semibold text-slate-900 dark:text-white mb-2">{problem.title}</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{problem.description}</p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {painPoints.map((point) => (
+        <div
+          data-test="pain-point"
+          class="p-6 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:border-brand-primary/40 transition-colors group"
+        >
+          <div class="w-10 h-10 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4 text-red-400 group-hover:bg-red-500/20 transition-colors">
+            ✕
+          </div>
+          <h3 class="font-semibold text-base mb-2">{point.title}</h3>
+          <p class="text-sm text-[var(--text-secondary)] leading-relaxed">{point.description}</p>
         </div>
       ))}
     </div>
