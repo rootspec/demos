@@ -6,7 +6,7 @@
 set -euo pipefail
 
 # --- Configuration (edit these) ---
-DEV_CMD="npx astro dev --port 3000 --host"
+DEV_CMD="npx astro dev --port 3000"
 PORT="${PORT:-3000}"
 
 # --- Internal ---

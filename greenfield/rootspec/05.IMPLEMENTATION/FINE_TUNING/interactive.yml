@@ -1,51 +1,61 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Interactive Components
+# FINE TUNING: Interactive System
 # =============================================================================
-# @spec_version: 7.2.4
-# @system: INTERACTIVE_SYSTEM
-# @last_updated: 2026-04-14T00:00:00Z
-# @status: production
+# @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+# @last_updated: 2026-04-14T00:00:00Z
 
 hierarchy_explorer:
-  level_count: 5
-  # @rationale: Fixed — RootSpec has exactly five levels, this is not configurable
-  # @constraints: type=integer, fixed=true
+  expand_duration:
+    value: 200
+    # @unit: milliseconds
+    # @rationale: Fast enough to feel responsive; slow enough to be visible as an intentional animation
+    # @constraint: min=100, max=400
 
-  max_expanded: 1
-  # @rationale: Only one level open at a time; prevents cognitive overload and keeps layout stable
-  # @alternatives: [1, 3, 5]
-  # @constraints: min=1, max=5, type=integer
+  max_levels:
+    value: 5
+    # @unit: count
+    # @rationale: RootSpec has exactly five levels; this is a fixed product constant
 
-spec_wizard:
-  step_count: 3
-  # @rationale: Three steps (idea → mission → pillars) maps cleanly to L1 without overwhelming
-  # @constraints: type=integer, fixed=true
+wizard:
+  min_pillars:
+    value: 3
+    # @unit: count
+    # @rationale: Three pillars is the minimum to create meaningful tension and prioritization in design decisions
+    # @constraint: min=1, max=5
 
-  min_pillars: 3
-  # @rationale: Minimum needed to reflect genuine design thinking; fewer feels trivial
-  # @constraints: min=1, max=5, type=integer
+  max_pillars:
+    value: 5
+    # @unit: count
+    # @rationale: More than five pillars dilutes their decision-filtering power (per L1 Design Pillars rule)
+    # @constraint: min=3, max=7
 
-  max_pillars: 5
-  # @rationale: Matches the RootSpec design pillar recommendation of 3-5
-  # @reference: 00.FRAMEWORK.md — "Design Pillars: 3-5 core experiences"
-  # @constraints: min=3, max=7, type=integer
+  step_transition_duration:
+    value: 150
+    # @unit: milliseconds
+    # @rationale: Quick step transitions maintain momentum; longer would feel sluggish in a form flow
+    # @constraint: min=50, max=300
 
-  mission_template_count: 4
-  # @rationale: Enough variety to feel useful without overwhelming; covers common archetypes
-  # @constraints: min=3, max=6, type=integer
+comparison:
+  toggle_transition_duration:
+    value: 200
+    # @unit: milliseconds
+    # @rationale: Slightly slower than wizard steps; the comparison content is denser and benefits from a more deliberate transition
 
-  pillar_suggestion_count: 12
-  # @rationale: Large enough set for diverse needs; small enough to scan in one pass
-  # @constraints: min=8, max=20, type=integer
+scroll_reveal:
+  threshold:
+    value: 0.1
+    # @unit: ratio (0-1, Intersection Observer threshold)
+    # @rationale: Reveal begins when 10% of element is visible; triggers early enough to feel natural while scrolling
+    # @constraint: min=0, max=1
 
-section_transitions:
-  scroll_threshold: 0.15
-  # @rationale: Section becomes "visible" when 15% enters viewport; triggers early enough to feel smooth
-  # @constraints: min=0.0, max=0.5, type=float
-  # @reference: IntersectionObserver threshold
+  delay_per_item:
+    value: 80
+    # @unit: milliseconds
+    # @rationale: Stagger between items in a reveal sequence; creates cascade effect without feeling slow
 
-  fade_offset_px: 20
-  # @rationale: Subtle translateY offset; enough to imply motion without being distracting
-  # @alternatives: [10, 20, 40]
-  # @constraints: min=5, max=60, type=integer, unit=px
+mobile_touch_target_min:
+  value: 44
+  # @unit: pixels
+  # @rationale: WCAG 2.5.5 recommended minimum touch target size for mobile accessibility
+  # @inviolable: true

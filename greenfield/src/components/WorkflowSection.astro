@@ -1,59 +1,61 @@
 ---
-const steps = [
+const skills = [
   {
-    command: 'rs-init',
-    title: 'Initialize',
-    description: 'Scaffold the spec directory structure and conventions for your project.',
-    number: '01',
+    name: 'rs-init',
+    step: '01',
+    tagline: 'Bootstrap your spec',
+    desc: 'Creates the directory structure and axiom files. Establishes the philosophical foundation before any implementation decisions.',
+    color: 'var(--brand)',
   },
   {
-    command: 'rs-spec',
-    title: 'Specify',
-    description: 'AI interviews you about your product and generates a five-level spec from your seed.',
-    number: '02',
+    name: 'rs-spec',
+    step: '02',
+    tagline: 'Fill all five levels',
+    desc: 'Interviews you about mission, pillars, truths, and interactions. Derives systems architecture from your philosophy, not the other way around.',
+    color: 'var(--brand)',
   },
   {
-    command: 'rs-impl',
-    title: 'Implement',
-    description: 'AI reads the spec and builds features test-first, story by story, autonomously.',
-    number: '03',
+    name: 'rs-impl',
+    step: '03',
+    tagline: 'Implement from stories',
+    desc: 'Takes validated user stories and builds test-driven implementation. Every feature traces back to a design pillar.',
+    color: 'var(--accent)',
   },
   {
-    command: 'rs-validate',
-    title: 'Validate',
-    description: 'Run the full test suite, check coverage, and generate a spec compliance report.',
-    number: '04',
+    name: 'rs-validate',
+    step: '04',
+    tagline: 'Run the validation gate',
+    desc: 'Executes all tests, generates coverage report, and confirms spec alignment. Pass or fail — no ambiguity.',
+    color: 'var(--accent)',
   },
 ];
 ---
 
-<section
-  data-test="workflow-section"
-  id="workflow"
-  class="py-24 px-4 bg-[var(--bg-secondary)]"
->
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl sm:text-4xl font-bold mb-4">How RootSpec works</h2>
-      <p class="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
-        Four commands. From idea to tested, shipped product.
+<section data-test="how-it-works" class="section-spacing" style="background: var(--bg);">
+  <div class="container-content">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--fg);">How it works</h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
+        Four skills cover the full specification lifecycle — from blank slate to validated implementation.
       </p>
     </div>
 
-    <div data-test="workflow-steps" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {steps.map((step) => (
-        <div
-          data-test="workflow-step"
-          class="relative p-6 rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] hover:border-brand-primary/50 transition-all group"
-        >
-          <div class="text-xs font-mono text-[var(--text-secondary)] mb-4 opacity-50">{step.number}</div>
-          <div class="mb-3">
-            <code class="text-brand-primary font-mono font-semibold text-base bg-brand-primary/10 px-2 py-1 rounded">
-              /{step.command}
-            </code>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {skills.map((skill) => (
+        <div class="card flex gap-4">
+          <div class="flex-shrink-0">
+            <span
+              class="text-xs font-mono px-2 py-0.5 rounded-full"
+              style={`background: ${skill.color}22; color: ${skill.color}; border: 1px solid ${skill.color}44;`}
+            >
+              {skill.step}
+            </span>
           </div>
-          <h3 class="font-bold text-base mb-2">{step.title}</h3>
-          <p class="text-sm text-[var(--text-secondary)] leading-relaxed">{step.description}</p>
+          <div>
+            <code class="text-sm font-mono font-bold" style={`color: ${skill.color};`}>{skill.name}</code>
+            <p class="font-semibold text-sm mt-1 mb-1" style="color: var(--fg);">{skill.tagline}</p>
+            <p class="text-sm leading-relaxed" style="color: var(--muted);">{skill.desc}</p>
+          </div>
         </div>
       ))}
     </div>

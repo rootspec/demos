@@ -1,37 +1,21 @@
 {
   "runs": [
-    {
-      "runId": "13df76ea",
-      "startedAt": "2026-04-14T14:04:25.670Z",
-      "completedAt": "2026-04-14T14:23:55.610Z",
-      "totalCostUsd": 3.44,
-      "phases": {
-        "init": {
-          "status": "success",
-          "costUsd": 0,
-          "turns": 0,
-          "durationSeconds": 0
-        },
-        "spec": {
-          "status": "success",
-          "costUsd": 1.06,
-          "turns": 42,
-          "durationSeconds": 387
-        },
-        "impl": {
-          "status": "success",
-          "costUsd": 2.07,
-          "turns": 70,
-          "durationSeconds": 631
-        },
-        "validate": {
-          "status": "success",
-          "costUsd": 0.31,
-          "turns": 16,
-          "durationSeconds": 147
-        }
-      },
-      "qualityScore": null
-    }
+  {
+    "skill": "rs-spec",
+    "startedAt": "2026-04-14T15:18:17Z",
+    "completedAt": "2026-04-14T15:25:05Z",
+    "durationSeconds": 408,
+    "iterations": null,
+    "stories": null
+  }
+,
+  {
+    "skill": "rs-impl",
+    "startedAt": "2026-04-14T15:25:26Z",
+    "completedAt": "2026-04-14T15:42:51Z",
+    "durationSeconds": 1045,
+    "iterations": 2,
+    "stories": {"US-001":{"attempts":1},"US-002":{"attempts":1},"US-003":{"attempts":1},"US-004":{"attempts":1},"US-005":{"attempts":1},"US-006":{"attempts":1},"US-010":{"attempts":2},"US-011":{"attempts":2},"US-012":{"attempts":1},"US-013":{"attempts":1},"US-020":{"attempts":1},"US-021":{"attempts":1},"US-030":{"attempts":2},"US-031":{"attempts":1}}
+  }
   ]
 }

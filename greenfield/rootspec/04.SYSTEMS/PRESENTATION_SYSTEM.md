@@ -1,55 +1,66 @@
 # Level 4: Presentation System
-
-> References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md
+<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
 
 ## Responsibility
 
-Owns the page shell, section layout, and scroll structure. Renders all sections in order, provides the HTML skeleton, and coordinates the mounting of content and interactive components. Does not own any content or business logic.
+The Presentation System owns visual design tokens, animation, and the visual expression of the active theme. It translates THEME_SYSTEM's active theme into concrete visual output and provides the motion vocabulary for interactive state changes.
 
-## Boundaries
+---
 
-- **Owns:** `<html>`, `<body>`, `<main>`, section containers, header/footer shell
-- **Does not own:** Text content (CONTENT_SYSTEM), interactive state (INTERACTIVE_SYSTEM), design tokens (THEME_SYSTEM), spacing/type scale (LAYOUT_SYSTEM)
+## Design Tokens
 
-## Page Structure
+Token categories and semantic roles are defined here. Concrete numeric values are set in implementation configuration.
 
-The page is a single scrolling document. Sections are rendered in this order:
+### Color Tokens
+- **Background** — page background, section backgrounds, card backgrounds
+- **Surface** — elevated elements (header, cards, panels)
+- **Brand** — primary brand color for CTAs, links, accents
+- **Text** — primary, secondary, muted text colors
+- **Border** — separator and outline colors
+- **Semantic** — success, warning, error states
 
-1. **Header** — Logo, version badge, theme toggle, navigation anchors
-2. **Meta Banner** — Persistent call-out about the site being a RootSpec demo
-3. **Hero Section** — Tagline, one-sentence explanation, version badge, CTA
-4. **Problem Section** — Why existing approaches fail
-5. **How It Works Section** — Four-step workflow walkthrough
-6. **Hierarchy Explorer Section** — Interactive component
-7. **Spec Wizard Section** — Interactive component
-8. **Before/After Comparison Section** — Interactive component
-9. **CTA Section** — GitHub link, getting started
-10. **Footer** — Builder attribution, build date
+All color tokens have both dark-mode and light-mode values. THEME_SYSTEM determines which set is active.
 
-## Responsive Behavior
+### Typography Tokens
+- **Font families** — heading and body (system stack or web-safe)
+- **Font sizes** — scale from xs to 4xl
+- **Font weights** — regular, medium, bold
+- **Line heights** — tight, normal, relaxed
 
-| Viewport | Layout | Column behavior |
-|----------|--------|-----------------|
-| Mobile (<768px) | Single column | All sections stack vertically |
-| Tablet (768–1023px) | Single to two-column | Side-by-side only where content warrants |
-| Desktop (≥1024px) | Full multi-column | Hero, comparison, and workflow show multi-column |
+### Spacing Tokens
+- Consistent scale for margin, padding, gap
+- Applied via utility classes or design tokens consumed by LAYOUT_SYSTEM
 
-## Section Transitions
+### Motion Tokens
+- **Duration** — [fast], [moderate], [slow] — distinct values for micro-interactions vs. section transitions
+- **Easing** — ease-in-out for transitions; ease-out for reveals
+- Respects `prefers-reduced-motion` — all animations disabled or minimized when preference is set
 
-Sections animate into view on scroll (intersection observer). The animation is a subtle fade-up — opacity 0→1, translateY 20px→0. Timing is controlled by THEME_SYSTEM animation tokens. Reduced motion preference is respected.
+---
 
-## State Owned
+## Animation Vocabulary
 
-- Scroll position (read-only, for active section highlighting)
-- Current section in viewport (for navigation highlight)
+| Interaction              | Animation                                              |
+|--------------------------|--------------------------------------------------------|
+| Section scroll reveal    | Fade up, [moderate] duration                           |
+| Hierarchy level expand   | Smooth height transition, [fast] duration              |
+| Hierarchy arrow highlight| Opacity transition, [fast] duration                    |
+| Wizard step transition   | Slide or fade between steps, [fast] duration           |
+| Before/after toggle      | Cross-fade or slide, [fast] duration                   |
+| Theme toggle             | Immediate; no animation on theme switch                |
+| CTA hover                | Scale or shadow change, [fast] duration                |
 
-## Data Owned
+---
 
-None. All content flows in from CONTENT_SYSTEM and INTERACTIVE_SYSTEM.
+## SVG Diagram
+
+The site includes an SVG diagram depicting the RootSpec methodology: a spec hierarchy surrounding the development cycle, with arrows showing that only valid (spec-conformant) solutions pass through. This is rendered inline as an SVG, not an image file, so it respects the active theme's color tokens.
+
+---
 
 ## Interactions with Other Systems
 
-- Receives CSS custom properties from THEME_SYSTEM via `<html>` class
-- Receives spacing/typography tokens from LAYOUT_SYSTEM via CSS variables
-- Renders slots/slots provided by CONTENT_SYSTEM components
-- Provides mount points (DOM nodes) where INTERACTIVE_SYSTEM hydrates
+- Consumes theme context from THEME_SYSTEM (dark/light class on root)
+- Consumes layout tokens from LAYOUT_SYSTEM (spacing, grid)
+- Provides animation classes and visual feedback to INTERACTIVE_SYSTEM components
+- Does not own content, structure, or interaction logic

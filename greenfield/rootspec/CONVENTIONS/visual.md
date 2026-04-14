@@ -1,40 +1,51 @@
-# Visual Conventions
-
 ## Color Palette
-- **Brand primary:** `#6366f1` (Indigo 500) — `brand.primary` in Tailwind
-- **Brand secondary:** `#8b5cf6` (Violet 500) — `brand.secondary` in Tailwind
-- **Dark background:** `#0f0f17` — `var(--bg-primary)`
-- **Dark surface:** `#1a1a2e` — `var(--bg-secondary)`
-- **Light background:** `#f8fafc` — `var(--bg-primary)` in light mode
-- **Light surface:** `#f1f5f9` — `var(--bg-secondary)` in light mode
-- **Border:** `rgba(99, 102, 241, 0.2)` — `var(--border-color)`
+
+- **Theme:** CSS custom properties on `:root` and `.dark`, toggled via `class` on `<html>`
+- **Default theme:** dark (per fine-tuning spec)
+- **Background:** `var(--bg)` — `#0a0f1a` (dark) / `#ffffff` (light)
+- **Foreground:** `var(--fg)` — `#e2e8f0` (dark) / `#0f172a` (light)
+- **Muted:** `var(--muted)` — `#94a3b8` (dark) / `#64748b` (light)
+- **Border:** `var(--border)` — `#1e293b` (dark) / `#e2e8f0` (light)
+- **Card background:** `var(--card)` — `#0f172a` (dark) / `#f8fafc` (light)
+- **Brand color:** `var(--brand)` — `#38bdf8` (dark) / `#0ea5e9` (light)
+- **Accent color:** `var(--accent)` — `#a78bfa` (dark) / `#8b5cf6` (light)
 
 ## Typography
-- **Body font:** Inter (Google Fonts), fallback: `system-ui, sans-serif`
-- **Mono font:** JetBrains Mono (Google Fonts), fallback: `Fira Code, monospace`
-- **Headline sizes:** `text-4xl sm:text-5xl md:text-6xl lg:text-7xl` (hero), `text-3xl sm:text-4xl` (section)
-- **Font weights:** `font-extrabold` (hero), `font-bold` (section headings), `font-semibold` (CTAs)
+
+- **Font family:** System sans-serif via Tailwind defaults
+- **Monospace:** JetBrains Mono, Fira Code, system monospace (used for code and skill names)
+- **Base size:** 16px (Tailwind default)
 
 ## Layout
-- **Max content width:** `max-w-6xl mx-auto` (sections), `max-w-3xl mx-auto` (wizard/hierarchy)
-- **Section padding:** `py-24 px-4`
-- **Card radius:** `rounded-xl`
-- **Border style:** 1px solid `var(--border-color)` with hover accent effect
+
+- **Max content width:** 1200px (`max-w-content`, per fine-tuning)
+- **Horizontal padding:** 24px (`px-6`)
+- **Section vertical spacing:** 96px (`py-24`, per fine-tuning)
+- **Mobile breakpoint:** 640px
+- **Tablet breakpoint:** 768px
+- **Desktop breakpoint:** 1024px
 
 ## Component Patterns
-- **Pain points grid:** `sm:grid-cols-2 lg:grid-cols-3`
-- **Workflow grid:** `sm:grid-cols-2 lg:grid-cols-4`
-- **Comparison:** `md:grid-cols-2` side-by-side panels
-- **Before panel:** Red accent (`border-red-500/30`, `bg-red-500/5`)
-- **After panel:** Brand accent (`border-brand-primary/30`, `bg-brand-primary/5`)
 
-## Accessibility
-- **Focus management:** `tabIndex={0}`, `role="button"`, `aria-expanded` on interactive divs
-- **Keyboard navigation:** Enter/Space triggers expand/collapse in HierarchyExplorer
-- **Reduced motion:** CSS `@media (prefers-reduced-motion: reduce)` disables all animations
-- **Dark/light class:** Applied to `<html>` element before first paint via inline script
+- **Meta banner:** sticky top, z-index 50, visible on load
+- **Header:** sticky, z-index 40, contains version badge and theme toggle
+- **Cards:** `var(--card)` background, `var(--border)` border, `rounded-xl p-6`
+- **Buttons:** `rounded-lg`, `var(--brand)` or `var(--accent)` for primary actions
+- **Code elements:** `var(--card)` bg, `var(--accent)` text, `rounded px-1.5 py-0.5`
 
-## CTA Style
-- **Primary:** `bg-brand-primary hover:bg-brand-secondary text-white` with shadow
-- **Secondary:** `border border-[var(--border-color)] hover:bg-[var(--bg-secondary)]`
-- **Padding:** `px-8 py-3.5 rounded-lg`
+## Interactive Components
+
+- **HierarchyExplorer:** React island, `client:load`, always-in-DOM content panels with CSS display toggle
+- **SpecWizard:** React island, `client:load`, 4-step linear flow, `data-test` on first option in each list
+- **ComparisonSection:** React island, `client:load`, toggle between two views
+- **Theme toggle:** vanilla JS in Header, instant (0ms transition), localStorage key `rootspec-theme`
+
+## Z-Index Scale
+
+- **Meta banner:** 50
+- **Header:** 40
+
+## Focus States
+
+- `outline: 2px solid var(--brand)` via `:focus-visible` global rule
+- All interactive elements: `minHeight: 44px` (WCAG touch target compliance)

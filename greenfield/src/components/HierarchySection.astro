@@ -1,16 +1,14 @@
 ---
-import HierarchyExplorer from './HierarchyExplorer.tsx';
+// Server-side wrapper for the React hierarchy explorer island
 ---
-
-<section id="hierarchy" class="py-24 px-4 bg-[var(--bg-secondary)]">
-  <div class="max-w-3xl mx-auto">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl sm:text-4xl font-bold mb-4">The five-level spec hierarchy</h2>
-      <p class="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
-        RootSpec structures every product as five nested layers — from philosophy to testable user stories.
-        Click any level to explore.
+<section class="section-spacing" style="background: var(--bg);">
+  <div class="container-content">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--fg);">The five-level hierarchy</h2>
+      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
+        Each level can only reference higher levels, never lower. Click a level to explore.
       </p>
     </div>
-    <HierarchyExplorer client:load />
+    <div id="hierarchy-explorer-mount"></div>
   </div>
 </section>

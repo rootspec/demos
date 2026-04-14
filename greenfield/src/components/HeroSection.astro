@@ -1,57 +1,118 @@
 ---
-const VERSION = '7.2.4';
+import { version } from '../../.rootspec.json';
+
+const githubUrl = 'https://github.com/rootspec/rootspec';
 ---
 
-<section
-  data-test="hero-section"
-  class="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 py-24 overflow-hidden"
->
-  <!-- Background gradient -->
-  <div class="absolute inset-0 bg-gradient-to-b from-brand-primary/10 via-transparent to-transparent pointer-events-none"></div>
+<section class="section-spacing" style="background: var(--bg);">
+  <div class="container-content text-center">
+    <div class="mb-6 flex items-center justify-center gap-3">
+      <span
+        data-test="version-badge"
+        class="text-xs font-mono px-3 py-1 rounded-full"
+        style="background: var(--card); border: 1px solid var(--border); color: var(--muted);"
+      >
+        v{version}
+      </span>
+    </div>
 
-  <!-- Version badge -->
-  <div
-    data-test="version-badge"
-    class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-primary/40 bg-brand-primary/10 text-brand-primary text-sm font-medium mb-8 animate-fade-in"
-  >
-    <span class="w-2 h-2 rounded-full bg-brand-primary inline-block"></span>
-    v{VERSION}
-  </div>
-
-  <!-- Headline -->
-  <h1
-    data-test="hero-headline"
-    class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 max-w-4xl leading-tight"
-  >
-    Spec-driven AI development<br />
-    <span class="text-brand-primary">that actually works</span>
-  </h1>
-
-  <!-- Subheadline -->
-  <p
-    data-test="hero-subheadline"
-    class="text-lg sm:text-xl text-[var(--text-secondary)] max-w-2xl mb-10 leading-relaxed"
-  >
-    RootSpec turns your product idea into a structured, five-level specification
-    that AI agents can implement, test, and validate — autonomously.
-  </p>
-
-  <!-- CTA buttons -->
-  <div class="flex flex-col sm:flex-row gap-4 items-center">
-    <a
-      data-test="hero-cta"
-      href="https://github.com/rootspec/rootspec"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg bg-brand-primary hover:bg-brand-secondary text-white font-semibold text-base transition-colors shadow-lg shadow-brand-primary/25"
+    <h1
+      data-test="hero-tagline"
+      class="text-5xl md:text-6xl font-bold leading-tight mb-6"
+      style="color: var(--fg);"
     >
-      Get started on GitHub
-    </a>
-    <a
-      href="#workflow"
-      class="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg border border-[var(--border-color)] text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] font-semibold text-base transition-colors"
-    >
-      See how it works
-    </a>
+      When code and specs can be<br />
+      generated trivially,<br />
+      <span style="color: var(--brand);">validation is the real value.</span>
+    </h1>
+
+    <p class="text-xl mb-10 max-w-2xl mx-auto" style="color: var(--muted);">
+      RootSpec is a specification language where philosophy guides implementation, never vice versa.
+      AI has knowledge but not wisdom — the spec bridges the gap.
+    </p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a
+        data-test="hero-cta"
+        href={githubUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-primary"
+        style="background: var(--brand);"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.745 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        View on GitHub
+      </a>
+    </div>
+
+    <!-- RootSpec diagram -->
+    <div class="mt-16 max-w-2xl mx-auto">
+      <svg viewBox="0 0 600 320" class="w-full" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="RootSpec methodology diagram">
+        <!-- Outer spec boundary -->
+        <rect x="20" y="20" width="560" height="280" rx="16" stroke="currentColor" stroke-opacity="0.3" stroke-width="2" stroke-dasharray="8 4" fill="none"/>
+        <text x="300" y="14" text-anchor="middle" class="text-xs" fill="currentColor" opacity="0.5" font-size="11" font-family="monospace">ROOTSPEC BOUNDARY</text>
+
+        <!-- Five levels -->
+        <rect x="40" y="40" width="100" height="50" rx="8" fill="var(--brand)" fill-opacity="0.15" stroke="var(--brand)" stroke-opacity="0.5" stroke-width="1.5"/>
+        <text x="90" y="61" text-anchor="middle" fill="var(--brand)" font-size="10" font-weight="600" font-family="monospace">L1</text>
+        <text x="90" y="74" text-anchor="middle" fill="var(--fg)" font-size="9" opacity="0.8">Philosophy</text>
+
+        <rect x="40" y="105" width="100" height="50" rx="8" fill="var(--brand)" fill-opacity="0.12" stroke="var(--brand)" stroke-opacity="0.4" stroke-width="1.5"/>
+        <text x="90" y="126" text-anchor="middle" fill="var(--brand)" font-size="10" font-weight="600" font-family="monospace">L2</text>
+        <text x="90" y="139" text-anchor="middle" fill="var(--fg)" font-size="9" opacity="0.8">Truths</text>
+
+        <rect x="40" y="170" width="100" height="50" rx="8" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-opacity="0.4" stroke-width="1.5"/>
+        <text x="90" y="191" text-anchor="middle" fill="var(--accent)" font-size="10" font-weight="600" font-family="monospace">L3</text>
+        <text x="90" y="204" text-anchor="middle" fill="var(--fg)" font-size="9" opacity="0.8">Interactions</text>
+
+        <rect x="40" y="235" width="100" height="45" rx="8" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-opacity="0.3" stroke-width="1.5"/>
+        <text x="90" y="254" text-anchor="middle" fill="var(--accent)" font-size="10" font-weight="600" font-family="monospace">L4/L5</text>
+        <text x="90" y="267" text-anchor="middle" fill="var(--fg)" font-size="9" opacity="0.8">Systems/Impl</text>
+
+        <!-- Arrows showing one-way reference -->
+        <line x1="90" y1="90" x2="90" y2="105" stroke="var(--brand)" stroke-opacity="0.5" stroke-width="1.5" marker-end="url(#arrow-down)"/>
+        <line x1="90" y1="155" x2="90" y2="170" stroke="var(--brand)" stroke-opacity="0.4" stroke-width="1.5" marker-end="url(#arrow-down)"/>
+        <line x1="90" y1="220" x2="90" y2="235" stroke="var(--accent)" stroke-opacity="0.4" stroke-width="1.5" marker-end="url(#arrow-down)"/>
+
+        <!-- Four skills -->
+        <text x="310" y="52" text-anchor="middle" fill="var(--fg)" opacity="0.9" font-size="12" font-weight="600">/rs-init</text>
+        <text x="310" y="65" text-anchor="middle" fill="var(--muted)" font-size="10">Bootstrap the spec structure</text>
+        <rect x="230" y="42" width="160" height="32" rx="6" stroke="currentColor" stroke-opacity="0.2" stroke-width="1" fill="none"/>
+
+        <text x="310" y="117" text-anchor="middle" fill="var(--fg)" opacity="0.9" font-size="12" font-weight="600">/rs-spec</text>
+        <text x="310" y="130" text-anchor="middle" fill="var(--muted)" font-size="10">Fill all five levels</text>
+        <rect x="230" y="107" width="160" height="32" rx="6" stroke="currentColor" stroke-opacity="0.2" stroke-width="1" fill="none"/>
+
+        <text x="310" y="182" text-anchor="middle" fill="var(--fg)" opacity="0.9" font-size="12" font-weight="600">/rs-impl</text>
+        <text x="310" y="195" text-anchor="middle" fill="var(--muted)" font-size="10">Implement from user stories</text>
+        <rect x="230" y="172" width="160" height="32" rx="6" stroke="currentColor" stroke-opacity="0.2" stroke-width="1" fill="none"/>
+
+        <text x="310" y="247" text-anchor="middle" fill="var(--fg)" opacity="0.9" font-size="12" font-weight="600">/rs-validate</text>
+        <text x="310" y="260" text-anchor="middle" fill="var(--muted)" font-size="10">Run tests, report coverage</text>
+        <rect x="230" y="237" width="160" height="32" rx="6" stroke="currentColor" stroke-opacity="0.2" stroke-width="1" fill="none"/>
+
+        <!-- Filter/gate on right -->
+        <polygon points="480,80 540,80 520,160 500,160" fill="var(--brand)" fill-opacity="0.1" stroke="var(--brand)" stroke-opacity="0.4" stroke-width="1.5"/>
+        <text x="510" y="125" text-anchor="middle" fill="var(--brand)" font-size="10" font-weight="600">SPEC</text>
+        <text x="510" y="138" text-anchor="middle" fill="var(--brand)" font-size="9">GATE</text>
+
+        <path d="M395 138 L480 120" stroke="var(--brand)" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="4 2"/>
+        <text x="440" y="128" fill="var(--fg)" opacity="0.6" font-size="8">valid only</text>
+
+        <!-- Check mark for passing -->
+        <circle cx="560" cy="210" r="18" fill="none" stroke="var(--brand)" stroke-opacity="0.4" stroke-width="1.5"/>
+        <path d="M551 210 L557 217 L568 203" stroke="var(--brand)" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="560" y="238" text-anchor="middle" fill="var(--muted)" font-size="8">passes</text>
+
+        <!-- Arrow markers -->
+        <defs>
+          <marker id="arrow-down" markerWidth="6" markerHeight="6" refX="3" refY="5" orient="auto">
+            <path d="M0 0 L3 5 L6 0" fill="none" stroke="currentColor" stroke-width="1"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
   </div>
 </section>

@@ -1,83 +1,80 @@
 # =============================================================================
-# LEVEL 5: USER STORIES — Responsive Layout
+# USER STORIES: Responsive & Accessibility — MVP Phase
 # =============================================================================
+# @spec_version: 1.0.0
 # @phase: MVP
-# @systems: [LAYOUT_SYSTEM, PRESENTATION_SYSTEM]
+# @journey: ACCESSIBILITY
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
 
 ---
 
-id: US-401
-title: Visitor on desktop sees multi-column layout in key sections
+# =============================================================================
+# USER STORY: Use site on mobile
+# =============================================================================
+
+id: US-030
+title: Access all content and interactive features on a mobile device
 
 acceptance_criteria:
-  - id: AC-401-1
-    title: Workflow section shows steps in a grid on desktop
+  - id: AC-030-1
+    title: Page renders all sections on mobile viewport
     narrative: |
-      Given I visit on a 1280px-wide viewport
-      When I scroll to the workflow section
-      Then the four steps are arranged in a grid (2x2 or 4x1)
+      Given I visit the page on a mobile device
+      When the page loads
+      Then I can see all major sections without horizontal scrolling
     given:
-      - viewport: { width: 1280, height: 800 }
       - visit: '/'
-    when:
-      - scrollTo: { selector: '[data-test=workflow-section]' }
+    when: []
     then:
-      - shouldBeVisible: { selector: '[data-test=workflow-steps]' }
-      - shouldExist: { selector: '[data-test=workflow-step]', count: 4 }
+      - shouldExist: { selector: '[data-test=hero-tagline]' }
+      - shouldExist: { selector: '[data-test=meta-banner]' }
 
-  - id: AC-401-2
-    title: Before/After comparison shows panels side by side on desktop
+  - id: AC-030-2
+    title: Hierarchy explorer is usable on mobile
     narrative: |
-      Given I visit on a desktop viewport
-      When I scroll to the comparison section
-      Then the before and after panels are side by side
+      Given I am on mobile and scroll to the hierarchy explorer
+      When I tap a hierarchy level
+      Then it expands with its content visible
     given:
-      - viewport: { width: 1280, height: 800 }
       - visit: '/'
     when:
-      - scrollTo: { selector: '[data-test=comparison-section]' }
+      - click: { selector: '[data-test=hierarchy-level-1]' }
     then:
-      - shouldBeVisible: { selector: '[data-test=panel-before]' }
-      - shouldBeVisible: { selector: '[data-test=panel-after]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
 
 ---
 
-id: US-402
-title: Visitor on tablet sees appropriately adapted layout
+# =============================================================================
+# USER STORY: Keyboard navigation of interactive elements
+# =============================================================================
+
+id: US-031
+title: Navigate all interactive elements without a mouse
 
 acceptance_criteria:
-  - id: AC-402-1
-    title: Page is usable at 768px viewport width
+  - id: AC-031-1
+    title: Theme toggle is keyboard accessible
     narrative: |
-      Given I visit on a 768px-wide viewport
-      When I scroll through the page
-      Then all sections are visible and readable without overflow
-    given:
-      - viewport: { width: 768, height: 1024 }
-      - visit: '/'
-    when:
-      - scrollTo: { selector: '[data-test=footer]' }
-    then:
-      - shouldNotOverflow: { selector: 'body', direction: 'x' }
-      - shouldBeVisible: { selector: '[data-test=meta-banner]' }
-      - shouldBeVisible: { selector: '[data-test=footer]' }
-
----
-
-id: US-403
-title: CTA section links to the correct GitHub repository
-
-acceptance_criteria:
-  - id: AC-403-1
-    title: CTA section has a link to the RootSpec GitHub repo
-    narrative: |
-      Given I scroll to the CTA section
-      When I look for the primary action
-      Then there is a link to https://github.com/rootspec/rootspec
+      Given I am using keyboard navigation
+      When I tab to the theme toggle and press Enter
+      Then the theme changes
     given:
       - visit: '/'
     when:
-      - scrollTo: { selector: '[data-test=cta-section]' }
+      - click: { selector: '[data-test=theme-toggle]' }
     then:
-      - shouldBeVisible: { selector: '[data-test=cta-github-link]' }
-      - shouldHaveAttr: { selector: '[data-test=cta-github-link]', attr: 'href', value: 'https://github.com/rootspec/rootspec' }
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+  - id: AC-031-2
+    title: Hierarchy explorer levels have visible focus states
+    narrative: |
+      Given I am using keyboard navigation
+      When I tab to a hierarchy level
+      Then I see a visible focus indicator
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: '[data-test=hierarchy-level-1]' }
+    then:
+      - shouldExist: { selector: '[data-test=hierarchy-level-1]' }

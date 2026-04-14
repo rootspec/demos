@@ -1,39 +1,32 @@
-# Technical Conventions
-
 ## Framework
-- **Framework:** Astro 6 with React 19 islands and Tailwind CSS 3
-- **Language:** TypeScript (strict mode for app code, loose for Cypress)
-- **Node version:** 22.x
-- **Package manager:** npm with --legacy-peer-deps flag (needed for tailwindcss@3 + @astrojs/tailwind@6)
 
-## Project Structure
-- **Pages:** `src/pages/` — Astro pages
-- **Components:** `src/components/` — `.astro` for static, `.tsx` for interactive React islands
-- **Layouts:** `src/layouts/Layout.astro` — base HTML shell
-- **Styles:** `src/styles/global.css` — Tailwind directives + CSS variables
+- **Framework:** Astro 6 with React islands (`@astrojs/react`) and Tailwind CSS (`@astrojs/tailwind`, tailwindcss v3)
+- **TypeScript:** v4 (pinned for Cypress webpack-batteries compatibility)
+- **Rendering:** Astro SSR for static components, `client:load` for React interactive islands
+- **Base path:** `/demos/greenfield` in production (`NODE_ENV=production`), `/` in dev
 
-## Dev Server
-- **Command:** `npx astro dev --port 3000 --host`
-- **Port:** 3000
-- **Start/stop:** via `./scripts/dev.sh`
+## File Structure
+
+- **Pages:** `src/pages/` — Astro page files
+- **Layouts:** `src/layouts/Layout.astro` — root HTML layout with theme FOUC prevention
+- **Components:** `src/components/` — `.astro` for static, `.tsx` for interactive
+- **Styles:** `src/styles/global.css` — Tailwind base + CSS custom properties for theming
 
 ## Testing
+
 - **Framework:** Cypress 15 with TypeScript
-- **Test file:** `cypress/e2e/mvp.cy.ts`
-- **DSL:** Extended RootSpec DSL — see `cypress/support/schema.ts` for all step types
-- **Cypress tsconfig:** `target: ES2020`, `ignoreDeprecations: "6.0"` (required for TypeScript 6)
+- **Pattern:** `loadAndRun()` with embedded YAML string literals in `cypress/e2e/mvp.cy.ts`
+- **DSL:** `visit`, `click`, `fill`, `shouldExist`, `shouldContain`
+- **Selectors:** All interactive elements have `data-test` attributes matching spec selector names
+- **Note:** Cypress tsconfig uses `"ignoreDeprecations": "5.0"` and `target: es2017` to avoid TS5 deprecation errors
 
-## Interactive Components
-- **Pattern:** React islands using `client:load` directive in Astro
-- **HierarchyExplorer:** `src/components/HierarchyExplorer.tsx` — accordion with `expanded` class
-- **SpecWizard:** `src/components/SpecWizard.tsx` — 4-step multi-page wizard
+## Dev Server
 
-## Theme
-- **Default:** Dark mode (`html.dark` class set by inline script before paint)
-- **Toggle:** Stores preference in `localStorage` as `'dark'` or `'light'`
-- **CSS variables:** `--bg-primary`, `--bg-secondary`, `--text-primary`, `--text-secondary`, `--border-color`, `--accent`
+- **Command:** `npx astro dev --port 3000`
+- **Port:** 3000
+- **Managed by:** `scripts/dev.sh`
 
-## Dependencies Added
-- `astro@^6.1.6`, `@astrojs/react@^5.0.3`, `@astrojs/tailwind@^6.0.2`
-- `react@^19.2.5`, `react-dom@^19.2.5`, `tailwindcss@^3.4.19`
-- `typescript@^6.0.2`, `cypress@^15.13.1`, `js-yaml@^4.1.1`, `zod@^4.3.6`
+## Dependencies
+
+- **Runtime:** astro, @astrojs/react, @astrojs/tailwind, react, react-dom, tailwindcss@3
+- **Dev:** cypress, js-yaml, zod, typescript@4

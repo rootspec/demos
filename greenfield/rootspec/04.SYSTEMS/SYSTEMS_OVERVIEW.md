@@ -1,62 +1,51 @@
 # Level 4: Systems Overview
-
-> References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md
+<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
 
 ## System Map
 
-The marketing site is composed of five primary systems. All systems are static-first with progressive enhancement; no server-side state.
+| System              | Responsibility                                              | Primary Data Owned                    |
+|---------------------|-------------------------------------------------------------|---------------------------------------|
+| CONTENT_SYSTEM      | Static page content, copy, and structure                    | Sections, headings, paragraphs, links |
+| INTERACTIVE_SYSTEM  | Client-side interactive components                          | UI state for explorer, wizard, toggle |
+| LAYOUT_SYSTEM       | Page structure, responsive grid, navigation                  | Layout tokens, breakpoints, z-layers  |
+| PRESENTATION_SYSTEM | Visual design tokens, theme, animation                      | Colors, typography, motion values     |
+| THEME_SYSTEM        | Dark/light mode detection, persistence, switching           | Theme preference, system detection    |
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    PRESENTATION_SYSTEM                       │
-│  (Layout, Theme, Navigation, Section rendering)             │
-│                                                             │
-│  ┌──────────────────┐  ┌──────────────────┐                │
-│  │  CONTENT_SYSTEM  │  │INTERACTIVE_SYSTEM│                │
-│  │  (Static copy,   │  │(Hierarchy, Wizard│                │
-│  │   meta banner,   │  │ Before/After,    │                │
-│  │   version badge) │  │ Comparison)      │                │
-│  └──────────────────┘  └──────────────────┘                │
-│                                                             │
-│  ┌──────────────────────────────────────────────┐          │
-│  │            THEME_SYSTEM                       │          │
-│  │  (Dark/light, tokens, animation timing)       │          │
-│  └──────────────────────────────────────────────┘          │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## Systems
-
-| System | Responsibility | Primary File(s) |
-|--------|---------------|-----------------|
-| [PRESENTATION_SYSTEM](PRESENTATION_SYSTEM.md) | Layout, page structure, responsive grid, section orchestration | Layout.astro, index.astro |
-| [CONTENT_SYSTEM](CONTENT_SYSTEM.md) | Static text content, meta banner, version badge, external links | Content components, version reading |
-| [INTERACTIVE_SYSTEM](INTERACTIVE_SYSTEM.md) | Hierarchy Explorer, Spec Wizard, Before/After comparison | React/TSX components |
-| [THEME_SYSTEM](THEME_SYSTEM.md) | Dark/light mode, design tokens, animation parameters | global.css, theme provider |
-| [LAYOUT_SYSTEM](LAYOUT_SYSTEM.md) | Responsive breakpoints, spacing scale, typography scale | Tailwind config, CSS variables |
+---
 
 ## System Interactions
 
-| Interaction | From | To | Data/Signal |
-|-------------|------|----|-------------|
-| Theme application | THEME_SYSTEM | PRESENTATION_SYSTEM | CSS class toggle (dark/light) |
-| Content rendering | CONTENT_SYSTEM | PRESENTATION_SYSTEM | Static HTML/Astro components |
-| Interactive mounting | INTERACTIVE_SYSTEM | PRESENTATION_SYSTEM | Client-side hydration |
-| Token consumption | LAYOUT_SYSTEM | PRESENTATION_SYSTEM, CONTENT_SYSTEM, INTERACTIVE_SYSTEM | CSS custom properties |
-| Theme state | THEME_SYSTEM | INTERACTIVE_SYSTEM | CSS class (interactive components respond) |
+| Source              | Target              | What crosses the boundary                                  |
+|---------------------|---------------------|------------------------------------------------------------|
+| CONTENT_SYSTEM      | LAYOUT_SYSTEM       | Section structure and content slots                        |
+| CONTENT_SYSTEM      | INTERACTIVE_SYSTEM  | Initial data for wizard templates and explorer content     |
+| INTERACTIVE_SYSTEM  | PRESENTATION_SYSTEM | Dynamic class changes, animation triggers                  |
+| INTERACTIVE_SYSTEM  | THEME_SYSTEM        | Theme toggle user action                                   |
+| LAYOUT_SYSTEM       | PRESENTATION_SYSTEM | Spacing and grid tokens consumed by visual rules           |
+| THEME_SYSTEM        | PRESENTATION_SYSTEM | Active theme class applied to root element                 |
+
+---
 
 ## Data Flow
 
-All data flows are one-directional and client-side:
+```
+User action
+    ↓
+INTERACTIVE_SYSTEM (handles interaction, updates UI state)
+    ↓
+PRESENTATION_SYSTEM (applies visual changes via class/token changes)
+    ↑
+THEME_SYSTEM (provides active theme context)
+    ↑
+CONTENT_SYSTEM (provides static content to all systems)
+    ↑
+LAYOUT_SYSTEM (provides structural context for all rendering)
+```
 
-1. **Build time:** Version number read from `.rootspec.json` → injected into CONTENT_SYSTEM
-2. **Load time:** `prefers-color-scheme` → THEME_SYSTEM initializes → CSS class applied to `<html>`
-3. **Interaction time:** User action → INTERACTIVE_SYSTEM state update → DOM re-render (client-side only)
-4. **No persistence:** Wizard output, theme preference (session only), no server writes
+---
 
-## Boundaries
+## Deployment Context
 
-- No system makes network requests at runtime
-- No system shares mutable state across components (each interactive component is self-contained)
-- THEME_SYSTEM is the only system that touches the root `<html>` element
-- CONTENT_SYSTEM owns all external link URLs — INTERACTIVE_SYSTEM does not hardcode URLs
+The site is a static build deployed to GitHub Pages at `/demos/greenfield/`. All systems must operate correctly under this subpath. No server-side rendering. No API calls. All interactivity is client-side JavaScript.
+
+The build reads `.rootspec.json` at build time to extract the framework version for the version badge. This is the only build-time data read from outside the source directory.

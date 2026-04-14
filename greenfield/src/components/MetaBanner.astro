@@ -1,32 +1,36 @@
 ---
-const SPEC_URL = 'https://github.com/rootspec/demos/tree/main/greenfield/rootspec';
-const SEED_URL = 'https://github.com/rootspec/demos/tree/main/greenfield/SEED.md';
+const BASE = import.meta.env.BASE_URL || '';
+const specUrl = 'https://github.com/rootspec/demos/tree/main/greenfield/rootspec';
+const seedUrl = 'https://github.com/rootspec/demos/blob/main/greenfield/SEED.md';
 ---
 
 <div
   data-test="meta-banner"
-  class="w-full bg-brand-primary/10 border-b border-brand-primary/30 px-4 py-2 text-center text-sm text-[var(--text-secondary)]"
+  class="w-full py-2.5 px-4 text-sm text-center"
+  style="background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50;"
 >
-  <span class="inline-flex items-center gap-3 flex-wrap justify-center">
-    <span>🧪 This site was built by an AI agent using RootSpec</span>
+  <span class="text-[var(--muted)]">
+    This site was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups.&nbsp;
     <a
-      data-test="link-spec"
-      href={SPEC_URL}
+      data-test="meta-banner-spec-link"
+      href={specUrl}
       target="_blank"
       rel="noopener noreferrer"
-      class="text-brand-primary hover:text-brand-secondary underline font-medium"
+      class="underline hover:opacity-80 transition-opacity"
+      style="color: var(--brand);"
     >
-      View the spec
+      View the spec →
     </a>
-    <span class="opacity-40">·</span>
+    &nbsp;
     <a
-      data-test="link-seed"
-      href={SEED_URL}
+      data-test="meta-banner-seed-link"
+      href={seedUrl}
       target="_blank"
       rel="noopener noreferrer"
-      class="text-brand-primary hover:text-brand-secondary underline font-medium"
+      class="underline hover:opacity-80 transition-opacity"
+      style="color: var(--brand);"
     >
-      View the seed
+      View the seed →
     </a>
   </span>
 </div>

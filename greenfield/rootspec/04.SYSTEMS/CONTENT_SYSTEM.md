@@ -1,66 +1,76 @@
 # Level 4: Content System
-
-> References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md
+<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
 
 ## Responsibility
 
-Owns all static text, copy, external link URLs, and the version badge. Reads the RootSpec version from `.rootspec.json` at build time and injects it where needed. Manages the meta banner that contextualizes this site as a RootSpec demo.
+The Content System owns all static copy, section structure, and page content. It defines what is said and where — not how it looks or how it behaves interactively.
 
-## Boundaries
+---
 
-- **Owns:** All visible static text, headline copy, section descriptions, link URLs, version number, footer attribution
-- **Does not own:** Layout structure (PRESENTATION_SYSTEM), interactive state (INTERACTIVE_SYSTEM), visual tokens (THEME_SYSTEM), spacing (LAYOUT_SYSTEM)
+## Sections and Content
 
-## Data Owned
+### Meta Banner
+- Persistent visibility at top of page or immediately below hero
+- Copy: explains the site is a RootSpec demo built from a [~100-line] seed, no manual code, no mockups
+- Links to SEED.md and spec files in the GitHub repo at `https://github.com/rootspec/demos/tree/main/greenfield`
+- Tone: honest and direct — names what the visitor is looking at and why rough edges exist
 
-### Version Badge
-- `version: string` — Read from `.rootspec.json` at build time (field: `version`)
-- Displayed in: header, hero section
-- Format: `v{version}` (e.g., `v7.2.4`)
+### Hero
+- Tagline: short, punchy, communicates "spec methodology" at a glance
+- One-sentence explanation of what RootSpec is
+- Version badge: reads from `.rootspec.json` at build time; displays `v{version}`
+- Primary CTA: link to GitHub repo
 
-### External Links
-All external URLs are centralized in CONTENT_SYSTEM, not scattered across interactive components:
+### Problem Section
+- Named, specific pain points — not generic industry speak
+- Four core problems: spec drift, philosophy-implementation gap, unreliable AI output, specs nobody reads
+- Tone: recognition, not lecture — the reader has felt these problems
 
-| Link | URL | Opens |
-|------|-----|-------|
-| View the spec | https://github.com/rootspec/demos/tree/main/greenfield/rootspec | New tab |
-| View the seed | https://github.com/rootspec/demos/tree/main/greenfield/SEED.md | New tab |
-| RootSpec GitHub | https://github.com/rootspec/rootspec | New tab |
-| Demos repo | https://github.com/rootspec/demos/tree/main/greenfield | New tab |
+### How It Works
+- Four-skill workflow: `/rs-init` → `/rs-spec` → `/rs-impl` → `/rs-validate`
+- Each skill: name, one-line description, what it produces
+- Visual or structural walkthrough — before/after or step progression
 
-### Footer Attribution
-- Builder: Claude (Anthropic)
-- Build date: injected at build time (ISO date format, displayed as human-readable)
+### Hierarchy Explorer Section
+- Introduction text explaining the five levels
+- Hosts the INTERACTIVE_SYSTEM hierarchy explorer component
+- Static fallback content if JS is unavailable
 
-## Meta Banner
+### Spec Wizard Section
+- Introduction text inviting visitors to apply the methodology
+- Hosts the INTERACTIVE_SYSTEM wizard component
+- Note that output is templates, not AI — sets expectation correctly
 
-The meta banner is a persistent element at the top of the page (or immediately below the hero) that:
-- Explains this site is itself a RootSpec demo
-- States that it was generated from a ~100-line product description using four commands
-- Links to the spec files and seed in the GitHub repo
-- Is honest about rough edges being a result of minimal human guidance
+### Before/After Comparison Section
+- Introduction text framing the comparison
+- "Without spec" panel: vague requirements, ambiguous stories, untraceable decisions
+- "With RootSpec" panel: structured hierarchy, testable stories, traced decisions
+- Real content in both panels — specific examples, not placeholder text
 
-**Content (canonical):**
-> This site was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups. The spec, the code, and the tests were all produced by running four commands. [View the spec →] [View the seed →]
+### Open Source CTA
+- Links to `https://github.com/rootspec/rootspec`
+- Getting-started framing: one command to start
+- Community framing if applicable
 
-The meta banner should never be hidden, collapsed, or deprioritized. It is essential context for the site's credibility.
+### Footer
+- Built-by attribution: identifies the builder (Claude / AI assistant) and build date
+- Framework version
+- Links back to GitHub repos
 
-## Sections: Content Responsibilities
+---
 
-| Section | Content Type |
-|---------|-------------|
-| Hero | Tagline, one-sentence explanation, primary CTA text |
-| Problem | Four pain point descriptions with headlines |
-| How It Works | Four-step workflow: step names, descriptions, command labels |
-| Hierarchy Explorer | Level names, icons, purpose descriptions, example content for each of 5 levels |
-| Spec Wizard | Step labels, template mission options, design pillar suggestions |
-| Before/After | Both panel contents — "without spec" doc and "with RootSpec" doc |
-| CTA | Headline, description, button text |
-| Footer | Attribution text, build date |
+## Content Constraints
 
-## Rules
+- No lorem ipsum anywhere on the page
+- No "coming soon" or placeholder content visible to visitors
+- All links must resolve: SEED.md, spec files, GitHub repos
+- Version badge reads from `.rootspec.json` — not hardcoded
+- Meta banner is visible above the fold on all common screen sizes
 
-- No lorem ipsum at any level — all content is real and representative
-- External URLs are defined here; components receive them as props
-- Version number is fetched at build time; there is no runtime version fetch
-- The meta banner content is never paraphrased — the canonical copy above must be used verbatim or improved, never diluted
+---
+
+## Interactions with Other Systems
+
+- Provides section structure to LAYOUT_SYSTEM (slot boundaries, section order)
+- Provides initial data to INTERACTIVE_SYSTEM (wizard templates, explorer level content)
+- Does not own visual design or layout tokens — those belong to PRESENTATION_SYSTEM and LAYOUT_SYSTEM

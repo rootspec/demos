@@ -1,70 +1,70 @@
 # Level 4: Layout System
-
-> References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md
+<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
 
 ## Responsibility
 
-Owns the spacing scale, typography scale, breakpoint definitions, and max-width constraints. Provides the grid vocabulary all other systems use to position content. Does not own color or animation timing (those belong to THEME_SYSTEM).
+The Layout System owns page structure, responsive grid, navigation, and section ordering. It defines where things are, not what they contain or how they look visually.
 
-## Boundaries
+---
 
-- **Owns:** Spacing tokens, typography scale, breakpoint values, container max-widths, grid column definitions
-- **Does not own:** Color (THEME_SYSTEM), component state (INTERACTIVE_SYSTEM), content (CONTENT_SYSTEM)
-- **Consumed by:** PRESENTATION_SYSTEM, CONTENT_SYSTEM, INTERACTIVE_SYSTEM, THEME_SYSTEM (for layout-adjacent animation)
+## Page Structure
 
-## Breakpoints
+The site is a single-page layout with a persistent header and a vertical stack of sections:
 
-| Name | Min Width | Primary Use |
-|------|-----------|-------------|
-| `sm` | [N]px | Small phones |
-| `md` | [N]px | Tablets, large phones landscape |
-| `lg` | [N]px | Desktop, small laptops |
-| `xl` | [N]px | Wide desktop |
+1. Header (persistent, sticky)
+2. Meta Banner (persistent, high-visibility)
+3. Hero Section
+4. Problem Section
+5. How It Works Section
+6. Hierarchy Explorer Section
+7. Spec Wizard Section
+8. Before/After Comparison Section
+9. Open Source CTA Section
+10. Footer
 
-## Container
+The header provides jump links to major sections via anchor navigation. Smooth scrolling is applied to all anchor links.
 
-- Max content width: `[N]px`
-- Horizontal padding (mobile): `[N]px` each side
-- Horizontal padding (desktop): `[N]px` each side
-- Centered via `margin: 0 auto`
+---
 
-## Spacing Scale
+## Responsive Behavior
 
-A consistent multiplier-based scale. All spacing values (margin, padding, gap) derive from a base unit of `[N]px`.
+| Breakpoint | Behavior                                                              |
+|------------|-----------------------------------------------------------------------|
+| Mobile     | Single-column layout; header collapses to hamburger or simplified nav |
+| Tablet     | Single-column with wider margins; interactive components full-width   |
+| Desktop    | Content max-width centered; interactive sections may use two columns  |
 
-| Token | Value | Common use |
-|-------|-------|------------|
-| `--space-1` | [N]px | Tight internal spacing |
-| `--space-2` | [N]px | Component internal padding |
-| `--space-3` | [N]px | Between related elements |
-| `--space-4` | [N]px | Between components |
-| `--space-6` | [N]px | Section padding |
-| `--space-8` | [N]px | Major section separation |
-| `--space-12` | [N]px | Hero/CTA vertical padding |
+All interactive components must be usable at all breakpoints. No content is hidden on mobile — it reflows.
 
-## Typography Scale
+---
 
-| Token | Size | Weight | Use |
-|-------|------|--------|-----|
-| `--text-xs` | [N]px | 400 | Captions, meta |
-| `--text-sm` | [N]px | 400 | Secondary copy |
-| `--text-base` | [N]px | 400 | Body text |
-| `--text-lg` | [N]px | 500 | Lead copy, emphasized body |
-| `--text-xl` | [N]px | 600 | Section subheadings |
-| `--text-2xl` | [N]px | 700 | Section headings |
-| `--text-3xl` | [N]px | 700 | Hero tagline (mobile) |
-| `--text-4xl` | [N]px | 800 | Hero tagline (desktop) |
+## Z-Layering
 
-## Grid
+| Layer    | Elements                                         |
+|----------|--------------------------------------------------|
+| Base     | Page content and sections                        |
+| Elevated | Sticky header, Meta Banner                       |
+| Overlay  | Modals or expanded states (if applicable)        |
 
-- Base grid: 12 columns (desktop), 4 columns (mobile)
-- Column gap: `--space-4`
-- Row gap: `--space-6`
+---
 
-## Rules
+## Navigation
 
-- All spacing in components uses `--space-*` tokens; no arbitrary pixel values
-- Typography sizes always use `--text-*` tokens; no arbitrary rem/px values
-- No component defines its own breakpoints; breakpoints are defined here and consumed via Tailwind config or CSS media queries
-- Line height: 1.5 for body text, 1.2 for headings
-- Font family: system font stack by default; monospace stack for code blocks
+- Header links are anchor tags pointing to section IDs
+- Meta Banner is sticky or fixed at the top to maintain visibility
+- No multi-page routing — single page with sections
+
+---
+
+## Subpath Deployment
+
+All internal links and asset URLs must include the base path `/demos/greenfield/`. The framework (Astro or equivalent) is configured with `base: '/demos/greenfield'` so that build output resolves correctly on GitHub Pages.
+
+---
+
+## Interactions with Other Systems
+
+- Receives section content slots from CONTENT_SYSTEM
+- Provides structural context (grid, spacing) consumed by PRESENTATION_SYSTEM
+- Hosts component slots for INTERACTIVE_SYSTEM components
+- Is not responsible for colors, typography, or motion — those belong to PRESENTATION_SYSTEM
