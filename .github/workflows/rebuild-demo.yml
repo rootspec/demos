@@ -99,7 +99,8 @@ jobs:
         if: inputs.demo == 'scaffold'
         run: |
           # Restore original SvelteKit scaffold from skeleton branch
-          git checkout scaffold/skeleton -- scaffold/src/
+          git fetch origin scaffold/skeleton
+          git checkout origin/scaffold/skeleton -- scaffold/src/
 
           # Remove spec files (keep framework files 00.*)
           cd scaffold
