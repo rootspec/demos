@@ -86,6 +86,10 @@ The current RootSpec version should be displayed prominently — in the hero sec
 
 Link to the framework GitHub repo at https://github.com/rootspec/rootspec — getting started instructions, community links.
 
+## Deployment
+
+This site is deployed to GitHub Pages at the subpath `/demos/greenfield/`. Configure the framework's base path so that all asset URLs (CSS, JS, images) and internal links resolve correctly when served from that subpath, not from the site root.
+
 ## Interactive & Visual Requirements
 
 - **Dark/light theme** with system preference detection and manual toggle
