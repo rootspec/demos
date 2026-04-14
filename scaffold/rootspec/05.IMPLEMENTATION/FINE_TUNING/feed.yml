@@ -3,28 +3,43 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @system: FEED_SYSTEM
-# @last_updated: 2026-04-03T00:00:00Z
+# @last_updated: 2026-04-14T00:00:00Z
 # @status: production
 # @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Pagination
+# Post Composition Constraints
 # -----------------------------------------------------------------------------
-
-pagination:
-  page_size: 10
-  # @rationale: Standard feed page size — enough to scroll without overwhelming,
-  #   small enough that "load more" feels meaningful
-  # @constraints: min=5, max=25, type=integer
-  # @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
-
-# -----------------------------------------------------------------------------
-# Composer
-# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
 
 composer:
-  max_length: 300
-  # @rationale: Short-form social posts, similar to Bluesky's character limit.
-  #   Keeps demo content concise and scannable.
-  # @constraints: min=100, max=500, type=integer
-  # @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
+  max_post_length: 300
+  # @rationale: Bluesky uses 300; Twitter uses 280. 300 is familiar to developers
+  #   evaluating social feed demos and encourages concise content without
+  #   feeling restrictive for a tech-community persona
+  # @reference: Bluesky character limit (2024)
+  # @alternatives: [280, 300, 500]
+  # @constraints: min=50, max=1000, type=integer
+
+# -----------------------------------------------------------------------------
+# Feed Display
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
+
+feed:
+  posts_per_page: 0
+  # @rationale: 0 = no pagination (all posts shown). The demo has 30-40 posts
+  #   which is manageable without pagination. Implementing pagination adds
+  #   complexity that would obscure the scaffold teaching purpose.
+  # @note: If post count grows beyond 50, consider implementing pagination
+  # @constraints: min=0, max=100, type=integer
+
+# -----------------------------------------------------------------------------
+# Engagement Display
+# -----------------------------------------------------------------------------
+
+engagement:
+  like_animation_duration_ms: 150
+  # @rationale: Brief enough to feel snappy, long enough to register. Follows
+  #   standard micro-interaction timing for toggle feedback.
+  # @constraints: min=50, max=500, type=integer

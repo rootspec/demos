@@ -1,0 +1,21 @@
+{
+  "runs": [
+  {
+    "skill": "rs-spec",
+    "startedAt": "2026-04-14T16:36:08Z",
+    "completedAt": "2026-04-14T16:43:39Z",
+    "durationSeconds": 451,
+    "iterations": null,
+    "stories": null
+  }
+,
+  {
+    "skill": "rs-impl",
+    "startedAt": "2026-04-14T16:44:09Z",
+    "completedAt": "2026-04-14T16:51:01Z",
+    "durationSeconds": 412,
+    "iterations": 2,
+    "stories": {"US-001":{"attempts":1},"US-002":{"attempts":1},"US-003":{"attempts":2},"US-004":{"attempts":1},"US-005":{"attempts":1},"US-006":{"attempts":1},"US-007":{"attempts":1},"US-008":{"attempts":1},"US-009":{"attempts":1},"US-010":{"attempts":1},"US-011":{"attempts":1}}
+  }
+  ]
+}

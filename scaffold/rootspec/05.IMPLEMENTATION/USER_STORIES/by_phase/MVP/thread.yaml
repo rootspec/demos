@@ -1,63 +1,37 @@
 # =============================================================================
-# USER STORY: Read a Post Thread
+# USER STORY: View Post Detail and Replies
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FEED_BROWSING
-# @systems: [THREAD_SYSTEM, FEED_SYSTEM]
-# @last_updated: 2026-04-03T00:00:00Z
+# @journey: POST_DETAIL
+# @systems: [THREAD_SYSTEM, PROFILE_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-107
-title: Read a post thread
+id: US-004
+title: View a single post with its replies
 
 acceptance_criteria:
-  - id: AC-107-1
-    title: Post detail shows full post with engagement actions
+  - id: AC-004-1
+    title: Post detail page shows the post content and author
     narrative: |
       Given I navigate to a post detail page
       When the page loads
-      Then I should see the full post content with like and bookmark buttons
+      Then I see the post content and author information
     given:
-      - visit: '/post/1'
+      - visit: '/post/p1'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=post-detail]' }
       - shouldExist: { selector: '[data-test=post-content]' }
-      - shouldExist: { selector: '[data-test=like-button]' }
-      - shouldExist: { selector: '[data-test=bookmark-button]' }
+      - shouldExist: { selector: '[data-test=post-author]' }
 
-  - id: AC-107-2
-    title: Replies display below the post
-    narrative: |
-      Given I am viewing a post that has replies
-      When the page loads
-      Then I should see replies listed below the main post
-    given:
-      - visit: '/post/1'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=replies-section]' }
-
-  - id: AC-107-3
-    title: Parent post displayed for replies
-    narrative: |
-      Given I am viewing a post that is a reply to another post
-      When the page loads
-      Then I should see the parent post displayed above
-    given:
-      - visit: '/post/3'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=parent-post]' }
-
-  - id: AC-107-4
-    title: Invalid post shows not found
+  - id: AC-004-2
+    title: Invalid post ID shows not-found message
     narrative: |
       Given I navigate to a post that does not exist
       When the page loads
-      Then I should see a post not found message
+      Then I see a not-found message
     given:
-      - visit: '/post/99999'
+      - visit: '/post/nonexistent-id'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=post-not-found]' }
+      - shouldContain: { selector: 'body', text: 'Post not found' }

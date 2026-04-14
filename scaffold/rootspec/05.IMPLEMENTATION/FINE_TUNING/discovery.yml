@@ -3,41 +3,34 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @system: DISCOVERY_SYSTEM
-# @last_updated: 2026-04-03T00:00:00Z
+# @last_updated: 2026-04-14T00:00:00Z
 # @status: production
 # @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Search
+# Tag Display
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
+
+tags:
+  sort_by: post_count_desc
+  # @rationale: Highest-volume tags first gives a realistic sense of community
+  #   trending. Alphabetical would feel arbitrary for a "Trending Tags" section.
+  # @alternatives: [alphabetical, post_count_desc, post_count_asc]
+
+  max_displayed: 0
+  # @rationale: 0 = show all tags. The demo has 10-15 tags which fits
+  #   comfortably on the page without overflow.
+  # @note: If tag count grows, cap at 15 for visual clarity
+  # @constraints: min=0, max=50, type=integer
+
+# -----------------------------------------------------------------------------
+# User Suggestions
 # -----------------------------------------------------------------------------
 
-search:
-  debounce_duration: 300
-  # @unit: milliseconds
-  # @rationale: 300ms debounce is standard for search-as-you-type — fast enough
-  #   to feel responsive, slow enough to avoid excessive filtering on every keystroke
-  # @constraints: min=100, max=500, type=integer
-  # @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
-
-# -----------------------------------------------------------------------------
-# Explore
-# -----------------------------------------------------------------------------
-
-explore:
-  trending_tags_count: 10
-  # @rationale: Show top 10 tags — enough to give a sense of activity without
-  #   overwhelming the explore page
-  # @constraints: min=5, max=20, type=integer
-  # @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
-
-  suggested_users_count: 5
-  # @rationale: Small set of suggestions — demo has 8-10 users total, showing
-  #   half feels like a curated recommendation
-  # @constraints: min=3, max=10, type=integer
-  # @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
-
-  popular_posts_count: 5
-  # @rationale: Top 5 posts by engagement — enough to showcase without duplicating
-  #   the main feed experience
-  # @constraints: min=3, max=10, type=integer
-  # @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
+users:
+  max_displayed: 0
+  # @rationale: 0 = show all users (8-10 in demo data). All mock users are
+  #   relevant suggested follows — no ranking or cap needed.
+  # @note: A real app would cap at 5-10 with "View more" expansion
+  # @constraints: min=0, max=100, type=integer
