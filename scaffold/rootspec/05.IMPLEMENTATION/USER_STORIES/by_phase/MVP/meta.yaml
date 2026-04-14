@@ -1,96 +1,142 @@
 # =============================================================================
-# USER STORIES: Meta / View System — Navigation, Banner, Footer
+# USER STORY: See meta-banner with RootSpec links
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: TRANSPARENCY
-# @systems: [VIEW_SYSTEM, THEME_SYSTEM]
+# @journey: FIRST_TIME_DEVELOPER_VISIT
+# @systems: [VIEW_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
----
-
-id: US-001
-title: See the meta banner on the home page
+id: US-013
+title: See meta-banner with RootSpec links
 
 acceptance_criteria:
-  - id: AC-001-1
-    title: Meta banner is visible on home page
+  - id: AC-013-1
+    title: Meta-banner is visible on home page
     narrative: |
-      Given I visit the home page
+      Given I visit the home feed
       When the page loads
-      Then I see the meta banner explaining RootFeed is a RootSpec scaffold demo
+      Then I should see the meta-banner explaining this is a RootSpec scaffold demo
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldContain: { selector: '[data-test=meta-banner]', text: 'RootSpec' }
 
-  - id: AC-001-2
-    title: Meta banner contains link to scaffold commit
+  - id: AC-013-2
+    title: Meta-banner contains scaffold commit link
     narrative: |
-      Given I visit the home page
-      When I look at the meta banner
-      Then I see a link to view the scaffold commit
+      Given I visit the home feed
+      When the page loads
+      Then I should see a link to view the scaffold commit
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=banner-scaffold-link]' }
+      - shouldExist: { selector: '[data-test=meta-banner-scaffold-link]' }
 
-  - id: AC-001-3
-    title: Meta banner contains link to the spec
+  - id: AC-013-3
+    title: Meta-banner contains spec link
     narrative: |
-      Given I visit the home page
-      When I look at the meta banner
-      Then I see a link to view the spec
+      Given I visit the home feed
+      When the page loads
+      Then I should see a link to view the spec
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=banner-spec-link]' }
+      - shouldExist: { selector: '[data-test=meta-banner-spec-link]' }
 
-  - id: AC-001-4
-    title: Meta banner contains link to the seed
+  - id: AC-013-4
+    title: Meta-banner contains seed link
     narrative: |
-      Given I visit the home page
-      When I look at the meta banner
-      Then I see a link to view the seed
+      Given I visit the home feed
+      When the page loads
+      Then I should see a link to view the seed
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=banner-seed-link]' }
+      - shouldExist: { selector: '[data-test=meta-banner-seed-link]' }
 
 ---
 
-id: US-002
-title: See the RootSpec version in the navigation
+# =============================================================================
+# USER STORY: See RootSpec version in header
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_TIME_DEVELOPER_VISIT
+# @systems: [VIEW_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-015
+title: See RootSpec version in header
 
 acceptance_criteria:
-  - id: AC-002-1
-    title: RootSpec version badge is visible in nav
+  - id: AC-015-1
+    title: RootSpec version badge visible in nav
     narrative: |
       Given I visit any page
-      When I look at the navigation bar
-      Then I see the RootSpec version displayed
+      When the page loads
+      Then I should see the RootSpec version displayed in the navigation
     given:
       - visit: '/demos/scaffold/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=version-badge]' }
+      - shouldExist: { selector: '[data-test=rootspec-version]' }
+      - shouldContain: { selector: '[data-test=rootspec-version]', text: 'v7.2.7' }
 
 ---
 
-id: US-003
-title: Navigate between main routes using the navigation bar
+# =============================================================================
+# USER STORY: See footer with attribution
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_TIME_DEVELOPER_VISIT
+# @systems: [VIEW_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-016
+title: See footer with attribution
 
 acceptance_criteria:
-  - id: AC-003-1
-    title: Navigation bar shows Home, Explore, and Search links
+  - id: AC-016-1
+    title: Footer contains RootSpec attribution
     narrative: |
-      Given I visit the home page
-      When I look at the navigation bar
-      Then I see links for Home, Explore, and Search
+      Given I visit the home feed
+      When the page loads
+      Then I should see a footer with RootSpec version and attribution
+    given:
+      - visit: '/demos/scaffold/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=footer]' }
+      - shouldContain: { selector: '[data-test=footer]', text: 'RootSpec' }
+
+---
+
+# =============================================================================
+# USER STORY: Navigate between routes
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_TIME_DEVELOPER_VISIT
+# @systems: [VIEW_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-014
+title: Navigate between routes
+
+acceptance_criteria:
+  - id: AC-014-1
+    title: Nav links are present on home page
+    narrative: |
+      Given I visit the home feed
+      When the page loads
+      Then I should see navigation links to Home, Explore, and Search
     given:
       - visit: '/demos/scaffold/'
     when: []
@@ -98,64 +144,3 @@ acceptance_criteria:
       - shouldExist: { selector: '[data-test=nav-home]' }
       - shouldExist: { selector: '[data-test=nav-explore]' }
       - shouldExist: { selector: '[data-test=nav-search]' }
-
----
-
-id: US-004
-title: See the footer attribution on every page
-
-acceptance_criteria:
-  - id: AC-004-1
-    title: Footer is visible on home page
-    narrative: |
-      Given I visit the home page
-      When the page loads
-      Then I see a footer with RootSpec attribution
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=footer]' }
-
-  - id: AC-004-2
-    title: Footer contains RootSpec version
-    narrative: |
-      Given I visit the home page
-      When I look at the footer
-      Then I see the RootSpec version string
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=footer-version]' }
-
----
-
-id: US-005
-title: Toggle between dark and light theme
-
-acceptance_criteria:
-  - id: AC-005-1
-    title: Theme toggle button is visible in the navigation bar
-    narrative: |
-      Given I visit the home page
-      When I look at the navigation bar
-      Then I see a theme toggle button
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
-
-  - id: AC-005-2
-    title: Clicking the theme toggle switches the active theme
-    narrative: |
-      Given I visit the home page
-      When I click the theme toggle button
-      Then the page theme changes
-    given:
-      - visit: '/demos/scaffold/'
-    when:
-      - click: { selector: '[data-test=theme-toggle]' }
-    then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }

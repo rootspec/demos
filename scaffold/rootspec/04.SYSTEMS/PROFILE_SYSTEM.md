@@ -1,73 +1,47 @@
 # PROFILE_SYSTEM
 
-**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md, DATA_SYSTEM.md
+**Responsibility:** User profile page rendering and follow/unfollow client-side state.
+
+**Depends on:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, DATA_SYSTEM
 
 ---
 
-## Responsibility
+## Routes Owned
 
-Owns the user profile view and follow/unfollow interaction state. Renders a user's identity, bio, stats, and post history.
-
----
-
-## State Owned
-
-| State | Type | Description |
-|-------|------|-------------|
-| followedUsers | Set\<string\> | User IDs followed this session |
-
-Follow state is component-local and ephemeral — it resets on page reload.
+| Route | File | Purpose |
+|---|---|---|
+| `/profile/[handle]` | `src/routes/profile/[handle]/+page.svelte` | User profile with bio, stats, posts, follow button |
 
 ---
 
-## Rules
+## State Managed
 
-### Profile Display
-- Profile page is pre-rendered for each user handle in `users.json`
-- Displays: avatar, display name, handle, bio, follower count, following count
-- Follower count adjusts (increments or decrements by one) based on local follow state
-
-### Follow Toggle
-- Initial state: not following (unless additional logic is added)
-- Clicking "Follow" adds user ID to `followedUsers`, increments displayed follower count
-- Clicking "Unfollow" removes user ID, decrements displayed follower count
-- Button label and style reflect current follow state
-
-### Posts List
-- Shows all posts by this user (from `posts.json` filtered by `authorId === user.id`)
-- Displayed in reverse-chronological order
-- Each post links to its post detail page
+| State | Type | Default | Description |
+|---|---|---|---|
+| `isFollowing` | `boolean` | `false` | Whether the current visitor is following this user |
 
 ---
 
-## Data Consumed
+## Responsibilities
 
-- `users[]` from DATA_SYSTEM — to find the profile user by handle
-- `posts[]` from DATA_SYSTEM — to filter posts by this user's ID
+1. **Render profile header:** Display name, handle, avatar, bio, follower count, following count.
+2. **Follow/unfollow button:** Toggles `isFollowing` on click; button label reflects state ("Follow" / "Unfollow"); follower count does NOT change in the mock data (client-side state only).
+3. **Render user posts:** List of posts by this user, each linking to `/post/[id]`, showing content, like count, repost count.
+4. **Prerender entries:** Export `entries()` returning all handles from `users.json`.
 
 ---
 
-## Route
+## Boundaries
 
-- `/profile/[handle]` — pre-rendered for each handle in `users.json`
-- Page loader receives `handle` param and finds matching user; if no match, renders fallback (though this case should not occur for known handles)
+- Does NOT modify follower/following counts in the data — follow is purely a UI state toggle.
+- Does NOT show a "not found" page — unknown handles produce no static page; this is acceptable per TRUTHS.md.
 
 ---
 
 ## Interactions with Other Systems
 
-- Profile page links back to post detail routes (FEED_SYSTEM post cards)
-- Does not manage like/bookmark state — those belong to FEED_SYSTEM
-- Does not communicate with DISCOVERY_SYSTEM directly
-
----
-
-## Rendered Elements (Key)
-
-- Avatar image
-- Display name (large, prominent)
-- Handle (subdued, @prefixed)
-- Bio text
-- Follower count / Following count
-- Follow / Unfollow button with live count update
-- Post list with link-to-detail for each post
+| System | Interaction |
+|---|---|
+| DATA_SYSTEM | Receives user object and filtered posts array via SvelteKit `data` prop |
+| VIEW_SYSTEM | Renders within the shared layout |
+| FEED_SYSTEM | Posts on profile link to `/post/[id]` (FEED_SYSTEM route) |

@@ -1,85 +1,55 @@
 # VIEW_SYSTEM
 
-**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md, THEME_SYSTEM.md
+**Responsibility:** Shared layout, persistent meta-banner, navigation bar, footer, and RootSpec version display. The "chrome" that wraps every page.
+
+**Depends on:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, THEME_SYSTEM
 
 ---
 
-## Responsibility
+## Files Owned
 
-Owns the global layout, navigation, meta banner, and footer. Wraps all pages with consistent chrome that surfaces the RootSpec identity on every route.
-
----
-
-## Layout Structure
-
-```
-+layout.svelte
-├── Meta Banner (persistent, top of page)
-├── Nav Bar
-│   ├── RootFeed logo/wordmark + RootSpec version badge
-│   ├── Navigation links: Home | Explore | Search
-│   └── Theme toggle button
-├── <slot> (page content)
-└── Footer
-    ├── RootSpec version
-    ├── Build date
-    ├── Builder identity ("Built with RootSpec")
-    └── Link to rootspec/rootspec repo
-```
+| File | Purpose |
+|---|---|
+| `src/routes/+layout.svelte` | Root layout — wraps all pages with nav, meta-banner, footer, theme wrapper |
+| `src/app.css` | Global styles, Tailwind imports, dark mode base styles |
 
 ---
 
-## Meta Banner
+## Responsibilities
 
-The meta banner is always visible at the top of every page. It is the primary transparency surface.
+### Meta-Banner
+- Persistent at top of every page; not dismissible
+- Content: "RootFeed started as a bare SvelteKit scaffold — 5 empty routes and some JSON files. RootSpec defined the spec and implemented the full experience. [View the scaffold commit →] [View the spec →] [View the seed →]"
+- All three links are absolute GitHub URLs pointing to `https://github.com/rootspec/demos/tree/main/scaffold`
+- Visually distinct from nav (different background color)
 
-**Content:**
-> "RootFeed started as a bare SvelteKit scaffold — 5 empty routes and some JSON files. RootSpec defined the spec and implemented the full experience with minimal human guidance."
+### Navigation Bar
+- Always visible; fixed or sticky at top
+- Contains: RootFeed logo/wordmark (links to `/`), nav links (Home, Explore, Search), RootSpec version badge (v7.2.7), theme toggle button
+- RootSpec version is a non-link badge, prominently visible
 
-**Links (three affordances):**
-- "View the scaffold commit →" — links to GitHub commit SHA
-- "View the spec →" — links to `rootspec/` directory in repo
-- "View the seed →" — links to `SEED.md` in repo
+### Footer
+- Appears at bottom of every page
+- Contains: "Built with RootSpec v7.2.7", build date, "Built by Claude / Anthropic", link to https://github.com/rootspec/rootspec
+- Visually subdued (muted text color)
 
-**Style:** Distinct background (accent color) to differentiate from the main nav. Not dismissible.
-
----
-
-## Navigation Bar
-
-- **Logo:** "RootFeed" wordmark, links to `/`
-- **Version badge:** RootSpec version (e.g., "v7.2.7") displayed visibly — small badge or label near logo
-- **Links:** Home (`/`), Explore (`/explore`), Search (`/search`)
-- **Theme toggle:** Sun/Moon icon button — triggers THEME_SYSTEM
-
----
-
-## Footer
-
-- RootSpec version string
-- Build timestamp (injected at build time via Vite env or static string)
-- "Built with RootSpec" text with link to rootspec/rootspec GitHub repo
-- Brief tagline: "A scaffold demo — not a real social network"
+### Theme Wrapper
+- Applies `dark` class to root element based on THEME_SYSTEM state
+- All dark mode styles flow from this single class via Tailwind `dark:` variants
 
 ---
 
-## Base Path
+## Boundaries
 
-The site is deployed to `/demos/scaffold/`. SvelteKit's `base` config must be set so all internal links and asset URLs resolve correctly under this subpath.
+- Does NOT own page content — that belongs to FEED_SYSTEM, PROFILE_SYSTEM, DISCOVERY_SYSTEM.
+- Does NOT manage interactive state beyond theme toggle (which delegates to THEME_SYSTEM).
+- Does NOT render post cards or user cards — those are owned by their respective systems.
 
 ---
 
 ## Interactions with Other Systems
 
-- Receives theme class from THEME_SYSTEM and applies to root element
-- Provides navigation links that route to FEED_SYSTEM, PROFILE_SYSTEM, and DISCOVERY_SYSTEM pages
-- Does not manage data or interaction state — purely presentational layout
-
----
-
-## Rendered Elements (Key)
-
-- Meta banner with text and three external/internal links
-- Nav bar with logo, version badge, nav links, and theme toggle
-- Page content slot
-- Footer with attribution
+| System | Interaction |
+|---|---|
+| THEME_SYSTEM | Reads active theme; renders theme toggle button; applies theme class to `<html>` |
+| All page systems | Wraps all routes via SvelteKit layout slot (`{@render children()}`) |

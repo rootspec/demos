@@ -1,87 +1,64 @@
 # =============================================================================
-# USER STORIES: Thread / Post Detail View
+# USER STORY: View post detail with thread
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: THREAD_READING
+# @journey: FIRST_TIME_DEVELOPER_VISIT
 # @systems: [FEED_SYSTEM, DATA_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
----
-
-id: US-040
-title: View a single post and its replies
+id: US-006
+title: View post detail with thread
 
 acceptance_criteria:
-  - id: AC-040-1
-    title: Post detail page shows the main post content
+  - id: AC-006-1
+    title: Post detail page shows post content
     narrative: |
-      Given I navigate to a post detail page
+      Given I visit a post detail page
       When the page loads
-      Then I see the post content
+      Then I should see the post content
     given:
       - visit: '/demos/scaffold/post/p1'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=post-detail-content]' }
+      - shouldExist: { selector: '[data-test=post-detail]' }
+      - shouldContain: { selector: '[data-test=post-detail]', text: 'CSS grid' }
 
-  - id: AC-040-2
-    title: Post detail page shows the author
+  - id: AC-006-2
+    title: Post detail shows replies when they exist
     narrative: |
-      Given I navigate to a post detail page
+      Given I visit a post that has replies
       When the page loads
-      Then I see the author display name and handle
+      Then I should see the replies section
     given:
-      - visit: '/demos/scaffold/post/p1'
+      - visit: '/demos/scaffold/post/p2'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=post-detail-author]' }
-
-  - id: AC-040-3
-    title: Post detail page shows replies when they exist
-    narrative: |
-      Given I navigate to a post detail page that has replies
-      When the page loads
-      Then I see the replies listed below the main post
-    given:
-      - visit: '/demos/scaffold/post/p1'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=reply-card]' }
+      - shouldExist: { selector: '[data-test=replies-section]' }
 
 ---
 
-id: US-041
-title: Navigate to a post detail page from the feed
+# =============================================================================
+# USER STORY: View post with parent context
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_TIME_DEVELOPER_VISIT
+# @systems: [FEED_SYSTEM, DATA_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-017
+title: View post with parent context
 
 acceptance_criteria:
-  - id: AC-041-1
-    title: Post content in feed card links to post detail
+  - id: AC-017-1
+    title: Reply post shows parent post above it
     narrative: |
-      Given I visit the home feed
-      When I see a post card
-      Then there is a link to the post detail page
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=post-card-link]' }
-
----
-
-id: US-042
-title: See like and repost counts on a post detail page
-
-acceptance_criteria:
-  - id: AC-042-1
-    title: Post detail shows like and repost counts
-    narrative: |
-      Given I navigate to a post detail page
+      Given I visit a post detail page for a reply post
       When the page loads
-      Then I see the like count and repost count for the post
+      Then I should see the parent post displayed above the reply
     given:
-      - visit: '/demos/scaffold/post/p1'
+      - visit: '/demos/scaffold/post/p5'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=post-detail-like-count]' }
-      - shouldExist: { selector: '[data-test=post-detail-repost-count]' }
+      - shouldExist: { selector: '[data-test=parent-post]' }

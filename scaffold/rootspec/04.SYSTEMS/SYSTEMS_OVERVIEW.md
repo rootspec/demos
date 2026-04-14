@@ -1,70 +1,77 @@
 # Level 4: Systems Overview
 
-**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md
+**Depends on:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md
+**Last Updated:** 2026-04-14
 
 ---
 
 ## System Map
 
-RootFeed is composed of five major systems. All data flows from static JSON at build time. There is no server or database.
-
-```
-DATA_SYSTEM
-    ↓ loads at build time
-FEED_SYSTEM  ←→  PROFILE_SYSTEM  ←→  DISCOVERY_SYSTEM
-    ↓                  ↓                    ↓
-VIEW_SYSTEM (renders all routes, applies THEME_SYSTEM)
-```
-
 | System | File | Responsibility |
-|--------|------|----------------|
-| DATA_SYSTEM | DATA_SYSTEM.md | Static JSON loading, data shape, mock content |
-| FEED_SYSTEM | FEED_SYSTEM.md | Home feed, post composer, like/bookmark state |
-| PROFILE_SYSTEM | PROFILE_SYSTEM.md | User profiles, follow/unfollow state |
-| DISCOVERY_SYSTEM | DISCOVERY_SYSTEM.md | Explore page, tag filtering, search |
-| VIEW_SYSTEM | VIEW_SYSTEM.md | Layout, navigation, meta banner, theme toggle |
-| THEME_SYSTEM | THEME_SYSTEM.md | Dark/light mode, system preference detection |
+|---|---|---|
+| DATA_SYSTEM | DATA_SYSTEM.md | Static JSON loading, mock data access, prerender entry generation |
+| FEED_SYSTEM | FEED_SYSTEM.md | Home feed rendering, pagination, post composer, like/bookmark state |
+| PROFILE_SYSTEM | PROFILE_SYSTEM.md | User profile rendering, follow/unfollow state |
+| DISCOVERY_SYSTEM | DISCOVERY_SYSTEM.md | Explore page (trending tags, people), tag filtering, search |
+| THEME_SYSTEM | THEME_SYSTEM.md | Dark/light mode, system preference detection, localStorage persistence |
+| VIEW_SYSTEM | VIEW_SYSTEM.md | Layout, meta-banner, nav, footer, RootSpec version display |
 
 ---
 
 ## System Interactions
 
-| Source System | Target System | Data / Event |
-|---------------|--------------|--------------|
-| DATA_SYSTEM | FEED_SYSTEM | posts[], users[] |
-| DATA_SYSTEM | PROFILE_SYSTEM | users[], posts[] |
-| DATA_SYSTEM | DISCOVERY_SYSTEM | tags[], users[], posts[] |
-| FEED_SYSTEM | VIEW_SYSTEM | rendered post cards |
-| PROFILE_SYSTEM | VIEW_SYSTEM | rendered profile, follow button state |
-| DISCOVERY_SYSTEM | VIEW_SYSTEM | rendered tag list, user suggestions, filtered posts |
-| VIEW_SYSTEM | THEME_SYSTEM | theme toggle event |
-| THEME_SYSTEM | VIEW_SYSTEM | current theme class applied to root element |
+| From | To | What crosses the boundary |
+|---|---|---|
+| DATA_SYSTEM | FEED_SYSTEM | Posts array + users map for home feed |
+| DATA_SYSTEM | PROFILE_SYSTEM | User object + filtered posts for profile |
+| DATA_SYSTEM | DISCOVERY_SYSTEM | Tags array, users array, posts array |
+| DATA_SYSTEM | FEED_SYSTEM | Post detail + replies for thread view |
+| FEED_SYSTEM | VIEW_SYSTEM | Rendered post cards (client-side state remains in FEED_SYSTEM) |
+| PROFILE_SYSTEM | VIEW_SYSTEM | Rendered profile header and post list |
+| DISCOVERY_SYSTEM | VIEW_SYSTEM | Rendered tag chips, user cards, filtered post list |
+| THEME_SYSTEM | VIEW_SYSTEM | Active theme class/attribute applied to root element |
 
 ---
 
 ## Data Flow
 
-1. **Build time:** SvelteKit `+page.ts` loaders import JSON from `src/lib/data/` and pass data to pages as props
-2. **Runtime (client):** Component state manages interaction state (likes, follows, composed posts, active tag, search query, theme)
-3. **No network calls at runtime** — all data is embedded in the static build
+```
+src/lib/data/*.json
+        │
+        ▼
+  DATA_SYSTEM
+  (SvelteKit +page.ts loaders)
+        │
+   ┌────┴──────────┬──────────────┬─────────────┐
+   ▼               ▼              ▼             ▼
+FEED_SYSTEM  PROFILE_SYSTEM  DISCOVERY_   (thread view
+(/ route)    (/profile/      SYSTEM       in FEED_SYSTEM)
+              [handle])      (/explore,
+                              /search)
+        │               │              │
+        └───────────────┴──────────────┘
+                        │
+                   VIEW_SYSTEM
+               (layout, banner, nav,
+                footer, theme wrapper)
+                        │
+                  THEME_SYSTEM
+               (theme class on <html>)
+```
 
 ---
 
-## Boundaries
+## Prerendering Strategy
 
-- **DATA_SYSTEM** owns the shape and content of mock data; other systems consume it read-only
-- **FEED_SYSTEM** owns post engagement state (likes, bookmarks, composed posts) for the home feed
-- **PROFILE_SYSTEM** owns follow state per user
-- **DISCOVERY_SYSTEM** owns tag filter state and search query state
-- **VIEW_SYSTEM** owns layout structure, navigation, and meta banner
-- **THEME_SYSTEM** owns theme preference — reads from system media query, writes to localStorage and document class
+All dynamic routes (`/post/[id]`, `/profile/[handle]`) export `entries()` functions that return all known IDs/handles from mock data. SvelteKit prerender generates one static HTML file per entry. Unknown parameters produce no page — acceptable per spec.
 
 ---
 
-## Shared Entities
+## State Management
 
-These entities are defined in DATA_SYSTEM and referenced by all other systems:
+All interactive state is client-side only (Svelte 5 `$state` runes). No shared store needed — each page/component owns its own state:
 
-- **Post** — id, authorId, content, likeCount, repostCount, parentId (nullable), tags[], createdAt
-- **User** — id, handle, displayName, bio, avatar, followerCount, followingCount
-- **Tag** — name, postCount
+- Feed page: `likedPosts: Set<string>`, `bookmarkedPosts: Set<string>`, `visibleCount: number`, `composerOpen: boolean`, `composerText: string`
+- Profile page: `isFollowing: boolean`
+- Explore page: `activeTag: string | null`
+- Theme: `theme: 'light' | 'dark'` in layout, persisted to localStorage

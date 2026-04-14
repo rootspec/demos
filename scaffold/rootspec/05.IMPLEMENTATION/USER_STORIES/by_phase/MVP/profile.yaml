@@ -1,127 +1,114 @@
 # =============================================================================
-# USER STORIES: Profile System — User Profiles, Follow/Unfollow
+# USER STORY: View user profile
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: PROFILE_BROWSING
+# @journey: FIRST_TIME_DEVELOPER_VISIT
 # @systems: [PROFILE_SYSTEM, DATA_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
----
-
-id: US-030
-title: View a user's profile page
+id: US-007
+title: View user profile
 
 acceptance_criteria:
-  - id: AC-030-1
-    title: Profile page shows display name and handle
+  - id: AC-007-1
+    title: Profile page shows user display name
     narrative: |
-      Given I navigate to a user profile page
+      Given I visit a user profile page
       When the page loads
-      Then I see the user display name and handle
+      Then I should see the user display name
     given:
-      - visit: '/demos/scaffold/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/devguru'
     when: []
     then:
-      - shouldContain: { selector: '[data-test=profile-name]', text: 'Alice Chen' }
-      - shouldExist: { selector: '[data-test=profile-handle]' }
+      - shouldExist: { selector: '[data-test=profile-display-name]' }
 
-  - id: AC-030-2
-    title: Profile page shows bio
+  - id: AC-007-2
+    title: Profile page shows user bio
     narrative: |
-      Given I navigate to a user profile page
+      Given I visit a user profile page
       When the page loads
-      Then I see the user bio text
+      Then I should see the user bio
     given:
-      - visit: '/demos/scaffold/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/devguru'
     when: []
     then:
       - shouldExist: { selector: '[data-test=profile-bio]' }
 
-  - id: AC-030-3
-    title: Profile page shows follower and following counts
+  - id: AC-007-3
+    title: Profile page shows user posts
     narrative: |
-      Given I navigate to a user profile page
+      Given I visit a user profile page
       When the page loads
-      Then I see follower count and following count
+      Then I should see a list of posts by that user
     given:
-      - visit: '/demos/scaffold/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/devguru'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=profile-post-item]' }
+
+  - id: AC-007-4
+    title: Profile page shows follower count
+    narrative: |
+      Given I visit a user profile page
+      When the page loads
+      Then I should see the follower count
+    given:
+      - visit: '/demos/scaffold/profile/devguru'
     when: []
     then:
       - shouldExist: { selector: '[data-test=profile-follower-count]' }
-      - shouldExist: { selector: '[data-test=profile-following-count]' }
-
-  - id: AC-030-4
-    title: Profile page shows a list of the user's posts
-    narrative: |
-      Given I navigate to a user profile page
-      When the page loads
-      Then I see at least one post by that user
-    given:
-      - visit: '/demos/scaffold/profile/alice.dev'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=profile-post]' }
 
 ---
 
-id: US-031
-title: Follow and unfollow a user from their profile
+# =============================================================================
+# USER STORY: Follow and unfollow a user
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: INTERACTIVE_EXPLORATION
+# @systems: [PROFILE_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-008
+title: Follow and unfollow a user
 
 acceptance_criteria:
-  - id: AC-031-1
-    title: Follow button is visible on profile page
+  - id: AC-008-1
+    title: Follow button is present on profile page
     narrative: |
-      Given I navigate to a user profile page
+      Given I visit a user profile page
       When the page loads
-      Then I see a Follow button
+      Then I should see a follow button
     given:
-      - visit: '/demos/scaffold/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/devguru'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=follow-btn]' }
+      - shouldExist: { selector: '[data-test=follow-button]' }
 
-  - id: AC-031-2
-    title: Clicking Follow changes button to Unfollow
+  - id: AC-008-2
+    title: Clicking follow changes button to Unfollow
     narrative: |
-      Given I am on a user profile page
-      When I click the Follow button
-      Then the button changes to Unfollow
+      Given I visit a user profile page
+      When I click the follow button
+      Then the button should change to show Unfollow
     given:
-      - visit: '/demos/scaffold/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/devguru'
     when:
-      - click: { selector: '[data-test=follow-btn]' }
+      - click: { selector: '[data-test=follow-button]' }
     then:
-      - shouldContain: { selector: '[data-test=follow-btn]', text: 'Unfollow' }
+      - shouldContain: { selector: '[data-test=follow-button]', text: 'Unfollow' }
 
-  - id: AC-031-3
-    title: Clicking Unfollow changes button back to Follow
+  - id: AC-008-3
+    title: Clicking unfollow returns button to Follow
     narrative: |
-      Given I have followed a user on their profile page
-      When I click Unfollow
-      Then the button changes back to Follow
+      Given I have clicked follow on a profile
+      When I click the button again
+      Then the button should return to showing Follow
     given:
-      - visit: '/demos/scaffold/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/devguru'
     when:
-      - click: { selector: '[data-test=follow-btn]' }
-      - click: { selector: '[data-test=follow-btn]' }
+      - click: { selector: '[data-test=follow-button]' }
+      - click: { selector: '[data-test=follow-button]' }
     then:
-      - shouldContain: { selector: '[data-test=follow-btn]', text: 'Follow' }
-
----
-
-id: US-032
-title: Navigate to a user profile from a post card
-
-acceptance_criteria:
-  - id: AC-032-1
-    title: Author name in post card links to profile
-    narrative: |
-      Given I visit the home feed
-      When I see a post card with an author name
-      Then there is a link to that author's profile
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=post-author-link]' }
+      - shouldContain: { selector: '[data-test=follow-button]', text: 'Follow' }
