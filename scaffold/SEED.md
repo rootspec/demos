@@ -21,14 +21,16 @@ RootSpec then defines the philosophy, interactions, and implementation details t
 
 ## Routes
 
+This is a statically built site. Dynamic route parameters (like `[handle]` and `[id]`) are prerendered from mock data at build time — only known handles and IDs produce pages. Do not spec "not found" behavior for unknown parameters; there is no server to render them.
+
 ### `/` — Home Feed
 Timeline of posts from mock data. Displays author avatar, handle, post content, timestamps, and engagement counts. The primary experience.
 
 ### `/profile/[handle]` — User Profile
-A user's posts, bio, follower/following counts. Shows a follow/unfollow button (client-side state).
+A user's posts, bio, follower/following counts. Shows a follow/unfollow button (client-side state). Only profiles from mock data exist.
 
 ### `/post/[id]` — Post Detail
-Single post with its full thread — parent post (if reply) and all replies. Shows engagement actions.
+Single post with its full thread — parent post (if reply) and all replies. Shows engagement actions. Only posts from mock data exist.
 
 ### `/search` — Search
 Search posts by keyword. Filter by tag. Results update as the user types.
