@@ -55,7 +55,6 @@ jobs:
           for demo in greenfield scaffold brownfield; do
             echo "=== Updating skills in ${demo} ==="
             cd "$demo"
-            npm ci --ignore-scripts
             npx skills add rootspec/rootspec --agent claude-code universal --skill '*' -y
             cd ..
           done
