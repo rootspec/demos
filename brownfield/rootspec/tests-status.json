@@ -1,124 +1,73 @@
 {
-  "lastRun": "2026-04-06T19:03:09.841Z",
+  "lastRun": "2026-04-14T23:53:55.974Z",
   "stories": {
-    "US-101": {
+    "US-019": {
       "status": "pass",
       "criteria": {
-        "AC-101-1": "pass",
-        "AC-101-2": "pass"
+        "AC-019-1": "pass",
+        "AC-019-2": "pass",
+        "AC-019-3": "pass"
       }
     },
-    "US-102": {
+    "US-020": {
       "status": "pass",
       "criteria": {
-        "AC-102-1": "pass"
+        "AC-020-1": "pass"
       }
     },
-    "US-103": {
+    "US-016": {
       "status": "pass",
       "criteria": {
-        "AC-103-1": "pass"
+        "AC-016-1": "pass",
+        "AC-016-2": "pass"
       }
     },
-    "US-104": {
+    "US-009": {
       "status": "pass",
       "criteria": {
-        "AC-104-1": "pass",
-        "AC-104-2": "pass"
+        "AC-009-1": "pass",
+        "AC-009-2": "pass"
       }
     },
-    "US-105": {
+    "US-010": {
       "status": "pass",
       "criteria": {
-        "AC-105-1": "pass"
+        "AC-010-1": "pass"
       }
     },
-    "US-106": {
+    "US-001": {
       "status": "pass",
       "criteria": {
-        "AC-106-1": "pass",
-        "AC-106-2": "pass"
+        "AC-001-1": "pass",
+        "AC-001-2": "pass",
+        "AC-001-3": "pass"
       }
     },
-    "US-107": {
+    "US-013": {
       "status": "pass",
       "criteria": {
-        "AC-107-1": "pass"
+        "AC-013-1": "pass",
+        "AC-013-2": "pass"
       }
     },
-    "US-108": {
+    "US-014": {
       "status": "pass",
       "criteria": {
-        "AC-108-1": "pass"
+        "AC-014-1": "pass"
       }
     },
-    "US-109": {
+    "US-005": {
       "status": "pass",
       "criteria": {
-        "AC-109-1": "pass",
-        "AC-109-2": "pass"
+        "AC-005-1": "pass",
+        "AC-005-2": "pass"
       }
     },
-    "US-110": {
+    "US-006": {
       "status": "pass",
       "criteria": {
-        "AC-110-1": "pass"
-      }
-    },
-    "US-111": {
-      "status": "pass",
-      "criteria": {
-        "AC-111-1": "pass"
-      }
-    },
-    "US-112": {
-      "status": "pass",
-      "criteria": {
-        "AC-112-1": "pass"
-      }
-    },
-    "US-113": {
-      "status": "pass",
-      "criteria": {
-        "AC-113-1": "pass"
-      }
-    },
-    "US-114": {
-      "status": "pass",
-      "criteria": {
-        "AC-114-1": "pass"
-      }
-    },
-    "US-201": {
-      "status": "pass",
-      "criteria": {
-        "AC-201-1": "pass",
-        "AC-201-2": "pass"
-      }
-    },
-    "US-202": {
-      "status": "pass",
-      "criteria": {
-        "AC-202-1": "pass",
-        "AC-202-2": "pass"
-      }
-    },
-    "US-203": {
-      "status": "pass",
-      "criteria": {
-        "AC-203-1": "pass"
-      }
-    },
-    "US-204": {
-      "status": "pass",
-      "criteria": {
-        "AC-204-1": "pass"
-      }
-    },
-    "US-205": {
-      "status": "pass",
-      "criteria": {
-        "AC-205-1": "pass"
+        "AC-006-1": "pass",
+        "AC-006-2": "pass"
       }
     }
   }
