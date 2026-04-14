@@ -1,12 +1,64 @@
 # =============================================================================
-# USER STORIES: Search
+# USER STORY: Search Posts by Keyword
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: DISCOVERY
-# @systems: [DISCOVERY_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @journey: SEARCH
+# @systems: [DISCOVERY_SYSTEM]
+# @last_updated: 2026-04-14T20:45:19Z
 
-# Note: Core search stories are in discovery.yaml (US-301, US-302).
-# This file is a placeholder per the MVP story structure requirement.
-# No additional search stories beyond US-301 and US-302 for MVP phase.
+id: US-009
+title: Search posts by keyword and see matching results
+
+acceptance_criteria:
+  - id: AC-009-1
+    title: Typing a query returns matching posts
+    narrative: |
+      Given I am on the search page
+      When I type a keyword that matches post content
+      Then I should see matching posts in the results
+    given:
+      - visit: '/demos/scaffold/search'
+    when:
+      - fill: { selector: '[data-test=search-input]', value: 'svelte' }
+    then:
+      - shouldExist: { selector: '[data-test=search-result]' }
+
+  - id: AC-009-2
+    title: Results are empty for an empty query
+    narrative: |
+      Given I am on the search page with no query entered
+      When the page loads
+      Then no results should be shown
+    given:
+      - visit: '/demos/scaffold/search'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=search-input]' }
+
+---
+# =============================================================================
+# USER STORY: See Empty Search State
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: SEARCH
+# @systems: [DISCOVERY_SYSTEM]
+# @last_updated: 2026-04-14T20:45:19Z
+
+id: US-017
+title: See empty state message when search returns no results
+
+acceptance_criteria:
+  - id: AC-017-1
+    title: No-results message appears for unmatched query
+    narrative: |
+      Given I am on the search page
+      When I type a query that does not match any post
+      Then I should see a no-results message
+    given:
+      - visit: '/demos/scaffold/search'
+    when:
+      - fill: { selector: '[data-test=search-input]', value: 'xyzzy12345notathing' }
+    then:
+      - shouldExist: { selector: '[data-test=search-empty]' }

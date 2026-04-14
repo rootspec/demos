@@ -1,40 +1,65 @@
 # =============================================================================
-# USER STORIES: Theme
+# USER STORY: View Post Detail with Replies
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: THEME
-# @systems: [THEME_SYSTEM, VIEW_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @journey: POST_DETAIL
+# @systems: [DATA_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-14T20:45:19Z
 
----
-
-id: US-501
-title: Toggle dark and light mode
-requirement_id: R-501
+id: US-006
+title: View post detail showing full content and replies
 
 acceptance_criteria:
-  - id: AC-501-1
-    title: Theme toggle button is visible in navigation
+  - id: AC-006-1
+    title: Post detail page shows post content and author
     narrative: |
-      Given I visit the home page
+      Given I navigate to a post detail page
       When the page loads
-      Then I should see a theme toggle button in the navigation
+      Then I should see the post content and author information
     given:
-      - visit: '/demos/scaffold/'
+      - visit: '/demos/scaffold/post/p1'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
+      - shouldExist: { selector: '[data-test=post-detail]' }
+      - shouldExist: { selector: '[data-test=post-author]' }
 
-  - id: AC-501-2
-    title: Clicking theme toggle switches between light and dark mode
+  - id: AC-006-2
+    title: Post detail page shows replies when they exist
     narrative: |
-      Given I am on the home page in light mode
-      When I click the theme toggle
-      Then the page should switch to dark mode
+      Given I navigate to a post that has replies
+      When the page loads
+      Then I should see the replies section with reply content
     given:
-      - visit: '/demos/scaffold/'
-    when:
-      - click: { selector: '[data-test=theme-toggle]' }
+      - visit: '/demos/scaffold/post/p1'
+    when: []
     then:
-      - shouldExist: { selector: 'html.dark' }
+      - shouldExist: { selector: '[data-test=replies-section]' }
+      - shouldExist: { selector: '[data-test=reply-item]' }
+
+---
+# =============================================================================
+# USER STORY: View Post Thread with Parent
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: POST_DETAIL
+# @systems: [DATA_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-14T20:45:19Z
+
+id: US-015
+title: View post thread showing parent post when viewing a reply
+
+acceptance_criteria:
+  - id: AC-015-1
+    title: Reply post shows parent post above it
+    narrative: |
+      Given I navigate to a post that is a reply to another post
+      When the page loads
+      Then I should see the parent post displayed above the reply
+    given:
+      - visit: '/demos/scaffold/post/p2'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=parent-post]' }
+      - shouldExist: { selector: '[data-test=post-detail]' }

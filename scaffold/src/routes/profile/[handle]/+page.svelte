@@ -1,39 +1,35 @@
 <script lang="ts">
-	import { base } from '$app/paths';
 	import { profile } from '$lib/stores/profile.svelte';
 
 	let { data } = $props();
-
-	let isFollowing = $derived(data.user ? profile.isFollowing(data.user.id) : false);
 </script>
 
 {#if data.user}
-	<div class="mb-6">
-		<h1 class="text-xl font-bold" data-test="profile-name">{data.user.displayName}</h1>
-		<p class="text-sm text-gray-500" data-test="profile-handle">@{data.user.handle}</p>
-		<p class="mt-2 text-gray-700 dark:text-gray-300">{data.user.bio}</p>
+	<div class="mb-4">
+		<h1 data-test="profile-name" class="text-xl font-bold">{data.user.displayName}</h1>
+		<p data-test="profile-handle" class="text-sm text-gray-500 dark:text-gray-400">@{data.user.handle}</p>
+		<p data-test="profile-bio" class="mt-2">{data.user.bio}</p>
 		<div class="mt-2 text-sm text-gray-400">
-			{data.user.followerCount} followers &middot; {data.user.followingCount} following
+			<span data-test="follower-count">{data.user.followerCount}</span> followers &middot;
+			{data.user.followingCount} following
 		</div>
 		<button
-			onclick={() => profile.toggleFollow(data.user!.id)}
-			class="mt-3 rounded border px-4 py-1.5 text-sm font-medium"
-			class:bg-blue-600={isFollowing}
-			class:text-white={isFollowing}
-			class:border-blue-600={isFollowing}
-			class:border-gray-300={!isFollowing}
-			class:text-gray-700={!isFollowing}
-			data-test="follow-button"
+			data-test="follow-btn"
+			data-following={profile.isFollowing(data.user.id)}
+			onclick={() => profile.toggleFollow(data.user.id)}
+			class="mt-3 rounded border px-4 py-1.5 text-sm {profile.isFollowing(data.user.id)
+				? 'bg-blue-600 text-white border-blue-600'
+				: 'border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300'}"
 		>
-			{isFollowing ? 'Following' : 'Follow'}
+			{profile.isFollowing(data.user.id) ? 'Unfollow' : 'Follow'}
 		</button>
 	</div>
 
 	<h2 class="mb-2 mt-6 font-bold">Posts</h2>
-	{#each data.posts as post}
-		<div class="border-b border-gray-200 py-3 dark:border-gray-700" data-test="post-card">
-			<a href="{base}/post/{post.id}">
-				<p class="text-gray-900 dark:text-gray-100" data-test="post-content">{post.content}</p>
+	{#each data.posts as post (post.id)}
+		<div data-test="post-card" class="border-b border-gray-200 py-3 dark:border-gray-700">
+			<a href="/demos/scaffold/post/{post.id}">
+				<p data-test="post-content">{post.content}</p>
 			</a>
 			<div class="mt-1 text-xs text-gray-400">
 				{post.likeCount} likes &middot; {post.repostCount} reposts
@@ -41,5 +37,5 @@
 		</div>
 	{/each}
 {:else}
-	<p class="text-gray-500" data-test="profile-not-found">User not found.</p>
+	<p>User not found.</p>
 {/if}

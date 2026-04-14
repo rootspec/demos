@@ -1,47 +1,71 @@
-# System: DATA_SYSTEM
-<!-- L4: References L1-3 + Sibling L4 + External -->
+# Level 4: Data System
+
+**References:** L1 Philosophy, L2 Truths, L3 Interactions, SYSTEMS_OVERVIEW.md
+
+---
 
 ## Responsibility
 
-Owns all static mock data and makes it available to page routes via SvelteKit's `load` functions. Acts as the read-only data layer for the entire application. No writes flow through this system — all mutations live in client-side stores (FEED_SYSTEM, PROFILE_SYSTEM).
+Owns all static mock content for the application. Provides typed, structured data to route loaders. Never makes network requests. All data is baked into the static build.
 
-## Data Owned
+---
 
-| File | Type | Contents |
-|------|------|----------|
-| `src/lib/data/users.json` | `User[]` | 8-10 users with id, handle, displayName, bio, avatar, followerCount, followingCount |
-| `src/lib/data/posts.json` | `Post[]` | ~30 posts with id, authorId, content, createdAt, likeCount, repostCount, parentId, tags |
-| `src/lib/data/tags.json` | `Tag[]` | 15 tags with name and postCount |
+## Data Ownership
 
-## Type Contracts
+### users.json
+Array of [N] User records. Each user has:
+- `id` (string, unique) — internal reference key
+- `handle` (string, unique) — URL-safe username, used in profile routes
+- `displayName` (string) — human-readable name
+- `bio` (string) — short profile description
+- `avatar` (string) — placeholder image URL
+- `followerCount` (integer) — initial follower count (client-side follow toggling does not mutate this directly; see PROFILE_SYSTEM)
+- `followingCount` (integer) — initial following count
 
-Defined in `src/lib/types.ts`:
-- `User`: id, handle, displayName, bio, avatar, followerCount, followingCount
-- `Post`: id, authorId, content, createdAt, likeCount, repostCount, parentId (null | string), tags (string[])
-- `Tag`: name, postCount
+### posts.json
+Array of [N] Post records. Each post has:
+- `id` (string, unique) — used in post detail routes
+- `authorId` (string) — references a User.id
+- `content` (string) — post text body
+- `createdAt` (ISO 8601 timestamp) — used for display
+- `likeCount` (integer) — initial like count
+- `repostCount` (integer) — initial repost count
+- `parentId` (string | null) — if set, this post is a reply to the referenced post
+- `tags` (string[]) — tag names without `#` prefix
+
+### tags.json
+Array of Tag records. Each tag has:
+- `name` (string) — tag name without `#` prefix
+- `postCount` (integer) — number of posts using this tag
+
+---
+
+## Content Guidelines
+
+- [N] users total (8–10), with realistic tech community handles and display names
+- [N] posts total (30–40), covering: standalone thoughts, replies to other posts, threaded conversations
+- [N] tags total (10–15), covering common tech topics
+- Content tone: casual tech discussion — opinions about frameworks, tools, dev culture, occasional humor
+- No lorem ipsum. Posts should read like something a developer might actually write.
+
+---
+
+## Data Loading Pattern
+
+Each SvelteKit route loader (`+page.ts`) imports directly from the JSON files:
+
+```
+import users from '$lib/data/users.json';
+import posts from '$lib/data/posts.json';
+```
+
+Loaders filter, sort, and pass data to the page component as a `data` prop. No async fetching — imports are resolved at build time.
+
+---
 
 ## Boundaries
 
-**Provides to:**
-- FEED_SYSTEM: full posts array + users array via home page `load()`
-- PROFILE_SYSTEM: user by handle + their posts via profile page `load()`
-- DISCOVERY_SYSTEM: all posts, users, and tags via search and explore page `load()` functions
-
-**Does not:**
-- Mutate data (read-only)
-- Persist user-generated posts or interactions
-- Contact any external API or server
-
-## Load Function Pattern
-
-Each route's `+page.ts` imports JSON directly and returns the relevant slice. Example:
-- Home: returns `{ posts, users }`
-- Profile: returns `{ user, posts }` filtered by handle
-- Post detail: returns `{ post, replies, users }` filtered by post id
-- Search/Explore: returns `{ posts, users, tags }`
-
-## Interactions with Other Systems
-
-- FEED_SYSTEM reads `data.posts` and `data.users` from the load function return value
-- PROFILE_SYSTEM reads `data.user` and `data.posts` from the profile load function
-- DISCOVERY_SYSTEM reads `data.posts`, `data.users`, `data.tags` from search and explore load functions
+- **Reads from:** JSON files in `src/lib/data/`
+- **Provides to:** FEED_SYSTEM, PROFILE_SYSTEM, DISCOVERY_SYSTEM, VIEW_SYSTEM (via route loaders)
+- **Does not:** mutate data, fetch from external sources, or own any client-side state
+- **Immutable at runtime:** Data does not change after build. Only Svelte stores layer mutable state on top.

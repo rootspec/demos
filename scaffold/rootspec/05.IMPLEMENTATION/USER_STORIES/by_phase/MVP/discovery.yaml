@@ -1,131 +1,80 @@
 # =============================================================================
-# USER STORIES: Discovery Journey
+# USER STORY: Browse Explore Page
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: DISCOVERY
-# @systems: [DISCOVERY_SYSTEM, DATA_SYSTEM, VIEW_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @systems: [DISCOVERY_SYSTEM, DATA_SYSTEM]
+# @last_updated: 2026-04-14T20:45:19Z
 
----
-
-id: US-301
-title: Search posts by keyword
-requirement_id: R-301
+id: US-010
+title: Browse explore page with trending tags and suggested users
 
 acceptance_criteria:
-  - id: AC-301-1
-    title: Typing in search input shows matching posts
-    narrative: |
-      Given I am on the search page
-      When I type a keyword that matches post content
-      Then I should see matching posts in the results
-    given:
-      - visit: '/demos/scaffold/search'
-    when:
-      - fill: { selector: '[data-test=search-input]', value: 'TypeScript' }
-    then:
-      - shouldExist: { selector: '[data-test=search-result]' }
-
-  - id: AC-301-2
-    title: Search input is visible on search page
-    narrative: |
-      Given I visit the search page
-      When the page loads
-      Then I should see a search input field
-    given:
-      - visit: '/demos/scaffold/search'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=search-input]' }
-
----
-
-id: US-302
-title: Search empty state
-requirement_id: R-302
-
-acceptance_criteria:
-  - id: AC-302-1
-    title: Searching with no matches shows empty state message
-    narrative: |
-      Given I am on the search page
-      When I type a query that matches no posts
-      Then I should see a no results message
-    given:
-      - visit: '/demos/scaffold/search'
-    when:
-      - fill: { selector: '[data-test=search-input]', value: 'xyzzy_no_match_12345' }
-    then:
-      - shouldExist: { selector: '[data-test=search-empty]' }
-
----
-
-id: US-303
-title: View explore page
-requirement_id: R-303
-
-acceptance_criteria:
-  - id: AC-303-1
+  - id: AC-010-1
     title: Explore page shows trending tags
     narrative: |
-      Given I visit the explore page
+      Given I navigate to the explore page
       When the page loads
-      Then I should see trending tags
+      Then I should see a list of trending tags
     given:
       - visit: '/demos/scaffold/explore'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=tag-chip]' }
+      - shouldExist: { selector: '[data-test=trending-tags]' }
+      - shouldExist: { selector: '[data-test=tag-item]' }
 
-  - id: AC-303-2
+  - id: AC-010-2
     title: Explore page shows suggested users
     narrative: |
-      Given I visit the explore page
+      Given I navigate to the explore page
       When the page loads
-      Then I should see suggested users
+      Then I should see a list of suggested users with their display names and bios
     given:
       - visit: '/demos/scaffold/explore'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=suggested-user]' }
+      - shouldExist: { selector: '[data-test=suggested-users]' }
+      - shouldExist: { selector: '[data-test=user-item]' }
 
 ---
+# =============================================================================
+# USER STORY: Filter Posts by Tag on Explore
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: DISCOVERY
+# @systems: [DISCOVERY_SYSTEM]
+# @last_updated: 2026-04-14T20:45:19Z
 
-id: US-304
-title: Filter explore by tag
-requirement_id: R-304
+id: US-011
+title: Filter explore posts by clicking a tag
 
 acceptance_criteria:
-  - id: AC-304-1
-    title: Clicking a tag filters the explore posts
+  - id: AC-011-1
+    title: Clicking a tag filters the posts list
     narrative: |
       Given I am on the explore page
-      When I click a tag chip
-      Then the posts section should filter to that tag
+      When I click a tag
+      Then the tag should appear as active and filtered posts should be shown
     given:
       - visit: '/demos/scaffold/explore'
     when:
-      - click: { selector: '[data-test=tag-chip]' }
+      - click: { selector: '[data-test=tag-item]' }
     then:
-      - shouldExist: { selector: '[data-test=active-tag]' }
+      - shouldExist: { selector: '[data-test=tag-item][data-active=true]' }
+      - shouldExist: { selector: '[data-test=filtered-posts]' }
 
----
-
-id: US-305
-title: Navigate from explore to profile
-requirement_id: R-305
-
-acceptance_criteria:
-  - id: AC-305-1
-    title: Clicking a suggested user navigates to their profile
+  - id: AC-011-2
+    title: Clicking the active tag deselects it
     narrative: |
-      Given I am on the explore page
-      When I click on a suggested user
-      Then I should be on that user's profile page
+      Given I have clicked a tag on the explore page
+      When I click the same tag again
+      Then the tag should no longer be active
     given:
       - visit: '/demos/scaffold/explore'
     when:
-      - click: { selector: '[data-test=suggested-user-link]' }
+      - click: { selector: '[data-test=tag-item]' }
+      - click: { selector: '[data-test=tag-item][data-active=true]' }
     then:
-      - shouldExist: { selector: '[data-test=profile-name]' }
+      - shouldExist: { selector: '[data-test=tag-item][data-active=false]' }

@@ -1,51 +1,57 @@
 # Level 4: Systems Overview
-<!-- L4: Implementation architecture — References L1-3 + Sibling L4 + External -->
+
+**Product:** RootFeed
+**References:** L1 Philosophy, L2 Truths, L3 Interactions
+
+---
 
 ## System Map
 
-RootFeed is composed of five systems. Each owns a distinct domain and communicates with others through well-defined boundaries.
+| System           | File                    | Responsibility                                      |
+|-----------------|-------------------------|-----------------------------------------------------|
+| DATA_SYSTEM      | DATA_SYSTEM.md          | Mock data loading, types, and static content supply |
+| FEED_SYSTEM      | FEED_SYSTEM.md          | Home feed display, pagination, post composition     |
+| PROFILE_SYSTEM   | PROFILE_SYSTEM.md       | User profile display, follow/unfollow state         |
+| DISCOVERY_SYSTEM | DISCOVERY_SYSTEM.md     | Explore page, tag filtering, suggested users        |
+| THEME_SYSTEM     | THEME_SYSTEM.md         | Dark/light theme detection, toggle, persistence     |
+| VIEW_SYSTEM      | VIEW_SYSTEM.md          | Layout, navigation, meta banner, routing            |
 
-| System | Responsibility | Key Files |
-|--------|---------------|-----------|
-| **DATA_SYSTEM** | Static mock data loading and routing | `src/lib/data/*.json`, `+page.ts` load functions |
-| **FEED_SYSTEM** | Home feed state, post composition, pagination, likes, bookmarks | `src/lib/stores/feed.svelte.ts`, `src/routes/+page.svelte` |
-| **PROFILE_SYSTEM** | User profile display and follow state | `src/lib/stores/profile.svelte.ts`, `src/routes/profile/[handle]/+page.svelte` |
-| **DISCOVERY_SYSTEM** | Search, tag filtering, and explore surface | `src/routes/search/+page.svelte`, `src/routes/explore/+page.svelte` |
-| **THEME_SYSTEM** | Dark/light mode detection, toggling, and persistence | `src/lib/stores/theme.svelte.ts` |
-| **VIEW_SYSTEM** | Shared UI components, navigation, meta banner, footer | `src/lib/components/`, `src/routes/+layout.svelte` |
+---
 
 ## System Interactions
 
-| From | To | Nature of Dependency |
-|------|----|---------------------|
-| FEED_SYSTEM | DATA_SYSTEM | Reads post and user data loaded by page load functions |
-| PROFILE_SYSTEM | DATA_SYSTEM | Reads user and post data for a given handle |
-| DISCOVERY_SYSTEM | DATA_SYSTEM | Reads all posts, users, and tags for filtering/searching |
-| VIEW_SYSTEM | FEED_SYSTEM | Renders PostCard and Composer; consumes feed store |
-| VIEW_SYSTEM | PROFILE_SYSTEM | Renders profile page; consumes profile store |
-| VIEW_SYSTEM | THEME_SYSTEM | Applies dark class to root element; binds toggle |
-| FEED_SYSTEM | — | No dependency on PROFILE_SYSTEM or DISCOVERY_SYSTEM |
-| THEME_SYSTEM | — | No dependency on data or content systems |
+| From             | To               | Data / Event                                          |
+|-----------------|------------------|-------------------------------------------------------|
+| DATA_SYSTEM      | FEED_SYSTEM      | posts[], users[] loaded at build time via +page.ts    |
+| DATA_SYSTEM      | PROFILE_SYSTEM   | user, posts[] for a specific handle                   |
+| DATA_SYSTEM      | DISCOVERY_SYSTEM | tags[], users[], posts[] for explore page             |
+| DATA_SYSTEM      | VIEW_SYSTEM      | posts[], users[] for search route                     |
+| FEED_SYSTEM      | VIEW_SYSTEM      | Composed posts injected into feed display             |
+| PROFILE_SYSTEM   | VIEW_SYSTEM      | Follow state reflected in profile UI                  |
+| THEME_SYSTEM     | VIEW_SYSTEM      | Current theme class applied to `<html>` root          |
+| VIEW_SYSTEM      | All systems      | Routes trigger data loading; layout wraps all views   |
+
+---
 
 ## Data Flow
 
 ```
-JSON files (static)
-    └── DATA_SYSTEM (SvelteKit load functions)
-            ├── FEED_SYSTEM (FeedState store + home route)
-            ├── PROFILE_SYSTEM (ProfileState store + profile route)
-            └── DISCOVERY_SYSTEM (search + explore routes)
-
-THEME_SYSTEM (localStorage + system preference)
-    └── VIEW_SYSTEM (layout + nav + all pages)
+JSON files (src/lib/data/)
+  └─► +page.ts loaders (route-level)
+        └─► +page.svelte (route components)
+              ├─► Svelte stores (FeedState, ProfileState)
+              │     └─► Reactive UI updates
+              └─► THEME_SYSTEM (localStorage + CSS class)
 ```
 
-## Shared State Model
+All data flows downward from static JSON. No data flows upward to the server. Stores are the only mutable state, and they are in-memory only (except theme preference).
 
-- **FeedState** (`feed.svelte.ts`): Svelte 5 reactive class. Owns liked IDs, bookmarked IDs, and user-composed posts. Shared across all pages via module-level singleton.
-- **ProfileState** (`profile.svelte.ts`): Svelte 5 reactive class. Owns followed user IDs. Shared across all pages.
-- **ThemeState** (`theme.svelte.ts`): Svelte 5 reactive object. Owns current theme value. Reads/writes localStorage. Initializes from system preference.
+---
 
-## Deployment Constraint
+## Shared Data Types
 
-All internal links and asset paths must include the SvelteKit base path (`/demos/scaffold`). Components use `{base}` from `$app/paths`. Static adapter builds to `build/` directory for GitHub Pages deployment.
+Defined in `src/lib/types.ts`:
+
+- **User** — `id`, `handle`, `displayName`, `bio`, `avatar`, `followerCount`, `followingCount`
+- **Post** — `id`, `authorId`, `content`, `createdAt`, `likeCount`, `repostCount`, `parentId`, `tags`
+- **Tag** — `name`, `postCount`

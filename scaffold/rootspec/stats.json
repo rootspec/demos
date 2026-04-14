@@ -33,5 +33,14 @@
       },
       "qualityScore": null
     }
+,
+  {
+    "skill": "rs-spec",
+    "startedAt": "2026-04-14T20:50:40Z",
+    "completedAt": "2026-04-14T20:51:53Z",
+    "durationSeconds": 73,
+    "iterations": null,
+    "stories": null
+  }
   ]
 }

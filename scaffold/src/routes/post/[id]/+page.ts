@@ -10,5 +10,7 @@ export function load({ params }: { params: { id: string } }) {
 		.filter((p) => p.parentId === params.id)
 		.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-	return { post, replies, users: allUsers };
+	const parentPost = post?.parentId ? allPosts.find((p) => p.id === post.parentId) : null;
+
+	return { post, replies, users: allUsers, parentPost: parentPost ?? null };
 }

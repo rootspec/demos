@@ -16,7 +16,7 @@
     "createdAt": "2026-04-03T13:15:00Z",
     "likeCount": 234,
     "repostCount": 89,
-    "parentId": null,
+    "parentId": "p1",
     "tags": ["architecture", "hotttake"]
   },
   {

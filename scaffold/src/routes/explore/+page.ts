@@ -8,6 +8,6 @@ export function load() {
 	return {
 		tags: sortedTags,
 		users: users as User[],
-		posts: (posts as Post[]).filter((p) => p.parentId === null)
+		posts: posts as Post[]
 	};
 }

@@ -1,54 +1,65 @@
-# System: PROFILE_SYSTEM
-<!-- L4: References L1-3 + Sibling L4 + External -->
+# Level 4: Profile System
+
+**References:** L1 Philosophy, L2 Truths, L3 Interactions, SYSTEMS_OVERVIEW.md, DATA_SYSTEM.md
+
+---
 
 ## Responsibility
 
-Manages user profile display and follow state. When a visitor navigates to a user profile, this system renders the user's bio, stats, and posts, and manages the client-side follow/unfollow toggle.
+Owns the user profile view: displaying a user's identity, stats, and post history. Manages follow/unfollow state via the `ProfileState` store. Each profile is a prerendered static page.
 
-## State Owned
+---
 
-All state lives in `src/lib/stores/profile.svelte.ts` as a Svelte 5 reactive class (`ProfileState`):
+## State Ownership: ProfileState
 
-| State | Type | Description |
-|-------|------|-------------|
-| `followedIds` | `string[]` | IDs of users the current session user follows (session only) |
+Svelte class-based reactive store (`src/lib/stores/profile.svelte.ts`):
 
-## Derived Values
+| Property     | Type     | Description                                          |
+|-------------|----------|------------------------------------------------------|
+| `followedIds`| string[] | User IDs the current session user has followed       |
 
-- `isFollowing(id)` — returns true if the user ID is in `followedIds`
-- Follow button label: "Follow" or "Following" based on `isFollowing`
+### Derived State
 
-## Behaviors
+| Derived          | From                          | Description                                                |
+|------------------|-------------------------------|------------------------------------------------------------|
+| `isFollowing(id)`| followedIds                   | Whether a given user is currently followed                  |
+| Displayed follower count | followedIds + user.followerCount | base + 1 if followed, else base             |
 
-### Profile Display
-The profile page (`/profile/[handle]`) renders:
-- User display name (large, heading)
-- Handle (@handle, subdued)
-- Bio text
-- Follower and following counts (from mock data, static)
-- Follow/unfollow button
+---
 
-### Post List
-All posts authored by the profile user are listed below the bio section in reverse chronological order. Each post links to its detail page.
+## Profile Display Rules
 
-### Follow Toggle
-Clicking "Follow" adds the user's ID to `followedIds` and updates the button to "Following" with a different visual style. Clicking "Following" removes the ID and reverts the button. The follower count displayed does not change (it is read from static mock data).
+Each profile page (`/profile/[handle]`) shows:
+- User avatar
+- Display name
+- Handle (`@handle`)
+- Bio
+- Follower count (adjusted for follow state)
+- Following count
+- Follow/Unfollow button
+- List of user's posts (from DATA_SYSTEM, sorted newest first)
 
-### Not Found
-If the handle in the URL does not match any user in the data, a "User not found" message is displayed.
+---
+
+## Follow/Unfollow Mechanics
+
+- Toggle is immediate; no async operation
+- Follow button label: "Follow" when not following, "Unfollow" when following
+- Button visual state changes on toggle (style distinction)
+- Follower count display = `user.followerCount + (isFollowing ? 1 : 0)`
+- State is stored in ProfileState — resets on page reload
+
+---
+
+## Route Generation
+
+Profile pages are prerendered for all users in `users.json`. The route `/profile/[handle]` resolves only for known handles. The `entries()` function in `+page.ts` returns all handles for static prerendering.
+
+---
 
 ## Boundaries
 
-**Reads from:**
-- DATA_SYSTEM: `data.user`, `data.posts` (via profile page load function)
-
-**Does not:**
-- Manage like/bookmark state (owned by FEED_SYSTEM)
-- Handle search or explore (owned by DISCOVERY_SYSTEM)
-- Persist follow state (session only)
-
-## Key Files
-
-- `src/lib/stores/profile.svelte.ts` — ProfileState class
-- `src/routes/profile/[handle]/+page.svelte` — Profile route
-- `src/routes/profile/[handle]/+page.ts` — Profile load function
+- **Reads from:** DATA_SYSTEM (via route loader) — user record and their posts
+- **Writes to:** ProfileState store (in-memory follow state)
+- **Does not:** affect other users' data, persist follows, or handle authentication
+- **Interacts with:** VIEW_SYSTEM (rendered within layout), FEED_SYSTEM (post cards on profile share PostCard component)
