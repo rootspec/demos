@@ -1,59 +1,74 @@
-# System: FEED_SYSTEM
-<!-- L4: References L1-3 + Sibling L4 + External -->
+# FEED_SYSTEM
+
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md, DATA_SYSTEM.md
+
+---
 
 ## Responsibility
 
-Manages the home feed experience: displaying posts, paginating through them, composing new posts, and tracking like/bookmark state. The FEED_SYSTEM is the primary interactive surface of the app and the core demonstration of RootSpec's scaffold workflow.
+Owns the home feed experience: rendering posts, managing pagination, handling post engagement state (likes, bookmarks), and providing the post composer for new posts.
+
+---
 
 ## State Owned
 
-All state lives in `src/lib/stores/feed.svelte.ts` as a Svelte 5 reactive class (`FeedState`):
-
 | State | Type | Description |
 |-------|------|-------------|
-| `likedIds` | `string[]` | IDs of posts the user has liked (session only) |
-| `bookmarkedIds` | `string[]` | IDs of posts the user has bookmarked (session only) |
-| `userPosts` | `Post[]` | Posts composed in the current session, prepended to feed |
+| visibleCount | number | Number of posts currently shown (paginated) |
+| likedPosts | Set\<string\> | Post IDs the user has liked this session |
+| bookmarkedPosts | Set\<string\> | Post IDs the user has bookmarked this session |
+| composedPosts | Post[] | Posts created in this session via composer |
+| composerOpen | boolean | Whether the composer panel is open |
+| composerContent | string | Current text in the composer input |
 
-## Derived Values
+All state is component-local and ephemeral — it resets on page reload.
 
-- `isLiked(id)` — returns true if the post ID is in `likedIds`
-- `isBookmarked(id)` — returns true if the post ID is in `bookmarkedIds`
-- Displayed like count = `post.likeCount + (isLiked(id) ? 1 : 0)`
+---
 
-## Behaviors
-
-### Feed Display
-Posts are rendered via `PostCard` component. Each card shows: avatar, display name, handle, relative timestamp, content, like button with count, repost count (read-only), bookmark button.
+## Rules
 
 ### Pagination
-Home feed shows [initial_posts_count] posts initially. A "Load more" control loads [load_more_count] additional posts per click. When all posts are shown, the control is hidden.
-
-Combined post list = `userPosts` (new session posts first) + paginated slice of `data.posts`.
+- Initial load shows first [N] posts (e.g., 10)
+- "Load more" button appears when more posts exist beyond `visibleCount`
+- Each click of "Load more" increments `visibleCount` by [N]
+- Posts are displayed in reverse-chronological order (newest first)
 
 ### Like Toggle
-Clicking the like button: adds/removes post ID from `likedIds`, updates the displayed count immediately, renders filled/outlined heart icon.
+- Clicking like on a post adds its ID to `likedPosts` and increments displayed count
+- Clicking again removes it and decrements the count
+- Initial count comes from `post.likeCount` in DATA_SYSTEM
 
 ### Bookmark Toggle
-Clicking the bookmark button: adds/removes post ID from `bookmarkedIds`, renders filled/outlined bookmark icon.
+- Clicking bookmark adds/removes post ID from `bookmarkedPosts`
+- No count displayed — only icon state changes
 
-### Post Composition
-The `Composer` component renders above the feed. A textarea accepts content up to [max_post_length] characters. A character counter displays `n/[max_post_length]`. Submitting adds the post to `userPosts` prepended to the feed. Submitting empty content shows an inline error.
+### Post Composer
+- Composer is accessible from the feed header
+- Character limit: [N] characters
+- On submit: prepend new post to the feed with a session author identity (e.g., "You" or the first user in mock data)
+- New posts have 0 likes, 0 reposts, and current timestamp
+- Composer resets after submit
 
-## Boundaries
+---
 
-**Reads from:**
-- DATA_SYSTEM: `data.posts`, `data.users` (via page load function)
+## Data Consumed
 
-**Does not:**
-- Manage follow state (owned by PROFILE_SYSTEM)
-- Handle search or tag filtering (owned by DISCOVERY_SYSTEM)
-- Persist state to localStorage (except THEME_SYSTEM owns that pattern)
+- `posts[]` from DATA_SYSTEM — full post list for the home feed
+- `users[]` from DATA_SYSTEM — for resolving `authorId` to display names and handles
 
-## Key Files
+---
 
-- `src/lib/stores/feed.svelte.ts` — FeedState class
-- `src/lib/components/Composer.svelte` — Post composer component
-- `src/lib/components/PostCard.svelte` — Post display component
-- `src/routes/+page.svelte` — Home feed route
-- `src/routes/+page.ts` — Home page load function
+## Interactions with Other Systems
+
+- Provides post cards that link to PROFILE_SYSTEM routes (via author handle)
+- Provides post cards that link to post detail routes (post ID)
+- Does not communicate with DISCOVERY_SYSTEM or THEME_SYSTEM directly
+
+---
+
+## Rendered Elements (Key)
+
+- Post card: avatar, display name, handle, content, timestamp, like count, repost count, like button, bookmark button
+- "Load more" button at bottom of feed
+- Post composer: textarea, character count, submit button, cancel/collapse affordance
+- Feed header with "New Post" / compose trigger

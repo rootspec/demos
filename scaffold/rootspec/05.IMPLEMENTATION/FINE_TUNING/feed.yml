@@ -1,24 +1,27 @@
 # =============================================================================
-# FINE-TUNING: Feed System
+# FINE TUNING: Feed System
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
 # @last_updated: 2026-04-14T00:00:00Z
+# @status: production
 
-initial_posts_count:
-  value: 10
-  # @unit: posts
-  # @rationale: Shows enough content to demonstrate the feed without overwhelming. Matches typical social feed initial load.
-  # @constraint: min=5, max=20
+pagination:
+  initial_count:
+    value: 10
+    # @unit: posts
+    # @rationale: Shows enough posts to scan without overwhelming initial render
+    # @constraint: min=5, max=20, type=integer
 
-load_more_count:
-  value: 10
-  # @unit: posts
-  # @rationale: Consistent with initial load count for predictable pagination experience.
-  # @constraint: min=5, max=20
+  load_more_increment:
+    value: 10
+    # @unit: posts
+    # @rationale: Consistent batch size; same as initial for predictable rhythm
+    # @constraint: min=5, max=20, type=integer
 
-max_post_length:
-  value: 300
-  # @unit: characters
-  # @rationale: Long enough for meaningful tech discussion, short enough to keep the feed readable. Matches Bluesky's limit.
-  # @constraint: min=140, max=500
+composer:
+  max_character_count:
+    value: 300
+    # @unit: characters
+    # @rationale: Short-form microblogging convention; keeps posts scannable
+    # @constraint: min=140, max=500, type=integer
