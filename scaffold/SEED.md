@@ -63,7 +63,7 @@ A persistent banner explaining this is a RootSpec scaffold demo. Something like:
 
 > "RootFeed started as a bare SvelteKit scaffold — 5 empty routes and some JSON files. RootSpec defined the spec and implemented the full experience with minimal human guidance. [View the scaffold commit →] [View the spec →] [View the seed →]"
 
-Link to the SEED.md, spec files, and the original scaffold commit in the GitHub repo. Visitors should understand that rough edges come from sparse guidance, not sloppy engineering.
+Link to the SEED.md and spec files in the GitHub repo at https://github.com/rootspec/demos/tree/main/scaffold. These must be absolute GitHub URLs, not relative paths — relative links will break the static build's prerenderer.
 
 ## Attribution & Transparency
 

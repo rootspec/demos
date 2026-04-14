@@ -19,8 +19,8 @@
 	<div data-test="meta-banner" class="bg-blue-50 px-4 py-2 text-center text-sm text-blue-900 dark:bg-blue-950 dark:text-blue-200">
 		RootFeed — a RootSpec scaffold demo
 		<a data-test="banner-scaffold-link" href="https://github.com/rootspec/demos" class="ml-2 text-blue-600 hover:underline dark:text-blue-400">Scaffold</a>
-		<a data-test="banner-spec-link" href="{base}/rootspec" class="ml-2 text-blue-600 hover:underline dark:text-blue-400">Spec</a>
-		<a data-test="banner-seed-link" href="{base}/SEED.md" class="ml-2 text-blue-600 hover:underline dark:text-blue-400">Seed</a>
+		<a data-test="banner-spec-link" href="https://github.com/rootspec/demos/tree/main/scaffold/rootspec" class="ml-2 text-blue-600 hover:underline dark:text-blue-400">Spec</a>
+		<a data-test="banner-seed-link" href="https://github.com/rootspec/demos/tree/main/scaffold/SEED.md" class="ml-2 text-blue-600 hover:underline dark:text-blue-400">Seed</a>
 	</div>
 
 	<nav class="border-b border-gray-200 px-4 py-3 dark:border-gray-700">
