@@ -1,0 +1,247 @@
+Dev server already running (PID 40393)
+[35m[95mWarning:[39m[35m The [33mallowCypressEnv[39m[35m configuration option is enabled. This allows any browser code to read values from [33mCypress.env()[39m[35m. This is insecure and will be removed in a future major version.[39m
+[35m[39m
+[35m1. Replace [33mCypress.env()[39m[35m calls with [33mcy.env()[39m[35m (for sensitive values) or [33mCypress.expose()[39m[35m (for public configuration)[39m
+[35m2. Set [33mallowCypressEnv: false[39m[35m in your Cypress configuration to disable [33mCypress.env()[39m[35m[39m
+[35m[39m
+[35mLearn more: https://on.cypress.io/cypress-env-migration[39m
+[35m[39m
+
+[90m====================================================================================================[39m
+
+[0m  ([4m[1mRun Starting[22m[24m)[0m
+
+[90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
+[90m  │[39m [90mCypress:[39m        15.13.0                                                                        [90m│[39m
+[90m  │[39m [90mBrowser:[39m        Electron 138 [90m(headless)[39m                                                        [90m│[39m
+[90m  │[39m [90mNode Version:[39m   [0mv22.22.2 [90m(/opt/hostedtoolcache/node/22.22.2/x64/bin/node)[39m[0m                      [90m│[39m
+[90m  │[39m [90mSpecs:[39m          [0m3 found (baseline.cy.ts, comparison.cy.ts, meta.cy.ts)[0m                         [90m│[39m
+[90m  │[39m [90mSearched:[39m       [0mcypress/e2e/**/*.cy.{js,jsx,ts,tsx}[0m                                            [90m│[39m
+[90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
+
+
+[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m
+                                                                                                    
+  Running:  [90mbaseline.cy.ts[39m                                                                  [90m(1 of 3)[39m
+
+[0m[0m
+[0m  US-101: Search for a city by name and select it[0m
+  [32m  ✓[0m[90m AC-101-1: Autocomplete dropdown appears after typing[0m[90m (1804ms)[0m
+  [32m  ✓[0m[90m AC-101-2: Selecting a city loads its weather[0m[90m (1660ms)[0m
+
+[0m  US-102: View current weather conditions for a selected city[0m
+  [32m  ✓[0m[90m AC-102-1: Current conditions card shows temperature, humidity, wind, and UV[0m[90m (1044ms)[0m
+
+[0m  US-103: See weather alerts when conditions meet thresholds[0m
+  [32m  ✓[0m[90m AC-103-1: Alerts appear for notable conditions[0m[90m (1051ms)[0m
+
+[0m  US-104: View hourly forecast for the next 24 hours[0m
+  [32m  ✓[0m[90m AC-104-1: Hourly forecast strip displays after selecting a city[0m[90m (1029ms)[0m
+  [32m  ✓[0m[90m AC-104-2: Scroll arrows navigate the hourly strip[0m[90m (1135ms)[0m
+
+[0m  US-105: View 7-day forecast with temperature range and conditions[0m
+  [32m  ✓[0m[90m AC-105-1: Seven day cards appear with high/low temps and weather emoji[0m[90m (1046ms)[0m
+
+[0m  US-106: Save a city as a favorite location[0m
+  [32m  ✓[0m[90m AC-106-1: Save Location button appears for unsaved cities[0m[90m (1031ms)[0m
+  [32m  ✓[0m[90m AC-106-2: Clicking save adds the city to favorites chips[0m[90m (1124ms)[0m
+
+[0m  US-107: Click a favorite chip to view its weather[0m
+  [32m  ✓[0m[90m AC-107-1: Clicking a favorite chip loads that city's weather[0m[90m (1912ms)[0m
+
+[0m  US-108: Remove a city from favorites[0m
+  [32m  ✓[0m[90m AC-108-1: Clicking the remove button on a chip removes the favorite[0m[90m (1197ms)[0m
+
+[0m  US-109: View all saved locations on the dashboard[0m
+  [32m  ✓[0m[90m AC-109-1: Dashboard view toggle appears when favorites exist[0m[90m (1067ms)[0m
+  [32m  ✓[0m[90m AC-109-2: Switching to dashboard shows all locations with current weather[0m[90m (1296ms)[0m
+
+[0m  US-110: Switch between Celsius and Fahrenheit[0m
+  [32m  ✓[0m[90m AC-110-1: Changing temperature unit updates displayed temperatures[0m[90m (1194ms)[0m
+
+[0m  US-111: Switch between km/h and mph for wind speed[0m
+  [32m  ✓[0m[90m AC-111-1: Wind unit setting options are available[0m[90m (279ms)[0m
+
+[0m  US-112: Switch between 24-hour and 12-hour time format[0m
+  [32m  ✓[0m[90m AC-112-1: Time format setting options are available[0m[90m (231ms)[0m
+
+[0m  US-113: Set a default city that loads on app startup[0m
+  [32m  ✓[0m[90m AC-113-1: Default city dropdown appears when favorites exist[0m[90m (1152ms)[0m
+
+[0m  US-114: Empty state message shows on first load[0m
+  [32m  ✓[0m[90m AC-114-1: Empty state message shows on first load[0m[90m (168ms)[0m
+
+
+[92m [0m[32m 18 passing[0m[90m (29s)[0m
+
+
+[32m  ([4m[1mResults[22m[24m)[39m
+
+[90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
+[90m  │[39m [90mTests:[39m        [32m18[39m                                                                               [90m│[39m
+[90m  │[39m [90mPassing:[39m      [32m18[39m                                                                               [90m│[39m
+[90m  │[39m [90mFailing:[39m      [32m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mPending:[39m      [32m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mSkipped:[39m      [32m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mScreenshots:[39m  [32m18[39m                                                                               [90m│[39m
+[90m  │[39m [90mVideo:[39m        [32mfalse[39m                                                                            [90m│[39m
+[90m  │[39m [90mDuration:[39m     [32m28 seconds[39m                                                                       [90m│[39m
+[90m  │[39m [90mSpec Ran:[39m     [32m[32mbaseline.cy.ts[32m[39m                                                                   [90m│[39m
+[90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
+
+
+[33m  ([4m[1mScreenshots[22m[24m)[39m
+
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m     [90m[90m(1000x696)[90m[39m
+[90m [39m    [0m01--AC-101-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1033)[90m[39m
+[90m [39m    [0m01--AC-101-2.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1033)[90m[39m
+[90m [39m    [0m02--AC-102-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1046)[90m[39m
+[90m [39m    [0m03--AC-103-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1076)[90m[39m
+[90m [39m    [0m04--AC-104-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1076)[90m[39m
+[90m [39m    [0m04--AC-104-2.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1033)[90m[39m
+[90m [39m    [0m05--AC-105-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1033)[90m[39m
+[90m [39m    [0m06--AC-106-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1067)[90m[39m
+[90m [39m    [0m06--AC-106-2.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1212)[90m[39m
+[90m [39m    [0m07--AC-107-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1018)[90m[39m
+[90m [39m    [0m08--AC-108-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1110)[90m[39m
+[90m [39m    [0m09--AC-109-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m     [90m[90m(1000x696)[90m[39m
+[90m [39m    [0m09--AC-109-2.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1200)[90m[39m
+[90m [39m    [0m10--AC-110-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m     [90m[90m(1000x696)[90m[39m
+[90m [39m    [0m11--AC-111-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m     [90m[90m(1000x696)[90m[39m
+[90m [39m    [0m12--AC-112-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m    [90m[90m(1000x1278)[90m[39m
+[90m [39m    [0m13--AC-113-1.png[0m                                                                               
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/baseline.cy.ts/US-1[0m     [90m[90m(1000x696)[90m[39m
+[90m [39m    [0m14--AC-114-1.png[0m                                                                               
+
+
+[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m
+                                                                                                    
+  Running:  [90mcomparison.cy.ts[39m                                                                [90m(2 of 3)[39m
+
+[0m[0m
+[0m  US-201: Enter comparison mode from dashboard[0m
+  [32m  ✓[0m[90m AC-201-1: Compare button appears on dashboard when 2+ favorites exist[0m[90m (2850ms)[0m
+  [32m  ✓[0m[90m AC-201-2: Compare button is hidden when fewer than 2 favorites exist[0m[90m (1286ms)[0m
+
+[0m  US-202: Select cities for side-by-side comparison[0m
+  [32m  ✓[0m[90m AC-202-1: Clicking Compare enters selection mode with selectable cards[0m[90m (2188ms)[0m
+  [32m  ✓[0m[90m AC-202-2: Selecting 2 cities shows comparison view[0m[90m (2448ms)[0m
+
+[0m  US-203: View comparison with current conditions, hourly, and 7-day forecast[0m
+  [32m  ✓[0m[90m AC-203-1: Each comparison column shows full weather details[0m[90m (2447ms)[0m
+
+[0m  US-204: Deselect a city from comparison[0m
+  [32m  ✓[0m[90m AC-204-1: Clicking a column header removes that city and exits to dashboard[0m[90m (2721ms)[0m
+
+[0m  US-205: Navigate back to dashboard from comparison[0m
+  [32m  ✓[0m[90m AC-205-1: Back button returns to dashboard[0m[90m (2742ms)[0m
+
+
+[92m [0m[32m 7 passing[0m[90m (20s)[0m
+
+
+[32m  ([4m[1mResults[22m[24m)[39m
+
+[90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
+[90m  │[39m [90mTests:[39m        [32m7[39m                                                                                [90m│[39m
+[90m  │[39m [90mPassing:[39m      [32m7[39m                                                                                [90m│[39m
+[90m  │[39m [90mFailing:[39m      [32m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mPending:[39m      [32m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mSkipped:[39m      [32m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mScreenshots:[39m  [32m7[39m                                                                                [90m│[39m
+[90m  │[39m [90mVideo:[39m        [32mfalse[39m                                                                            [90m│[39m
+[90m  │[39m [90mDuration:[39m     [32m19 seconds[39m                                                                       [90m│[39m
+[90m  │[39m [90mSpec Ran:[39m     [32m[32mcomparison.cy.ts[32m[39m                                                                 [90m│[39m
+[90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
+
+
+[33m  ([4m[1mScreenshots[22m[24m)[39m
+
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/comparison.cy.ts/US[0m     [90m[90m(1000x696)[90m[39m
+[90m [39m    [0m-201--AC-201-1.png[0m                                                                             
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/comparison.cy.ts/US[0m     [90m[90m(1000x696)[90m[39m
+[90m [39m    [0m-201--AC-201-2.png[0m                                                                             
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/comparison.cy.ts/US[0m     [90m[90m(1000x696)[90m[39m
+[90m [39m    [0m-202--AC-202-1.png[0m                                                                             
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/comparison.cy.ts/US[0m    [90m[90m(1000x1154)[90m[39m
+[90m [39m    [0m-202--AC-202-2.png[0m                                                                             
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/comparison.cy.ts/US[0m    [90m[90m(1000x1154)[90m[39m
+[90m [39m    [0m-203--AC-203-1.png[0m                                                                             
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/comparison.cy.ts/US[0m     [90m[90m(1000x696)[90m[39m
+[90m [39m    [0m-204--AC-204-1.png[0m                                                                             
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/comparison.cy.ts/US[0m     [90m[90m(1000x696)[90m[39m
+[90m [39m    [0m-205--AC-205-1.png[0m                                                                             
+
+
+[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m
+                                                                                                    
+  Running:  [90mmeta.cy.ts[39m                                                                      [90m(3 of 3)[39m
+
+[0m[0m
+[0m  US-115: See a persistent meta banner identifying this as a RootSpec brownfield demo[0m
+  [32m  ✓[0m[90m AC-115-1: Meta banner is visible on page load[0m[90m (363ms)[0m
+  [32m  ✓[0m[90m AC-115-2: Meta banner contains links to the GitHub repo[0m[90m (147ms)[0m
+
+
+[92m [0m[32m 2 passing[0m[90m (1s)[0m
+
+
+[32m  ([4m[1mResults[22m[24m)[39m
+
+[90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
+[90m  │[39m [90mTests:[39m        [32m2[39m                                                                                [90m│[39m
+[90m  │[39m [90mPassing:[39m      [32m2[39m                                                                                [90m│[39m
+[90m  │[39m [90mFailing:[39m      [32m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mPending:[39m      [32m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mSkipped:[39m      [32m0[39m                                                                                [90m│[39m
+[90m  │[39m [90mScreenshots:[39m  [32m2[39m                                                                                [90m│[39m
+[90m  │[39m [90mVideo:[39m        [32mfalse[39m                                                                            [90m│[39m
+[90m  │[39m [90mDuration:[39m     [32m1 second[39m                                                                         [90m│[39m
+[90m  │[39m [90mSpec Ran:[39m     [32m[32mmeta.cy.ts[32m[39m                                                                       [90m│[39m
+[90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
+
+
+[33m  ([4m[1mScreenshots[22m[24m)[39m
+
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/meta.cy.ts/US-115--[0m     [90m[90m(1000x696)[90m[39m
+[90m [39m    [0mAC-115-1.png[0m                                                                                   
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/meta.cy.ts/US-115--[0m     [90m[90m(1000x696)[90m[39m
+[90m [39m    [0mAC-115-2.png[0m                                                                                   
+
+
+[rootspec] Updated rootspec/tests-status.json — 20/20 stories passing
+
+
+[90m====================================================================================================[39m
+
+[0m  ([4m[1mRun Finished[22m[24m)[0m
+
+
+[90m   [39m    [90mSpec[39m                                              [90mTests[39m  [90mPassing[39m  [90mFailing[39m  [90mPending[39m  [90mSkipped[39m [90m [39m
+[90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
+[90m  │[39m [32m✔[39m  [0mbaseline.cy.ts[0m                           [90m00:28[39m       [0m18[0m       [32m18[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m│[39m
+[90m  ├[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┤[39m
+[90m  │[39m [32m✔[39m  [0mcomparison.cy.ts[0m                         [90m00:19[39m        [0m7[0m        [32m7[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m│[39m
+[90m  ├[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┤[39m
+[90m  │[39m [32m✔[39m  [0mmeta.cy.ts[0m                               [90m00:01[39m        [0m2[0m        [32m2[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m│[39m
+[90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
+[90m   [39m [32m✔[39m  [32mAll specs passed![39m                        [90m00:49[39m       [0m27[0m       [32m27[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m [39m
+
+Stopping dev server (PID 40393)...
+Dev server stopped

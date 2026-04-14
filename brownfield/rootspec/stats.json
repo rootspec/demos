@@ -1,93 +1,37 @@
 {
   "runs": [
-  {
-    "skill": "rs-spec",
-    "startedAt": "2026-04-04T15:07:17Z",
-    "completedAt": "2026-04-04T15:17:03Z",
-    "durationSeconds": 586,
-    "iterations": null,
-    "stories": null
-  }
-,
-  {
-    "skill": "rs-impl",
-    "startedAt": "2026-04-04T16:36:06Z",
-    "completedAt": "2026-04-04T17:03:57Z",
-    "durationSeconds": 1671,
-    "iterations": 3,
-    "stories": {"US-101":{"attempts":1},"US-102":{"attempts":1},"US-103":{"attempts":1},"US-104":{"attempts":1},"US-105":{"attempts":1},"US-106":{"attempts":1},"US-107":{"attempts":1},"US-108":{"attempts":1},"US-109":{"attempts":1},"US-110":{"attempts":1},"US-111":{"attempts":1},"US-112":{"attempts":1},"US-113":{"attempts":1},"US-114":{"attempts":1}}
-  }
-,
-  {
-    "skill": "rs-validate",
-    "startedAt": "2026-04-04T17:04:22Z",
-    "completedAt": "2026-04-04T17:07:31Z",
-    "durationSeconds": 189,
-    "iterations": null,
-    "stories": null
-  }
-,
-  {
-    "skill": "rs-spec",
-    "startedAt": "2026-04-04T17:15:54Z",
-    "completedAt": "2026-04-04T17:25:33Z",
-    "durationSeconds": 579,
-    "iterations": null,
-    "stories": null
-  }
-,
-  {
-    "skill": "rs-impl",
-    "startedAt": "2026-04-04T17:26:19Z",
-    "completedAt": "2026-04-04T17:34:31Z",
-    "durationSeconds": 492,
-    "iterations": 3,
-    "stories": {"US-201":{"attempts":1},"US-202":{"attempts":1},"US-203":{"attempts":1},"US-204":{"attempts":1},"US-205":{"attempts":1}}
-  }
-,
-  {
-    "skill": "rs-validate",
-    "startedAt": "2026-04-04T17:35:10Z",
-    "completedAt": "2026-04-04T17:38:29Z",
-    "durationSeconds": 199,
-    "iterations": null,
-    "stories": null
-  }
-,
-  {
-    "skill": "rs-spec",
-    "startedAt": "2026-04-06T18:57:36Z",
-    "completedAt": "2026-04-06T19:00:48Z",
-    "durationSeconds": 192,
-    "iterations": null,
-    "stories": null
-  }
-,
-  {
-    "skill": "rs-validate",
-    "startedAt": "2026-04-06T19:01:16Z",
-    "completedAt": "2026-04-06T19:03:20Z",
-    "durationSeconds": 124,
-    "iterations": null,
-    "stories": null
-  }
-,
-  {
-    "skill": "rs-spec",
-    "startedAt": "2026-04-14T23:05:33Z",
-    "completedAt": "2026-04-14T23:06:26Z",
-    "durationSeconds": 53,
-    "iterations": null,
-    "stories": null
-  }
-,
-  {
-    "skill": "rs-impl",
-    "startedAt": "2026-04-14T23:06:45Z",
-    "completedAt": "2026-04-14T23:10:39Z",
-    "durationSeconds": 234,
-    "iterations": 3,
-    "stories": {"US-115":{"attempts":1}}
-  }
+    {
+      "runId": "55ec76c5",
+      "startedAt": "2026-04-14T23:03:08.984Z",
+      "completedAt": "2026-04-14T23:12:57.034Z",
+      "totalCostUsd": 1.92,
+      "phases": {
+        "init": {
+          "status": "success",
+          "costUsd": 0,
+          "turns": 0,
+          "durationSeconds": 0
+        },
+        "spec": {
+          "status": "success",
+          "costUsd": 1.15,
+          "turns": 63,
+          "durationSeconds": 209
+        },
+        "impl": {
+          "status": "success",
+          "costUsd": 0.53,
+          "turns": 27,
+          "durationSeconds": 262
+        },
+        "validate": {
+          "status": "success",
+          "costUsd": 0.24,
+          "turns": 16,
+          "durationSeconds": 115
+        }
+      },
+      "qualityScore": null
+    }
   ]
 }

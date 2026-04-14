@@ -4,3 +4,5 @@
 beforeEach(() => {
   cy.clearLocalStorage();
 });
+
+import "./screenshot-hook";
