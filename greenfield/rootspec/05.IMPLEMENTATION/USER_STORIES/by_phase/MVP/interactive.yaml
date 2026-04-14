@@ -1,149 +1,172 @@
 # =============================================================================
-# USER STORIES: Interactive Features
+# LEVEL 5: USER STORIES — Interactive Features
 # =============================================================================
-# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: METHODOLOGY_EXPLORATION
-# @systems: [INTERACTIVE_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM]
 
 ---
 
-# =============================================================================
-# USER STORY: Explore the hierarchy using the hierarchy explorer
-# =============================================================================
-
-id: US-007
-title: Explore the five-level spec hierarchy interactively
+id: US-201
+title: Visitor explores the hierarchy by clicking levels in the Hierarchy Explorer
 
 acceptance_criteria:
-  - id: AC-007-1
-    title: Hierarchy Explorer is visible on the page
+  - id: AC-201-1
+    title: Hierarchy Explorer renders all five levels
     narrative: |
-      Given I visit the site
-      When I scroll to the hierarchy explorer section
-      Then I see all five levels displayed
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
-
-  - id: AC-007-2
-    title: Clicking a level expands it to show content
-    narrative: |
-      Given I see the hierarchy explorer
-      When I click on a level
-      Then I see the level expand with example content
+      Given I scroll to the Hierarchy Explorer section
+      When the component loads
+      Then I see five level cards
     given:
       - visit: '/'
     when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level]', count: 5 }
 
-  - id: AC-007-3
-    title: All five levels are present
+  - id: AC-201-2
+    title: Clicking a level expands it to show more content
     narrative: |
-      Given I see the hierarchy explorer
-      When I look at the level list
-      Then I see entries for all five levels
+      Given I see the Hierarchy Explorer
+      When I click on a level card
+      Then it expands to show detailed content
     given:
       - visit: '/'
-    when: []
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - click: { selector: '[data-test=hierarchy-level]:first-child' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-2]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-3]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-4]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-5]' }
+      - shouldHaveClass: { selector: '[data-test=hierarchy-level]:first-child', class: 'expanded' }
+      - shouldBeVisible: { selector: '[data-test=hierarchy-level]:first-child [data-test=level-detail]' }
+
+  - id: AC-201-3
+    title: Clicking an expanded level collapses it
+    narrative: |
+      Given I have expanded a level
+      When I click it again
+      Then it collapses back to summary view
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+      - click: { selector: '[data-test=hierarchy-level]:first-child' }
+    when:
+      - click: { selector: '[data-test=hierarchy-level]:first-child' }
+    then:
+      - shouldNotHaveClass: { selector: '[data-test=hierarchy-level]:first-child', class: 'expanded' }
+
+  - id: AC-201-4
+    title: Hierarchy Explorer is keyboard navigable
+    narrative: |
+      Given I focus the Hierarchy Explorer
+      When I press Tab and Enter
+      Then I can expand a level without a mouse
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=hierarchy-explorer]' }
+    when:
+      - focus: { selector: '[data-test=hierarchy-level]:first-child' }
+      - keyPress: { key: 'Enter' }
+    then:
+      - shouldHaveClass: { selector: '[data-test=hierarchy-level]:first-child', class: 'expanded' }
 
 ---
 
-# =============================================================================
-# USER STORY: Complete the spec wizard
-# =============================================================================
-
-id: US-008
-title: Walk through the spec wizard and see a skeleton spec
+id: US-202
+title: Visitor uses the Spec Wizard to generate a skeleton spec from their idea
 
 acceptance_criteria:
-  - id: AC-008-1
-    title: Spec Wizard is visible on the page
+  - id: AC-202-1
+    title: Wizard renders step 1 with a text input
     narrative: |
-      Given I visit the site
-      When I scroll to the spec wizard section
-      Then I see the wizard with a product idea input
+      Given I scroll to the Spec Wizard section
+      When the component loads
+      Then I see step 1 with a text input for my product idea
     given:
       - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=spec-wizard]' }
-      - shouldExist: { selector: '[data-test=wizard-step-1]' }
-
-  - id: AC-008-2
-    title: Completing Step 1 advances to Step 2
-    narrative: |
-      Given I see the spec wizard
-      When I fill in a product idea and click next
-      Then I see Step 2 with design pillar choices
-    given:
-      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
     when:
-      - fill: { selector: '[data-test=wizard-product-idea]', value: 'A tool for tracking reading habits' }
-      - click: { selector: '[data-test=wizard-next]' }
+      - pageLoad: {}
     then:
-      - shouldExist: { selector: '[data-test=wizard-step-2]' }
+      - shouldBeVisible: { selector: '[data-test=wizard-step-1]' }
+      - shouldBeVisible: { selector: '[data-test=wizard-idea-input]' }
 
-  - id: AC-008-3
-    title: Completing all steps shows the skeleton spec
+  - id: AC-202-2
+    title: Next button is disabled when step 1 input is empty
     narrative: |
-      Given I have completed all three wizard steps
-      When I submit the final step
-      Then I see a skeleton spec preview
+      Given I see step 1 of the wizard with an empty input
+      When I look at the Next button
+      Then it is disabled
     given:
       - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
     when:
-      - fill: { selector: '[data-test=wizard-product-idea]', value: 'A tool for tracking reading habits' }
-      - click: { selector: '[data-test=wizard-next]' }
-      - click: { selector: '[data-test=wizard-pillar-option-0]' }
-      - click: { selector: '[data-test=wizard-next]' }
-      - fill: { selector: '[data-test=wizard-key-interaction]', value: 'User logs a book they finished' }
-      - click: { selector: '[data-test=wizard-submit]' }
+      - pageLoad: {}
     then:
-      - shouldExist: { selector: '[data-test=wizard-output]' }
+      - shouldBeDisabled: { selector: '[data-test=wizard-next]' }
+
+  - id: AC-202-3
+    title: Visitor can advance through all steps and see output
+    narrative: |
+      Given I enter a product idea, select a mission, and choose pillars
+      When I complete step 3
+      Then I see a generated skeleton spec
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+    when:
+      - type: { selector: '[data-test=wizard-idea-input]', text: 'A tool for remote teams to stay aligned' }
+      - click: { selector: '[data-test=wizard-next]' }
+      - click: { selector: '[data-test=mission-option]:first-child' }
+      - click: { selector: '[data-test=wizard-next]' }
+      - click: { selector: '[data-test=pillar-option]:nth-child(1)' }
+      - click: { selector: '[data-test=pillar-option]:nth-child(2)' }
+      - click: { selector: '[data-test=pillar-option]:nth-child(3)' }
+      - click: { selector: '[data-test=wizard-next]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test=wizard-output]' }
+      - shouldContain: { selector: '[data-test=wizard-output]', text: 'Mission' }
+
+  - id: AC-202-4
+    title: Start Over resets the wizard to step 1
+    narrative: |
+      Given I have completed the wizard and see output
+      When I click "Start Over"
+      Then the wizard resets to step 1 with empty inputs
+    given:
+      - visit: '/'
+      - scrollTo: { selector: '[data-test=spec-wizard]' }
+      - type: { selector: '[data-test=wizard-idea-input]', text: 'Test idea' }
+      - click: { selector: '[data-test=wizard-next]' }
+      - click: { selector: '[data-test=mission-option]:first-child' }
+      - click: { selector: '[data-test=wizard-next]' }
+      - click: { selector: '[data-test=pillar-option]:nth-child(1)' }
+      - click: { selector: '[data-test=pillar-option]:nth-child(2)' }
+      - click: { selector: '[data-test=pillar-option]:nth-child(3)' }
+      - click: { selector: '[data-test=wizard-next]' }
+    when:
+      - click: { selector: '[data-test=wizard-reset]' }
+    then:
+      - shouldBeVisible: { selector: '[data-test=wizard-step-1]' }
+      - shouldHaveValue: { selector: '[data-test=wizard-idea-input]', value: '' }
 
 ---
 
-# =============================================================================
-# USER STORY: View the before/after comparison
-# =============================================================================
-
-id: US-009
-title: Compare development with and without RootSpec
+id: US-203
+title: Visitor sees Before/After comparison of spec vs. no spec
 
 acceptance_criteria:
-  - id: AC-009-1
-    title: Before/After Comparison section is visible
+  - id: AC-203-1
+    title: Before/After section renders two panels with real content
     narrative: |
-      Given I visit the site
-      When I scroll to the comparison section
-      Then I see panels showing with and without RootSpec
+      Given I scroll to the Before/After section
+      When the component loads
+      Then I see two panels: "Without RootSpec" and "With RootSpec"
     given:
       - visit: '/'
-    when: []
+      - scrollTo: { selector: '[data-test=comparison-section]' }
+    when:
+      - pageLoad: {}
     then:
-      - shouldExist: { selector: '[data-test=comparison-section]' }
-
-  - id: AC-009-2
-    title: Both panels contain real content
-    narrative: |
-      Given I see the comparison section
-      When I look at the without-spec panel
-      Then I see example content showing an unstructured spec
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=comparison-without]' }
-      - shouldExist: { selector: '[data-test=comparison-with]' }
+      - shouldBeVisible: { selector: '[data-test=panel-before]' }
+      - shouldBeVisible: { selector: '[data-test=panel-after]' }
+      - shouldContain: { selector: '[data-test=panel-before]', text: 'Without' }
+      - shouldContain: { selector: '[data-test=panel-after]', text: 'With RootSpec' }

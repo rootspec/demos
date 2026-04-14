@@ -1,17 +1,31 @@
 # =============================================================================
-# FINE-TUNING: Theme System
+# LEVEL 5: FINE TUNING - Theme & Animation
 # =============================================================================
-# @spec_version: 1.0.0
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# @spec_version: 7.2.4
+# @system: THEME_SYSTEM
 # @last_updated: 2026-04-14T00:00:00Z
+# @status: production
+# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
-theme_transition_duration:
-  value: 200
-  # @unit: milliseconds
-  # @rationale: Long enough to feel intentional, short enough not to delay the user
-  # @constraint: min=100, max=400
+animation:
+  fast: 150
+  # @rationale: Hover effects should feel instant; 150ms is perceptible but snappy
+  # @constraints: min=50, max=250, type=integer
 
-localStorage_key:
-  value: "rootspec-theme"
-  # @unit: string key
-  # @rationale: Namespaced to avoid collision with other localStorage consumers
+  default: 300
+  # @rationale: Standard ease-out for expand/collapse; matches Material and Tailwind defaults
+  # @alternatives: [200, 300, 400]
+  # @constraints: min=150, max=500, type=integer
+
+  slow: 500
+  # @rationale: Scroll-triggered section fade-ins should feel deliberate, not jarring
+  # @constraints: min=300, max=800, type=integer
+
+  easing: "ease-out"
+  # @rationale: Ease-out feels natural for UI transitions (fast start, gentle finish)
+  # @alternatives: ["ease", "ease-in-out", "cubic-bezier(0.4, 0, 0.2, 1)"]
+
+theme:
+  default: "dark"
+  # @rationale: Developer audience expects dark mode; system preference overrides this
+  # @alternatives: ["light", "system"]

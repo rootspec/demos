@@ -1,72 +1,70 @@
 # Level 4: Layout System
 
-**System:** LAYOUT_SYSTEM
-**References:** L1-3, Sibling L4, External
-
----
+> References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md
 
 ## Responsibility
 
-Owns the overall page structure, section ordering, responsive layout behavior, and the mounting positions for all other systems' components. The Astro layout shell is the primary artifact of this system.
-
----
-
-## Page Structure (Top to Bottom)
-
-1. Meta Banner (CONTENT_SYSTEM)
-2. Header — site name, version badge, theme toggle (THEME_SYSTEM toggle, FRAMEWORK_SYSTEM version)
-3. Hero Section (CONTENT_SYSTEM + FRAMEWORK_SYSTEM)
-4. Problem Section (CONTENT_SYSTEM)
-5. How It Works Section (CONTENT_SYSTEM)
-6. Hierarchy Explorer (INTERACTIVE_SYSTEM)
-7. Spec Wizard (INTERACTIVE_SYSTEM)
-8. Before/After Comparison (INTERACTIVE_SYSTEM)
-9. CTA Section (CONTENT_SYSTEM)
-10. Footer (CONTENT_SYSTEM)
-
----
-
-## Responsive Behavior
-
-- Single-column layout on mobile
-- Two-column layouts for comparison panels on desktop
-- Interactive components reflow to touch-friendly single-column on narrow viewports
-- Section padding and typography scale with viewport width via Tailwind responsive classes
-- Minimum supported viewport width: [min_width] — below this, horizontal scrolling is acceptable but not preferred
-
----
-
-## Transitions and Animation
-
-- Section entry animations on scroll (fade-in, translate-up) using CSS or Intersection Observer
-- Animation duration and easing values defined in Tailwind config / CSS variables
-- Respects `prefers-reduced-motion` — all animations disabled when user has this preference
-
----
-
-## Data Ownership
-
-- Page document structure (head, body, section order)
-- Global meta tags (title, description, OG tags)
-- Theme toggle button position and markup
-- Scroll behavior and section IDs for anchor links
-
----
+Owns the spacing scale, typography scale, breakpoint definitions, and max-width constraints. Provides the grid vocabulary all other systems use to position content. Does not own color or animation timing (those belong to THEME_SYSTEM).
 
 ## Boundaries
 
-- Does not own copy or content inside sections (CONTENT_SYSTEM owns that)
-- Does not own theme state (THEME_SYSTEM owns that)
-- Does not own interactive component logic (INTERACTIVE_SYSTEM owns that)
-- Does not own the version string or GitHub URLs (FRAMEWORK_SYSTEM owns that)
+- **Owns:** Spacing tokens, typography scale, breakpoint values, container max-widths, grid column definitions
+- **Does not own:** Color (THEME_SYSTEM), component state (INTERACTIVE_SYSTEM), content (CONTENT_SYSTEM)
+- **Consumed by:** PRESENTATION_SYSTEM, CONTENT_SYSTEM, INTERACTIVE_SYSTEM, THEME_SYSTEM (for layout-adjacent animation)
 
----
+## Breakpoints
 
-## Interactions with Other Systems
+| Name | Min Width | Primary Use |
+|------|-----------|-------------|
+| `sm` | [N]px | Small phones |
+| `md` | [N]px | Tablets, large phones landscape |
+| `lg` | [N]px | Desktop, small laptops |
+| `xl` | [N]px | Wide desktop |
 
-| System | Nature |
-|--------|--------|
-| CONTENT_SYSTEM | Renders static sections in the defined order |
-| INTERACTIVE_SYSTEM | Mounts React islands in designated section slots |
-| THEME_SYSTEM | Applies theme class at root; renders theme toggle button in header |
-| FRAMEWORK_SYSTEM | Receives version string for header display |
+## Container
+
+- Max content width: `[N]px`
+- Horizontal padding (mobile): `[N]px` each side
+- Horizontal padding (desktop): `[N]px` each side
+- Centered via `margin: 0 auto`
+
+## Spacing Scale
+
+A consistent multiplier-based scale. All spacing values (margin, padding, gap) derive from a base unit of `[N]px`.
+
+| Token | Value | Common use |
+|-------|-------|------------|
+| `--space-1` | [N]px | Tight internal spacing |
+| `--space-2` | [N]px | Component internal padding |
+| `--space-3` | [N]px | Between related elements |
+| `--space-4` | [N]px | Between components |
+| `--space-6` | [N]px | Section padding |
+| `--space-8` | [N]px | Major section separation |
+| `--space-12` | [N]px | Hero/CTA vertical padding |
+
+## Typography Scale
+
+| Token | Size | Weight | Use |
+|-------|------|--------|-----|
+| `--text-xs` | [N]px | 400 | Captions, meta |
+| `--text-sm` | [N]px | 400 | Secondary copy |
+| `--text-base` | [N]px | 400 | Body text |
+| `--text-lg` | [N]px | 500 | Lead copy, emphasized body |
+| `--text-xl` | [N]px | 600 | Section subheadings |
+| `--text-2xl` | [N]px | 700 | Section headings |
+| `--text-3xl` | [N]px | 700 | Hero tagline (mobile) |
+| `--text-4xl` | [N]px | 800 | Hero tagline (desktop) |
+
+## Grid
+
+- Base grid: 12 columns (desktop), 4 columns (mobile)
+- Column gap: `--space-4`
+- Row gap: `--space-6`
+
+## Rules
+
+- All spacing in components uses `--space-*` tokens; no arbitrary pixel values
+- Typography sizes always use `--text-*` tokens; no arbitrary rem/px values
+- No component defines its own breakpoints; breakpoints are defined here and consumed via Tailwind config or CSS media queries
+- Line height: 1.5 for body text, 1.2 for headings
+- Font family: system font stack by default; monospace stack for code blocks

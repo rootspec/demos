@@ -1,67 +1,62 @@
 # Level 4: Systems Overview
 
-**Product:** RootSpec Marketing Site
-**Level:** L4 — HOW It's Built (System Map)
-**References:** L1-3 + Sibling L4 + External
-
----
+> References: 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md
 
 ## System Map
 
-| System | Responsibility | Primary Output |
-|--------|---------------|----------------|
-| CONTENT_SYSTEM | Static marketing copy, section structure, the meta banner | Rendered HTML sections |
-| THEME_SYSTEM | Dark/light mode detection, manual toggle, persistence | CSS variables, body class |
-| INTERACTIVE_SYSTEM | Hierarchy Explorer, Spec Wizard, Before/After Comparison | React island components |
-| LAYOUT_SYSTEM | Page structure, responsive behavior, section ordering | Astro layout and page wrapper |
-| FRAMEWORK_SYSTEM | Build-time version reading, GitHub link generation | Injected version string |
+The marketing site is composed of five primary systems. All systems are static-first with progressive enhancement; no server-side state.
 
----
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    PRESENTATION_SYSTEM                       │
+│  (Layout, Theme, Navigation, Section rendering)             │
+│                                                             │
+│  ┌──────────────────┐  ┌──────────────────┐                │
+│  │  CONTENT_SYSTEM  │  │INTERACTIVE_SYSTEM│                │
+│  │  (Static copy,   │  │(Hierarchy, Wizard│                │
+│  │   meta banner,   │  │ Before/After,    │                │
+│  │   version badge) │  │ Comparison)      │                │
+│  └──────────────────┘  └──────────────────┘                │
+│                                                             │
+│  ┌──────────────────────────────────────────────┐          │
+│  │            THEME_SYSTEM                       │          │
+│  │  (Dark/light, tokens, animation timing)       │          │
+│  └──────────────────────────────────────────────┘          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## Systems
+
+| System | Responsibility | Primary File(s) |
+|--------|---------------|-----------------|
+| [PRESENTATION_SYSTEM](PRESENTATION_SYSTEM.md) | Layout, page structure, responsive grid, section orchestration | Layout.astro, index.astro |
+| [CONTENT_SYSTEM](CONTENT_SYSTEM.md) | Static text content, meta banner, version badge, external links | Content components, version reading |
+| [INTERACTIVE_SYSTEM](INTERACTIVE_SYSTEM.md) | Hierarchy Explorer, Spec Wizard, Before/After comparison | React/TSX components |
+| [THEME_SYSTEM](THEME_SYSTEM.md) | Dark/light mode, design tokens, animation parameters | global.css, theme provider |
+| [LAYOUT_SYSTEM](LAYOUT_SYSTEM.md) | Responsive breakpoints, spacing scale, typography scale | Tailwind config, CSS variables |
 
 ## System Interactions
 
-| From | To | Interaction |
-|------|----|-------------|
-| LAYOUT_SYSTEM | CONTENT_SYSTEM | Renders content sections in defined order |
-| LAYOUT_SYSTEM | INTERACTIVE_SYSTEM | Mounts React islands at designated positions |
-| LAYOUT_SYSTEM | THEME_SYSTEM | Applies theme class at root; toggle button rendered in header |
-| FRAMEWORK_SYSTEM | CONTENT_SYSTEM | Provides version string to hero and header at build time |
-| FRAMEWORK_SYSTEM | CONTENT_SYSTEM | Provides GitHub repo URLs to meta banner and CTA |
-| THEME_SYSTEM | INTERACTIVE_SYSTEM | Interactive components respect inherited CSS variables |
-
----
+| Interaction | From | To | Data/Signal |
+|-------------|------|----|-------------|
+| Theme application | THEME_SYSTEM | PRESENTATION_SYSTEM | CSS class toggle (dark/light) |
+| Content rendering | CONTENT_SYSTEM | PRESENTATION_SYSTEM | Static HTML/Astro components |
+| Interactive mounting | INTERACTIVE_SYSTEM | PRESENTATION_SYSTEM | Client-side hydration |
+| Token consumption | LAYOUT_SYSTEM | PRESENTATION_SYSTEM, CONTENT_SYSTEM, INTERACTIVE_SYSTEM | CSS custom properties |
+| Theme state | THEME_SYSTEM | INTERACTIVE_SYSTEM | CSS class (interactive components respond) |
 
 ## Data Flow
 
-```
-Build time:
-  .rootspec.json → FRAMEWORK_SYSTEM → version string → CONTENT_SYSTEM (hero, header)
+All data flows are one-directional and client-side:
 
-Runtime (page load):
-  prefers-color-scheme → THEME_SYSTEM → body class → CSS variables
-  localStorage → THEME_SYSTEM → persisted preference overrides system
-
-Runtime (user interaction):
-  User action → INTERACTIVE_SYSTEM → component state → rendered output
-  Theme toggle → THEME_SYSTEM → body class update → localStorage write
-```
-
----
+1. **Build time:** Version number read from `.rootspec.json` → injected into CONTENT_SYSTEM
+2. **Load time:** `prefers-color-scheme` → THEME_SYSTEM initializes → CSS class applied to `<html>`
+3. **Interaction time:** User action → INTERACTIVE_SYSTEM state update → DOM re-render (client-side only)
+4. **No persistence:** Wizard output, theme preference (session only), no server writes
 
 ## Boundaries
 
-- **FRAMEWORK_SYSTEM** operates only at build time. It has no runtime behavior.
-- **THEME_SYSTEM** operates only in the browser. The server renders with a neutral/default state; hydration applies the correct theme without flash.
-- **INTERACTIVE_SYSTEM** is entirely client-side. No server rendering of dynamic interaction states.
-- **CONTENT_SYSTEM** is static — no runtime data fetching, no CMS.
-- **LAYOUT_SYSTEM** is the Astro shell; it coordinates all other systems but owns no business logic.
-
----
-
-## Technology Anchors
-
-- Astro (static site generator, island architecture)
-- React (interactive island components)
-- Tailwind CSS (styling via utility classes)
-- `localStorage` (theme preference persistence)
-- `.rootspec.json` (build-time version source)
+- No system makes network requests at runtime
+- No system shares mutable state across components (each interactive component is self-contained)
+- THEME_SYSTEM is the only system that touches the root `<html>` element
+- CONTENT_SYSTEM owns all external link URLs — INTERACTIVE_SYSTEM does not hardcode URLs
