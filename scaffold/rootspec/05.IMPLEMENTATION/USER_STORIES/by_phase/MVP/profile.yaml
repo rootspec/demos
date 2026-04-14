@@ -1,78 +1,79 @@
 # =============================================================================
-# USER STORY: View User Profile
+# USER STORIES: Profile
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: PROFILE_VIEWING
-# @systems: [PROFILE_SYSTEM]
+# @journey: PROFILE
+# @systems: [PROFILE_SYSTEM, VIEW_SYSTEM, DATA_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
 
-id: US-005
-title: View a user profile with their posts and stats
+---
+
+# =============================================================================
+# US-007: View a user profile
+# =============================================================================
+id: US-007
+title: View a user profile with bio, counts, and posts
 
 acceptance_criteria:
-  - id: AC-005-1
+  - id: AC-007-1
     title: Profile page shows user info and posts
+    narrative: |
+      Given I click on an author name from the home feed
+      When the profile page loads
+      Then I should see the user display name, handle, bio, and their posts
+    given:
+      - visit: '/demos/scaffold'
+    when:
+      - click: { selector: '[data-test=post-author]' }
+    then:
+      - shouldExist: { selector: '[data-test=user-display-name]' }
+      - shouldExist: { selector: '[data-test=user-handle]' }
+      - shouldExist: { selector: '[data-test=user-bio]' }
+
+  - id: AC-007-2
+    title: Profile page shows follower counts
     narrative: |
       Given I navigate to a user profile page
       When the page loads
-      Then I see the user display name, handle, bio, and follower counts
+      Then I should see follower and following counts
     given:
-      - visit: '/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/alice.dev'
     when: []
     then:
-      - shouldContain: { selector: 'body', text: 'Alice Chen' }
-      - shouldContain: { selector: 'body', text: '@alice.dev' }
-
-  - id: AC-005-2
-    title: Unknown profile handle shows not-found message
-    narrative: |
-      Given I navigate to a profile that does not exist
-      When the page loads
-      Then I see a not-found message
-    given:
-      - visit: '/profile/nobody-here'
-    when: []
-    then:
-      - shouldContain: { selector: 'body', text: 'User not found' }
+      - shouldExist: { selector: '[data-test=follower-count]' }
+      - shouldExist: { selector: '[data-test=following-count]' }
 
 ---
-# =============================================================================
-# USER STORY: Follow and Unfollow a User
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: PROFILE_VIEWING
-# @systems: [PROFILE_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-006
+# =============================================================================
+# US-008: Follow and unfollow a user
+# =============================================================================
+id: US-008
 title: Follow and unfollow a user from their profile page
 
 acceptance_criteria:
-  - id: AC-006-1
-    title: Follow button toggles to Unfollow after clicking
+  - id: AC-008-1
+    title: Follow button is present on profile pages
     narrative: |
-      Given I am viewing a user profile
-      When I click the Follow button
-      Then the button changes to show Unfollow
+      Given I navigate to a user profile page
+      When the page loads
+      Then I should see a follow button
     given:
-      - visit: '/profile/bobwrites'
-    when:
-      - click: { selector: '[data-test=follow-button]' }
+      - visit: '/demos/scaffold/profile/bobwrites'
+    when: []
     then:
-      - shouldContain: { selector: '[data-test=follow-button]', text: 'Unfollow' }
+      - shouldExist: { selector: '[data-test=follow-button]' }
 
-  - id: AC-006-2
-    title: Unfollow button toggles back to Follow after clicking
+  - id: AC-008-2
+    title: Clicking follow updates button to Following state
     narrative: |
-      Given I am viewing a user profile and already following them
-      When I click the Unfollow button
-      Then the button changes back to Follow
+      Given I am on a user profile page
+      When I click the follow button
+      Then the button should display Following
     given:
-      - visit: '/profile/bobwrites'
+      - visit: '/demos/scaffold/profile/bobwrites'
     when:
       - click: { selector: '[data-test=follow-button]' }
-      - click: { selector: '[data-test=follow-button]' }
     then:
-      - shouldContain: { selector: '[data-test=follow-button]', text: 'Follow' }
+      - shouldContain: { selector: '[data-test=follow-button]', text: 'Following' }

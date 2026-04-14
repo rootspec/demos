@@ -1,96 +1,58 @@
-# Level 4: Feed System
+# Feed System
 
-**Responsibility:** Home timeline display, post composition, and engagement interactions (like/bookmark) on the home route (`/`).
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, DATA_SYSTEM.md
 
 ---
+
+## Responsibility
+
+The Feed System manages all mutable state related to the home feed experience: which posts the visitor has liked, which they've bookmarked, and any posts they've composed during the session. It also owns feed pagination — how many posts are currently visible.
 
 ## Boundaries
 
-- **Owns:** The home feed list, post composer, like/bookmark toggle state
-- **Does not own:** User profile data (PROFILE_SYSTEM), post thread construction (THREAD_SYSTEM), tag/explore discovery (DISCOVERY_SYSTEM)
-- **Route:** `/`
+- **Owns:** `src/lib/stores/feed.svelte.ts`
+- **Reads from:** DATA SYSTEM (posts via route load)
+- **Does not own:** User identity, follow state (PROFILE SYSTEM), tag/search state (DISCOVERY SYSTEM)
 
----
+## State
 
-## Data Ownership
+| State | Type | Default | Description |
+|---|---|---|---|
+| `likedIds` | `string[]` | `[]` | IDs of posts the visitor has liked this session |
+| `bookmarkedIds` | `string[]` | `[]` | IDs of posts the visitor has bookmarked this session |
+| `userPosts` | `Post[]` | `[]` | Posts composed by the visitor this session |
 
-### Post Entity (from posts.json)
-- `id` — unique post identifier
-- `authorId` — reference to a User entity
-- `content` — post text body
-- `createdAt` — ISO 8601 timestamp
-- `likeCount` — baseline like count from data file
-- `repostCount` — repost count from data file
-- `parentId` — null for top-level posts; string ID for replies
-- `tags` — array of tag name strings
+All state is in-memory only. Resets on page reload. This ephemerality is intentional and aligns with Radical Transparency.
 
-### FeedState (client-side, in-memory)
-- `likedIds: string[]` — post IDs the current session has liked
-- `bookmarkedIds: string[]` — post IDs the current session has bookmarked
-- `userPosts: Post[]` — posts created in the current session via the composer
+## Derived Values
 
----
+- `isLiked(id)` — boolean derived from `likedIds`
+- `isBookmarked(id)` — boolean derived from `bookmarkedIds`
+- Displayed like count = base `post.likeCount` incremented by one if the visitor has liked the post — computed in VIEW SYSTEM at render time
 
-## Rules
+## Operations
 
-### Feed Construction
-- Posts are loaded from `posts.json` at route load time
-- User-composed posts (`userPosts`) are prepended to the top of the data file posts
-- Posts are displayed in reverse-chronological order (newest first)
-- The feed does not paginate in the current implementation — all posts are shown
+### toggleLike(postId)
+- If `postId` is in `likedIds`: removes it
+- Otherwise: appends it
+- No network call, no persistence
 
-### Post Filtering
-- The home feed shows ALL posts (top-level and replies)
-- No filtering by follow state — all mock users' posts appear
+### toggleBookmark(postId)
+- If `postId` is in `bookmarkedIds`: removes it
+- Otherwise: appends it
 
-### Like Behavior
-- Each post card tracks its own local `liked` boolean state
-- When liked: like button is visually active (filled heart, red color), displayed count increments by 1
-- When unliked: button returns to default state, count returns to `post.likeCount`
-- Like state is local to the post card component — not shared with THREAD_SYSTEM or PROFILE_SYSTEM
+### addPost(content)
+- Creates a new `Post` object with a unique ID (`user-{timestamp}`), `authorId: 'u1'`, current ISO timestamp, empty counts, null parentId, empty tags
+- Prepends to `userPosts`
+- The new post appears at the top of the feed immediately via Svelte reactivity
 
-### Bookmark Behavior
-- Each post card tracks its own local `bookmarked` boolean state
-- When bookmarked: bookmark button is visually active (filled, amber color)
-- Bookmark state is local to the post card component — purely visual feedback, no list of bookmarks exists
+## Feed Composition
 
-### Post Composition
-- Composer textarea accepts plain text
-- Maximum post length: [max_post_length] characters
-- Character count is displayed as `[current]/[max_post_length]`
-- Empty or whitespace-only submission is blocked with an inline validation error
-- Valid submission creates a new Post entity with:
-  - Generated ID (`user-[timestamp]`)
-  - `authorId` set to `u1` (Alice Chen — the default "current user")
-  - Current timestamp
-  - Zero likes, zero reposts
-  - No parent, no tags
-- New post is prepended to `userPosts` and appears at the top of the feed immediately
+The home feed shows: `userPosts` (prepended) + `posts from DATA SYSTEM` (paginated). The first [initial_post_count] DATA SYSTEM posts are shown; clicking "Load more" reveals the next [page_size].
 
----
+## Interactions with Other Systems
 
-## State Transitions
-
-```
-Post Like State:
-  unliked → (click like button) → liked
-  liked → (click like button) → unliked
-
-Post Bookmark State:
-  unbookmarked → (click bookmark button) → bookmarked
-  bookmarked → (click bookmark button) → unbookmarked
-
-Composer State:
-  empty → (type content) → has_content
-  has_content → (submit valid) → empty (post created)
-  empty → (submit) → error_shown
-  error_shown → (type content) → has_content (error clears)
-```
-
----
-
-## System Interactions
-
-- **→ PROFILE_SYSTEM:** Author handle on each post card links to `/profile/[handle]`
-- **→ THREAD_SYSTEM:** Post content on each card links to `/post/[id]`
-- **← SYSTEMS_OVERVIEW:** Reads from shared `posts.json` and `users.json`
+| System | Interaction |
+|---|---|
+| DATA SYSTEM | Receives posts array from route `load()` |
+| VIEW SYSTEM | `feed` store imported in `+page.svelte` for like/bookmark buttons and composer |

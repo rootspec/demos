@@ -1,36 +1,34 @@
 # User Stories Overview
 
-**RootFeed — Level 5 User Stories**
+**References:** 01.PHILOSOPHY.md through 04.SYSTEMS/
 
 ---
 
-## Organization
+## Phase: MVP
 
-Stories are organized in `by_phase/MVP/` since this is a single-phase demo. All stories represent the complete implemented feature set — there are no future phases.
+All stories below are in the MVP phase. They cover the full surface area of RootFeed as spec'd and implemented.
 
-## Phase Definitions
+| ID | Title | Systems | Journey |
+|---|---|---|---|
+| US-001 | View home feed | FEED, VIEW, DATA | FEED |
+| US-002 | Like a post | FEED, VIEW | FEED |
+| US-003 | Bookmark a post | FEED, VIEW | FEED |
+| US-004 | Compose and publish a post | FEED, VIEW | FEED |
+| US-005 | Load more posts | FEED, VIEW, DATA | FEED |
+| US-006 | View post detail and thread | VIEW, DATA | THREAD |
+| US-007 | View a user profile | PROFILE, VIEW, DATA | PROFILE |
+| US-008 | Follow and unfollow a user | PROFILE, VIEW | PROFILE |
+| US-009 | Search posts by keyword | DISCOVERY, VIEW, DATA | SEARCH |
+| US-010 | Explore trending tags and filter posts | DISCOVERY, VIEW, DATA | DISCOVERY |
+| US-011 | Toggle dark/light theme | THEME, VIEW | META |
 
-| Phase | Description |
-|-------|-------------|
-| MVP | The full RootFeed demo — all five routes implemented and tested |
+## Story Files
 
-## Story Index
+Stories are organized by system domain:
 
-| ID | Title | File | Systems |
-|----|-------|------|---------|
-| US-001 | View home feed | by_phase/MVP/feed.yaml | FEED_SYSTEM |
-| US-002 | Like and bookmark posts | by_phase/MVP/feed.yaml | FEED_SYSTEM |
-| US-003 | Compose a new post | by_phase/MVP/feed.yaml | FEED_SYSTEM |
-| US-004 | View post detail and replies | by_phase/MVP/thread.yaml | THREAD_SYSTEM |
-| US-005 | View user profile | by_phase/MVP/profile.yaml | PROFILE_SYSTEM |
-| US-006 | Follow and unfollow a user | by_phase/MVP/profile.yaml | PROFILE_SYSTEM |
-| US-007 | Search posts | by_phase/MVP/search.yaml | SEARCH_SYSTEM |
-| US-008 | Explore trending tags | by_phase/MVP/discovery.yaml | DISCOVERY_SYSTEM |
-| US-009 | Filter posts by tag | by_phase/MVP/discovery.yaml | DISCOVERY_SYSTEM |
-| US-010 | Toggle theme | by_phase/MVP/meta.yaml | META_SYSTEM |
-| US-011 | See meta banner on every page | by_phase/MVP/meta.yaml | META_SYSTEM |
-
-## Test Suite
-
-The MVP test suite runs: `cypress run --spec 'cypress/e2e/mvp.cy.ts'`
-The mvp.cy.ts file should load `rootspec/05.IMPLEMENTATION/USER_STORIES/by_phase/MVP/**/*.yaml`
+- `by_phase/MVP/feed.yaml` — Feed interactions (US-001 through US-005)
+- `by_phase/MVP/thread.yaml` — Thread/post detail (US-006)
+- `by_phase/MVP/profile.yaml` — Profile and follow (US-007, US-008)
+- `by_phase/MVP/search.yaml` — Search (US-009)
+- `by_phase/MVP/discovery.yaml` — Explore and tag filter (US-010)
+- `by_phase/MVP/meta.yaml` — Theme toggle and meta banner (US-011)

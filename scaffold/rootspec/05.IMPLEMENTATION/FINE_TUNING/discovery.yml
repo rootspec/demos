@@ -1,36 +1,24 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Discovery System
+# FINE-TUNING: Discovery System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: DISCOVERY_SYSTEM
+# @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
 # @last_updated: 2026-04-14T00:00:00Z
-# @status: production
-# @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
 
-# -----------------------------------------------------------------------------
-# Tag Display
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/DISCOVERY_SYSTEM.md
+search_min_query_length:
+  value: 1
+  # @unit: characters
+  # @rationale: Results appear immediately on any keystroke; no minimum query length required — keeps the interaction fluid
+  # @constraint: min=1, max=3
 
-tags:
-  sort_by: post_count_desc
-  # @rationale: Highest-volume tags first gives a realistic sense of community
-  #   trending. Alphabetical would feel arbitrary for a "Trending Tags" section.
-  # @alternatives: [alphabetical, post_count_desc, post_count_asc]
+explore_max_suggested_users:
+  value: 8
+  # @unit: users
+  # @rationale: Shows a representative set of users without requiring scroll on the explore page
+  # @constraint: min=4, max=10
 
-  max_displayed: 0
-  # @rationale: 0 = show all tags. The demo has 10-15 tags which fits
-  #   comfortably on the page without overflow.
-  # @note: If tag count grows, cap at 15 for visual clarity
-  # @constraints: min=0, max=50, type=integer
-
-# -----------------------------------------------------------------------------
-# User Suggestions
-# -----------------------------------------------------------------------------
-
-users:
-  max_displayed: 0
-  # @rationale: 0 = show all users (8-10 in demo data). All mock users are
-  #   relevant suggested follows — no ranking or cap needed.
-  # @note: A real app would cap at 5-10 with "View more" expansion
-  # @constraints: min=0, max=100, type=integer
+explore_max_trending_tags:
+  value: 15
+  # @unit: tags
+  # @rationale: All tags from the dataset fit comfortably in a wrapped flex row; no pagination needed
+  # @constraint: min=5, max=20

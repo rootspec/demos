@@ -22,55 +22,51 @@ function loadAndRun(yamlContent: string) {
   }
 }
 
-// US-008: Browse trending tags and suggested users on the explore page
-const stories_008 = `
-id: US-008
-title: Browse trending tags and suggested users on the explore page
+// US-010: Browse trending tags on the Explore page and filter posts by tag
+const stories_010 = `
+id: US-010
+title: Browse trending tags on the Explore page and filter posts by tag
 acceptance_criteria:
-  - id: AC-008-1
-    title: Explore page shows trending tags and user list
+  - id: AC-010-1
+    title: Explore page shows trending tags
     given:
-      - visit: /explore
+      - visit: /demos/scaffold/explore
     then:
       - shouldExist:
-          selector: body
-      - shouldContain:
-          selector: body
-          text: Trending
-      - shouldContain:
-          selector: body
-          text: People
+          selector: '[data-test=tag-chip]'
     when: []
-`;
-loadAndRun(stories_008);
-
-// US-009: Click a tag on the explore page to filter posts
-const stories_009 = `
-id: US-009
-title: Click a tag on the explore page to filter posts
-acceptance_criteria:
-  - id: AC-009-1
-    title: Clicking a tag filters the visible posts to that tag
+  - id: AC-010-2
+    title: Clicking a tag filters the posts shown
     given:
-      - visit: /explore
+      - visit: /demos/scaffold/explore
     when:
       - click:
-          selector: '[data-test=tag-chip]:first-child'
+          selector: '[data-test=tag-chip]'
     then:
       - shouldExist:
-          selector: '[data-test=tag-chip]:first-child.active'
+          selector: '[data-test=tag-chip].selected'
+      - shouldExist:
+          selector: '[data-test=filtered-posts]'
+  - id: AC-010-3
+    title: Explore page shows suggested users
+    given:
+      - visit: /demos/scaffold/explore
+    then:
+      - shouldExist:
+          selector: '[data-test=suggested-user]'
+    when: []
 `;
-loadAndRun(stories_009);
+loadAndRun(stories_010);
 
-// US-001: View the home feed with posts and author info
+// US-001: View home feed with posts and author info
 const stories_001 = `
 id: US-001
-title: View the home feed with posts and author info
+title: View home feed with posts and author info
 acceptance_criteria:
   - id: AC-001-1
-    title: Home feed shows posts with author info and engagement counts
+    title: Home feed shows posts with author and content
     given:
-      - visit: /
+      - visit: /demos/scaffold
     then:
       - shouldExist:
           selector: '[data-test=post-card]'
@@ -78,75 +74,93 @@ acceptance_criteria:
           selector: '[data-test=post-author]'
       - shouldExist:
           selector: '[data-test=post-content]'
-      - shouldExist:
-          selector: '[data-test=like-count]'
     when: []
   - id: AC-001-2
-    title: Meta banner is visible on home page
+    title: Posts show timestamp and engagement counts
     given:
-      - visit: /
+      - visit: /demos/scaffold
     then:
       - shouldExist:
-          selector: '[data-test=meta-banner]'
+          selector: '[data-test=post-timestamp]'
       - shouldExist:
-          selector: '[data-test=seed-link]'
+          selector: '[data-test=like-count]'
       - shouldExist:
-          selector: '[data-test=spec-link]'
+          selector: '[data-test=repost-count]'
     when: []
 `;
 loadAndRun(stories_001);
 
-// US-002: Like and bookmark posts on the home feed
+// US-002: Like a post on the home feed
 const stories_002 = `
 id: US-002
-title: Like and bookmark posts on the home feed
+title: Like a post on the home feed
 acceptance_criteria:
   - id: AC-002-1
-    title: Like button toggles visual state and updates count
+    title: Like button toggles active state
     given:
-      - visit: /
+      - visit: /demos/scaffold
     when:
       - click:
-          selector: '[data-test=post-card]:first-child [data-test=like-button]'
+          selector: '[data-test=like-button]'
     then:
       - shouldExist:
-          selector: '[data-test=post-card]:first-child [data-test=like-button].active'
-  - id: AC-002-2
-    title: Bookmark button toggles visual state
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=post-card]:first-child [data-test=bookmark-button]'
-    then:
-      - shouldExist:
-          selector: '[data-test=post-card]:first-child [data-test=bookmark-button].active'
+          selector: '[data-test=like-button].active'
 `;
 loadAndRun(stories_002);
 
-// US-003: Compose and submit a new post from the home feed
+// US-003: Bookmark a post on the home feed
 const stories_003 = `
 id: US-003
-title: Compose and submit a new post from the home feed
+title: Bookmark a post on the home feed
 acceptance_criteria:
   - id: AC-003-1
-    title: Valid post submission adds post to feed
+    title: Bookmark button toggles active state
     given:
-      - visit: /
+      - visit: /demos/scaffold
+    when:
+      - click:
+          selector: '[data-test=bookmark-button]'
+    then:
+      - shouldExist:
+          selector: '[data-test=bookmark-button].active'
+`;
+loadAndRun(stories_003);
+
+// US-004: Compose a new post that appears in the feed
+const stories_004 = `
+id: US-004
+title: Compose a new post that appears in the feed
+acceptance_criteria:
+  - id: AC-004-1
+    title: Composer is present on home page
+    given:
+      - visit: /demos/scaffold
+    then:
+      - shouldExist:
+          selector: '[data-test=composer]'
+      - shouldExist:
+          selector: '[data-test=composer-input]'
+      - shouldExist:
+          selector: '[data-test=composer-submit]'
+    when: []
+  - id: AC-004-2
+    title: Composing a post adds it to the feed
+    given:
+      - visit: /demos/scaffold
     when:
       - fill:
           selector: '[data-test=composer-input]'
-          value: Hello from RootFeed test
+          value: Hello from the composer
       - click:
           selector: '[data-test=composer-submit]'
     then:
       - shouldContain:
-          selector: '[data-test=post-card]:first-child [data-test=post-content]'
-          text: Hello from RootFeed test
-  - id: AC-003-2
-    title: Empty post submission shows validation error
+          selector: '[data-test=post-content]'
+          text: Hello from the composer
+  - id: AC-004-3
+    title: Submitting empty post shows error
     given:
-      - visit: /
+      - visit: /demos/scaffold
     when:
       - click:
           selector: '[data-test=composer-submit]'
@@ -154,25 +168,57 @@ acceptance_criteria:
       - shouldExist:
           selector: '[data-test=composer-error]'
 `;
-loadAndRun(stories_003);
+loadAndRun(stories_004);
 
-// US-010: Toggle between dark and light theme
-const stories_010 = `
-id: US-010
-title: Toggle between dark and light theme
+// US-005: Load additional posts by clicking Load more
+const stories_005 = `
+id: US-005
+title: Load additional posts by clicking Load more
 acceptance_criteria:
-  - id: AC-010-1
-    title: Theme toggle button exists in the navigation
+  - id: AC-005-1
+    title: Load more button appears and loads additional posts
     given:
-      - visit: /
+      - visit: /demos/scaffold
+    when:
+      - click:
+          selector: '[data-test=load-more]'
+    then:
+      - shouldExist:
+          selector: '[data-test=post-card]'
+`;
+loadAndRun(stories_005);
+
+// US-011: Toggle between dark and light mode using the theme button in the nav
+const stories_011 = `
+id: US-011
+title: Toggle between dark and light mode using the theme button in the nav
+acceptance_criteria:
+  - id: AC-011-1
+    title: Meta banner is present on every page
+    given:
+      - visit: /demos/scaffold
+    then:
+      - shouldExist:
+          selector: '[data-test=meta-banner]'
+      - shouldExist:
+          selector: '[data-test=seed-link]'
+      - shouldExist:
+          selector: '[data-test=spec-link]'
+      - shouldExist:
+          selector: '[data-test=scaffold-link]'
+    when: []
+  - id: AC-011-2
+    title: Theme toggle button is present in navigation
+    given:
+      - visit: /demos/scaffold
     then:
       - shouldExist:
           selector: '[data-test=theme-toggle]'
     when: []
-  - id: AC-010-2
-    title: Clicking theme toggle switches the theme class
+  - id: AC-011-3
+    title: Clicking theme toggle switches the active class on html element
     given:
-      - visit: /
+      - visit: /demos/scaffold
     when:
       - click:
           selector: '[data-test=theme-toggle]'
@@ -180,168 +226,121 @@ acceptance_criteria:
       - shouldExist:
           selector: html.dark
 `;
-loadAndRun(stories_010);
-
-// US-011: See the meta banner explaining the demo origin on every page
-const stories_011 = `
-id: US-011
-title: See the meta banner explaining the demo origin on every page
-acceptance_criteria:
-  - id: AC-011-1
-    title: Meta banner is visible on the home page
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=meta-banner]'
-      - shouldExist:
-          selector: '[data-test=scaffold-link]'
-    when: []
-  - id: AC-011-2
-    title: Meta banner is visible on the explore page
-    given:
-      - visit: /explore
-    then:
-      - shouldExist:
-          selector: '[data-test=meta-banner]'
-    when: []
-  - id: AC-011-3
-    title: Meta banner is visible on the search page
-    given:
-      - visit: /search
-    then:
-      - shouldExist:
-          selector: '[data-test=meta-banner]'
-    when: []
-`;
 loadAndRun(stories_011);
 
-// US-005: View a user profile with their posts and stats
-const stories_005 = `
-id: US-005
-title: View a user profile with their posts and stats
-acceptance_criteria:
-  - id: AC-005-1
-    title: Profile page shows user info and posts
-    given:
-      - visit: /profile/alice.dev
-    then:
-      - shouldContain:
-          selector: body
-          text: Alice Chen
-      - shouldContain:
-          selector: body
-          text: '@alice.dev'
-    when: []
-  - id: AC-005-2
-    title: Unknown profile handle shows not-found message
-    given:
-      - visit: /profile/nobody-here
-    then:
-      - shouldContain:
-          selector: body
-          text: User not found
-    when: []
-`;
-loadAndRun(stories_005);
-
-// US-006: Follow and unfollow a user from their profile page
-const stories_006 = `
-id: US-006
-title: Follow and unfollow a user from their profile page
-acceptance_criteria:
-  - id: AC-006-1
-    title: Follow button toggles to Unfollow after clicking
-    given:
-      - visit: /profile/bobwrites
-    when:
-      - click:
-          selector: '[data-test=follow-button]'
-    then:
-      - shouldContain:
-          selector: '[data-test=follow-button]'
-          text: Unfollow
-  - id: AC-006-2
-    title: Unfollow button toggles back to Follow after clicking
-    given:
-      - visit: /profile/bobwrites
-    when:
-      - click:
-          selector: '[data-test=follow-button]'
-      - click:
-          selector: '[data-test=follow-button]'
-    then:
-      - shouldContain:
-          selector: '[data-test=follow-button]'
-          text: Follow
-`;
-loadAndRun(stories_006);
-
-// US-007: Search posts by keyword and see filtered results
+// US-007: View a user profile with bio, counts, and posts
 const stories_007 = `
 id: US-007
-title: Search posts by keyword and see filtered results
+title: View a user profile with bio, counts, and posts
 acceptance_criteria:
   - id: AC-007-1
-    title: Typing a query shows matching posts
+    title: Profile page shows user info and posts
     given:
-      - visit: /search
+      - visit: /demos/scaffold
     when:
-      - fill:
-          selector: input[type=text]
-          value: microservices
+      - click:
+          selector: '[data-test=post-author]'
     then:
       - shouldExist:
-          selector: '[data-test=post-content]'
-      - shouldContain:
-          selector: '[data-test=post-content]'
-          text: microservices
+          selector: '[data-test=user-display-name]'
+      - shouldExist:
+          selector: '[data-test=user-handle]'
+      - shouldExist:
+          selector: '[data-test=user-bio]'
   - id: AC-007-2
-    title: No matching results shows empty state message
+    title: Profile page shows follower counts
     given:
-      - visit: /search
-    when:
-      - fill:
-          selector: input[type=text]
-          value: xyzquerynotindata123
-    then:
-      - shouldContain:
-          selector: body
-          text: No results
-  - id: AC-007-3
-    title: Empty query shows no results
-    given:
-      - visit: /search
+      - visit: /demos/scaffold/profile/alice.dev
     then:
       - shouldExist:
-          selector: input[type=text]
+          selector: '[data-test=follower-count]'
+      - shouldExist:
+          selector: '[data-test=following-count]'
     when: []
 `;
 loadAndRun(stories_007);
 
-// US-004: View a single post with its replies
-const stories_004 = `
-id: US-004
-title: View a single post with its replies
+// US-008: Follow and unfollow a user from their profile page
+const stories_008 = `
+id: US-008
+title: Follow and unfollow a user from their profile page
 acceptance_criteria:
-  - id: AC-004-1
-    title: Post detail page shows the post content and author
+  - id: AC-008-1
+    title: Follow button is present on profile pages
     given:
-      - visit: /post/p1
+      - visit: /demos/scaffold/profile/bobwrites
+    then:
+      - shouldExist:
+          selector: '[data-test=follow-button]'
+    when: []
+  - id: AC-008-2
+    title: Clicking follow updates button to Following state
+    given:
+      - visit: /demos/scaffold/profile/bobwrites
+    when:
+      - click:
+          selector: '[data-test=follow-button]'
+    then:
+      - shouldContain:
+          selector: '[data-test=follow-button]'
+          text: Following
+`;
+loadAndRun(stories_008);
+
+// US-009: Search for posts using a keyword and see results update live
+const stories_009 = `
+id: US-009
+title: Search for posts using a keyword and see results update live
+acceptance_criteria:
+  - id: AC-009-1
+    title: Search input is present on search page
+    given:
+      - visit: /demos/scaffold/search
+    then:
+      - shouldExist:
+          selector: '[data-test=search-input]'
+    when: []
+  - id: AC-009-2
+    title: Typing a keyword shows matching posts
+    given:
+      - visit: /demos/scaffold/search
+    when:
+      - fill:
+          selector: '[data-test=search-input]'
+          value: rust
+    then:
+      - shouldExist:
+          selector: '[data-test=search-result]'
+  - id: AC-009-3
+    title: Searching with no matches shows empty state message
+    given:
+      - visit: /demos/scaffold/search
+    when:
+      - fill:
+          selector: '[data-test=search-input]'
+          value: xyzzy12345notaword
+    then:
+      - shouldExist:
+          selector: '[data-test=search-empty]'
+`;
+loadAndRun(stories_009);
+
+// US-006: View a single post with its full thread context
+const stories_006 = `
+id: US-006
+title: View a single post with its full thread context
+acceptance_criteria:
+  - id: AC-006-1
+    title: Post detail page shows post content and author
+    given:
+      - visit: /demos/scaffold
+    when:
+      - click:
+          selector: '[data-test=post-content]'
     then:
       - shouldExist:
           selector: '[data-test=post-content]'
       - shouldExist:
           selector: '[data-test=post-author]'
-    when: []
-  - id: AC-004-2
-    title: Invalid post ID shows not-found message
-    given:
-      - visit: /post/nonexistent-id
-    then:
-      - shouldContain:
-          selector: body
-          text: Post not found
-    when: []
 `;
-loadAndRun(stories_004);
+loadAndRun(stories_006);

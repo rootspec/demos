@@ -6,7 +6,7 @@
 set -euo pipefail
 
 # --- Configuration (edit these) ---
-DEV_CMD="npm run dev"
+DEV_CMD="env SVELTE_BASE=/demos/scaffold npm run dev"
 PORT="${PORT:-3000}"
 
 # --- Internal ---

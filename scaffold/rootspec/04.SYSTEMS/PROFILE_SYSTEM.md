@@ -1,66 +1,47 @@
-# Level 4: Profile System
+# Profile System
 
-**Responsibility:** User profile display, follow/unfollow state management, and routing to individual user pages (`/profile/[handle]`).
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, DATA_SYSTEM.md
 
 ---
+
+## Responsibility
+
+The Profile System manages the visitor's follow/unfollow state — which user IDs they've followed during the current session. It drives the follow button in the profile page UI.
 
 ## Boundaries
 
-- **Owns:** Follow/unfollow state, user profile page layout, user's post list on their profile
-- **Does not own:** Post content (FEED_SYSTEM owns post cards), post threads (THREAD_SYSTEM), explore user suggestions (DISCOVERY_SYSTEM)
-- **Route:** `/profile/[handle]`
+- **Owns:** `src/lib/stores/profile.svelte.ts`
+- **Reads from:** DATA SYSTEM (user records via route load)
+- **Does not own:** User data itself, follower counts (those live in DATA SYSTEM and are static), like/bookmark state (FEED SYSTEM)
 
----
+## State
 
-## Data Ownership
+| State | Type | Default | Description |
+|---|---|---|---|
+| `followedIds` | `string[]` | `[]` | IDs of users the visitor has followed this session |
 
-### User Entity (from users.json)
-- `id` — unique user identifier
-- `handle` — URL-safe username (used in route parameter)
-- `displayName` — human-readable display name
-- `bio` — short user bio string
-- `avatar` — URL to avatar image (DiceBear placeholder URL)
-- `followerCount` — baseline follower count from data file
-- `followingCount` — baseline following count from data file
+All state is in-memory only. Resets on page reload. Follower/following counts shown on profile pages are static from DATA SYSTEM and do not reflect this state.
 
-### ProfileState (client-side, in-memory)
-- `followedIds: string[]` — user IDs that the current session has followed
+## Derived Values
 
----
+- `isFollowing(userId)` — boolean derived from `followedIds`
 
-## Rules
+## Operations
 
-### Profile Loading
-- The route `/profile/[handle]` loads the user by matching `handle` to `users.json`
-- If no user matches, the page renders a "User not found" message
-- The profile page loads all posts where `authorId === user.id` and displays them in reverse-chronological order
+### toggleFollow(userId)
+- If `userId` is in `followedIds`: removes it (unfollow)
+- Otherwise: appends it (follow)
+- Follow button label switches between "Follow" and "Following" immediately via Svelte reactivity
 
-### Follow Behavior
-- If the user being viewed is NOT in `followedIds`, a "Follow" button is shown
-- If the user is in `followedIds`, an "Unfollow" button is shown
-- Clicking Follow/Unfollow toggles the ID in `followedIds` immediately
-- Displayed follower/following counts are the static values from `users.json` — they do NOT update when follow state changes
-- The current session's "logged in" identity is always the first user (`u1`, Alice Chen) — there is no auth system
+## Constraints
 
-### User Post List
-- Posts by this user are shown in reverse-chronological order
-- Each post links to its detail page via `/post/[id]`
-- Engagement counts (likes, reposts) are shown as static values from data
+- No automatic follow on load — visitor starts with zero followed users each session
+- Follower counts on profile pages are cosmetic/static; they do not update when the visitor follows/unfollows
+- The "current user" (alice.dev) is never shown a follow button on their own profile
 
----
+## Interactions with Other Systems
 
-## State Transitions
-
-```
-Follow State (per userId):
-  not_following → (click Follow) → following
-  following → (click Unfollow) → not_following
-```
-
----
-
-## System Interactions
-
-- **→ THREAD_SYSTEM:** Each post on the profile page links to `/post/[id]`
-- **← DISCOVERY_SYSTEM:** ProfileState's `followedIds` is shared — the explore page also provides follow/unfollow buttons that mutate the same state
-- **← SYSTEMS_OVERVIEW:** Reads from shared `users.json` and `posts.json`
+| System | Interaction |
+|---|---|
+| DATA SYSTEM | Profile route `load()` provides user record; PROFILE SYSTEM only tracks the userId from it |
+| VIEW SYSTEM | `profile` store imported in profile page component to toggle and read follow state |

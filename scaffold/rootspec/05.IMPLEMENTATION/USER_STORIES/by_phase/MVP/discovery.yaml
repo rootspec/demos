@@ -1,53 +1,55 @@
 # =============================================================================
-# USER STORY: Explore Trending Tags
+# USER STORIES: Discovery / Explore
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: DISCOVERY
-# @systems: [DISCOVERY_SYSTEM]
+# @systems: [DISCOVERY_SYSTEM, VIEW_SYSTEM, DATA_SYSTEM]
 # @last_updated: 2026-04-14T00:00:00Z
-
-id: US-008
-title: Browse trending tags and suggested users on the explore page
-
-acceptance_criteria:
-  - id: AC-008-1
-    title: Explore page shows trending tags and user list
-    narrative: |
-      Given I navigate to the explore page
-      When the page loads
-      Then I see a list of trending tags and a list of suggested users
-    given:
-      - visit: '/explore'
-    when: []
-    then:
-      - shouldExist: { selector: 'body' }
-      - shouldContain: { selector: 'body', text: 'Trending' }
-      - shouldContain: { selector: 'body', text: 'People' }
 
 ---
-# =============================================================================
-# USER STORY: Filter Posts by Tag
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: DISCOVERY
-# @systems: [DISCOVERY_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-009
-title: Click a tag on the explore page to filter posts
+# =============================================================================
+# US-010: Explore trending tags and filter posts
+# =============================================================================
+id: US-010
+title: Browse trending tags on the Explore page and filter posts by tag
 
 acceptance_criteria:
-  - id: AC-009-1
-    title: Clicking a tag filters the visible posts to that tag
+  - id: AC-010-1
+    title: Explore page shows trending tags
     narrative: |
-      Given I am on the explore page
-      When I click on a trending tag
-      Then I see only posts tagged with that tag
+      Given I navigate to the Explore page
+      When the page loads
+      Then I should see a list of trending tag chips
     given:
-      - visit: '/explore'
-    when:
-      - click: { selector: '[data-test=tag-chip]:first-child' }
+      - visit: '/demos/scaffold/explore'
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=tag-chip]:first-child.active' }
+      - shouldExist: { selector: '[data-test=tag-chip]' }
+
+  - id: AC-010-2
+    title: Clicking a tag filters the posts shown
+    narrative: |
+      Given I am on the Explore page
+      When I click a tag chip
+      Then I should see filtered posts and the tag should appear selected
+    given:
+      - visit: '/demos/scaffold/explore'
+    when:
+      - click: { selector: '[data-test=tag-chip]' }
+    then:
+      - shouldExist: { selector: '[data-test=tag-chip].selected' }
+      - shouldExist: { selector: '[data-test=filtered-posts]' }
+
+  - id: AC-010-3
+    title: Explore page shows suggested users
+    narrative: |
+      Given I navigate to the Explore page
+      When the page loads
+      Then I should see a list of users in the People section
+    given:
+      - visit: '/demos/scaffold/explore'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=suggested-user]' }
