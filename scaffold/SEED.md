@@ -70,6 +70,10 @@ Link to the SEED.md, spec files, and the original scaffold commit in the GitHub 
 - The site should never pretend to be a real social network — every page should feel like a demo that happens to be a social feed
 - RootSpec version (v6.2.1) displayed prominently in the header
 
+## Deployment
+
+This site is deployed to GitHub Pages at the subpath `/demos/scaffold/`. Configure the framework's base path so that all asset URLs (CSS, JS, images) and internal links resolve correctly when served from that subpath, not from the site root.
+
 ## Audience
 
 Same as the greenfield demo — developers evaluating RootSpec. This demo specifically targets those who want to see how RootSpec works with an existing codebase rather than starting from nothing.
