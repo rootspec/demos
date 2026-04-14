@@ -131,7 +131,18 @@ function App() {
   );
 
   return (
-    <div className={`app${view === 'compare' ? ' comparison-active' : ''}`}>
+    <>
+    <div className="meta-banner">
+      RootSpec Brownfield Demo &mdash;{' '}
+      <a href="https://github.com/rootspec/demos/tree/main/brownfield" target="_blank" rel="noreferrer">
+        github.com/rootspec/demos
+      </a>{' '}
+      &middot;{' '}
+      <a href="https://github.com/rootspec/demos" target="_blank" rel="noreferrer">
+        View the spec
+      </a>
+    </div>
+    <div className={`app${view === 'compare' ? ' comparison-active' : ''}`} style={{ marginTop: 36 }}>
       <header className="header">
         <h1 className="title">🌤️ RootWeather</h1>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -231,6 +242,7 @@ function App() {
         </p>
       </footer>
     </div>
+    </>
   );
 }
 

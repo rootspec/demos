@@ -1,0 +1,42 @@
+# =============================================================================
+# USER STORIES: RootWeather — Meta Banner
+# =============================================================================
+# Stories for the persistent demo-context banner required by SEED.md.
+# These describe functionality not yet in the codebase — to be implemented.
+
+# =============================================================================
+# USER STORY: Meta banner — persistent demo context
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: meta
+# @journey: Discover the Demo Context
+# @systems: [VIEW_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-115
+title: See a persistent meta banner identifying this as a RootSpec brownfield demo
+
+acceptance_criteria:
+  - id: AC-115-1
+    title: Meta banner is visible on page load
+    narrative: |
+      Given I visit the app
+      When the page loads
+      Then I should see a banner identifying this as a RootSpec brownfield demo
+    given: []
+    when:
+      - visit: "/"
+    then:
+      - shouldExist: { selector: ".meta-banner" }
+
+  - id: AC-115-2
+    title: Meta banner contains links to the GitHub repo
+    narrative: |
+      Given the meta banner is visible
+      When I inspect the banner
+      Then I should see links using absolute GitHub URLs pointing to brownfield content
+    given: []
+    when:
+      - visit: "/"
+    then:
+      - shouldExist: { selector: ".meta-banner a[href*='github.com/rootspec/demos']" }

@@ -18,6 +18,7 @@ Owns the active view state (weather vs. dashboard), loading/error presentation, 
 ### Screen Regions
 | Region | Contents |
 |--------|----------|
+| Meta Banner | Persistent top-of-page strip identifying this as a RootSpec brownfield demo, with links to SEED.md and spec files on GitHub |
 | Header | App title, view toggle (appears when favorites exist) |
 | Search | City search input with autocomplete dropdown |
 | Settings | Collapsible settings panel |
@@ -50,6 +51,7 @@ Owns the active view state (weather vs. dashboard), loading/error presentation, 
 
 ## Behavior
 
+- Meta banner is always visible regardless of view state; links use absolute GitHub URLs and open in new tabs
 - View toggle only renders when favorites list is non-empty
 - Selecting a city from search or dashboard switches to weather view
 - Compare button only renders on dashboard when favorites count >= [min_comparison_cities]
