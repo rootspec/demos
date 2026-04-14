@@ -1,0 +1,51 @@
+# =============================================================================
+# USER STORY: City Search
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: CITY_LOOKUP
+# @systems: [LOCATION_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-001
+title: Search for a city by name
+
+acceptance_criteria:
+  - id: AC-001-1
+    title: Search input is present on load
+    narrative: |
+      Given I open the app
+      When the page loads
+      Then I see a search input with placeholder text
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: 'input[placeholder="Search for a city..."]' }
+
+  - id: AC-001-2
+    title: Typing triggers city suggestions
+    narrative: |
+      Given I am on the app
+      When I type a city name into the search bar
+      Then I see a dropdown list of city suggestions
+    given:
+      - visit: '/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'London' }
+    then:
+      - shouldExist: { selector: 'ul li' }
+
+  - id: AC-001-3
+    title: Selecting a city loads the weather view
+    narrative: |
+      Given city suggestions are visible
+      When I click a city from the dropdown
+      Then the weather view renders with the save button area
+    given:
+      - visit: '/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Paris' }
+      - click: { selector: 'ul li:first-child' }
+    then:
+      - shouldExist: { selector: '.actions' }
