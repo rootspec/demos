@@ -22,12 +22,58 @@ function loadAndRun(yamlContent: string) {
   }
 }
 
-// US-010: Browse trending tags on the Explore page and filter posts by tag
-const stories_010 = `
-id: US-010
-title: Browse trending tags on the Explore page and filter posts by tag
+// US-301: Search posts by keyword
+const stories_301 = `
+id: US-301
+title: Search posts by keyword
 acceptance_criteria:
-  - id: AC-010-1
+  - id: AC-301-1
+    title: Typing in search input shows matching posts
+    given:
+      - visit: /demos/scaffold/search
+    when:
+      - fill:
+          selector: '[data-test=search-input]'
+          value: TypeScript
+    then:
+      - shouldExist:
+          selector: '[data-test=search-result]'
+  - id: AC-301-2
+    title: Search input is visible on search page
+    given:
+      - visit: /demos/scaffold/search
+    then:
+      - shouldExist:
+          selector: '[data-test=search-input]'
+    when: []
+`;
+loadAndRun(stories_301);
+
+// US-302: Search empty state
+const stories_302 = `
+id: US-302
+title: Search empty state
+acceptance_criteria:
+  - id: AC-302-1
+    title: Searching with no matches shows empty state message
+    given:
+      - visit: /demos/scaffold/search
+    when:
+      - fill:
+          selector: '[data-test=search-input]'
+          value: xyzzy_no_match_12345
+    then:
+      - shouldExist:
+          selector: '[data-test=search-empty]'
+`;
+loadAndRun(stories_302);
+
+// US-303: View explore page
+const stories_303 = `
+id: US-303
+title: View explore page
+acceptance_criteria:
+  - id: AC-303-1
     title: Explore page shows trending tags
     given:
       - visit: /demos/scaffold/explore
@@ -35,19 +81,7 @@ acceptance_criteria:
       - shouldExist:
           selector: '[data-test=tag-chip]'
     when: []
-  - id: AC-010-2
-    title: Clicking a tag filters the posts shown
-    given:
-      - visit: /demos/scaffold/explore
-    when:
-      - click:
-          selector: '[data-test=tag-chip]'
-    then:
-      - shouldExist:
-          selector: '[data-test=tag-chip].selected'
-      - shouldExist:
-          selector: '[data-test=filtered-posts]'
-  - id: AC-010-3
+  - id: AC-303-2
     title: Explore page shows suggested users
     given:
       - visit: /demos/scaffold/explore
@@ -56,17 +90,53 @@ acceptance_criteria:
           selector: '[data-test=suggested-user]'
     when: []
 `;
-loadAndRun(stories_010);
+loadAndRun(stories_303);
 
-// US-001: View home feed with posts and author info
-const stories_001 = `
-id: US-001
-title: View home feed with posts and author info
+// US-304: Filter explore by tag
+const stories_304 = `
+id: US-304
+title: Filter explore by tag
 acceptance_criteria:
-  - id: AC-001-1
+  - id: AC-304-1
+    title: Clicking a tag filters the explore posts
+    given:
+      - visit: /demos/scaffold/explore
+    when:
+      - click:
+          selector: '[data-test=tag-chip]'
+    then:
+      - shouldExist:
+          selector: '[data-test=active-tag]'
+`;
+loadAndRun(stories_304);
+
+// US-305: Navigate from explore to profile
+const stories_305 = `
+id: US-305
+title: Navigate from explore to profile
+acceptance_criteria:
+  - id: AC-305-1
+    title: Clicking a suggested user navigates to their profile
+    given:
+      - visit: /demos/scaffold/explore
+    when:
+      - click:
+          selector: '[data-test=suggested-user-link]'
+    then:
+      - shouldExist:
+          selector: '[data-test=profile-name]'
+`;
+loadAndRun(stories_305);
+
+// US-101: View home feed with posts
+const stories_101 = `
+id: US-101
+title: View home feed with posts
+acceptance_criteria:
+  - id: AC-101-1
     title: Home feed shows posts with author and content
     given:
-      - visit: /demos/scaffold
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=post-card]'
@@ -75,30 +145,34 @@ acceptance_criteria:
       - shouldExist:
           selector: '[data-test=post-content]'
     when: []
-  - id: AC-001-2
-    title: Posts show timestamp and engagement counts
+  - id: AC-101-2
+    title: Home feed shows post timestamps
     given:
-      - visit: /demos/scaffold
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=post-timestamp]'
+    when: []
+  - id: AC-101-3
+    title: Home feed shows like counts
+    given:
+      - visit: /demos/scaffold/
+    then:
       - shouldExist:
           selector: '[data-test=like-count]'
-      - shouldExist:
-          selector: '[data-test=repost-count]'
     when: []
 `;
-loadAndRun(stories_001);
+loadAndRun(stories_101);
 
-// US-002: Like a post on the home feed
-const stories_002 = `
-id: US-002
-title: Like a post on the home feed
+// US-102: Like a post
+const stories_102 = `
+id: US-102
+title: Like a post
 acceptance_criteria:
-  - id: AC-002-1
-    title: Like button toggles active state
+  - id: AC-102-1
+    title: Like button toggles and updates count
     given:
-      - visit: /demos/scaffold
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=like-button]'
@@ -106,17 +180,17 @@ acceptance_criteria:
       - shouldExist:
           selector: '[data-test=like-button].active'
 `;
-loadAndRun(stories_002);
+loadAndRun(stories_102);
 
-// US-003: Bookmark a post on the home feed
-const stories_003 = `
-id: US-003
-title: Bookmark a post on the home feed
+// US-103: Bookmark a post
+const stories_103 = `
+id: US-103
+title: Bookmark a post
 acceptance_criteria:
-  - id: AC-003-1
-    title: Bookmark button toggles active state
+  - id: AC-103-1
+    title: Bookmark button toggles on click
     given:
-      - visit: /demos/scaffold
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=bookmark-button]'
@@ -124,43 +198,41 @@ acceptance_criteria:
       - shouldExist:
           selector: '[data-test=bookmark-button].active'
 `;
-loadAndRun(stories_003);
+loadAndRun(stories_103);
 
-// US-004: Compose a new post that appears in the feed
-const stories_004 = `
-id: US-004
-title: Compose a new post that appears in the feed
+// US-104: Compose a new post
+const stories_104 = `
+id: US-104
+title: Compose a new post
 acceptance_criteria:
-  - id: AC-004-1
-    title: Composer is present on home page
+  - id: AC-104-1
+    title: Composer is visible on home page
     given:
-      - visit: /demos/scaffold
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=composer]'
       - shouldExist:
           selector: '[data-test=composer-input]'
-      - shouldExist:
-          selector: '[data-test=composer-submit]'
     when: []
-  - id: AC-004-2
-    title: Composing a post adds it to the feed
+  - id: AC-104-2
+    title: Submitting a post adds it to the feed
     given:
-      - visit: /demos/scaffold
+      - visit: /demos/scaffold/
     when:
       - fill:
           selector: '[data-test=composer-input]'
-          value: Hello from the composer
+          value: Hello from the composer test
       - click:
           selector: '[data-test=composer-submit]'
     then:
       - shouldContain:
           selector: '[data-test=post-content]'
-          text: Hello from the composer
-  - id: AC-004-3
-    title: Submitting empty post shows error
+          text: Hello from the composer test
+  - id: AC-104-3
+    title: Submitting an empty post shows an error
     given:
-      - visit: /demos/scaffold
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=composer-submit]'
@@ -168,115 +240,149 @@ acceptance_criteria:
       - shouldExist:
           selector: '[data-test=composer-error]'
 `;
-loadAndRun(stories_004);
+loadAndRun(stories_104);
 
-// US-005: Load additional posts by clicking Load more
-const stories_005 = `
-id: US-005
-title: Load additional posts by clicking Load more
+// US-105: Load more posts
+const stories_105 = `
+id: US-105
+title: Load more posts
 acceptance_criteria:
-  - id: AC-005-1
-    title: Load more button appears and loads additional posts
+  - id: AC-105-1
+    title: Load more button exists on home page
     given:
-      - visit: /demos/scaffold
-    when:
-      - click:
-          selector: '[data-test=load-more]'
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
-          selector: '[data-test=post-card]'
+          selector: '[data-test=load-more]'
+    when: []
 `;
-loadAndRun(stories_005);
+loadAndRun(stories_105);
 
-// US-011: Toggle between dark and light mode using the theme button in the nav
-const stories_011 = `
-id: US-011
-title: Toggle between dark and light mode using the theme button in the nav
+// US-106: View post detail and thread
+const stories_106 = `
+id: US-106
+title: View post detail and thread
 acceptance_criteria:
-  - id: AC-011-1
-    title: Meta banner is present on every page
+  - id: AC-106-1
+    title: Post detail page shows full post content
     given:
-      - visit: /demos/scaffold
+      - visit: /demos/scaffold/
+    when:
+      - click:
+          selector: '[data-test=post-content]'
+    then:
+      - shouldExist:
+          selector: '[data-test=post-content]'
+`;
+loadAndRun(stories_106);
+
+// US-401: See meta banner on every page
+const stories_401 = `
+id: US-401
+title: See meta banner on every page
+acceptance_criteria:
+  - id: AC-401-1
+    title: Meta banner is visible on the home page
+    given:
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=meta-banner]'
+    when: []
+  - id: AC-401-2
+    title: Meta banner is visible on the explore page
+    given:
+      - visit: /demos/scaffold/explore
+    then:
+      - shouldExist:
+          selector: '[data-test=meta-banner]'
+    when: []
+  - id: AC-401-3
+    title: Meta banner is visible on the search page
+    given:
+      - visit: /demos/scaffold/search
+    then:
+      - shouldExist:
+          selector: '[data-test=meta-banner]'
+    when: []
+`;
+loadAndRun(stories_401);
+
+// US-402: Navigate to seed and spec from banner
+const stories_402 = `
+id: US-402
+title: Navigate to seed and spec from banner
+acceptance_criteria:
+  - id: AC-402-1
+    title: Meta banner contains seed link
+    given:
+      - visit: /demos/scaffold/
+    then:
       - shouldExist:
           selector: '[data-test=seed-link]'
+    when: []
+  - id: AC-402-2
+    title: Meta banner contains spec link
+    given:
+      - visit: /demos/scaffold/
+    then:
       - shouldExist:
           selector: '[data-test=spec-link]'
+    when: []
+  - id: AC-402-3
+    title: Meta banner contains scaffold commit link
+    given:
+      - visit: /demos/scaffold/
+    then:
       - shouldExist:
           selector: '[data-test=scaffold-link]'
     when: []
-  - id: AC-011-2
-    title: Theme toggle button is present in navigation
-    given:
-      - visit: /demos/scaffold
-    then:
-      - shouldExist:
-          selector: '[data-test=theme-toggle]'
-    when: []
-  - id: AC-011-3
-    title: Clicking theme toggle switches the active class on html element
-    given:
-      - visit: /demos/scaffold
-    when:
-      - click:
-          selector: '[data-test=theme-toggle]'
-    then:
-      - shouldExist:
-          selector: html.dark
 `;
-loadAndRun(stories_011);
+loadAndRun(stories_402);
 
-// US-007: View a user profile with bio, counts, and posts
-const stories_007 = `
-id: US-007
-title: View a user profile with bio, counts, and posts
+// US-201: View a user profile
+const stories_201 = `
+id: US-201
+title: View a user profile
 acceptance_criteria:
-  - id: AC-007-1
-    title: Profile page shows user info and posts
-    given:
-      - visit: /demos/scaffold
-    when:
-      - click:
-          selector: '[data-test=post-author]'
-    then:
-      - shouldExist:
-          selector: '[data-test=user-display-name]'
-      - shouldExist:
-          selector: '[data-test=user-handle]'
-      - shouldExist:
-          selector: '[data-test=user-bio]'
-  - id: AC-007-2
-    title: Profile page shows follower counts
+  - id: AC-201-1
+    title: Profile page shows user display name and handle
     given:
       - visit: /demos/scaffold/profile/alice.dev
     then:
       - shouldExist:
-          selector: '[data-test=follower-count]'
+          selector: '[data-test=profile-name]'
       - shouldExist:
-          selector: '[data-test=following-count]'
+          selector: '[data-test=profile-handle]'
     when: []
-`;
-loadAndRun(stories_007);
-
-// US-008: Follow and unfollow a user from their profile page
-const stories_008 = `
-id: US-008
-title: Follow and unfollow a user from their profile page
-acceptance_criteria:
-  - id: AC-008-1
-    title: Follow button is present on profile pages
+  - id: AC-201-2
+    title: Profile page shows user posts
     given:
-      - visit: /demos/scaffold/profile/bobwrites
+      - visit: /demos/scaffold/profile/alice.dev
     then:
       - shouldExist:
-          selector: '[data-test=follow-button]'
+          selector: '[data-test=post-card]'
     when: []
-  - id: AC-008-2
-    title: Clicking follow updates button to Following state
+  - id: AC-201-3
+    title: Unknown profile shows not found message
     given:
-      - visit: /demos/scaffold/profile/bobwrites
+      - visit: /demos/scaffold/profile/doesnotexist
+    then:
+      - shouldExist:
+          selector: '[data-test=profile-not-found]'
+    when: []
+`;
+loadAndRun(stories_201);
+
+// US-202: Follow a user
+const stories_202 = `
+id: US-202
+title: Follow a user
+acceptance_criteria:
+  - id: AC-202-1
+    title: Follow button appears on profile and toggles to following state
+    given:
+      - visit: /demos/scaffold/profile/alice.dev
     when:
       - click:
           selector: '[data-test=follow-button]'
@@ -285,62 +391,51 @@ acceptance_criteria:
           selector: '[data-test=follow-button]'
           text: Following
 `;
-loadAndRun(stories_008);
+loadAndRun(stories_202);
 
-// US-009: Search for posts using a keyword and see results update live
-const stories_009 = `
-id: US-009
-title: Search for posts using a keyword and see results update live
+// US-203: Unfollow a user
+const stories_203 = `
+id: US-203
+title: Unfollow a user
 acceptance_criteria:
-  - id: AC-009-1
-    title: Search input is present on search page
+  - id: AC-203-1
+    title: Clicking following button unfollows the user
     given:
-      - visit: /demos/scaffold/search
-    then:
-      - shouldExist:
-          selector: '[data-test=search-input]'
-    when: []
-  - id: AC-009-2
-    title: Typing a keyword shows matching posts
-    given:
-      - visit: /demos/scaffold/search
-    when:
-      - fill:
-          selector: '[data-test=search-input]'
-          value: rust
-    then:
-      - shouldExist:
-          selector: '[data-test=search-result]'
-  - id: AC-009-3
-    title: Searching with no matches shows empty state message
-    given:
-      - visit: /demos/scaffold/search
-    when:
-      - fill:
-          selector: '[data-test=search-input]'
-          value: xyzzy12345notaword
-    then:
-      - shouldExist:
-          selector: '[data-test=search-empty]'
-`;
-loadAndRun(stories_009);
-
-// US-006: View a single post with its full thread context
-const stories_006 = `
-id: US-006
-title: View a single post with its full thread context
-acceptance_criteria:
-  - id: AC-006-1
-    title: Post detail page shows post content and author
-    given:
-      - visit: /demos/scaffold
+      - visit: /demos/scaffold/profile/alice.dev
     when:
       - click:
-          selector: '[data-test=post-content]'
+          selector: '[data-test=follow-button]'
+      - click:
+          selector: '[data-test=follow-button]'
+    then:
+      - shouldContain:
+          selector: '[data-test=follow-button]'
+          text: Follow
+`;
+loadAndRun(stories_203);
+
+// US-501: Toggle dark and light mode
+const stories_501 = `
+id: US-501
+title: Toggle dark and light mode
+acceptance_criteria:
+  - id: AC-501-1
+    title: Theme toggle button is visible in navigation
+    given:
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
-          selector: '[data-test=post-content]'
+          selector: '[data-test=theme-toggle]'
+    when: []
+  - id: AC-501-2
+    title: Clicking theme toggle switches between light and dark mode
+    given:
+      - visit: /demos/scaffold/
+    when:
+      - click:
+          selector: '[data-test=theme-toggle]'
+    then:
       - shouldExist:
-          selector: '[data-test=post-author]'
+          selector: html.dark
 `;
-loadAndRun(stories_006);
+loadAndRun(stories_501);

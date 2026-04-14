@@ -10,7 +10,7 @@
 
 {#if data.post}
 	{@const author = getAuthor(data.post.authorId)}
-	<div class="mb-6">
+	<div class="mb-6" data-test="post-card">
 		<div class="mb-1 text-sm text-gray-500">
 			<a href="{base}/profile/{author?.handle}" class="font-medium text-gray-900 dark:text-gray-100" data-test="post-author">{author?.displayName}</a>
 			<span>@{author?.handle}</span>
@@ -25,11 +25,11 @@
 		<h2 class="mb-2 font-bold">Replies</h2>
 		{#each data.replies as reply}
 			{@const replyAuthor = getAuthor(reply.authorId)}
-			<div class="border-t border-gray-200 py-3 pl-4 dark:border-gray-700">
+			<div class="border-t border-gray-200 py-3 pl-4 dark:border-gray-700" data-test="post-card">
 				<div class="mb-1 text-sm text-gray-500">
 					<a href="{base}/profile/{replyAuthor?.handle}" class="font-medium text-gray-900 dark:text-gray-100">{replyAuthor?.displayName}</a>
 				</div>
-				<p class="text-gray-900 dark:text-gray-100">{reply.content}</p>
+				<p class="text-gray-900 dark:text-gray-100" data-test="post-content">{reply.content}</p>
 			</div>
 		{/each}
 	{/if}

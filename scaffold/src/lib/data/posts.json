@@ -298,15 +298,5 @@
     "repostCount": 89,
     "parentId": null,
     "tags": ["writing", "docs"]
-  },
-  {
-    "id": "p31",
-    "authorId": "u3",
-    "content": "Rust ownership model is one of those concepts that seems impossible until it clicks. And when it clicks, every other language feels like a liability.",
-    "createdAt": "2026-03-30T09:00:00Z",
-    "likeCount": 289,
-    "repostCount": 72,
-    "parentId": null,
-    "tags": ["rust", "engineering"]
   }
 ]
