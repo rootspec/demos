@@ -1,0 +1,67 @@
+# =============================================================================
+# USER STORY: Configure Settings
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: CITY_LOOKUP
+# @systems: [SETTINGS_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-013
+title: Change temperature unit
+
+acceptance_criteria:
+  - id: AC-013-1
+    title: Settings panel can be opened via the Settings button
+    narrative: |
+      Given I am on the app
+      When I click the Settings button
+      Then the settings panel becomes visible
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: 'button[class*="toggle"]' }
+    then:
+      - shouldExist: { selector: '[class*="panel"]' }
+
+  - id: AC-013-2
+    title: Temperature unit buttons are visible in settings
+    narrative: |
+      Given the settings panel is open
+      When I look at the Temperature setting
+      Then I see both the Celsius and Fahrenheit buttons
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: 'button[class*="toggle"]' }
+    then:
+      - shouldContain: { selector: '[class*="panel"]', text: '°C' }
+      - shouldContain: { selector: '[class*="panel"]', text: '°F' }
+
+---
+# =============================================================================
+# USER STORY: Configure Wind Unit and Time Format
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: CITY_LOOKUP
+# @systems: [SETTINGS_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-014
+title: Change wind speed unit and time format
+
+acceptance_criteria:
+  - id: AC-014-1
+    title: Wind speed and time format options are visible in settings
+    narrative: |
+      Given the settings panel is open
+      When I view the settings
+      Then I see km/h, mph, 24h, and 12h options
+    given:
+      - visit: '/'
+    when:
+      - click: { selector: 'button[class*="toggle"]' }
+    then:
+      - shouldContain: { selector: '[class*="panel"]', text: 'km/h' }
+      - shouldContain: { selector: '[class*="panel"]', text: '24h' }

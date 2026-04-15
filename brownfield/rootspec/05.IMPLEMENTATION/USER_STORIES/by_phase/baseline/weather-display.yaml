@@ -1,0 +1,81 @@
+# =============================================================================
+# USER STORY: Weather Display
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: CITY_LOOKUP
+# @systems: [WEATHER_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-005
+title: View current weather conditions for a city
+
+acceptance_criteria:
+  - id: AC-005-1
+    title: Actions area appears after selecting a city and weather loads
+    narrative: |
+      Given I have selected a city
+      When weather data loads
+      Then I see the actions area (save button or weather content)
+    given:
+      - visit: '/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Berlin' }
+      - click: { selector: 'ul li:first-child' }
+    then:
+      - shouldExist: { selector: '.actions' }
+
+  - id: AC-005-2
+    title: Empty state shown when no city selected
+    narrative: |
+      Given I open the app with no saved locations
+      When no city has been searched
+      Then I see an empty state message prompting to search
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldContain: { selector: '.empty', text: 'Search for a city to see the weather forecast' }
+
+---
+# =============================================================================
+# USER STORY: Save Location
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: CITY_LOOKUP
+# @systems: [LOCATION_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-006
+title: Save a location to favorites
+
+acceptance_criteria:
+  - id: AC-006-1
+    title: Save button appears after selecting a new city
+    narrative: |
+      Given I have searched for and selected a city
+      When weather data loads for a city not in my favorites
+      Then I see a Save Location button
+    given:
+      - visit: '/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Tokyo' }
+      - click: { selector: 'ul li:first-child' }
+    then:
+      - shouldExist: { selector: '.save-btn' }
+
+  - id: AC-006-2
+    title: Saved Locations heading appears after saving
+    narrative: |
+      Given I see the Save Location button
+      When I click Save Location
+      Then the Saved Locations heading appears with the saved city
+    given:
+      - visit: '/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Tokyo' }
+      - click: { selector: 'ul li:first-child' }
+      - click: { selector: '.save-btn' }
+    then:
+      - shouldContain: { selector: 'h3', text: 'Saved Locations' }

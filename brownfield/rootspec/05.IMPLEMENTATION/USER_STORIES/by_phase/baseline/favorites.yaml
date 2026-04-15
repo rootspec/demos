@@ -1,0 +1,72 @@
+# =============================================================================
+# USER STORY: Manage Favorites
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: CITY_LOOKUP
+# @systems: [LOCATION_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-009
+title: Navigate between saved locations
+
+acceptance_criteria:
+  - id: AC-009-1
+    title: Saved Locations heading is displayed when locations are saved
+    narrative: |
+      Given I have saved at least one location
+      When I am on the weather view
+      Then I see the Saved Locations heading
+    given:
+      - visit: '/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Amsterdam' }
+      - click: { selector: 'ul li:first-child' }
+      - click: { selector: '.save-btn' }
+    then:
+      - shouldContain: { selector: 'h3', text: 'Saved Locations' }
+
+  - id: AC-009-2
+    title: Clicking a favorite chip updates the weather view
+    narrative: |
+      Given I have saved locations shown as chips
+      When I click a chip
+      Then the actions area is visible (city weather loaded)
+    given:
+      - visit: '/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Amsterdam' }
+      - click: { selector: 'ul li:first-child' }
+      - click: { selector: '.save-btn' }
+      - click: { selector: 'h3 + div button:first-child' }
+    then:
+      - shouldExist: { selector: '.actions' }
+
+---
+# =============================================================================
+# USER STORY: Remove a Saved Location
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: baseline
+# @journey: CITY_LOOKUP
+# @systems: [LOCATION_SYSTEM]
+# @last_updated: 2026-04-14T00:00:00Z
+
+id: US-010
+title: Remove a city from favorites
+
+acceptance_criteria:
+  - id: AC-010-1
+    title: Remove span is visible inside each favorite chip button
+    narrative: |
+      Given I have a saved location shown as a chip
+      When I look at the chip
+      Then I see a remove span (✕) inside the button
+    given:
+      - visit: '/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Sydney' }
+      - click: { selector: 'ul li:first-child' }
+      - click: { selector: '.save-btn' }
+    then:
+      - shouldContain: { selector: 'h3 + div button span', text: '✕' }

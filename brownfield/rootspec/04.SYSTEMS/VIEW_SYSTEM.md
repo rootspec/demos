@@ -1,69 +1,111 @@
-# VIEW_SYSTEM
+# View System
 
-## Purpose
+> References: `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`, `SYSTEMS_OVERVIEW.md`
 
-Manages screen state, layout, and the composition of all visual elements. Orchestrates data from other systems into the user-facing interface.
+## Responsibility
 
-## Boundary
+Manages which view is active, orchestrates layout transitions, and coordinates the comparison flow. The View System is the conductor: it reads state from other systems and decides what the user sees.
 
-Owns the active view state (weather vs. dashboard), loading/error presentation, and layout structure. Does not own data fetching, persistence, or business logic.
+---
 
-## Data
+## View States
 
-### View State
-- `view` (enum) — `weather`, `dashboard`, or `compare`
-- `city` (City or null) — currently selected city in weather view
-- `comparedCities` (City[], max [max_comparison_cities]) — cities selected for side-by-side comparison
+The app has three mutually exclusive views:
 
-### Screen Regions
-| Region | Contents |
-|--------|----------|
-| Header | App title, view toggle (appears when favorites exist) |
-| Search | City search input with autocomplete dropdown |
-| Settings | Collapsible settings panel |
-| Content | Weather view OR Dashboard view (mutually exclusive) |
-| Footer | Attribution and version info |
+| View | Value | Description |
+|------|-------|-------------|
+| Weather View | `'weather'` | Single-city detail: current conditions, hourly, 7-day chart, alerts |
+| Dashboard View | `'dashboard'` | Grid of all saved cities with current conditions summary |
+| Comparison View | `'compare'` | Side-by-side columns for 2–[max_compare_cities] cities |
 
-### Weather View Layout (when city selected)
-1. Favorites bar (chips)
-2. Save Location button (if current city is not a favorite)
-3. Condition alerts (if any thresholds met)
-4. Current weather card (temp, humidity, wind, UV)
-5. Hourly forecast (scrollable horizontal strip)
-6. 7-day forecast (vertical bar chart)
+View state is held in memory. It is not persisted across sessions. On mount, the app starts in `weather` view.
 
-### Dashboard View Layout
-- Grid of location cards (auto-fill, responsive columns)
-- Each card shows city name, emoji, temperature, humidity, wind
-- "Compare" button appears when [min_comparison_cities]+ favorites exist
-- In comparison selection mode, cards show selectable highlight state
+---
 
-### Comparison View Layout
-- Side-by-side columns ([min_comparison_cities] to [max_comparison_cities] equal-width columns)
-- "Back to Dashboard" navigation at top
-- Each column contains:
-  1. City name header (click to deselect/remove from comparison)
-  2. Current conditions card (temperature, humidity, wind, UV)
-  3. Condition alerts (if any thresholds met)
-  4. Hourly forecast (compact horizontal strip)
-  5. 7-day forecast (compact bar chart)
+## View Transition Rules
 
-## Behavior
+| Trigger | From | To |
+|---------|------|----|
+| City selected (search or favorites) | Any | `weather` |
+| "Weather" toggle button clicked | `dashboard` | `weather` |
+| "Dashboard" toggle button clicked | `weather` | `dashboard` |
+| [min_compare_cities]+ cities selected in compare mode | `dashboard` (compare mode active) | `compare` |
+| "Back to Dashboard" clicked | `compare` | `dashboard` |
+| Comparison drops below [min_compare_cities] cities | `compare` | `dashboard` |
 
-- View toggle only renders when favorites list is non-empty
-- Selecting a city from search or dashboard switches to weather view
-- Compare button only renders on dashboard when favorites count >= [min_comparison_cities]
-- Entering comparison mode shows selectable cards; selecting enough cities transitions to comparison view
-- Deselecting a city in comparison view removes its column; dropping below minimum exits to dashboard
-- Loading state shows centered text during weather fetch
-- Error state shows styled error message
-- Empty state prompts user to search when no city is selected
-- Dashboard fetches all locations in parallel on mount and when favorites change
+The view toggle ("Weather" / "Dashboard") is only rendered when favorites exist ([min_favorites_for_dashboard] or more saved locations).
 
-## Interactions
+---
 
-- **← WEATHER_SYSTEM:** Receives weather data, loading, error states
-- **← LOCATION_SYSTEM:** Receives favorites list, active city, search results
-- **← SETTINGS_SYSTEM:** Receives display preferences for formatting
-- **→ LOCATION_SYSTEM:** Dispatches search, select, save, remove actions
-- **→ SETTINGS_SYSTEM:** Dispatches setting change actions
+## Layout Behavior
+
+| View | Max Width |
+|------|-----------|
+| Weather / Dashboard | [standard_max_width] |
+| Comparison | [comparison_max_width] |
+
+The app container class changes when comparison is active (`.app.comparison-active`), expanding the max-width to accommodate side-by-side columns.
+
+---
+
+## Comparison Mode
+
+Comparison mode is a sub-state of the dashboard view, not a view itself. It activates a selection UI on top of the dashboard:
+
+1. `compareMode: true` is set when the user clicks "Compare"
+2. A prompt appears: "Select at least [min_compare_cities] cities to compare (N selected)"
+3. Location cards become selectable — clicking toggles selection state
+4. Selection is tracked as `comparedCities[]`
+5. When `comparedCities.length >= [min_compare_cities]`, the view auto-transitions to `compare` and `compareMode` is reset to `false`
+6. Maximum [max_compare_cities] cities can be selected; additional clicks are ignored when at the limit
+
+### Comparison View Columns
+
+Each selected city renders in a column containing:
+- City name header with a remove (✕) button
+- WeatherAlerts component
+- CurrentWeather component
+- HourlyForecast component
+- ForecastChart component
+
+Removing a city: if the remaining cities drop below [min_compare_cities], `comparedCities` is cleared and view returns to `dashboard`.
+
+---
+
+## Component Rendering Rules
+
+### Weather View (`view === 'weather'`)
+
+Renders:
+- FavoritesList (if favorites exist)
+- Loading indicator (if weather loading)
+- Error message (if weather error)
+- If weather data and active city exist:
+  - "Save Location" button (if city not already in favorites)
+  - WeatherAlerts
+  - CurrentWeather
+  - HourlyForecast
+  - ForecastChart
+- Empty state (if no city selected and not loading)
+
+### Dashboard View (`view === 'dashboard'`)
+
+Renders:
+- LocationsDashboard (with all favorites, compare mode state, and handlers)
+
+### Comparison View (`view === 'compare'`)
+
+Renders:
+- ComparisonView (with selected cities, unit settings, and handlers)
+
+---
+
+## Interfaces Consumed
+
+| Interface | Source | Description |
+|-----------|--------|-------------|
+| Active city | LOCATION_SYSTEM | Determines what weather to show; drives view switch |
+| Favorites list | LOCATION_SYSTEM | Controls view toggle visibility; populates dashboard |
+| Weather data / loading / error | WEATHER_SYSTEM | Controls weather view rendering |
+| Temperature unit | SETTINGS_SYSTEM | Passed to weather display components |
+| Time format | SETTINGS_SYSTEM | Passed to hourly forecast component |
