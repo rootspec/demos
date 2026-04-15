@@ -227,7 +227,9 @@ function App() {
       <footer className="footer">
         <p>
           RootWeather — A <a href="https://github.com/rootspec/rootspec">RootSpec</a> brownfield demo
-          &middot; v6.2.2 &middot; Data from <a href="https://open-meteo.com/">Open-Meteo</a>
+          &middot; v7.2.8 &middot; Data from <a href="https://open-meteo.com/">Open-Meteo</a>
+          &middot; <a href="https://github.com/rootspec/demos/tree/main/brownfield/SEED.md">Seed</a>
+          &middot; <a href="https://github.com/rootspec/demos/tree/main/brownfield/rootspec">Spec</a>
         </p>
       </footer>
     </div>

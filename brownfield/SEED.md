@@ -2,9 +2,9 @@
 
 A weather dashboard that already exists. Derive the specification from the codebase — do not invent features or rewrite code.
 
-## Meta Banner
+## Attribution
 
-A persistent banner explaining this is a RootSpec brownfield demo. Link to the SEED.md and spec files in the GitHub repo at https://github.com/rootspec/demos/tree/main/brownfield. These must be absolute GitHub URLs, not relative paths.
+The footer should display the current RootSpec version (read from `.rootspec.json`), and link to the SEED.md and spec files in the GitHub repo at https://github.com/rootspec/demos/tree/main/brownfield. These must be absolute GitHub URLs, not relative paths.
 
 ## Deployment
 
