@@ -1,51 +1,58 @@
-# Level 4: Theme System
-<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
+# Theme System
+
+**Version:** 7.3.2
+**Status:** Draft
+
+---
 
 ## Responsibility
 
-The Theme System owns dark/light mode detection, user preference persistence, and the mechanism for switching themes. It determines the active theme context that PRESENTATION_SYSTEM uses to render visual output.
+Detects the user's system color scheme preference, applies the appropriate theme (dark or light) to the page root, and manages the manual toggle that allows users to override the system preference.
 
----
+## Boundaries
 
-## State Owned
+- **Owns:** Current theme state (dark/light), persistence of user preference
+- **Does not own:** Visual design tokens (defined in stylesheet), component-level styles
+- **Exposes:** Theme class on root element (e.g., `<html class="dark">` or `<html class="light">`)
 
-- `activeTheme` — "dark" or "light"
-- `source` — how the active theme was determined: "system" or "user"
+## Data Owned
 
----
+| Data | Source | Mutability | Persistence |
+|------|--------|------------|-------------|
+| Active theme | System preference or user override | Mutable | localStorage (if available) |
+| User has overridden | Toggle interaction | Mutable | localStorage (if available) |
 
-## Detection and Initialization
+## State Transitions
 
-On page load:
+```
+Page Load
+    │
+    ▼
+Read localStorage preference
+    │
+    ├── preference found ──► apply stored theme
+    │
+    └── no preference ──► read prefers-color-scheme
+            │
+            ├── dark ──► apply dark theme
+            ├── light ──► apply light theme
+            └── unavailable ──► apply dark theme (default)
 
-1. Check localStorage for a stored user preference
-2. If found: apply that theme immediately
-3. If not found: read `prefers-color-scheme` media query and apply matching theme
-4. If neither is available: default to dark theme
+User clicks toggle
+    │
+    ▼
+Flip current theme ──► update localStorage ──► update root class
+```
 
-The theme is applied by setting a class on the root `<html>` element before first render to prevent flash of incorrect theme.
+## Rules
 
----
+- Theme is applied before first paint to prevent flash of wrong theme
+- Default theme (when no preference is available) is dark mode
+- The toggle button's accessible label must reflect the current state ("Switch to light mode" / "Switch to dark mode")
+- System preference changes (e.g., OS setting change mid-session) are respected unless user has manually overridden
 
-## Persistence
+## Interactions with Other Systems
 
-When the user manually toggles the theme:
-- Update `activeTheme` and `source`
-- Write preference to localStorage
-- Apply class change to root element immediately
-
----
-
-## System Detection Reactivity
-
-If the user has not manually set a preference (`source === "system"`), the system responds to changes in `prefers-color-scheme` during the session and updates the theme accordingly.
-
-If the user has manually set a preference (`source === "user"`), system changes are ignored until the user resets preference (not a required feature — manual toggle is sufficient).
-
----
-
-## Interface with Other Systems
-
-- Provides `activeTheme` class to the root element; PRESENTATION_SYSTEM reads this to apply correct token set
-- Receives toggle action from INTERACTIVE_SYSTEM (the theme toggle button)
-- Does not own any visual tokens — only the active state
+- **CONTENT_SYSTEM:** Receives theme class; all content styles are theme-aware via CSS
+- **INTERACTIVE_SYSTEM:** Interactive components inherit theme through CSS; no JavaScript theme wiring required in components
+- **PRESENTATION_SYSTEM:** Theme transitions are animated by PRESENTATION_SYSTEM; THEME_SYSTEM only manages state

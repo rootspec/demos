@@ -2,83 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --bg: #ffffff;
-    --fg: #0f172a;
-    --muted: #64748b;
-    --border: #e2e8f0;
-    --card: #f8fafc;
-    --brand: #0ea5e9;
-    --accent: #8b5cf6;
-  }
-
-  .dark {
-    --bg: #0a0f1a;
-    --fg: #e2e8f0;
-    --muted: #94a3b8;
-    --border: #1e293b;
-    --card: #0f172a;
-    --brand: #38bdf8;
-    --accent: #a78bfa;
-  }
-
-  html {
-    background-color: var(--bg);
-    color: var(--fg);
-    scroll-behavior: smooth;
-  }
-
-  body {
-    @apply antialiased;
-    background-color: var(--bg);
-    color: var(--fg);
-    transition: background-color 0s, color 0s;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
+:root {
+  --bg: #ffffff;
+  --fg: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --card: #f8fafc;
 }
 
-@layer components {
-  .container-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  .section-spacing {
-    padding-top: 96px;
-    padding-bottom: 96px;
-  }
-
-  .btn-primary {
-    @apply inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200;
-    background: var(--brand);
-  }
-
-  .btn-primary:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-  }
-
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    @apply rounded-xl p-6;
-  }
-
-  code {
-    @apply font-mono text-sm px-1.5 py-0.5 rounded;
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--accent);
-  }
+html.dark {
+  --bg: #0f172a;
+  --fg: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #1e293b;
+  --card: #1e293b;
 }
 
-/* Focus styles */
-:focus-visible {
-  outline: 2px solid var(--brand);
-  outline-offset: 2px;
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  transition: background-color 0.2s, color 0.2s;
 }

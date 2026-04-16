@@ -22,77 +22,71 @@ function loadAndRun(yamlContent: string) {
   }
 }
 
-// US-001: Understand the site is a RootSpec demo before reading anything else
-const stories_001 = `
-id: US-001
-title: Understand the site is a RootSpec demo before reading anything else
+// US-201: Visitor sees meta-banner explaining the site is a RootSpec demo
+const stories_201 = `
+id: US-201
+title: Visitor sees meta-banner explaining the site is a RootSpec demo
 acceptance_criteria:
-  - id: AC-001-1
-    title: Meta banner is visible without scrolling
+  - id: AC-201-1
+    title: Meta-banner is visible on page load
     given:
       - visit: /
     then:
       - shouldExist:
           selector: '[data-test=meta-banner]'
     when: []
-  - id: AC-001-2
-    title: Meta banner contains link to spec files
+  - id: AC-201-2
+    title: Meta-banner contains link to the spec files
     given:
       - visit: /
     then:
       - shouldExist:
-          selector: '[data-test=meta-banner-spec-link]'
+          selector: '[data-test=meta-banner] [data-test=view-spec-link]'
     when: []
-  - id: AC-001-3
-    title: Meta banner contains link to SEED.md
+  - id: AC-201-3
+    title: Meta-banner contains link to the seed file
     given:
       - visit: /
     then:
       - shouldExist:
-          selector: '[data-test=meta-banner-seed-link]'
+          selector: '[data-test=meta-banner] [data-test=view-seed-link]'
     when: []
 `;
-loadAndRun(stories_001);
+loadAndRun(stories_201);
 
-// US-002: Understand what RootSpec is from the hero section
-const stories_002 = `
-id: US-002
-title: Understand what RootSpec is from the hero section
+// US-202: Visitor sees the hero section with tagline and version badge
+const stories_202 = `
+id: US-202
+title: Visitor sees the hero section with tagline and version badge
 acceptance_criteria:
-  - id: AC-002-1
-    title: Hero shows tagline
+  - id: AC-202-1
+    title: Hero section is visible with a headline
     given:
       - visit: /
     then:
       - shouldExist:
-          selector: '[data-test=hero-tagline]'
+          selector: '[data-test=hero-section]'
+      - shouldExist:
+          selector: '[data-test=hero-headline]'
     when: []
-  - id: AC-002-2
-    title: Hero shows version badge
+  - id: AC-202-2
+    title: Version badge is visible in the hero or header
     given:
       - visit: /
     then:
       - shouldExist:
           selector: '[data-test=version-badge]'
     when: []
-  - id: AC-002-3
-    title: Hero shows primary CTA link
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=hero-cta]'
-    when: []
 `;
-loadAndRun(stories_002);
+loadAndRun(stories_202);
 
-// US-003: Recognize my pain points in the problem section
-const stories_003 = `
-id: US-003
-title: Recognize my pain points in the problem section
+// US-203: Visitor sees the problem section explaining why existing approaches fail
+const stories_203 = `
+id: US-203
+title: Visitor sees the problem section explaining why existing approaches fail
 acceptance_criteria:
-  - id: AC-003-1
-    title: Problem section exists with real content
+  - id: AC-203-1
+    title: Problem section is present on the page
     given:
       - visit: /
     then:
@@ -100,43 +94,43 @@ acceptance_criteria:
           selector: '[data-test=problem-section]'
     when: []
 `;
-loadAndRun(stories_003);
+loadAndRun(stories_203);
 
-// US-004: Understand the four-skill workflow
-const stories_004 = `
-id: US-004
-title: Understand the four-skill workflow
+// US-204: Visitor sees the four RootSpec skills explained
+const stories_204 = `
+id: US-204
+title: Visitor sees the four RootSpec skills explained
 acceptance_criteria:
-  - id: AC-004-1
-    title: How it works section shows four skills
+  - id: AC-204-1
+    title: How-it-works section is present with the four skills
     given:
       - visit: /
     then:
       - shouldExist:
-          selector: '[data-test=how-it-works]'
+          selector: '[data-test=how-it-works-section]'
       - shouldContain:
-          selector: '[data-test=how-it-works]'
+          selector: '[data-test=how-it-works-section]'
           text: rs-init
       - shouldContain:
-          selector: '[data-test=how-it-works]'
+          selector: '[data-test=how-it-works-section]'
           text: rs-spec
       - shouldContain:
-          selector: '[data-test=how-it-works]'
+          selector: '[data-test=how-it-works-section]'
           text: rs-impl
       - shouldContain:
-          selector: '[data-test=how-it-works]'
+          selector: '[data-test=how-it-works-section]'
           text: rs-validate
     when: []
 `;
-loadAndRun(stories_004);
+loadAndRun(stories_204);
 
-// US-005: Find the GitHub repo link to start using RootSpec
-const stories_005 = `
-id: US-005
-title: Find the GitHub repo link to start using RootSpec
+// US-205: Visitor sees the open source CTA with GitHub link
+const stories_205 = `
+id: US-205
+title: Visitor sees the open source CTA with GitHub link
 acceptance_criteria:
-  - id: AC-005-1
-    title: CTA section exists with GitHub link
+  - id: AC-205-1
+    title: CTA section contains GitHub link
     given:
       - visit: /
     then:
@@ -146,15 +140,15 @@ acceptance_criteria:
           selector: '[data-test=github-link]'
     when: []
 `;
-loadAndRun(stories_005);
+loadAndRun(stories_205);
 
-// US-006: See who built the site and when
-const stories_006 = `
-id: US-006
-title: See who built the site and when
+// US-206: Visitor sees the footer with builder attribution
+const stories_206 = `
+id: US-206
+title: Visitor sees the footer with builder attribution
 acceptance_criteria:
-  - id: AC-006-1
-    title: Footer shows builder attribution and date
+  - id: AC-206-1
+    title: Footer is present with attribution text
     given:
       - visit: /
     then:
@@ -164,23 +158,33 @@ acceptance_criteria:
           selector: '[data-test=footer-attribution]'
     when: []
 `;
-loadAndRun(stories_006);
+loadAndRun(stories_206);
 
-// US-010: Explore the five spec levels interactively
-const stories_010 = `
-id: US-010
-title: Explore the five spec levels interactively
+// US-301: Visitor can expand hierarchy levels in the explorer
+const stories_301 = `
+id: US-301
+title: Visitor can expand hierarchy levels in the explorer
 acceptance_criteria:
-  - id: AC-010-1
-    title: Hierarchy explorer is visible on the page
+  - id: AC-301-1
+    title: Hierarchy explorer section is present
     given:
       - visit: /
     then:
       - shouldExist:
           selector: '[data-test=hierarchy-explorer]'
     when: []
-  - id: AC-010-2
-    title: Clicking a level expands it
+  - id: AC-301-2
+    title: Clicking a level card expands it
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=hierarchy-level-1]'
+    then:
+      - shouldExist:
+          selector: '[data-test=hierarchy-level-1][aria-expanded="true"]'
+  - id: AC-301-3
+    title: Expanded level shows example content
     given:
       - visit: /
     when:
@@ -189,110 +193,172 @@ acceptance_criteria:
     then:
       - shouldExist:
           selector: '[data-test=hierarchy-level-1-content]'
-  - id: AC-010-3
-    title: Clicking the same level again collapses it
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=hierarchy-level-1]'
-      - click:
-          selector: '[data-test=hierarchy-level-1]'
-    then:
-      - shouldExist:
-          selector: '[data-test=hierarchy-explorer]'
 `;
-loadAndRun(stories_010);
+loadAndRun(stories_301);
 
-// US-011: Generate a skeleton spec from my own product idea
-const stories_011 = `
-id: US-011
-title: Generate a skeleton spec from my own product idea
+// US-302: Visitor can complete the Spec Your Idea Wizard
+const stories_302 = `
+id: US-302
+title: Visitor can complete the Spec Your Idea Wizard
 acceptance_criteria:
-  - id: AC-011-1
-    title: Wizard is visible on the page
+  - id: AC-302-1
+    title: Wizard section is present on the page
     given:
       - visit: /
     then:
       - shouldExist:
           selector: '[data-test=spec-wizard]'
+    when: []
+  - id: AC-302-2
+    title: Wizard shows step 1 with a product idea input
+    given:
+      - visit: /
+    then:
       - shouldExist:
           selector: '[data-test=wizard-step-1]'
+      - shouldExist:
+          selector: '[data-test=product-idea-input]'
     when: []
-  - id: AC-011-2
-    title: Entering a product idea advances to step 2
+  - id: AC-302-3
+    title: Wizard advances to step 2 after entering a product idea
     given:
       - visit: /
     when:
       - fill:
-          selector: '[data-test=wizard-idea-input]'
-          value: A tool for tracking reading habits
+          selector: '[data-test=product-idea-input]'
+          value: A tool for tracking daily habits
       - click:
           selector: '[data-test=wizard-next]'
     then:
       - shouldExist:
           selector: '[data-test=wizard-step-2]'
-  - id: AC-011-3
-    title: Completing the wizard shows a skeleton spec
+  - id: AC-302-4
+    title: Completing the wizard shows a spec skeleton output
     given:
       - visit: /
     when:
       - fill:
-          selector: '[data-test=wizard-idea-input]'
-          value: A tool for tracking reading habits
+          selector: '[data-test=product-idea-input]'
+          value: A tool for tracking daily habits
       - click:
           selector: '[data-test=wizard-next]'
       - click:
-          selector: '[data-test=wizard-mission-option]'
+          selector: '[data-test=mission-template-0]'
       - click:
           selector: '[data-test=wizard-next]'
       - click:
-          selector: '[data-test=wizard-pillar-option]'
+          selector: '[data-test=pillar-option-0]'
       - click:
-          selector: '[data-test=wizard-next]'
+          selector: '[data-test=pillar-option-1]'
+      - click:
+          selector: '[data-test=pillar-option-2]'
       - fill:
-          selector: '[data-test=wizard-interaction-input]'
-          value: Mark a book as finished
+          selector: '[data-test=key-interaction-input]'
+          value: User marks a habit as complete
       - click:
-          selector: '[data-test=wizard-finish]'
+          selector: '[data-test=wizard-generate]'
     then:
       - shouldExist:
-          selector: '[data-test=wizard-output]'
+          selector: '[data-test=spec-output]'
 `;
-loadAndRun(stories_011);
+loadAndRun(stories_302);
 
-// US-012: See the difference between specced and unspecced development
-const stories_012 = `
-id: US-012
-title: See the difference between specced and unspecced development
+// US-303: Visitor can toggle the before/after comparison
+const stories_303 = `
+id: US-303
+title: Visitor can toggle the before/after comparison
 acceptance_criteria:
-  - id: AC-012-1
-    title: Comparison section is visible
+  - id: AC-303-1
+    title: Comparison section is present
     given:
       - visit: /
     then:
       - shouldExist:
           selector: '[data-test=comparison-section]'
     when: []
-  - id: AC-012-2
-    title: Toggling switches between views
+  - id: AC-303-2
+    title: Toggling shows the "with RootSpec" panel
     given:
       - visit: /
     when:
       - click:
-          selector: '[data-test=comparison-toggle]'
+          selector: '[data-test=comparison-toggle-after]'
     then:
       - shouldExist:
-          selector: '[data-test=comparison-section]'
+          selector: '[data-test=comparison-panel-after]'
 `;
-loadAndRun(stories_012);
+loadAndRun(stories_303);
 
-// US-013: Switch between dark and light mode
-const stories_013 = `
-id: US-013
-title: Switch between dark and light mode
+// US-304: Visitor can navigate the hierarchy explorer with keyboard
+const stories_304 = `
+id: US-304
+title: Visitor can navigate the hierarchy explorer with keyboard
 acceptance_criteria:
-  - id: AC-013-1
+  - id: AC-304-1
+    title: Hierarchy level cards are reachable via keyboard
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=hierarchy-level-1][tabindex], [data-test=hierarchy-level-1][role="button"]'
+    when: []
+`;
+loadAndRun(stories_304);
+
+// US-401: Site renders correctly on mobile viewport
+const stories_401 = `
+id: US-401
+title: Site renders correctly on mobile viewport
+acceptance_criteria:
+  - id: AC-401-1
+    title: Page is usable on a narrow viewport
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=meta-banner]'
+      - shouldExist:
+          selector: '[data-test=hero-section]'
+      - shouldExist:
+          selector: '[data-test=hierarchy-explorer]'
+    when: []
+`;
+loadAndRun(stories_401);
+
+// US-402: Site is navigable without JavaScript
+const stories_402 = `
+id: US-402
+title: Site is navigable without JavaScript
+acceptance_criteria:
+  - id: AC-402-1
+    title: Core content is visible without JavaScript
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=meta-banner]'
+      - shouldExist:
+          selector: '[data-test=hero-section]'
+      - shouldExist:
+          selector: '[data-test=cta-section]'
+    when: []
+`;
+loadAndRun(stories_402);
+
+// US-101: Page loads in correct theme based on system preference
+const stories_101 = `
+id: US-101
+title: Page loads in correct theme based on system preference
+acceptance_criteria:
+  - id: AC-101-1
+    title: Dark mode applied when system prefers dark
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-theme="dark"], html.dark, body.dark'
+    when: []
+  - id: AC-101-2
     title: Theme toggle is visible in the header
     given:
       - visit: /
@@ -300,54 +366,16 @@ acceptance_criteria:
       - shouldExist:
           selector: '[data-test=theme-toggle]'
     when: []
-  - id: AC-013-2
-    title: Clicking the toggle changes the theme
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=theme-toggle]'
-    then:
-      - shouldExist:
-          selector: '[data-test=theme-toggle]'
 `;
-loadAndRun(stories_013);
+loadAndRun(stories_101);
 
-// US-030: Access all content and interactive features on a mobile device
-const stories_030 = `
-id: US-030
-title: Access all content and interactive features on a mobile device
+// US-102: Toggle switches between dark and light theme
+const stories_102 = `
+id: US-102
+title: Toggle switches between dark and light theme
 acceptance_criteria:
-  - id: AC-030-1
-    title: Page renders all sections on mobile viewport
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=hero-tagline]'
-      - shouldExist:
-          selector: '[data-test=meta-banner]'
-    when: []
-  - id: AC-030-2
-    title: Hierarchy explorer is usable on mobile
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=hierarchy-level-1]'
-    then:
-      - shouldExist:
-          selector: '[data-test=hierarchy-level-1-content]'
-`;
-loadAndRun(stories_030);
-
-// US-031: Navigate all interactive elements without a mouse
-const stories_031 = `
-id: US-031
-title: Navigate all interactive elements without a mouse
-acceptance_criteria:
-  - id: AC-031-1
-    title: Theme toggle is keyboard accessible
+  - id: AC-102-1
+    title: Clicking theme toggle changes the theme
     given:
       - visit: /
     when:
@@ -355,50 +383,6 @@ acceptance_criteria:
           selector: '[data-test=theme-toggle]'
     then:
       - shouldExist:
-          selector: '[data-test=theme-toggle]'
-  - id: AC-031-2
-    title: Hierarchy explorer levels have visible focus states
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=hierarchy-level-1]'
-    then:
-      - shouldExist:
-          selector: '[data-test=hierarchy-level-1]'
+          selector: html.light, html[data-theme="light"], body.light
 `;
-loadAndRun(stories_031);
-
-// US-020: See correct theme on first visit without manual configuration
-const stories_020 = `
-id: US-020
-title: See correct theme on first visit without manual configuration
-acceptance_criteria:
-  - id: AC-020-1
-    title: Page renders without flash of incorrect theme
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: html
-    when: []
-`;
-loadAndRun(stories_020);
-
-// US-021: Have my theme preference remembered when I return
-const stories_021 = `
-id: US-021
-title: Have my theme preference remembered when I return
-acceptance_criteria:
-  - id: AC-021-1
-    title: Theme toggle is present and functional
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=theme-toggle]'
-    then:
-      - shouldExist:
-          selector: '[data-test=theme-toggle]'
-`;
-loadAndRun(stories_021);
+loadAndRun(stories_102);

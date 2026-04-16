@@ -1,61 +1,42 @@
 # =============================================================================
-# FINE TUNING: Interactive System
+# FINE-TUNING: Interactive System
 # =============================================================================
-# @spec_version: 1.0.0
+# @spec_version: 7.3.2
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-16T00:00:00Z
 
-hierarchy_explorer:
-  expand_duration:
-    value: 200
-    # @unit: milliseconds
-    # @rationale: Fast enough to feel responsive; slow enough to be visible as an intentional animation
-    # @constraint: min=100, max=400
+hierarchy_expand_duration:
+  value: 250
+  # @unit: milliseconds
+  # @rationale: Smooth but not sluggish; allows user to perceive the expansion without waiting
+  # @constraint: min=150, max=400
 
-  max_levels:
-    value: 5
-    # @unit: count
-    # @rationale: RootSpec has exactly five levels; this is a fixed product constant
+wizard_step_transition_duration:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Snappy step transitions keep momentum; too long feels sluggish
+  # @constraint: min=100, max=350
 
-wizard:
-  min_pillars:
-    value: 3
-    # @unit: count
-    # @rationale: Three pillars is the minimum to create meaningful tension and prioritization in design decisions
-    # @constraint: min=1, max=5
+wizard_min_pillars:
+  value: 3
+  # @unit: count
+  # @rationale: Three pillars is the minimum to produce meaningful spec output; matches L1 guidance
+  # @constraint: min=2, max=3
 
-  max_pillars:
-    value: 5
-    # @unit: count
-    # @rationale: More than five pillars dilutes their decision-filtering power (per L1 Design Pillars rule)
-    # @constraint: min=3, max=7
+wizard_max_pillars:
+  value: 5
+  # @unit: count
+  # @rationale: Five is the L1-specified maximum for design pillars; keeps output focused
+  # @constraint: max=5
 
-  step_transition_duration:
-    value: 150
-    # @unit: milliseconds
-    # @rationale: Quick step transitions maintain momentum; longer would feel sluggish in a form flow
-    # @constraint: min=50, max=300
+wizard_mission_template_count:
+  value: 4
+  # @unit: count
+  # @rationale: Enough variety to cover common product types; not so many that choice is paralyzing
+  # @constraint: min=3, max=6
 
-comparison:
-  toggle_transition_duration:
-    value: 200
-    # @unit: milliseconds
-    # @rationale: Slightly slower than wizard steps; the comparison content is denser and benefits from a more deliberate transition
-
-scroll_reveal:
-  threshold:
-    value: 0.1
-    # @unit: ratio (0-1, Intersection Observer threshold)
-    # @rationale: Reveal begins when 10% of element is visible; triggers early enough to feel natural while scrolling
-    # @constraint: min=0, max=1
-
-  delay_per_item:
-    value: 80
-    # @unit: milliseconds
-    # @rationale: Stagger between items in a reveal sequence; creates cascade effect without feeling slow
-
-mobile_touch_target_min:
-  value: 44
-  # @unit: pixels
-  # @rationale: WCAG 2.5.5 recommended minimum touch target size for mobile accessibility
-  # @inviolable: true
+comparison_panel_transition_duration:
+  value: 180
+  # @unit: milliseconds
+  # @rationale: Slightly faster than expand — comparison is a simple toggle, not a reveal
+  # @constraint: min=100, max=300

@@ -1,76 +1,79 @@
-# Level 4: Content System
-<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
+# Content System
+
+**Version:** 7.3.2
+**Status:** Draft
+
+---
 
 ## Responsibility
 
-The Content System owns all static copy, section structure, and page content. It defines what is said and where — not how it looks or how it behaves interactively.
+Owns and renders all static content on the marketing site: the meta-banner, hero section, problem section, methodology walkthrough, open-source CTA, and footer. Also reads the RootSpec version from `.rootspec.json` at build time to display the version badge.
 
----
+## Boundaries
 
-## Sections and Content
+- **Owns:** Section copy, GitHub URLs, version badge, footer attribution
+- **Does not own:** Theme state (THEME_SYSTEM), layout structure (LAYOUT_SYSTEM), interactive component state (INTERACTIVE_SYSTEM)
+- **Does not call:** External APIs at runtime
+- **Reads at build time:** `.rootspec.json` → `version` field for the version badge
+
+## Data Owned
+
+| Data | Source | Mutability |
+|------|--------|------------|
+| Section copy | Hardcoded in source | Static |
+| RootSpec version | `.rootspec.json` at build time | Build-time only |
+| GitHub URLs (SEED.md, spec files) | Hardcoded absolute URLs | Static |
+| GitHub URL (rootspec/rootspec) | Hardcoded absolute URL | Static |
+| Footer attribution (builder name, build date) | Hardcoded at build time | Static |
+| Meta-banner text | Hardcoded | Static |
+
+## Sections
 
 ### Meta Banner
-- Persistent visibility at top of page or immediately below hero
-- Copy: explains the site is a RootSpec demo built from a [~100-line] seed, no manual code, no mockups
-- Links to SEED.md and spec files in the GitHub repo at `https://github.com/rootspec/demos/tree/main/greenfield`
-- Tone: honest and direct — names what the visitor is looking at and why rough edges exist
+Persistent banner explaining the site is a RootSpec demo. Contains:
+- Explanation: what the site is and how it was generated (four commands, no manual code, no design mockups)
+- Link: "View the spec →" → absolute GitHub URL to spec files
+- Link: "View the seed →" → absolute GitHub URL to SEED.md
+- Honest framing: rough edges are the result of minimal guidance
 
 ### Hero
-- Tagline: short, punchy, communicates "spec methodology" at a glance
-- One-sentence explanation of what RootSpec is
-- Version badge: reads from `.rootspec.json` at build time; displays `v{version}`
-- Primary CTA: link to GitHub repo
+- Tagline: primary headline about RootSpec
+- One-sentence explanation
+- RootSpec version badge (from `.rootspec.json`)
+- Primary CTA to getting started / GitHub
 
 ### Problem Section
-- Named, specific pain points — not generic industry speak
-- Four core problems: spec drift, philosophy-implementation gap, unreliable AI output, specs nobody reads
-- Tone: recognition, not lecture — the reader has felt these problems
+Explains why existing approaches fail:
+- Spec drift
+- Philosophy-implementation gap
+- Unreliable AI output without validation
+- Unread documentation ("Google Docs specs nobody reads")
 
 ### How It Works
-- Four-skill workflow: `/rs-init` → `/rs-spec` → `/rs-impl` → `/rs-validate`
-- Each skill: name, one-line description, what it produces
-- Visual or structural walkthrough — before/after or step progression
+Visual walkthrough of four skills: `/rs-init` → `/rs-spec` → `/rs-impl` → `/rs-validate`
+- Each skill described with its role and what it produces
 
-### Hierarchy Explorer Section
-- Introduction text explaining the five levels
-- Hosts the INTERACTIVE_SYSTEM hierarchy explorer component
-- Static fallback content if JS is unavailable
-
-### Spec Wizard Section
-- Introduction text inviting visitors to apply the methodology
-- Hosts the INTERACTIVE_SYSTEM wizard component
-- Note that output is templates, not AI — sets expectation correctly
-
-### Before/After Comparison Section
-- Introduction text framing the comparison
-- "Without spec" panel: vague requirements, ambiguous stories, untraceable decisions
-- "With RootSpec" panel: structured hierarchy, testable stories, traced decisions
-- Real content in both panels — specific examples, not placeholder text
+### RootSpec Diagram
+An SVG diagram depicting the RootSpec methodology — a spec surrounding the development cycle, only allowing valid solutions to pass through. If SVG is not feasible, a simplified HTML/CSS diagram is acceptable.
 
 ### Open Source CTA
-- Links to `https://github.com/rootspec/rootspec`
-- Getting-started framing: one command to start
-- Community framing if applicable
+- Link to `https://github.com/rootspec/rootspec`
+- Getting started instructions reference
+- Community links
 
 ### Footer
-- Built-by attribution: identifies the builder (Claude / AI assistant) and build date
-- Framework version
-- Links back to GitHub repos
+- Builder attribution (name of the AI agent that built the site)
+- Build date (date the site was generated)
 
----
+## Rules
 
-## Content Constraints
-
-- No lorem ipsum anywhere on the page
-- No "coming soon" or placeholder content visible to visitors
-- All links must resolve: SEED.md, spec files, GitHub repos
-- Version badge reads from `.rootspec.json` — not hardcoded
-- Meta banner is visible above the fold on all common screen sizes
-
----
+- All GitHub links must be absolute URLs — relative paths break the static prerenderer
+- The meta-banner must not be hidden or dismissible — it is always visible
+- The version badge must reflect the actual framework version used, not a hardcoded string
+- Footer attribution must identify the builder and date accurately
 
 ## Interactions with Other Systems
 
-- Provides section structure to LAYOUT_SYSTEM (slot boundaries, section order)
-- Provides initial data to INTERACTIVE_SYSTEM (wizard templates, explorer level content)
-- Does not own visual design or layout tokens — those belong to PRESENTATION_SYSTEM and LAYOUT_SYSTEM
+- **THEME_SYSTEM:** Content sections receive theme class from the root; no content-specific theme logic
+- **LAYOUT_SYSTEM:** Sections are rendered inside the layout shell; content does not control its own spacing grid
+- **INTERACTIVE_SYSTEM:** Wizard output is rendered as spec content inside the wizard component — CONTENT_SYSTEM does not own wizard output text

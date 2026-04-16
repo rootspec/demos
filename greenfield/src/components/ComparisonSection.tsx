@@ -1,101 +1,66 @@
 import { useState } from 'react';
 
-const WITHOUT_SPEC = {
-  title: 'Without a spec',
-  items: [
-    { label: 'Requirements', content: 'Slack thread from 3 months ago. Partially contradicted by a later Slack thread. Nobody knows which is current.' },
-    { label: 'User story', content: '"As a user, I want to see my data." (No acceptance criteria. No definition of done.)' },
-    { label: 'Feature decision', content: '"We added dark mode because a customer asked for it."' },
-    { label: 'AI output', content: '"Here\'s an implementation of your feature." (Based on what philosophy? Nobody knows.)' },
-    { label: 'Validation', content: '"It looks right to me." — engineer who built it, reviewing their own work' },
-  ],
-  color: '#f97316',
-  bg: '#f9731611',
-  border: '#f9731633',
-};
-
-const WITH_SPEC = {
-  title: 'With RootSpec',
-  items: [
-    { label: 'Requirements', content: 'L1–L3 written once, version-controlled, referenced by every downstream decision. Any drift is caught at validation.' },
-    { label: 'User story', content: 'US-042: Given user has items, When they visit /dashboard, Then they see count badge. Traceable to L2 Truth: "Users always know system state."' },
-    { label: 'Feature decision', content: '"Dark mode is in scope because it traces to Design Pillar: User Autonomy. Feature X is out of scope because it doesn\'t."' },
-    { label: 'AI output', content: '"Here\'s an implementation constrained by your spec. These 3 decisions required trade-offs — here\'s why each was made per L2."' },
-    { label: 'Validation', content: '15/15 tests pass. Spec coverage: 94%. 1 story has no test. Report generated.' },
-  ],
-  color: '#22c55e',
-  bg: '#22c55e11',
-  border: '#22c55e33',
-};
-
 export default function ComparisonSection() {
-  const [showWithSpec, setShowWithSpec] = useState(false);
-  const current = showWithSpec ? WITH_SPEC : WITHOUT_SPEC;
+  const [view, setView] = useState<'before' | 'after'>('before');
 
   return (
-    <section
-      data-test="comparison-section"
-      className="section-spacing"
-      style={{ background: 'var(--card)' }}
-    >
-      <div className="container-content">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: 'var(--fg)' }}>
-            See the difference
-          </h2>
-          <p className="text-lg mb-6" style={{ color: 'var(--muted)' }}>
-            The same software team, before and after RootSpec.
-          </p>
-          {/* Toggle */}
-          <div className="inline-flex items-center rounded-xl p-1" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
-            <button
-              onClick={() => setShowWithSpec(false)}
-              className="px-5 py-2 rounded-lg text-sm font-semibold transition-all"
-              style={{
-                background: !showWithSpec ? WITHOUT_SPEC.bg : 'transparent',
-                color: !showWithSpec ? WITHOUT_SPEC.color : 'var(--muted)',
-                border: !showWithSpec ? `1px solid ${WITHOUT_SPEC.border}` : '1px solid transparent',
-              }}
-            >
-              Without spec
-            </button>
-            <button
-              data-test="comparison-toggle"
-              onClick={() => setShowWithSpec(v => !v)}
-              className="px-5 py-2 rounded-lg text-sm font-semibold transition-all"
-              style={{
-                background: showWithSpec ? WITH_SPEC.bg : 'transparent',
-                color: showWithSpec ? WITH_SPEC.color : 'var(--muted)',
-                border: showWithSpec ? `1px solid ${WITH_SPEC.border}` : '1px solid transparent',
-              }}
-            >
-              With RootSpec
-            </button>
-          </div>
+    <section data-test="comparison-section" className="py-20 px-4">
+      <div className="max-w-5xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-4 text-[var(--fg)]">Before and after RootSpec</h2>
+        <p className="text-center text-[var(--muted)] mb-8 max-w-2xl mx-auto">
+          See the difference between a typical ad-hoc spec and a structured RootSpec.
+        </p>
+
+        <div className="flex justify-center mb-8 gap-2">
+          <button
+            data-test="comparison-toggle-before"
+            onClick={() => setView('before')}
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
+              view === 'before'
+                ? 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 border border-red-300 dark:border-red-700'
+                : 'bg-[var(--card)] text-[var(--muted)] border border-[var(--border)] hover:bg-[var(--border)]'
+            }`}
+          >
+            Without RootSpec
+          </button>
+          <button
+            data-test="comparison-toggle-after"
+            onClick={() => setView('after')}
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
+              view === 'after'
+                ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 border border-green-300 dark:border-green-700'
+                : 'bg-[var(--card)] text-[var(--muted)] border border-[var(--border)] hover:bg-[var(--border)]'
+            }`}
+          >
+            With RootSpec
+          </button>
         </div>
 
-        {/* Content panel */}
-        <div
-          className="rounded-xl overflow-hidden max-w-2xl mx-auto"
-          style={{ border: `1px solid ${current.border}`, background: current.bg }}
-        >
-          <div
-            className="px-6 py-4"
-            style={{ borderBottom: `1px solid ${current.border}`, background: current.bg }}
-          >
-            <h3 className="font-bold text-lg" style={{ color: current.color }}>{current.title}</h3>
+        {view === 'before' && (
+          <div data-test="comparison-panel-before" className="rounded-xl border-2 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/20 p-6">
+            <h3 className="font-bold text-red-700 dark:text-red-400 mb-4 text-lg">❌ Typical spec document</h3>
+            <div className="space-y-3 text-sm text-[var(--fg)]">
+              <p className="p-3 bg-white dark:bg-black/20 rounded border border-red-200 dark:border-red-800">"Build a dashboard with graphs and user settings. Make it look nice. Mobile too."</p>
+              <p className="text-[var(--muted)]">No acceptance criteria. No hierarchy. No way to verify correctness. Three months later, nobody remembers why certain decisions were made.</p>
+            </div>
           </div>
-          <div className="divide-y" style={{ borderColor: current.border }}>
-            {current.items.map((item) => (
-              <div key={item.label} className="px-6 py-4">
-                <div className="text-xs font-mono font-bold mb-1 uppercase" style={{ color: current.color, opacity: 0.7 }}>
-                  {item.label}
-                </div>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--fg)' }}>{item.content}</p>
+        )}
+
+        {view === 'after' && (
+          <div data-test="comparison-panel-after" className="rounded-xl border-2 border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/20 p-6">
+            <h3 className="font-bold text-green-700 dark:text-green-400 mb-4 text-lg">✅ RootSpec structured spec</h3>
+            <div className="space-y-3 font-mono text-xs text-[var(--fg)]">
+              <div className="p-3 bg-white dark:bg-black/20 rounded border border-green-200 dark:border-green-800">
+                <div className="text-purple-600 dark:text-purple-400 font-bold mb-1">L1 · Philosophy</div>
+                <p>"The dashboard serves power users who need high-density information at a glance."</p>
               </div>
-            ))}
+              <div className="p-3 bg-white dark:bg-black/20 rounded border border-green-200 dark:border-green-800">
+                <div className="text-blue-600 dark:text-blue-400 font-bold mb-1">L5 · User Story US-101</div>
+                <p>{"id: US-101\ntitle: User sees KPI summary on load\nacceptance_criteria:\n  - id: AC-101-1\n    given: [visit: '/']\n    then: [shouldExist: '[data-test=kpi-summary]']"}</p>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

@@ -1,120 +1,97 @@
 # =============================================================================
-# USER STORIES: Content System — MVP Phase
+# USER STORIES: Content System — MVP
 # =============================================================================
-# @spec_version: 1.0.0
+# @spec_version: 7.3.2
 # @phase: MVP
-# @journey: VISITOR_ONBOARDING
+# @journey: SITE_EXPERIENCE
 # @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-16T00:00:00Z
 
 ---
 
-# =============================================================================
-# USER STORY: View meta banner
-# =============================================================================
-
-id: US-001
-title: Understand the site is a RootSpec demo before reading anything else
+id: US-201
+title: Visitor sees meta-banner explaining the site is a RootSpec demo
 
 acceptance_criteria:
-  - id: AC-001-1
-    title: Meta banner is visible without scrolling
+  - id: AC-201-1
+    title: Meta-banner is visible on page load
     narrative: |
-      Given I land on the page
+      Given I visit the site
       When the page loads
-      Then I see a banner explaining this site was built with RootSpec
+      Then I should see the meta-banner with the demo explanation
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
 
-  - id: AC-001-2
-    title: Meta banner contains link to spec files
+  - id: AC-201-2
+    title: Meta-banner contains link to the spec files
     narrative: |
-      Given I am viewing the meta banner
-      When I look at the banner
-      Then I see a link to the spec files on GitHub
+      Given I am viewing the meta-banner
+      When I look at its contents
+      Then I should see a link to view the spec
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner-spec-link]' }
+      - shouldExist: { selector: '[data-test=meta-banner] [data-test=view-spec-link]' }
 
-  - id: AC-001-3
-    title: Meta banner contains link to SEED.md
+  - id: AC-201-3
+    title: Meta-banner contains link to the seed file
     narrative: |
-      Given I am viewing the meta banner
-      When I look at the banner
-      Then I see a link to the SEED.md file
+      Given I am viewing the meta-banner
+      When I look at its contents
+      Then I should see a link to view the seed
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner-seed-link]' }
+      - shouldExist: { selector: '[data-test=meta-banner] [data-test=view-seed-link]' }
 
 ---
 
-# =============================================================================
-# USER STORY: Read the hero section
-# =============================================================================
-
-id: US-002
-title: Understand what RootSpec is from the hero section
+id: US-202
+title: Visitor sees the hero section with tagline and version badge
 
 acceptance_criteria:
-  - id: AC-002-1
-    title: Hero shows tagline
+  - id: AC-202-1
+    title: Hero section is visible with a headline
     narrative: |
-      Given I land on the page
+      Given I visit the site
       When the page loads
-      Then I see a tagline in the hero section
+      Then I should see the hero section with a prominent headline
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
+      - shouldExist: { selector: '[data-test=hero-section]' }
+      - shouldExist: { selector: '[data-test=hero-headline]' }
 
-  - id: AC-002-2
-    title: Hero shows version badge
+  - id: AC-202-2
+    title: Version badge is visible in the hero or header
     narrative: |
-      Given I land on the page
+      Given I visit the site
       When the page loads
-      Then I see the RootSpec version displayed in the hero
+      Then I should see the RootSpec version displayed
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=version-badge]' }
 
-  - id: AC-002-3
-    title: Hero shows primary CTA link
-    narrative: |
-      Given I am viewing the hero section
-      When I look at the hero
-      Then I see a link to the GitHub repo
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-cta]' }
-
 ---
 
-# =============================================================================
-# USER STORY: Read the problem section
-# =============================================================================
-
-id: US-003
-title: Recognize my pain points in the problem section
+id: US-203
+title: Visitor sees the problem section explaining why existing approaches fail
 
 acceptance_criteria:
-  - id: AC-003-1
-    title: Problem section exists with real content
+  - id: AC-203-1
+    title: Problem section is present on the page
     narrative: |
-      Given I scroll to the problem section
-      When I view the section
-      Then I see named pain points about spec drift and AI reliability
+      Given I visit the site
+      When I scroll down
+      Then I should see a section explaining the problem RootSpec solves
     given:
       - visit: '/'
     when: []
@@ -123,46 +100,38 @@ acceptance_criteria:
 
 ---
 
-# =============================================================================
-# USER STORY: Read how it works
-# =============================================================================
-
-id: US-004
-title: Understand the four-skill workflow
+id: US-204
+title: Visitor sees the four RootSpec skills explained
 
 acceptance_criteria:
-  - id: AC-004-1
-    title: How it works section shows four skills
+  - id: AC-204-1
+    title: How-it-works section is present with the four skills
     narrative: |
-      Given I scroll to the how it works section
-      When I view the section
-      Then I see all four skills described
+      Given I visit the site
+      When I scroll to the methodology section
+      Then I should see all four skills listed
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=how-it-works]' }
-      - shouldContain: { selector: '[data-test=how-it-works]', text: 'rs-init' }
-      - shouldContain: { selector: '[data-test=how-it-works]', text: 'rs-spec' }
-      - shouldContain: { selector: '[data-test=how-it-works]', text: 'rs-impl' }
-      - shouldContain: { selector: '[data-test=how-it-works]', text: 'rs-validate' }
+      - shouldExist: { selector: '[data-test=how-it-works-section]' }
+      - shouldContain: { selector: '[data-test=how-it-works-section]', text: 'rs-init' }
+      - shouldContain: { selector: '[data-test=how-it-works-section]', text: 'rs-spec' }
+      - shouldContain: { selector: '[data-test=how-it-works-section]', text: 'rs-impl' }
+      - shouldContain: { selector: '[data-test=how-it-works-section]', text: 'rs-validate' }
 
 ---
 
-# =============================================================================
-# USER STORY: Find the open source CTA
-# =============================================================================
-
-id: US-005
-title: Find the GitHub repo link to start using RootSpec
+id: US-205
+title: Visitor sees the open source CTA with GitHub link
 
 acceptance_criteria:
-  - id: AC-005-1
-    title: CTA section exists with GitHub link
+  - id: AC-205-1
+    title: CTA section contains GitHub link
     narrative: |
-      Given I reach the bottom of the page
-      When I view the CTA section
-      Then I see a link to the rootspec GitHub repo
+      Given I visit the site
+      When I reach the CTA section
+      Then I should see a link to the RootSpec GitHub repository
     given:
       - visit: '/'
     when: []
@@ -172,20 +141,16 @@ acceptance_criteria:
 
 ---
 
-# =============================================================================
-# USER STORY: View the footer attribution
-# =============================================================================
-
-id: US-006
-title: See who built the site and when
+id: US-206
+title: Visitor sees the footer with builder attribution
 
 acceptance_criteria:
-  - id: AC-006-1
-    title: Footer shows builder attribution and date
+  - id: AC-206-1
+    title: Footer is present with attribution text
     narrative: |
-      Given I reach the footer
-      When I view it
-      Then I see the builder name and build date
+      Given I visit the site
+      When I reach the bottom of the page
+      Then I should see a footer with builder attribution
     given:
       - visit: '/'
     when: []

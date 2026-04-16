@@ -1,69 +1,37 @@
 ---
-import { version } from '../../.rootspec.json';
 ---
-
-<header
-  class="w-full py-4 px-6"
-  style="background: var(--bg); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40; backdrop-filter: blur(8px);"
->
-  <div class="container-content flex items-center justify-between">
+<header class="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
     <div class="flex items-center gap-3">
-      <span class="font-bold text-lg" style="color: var(--fg);">RootSpec</span>
-      <span
-        data-test="version-badge"
-        class="text-xs font-mono px-2 py-0.5 rounded-full"
-        style="background: var(--card); border: 1px solid var(--border); color: var(--muted);"
-      >
-        v{version}
-      </span>
+      <span class="font-bold text-lg text-purple-600 dark:text-purple-400">RootSpec</span>
+      <span data-test="version-badge" class="text-xs bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full font-mono">v7.3.2</span>
     </div>
     <button
       data-test="theme-toggle"
       id="theme-toggle"
-      aria-label="Toggle dark/light mode"
-      class="p-2 rounded-lg transition-colors hover:bg-[var(--card)] focus-visible:outline-2"
-      style="color: var(--muted);"
+      aria-label="Toggle theme"
+      class="p-2 rounded-lg border border-[var(--border)] hover:bg-[var(--card)] transition-colors"
     >
-      <svg id="icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
-      </svg>
-      <svg id="icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-      </svg>
+      <span class="block dark:hidden">🌙</span>
+      <span class="hidden dark:block">☀️</span>
     </button>
   </div>
 </header>
-
 <script>
-  function initThemeToggle() {
-    const btn = document.getElementById('theme-toggle');
-    const sunIcon = document.getElementById('icon-sun');
-    const moonIcon = document.getElementById('icon-moon');
-
-    function updateIcons() {
-      const isDark = document.documentElement.classList.contains('dark');
-      if (sunIcon) sunIcon.classList.toggle('hidden', !isDark);
-      if (moonIcon) moonIcon.classList.toggle('hidden', isDark);
+  const btn = document.getElementById('theme-toggle');
+  btn?.addEventListener('click', () => {
+    const html = document.documentElement;
+    const isDark = html.classList.contains('dark');
+    if (isDark) {
+      html.classList.remove('dark');
+      html.classList.add('light');
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    } else {
+      html.classList.add('dark');
+      html.classList.remove('light');
+      html.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
     }
-
-    updateIcons();
-
-    if (btn) {
-      btn.addEventListener('click', () => {
-        const isDark = document.documentElement.classList.contains('dark');
-        if (isDark) {
-          document.documentElement.classList.remove('dark');
-          document.documentElement.setAttribute('data-theme', 'light');
-          localStorage.setItem('rootspec-theme', 'light');
-        } else {
-          document.documentElement.classList.add('dark');
-          document.documentElement.setAttribute('data-theme', 'dark');
-          localStorage.setItem('rootspec-theme', 'dark');
-        }
-        updateIcons();
-      });
-    }
-  }
-
-  initThemeToggle();
+  });
 </script>

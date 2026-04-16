@@ -1,34 +1,23 @@
 ---
 import '../styles/global.css';
-
-interface Props {
-  title?: string;
-  description?: string;
-}
-
-const { title = 'RootSpec — Purpose-Aligned Specification', description = 'A specification language for software where philosophy guides implementation, never vice versa.' } = Astro.props;
+const { title = 'RootSpec — Spec-first development' } = Astro.props;
 ---
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <script is:inline>
-      // Prevent flash of incorrect theme
-      (function() {
-        var stored = localStorage.getItem('rootspec-theme');
-        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        var theme = stored || (prefersDark ? 'dark' : 'light');
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
+      // Theme init: only override default (dark) if there's a stored preference
+      (function () {
+        const stored = localStorage.getItem('theme');
+        if (stored === 'light') {
           document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+          document.documentElement.setAttribute('data-theme', 'light');
         }
-        document.documentElement.setAttribute('data-theme', theme);
+        // Default is dark (already set in html tag above)
       })();
     </script>
   </head>

@@ -1,47 +1,36 @@
 # =============================================================================
-# FINE TUNING: Layout System
+# FINE-TUNING: Layout System
 # =============================================================================
-# @spec_version: 1.0.0
+# @spec_version: 7.3.2
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-16T00:00:00Z
 
-content_max_width:
-  value: 1200
-  # @unit: pixels
-  # @rationale: Wide enough for desktop reading; narrow enough to avoid overly long line lengths
-  # @constraint: min=960, max=1440
+section_entry_animation_duration:
+  value: 400
+  # @unit: milliseconds
+  # @rationale: Long enough to feel polished; short enough not to delay content consumption
+  # @constraint: min=200, max=600
 
-content_padding_horizontal:
+section_entry_offset:
   value: 24
   # @unit: pixels
-  # @rationale: Provides breathing room on mobile (min padding); scales up on wider viewports
+  # @rationale: Subtle upward travel on entry; enough to notice, not enough to feel like a jump
+  # @constraint: min=8, max=48
 
-breakpoints:
-  mobile:
-    value: 640
-    # @unit: pixels
-    # @rationale: Standard small screen breakpoint; below this, single-column layout applies
-  tablet:
-    value: 768
-    # @unit: pixels
-    # @rationale: iPad portrait and similar; two-column layouts may apply
-  desktop:
-    value: 1024
-    # @unit: pixels
-    # @rationale: Desktop-first layouts activate; full interactive component widths apply
-
-section_vertical_spacing:
-  value: 96
+mobile_breakpoint:
+  value: 640
   # @unit: pixels
-  # @rationale: Generous spacing between sections creates visual breathing room and separates conceptual areas
-  # @constraint: min=64, max=128
+  # @rationale: Standard small-screen breakpoint; matches Tailwind's sm breakpoint
+  # @constraint: min=480, max=768
 
-meta_banner_z_index:
-  value: 50
-  # @unit: z-index
-  # @rationale: Above page content, below any modal overlays; ensures banner is always readable
+tablet_breakpoint:
+  value: 1024
+  # @unit: pixels
+  # @rationale: Standard medium-screen breakpoint; matches Tailwind's lg breakpoint
+  # @constraint: min=768, max=1280
 
-header_z_index:
-  value: 40
-  # @unit: z-index
-  # @rationale: Sticky header stays above page content; below meta banner when both visible
+scroll_trigger_threshold:
+  value: 0.15
+  # @unit: ratio (0-1, fraction of element visible)
+  # @rationale: Trigger animation when 15% of the section is visible; avoids premature firing
+  # @constraint: min=0.05, max=0.4
