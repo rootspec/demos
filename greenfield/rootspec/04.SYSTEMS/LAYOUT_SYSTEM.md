@@ -1,70 +1,77 @@
-# Level 4: Layout System
-<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
+# Layout System
+
+**Version:** 7.3.2
+**Status:** Draft
+
+---
 
 ## Responsibility
 
-The Layout System owns page structure, responsive grid, navigation, and section ordering. It defines where things are, not what they contain or how they look visually.
+Owns the responsive grid, section structure, scroll behavior, and base path configuration for the static deployment. Provides the structural shell that all content and interactive sections are rendered within.
 
----
+## Boundaries
 
-## Page Structure
+- **Owns:** Page structure, responsive breakpoints, section spacing, base path (`/demos/greenfield/`)
+- **Does not own:** Content copy (CONTENT_SYSTEM), theme state (THEME_SYSTEM), component-level interaction state (INTERACTIVE_SYSTEM)
 
-The site is a single-page layout with a persistent header and a vertical stack of sections:
+## Data Owned
 
-1. Header (persistent, sticky)
-2. Meta Banner (persistent, high-visibility)
-3. Hero Section
-4. Problem Section
-5. How It Works Section
-6. Hierarchy Explorer Section
-7. Spec Wizard Section
-8. Before/After Comparison Section
-9. Open Source CTA Section
-10. Footer
+| Data | Source | Mutability |
+|------|--------|------------|
+| Viewport width | Browser | Read-only (observed) |
+| Scroll position | Browser | Read-only (observed) |
+| Base path | Build config | Static |
 
-The header provides jump links to major sections via anchor navigation. Smooth scrolling is applied to all anchor links.
+## Layout Structure
 
----
+```
+<html>
+  <head> (meta, styles, theme init script) </head>
+  <body>
+    <header> (logo, version badge, theme toggle, nav) </header>
+    <main>
+      <MetaBanner />
+      <HeroSection />
+      <ProblemSection />
+      <HowItWorksSection />
+      <HierarchyExplorerSection />
+      <SpecWizardSection />
+      <ComparisonSection />
+      <CTASection />
+    </main>
+    <footer> (attribution, build date) </footer>
+  </body>
+</html>
+```
 
 ## Responsive Behavior
 
-| Breakpoint | Behavior                                                              |
-|------------|-----------------------------------------------------------------------|
-| Mobile     | Single-column layout; header collapses to hamburger or simplified nav |
-| Tablet     | Single-column with wider margins; interactive components full-width   |
-| Desktop    | Content max-width centered; interactive sections may use two columns  |
+| Breakpoint | Layout Changes |
+|-----------|----------------|
+| Mobile (narrow) | Single column; touch targets expanded; comparison shows one panel |
+| Tablet (medium) | Two-column where appropriate; hierarchy explorer stacks |
+| Desktop (wide) | Full layout; side-by-side comparison; hierarchy explorer grid |
 
-All interactive components must be usable at all breakpoints. No content is hidden on mobile — it reflows.
+## Base Path
 
----
+The site is deployed to GitHub Pages at `/demos/greenfield/`. All asset URLs (CSS, JS, images/SVG), internal links, and the sitemap must be prefixed with this base path. The framework's base path configuration handles this at build time — not at runtime.
 
-## Z-Layering
+## Scroll Behavior
 
-| Layer    | Elements                                         |
-|----------|--------------------------------------------------|
-| Base     | Page content and sections                        |
-| Elevated | Sticky header, Meta Banner                       |
-| Overlay  | Modals or expanded states (if applicable)        |
+- Sections transition smoothly as the user scrolls
+- Section entry animations are triggered by scroll position (delegated to PRESENTATION_SYSTEM)
+- No horizontal scroll on any viewport size
+- Header remains visible (sticky or fixed) so theme toggle and version badge are always accessible
 
----
+## Rules
 
-## Navigation
-
-- Header links are anchor tags pointing to section IDs
-- Meta Banner is sticky or fixed at the top to maintain visibility
-- No multi-page routing — single page with sections
-
----
-
-## Subpath Deployment
-
-All internal links and asset URLs must include the base path `/demos/greenfield/`. The framework (Astro or equivalent) is configured with `base: '/demos/greenfield'` so that build output resolves correctly on GitHub Pages.
-
----
+- No layout-level JavaScript that cannot degrade gracefully
+- The base path must be set in framework config, not hardcoded in individual components
+- Section order matches the narrative flow: meta → hero → problem → methodology → interactive → CTA
 
 ## Interactions with Other Systems
 
-- Receives section content slots from CONTENT_SYSTEM
-- Provides structural context (grid, spacing) consumed by PRESENTATION_SYSTEM
-- Hosts component slots for INTERACTIVE_SYSTEM components
-- Is not responsible for colors, typography, or motion — those belong to PRESENTATION_SYSTEM
+- **CONTENT_SYSTEM:** Provides the shell that content sections render within; does not control content
+- **INTERACTIVE_SYSTEM:** Provides viewport size context; interactive components adapt their layout accordingly
+- **PRESENTATION_SYSTEM:** Scroll positions are passed to PRESENTATION_SYSTEM for triggering section entry animations
+- **THEME_SYSTEM:** Root element receives theme class before layout renders; no layout-specific theme logic

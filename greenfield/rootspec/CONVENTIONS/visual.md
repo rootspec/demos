@@ -1,51 +1,40 @@
 ## Color Palette
+- **Brand purple:** `#7c3aed` (purple-600) — primary actions, CTAs
+- **Brand blue:** `#2563eb` (blue-600) — rs-spec skill card accent
+- **Brand cyan:** `#0891b2` (cyan-600) — rs-impl skill card accent
+- **Brand green:** `#16a34a` (green-600) — rs-validate skill card accent
 
-- **Theme:** CSS custom properties on `:root` and `.dark`, toggled via `class` on `<html>`
-- **Default theme:** dark (per fine-tuning spec)
-- **Background:** `var(--bg)` — `#0a0f1a` (dark) / `#ffffff` (light)
-- **Foreground:** `var(--fg)` — `#e2e8f0` (dark) / `#0f172a` (light)
-- **Muted:** `var(--muted)` — `#94a3b8` (dark) / `#64748b` (light)
-- **Border:** `var(--border)` — `#1e293b` (dark) / `#e2e8f0` (light)
-- **Card background:** `var(--card)` — `#0f172a` (dark) / `#f8fafc` (light)
-- **Brand color:** `var(--brand)` — `#38bdf8` (dark) / `#0ea5e9` (light)
-- **Accent color:** `var(--accent)` — `#a78bfa` (dark) / `#8b5cf6` (light)
+## Theme Tokens (CSS custom properties)
+- **`--bg`:** Page background (`#ffffff` light / `#0f172a` dark)
+- **`--fg`:** Primary text (`#0f172a` light / `#f1f5f9` dark)
+- **`--muted`:** Secondary text (`#64748b` light / `#94a3b8` dark)
+- **`--border`:** Borders/dividers (`#e2e8f0` light / `#1e293b` dark)
+- **`--card`:** Card/section backgrounds (`#f8fafc` light / `#1e293b` dark)
 
 ## Typography
+- **Font:** System font stack (Tailwind default)
+- **Headings:** `font-bold` or `font-extrabold`, tight tracking on hero
+- **Monospace:** `font-mono` for skill names (rs-init, rs-spec, etc.) and code samples
+- **Body:** `text-sm` to `text-lg` depending on context
 
-- **Font family:** System sans-serif via Tailwind defaults
-- **Monospace:** JetBrains Mono, Fira Code, system monospace (used for code and skill names)
-- **Base size:** 16px (Tailwind default)
+## Spacing & Layout
+- **Max width:** `max-w-5xl` (sections), `max-w-4xl` (hero), `max-w-3xl` (wizard)
+- **Section padding:** `py-20 px-4` standard; `py-24` for hero
+- **Container:** `mx-auto` centering
 
-## Layout
+## Component Styles
+- **Cards:** `rounded-xl border-2 p-4/6` with colored border per skill/level
+- **Buttons:** `px-6 py-3 rounded-lg font-medium` with hover transition
+- **Meta-banner:** Purple-700 bg, white text, sticky at top
+- **Header:** Sticky, `bg-[var(--bg)]/90 backdrop-blur`, border-bottom
+- **Sections alternate:** White/card backgrounds for visual rhythm
 
-- **Max content width:** 1200px (`max-w-content`, per fine-tuning)
-- **Horizontal padding:** 24px (`px-6`)
-- **Section vertical spacing:** 96px (`py-24`, per fine-tuning)
-- **Mobile breakpoint:** 640px
-- **Tablet breakpoint:** 768px
-- **Desktop breakpoint:** 1024px
+## Meta-banner
+- Background: `bg-purple-700` (always purple, not themed)
+- Links: `underline font-medium` with hover lighten
 
-## Component Patterns
-
-- **Meta banner:** sticky top, z-index 50, visible on load
-- **Header:** sticky, z-index 40, contains version badge and theme toggle
-- **Cards:** `var(--card)` background, `var(--border)` border, `rounded-xl p-6`
-- **Buttons:** `rounded-lg`, `var(--brand)` or `var(--accent)` for primary actions
-- **Code elements:** `var(--card)` bg, `var(--accent)` text, `rounded px-1.5 py-0.5`
-
-## Interactive Components
-
-- **HierarchyExplorer:** React island, `client:load`, always-in-DOM content panels with CSS display toggle
-- **SpecWizard:** React island, `client:load`, 4-step linear flow, `data-test` on first option in each list
-- **ComparisonSection:** React island, `client:load`, toggle between two views
-- **Theme toggle:** vanilla JS in Header, instant (0ms transition), localStorage key `rootspec-theme`
-
-## Z-Index Scale
-
-- **Meta banner:** 50
-- **Header:** 40
-
-## Focus States
-
-- `outline: 2px solid var(--brand)` via `:focus-visible` global rule
-- All interactive elements: `minHeight: 44px` (WCAG touch target compliance)
+## Interactive States
+- **Hover:** Transition on `bg`, `border-color`, `color` — 150-200ms
+- **Focus:** Purple ring (`focus:ring-2 focus:ring-purple-500`)
+- **Disabled:** `opacity-40 cursor-not-allowed`
+- **Active/selected card:** Purple border + tinted background (`bg-purple-50 dark:bg-purple-950/40`)

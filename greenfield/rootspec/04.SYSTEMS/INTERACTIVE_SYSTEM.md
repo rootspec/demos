@@ -1,90 +1,100 @@
-# Level 4: Interactive System
-<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
+# Interactive System
+
+**Version:** 7.3.2
+**Status:** Draft
+
+---
 
 ## Responsibility
 
-The Interactive System owns all client-side interactive components: the hierarchy explorer, the spec wizard, and the before/after comparison toggle. It manages UI state for these components and handles all user interaction events.
+Owns all interactive features on the page: the Hierarchy Explorer visualization, the Spec Your Idea Wizard, and the Before/After Comparison toggle. All state is client-side and ephemeral (not persisted between sessions). No external API calls.
 
----
+## Boundaries
 
-## Components
+- **Owns:** Wizard step state, selected pillars, wizard output text, hierarchy level expansion state, comparison toggle state
+- **Does not own:** Theme (THEME_SYSTEM), layout grid (LAYOUT_SYSTEM), animations (PRESENTATION_SYSTEM)
+- **Does not call:** External APIs
+
+## Subsystems
 
 ### Hierarchy Explorer
 
-**State owned:**
-- `activeLevel` — which level (if any) is currently expanded
-- `hoveredLevel` — which level (if any) is currently hovered
-- `connectionHighlights` — which reference arrows are currently highlighted
+A visual, interactive representation of the five RootSpec levels.
+
+**Data owned:**
+| Data | Type | Default |
+|------|------|---------|
+| Active level | enum (L1–L5) or null | null |
+| Hovered level | enum (L1–L5) or null | null |
 
 **Behavior:**
-- Clicking a level toggles its expanded state
-- Hovering a level highlights its allowed reference connections (upward arrows only)
-- Only one level may be expanded at a time
-- Keyboard: Arrow keys move focus between levels; Enter/Space toggle expansion; Escape collapses
+- Each level is a card: title, icon, one-sentence role description
+- Clicking a card expands it to show example content for that level
+- Reference arrows connect levels; when a level is active, arrows to its allowed references highlight
+- Levels that the active level cannot reference dim (visual de-emphasis)
+- Only one level is expanded at a time; activating another collapses the previous
 
-**Content source:** Level names, descriptions, and example content provided by CONTENT_SYSTEM
+**Reference map (derived from L1-L4 hierarchy rules):**
+- L1: no inbound references; no arrows from above
+- L2: can reference L1
+- L3: can reference L1, L2
+- L4: can reference L1, L2, L3, sibling L4
+- L5: can reference all levels
 
-**Visual output:** Expanded content panels, arrow highlights — rendered using PRESENTATION_SYSTEM tokens
+### Spec Your Idea Wizard
 
-**Accessibility:**
-- ARIA role="tree" on the explorer container
-- ARIA role="treeitem" on each level
-- ARIA expanded/collapsed state communicated
-- Focus visible on all interactive elements
+A three-step guided wizard that produces a skeleton spec fragment (L1-L3) from user input.
 
-**Degradation:** If JavaScript unavailable, render all levels as static collapsed summaries
+**Data owned:**
+| Data | Type | Default |
+|------|------|---------|
+| Current step | integer (1–3) | 1 |
+| Product idea | string | "" |
+| Selected mission template | string or "custom" | null |
+| Custom mission text | string | "" |
+| Selected design pillars | string[] | [] |
+| Key interaction text | string | "" |
+| Output spec | string | null |
 
----
+**Steps:**
+1. Enter product idea (text input, required)
+2. Select or write mission (radio: choose from [small count] templates, or write custom text)
+3. Select design pillars from suggestions (multi-select, minimum [small count], maximum [moderate count]) and describe one key interaction (text input, required)
 
-### Spec Wizard
+**Output generation:**
+- Fully client-side template assembly
+- Output is a markdown-formatted spec skeleton showing L1 (mission + pillars), L2 (implied trade-off), L3 (key interaction pattern) based on user inputs
+- Output is displayed in a read-only panel; user can copy it
 
-**State owned:**
-- `step` — current step (1-4)
-- `productIdea` — free text, step 1
-- `missionSelection` — selected or written mission, step 2
-- `selectedPillars` — array of [min-to-max] pillar selections, step 3
-- `keyInteraction` — free text, step 4
-- `outputVisible` — whether output skeleton is shown
-
-**Behavior:**
-- Step 1: Text input for product idea; advancing to step 2 requires non-empty input
-- Step 2: Radio or button selection from mission templates, with optional free-text override
-- Step 3: Multi-select of [min-to-max] design pillars from suggestions; custom entry allowed
-- Step 4: Text input for key interaction
-- Output: Generated inline below the form when step 4 is complete; maps inputs to L1-L3 structure
-- No data sent externally; all processing is client-side template substitution
-
-**Templates:** Provided by CONTENT_SYSTEM — wizard does not own the copy, only the state
-
-**Keyboard:** Tab between inputs; Enter to advance; Back button navigable via keyboard
-
-**Touch:** Large tap targets ([wcag-minimum-size] minimum); scroll to output on generation
-
-**Degradation:** If JavaScript unavailable, show static description of the wizard with link to GitHub
-
----
+**Validation:**
+- Step 1: product idea must be non-empty to advance
+- Step 3: at least [minimum pillar count] pillars must be selected and key interaction must be non-empty to generate output
 
 ### Before/After Comparison
 
-**State owned:**
-- `activeView` — "before" or "after"
+A toggle showing two states of the same product scenario: "without spec" and "with RootSpec".
 
-**Behavior:**
-- Toggle button switches between "Without spec" and "With RootSpec" views
-- Both views contain real content (provided by CONTENT_SYSTEM)
-- Transition is smooth (PRESENTATION_SYSTEM animation)
-- On mobile: stacked view with toggle still functional
+**Data owned:**
+| Data | Type | Default |
+|------|------|---------|
+| Active panel | enum ("before", "after") | "before" |
 
-**Keyboard:** Toggle button is keyboard-focusable; Enter/Space switches view
+**Content:**
+- Both panels contain real, non-placeholder content
+- "Without spec": vague requirements doc, ambiguous stories, untraceable decisions
+- "With RootSpec": structured hierarchy excerpt, testable stories, decision traceability note
+- On mobile: single panel with toggle button; on desktop: side-by-side or slider
 
-**Degradation:** Both views rendered stacked if JavaScript unavailable, labeled clearly
+## Rules
 
----
+- All state is ephemeral; refreshing the page resets all interactive components
+- No data is sent anywhere; all processing is local
+- Wizard output must be deterministic for the same inputs (no randomness)
+- Interactive components must render meaningful static content if JavaScript is unavailable
 
 ## Interactions with Other Systems
 
-- Reads initial data from CONTENT_SYSTEM (wizard templates, explorer content)
-- Triggers visual changes via class mutations consumed by PRESENTATION_SYSTEM
-- Sends theme toggle action to THEME_SYSTEM
-- Uses LAYOUT_SYSTEM grid for component placement
-- Does not own copy, colors, or layout tokens
+- **LAYOUT_SYSTEM:** Receives viewport size; adapts layout of hierarchy explorer (stack vs. grid) and comparison (single vs. side-by-side)
+- **PRESENTATION_SYSTEM:** Triggers animations on state change (expand, step transition, panel switch); does not own animation logic
+- **CONTENT_SYSTEM:** Wizard output text is owned by INTERACTIVE_SYSTEM, not CONTENT_SYSTEM
+- **THEME_SYSTEM:** Inherits theme via CSS class on root; no JavaScript wiring needed

@@ -1,63 +1,32 @@
 ---
-const skills = [
-  {
-    name: 'rs-init',
-    step: '01',
-    tagline: 'Bootstrap your spec',
-    desc: 'Creates the directory structure and axiom files. Establishes the philosophical foundation before any implementation decisions.',
-    color: 'var(--brand)',
-  },
-  {
-    name: 'rs-spec',
-    step: '02',
-    tagline: 'Fill all five levels',
-    desc: 'Interviews you about mission, pillars, truths, and interactions. Derives systems architecture from your philosophy, not the other way around.',
-    color: 'var(--brand)',
-  },
-  {
-    name: 'rs-impl',
-    step: '03',
-    tagline: 'Implement from stories',
-    desc: 'Takes validated user stories and builds test-driven implementation. Every feature traces back to a design pillar.',
-    color: 'var(--accent)',
-  },
-  {
-    name: 'rs-validate',
-    step: '04',
-    tagline: 'Run the validation gate',
-    desc: 'Executes all tests, generates coverage report, and confirms spec alignment. Pass or fail — no ambiguity.',
-    color: 'var(--accent)',
-  },
-];
 ---
-
-<section data-test="how-it-works" class="section-spacing" style="background: var(--bg);">
-  <div class="container-content">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--fg);">How it works</h2>
-      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
-        Four skills cover the full specification lifecycle — from blank slate to validated implementation.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {skills.map((skill) => (
-        <div class="card flex gap-4">
-          <div class="flex-shrink-0">
-            <span
-              class="text-xs font-mono px-2 py-0.5 rounded-full"
-              style={`background: ${skill.color}22; color: ${skill.color}; border: 1px solid ${skill.color}44;`}
-            >
-              {skill.step}
-            </span>
-          </div>
-          <div>
-            <code class="text-sm font-mono font-bold" style={`color: ${skill.color};`}>{skill.name}</code>
-            <p class="font-semibold text-sm mt-1 mb-1" style="color: var(--fg);">{skill.tagline}</p>
-            <p class="text-sm leading-relaxed" style="color: var(--muted);">{skill.desc}</p>
-          </div>
-        </div>
-      ))}
+<section id="how-it-works" data-test="how-it-works-section" class="py-20 px-4">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-4 text-[var(--fg)]">Four skills. One methodology.</h2>
+    <p class="text-center text-[var(--muted)] mb-12 max-w-2xl mx-auto">
+      RootSpec breaks the spec-to-ship pipeline into four composable skills you can run at any stage of development.
+    </p>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="p-6 rounded-xl border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/30">
+        <div class="font-mono text-purple-600 dark:text-purple-400 font-bold text-lg mb-2">rs-init</div>
+        <h3 class="font-semibold mb-2 text-[var(--fg)]">Initialize</h3>
+        <p class="text-sm text-[var(--muted)]">Scaffold the spec directory, conventions, and test infrastructure for your project.</p>
+      </div>
+      <div class="p-6 rounded-xl border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
+        <div class="font-mono text-blue-600 dark:text-blue-400 font-bold text-lg mb-2">rs-spec</div>
+        <h3 class="font-semibold mb-2 text-[var(--fg)]">Specify</h3>
+        <p class="text-sm text-[var(--muted)]">Transform a product seed into a structured 5-level specification with user stories and acceptance criteria.</p>
+      </div>
+      <div class="p-6 rounded-xl border border-cyan-200 dark:border-cyan-800 bg-cyan-50 dark:bg-cyan-950/30">
+        <div class="font-mono text-cyan-600 dark:text-cyan-400 font-bold text-lg mb-2">rs-impl</div>
+        <h3 class="font-semibold mb-2 text-[var(--fg)]">Implement</h3>
+        <p class="text-sm text-[var(--muted)]">Build features from user stories, test-driven, one story at a time, with automated verification.</p>
+      </div>
+      <div class="p-6 rounded-xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/30">
+        <div class="font-mono text-green-600 dark:text-green-400 font-bold text-lg mb-2">rs-validate</div>
+        <h3 class="font-semibold mb-2 text-[var(--fg)]">Validate</h3>
+        <p class="text-sm text-[var(--muted)]">Run a full review pass — automated tests, spec coverage, and LLM review — to surface gaps.</p>
+      </div>
     </div>
   </div>
 </section>

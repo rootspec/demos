@@ -1,80 +1,48 @@
 # =============================================================================
-# USER STORIES: Responsive & Accessibility — MVP Phase
+# USER STORIES: Responsive Layout — MVP
 # =============================================================================
-# @spec_version: 1.0.0
+# @spec_version: 7.3.2
 # @phase: MVP
-# @journey: ACCESSIBILITY
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @journey: SITE_EXPERIENCE
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-16T00:00:00Z
 
 ---
 
-# =============================================================================
-# USER STORY: Use site on mobile
-# =============================================================================
-
-id: US-030
-title: Access all content and interactive features on a mobile device
+id: US-401
+title: Site renders correctly on mobile viewport
 
 acceptance_criteria:
-  - id: AC-030-1
-    title: Page renders all sections on mobile viewport
+  - id: AC-401-1
+    title: Page is usable on a narrow viewport
     narrative: |
-      Given I visit the page on a mobile device
+      Given I visit the site on a mobile device
       When the page loads
-      Then I can see all major sections without horizontal scrolling
+      Then all major sections should be visible without horizontal scrolling
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
       - shouldExist: { selector: '[data-test=meta-banner]' }
-
-  - id: AC-030-2
-    title: Hierarchy explorer is usable on mobile
-    narrative: |
-      Given I am on mobile and scroll to the hierarchy explorer
-      When I tap a hierarchy level
-      Then it expands with its content visible
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+      - shouldExist: { selector: '[data-test=hero-section]' }
+      - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
 
 ---
 
-# =============================================================================
-# USER STORY: Keyboard navigation of interactive elements
-# =============================================================================
-
-id: US-031
-title: Navigate all interactive elements without a mouse
+id: US-402
+title: Site is navigable without JavaScript
 
 acceptance_criteria:
-  - id: AC-031-1
-    title: Theme toggle is keyboard accessible
+  - id: AC-402-1
+    title: Core content is visible without JavaScript
     narrative: |
-      Given I am using keyboard navigation
-      When I tab to the theme toggle and press Enter
-      Then the theme changes
+      Given JavaScript is unavailable
+      When I visit the site
+      Then I should still see the meta-banner, hero, problem, and CTA sections
     given:
       - visit: '/'
-    when:
-      - click: { selector: '[data-test=theme-toggle]' }
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
-
-  - id: AC-031-2
-    title: Hierarchy explorer levels have visible focus states
-    narrative: |
-      Given I am using keyboard navigation
-      When I tab to a hierarchy level
-      Then I see a visible focus indicator
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1]' }
+      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: '[data-test=hero-section]' }
+      - shouldExist: { selector: '[data-test=cta-section]' }
