@@ -23,6 +23,11 @@ on:
         description: "Comma-separated phases"
         required: false
         default: "init,spec,impl,validate,review"
+      run_llm_review:
+        description: "Run the LLM visual review stage (advisory)"
+        required: false
+        type: boolean
+        default: true
       rootspec_version:
         description: "RootSpec version (default: auto-detect from installed skills)"
         required: false
@@ -184,12 +189,17 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
+          LLM_FLAG=""
+          if [ "${{ inputs.run_llm_review }}" = "false" ]; then
+            LLM_FLAG="--no-llm-review"
+          fi
           node /tmp/rootspec/orchestrator/dist/bin/rs-orchestrate.js \
             --project-dir "${{ github.workspace }}/${{ inputs.demo }}" \
             --rootspec-dir /tmp/rootspec \
             --budget "${{ inputs.max_budget }}" \
             --model "${{ inputs.model }}" \
             --phases "${{ inputs.phases }}" \
+            $LLM_FLAG \
             2>&1 | tee /tmp/orchestrator-output.log || true
 
       # ── Extract results ──────────────────────────────────
@@ -214,28 +224,18 @@ jobs:
             COST=$(jq -r '.totalCostUsd // 0 | . * 100 | round / 100' "$STATE" 2>/dev/null || echo "?")
           fi
 
-          # Quality score from stats.json (orchestrator's run entry)
-          SCORE="n/a"
-          if [ -f "$STATS" ]; then
-            SCORE=$(jq -r '.runs[-1].qualityScore // "n/a"' "$STATS" 2>/dev/null || echo "n/a")
-          fi
-          # Fallback: parse from review gate message in state.json
-          if [ "$SCORE" = "n/a" ] || [ "$SCORE" = "null" ]; then
-            if [ -f "$STATE" ]; then
-              SCORE=$(jq -r '
-                .gateResults.review.checks[]? |
-                select(.name == "Review completed") |
-                .message | capture("Score: (?<s>[0-9]+)") | .s
-              ' "$STATE" 2>/dev/null || echo "n/a")
-            fi
-          fi
-
-          # Blockers and warnings from review-status.json
+          # Review summary from review-status.json (new hybrid shape)
           BLOCKERS="0"
           WARNINGS="0"
+          PAGES="0"
+          LLM_ASSESS="skipped"
+          LLM_OBS="0"
           if [ -f "$REVIEW" ]; then
-            BLOCKERS=$(jq -r '.summary.blockers // 0' "$REVIEW" 2>/dev/null || echo "0")
-            WARNINGS=$(jq -r '.summary.warnings // 0' "$REVIEW" 2>/dev/null || echo "0")
+            BLOCKERS=$(jq -r '.summary.staticBlockers // 0' "$REVIEW" 2>/dev/null || echo "0")
+            WARNINGS=$(jq -r '.summary.staticWarnings // 0' "$REVIEW" 2>/dev/null || echo "0")
+            PAGES=$(jq -r '.summary.pagesScanned // 0' "$REVIEW" 2>/dev/null || echo "0")
+            LLM_ASSESS=$(jq -r '.llmFindings.assessment // "skipped"' "$REVIEW" 2>/dev/null || echo "skipped")
+            LLM_OBS=$(jq -r '(.llmFindings.observations // []) | length' "$REVIEW" 2>/dev/null || echo "0")
           fi
 
           # Test pass rate from tests-status.json (stories is an object)
@@ -265,9 +265,11 @@ jobs:
           {
             echo "status=${STATUS}"
             echo "cost=${COST}"
-            echo "score=${SCORE}"
             echo "blockers=${BLOCKERS}"
             echo "warnings=${WARNINGS}"
+            echo "pages=${PAGES}"
+            echo "llm_assess=${LLM_ASSESS}"
+            echo "llm_obs=${LLM_OBS}"
             echo "tests=${TESTS}"
           } >> "$GITHUB_OUTPUT"
 
@@ -327,8 +329,9 @@ jobs:
             --body "$(cat <<EOF
           ## Summary
           - **Status**: ${{ steps.summary.outputs.status }}
-          - **Quality score**: ${{ steps.summary.outputs.score }}/100 (${{ steps.summary.outputs.blockers }} blockers, ${{ steps.summary.outputs.warnings }} warnings)
           - **Tests**: ${{ steps.summary.outputs.tests }} passing
+          - **Static review**: ${{ steps.summary.outputs.blockers }} blockers, ${{ steps.summary.outputs.warnings }} warnings across ${{ steps.summary.outputs.pages }} page(s)
+          - **LLM assessment**: ${{ steps.summary.outputs.llm_assess }} (${{ steps.summary.outputs.llm_obs }} observations)
           - **Cost**: \$${{ steps.summary.outputs.cost }} / \$${{ inputs.max_budget }} budget
           - **Model**: ${{ inputs.model }}
 
