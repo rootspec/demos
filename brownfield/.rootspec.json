@@ -1,5 +1,5 @@
 {
-  "version": "7.2.7",
+  "version": "7.3.1",
   "specDirectory": "rootspec",
   "prerequisites": {
     "devServer": "./scripts/dev.sh",
