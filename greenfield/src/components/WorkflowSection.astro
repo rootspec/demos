@@ -1,60 +1,67 @@
 ---
 const skills = [
   {
-    name: 'rs-init',
+    cmd: 'rs-init',
+    label: 'Initialize',
+    color: 'text-brand-500',
+    borderColor: 'border-brand-500/30',
+    bgColor: 'bg-brand-500/5',
+    description: 'Bootstrap your project with a RootSpec skeleton — axioms, structure, and conventions ready to go.',
     step: '01',
-    tagline: 'Bootstrap your spec',
-    desc: 'Creates the directory structure and axiom files. Establishes the philosophical foundation before any implementation decisions.',
-    color: 'var(--brand)',
   },
   {
-    name: 'rs-spec',
+    cmd: 'rs-spec',
+    label: 'Specify',
+    color: 'text-accent-400',
+    borderColor: 'border-accent-500/30',
+    bgColor: 'bg-accent-500/5',
+    description: 'Collaboratively write L1–L5 specs with an AI agent. User stories with machine-readable acceptance criteria.',
     step: '02',
-    tagline: 'Fill all five levels',
-    desc: 'Interviews you about mission, pillars, truths, and interactions. Derives systems architecture from your philosophy, not the other way around.',
-    color: 'var(--brand)',
   },
   {
-    name: 'rs-impl',
+    cmd: 'rs-impl',
+    label: 'Implement',
+    color: 'text-green-400',
+    borderColor: 'border-green-500/30',
+    bgColor: 'bg-green-500/5',
+    description: 'AI implements features test-first, one story at a time. Every story is verified against the spec.',
     step: '03',
-    tagline: 'Implement from stories',
-    desc: 'Takes validated user stories and builds test-driven implementation. Every feature traces back to a design pillar.',
-    color: 'var(--accent)',
   },
   {
-    name: 'rs-validate',
+    cmd: 'rs-validate',
+    label: 'Validate',
+    color: 'text-yellow-400',
+    borderColor: 'border-yellow-500/30',
+    bgColor: 'bg-yellow-500/5',
+    description: 'Run the full test suite. Get a pass/fail report tied back to your spec stories. Ship with confidence.',
     step: '04',
-    tagline: 'Run the validation gate',
-    desc: 'Executes all tests, generates coverage report, and confirms spec alignment. Pass or fail — no ambiguity.',
-    color: 'var(--accent)',
   },
 ];
 ---
 
-<section data-test="how-it-works" class="section-spacing" style="background: var(--bg);">
-  <div class="container-content">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--fg);">How it works</h2>
-      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
-        Four skills cover the full specification lifecycle — from blank slate to validated implementation.
+<section
+  data-test="workflow-section"
+  id="workflow"
+  class="py-24 px-4 bg-[var(--bg-secondary)]"
+>
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">How it works</h2>
+      <p class="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+        Four skills. One repeatable loop. From idea to working software with full spec traceability.
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {skills.map((skill) => (
-        <div class="card flex gap-4">
-          <div class="flex-shrink-0">
-            <span
-              class="text-xs font-mono px-2 py-0.5 rounded-full"
-              style={`background: ${skill.color}22; color: ${skill.color}; border: 1px solid ${skill.color}44;`}
-            >
-              {skill.step}
-            </span>
+        <div class={`relative p-6 rounded-xl border ${skill.borderColor} ${skill.bgColor} flex flex-col gap-4`}>
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-[var(--text-secondary)] font-mono">{skill.step}</span>
+            <code class={`text-sm font-mono font-bold ${skill.color}`}>{skill.cmd}</code>
           </div>
           <div>
-            <code class="text-sm font-mono font-bold" style={`color: ${skill.color};`}>{skill.name}</code>
-            <p class="font-semibold text-sm mt-1 mb-1" style="color: var(--fg);">{skill.tagline}</p>
-            <p class="text-sm leading-relaxed" style="color: var(--muted);">{skill.desc}</p>
+            <h3 class="font-semibold text-lg mb-2">{skill.label}</h3>
+            <p class="text-sm text-[var(--text-secondary)] leading-relaxed">{skill.description}</p>
           </div>
         </div>
       ))}

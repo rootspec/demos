@@ -1,23 +1,16 @@
 # =============================================================================
-# FINE TUNING: Theme System
+# FINE-TUNING: Theme System
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-16T00:00:00Z
 
-default_theme:
-  value: "dark"
-  # @unit: string enum (dark | light)
-  # @rationale: Developer audience expects dark mode; matches PRESENTATION_SYSTEM default palette
-  # @constraint: must be "dark" or "light"
-
-storage_key:
+localStorage_key:
   value: "rootspec-theme"
   # @unit: string
-  # @rationale: Unique key to avoid collision with other localStorage entries on GitHub Pages domain
+  # @rationale: Namespaced key avoids collision with other tools on same domain
 
-theme_transition_duration:
-  value: 0
-  # @unit: milliseconds
-  # @rationale: Theme toggle is instant; no transition avoids jarring mid-render color changes
-  # @constraint: 0 means no CSS transition on theme switch
+default_theme:
+  value: "system"
+  # @unit: enum (system | dark | light)
+  # @rationale: Respects user OS preference on first visit; only overridden by manual toggle

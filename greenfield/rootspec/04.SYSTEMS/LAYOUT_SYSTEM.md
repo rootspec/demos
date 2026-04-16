@@ -1,70 +1,40 @@
-# Level 4: Layout System
-<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
+# System: Layout System
+
+> References: L1 (01.PHILOSOPHY.md), L2 (02.TRUTHS.md), L3 (03.INTERACTIONS.md)
+> Interacts with: CONTENT_SYSTEM, INTERACTIVE_SYSTEM, THEME_SYSTEM, PRESENTATION_SYSTEM
 
 ## Responsibility
 
-The Layout System owns page structure, responsive grid, navigation, and section ordering. It defines where things are, not what they contain or how they look visually.
+Owns the page shell: HTML document structure, `<head>`, navigation header, footer, section grid, and responsive breakpoints. All page sections are composed inside the Layout.
 
----
+## Components
 
-## Page Structure
+- `Layout.astro` — Root layout: `<html>`, `<head>`, meta tags, theme script, slot for page content
+- `Header.astro` — Site navigation, version badge, theme toggle button
+- Page-level grid in `src/pages/index.astro` — arranges all sections in order
 
-The site is a single-page layout with a persistent header and a vertical stack of sections:
+## Base Path Configuration
 
-1. Header (persistent, sticky)
-2. Meta Banner (persistent, high-visibility)
-3. Hero Section
-4. Problem Section
-5. How It Works Section
-6. Hierarchy Explorer Section
-7. Spec Wizard Section
-8. Before/After Comparison Section
-9. Open Source CTA Section
-10. Footer
+All asset URLs and internal links must use Astro's `base` config set to `/demos/greenfield/`. This ensures correct resolution when served from the GitHub Pages subpath.
 
-The header provides jump links to major sections via anchor navigation. Smooth scrolling is applied to all anchor links.
+## Responsive Breakpoints
 
----
+Standard Tailwind breakpoints:
+- Mobile: default (< 768px)
+- Tablet: `md:` (≥ 768px)
+- Desktop: `lg:` (≥ 1024px)
 
-## Responsive Behavior
+All interactive features must be functional and touch-friendly at mobile breakpoint.
 
-| Breakpoint | Behavior                                                              |
-|------------|-----------------------------------------------------------------------|
-| Mobile     | Single-column layout; header collapses to hamburger or simplified nav |
-| Tablet     | Single-column with wider margins; interactive components full-width   |
-| Desktop    | Content max-width centered; interactive sections may use two columns  |
+## Data Owned
 
-All interactive components must be usable at all breakpoints. No content is hidden on mobile — it reflows.
+- Page metadata (title, description, OG tags) — injected per-page via Layout props
+- Navigation items — static array in Header component
+- Footer attribution — builder name and build date (injected at build time)
 
----
+## Boundaries
 
-## Z-Layering
-
-| Layer    | Elements                                         |
-|----------|--------------------------------------------------|
-| Base     | Page content and sections                        |
-| Elevated | Sticky header, Meta Banner                       |
-| Overlay  | Modals or expanded states (if applicable)        |
-
----
-
-## Navigation
-
-- Header links are anchor tags pointing to section IDs
-- Meta Banner is sticky or fixed at the top to maintain visibility
-- No multi-page routing — single page with sections
-
----
-
-## Subpath Deployment
-
-All internal links and asset URLs must include the base path `/demos/greenfield/`. The framework (Astro or equivalent) is configured with `base: '/demos/greenfield'` so that build output resolves correctly on GitHub Pages.
-
----
-
-## Interactions with Other Systems
-
-- Receives section content slots from CONTENT_SYSTEM
-- Provides structural context (grid, spacing) consumed by PRESENTATION_SYSTEM
-- Hosts component slots for INTERACTIVE_SYSTEM components
-- Is not responsible for colors, typography, or motion — those belong to PRESENTATION_SYSTEM
+- Does NOT own section content (CONTENT_SYSTEM)
+- Does NOT own theme state (THEME_SYSTEM), but renders the toggle button
+- Does NOT own interactive widget logic (INTERACTIVE_SYSTEM)
+- Provides the structural frame; all other systems slot into it

@@ -5,60 +5,29 @@ import Header from '../components/Header.astro';
 import HeroSection from '../components/HeroSection.astro';
 import ProblemSection from '../components/ProblemSection.astro';
 import WorkflowSection from '../components/WorkflowSection.astro';
+import HierarchySection from '../components/HierarchySection.astro';
+import MethodologyDiagram from '../components/MethodologyDiagram.astro';
+import ComparisonSection from '../components/ComparisonSection.tsx';
+import SpecWizard from '../components/SpecWizard.tsx';
 import CTASection from '../components/CTASection.astro';
-import HierarchyExplorer from '../components/HierarchyExplorer';
-import SpecWizard from '../components/SpecWizard';
-import ComparisonSection from '../components/ComparisonSection';
-
-const buildDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<Layout>
+<Layout title="RootSpec — Spec-Driven AI Development">
   <MetaBanner />
   <Header />
   <main>
     <HeroSection />
     <ProblemSection />
     <WorkflowSection />
-
-    <!-- Hierarchy Explorer Section -->
-    <section class="section-spacing" style="background: var(--bg);">
-      <div class="container-content">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--fg);">The five-level hierarchy</h2>
-          <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
-            Each level can only reference higher levels, never lower. Click a level to explore.
-          </p>
-        </div>
-        <HierarchyExplorer client:load />
-      </div>
-    </section>
-
-    <!-- Spec Wizard Section -->
-    <section class="section-spacing" style="background: var(--card);">
-      <div class="container-content">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--fg);">Spec your own idea</h2>
-          <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
-            Walk through three steps and get a skeleton L1–L3 spec for your product. Client-side only — no AI.
-          </p>
-        </div>
-        <SpecWizard client:load />
-      </div>
-    </section>
-
+    <HierarchySection />
+    <MethodologyDiagram />
     <ComparisonSection client:load />
+    <SpecWizard client:load />
     <CTASection />
   </main>
-
-  <footer data-test="footer" class="py-12" style="background: var(--card); border-top: 1px solid var(--border);">
-    <div class="container-content text-center">
-      <p data-test="footer-attribution" class="text-sm" style="color: var(--muted);">
-        Built by Claude (Anthropic) · {buildDate}
-      </p>
-      <p class="text-xs mt-2" style="color: var(--muted); opacity: 0.6;">
-        Generated from a ~100-line product description using the RootSpec pipeline.
-      </p>
-    </div>
+  <footer class="py-8 px-4 text-center border-t border-white/10">
+    <p class="text-[var(--text-secondary)] text-sm font-mono">
+      RootSpec v7.3.0 · Built with Claude Code
+    </p>
   </footer>
 </Layout>

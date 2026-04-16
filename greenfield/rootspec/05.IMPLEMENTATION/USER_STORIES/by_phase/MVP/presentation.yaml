@@ -1,0 +1,54 @@
+# =============================================================================
+# USER STORY: RootSpec Methodology Diagram Visible
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_TIME_ARRIVAL
+# @systems: [PRESENTATION_SYSTEM, CONTENT_SYSTEM]
+# @last_updated: 2026-04-16T00:00:00Z
+
+id: US-501
+title: RootSpec methodology diagram is visible on the page
+requirement_id: R-501
+
+acceptance_criteria:
+  - id: AC-501-1
+    title: Methodology diagram renders in the page
+    narrative: |
+      Given I visit the site homepage
+      When the page loads
+      Then I should see the RootSpec methodology diagram
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=methodology-diagram]' }
+
+---
+# =============================================================================
+# USER STORY: Section Entrance Animations
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_TIME_ARRIVAL
+# @systems: [PRESENTATION_SYSTEM]
+# @last_updated: 2026-04-16T00:00:00Z
+
+id: US-502
+title: Page sections animate into view as user scrolls
+requirement_id: R-502
+
+acceptance_criteria:
+  - id: AC-502-1
+    title: Main sections are visible after scroll
+    narrative: |
+      Given I visit the site homepage
+      When I scroll through the page
+      Then each major section should be visible and readable
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=hero-section]' }
+      - shouldExist: { selector: '[data-test=problem-section]' }
+      - shouldExist: { selector: '[data-test=workflow-section]' }

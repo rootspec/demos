@@ -1,194 +1,166 @@
 # =============================================================================
-# USER STORIES: Content System — MVP Phase
+# USER STORY: Meta Banner Visible and Linked
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: VISITOR_ONBOARDING
+# @journey: FIRST_TIME_ARRIVAL
 # @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-16T00:00:00Z
 
----
-
-# =============================================================================
-# USER STORY: View meta banner
-# =============================================================================
-
-id: US-001
-title: Understand the site is a RootSpec demo before reading anything else
+id: US-101
+title: Meta banner explains demo context with working GitHub links
+requirement_id: R-101
 
 acceptance_criteria:
-  - id: AC-001-1
-    title: Meta banner is visible without scrolling
+  - id: AC-101-1
+    title: Meta banner is visible on page load
     narrative: |
-      Given I land on the page
+      Given I visit the site homepage
       When the page loads
-      Then I see a banner explaining this site was built with RootSpec
+      Then I should see the meta banner with demo framing text
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldContain: { selector: '[data-test=meta-banner]', text: 'RootSpec' }
 
-  - id: AC-001-2
-    title: Meta banner contains link to spec files
+  - id: AC-101-2
+    title: Meta banner links to spec files on GitHub
     narrative: |
-      Given I am viewing the meta banner
-      When I look at the banner
-      Then I see a link to the spec files on GitHub
+      Given I visit the site homepage
+      When the page loads
+      Then I should see links to the spec and seed in the meta banner
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner-spec-link]' }
-
-  - id: AC-001-3
-    title: Meta banner contains link to SEED.md
-    narrative: |
-      Given I am viewing the meta banner
-      When I look at the banner
-      Then I see a link to the SEED.md file
-    given:
-      - visit: '/'
-    when: []
-    then:
       - shouldExist: { selector: '[data-test=meta-banner-seed-link]' }
 
 ---
-
 # =============================================================================
-# USER STORY: Read the hero section
+# USER STORY: Hero Section Communicates Value
 # =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_TIME_ARRIVAL
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-16T00:00:00Z
 
-id: US-002
-title: Understand what RootSpec is from the hero section
+id: US-102
+title: Hero section displays tagline, explanation, and version badge
+requirement_id: R-102
 
 acceptance_criteria:
-  - id: AC-002-1
-    title: Hero shows tagline
+  - id: AC-102-1
+    title: Hero shows tagline and one-line explanation
     narrative: |
-      Given I land on the page
+      Given I visit the site homepage
       When the page loads
-      Then I see a tagline in the hero section
+      Then I should see a tagline and explanation in the hero section
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
+      - shouldExist: { selector: '[data-test=hero-section]' }
       - shouldExist: { selector: '[data-test=hero-tagline]' }
 
-  - id: AC-002-2
-    title: Hero shows version badge
+  - id: AC-102-2
+    title: Hero displays RootSpec version badge
     narrative: |
-      Given I land on the page
+      Given I visit the site homepage
       When the page loads
-      Then I see the RootSpec version displayed in the hero
+      Then I should see the RootSpec version displayed in the hero
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=version-badge]' }
 
-  - id: AC-002-3
-    title: Hero shows primary CTA link
-    narrative: |
-      Given I am viewing the hero section
-      When I look at the hero
-      Then I see a link to the GitHub repo
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hero-cta]' }
-
 ---
-
 # =============================================================================
-# USER STORY: Read the problem section
+# USER STORY: Problem Section Resonates
 # =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_TIME_ARRIVAL
+# @systems: [CONTENT_SYSTEM]
+# @last_updated: 2026-04-16T00:00:00Z
 
-id: US-003
-title: Recognize my pain points in the problem section
+id: US-103
+title: Problem section clearly describes four pain points
+requirement_id: R-103
 
 acceptance_criteria:
-  - id: AC-003-1
-    title: Problem section exists with real content
+  - id: AC-103-1
+    title: Problem section is present and contains pain point content
     narrative: |
-      Given I scroll to the problem section
-      When I view the section
-      Then I see named pain points about spec drift and AI reliability
+      Given I visit the site homepage
+      When I scroll to the problem section
+      Then I should see content describing spec drift and related problems
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=problem-section]' }
+      - shouldContain: { selector: '[data-test=problem-section]', text: 'spec' }
 
 ---
-
 # =============================================================================
-# USER STORY: Read how it works
+# USER STORY: How It Works Section Shows Four Skills
 # =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_TIME_ARRIVAL
+# @systems: [CONTENT_SYSTEM]
+# @last_updated: 2026-04-16T00:00:00Z
 
-id: US-004
-title: Understand the four-skill workflow
+id: US-104
+title: How It Works section walks through the four RootSpec skills
+requirement_id: R-104
 
 acceptance_criteria:
-  - id: AC-004-1
-    title: How it works section shows four skills
+  - id: AC-104-1
+    title: Workflow section displays all four skills
     narrative: |
-      Given I scroll to the how it works section
-      When I view the section
-      Then I see all four skills described
+      Given I visit the site homepage
+      When I scroll to the how it works section
+      Then I should see all four RootSpec skills listed
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=how-it-works]' }
-      - shouldContain: { selector: '[data-test=how-it-works]', text: 'rs-init' }
-      - shouldContain: { selector: '[data-test=how-it-works]', text: 'rs-spec' }
-      - shouldContain: { selector: '[data-test=how-it-works]', text: 'rs-impl' }
-      - shouldContain: { selector: '[data-test=how-it-works]', text: 'rs-validate' }
+      - shouldExist: { selector: '[data-test=workflow-section]' }
+      - shouldContain: { selector: '[data-test=workflow-section]', text: 'rs-init' }
+      - shouldContain: { selector: '[data-test=workflow-section]', text: 'rs-spec' }
+      - shouldContain: { selector: '[data-test=workflow-section]', text: 'rs-impl' }
+      - shouldContain: { selector: '[data-test=workflow-section]', text: 'rs-validate' }
 
 ---
-
 # =============================================================================
-# USER STORY: Find the open source CTA
+# USER STORY: CTA Links to GitHub Repo
 # =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_TIME_ARRIVAL
+# @systems: [CONTENT_SYSTEM]
+# @last_updated: 2026-04-16T00:00:00Z
 
-id: US-005
-title: Find the GitHub repo link to start using RootSpec
+id: US-105
+title: CTA section provides link to the RootSpec GitHub repository
+requirement_id: R-105
 
 acceptance_criteria:
-  - id: AC-005-1
+  - id: AC-105-1
     title: CTA section exists with GitHub link
     narrative: |
-      Given I reach the bottom of the page
-      When I view the CTA section
-      Then I see a link to the rootspec GitHub repo
+      Given I visit the site homepage
+      When I scroll to the bottom of the page
+      Then I should see a call-to-action with a link to the GitHub repository
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=cta-section]' }
-      - shouldExist: { selector: '[data-test=github-link]' }
-
----
-
-# =============================================================================
-# USER STORY: View the footer attribution
-# =============================================================================
-
-id: US-006
-title: See who built the site and when
-
-acceptance_criteria:
-  - id: AC-006-1
-    title: Footer shows builder attribution and date
-    narrative: |
-      Given I reach the footer
-      When I view it
-      Then I see the builder name and build date
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=footer]' }
-      - shouldExist: { selector: '[data-test=footer-attribution]' }
+      - shouldExist: { selector: '[data-test=cta-github-link]' }

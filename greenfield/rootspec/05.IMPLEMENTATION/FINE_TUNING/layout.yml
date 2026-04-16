@@ -1,47 +1,35 @@
 # =============================================================================
-# FINE TUNING: Layout System
+# FINE-TUNING: Layout System
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-16T00:00:00Z
 
-content_max_width:
-  value: 1200
+animation_duration_fast:
+  value: 150
+  # @unit: milliseconds
+  # @rationale: Fast enough to feel immediate for hover states; slow enough to register
+  # @constraint: min=50, max=300
+
+animation_duration_standard:
+  value: 300
+  # @unit: milliseconds
+  # @rationale: Standard transition time for section entrances and interactive expand/collapse
+  # @constraint: min=150, max=600
+
+animation_delay_stagger:
+  value: 75
+  # @unit: milliseconds
+  # @rationale: Small offset between successive entrance animations creates sequential flow without feeling slow
+  # @constraint: min=25, max=200
+
+page_load_target:
+  value: 3
+  # @unit: seconds
+  # @rationale: 3s is the threshold where bounce rate increases significantly; static site should be well under this
+  # @constraint: max=5
+
+max_content_width:
+  value: 1280
   # @unit: pixels
-  # @rationale: Wide enough for desktop reading; narrow enough to avoid overly long line lengths
-  # @constraint: min=960, max=1440
-
-content_padding_horizontal:
-  value: 24
-  # @unit: pixels
-  # @rationale: Provides breathing room on mobile (min padding); scales up on wider viewports
-
-breakpoints:
-  mobile:
-    value: 640
-    # @unit: pixels
-    # @rationale: Standard small screen breakpoint; below this, single-column layout applies
-  tablet:
-    value: 768
-    # @unit: pixels
-    # @rationale: iPad portrait and similar; two-column layouts may apply
-  desktop:
-    value: 1024
-    # @unit: pixels
-    # @rationale: Desktop-first layouts activate; full interactive component widths apply
-
-section_vertical_spacing:
-  value: 96
-  # @unit: pixels
-  # @rationale: Generous spacing between sections creates visual breathing room and separates conceptual areas
-  # @constraint: min=64, max=128
-
-meta_banner_z_index:
-  value: 50
-  # @unit: z-index
-  # @rationale: Above page content, below any modal overlays; ensures banner is always readable
-
-header_z_index:
-  value: 40
-  # @unit: z-index
-  # @rationale: Sticky header stays above page content; below meta banner when both visible
+  # @rationale: Wide enough for desktop side-by-side layouts; matches Tailwind's xl breakpoint

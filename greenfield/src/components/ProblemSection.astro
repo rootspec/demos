@@ -1,45 +1,50 @@
 ---
 const problems = [
   {
-    icon: '📉',
+    icon: '⚠️',
     title: 'Spec Drift',
-    desc: 'Requirements documents go stale the moment implementation begins. By sprint 3, nobody trusts the spec.',
+    description: 'Your spec document diverges from the code the moment implementation begins. AI agents build what they infer, not what you intended.',
   },
   {
-    icon: '🤖',
-    title: 'Unreliable AI Output',
-    desc: 'AI has knowledge but not wisdom. Without a validation gate, generated code accumulates decisions nobody made.',
+    icon: '🔁',
+    title: 'Endless Rework',
+    description: 'Without structured specs, AI-generated code needs constant correction. Each cycle costs time and trust in the process.',
   },
   {
-    icon: '🔀',
-    title: 'Philosophy-Implementation Gap',
-    desc: 'What the product should feel like gets lost in tickets and PRs. Features ship that contradict the original vision.',
+    icon: '🧩',
+    title: 'Lost Context',
+    description: 'Requirements scattered across Slack, Notion, and your head. AI can\'t read your mind — it needs structured input.',
   },
   {
-    icon: '📄',
-    title: 'Google Docs Nobody Reads',
-    desc: 'The spec lives in a shared doc. It\'s never updated, never tested, and never enforced. It\'s decoration.',
+    icon: '📉',
+    title: 'No Validation Loop',
+    description: 'Teams ship features without a repeatable way to verify that AI output matches what the spec actually described.',
   },
 ];
 ---
 
-<section data-test="problem-section" class="section-spacing" style="background: var(--card);">
-  <div class="container-content">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--fg);">The problem with how we specify software</h2>
-      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
-        Every team has a spec process. Most are broken in the same ways.
+<section
+  data-test="problem-section"
+  id="problem"
+  class="py-24 px-4"
+>
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        The spec problem is real
+      </h2>
+      <p class="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+        AI coding tools are powerful — but without structured specs, they drift.
+        Here's what happens when you skip the spec.
       </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       {problems.map((p) => (
-        <div class="card flex gap-4">
-          <span class="text-3xl flex-shrink-0">{p.icon}</span>
-          <div>
-            <h3 class="font-semibold text-base mb-1" style="color: var(--fg);">{p.title}</h3>
-            <p class="text-sm leading-relaxed" style="color: var(--muted);">{p.desc}</p>
-          </div>
+        <div class="p-6 rounded-xl border border-white/10 bg-[var(--bg-secondary)] hover:border-accent-500/30 transition-colors">
+          <div class="text-3xl mb-3">{p.icon}</div>
+          <h3 class="text-lg font-semibold mb-2 text-[var(--text-primary)]">{p.title}</h3>
+          <p class="text-[var(--text-secondary)] leading-relaxed">{p.description}</p>
         </div>
       ))}
     </div>

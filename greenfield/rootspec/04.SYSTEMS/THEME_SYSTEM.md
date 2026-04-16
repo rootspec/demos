@@ -1,51 +1,45 @@
-# Level 4: Theme System
-<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
+# System: Theme System
+
+> References: L1 (01.PHILOSOPHY.md), L2 (02.TRUTHS.md), L3 (03.INTERACTIONS.md)
+> Interacts with: CONTENT_SYSTEM, INTERACTIVE_SYSTEM, LAYOUT_SYSTEM
 
 ## Responsibility
 
-The Theme System owns dark/light mode detection, user preference persistence, and the mechanism for switching themes. It determines the active theme context that PRESENTATION_SYSTEM uses to render visual output.
+Owns dark/light theme state, system preference detection, manual toggle, and persistence. Applies theme via CSS class on `<html>`. All visual systems inherit from CSS custom properties set at the root level.
 
----
+## Data Ownership
 
-## State Owned
+- **Theme preference** — Stored in `localStorage` key `rootspec-theme`
+- **System preference** — Read from `window.matchMedia('(prefers-color-scheme: dark)')` on first visit
+- **Active theme class** — `dark` or `light` on `<html>` element
 
-- `activeTheme` — "dark" or "light"
-- `source` — how the active theme was determined: "system" or "user"
+## State Machine
 
----
+```
+Initial load:
+  localStorage has value → use it
+  localStorage empty → read system preference → set and store
 
-## Detection and Initialization
+Toggle:
+  current = dark → set light, store 'light'
+  current = light → set dark, store 'dark'
+```
 
-On page load:
+## CSS Architecture
 
-1. Check localStorage for a stored user preference
-2. If found: apply that theme immediately
-3. If not found: read `prefers-color-scheme` media query and apply matching theme
-4. If neither is available: default to dark theme
+Theme is implemented via CSS custom properties on `:root`:
+- Light theme: default values
+- Dark theme: `.dark` class overrides on `:root` or `html.dark`
 
-The theme is applied by setting a class on the root `<html>` element before first render to prevent flash of incorrect theme.
+Tailwind's `darkMode: 'class'` strategy is used. All components use `dark:` variant classes.
 
----
+## Boundaries
 
-## Persistence
+- Does NOT own component styling (CONTENT_SYSTEM, LAYOUT_SYSTEM)
+- Does NOT own animation (PRESENTATION_SYSTEM)
+- Exposes: CSS custom properties for colors, backgrounds, borders
+- No server-side theme detection — all client-side to avoid flash
 
-When the user manually toggles the theme:
-- Update `activeTheme` and `source`
-- Write preference to localStorage
-- Apply class change to root element immediately
+## Anti-Flash Strategy
 
----
-
-## System Detection Reactivity
-
-If the user has not manually set a preference (`source === "system"`), the system responds to changes in `prefers-color-scheme` during the session and updates the theme accordingly.
-
-If the user has manually set a preference (`source === "user"`), system changes are ignored until the user resets preference (not a required feature — manual toggle is sufficient).
-
----
-
-## Interface with Other Systems
-
-- Provides `activeTheme` class to the root element; PRESENTATION_SYSTEM reads this to apply correct token set
-- Receives toggle action from INTERACTIVE_SYSTEM (the theme toggle button)
-- Does not own any visual tokens — only the active state
+A small inline `<script>` in the `<head>` reads localStorage and sets the class before first paint, preventing flash of wrong theme.

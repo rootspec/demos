@@ -1,52 +1,37 @@
 # =============================================================================
-# USER STORIES: Theme System — MVP Phase
+# USER STORY: Theme Toggle
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: ACCESSIBILITY_AND_PREFERENCE
-# @systems: [THEME_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @journey: FIRST_TIME_ARRIVAL
+# @systems: [THEME_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-16T00:00:00Z
 
----
-
-# =============================================================================
-# USER STORY: System preference detected on first load
-# =============================================================================
-
-id: US-020
-title: See correct theme on first visit without manual configuration
+id: US-301
+title: User toggles between dark and light theme
+requirement_id: R-301
 
 acceptance_criteria:
-  - id: AC-020-1
-    title: Page renders without flash of incorrect theme
+  - id: AC-301-1
+    title: Theme toggle button is present in the header
     narrative: |
-      Given I have a system dark mode preference
-      When I visit the page for the first time
-      Then the page loads in dark mode without a visible flash
+      Given I visit the site homepage
+      When the page loads
+      Then I should see a theme toggle button in the header
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: 'html' }
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
 
----
-
-# =============================================================================
-# USER STORY: Theme persists across navigation
-# =============================================================================
-
-id: US-021
-title: Have my theme preference remembered when I return
-
-acceptance_criteria:
-  - id: AC-021-1
-    title: Theme toggle is present and functional
+  - id: AC-301-2
+    title: Clicking theme toggle changes the theme
     narrative: |
-      Given I visit the page
-      When I click the theme toggle
-      Then the visual theme changes
+      Given I am viewing the site
+      When I click the theme toggle button
+      Then the page theme should change
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when:
       - click: { selector: '[data-test=theme-toggle]' }
     then:

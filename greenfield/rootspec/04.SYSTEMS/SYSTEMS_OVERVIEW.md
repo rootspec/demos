@@ -1,51 +1,47 @@
 # Level 4: Systems Overview
-<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
+
+> References: L1 (01.PHILOSOPHY.md), L2 (02.TRUTHS.md), L3 (03.INTERACTIONS.md)
 
 ## System Map
 
-| System              | Responsibility                                              | Primary Data Owned                    |
-|---------------------|-------------------------------------------------------------|---------------------------------------|
-| CONTENT_SYSTEM      | Static page content, copy, and structure                    | Sections, headings, paragraphs, links |
-| INTERACTIVE_SYSTEM  | Client-side interactive components                          | UI state for explorer, wizard, toggle |
-| LAYOUT_SYSTEM       | Page structure, responsive grid, navigation                  | Layout tokens, breakpoints, z-layers  |
-| PRESENTATION_SYSTEM | Visual design tokens, theme, animation                      | Colors, typography, motion values     |
-| THEME_SYSTEM        | Dark/light mode detection, persistence, switching           | Theme preference, system detection    |
-
----
+| System | Responsibility | Technology |
+|--------|---------------|------------|
+| CONTENT_SYSTEM | Static page content, sections, copy | Astro components |
+| THEME_SYSTEM | Dark/light mode, system preference, toggle | CSS custom properties + localStorage |
+| INTERACTIVE_SYSTEM | Hierarchy Explorer, Spec Wizard, Before/After | React islands (client-side) |
+| LAYOUT_SYSTEM | Responsive grid, navigation, base structure | Astro Layout + Tailwind CSS |
+| PRESENTATION_SYSTEM | Animations, transitions, visual polish | CSS animations + Tailwind |
 
 ## System Interactions
 
-| Source              | Target              | What crosses the boundary                                  |
-|---------------------|---------------------|------------------------------------------------------------|
-| CONTENT_SYSTEM      | LAYOUT_SYSTEM       | Section structure and content slots                        |
-| CONTENT_SYSTEM      | INTERACTIVE_SYSTEM  | Initial data for wizard templates and explorer content     |
-| INTERACTIVE_SYSTEM  | PRESENTATION_SYSTEM | Dynamic class changes, animation triggers                  |
-| INTERACTIVE_SYSTEM  | THEME_SYSTEM        | Theme toggle user action                                   |
-| LAYOUT_SYSTEM       | PRESENTATION_SYSTEM | Spacing and grid tokens consumed by visual rules           |
-| THEME_SYSTEM        | PRESENTATION_SYSTEM | Active theme class applied to root element                 |
-
----
+| From | To | Data / Trigger |
+|------|----|----------------|
+| THEME_SYSTEM | CONTENT_SYSTEM | CSS class on `<html>` (`dark` / `light`) |
+| THEME_SYSTEM | INTERACTIVE_SYSTEM | CSS variables inherited by React components |
+| LAYOUT_SYSTEM | CONTENT_SYSTEM | Slot-based composition; Layout wraps all pages |
+| INTERACTIVE_SYSTEM | CONTENT_SYSTEM | None — React islands are self-contained |
+| PRESENTATION_SYSTEM | CONTENT_SYSTEM | CSS classes applied to section wrappers |
+| PRESENTATION_SYSTEM | INTERACTIVE_SYSTEM | Shared animation tokens via CSS variables |
 
 ## Data Flow
 
 ```
-User action
-    ↓
-INTERACTIVE_SYSTEM (handles interaction, updates UI state)
-    ↓
-PRESENTATION_SYSTEM (applies visual changes via class/token changes)
-    ↑
-THEME_SYSTEM (provides active theme context)
-    ↑
-CONTENT_SYSTEM (provides static content to all systems)
-    ↑
-LAYOUT_SYSTEM (provides structural context for all rendering)
+Build time:
+  .rootspec.json → version string → CONTENT_SYSTEM (Header, Hero version badge)
+  SEED.md links → absolute GitHub URLs → CONTENT_SYSTEM (Meta Banner)
+
+Runtime (client-side only):
+  localStorage → THEME_SYSTEM → CSS class on <html>
+  User input → INTERACTIVE_SYSTEM (Wizard) → rendered skeleton spec (ephemeral)
+  User interaction → INTERACTIVE_SYSTEM (Explorer) → local component state (ephemeral)
+  Drag/toggle → INTERACTIVE_SYSTEM (Comparison) → local component state (ephemeral)
 ```
 
----
+## No External Data Sources
 
-## Deployment Context
+All runtime data is either:
+- Injected at build time (version, URLs)
+- Generated from user interaction (Wizard output)
+- Static (comparison panel content, hierarchy level descriptions)
 
-The site is a static build deployed to GitHub Pages at `/demos/greenfield/`. All systems must operate correctly under this subpath. No server-side rendering. No API calls. All interactivity is client-side JavaScript.
-
-The build reads `.rootspec.json` at build time to extract the framework version for the version badge. This is the only build-time data read from outside the source directory.
+No API calls. No CDN-loaded fonts or scripts (or explicitly self-hosted).

@@ -1,80 +1,39 @@
 # =============================================================================
-# USER STORIES: Responsive & Accessibility — MVP Phase
+# USER STORY: Mobile Responsive Layout
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: ACCESSIBILITY
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @journey: FIRST_TIME_ARRIVAL
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-16T00:00:00Z
 
----
-
-# =============================================================================
-# USER STORY: Use site on mobile
-# =============================================================================
-
-id: US-030
-title: Access all content and interactive features on a mobile device
+id: US-401
+title: Site renders correctly and is usable on mobile devices
+requirement_id: R-401
 
 acceptance_criteria:
-  - id: AC-030-1
-    title: Page renders all sections on mobile viewport
+  - id: AC-401-1
+    title: Page renders without horizontal scroll on mobile
     narrative: |
-      Given I visit the page on a mobile device
+      Given I am viewing the site on a mobile device
       When the page loads
-      Then I can see all major sections without horizontal scrolling
+      Then I should see the page without horizontal overflow
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=hero-tagline]' }
+      - shouldExist: { selector: '[data-test=hero-section]' }
       - shouldExist: { selector: '[data-test=meta-banner]' }
 
-  - id: AC-030-2
-    title: Hierarchy explorer is usable on mobile
+  - id: AC-401-2
+    title: Hierarchy Explorer is usable on mobile
     narrative: |
-      Given I am on mobile and scroll to the hierarchy explorer
-      When I tap a hierarchy level
-      Then it expands with its content visible
+      Given I am viewing the hierarchy explorer on mobile
+      When I tap a level node
+      Then I should see the level content expand
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+      - click: { selector: '[data-test=hierarchy-level]:first-child' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
-
----
-
-# =============================================================================
-# USER STORY: Keyboard navigation of interactive elements
-# =============================================================================
-
-id: US-031
-title: Navigate all interactive elements without a mouse
-
-acceptance_criteria:
-  - id: AC-031-1
-    title: Theme toggle is keyboard accessible
-    narrative: |
-      Given I am using keyboard navigation
-      When I tab to the theme toggle and press Enter
-      Then the theme changes
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=theme-toggle]' }
-    then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
-
-  - id: AC-031-2
-    title: Hierarchy explorer levels have visible focus states
-    narrative: |
-      Given I am using keyboard navigation
-      When I tab to a hierarchy level
-      Then I see a visible focus indicator
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-content]' }

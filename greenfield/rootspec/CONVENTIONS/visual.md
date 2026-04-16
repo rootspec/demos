@@ -1,51 +1,34 @@
 ## Color Palette
-
-- **Theme:** CSS custom properties on `:root` and `.dark`, toggled via `class` on `<html>`
-- **Default theme:** dark (per fine-tuning spec)
-- **Background:** `var(--bg)` — `#0a0f1a` (dark) / `#ffffff` (light)
-- **Foreground:** `var(--fg)` — `#e2e8f0` (dark) / `#0f172a` (light)
-- **Muted:** `var(--muted)` — `#94a3b8` (dark) / `#64748b` (light)
-- **Border:** `var(--border)` — `#1e293b` (dark) / `#e2e8f0` (light)
-- **Card background:** `var(--card)` — `#0f172a` (dark) / `#f8fafc` (light)
-- **Brand color:** `var(--brand)` — `#38bdf8` (dark) / `#0ea5e9` (light)
-- **Accent color:** `var(--accent)` — `#a78bfa` (dark) / `#8b5cf6` (light)
+- **Brand:** `brand-500: #0ea5e9` (sky blue) — links, CTAs
+- **Accent:** `accent-500: #8b5cf6` (violet) — highlights, badges, interactive states
+- **Success:** `green-400` — "after" states, passing
+- **Warning:** `yellow-400` — validate skill color
+- **Error/Before:** `red-400` — "before" states, issues
+- **Background (dark):** `#0f172a` (slate-900)
+- **Background secondary (dark):** `#1e293b` (slate-800)
+- **Text primary (dark):** `#f1f5f9`
+- **Text secondary (dark):** `#94a3b8`
 
 ## Typography
-
-- **Font family:** System sans-serif via Tailwind defaults
-- **Monospace:** JetBrains Mono, Fira Code, system monospace (used for code and skill names)
-- **Base size:** 16px (Tailwind default)
+- **Headings:** Bold, tight tracking (`tracking-tight`)
+- **Code/commands:** `font-mono` — JetBrains Mono
+- **Body:** System sans, `leading-relaxed`
+- **Version badge:** Mono, small, with animated pulse dot
 
 ## Layout
+- **Max width:** `max-w-6xl mx-auto` for content, `max-w-4xl` for focused sections
+- **Section padding:** `py-24 px-4`
+- **Responsive grid:** 1 col mobile → 2 col md → 4 col lg for workflow cards
 
-- **Max content width:** 1200px (`max-w-content`, per fine-tuning)
-- **Horizontal padding:** 24px (`px-6`)
-- **Section vertical spacing:** 96px (`py-24`, per fine-tuning)
-- **Mobile breakpoint:** 640px
-- **Tablet breakpoint:** 768px
-- **Desktop breakpoint:** 1024px
+## Visual Motifs
+- **Grid background:** Subtle CSS grid lines in hero (low opacity purple)
+- **Cards:** `rounded-xl border border-white/10 bg-[var(--bg-secondary)]`
+- **Interactive states:** `hover:border-accent-500/30 transition-colors`
+- **Badges:** `rounded-full px-3 py-1 border bg-accent/10`
+- **Hierarchy levels:** Color-coded by L1–L5 (purple, blue, cyan, green, yellow)
 
-## Component Patterns
-
-- **Meta banner:** sticky top, z-index 50, visible on load
-- **Header:** sticky, z-index 40, contains version badge and theme toggle
-- **Cards:** `var(--card)` background, `var(--border)` border, `rounded-xl p-6`
-- **Buttons:** `rounded-lg`, `var(--brand)` or `var(--accent)` for primary actions
-- **Code elements:** `var(--card)` bg, `var(--accent)` text, `rounded px-1.5 py-0.5`
-
-## Interactive Components
-
-- **HierarchyExplorer:** React island, `client:load`, always-in-DOM content panels with CSS display toggle
-- **SpecWizard:** React island, `client:load`, 4-step linear flow, `data-test` on first option in each list
-- **ComparisonSection:** React island, `client:load`, toggle between two views
-- **Theme toggle:** vanilla JS in Header, instant (0ms transition), localStorage key `rootspec-theme`
-
-## Z-Index Scale
-
-- **Meta banner:** 50
-- **Header:** 40
-
-## Focus States
-
-- `outline: 2px solid var(--brand)` via `:focus-visible` global rule
-- All interactive elements: `minHeight: 44px` (WCAG touch target compliance)
+## Dark/Light Mode
+- **Default:** Dark mode
+- **Toggle:** Header button with sun/moon icon
+- **Stored:** `localStorage.theme` = `'light'` or `'dark'`
+- **Applied:** `class="dark"` or `class="light"` on `<html>`

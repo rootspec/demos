@@ -1,38 +1,34 @@
 ---
-import '../styles/global.css';
-
-interface Props {
+export interface Props {
   title?: string;
-  description?: string;
 }
 
-const { title = 'RootSpec — Purpose-Aligned Specification', description = 'A specification language for software where philosophy guides implementation, never vice versa.' } = Astro.props;
+const { title = 'RootSpec — Spec-Driven AI Development' } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
-    <script is:inline>
-      // Prevent flash of incorrect theme
-      (function() {
-        var stored = localStorage.getItem('rootspec-theme');
-        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        var theme = stored || (prefersDark ? 'dark' : 'light');
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-        document.documentElement.setAttribute('data-theme', theme);
-      })();
-    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
-  <body>
+  <body class="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
     <slot />
+    <script>
+      // Theme persistence
+      const stored = localStorage.getItem('theme');
+      if (stored === 'light') {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      }
+    </script>
   </body>
 </html>
+
+<style is:global>
+  @import '../styles/global.css';
+</style>

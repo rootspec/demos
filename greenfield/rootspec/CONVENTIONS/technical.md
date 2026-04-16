@@ -1,32 +1,31 @@
 ## Framework
+- **Stack:** Astro 5 + React (islands) + Tailwind CSS
+- **Language:** TypeScript strict
+- **Node version:** 18+
 
-- **Framework:** Astro 6 with React islands (`@astrojs/react`) and Tailwind CSS (`@astrojs/tailwind`, tailwindcss v3)
-- **TypeScript:** v4 (pinned for Cypress webpack-batteries compatibility)
-- **Rendering:** Astro SSR for static components, `client:load` for React interactive islands
-- **Base path:** `/demos/greenfield` in production (`NODE_ENV=production`), `/` in dev
+## Project Structure
+- **Pages:** `src/pages/` — Astro file-based routing
+- **Components:** `src/components/` — `.astro` for static, `.tsx` for interactive React islands
+- **Layouts:** `src/layouts/Layout.astro` — base HTML shell
+- **Styles:** `src/styles/global.css` — Tailwind base + CSS custom properties
 
-## File Structure
+## Routing
+- **Base path:** `/demos/greenfield` (set in `astro.config.mjs`)
+- **Homepage:** `src/pages/index.astro` → serves at `/demos/greenfield/`
 
-- **Pages:** `src/pages/` — Astro page files
-- **Layouts:** `src/layouts/Layout.astro` — root HTML layout with theme FOUC prevention
-- **Components:** `src/components/` — `.astro` for static, `.tsx` for interactive
-- **Styles:** `src/styles/global.css` — Tailwind base + CSS custom properties for theming
+## Component Patterns
+- **Static sections:** Astro components (`.astro`) — no client JS
+- **Interactive components:** React TSX with `client:load` directive on import
+- **Data test attributes:** All testable elements use `data-test=` for Cypress selectors
+- **Theme:** CSS custom properties (`--bg-primary`, `--text-primary`, etc.) toggled via `dark`/`light` class on `<html>`
+
+## Styling
+- **Approach:** Tailwind utility classes + CSS variables for theme tokens
+- **Dark mode:** `darkMode: 'class'` in tailwind config — toggle class on `<html>`
+- **Fonts:** JetBrains Mono for code/mono, system sans for body
 
 ## Testing
-
-- **Framework:** Cypress 15 with TypeScript
-- **Pattern:** `loadAndRun()` with embedded YAML string literals in `cypress/e2e/mvp.cy.ts`
-- **DSL:** `visit`, `click`, `fill`, `shouldExist`, `shouldContain`
-- **Selectors:** All interactive elements have `data-test` attributes matching spec selector names
-- **Note:** Cypress tsconfig uses `"ignoreDeprecations": "5.0"` and `target: es2017` to avoid TS5 deprecation errors
-
-## Dev Server
-
-- **Command:** `npx astro dev --port 3000`
-- **Port:** 3000
-- **Managed by:** `scripts/dev.sh`
-
-## Dependencies
-
-- **Runtime:** astro, @astrojs/react, @astrojs/tailwind, react, react-dom, tailwindcss@3
-- **Dev:** cypress, js-yaml, zod, typescript@4
+- **Framework:** Cypress 15
+- **Config:** `cypress.config.ts` — base URL `http://localhost:3000/demos/greenfield/`
+- **Test file:** `cypress/e2e/mvp.cy.ts`
+- **DSL:** RootSpec step DSL via `cypress/support/steps.ts`
