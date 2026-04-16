@@ -1,137 +1,149 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-const LEVELS = [
+const levels = [
   {
     id: 1,
-    code: 'L1',
-    name: 'Philosophy',
-    tagline: 'WHY and WHAT EXPERIENCE',
-    content: 'The mission and design pillars. Why does this product exist? What should users feel? These answers are permanent — they should change only when the product\'s fundamental purpose changes.',
-    items: ['Mission statement', 'Design pillars (3–5)', 'Success feeling definition'],
-    color: '#0ea5e9',
+    label: 'L1',
+    title: 'Philosophy',
+    color: '#7c3aed',
+    detail: 'The foundational beliefs and principles that guide every product decision. Immutable core values that persist across all versions.',
+    example: '> "We believe software should reduce cognitive load, not add to it."',
   },
   {
     id: 2,
-    code: 'L2',
-    name: 'Truths',
-    tagline: 'WHAT strategy',
-    content: 'Strategic commitments and trade-offs. What do we sacrifice to be exceptional at something? What are our measurable success criteria? Truths derive from Philosophy.',
-    items: ['Trade-off commitments', 'Success metrics', 'Core user promises'],
-    color: '#38bdf8',
+    label: 'L2',
+    title: 'Truths',
+    color: '#2563eb',
+    detail: 'Absolute product constraints — things that must always be true. These are the non-negotiables derived from philosophy.',
+    example: '> "The application will never require account creation to access core functionality."',
   },
   {
     id: 3,
-    code: 'L3',
-    name: 'Interactions',
-    tagline: 'HOW users interact',
-    content: 'User flows and feedback patterns. How do users accomplish goals? What is the system\'s response contract? Interactions are derived from Truths, not invented independently.',
-    items: ['User journeys', 'Feedback patterns', 'Interaction constraints'],
-    color: '#7dd3fc',
+    label: 'L3',
+    title: 'Interactions',
+    color: '#059669',
+    detail: 'How users flow through the product. The canonical journeys and interaction patterns that define the UX.',
+    example: '> "JOURNEY: User discovers → tries → adopts without friction."',
   },
   {
     id: 4,
-    code: 'L4',
-    name: 'Systems',
-    tagline: 'HOW it\'s built',
-    content: 'Architecture, boundaries, and data structures. Technical decisions are constrained by Interactions, never the other way around. Systems answer: what infrastructure makes the Interactions possible?',
-    items: ['Architecture decisions', 'System boundaries', 'Data models'],
-    color: '#a78bfa',
+    label: 'L4',
+    title: 'Systems',
+    color: '#d97706',
+    detail: 'Technical and design systems that implement the interactions. Component libraries, data models, and architecture patterns.',
+    example: '> "SYSTEM: Content delivery is static-first, hydrated only for interactive components."',
   },
   {
     id: 5,
-    code: 'L5',
-    name: 'Implementation',
-    tagline: 'Testable stories',
-    content: 'User stories with acceptance criteria. Every story traces to a higher level. If you can\'t trace a feature to L1, it shouldn\'t be built. Implementation is the most volatile level — it changes; Philosophy doesn\'t.',
-    items: ['User stories', 'Acceptance criteria', 'Fine-tuning parameters'],
-    color: '#c4b5fd',
+    label: 'L5',
+    title: 'Implementation',
+    color: '#dc2626',
+    detail: 'Executable user stories with Given/When/Then acceptance criteria. Directly consumed by the rs-impl agent skill.',
+    example: '> "Given I visit the homepage, when the page loads, then I see the hero section."',
   },
 ];
 
 export default function HierarchyExplorer() {
-  const [expanded, setExpanded] = useState<number | null>(null);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  const toggle = (id: number) => {
-    setExpanded(prev => (prev === id ? null : id));
-  };
+  const [activeLevel, setActiveLevel] = useState<number | null>(null);
 
   return (
-    <div data-test="hierarchy-explorer" data-hydrated={hydrated ? 'true' : undefined} className="max-w-2xl mx-auto space-y-3">
-      {LEVELS.map((level) => {
-        const isOpen = expanded === level.id;
-        return (
-          <div
-            key={level.id}
-            className="rounded-xl overflow-hidden"
-            style={{ border: `1px solid var(--border)`, background: 'var(--card)' }}
-          >
-            <button
-              data-test={`hierarchy-level-${level.id}`}
-              onClick={() => toggle(level.id)}
-              className="w-full flex items-center gap-4 px-6 py-4 text-left transition-colors"
-              style={{
-                background: isOpen ? `${level.color}18` : 'transparent',
-                minHeight: '44px',
-              }}
-              aria-expanded={isOpen}
-            >
-              <span
-                className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-mono font-bold text-sm"
-                style={{ background: `${level.color}22`, color: level.color, border: `1px solid ${level.color}44` }}
-              >
-                {level.code}
-              </span>
-              <div className="flex-1 min-w-0">
-                <div className="font-semibold" style={{ color: 'var(--fg)' }}>{level.name}</div>
-                <div className="text-xs" style={{ color: 'var(--muted)' }}>{level.tagline}</div>
-              </div>
-              <svg
-                className="w-5 h-5 flex-shrink-0 transition-transform duration-200"
-                style={{
-                  color: 'var(--muted)',
-                  transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                }}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
+    <section
+      id="explore"
+      data-test="hierarchy-explorer"
+      style={{
+        padding: '5rem 1.5rem',
+        background: 'var(--surface)',
+        borderTop: '1px solid var(--border)',
+        borderBottom: '1px solid var(--border)',
+      }}
+    >
+      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+        <p style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.12em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
+          The five levels
+        </p>
+        <h2 style={{ fontSize: 'clamp(1.75rem,4vw,2.75rem)', fontWeight: 700, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
+          A hierarchy of spec documents
+        </h2>
+        <p style={{ color: 'var(--muted)', fontSize: '1.0625rem', lineHeight: 1.65, maxWidth: '580px', marginBottom: '2.5rem' }}>
+          Click any level to see what it contains and how it relates to the others.
+        </p>
 
-            <div
-              data-test={`hierarchy-level-${level.id}-content`}
-              className="px-6 pb-5"
-              style={{
-                display: isOpen ? 'block' : 'none',
-                borderTop: `1px solid var(--border)`,
-              }}
-            >
-              <p className="text-sm mt-4 leading-relaxed mb-4" style={{ color: 'var(--muted)' }}>
-                {level.content}
-              </p>
-              <ul className="space-y-1">
-                {level.items.map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm" style={{ color: 'var(--fg)' }}>
-                    <span style={{ color: level.color }}>▸</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              {level.id > 1 && (
-                <p className="text-xs mt-4" style={{ color: 'var(--muted)' }}>
-                  References: L1{level.id > 2 ? '–L' + (level.id - 1) : ''} only
-                </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {levels.map((level) => (
+            <div key={level.id}>
+              <button
+                data-test={`level-card-${level.id}`}
+                onClick={() => setActiveLevel(activeLevel === level.id ? null : level.id)}
+                style={{
+                  width: '100%',
+                  background: 'var(--bg)',
+                  border: `1px solid ${activeLevel === level.id ? level.color : 'var(--border)'}`,
+                  borderRadius: '0.625rem',
+                  padding: '1rem 1.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  transition: 'border-color 0.15s',
+                  color: 'var(--fg)',
+                }}
+              >
+                <span
+                  style={{
+                    flexShrink: 0,
+                    width: '2.25rem',
+                    height: '2.25rem',
+                    borderRadius: '0.5rem',
+                    background: level.color,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 700,
+                    fontSize: '0.8125rem',
+                    color: '#fff',
+                  }}
+                >
+                  {level.label}
+                </span>
+                <span style={{ fontWeight: 600, flexGrow: 1 }}>{level.title}</span>
+                <span style={{ color: 'var(--muted)', fontSize: '1.25rem', lineHeight: 1 }}>
+                  {activeLevel === level.id ? '−' : '+'}
+                </span>
+              </button>
+
+              {activeLevel === level.id && (
+                <div
+                  data-test={`level-detail-${level.id}`}
+                  style={{
+                    background: 'var(--bg)',
+                    border: `1px solid ${level.color}`,
+                    borderTop: 'none',
+                    borderRadius: '0 0 0.625rem 0.625rem',
+                    padding: '1.25rem 1.5rem',
+                  }}
+                >
+                  <p style={{ color: 'var(--muted)', lineHeight: 1.65, marginBottom: '0.875rem' }}>{level.detail}</p>
+                  <pre style={{
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '0.375rem',
+                    padding: '0.875rem 1rem',
+                    fontSize: '0.875rem',
+                    color: 'var(--accent-light)',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
+                    margin: 0,
+                    fontFamily: 'ui-monospace, monospace',
+                  }}>
+                    {level.example}
+                  </pre>
+                </div>
               )}
             </div>
-          </div>
-        );
-      })}
-    </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

@@ -1,90 +1,69 @@
 # Level 4: Interactive System
-<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
+
+References: [L1: Foundational Philosophy], [L2: Stable Truths], [L3: Interaction Architecture], [L4: SYSTEMS_OVERVIEW]
 
 ## Responsibility
 
-The Interactive System owns all client-side interactive components: the hierarchy explorer, the spec wizard, and the before/after comparison toggle. It manages UI state for these components and handles all user interaction events.
+Owns all client-side interactive components. Manages the internal state of the Hierarchy Explorer, Spec Wizard, and Before/After Comparison. All interactivity is client-side only — no API calls, no server round-trips.
 
----
-
-## Components
+## Components Owned
 
 ### Hierarchy Explorer
-
-**State owned:**
-- `activeLevel` — which level (if any) is currently expanded
-- `hoveredLevel` — which level (if any) is currently hovered
-- `connectionHighlights` — which reference arrows are currently highlighted
+**State:** Which level is currently selected (or none); hover state for reference highlighting
 
 **Behavior:**
-- Clicking a level toggles its expanded state
-- Hovering a level highlights its allowed reference connections (upward arrows only)
-- Only one level may be expanded at a time
-- Keyboard: Arrow keys move focus between levels; Enter/Space toggle expansion; Escape collapses
+- Five level cards displayed visually (L1 through L5)
+- Clicking a card expands it to show example content for that level
+- Visual arrows indicate reference direction — upward only (dependency inversion)
+- Hovering a level highlights its allowed reference paths
+- Keyboard navigable: arrow keys move focus between levels, Enter/Space expands
 
-**Content source:** Level names, descriptions, and example content provided by CONTENT_SYSTEM
+**Responsive adaptation:**
+- Wide viewport: horizontal/diagram layout with visible arrows
+- Narrow viewport: vertical accordion — one level expanded at a time, arrows hidden
 
-**Visual output:** Expanded content panels, arrow highlights — rendered using PRESENTATION_SYSTEM tokens
-
-**Accessibility:**
-- ARIA role="tree" on the explorer container
-- ARIA role="treeitem" on each level
-- ARIA expanded/collapsed state communicated
-- Focus visible on all interactive elements
-
-**Degradation:** If JavaScript unavailable, render all levels as static collapsed summaries
-
----
+**Reset:** Clicking an already-selected card collapses it (no selection state)
 
 ### Spec Wizard
+**State:** Current step (1–3), user inputs per step, completion status, output visibility
 
-**State owned:**
-- `step` — current step (1-4)
-- `productIdea` — free text, step 1
-- `missionSelection` — selected or written mission, step 2
-- `selectedPillars` — array of [min-to-max] pillar selections, step 3
-- `keyInteraction` — free text, step 4
-- `outputVisible` — whether output skeleton is shown
+**Step data owned:**
+- Step 1: product idea text, selected or custom mission statement
+- Step 2: selected design pillars (from curated list) or custom entries
+- Step 3: key interaction description (free text)
 
 **Behavior:**
-- Step 1: Text input for product idea; advancing to step 2 requires non-empty input
-- Step 2: Radio or button selection from mission templates, with optional free-text override
-- Step 3: Multi-select of [min-to-max] design pillars from suggestions; custom entry allowed
-- Step 4: Text input for key interaction
-- Output: Generated inline below the form when step 4 is complete; maps inputs to L1-L3 structure
-- No data sent externally; all processing is client-side template substitution
+- Step indicator shows position and completion
+- Advancing requires valid input (non-empty mission; at least [minimum pillars] pillar selected)
+- Invalid advance attempt shows inline validation message, does not navigate
+- On completion, outputs a skeleton spec fragment mapping inputs to L1-L3
+- Output animates into view
+- Reset button clears all state and returns to Step 1
 
-**Templates:** Provided by CONTENT_SYSTEM — wizard does not own the copy, only the state
-
-**Keyboard:** Tab between inputs; Enter to advance; Back button navigable via keyboard
-
-**Touch:** Large tap targets ([wcag-minimum-size] minimum); scroll to output on generation
-
-**Degradation:** If JavaScript unavailable, show static description of the wizard with link to GitHub
-
----
+**Output format:** Spec fragment displayed as formatted code block, structured like an actual RootSpec file
 
 ### Before/After Comparison
+**State:** Active panel (Before or After) on mobile; always-visible on desktop
 
-**State owned:**
-- `activeView` — "before" or "after"
+**Content:** Real copy contrasting vague traditional spec with structured RootSpec spec for the same example product
 
 **Behavior:**
-- Toggle button switches between "Without spec" and "With RootSpec" views
-- Both views contain real content (provided by CONTENT_SYSTEM)
-- Transition is smooth (PRESENTATION_SYSTEM animation)
-- On mobile: stacked view with toggle still functional
+- Desktop: two panels side by side, separated by a labeled divider
+- Mobile: tab toggle — only one panel visible at a time
+- Visual differentiation between panels (distinct styling to make contrast clear)
 
-**Keyboard:** Toggle button is keyboard-focusable; Enter/Space switches view
+## Data Ownership
 
-**Degradation:** Both views rendered stacked if JavaScript unavailable, labeled clearly
+- Explorer: selected level ID, hover state
+- Wizard: step index, per-step user inputs, validation errors, output visibility
+- Comparison: active panel (mobile only)
+- Curated pillar list (static, defined at build time — not fetched)
+- Wizard template strings (static, defined at build time)
 
----
+## Boundaries
 
-## Interactions with Other Systems
-
-- Reads initial data from CONTENT_SYSTEM (wizard templates, explorer content)
-- Triggers visual changes via class mutations consumed by PRESENTATION_SYSTEM
-- Sends theme toggle action to THEME_SYSTEM
-- Uses LAYOUT_SYSTEM grid for component placement
-- Does not own copy, colors, or layout tokens
+- No external API calls — all data and logic is bundled at build time
+- No shared state with CONTENT_SYSTEM or LAYOUT_SYSTEM — components receive props only
+- Theme tokens consumed from PRESENTATION_SYSTEM; INTERACTIVE_SYSTEM does not manage color or typography
+- Wizard output is a display-only formatted string — it is not saveable, shareable, or submitted anywhere
+- Local storage is not used by INTERACTIVE_SYSTEM (only THEME_SYSTEM uses local storage)

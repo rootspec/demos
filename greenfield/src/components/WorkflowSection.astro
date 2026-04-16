@@ -1,61 +1,30 @@
 ---
-const skills = [
-  {
-    name: 'rs-init',
-    step: '01',
-    tagline: 'Bootstrap your spec',
-    desc: 'Creates the directory structure and axiom files. Establishes the philosophical foundation before any implementation decisions.',
-    color: 'var(--brand)',
-  },
-  {
-    name: 'rs-spec',
-    step: '02',
-    tagline: 'Fill all five levels',
-    desc: 'Interviews you about mission, pillars, truths, and interactions. Derives systems architecture from your philosophy, not the other way around.',
-    color: 'var(--brand)',
-  },
-  {
-    name: 'rs-impl',
-    step: '03',
-    tagline: 'Implement from stories',
-    desc: 'Takes validated user stories and builds test-driven implementation. Every feature traces back to a design pillar.',
-    color: 'var(--accent)',
-  },
-  {
-    name: 'rs-validate',
-    step: '04',
-    tagline: 'Run the validation gate',
-    desc: 'Executes all tests, generates coverage report, and confirms spec alignment. Pass or fail — no ambiguity.',
-    color: 'var(--accent)',
-  },
-];
 ---
+<section
+  id="how-it-works"
+  data-test="how-it-works"
+  style="padding:5rem 1.5rem;"
+>
+  <div style="max-width:900px;margin:0 auto;">
+    <p style="font-size:0.75rem;font-weight:700;letter-spacing:0.12em;color:var(--accent);text-transform:uppercase;margin-bottom:0.75rem;">How it works</p>
+    <h2 style="font-size:clamp(1.75rem,4vw,2.75rem);font-weight:700;margin-bottom:1rem;letter-spacing:-0.02em;">
+      Four skills. One cohesive spec.
+    </h2>
+    <p style="color:var(--muted);font-size:1.0625rem;line-height:1.65;max-width:580px;margin-bottom:3rem;">
+      RootSpec provides four agent skills that guide your project from first idea to production-ready implementation.
+    </p>
 
-<section data-test="how-it-works" class="section-spacing" style="background: var(--bg);">
-  <div class="container-content">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--fg);">How it works</h2>
-      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
-        Four skills cover the full specification lifecycle — from blank slate to validated implementation.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {skills.map((skill) => (
-        <div class="card flex gap-4">
-          <div class="flex-shrink-0">
-            <span
-              class="text-xs font-mono px-2 py-0.5 rounded-full"
-              style={`background: ${skill.color}22; color: ${skill.color}; border: 1px solid ${skill.color}44;`}
-            >
-              {skill.step}
-            </span>
-          </div>
-          <div>
-            <code class="text-sm font-mono font-bold" style={`color: ${skill.color};`}>{skill.name}</code>
-            <p class="font-semibold text-sm mt-1 mb-1" style="color: var(--fg);">{skill.tagline}</p>
-            <p class="text-sm leading-relaxed" style="color: var(--muted);">{skill.desc}</p>
-          </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;">
+      {[
+        { cmd: 'rs-init', label: 'Initialize', desc: 'Bootstrap your project structure and RootSpec configuration from a seed description.' },
+        { cmd: 'rs-spec', label: 'Specify', desc: 'Generate and refine all five specification levels — from philosophy to user stories.' },
+        { cmd: 'rs-impl', label: 'Implement', desc: 'Turn validated user stories into working code, one story at a time, test-driven.' },
+        { cmd: 'rs-validate', label: 'Validate', desc: 'Run the full test suite and generate a spec compliance report.' },
+      ].map(({ cmd, label, desc }) => (
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:0.75rem;padding:1.5rem;">
+          <code style="font-size:0.8125rem;color:var(--accent-light);background:var(--bg);border:1px solid var(--border);padding:0.2rem 0.5rem;border-radius:0.25rem;display:inline-block;margin-bottom:0.875rem;">{cmd}</code>
+          <h3 style="font-weight:600;margin-bottom:0.5rem;">{label}</h3>
+          <p style="color:var(--muted);font-size:0.9rem;line-height:1.6;">{desc}</p>
         </div>
       ))}
     </div>

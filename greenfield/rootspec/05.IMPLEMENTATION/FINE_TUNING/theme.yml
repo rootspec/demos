@@ -3,21 +3,14 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
-
-default_theme:
-  value: "dark"
-  # @unit: string enum (dark | light)
-  # @rationale: Developer audience expects dark mode; matches PRESENTATION_SYSTEM default palette
-  # @constraint: must be "dark" or "light"
-
-storage_key:
-  value: "rootspec-theme"
-  # @unit: string
-  # @rationale: Unique key to avoid collision with other localStorage entries on GitHub Pages domain
+# @last_updated: 2026-04-16T00:00:00Z
 
 theme_transition_duration:
-  value: 0
+  value: 200
   # @unit: milliseconds
-  # @rationale: Theme toggle is instant; no transition avoids jarring mid-render color changes
-  # @constraint: 0 means no CSS transition on theme switch
+  # @rationale: Fast enough to feel instant, slow enough to be visually smooth
+  # @constraint: min=100, max=400
+
+local_storage_key:
+  value: "rootspec-theme"
+  # @rationale: Namespaced to avoid collision with other apps on the same domain

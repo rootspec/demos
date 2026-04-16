@@ -1,66 +1,54 @@
 # Level 4: Presentation System
-<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
+
+References: [L1: Foundational Philosophy], [L2: Stable Truths], [L3: Interaction Architecture], [L4: SYSTEMS_OVERVIEW]
 
 ## Responsibility
 
-The Presentation System owns visual design tokens, animation, and the visual expression of the active theme. It translates THEME_SYSTEM's active theme into concrete visual output and provides the motion vocabulary for interactive state changes.
+Owns all visual design tokens and animation parameters. Defines the aesthetic language of the site — typography, color, spacing, and motion — as a consistent, readable token set that other systems consume. Does not own layout decisions or interactive logic.
 
----
+## Design Token Categories
 
-## Design Tokens
+### Color
+- **Foreground / background** — High-contrast text and surface colors for both light and dark themes
+- **Accent** — A primary accent color used for interactive elements, highlights, and calls to action
+- **Muted** — Reduced-contrast variants for secondary text and borders
+- **Destructive / warning** — Reserved for validation error states in the wizard
+- **Panel differentiation** — Distinct surface colors for Before/After panels
 
-Token categories and semantic roles are defined here. Concrete numeric values are set in implementation configuration.
+### Typography
+- **Scale** — A limited type scale (heading sizes, body, caption) with clear hierarchy
+- **Font family** — System or web-safe fonts preferred; no heavy custom font loading
+- **Weight** — Regular and bold; minimal intermediate weights
+- **Line height** — Comfortable reading line height for body copy; tighter for headings
 
-### Color Tokens
-- **Background** — page background, section backgrounds, card backgrounds
-- **Surface** — elevated elements (header, cards, panels)
-- **Brand** — primary brand color for CTAs, links, accents
-- **Text** — primary, secondary, muted text colors
-- **Border** — separator and outline colors
-- **Semantic** — success, warning, error states
+### Spacing
+- **Base unit** — A consistent base unit from which all spacing is derived (multiples/fractions only)
+- **Section spacing** — Generous vertical space between major page sections
+- **Component spacing** — Consistent internal padding within cards and panels
 
-All color tokens have both dark-mode and light-mode values. THEME_SYSTEM determines which set is active.
+### Motion
+- **Transition duration** — [short duration] for hover/focus state changes; [medium duration] for component expansion
+- **Easing** — Ease-out for elements entering the viewport; ease-in-out for toggle transitions
+- **Animation philosophy:** Smooth and purposeful — animations communicate state changes, not decoration. Motion respects `prefers-reduced-motion`.
 
-### Typography Tokens
-- **Font families** — heading and body (system stack or web-safe)
-- **Font sizes** — scale from xs to 4xl
-- **Font weights** — regular, medium, bold
-- **Line heights** — tight, normal, relaxed
+## Visual Identity Principles
 
-### Spacing Tokens
-- Consistent scale for margin, padding, gap
-- Applied via utility classes or design tokens consumed by LAYOUT_SYSTEM
+Derived from Design Pillars (L1):
 
-### Motion Tokens
-- **Duration** — [fast], [moderate], [slow] — distinct values for micro-interactions vs. section transitions
-- **Easing** — ease-in-out for transitions; ease-out for reveals
-- Respects `prefers-reduced-motion` — all animations disabled or minimized when preference is set
+- **Grounded Clarity** → Clean layouts, generous whitespace, clear typographic hierarchy
+- **Trustworthy Confidence** → Consistent token application, no visual surprises
+- **Approachable Rigor** → Professional but not corporate; developer-aesthetic with warmth
+- **Collaborative Transparency** → Code-like formatting for spec fragments; readable prose for narrative
 
----
+## RootSpec Diagram
 
-## Animation Vocabulary
+A visual diagram (SVG) depicting the RootSpec methodology: a spec surrounding the development cycle, with only valid (spec-conforming) solutions passing through. The diagram shows the filtering/validation role of the spec, not just the hierarchy levels.
 
-| Interaction              | Animation                                              |
-|--------------------------|--------------------------------------------------------|
-| Section scroll reveal    | Fade up, [moderate] duration                           |
-| Hierarchy level expand   | Smooth height transition, [fast] duration              |
-| Hierarchy arrow highlight| Opacity transition, [fast] duration                    |
-| Wizard step transition   | Slide or fade between steps, [fast] duration           |
-| Before/after toggle      | Cross-fade or slide, [fast] duration                   |
-| Theme toggle             | Immediate; no animation on theme switch                |
-| CTA hover                | Scale or shadow change, [fast] duration                |
+**Format:** SVG (inline or as a build artifact), so it renders without an image server and scales cleanly at all sizes.
 
----
+## Boundaries
 
-## SVG Diagram
-
-The site includes an SVG diagram depicting the RootSpec methodology: a spec hierarchy surrounding the development cycle, with arrows showing that only valid (spec-conformant) solutions pass through. This is rendered inline as an SVG, not an image file, so it respects the active theme's color tokens.
-
----
-
-## Interactions with Other Systems
-
-- Consumes theme context from THEME_SYSTEM (dark/light class on root)
-- Consumes layout tokens from LAYOUT_SYSTEM (spacing, grid)
-- Provides animation classes and visual feedback to INTERACTIVE_SYSTEM components
-- Does not own content, structure, or interaction logic
+- PRESENTATION_SYSTEM defines tokens; it does not render components or manage layout
+- Token values (actual numeric values: px, ms, rem) live in fine-tuning (L5)
+- PRESENTATION_SYSTEM does not manage which theme is active — THEME_SYSTEM owns that
+- All other systems consume tokens from PRESENTATION_SYSTEM; they do not define their own colors or spacing

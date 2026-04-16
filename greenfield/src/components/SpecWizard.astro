@@ -1,0 +1,167 @@
+---
+const pillars = [
+  { id: 'clarity', label: 'Clarity', desc: 'Simple, focused, opinionated' },
+  { id: 'collaboration', label: 'Collaboration', desc: 'Team-first, shared understanding' },
+  { id: 'automation', label: 'Automation', desc: 'AI-native, agent-ready' },
+  { id: 'trust', label: 'Trust', desc: 'Verifiable, auditable, honest' },
+];
+---
+<div
+  data-test="spec-wizard"
+  id="spec-wizard"
+  style="max-width:680px;margin:0 auto;padding:2rem;background:var(--surface);border:1px solid var(--border);border-radius:1rem;"
+>
+  <!-- Step indicator -->
+  <div data-test="wizard-step-indicator" id="wizard-step-indicator" style="display:flex;gap:0.5rem;margin-bottom:2rem;">
+    <div id="step-bar-1" style="flex:1;height:4px;border-radius:9999px;background:var(--accent);transition:background 0.2s;"></div>
+    <div id="step-bar-2" style="flex:1;height:4px;border-radius:9999px;background:var(--border);transition:background 0.2s;"></div>
+    <div id="step-bar-3" style="flex:1;height:4px;border-radius:9999px;background:var(--border);transition:background 0.2s;"></div>
+  </div>
+
+  <!-- Step 1 -->
+  <div data-test="wizard-step-1" id="wizard-step-1">
+    <h3 style="font-weight:700;font-size:1.125rem;margin-bottom:0.5rem;">What is your product?</h3>
+    <p style="color:var(--muted);font-size:0.9375rem;margin-bottom:1.25rem;">
+      Describe your product idea in one or two sentences.
+    </p>
+    <textarea
+      data-test="wizard-mission-input"
+      id="wizard-mission-input"
+      placeholder="e.g. A tool for focused writing without distractions..."
+      rows="3"
+      style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:0.5rem;padding:0.75rem 1rem;color:var(--fg);font-size:0.9375rem;resize:vertical;outline:none;box-sizing:border-box;"
+    ></textarea>
+    <p data-test="wizard-validation-message" id="wizard-validation-message" style="color:#dc2626;font-size:0.875rem;margin-top:0.5rem;display:none;"></p>
+  </div>
+
+  <!-- Step 2 -->
+  <div data-test="wizard-step-2" id="wizard-step-2" style="display:none;">
+    <h3 style="font-weight:700;font-size:1.125rem;margin-bottom:0.5rem;">Choose your core pillar</h3>
+    <p style="color:var(--muted);font-size:0.9375rem;margin-bottom:1.25rem;">
+      What principle drives your product most?
+    </p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.5rem;" id="pillar-grid">
+      {pillars.map((p) => (
+        <button
+          data-test="pillar-option"
+          data-pillar={p.id}
+          style="background:var(--bg);border:1px solid var(--border);border-radius:0.5rem;padding:0.875rem 1rem;text-align:left;cursor:pointer;color:var(--fg);transition:background 0.15s;"
+        >
+          <div style="font-weight:600;margin-bottom:0.25rem;">{p.label}</div>
+          <div style="font-size:0.8125rem;color:var(--muted);">{p.desc}</div>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div data-test="wizard-step-3" id="wizard-step-3" style="display:none;">
+    <h3 style="font-weight:700;font-size:1.125rem;margin-bottom:0.5rem;">Describe a key interaction</h3>
+    <p style="color:var(--muted);font-size:0.9375rem;margin-bottom:1.25rem;">
+      How does a user accomplish their main goal in your product?
+    </p>
+    <textarea
+      data-test="wizard-interaction-input"
+      id="wizard-interaction-input"
+      placeholder="e.g. User opens app and starts writing immediately..."
+      rows="3"
+      style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:0.5rem;padding:0.75rem 1rem;color:var(--fg);font-size:0.9375rem;resize:vertical;outline:none;box-sizing:border-box;"
+    ></textarea>
+  </div>
+
+  <!-- Output -->
+  <div data-test="wizard-output" id="wizard-output" style="display:none;font-family:ui-monospace,monospace;font-size:0.875rem;line-height:1.7;">
+    <p style="color:var(--accent);font-weight:700;margin-bottom:1rem;">📄 Skeleton Spec Output</p>
+    <p style="color:var(--muted);margin-bottom:0.5rem;"><strong style="color:var(--fg);">L1 · Philosophy</strong></p>
+    <p id="output-mission" style="color:var(--muted);margin-bottom:1rem;padding-left:1rem;border-left:2px solid var(--border);"></p>
+    <p style="color:var(--muted);margin-bottom:0.5rem;"><strong style="color:var(--fg);">L2 · Truths</strong></p>
+    <p id="output-pillar" style="color:var(--muted);margin-bottom:1rem;padding-left:1rem;border-left:2px solid var(--border);"></p>
+    <p style="color:var(--muted);margin-bottom:0.5rem;"><strong style="color:var(--fg);">L3 · Interactions</strong></p>
+    <p id="output-interaction" style="color:var(--muted);padding-left:1rem;border-left:2px solid var(--border);"></p>
+  </div>
+
+  <!-- Single action button row (shared) -->
+  <div id="wizard-actions" style="margin-top:1.5rem;display:flex;justify-content:flex-end;gap:0.75rem;">
+    <button
+      data-test="wizard-next"
+      id="wizard-next"
+      style="background:var(--accent);color:#fff;border:none;border-radius:0.5rem;padding:0.625rem 1.5rem;font-weight:600;cursor:pointer;font-size:0.9375rem;"
+    >
+      Next →
+    </button>
+    <button
+      data-test="wizard-finish"
+      id="wizard-finish"
+      style="display:none;background:var(--accent);color:#fff;border:none;border-radius:0.5rem;padding:0.625rem 1.5rem;font-weight:600;cursor:pointer;font-size:0.9375rem;"
+    >
+      Generate spec →
+    </button>
+  </div>
+</div>
+
+<script>
+(function() {
+  var currentStep = 1;
+  var selectedPillar = '';
+
+  var step1 = document.getElementById('wizard-step-1');
+  var step2 = document.getElementById('wizard-step-2');
+  var step3 = document.getElementById('wizard-step-3');
+  var output = document.getElementById('wizard-output');
+  var missionInput = document.getElementById('wizard-mission-input');
+  var interactionInput = document.getElementById('wizard-interaction-input');
+  var validationMsg = document.getElementById('wizard-validation-message');
+  var bar1 = document.getElementById('step-bar-1');
+  var bar2 = document.getElementById('step-bar-2');
+  var bar3 = document.getElementById('step-bar-3');
+  var nextBtn = document.getElementById('wizard-next');
+  var finishBtn = document.getElementById('wizard-finish');
+
+  function showStep(n) {
+    currentStep = n;
+    step1.style.display = n === 1 ? '' : 'none';
+    step2.style.display = n === 2 ? '' : 'none';
+    step3.style.display = n === 3 ? '' : 'none';
+    output.style.display = n === 4 ? '' : 'none';
+    nextBtn.style.display = n < 3 ? '' : 'none';
+    finishBtn.style.display = n === 3 ? '' : 'none';
+    bar1.style.background = n >= 1 ? 'var(--accent)' : 'var(--border)';
+    bar2.style.background = n >= 2 ? 'var(--accent)' : 'var(--border)';
+    bar3.style.background = n >= 3 ? 'var(--accent)' : 'var(--border)';
+  }
+
+  nextBtn.addEventListener('click', function() {
+    if (currentStep === 1) {
+      var val = missionInput.value.trim();
+      if (!val) {
+        validationMsg.textContent = 'Please describe your product idea before continuing.';
+        validationMsg.style.display = '';
+        return;
+      }
+      validationMsg.style.display = 'none';
+      showStep(2);
+    } else if (currentStep === 2) {
+      showStep(3);
+    }
+  });
+
+  document.getElementById('pillar-grid').addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-pillar]');
+    if (!btn) return;
+    selectedPillar = btn.dataset.pillar || '';
+    document.querySelectorAll('[data-pillar]').forEach(function(b) {
+      b.style.background = 'var(--bg)';
+      b.style.border = '1px solid var(--border)';
+    });
+    btn.style.background = 'var(--accent)';
+    btn.style.border = '1px solid var(--accent)';
+  });
+
+  finishBtn.addEventListener('click', function() {
+    document.getElementById('output-mission').textContent = 'We believe: ' + (missionInput.value || '');
+    document.getElementById('output-pillar').textContent = 'Pillar: ' + (selectedPillar || 'clarity');
+    document.getElementById('output-interaction').textContent = interactionInput.value || '';
+    showStep(4);
+  });
+})();
+</script>

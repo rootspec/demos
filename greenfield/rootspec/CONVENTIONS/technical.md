@@ -1,32 +1,29 @@
 ## Framework
+- **Stack:** Astro 6 + React 19 (islands) + Tailwind CSS 4 (@tailwindcss/vite)
+- **Language:** TypeScript (strict mode via astro/tsconfigs/strict)
+- **Package manager:** npm
 
-- **Framework:** Astro 6 with React islands (`@astrojs/react`) and Tailwind CSS (`@astrojs/tailwind`, tailwindcss v3)
-- **TypeScript:** v4 (pinned for Cypress webpack-batteries compatibility)
-- **Rendering:** Astro SSR for static components, `client:load` for React interactive islands
-- **Base path:** `/demos/greenfield` in production (`NODE_ENV=production`), `/` in dev
+## Structure
+- **Pages:** `src/pages/` — Astro pages (index.astro is the homepage)
+- **Layouts:** `src/layouts/` — Layout.astro wraps all pages
+- **Components:** `src/components/` — `.astro` for static, `.tsx` for interactive islands
+- **Styles:** `src/styles/global.css` — single global CSS file with CSS custom properties
 
-## File Structure
-
-- **Pages:** `src/pages/` — Astro page files
-- **Layouts:** `src/layouts/Layout.astro` — root HTML layout with theme FOUC prevention
-- **Components:** `src/components/` — `.astro` for static, `.tsx` for interactive
-- **Styles:** `src/styles/global.css` — Tailwind base + CSS custom properties for theming
-
-## Testing
-
-- **Framework:** Cypress 15 with TypeScript
-- **Pattern:** `loadAndRun()` with embedded YAML string literals in `cypress/e2e/mvp.cy.ts`
-- **DSL:** `visit`, `click`, `fill`, `shouldExist`, `shouldContain`
-- **Selectors:** All interactive elements have `data-test` attributes matching spec selector names
-- **Note:** Cypress tsconfig uses `"ignoreDeprecations": "5.0"` and `target: es2017` to avoid TS5 deprecation errors
+## Patterns
+- **Static components:** Use `.astro` files with inline styles (CSS variables)
+- **Interactive components:** Use `.tsx` React components with `client:load` directive
+- **Styling:** Inline styles using CSS custom property variables (`var(--accent)`, etc.)
+- **Routing:** Single page (`/demos/greenfield/`) served at Astro base path
+- **data-test attributes:** All testable elements have `data-test` attributes
 
 ## Dev Server
-
 - **Command:** `npx astro dev --port 3000`
 - **Port:** 3000
-- **Managed by:** `scripts/dev.sh`
+- **Base path:** `/demos/greenfield/`
+- **PID management:** `./scripts/dev.sh start|stop|status`
 
-## Dependencies
-
-- **Runtime:** astro, @astrojs/react, @astrojs/tailwind, react, react-dom, tailwindcss@3
-- **Dev:** cypress, js-yaml, zod, typescript@4
+## Tests
+- **Framework:** Cypress e2e
+- **Test file:** `cypress/e2e/mvp.cy.ts`
+- **Pattern:** YAML embedded as string literals, `loadAndRun()` pattern
+- **Reporter:** rootspec-reporter writes to `rootspec/tests-status.json`

@@ -1,51 +1,45 @@
 # Level 4: Theme System
-<!-- L4: HOW it's built — References L1-3 + Sibling L4 + External only -->
+
+References: [L1: Foundational Philosophy], [L2: Stable Truths], [L3: Interaction Architecture], [L4: SYSTEMS_OVERVIEW]
 
 ## Responsibility
 
-The Theme System owns dark/light mode detection, user preference persistence, and the mechanism for switching themes. It determines the active theme context that PRESENTATION_SYSTEM uses to render visual output.
+Owns dark/light theme detection, user override, and persistence. Determines which token set from PRESENTATION_SYSTEM is currently active. Is the single source of truth for theme state — no other system stores or decides the current theme.
 
----
+## State
 
-## State Owned
+- **Resolved theme:** `dark` or `light` — the currently active theme applied to the page
+- **Source:** `system` (from OS/browser preference) or `user` (manual override)
+- **Stored preference:** User override persisted in `localStorage` so preference survives page reload
 
-- `activeTheme` — "dark" or "light"
-- `source` — how the active theme was determined: "system" or "user"
+## Behavior
 
----
+### Initial Load
+1. Check `localStorage` for a stored user preference
+2. If found, apply that preference as the resolved theme
+3. If not found, read `prefers-color-scheme` media query and apply system preference
+4. Apply resolved theme to the page root element before first paint (to prevent flash of wrong theme)
 
-## Detection and Initialization
+### User Toggle
+1. User clicks theme toggle control (rendered by LAYOUT_SYSTEM)
+2. THEME_SYSTEM inverts the current resolved theme (`dark` → `light` or `light` → `dark`)
+3. Writes new preference to `localStorage`
+4. Updates page root element class/attribute
+5. PRESENTATION_SYSTEM token set switches immediately via CSS variable cascade
 
-On page load:
+### System Preference Change
+- If the user has not set a manual override, THEME_SYSTEM listens to `prefers-color-scheme` changes and updates the resolved theme reactively
+- If the user has set a manual override, system preference changes are ignored until the user resets their preference
 
-1. Check localStorage for a stored user preference
-2. If found: apply that theme immediately
-3. If not found: read `prefers-color-scheme` media query and apply matching theme
-4. If neither is available: default to dark theme
+## Data Ownership
 
-The theme is applied by setting a class on the root `<html>` element before first render to prevent flash of incorrect theme.
+- Resolved theme (runtime state: `dark` | `light`)
+- Source of resolved theme (`system` | `user`)
+- `localStorage` key for theme preference (owned by this system exclusively)
 
----
+## Boundaries
 
-## Persistence
-
-When the user manually toggles the theme:
-- Update `activeTheme` and `source`
-- Write preference to localStorage
-- Apply class change to root element immediately
-
----
-
-## System Detection Reactivity
-
-If the user has not manually set a preference (`source === "system"`), the system responds to changes in `prefers-color-scheme` during the session and updates the theme accordingly.
-
-If the user has manually set a preference (`source === "user"`), system changes are ignored until the user resets preference (not a required feature — manual toggle is sufficient).
-
----
-
-## Interface with Other Systems
-
-- Provides `activeTheme` class to the root element; PRESENTATION_SYSTEM reads this to apply correct token set
-- Receives toggle action from INTERACTIVE_SYSTEM (the theme toggle button)
-- Does not own any visual tokens — only the active state
+- THEME_SYSTEM does not define token values — those belong to PRESENTATION_SYSTEM
+- THEME_SYSTEM does not render the toggle UI — LAYOUT_SYSTEM renders it and calls into THEME_SYSTEM on click
+- THEME_SYSTEM does not manage any other user preferences or persistent state
+- The theme toggle is always accessible: keyboard-operable and announced to screen readers

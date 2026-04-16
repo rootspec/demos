@@ -3,59 +3,30 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-16T00:00:00Z
 
 hierarchy_explorer:
-  expand_duration:
-    value: 200
+  expand_animation_duration:
+    value: 250
     # @unit: milliseconds
-    # @rationale: Fast enough to feel responsive; slow enough to be visible as an intentional animation
-    # @constraint: min=100, max=400
-
-  max_levels:
-    value: 5
-    # @unit: count
-    # @rationale: RootSpec has exactly five levels; this is a fixed product constant
+    # @rationale: Responsive enough to feel direct, long enough to orient the user to what expanded
+    # @constraint: min=150, max=500
 
 wizard:
-  min_pillars:
-    value: 3
+  minimum_pillars:
+    value: 1
     # @unit: count
-    # @rationale: Three pillars is the minimum to create meaningful tension and prioritization in design decisions
-    # @constraint: min=1, max=5
+    # @rationale: At least one pillar required to produce meaningful output; keeps barrier low
+    # @constraint: min=1, max=3
 
-  max_pillars:
+  maximum_pillars:
     value: 5
     # @unit: count
-    # @rationale: More than five pillars dilutes their decision-filtering power (per L1 Design Pillars rule)
+    # @rationale: Matches L1 spec guidance (3-5 pillars); caps selection to match methodology
     # @constraint: min=3, max=7
 
-  step_transition_duration:
-    value: 150
+  output_animation_duration:
+    value: 300
     # @unit: milliseconds
-    # @rationale: Quick step transitions maintain momentum; longer would feel sluggish in a form flow
-    # @constraint: min=50, max=300
-
-comparison:
-  toggle_transition_duration:
-    value: 200
-    # @unit: milliseconds
-    # @rationale: Slightly slower than wizard steps; the comparison content is denser and benefits from a more deliberate transition
-
-scroll_reveal:
-  threshold:
-    value: 0.1
-    # @unit: ratio (0-1, Intersection Observer threshold)
-    # @rationale: Reveal begins when 10% of element is visible; triggers early enough to feel natural while scrolling
-    # @constraint: min=0, max=1
-
-  delay_per_item:
-    value: 80
-    # @unit: milliseconds
-    # @rationale: Stagger between items in a reveal sequence; creates cascade effect without feeling slow
-
-mobile_touch_target_min:
-  value: 44
-  # @unit: pixels
-  # @rationale: WCAG 2.5.5 recommended minimum touch target size for mobile accessibility
-  # @inviolable: true
+    # @rationale: Output appears with enough motion to signal completion without delaying the user
+    # @constraint: min=150, max=600

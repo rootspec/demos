@@ -1,47 +1,42 @@
 ---
-const problems = [
-  {
-    icon: '📉',
-    title: 'Spec Drift',
-    desc: 'Requirements documents go stale the moment implementation begins. By sprint 3, nobody trusts the spec.',
-  },
-  {
-    icon: '🤖',
-    title: 'Unreliable AI Output',
-    desc: 'AI has knowledge but not wisdom. Without a validation gate, generated code accumulates decisions nobody made.',
-  },
-  {
-    icon: '🔀',
-    title: 'Philosophy-Implementation Gap',
-    desc: 'What the product should feel like gets lost in tickets and PRs. Features ship that contradict the original vision.',
-  },
-  {
-    icon: '📄',
-    title: 'Google Docs Nobody Reads',
-    desc: 'The spec lives in a shared doc. It\'s never updated, never tested, and never enforced. It\'s decoration.',
-  },
-];
 ---
+<section
+  data-test="problem-section"
+  style="padding:4rem 1.5rem;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);"
+>
+  <div style="max-width:900px;margin:0 auto;">
+    <p style="font-size:0.75rem;font-weight:700;letter-spacing:0.12em;color:var(--accent);text-transform:uppercase;margin-bottom:0.75rem;">The problem</p>
+    <h2 style="font-size:clamp(1.75rem,4vw,2.75rem);font-weight:700;margin-bottom:1rem;letter-spacing:-0.02em;">
+      AI agents drift.<br/>Specs prevent it.
+    </h2>
+    <p style="color:var(--muted);font-size:1.0625rem;line-height:1.65;max-width:620px;margin-bottom:3rem;">
+      Without a structured specification, AI coding agents make decisions based
+      on incomplete context — leading to spec drift, inconsistency, and features
+      that don't reflect your actual vision.
+    </p>
 
-<section data-test="problem-section" class="section-spacing" style="background: var(--card);">
-  <div class="container-content">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--fg);">The problem with how we specify software</h2>
-      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
-        Every team has a spec process. Most are broken in the same ways.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {problems.map((p) => (
-        <div class="card flex gap-4">
-          <span class="text-3xl flex-shrink-0">{p.icon}</span>
-          <div>
-            <h3 class="font-semibold text-base mb-1" style="color: var(--fg);">{p.title}</h3>
-            <p class="text-sm leading-relaxed" style="color: var(--muted);">{p.desc}</p>
-          </div>
-        </div>
-      ))}
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;">
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:0.75rem;padding:1.5rem;">
+        <div style="font-size:1.5rem;margin-bottom:0.75rem;">🌀</div>
+        <h3 style="font-weight:600;margin-bottom:0.5rem;">Spec drift</h3>
+        <p style="color:var(--muted);font-size:0.9375rem;line-height:1.6;">
+          Each agent prompt diverges slightly from the last until the codebase no longer matches your intent.
+        </p>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:0.75rem;padding:1.5rem;">
+        <div style="font-size:1.5rem;margin-bottom:0.75rem;">🤖</div>
+        <h3 style="font-weight:600;margin-bottom:0.5rem;">AI limitations</h3>
+        <p style="color:var(--muted);font-size:0.9375rem;line-height:1.6;">
+          LLMs lack persistent memory across sessions and cannot infer your product philosophy without explicit grounding.
+        </p>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:0.75rem;padding:1.5rem;">
+        <div style="font-size:1.5rem;margin-bottom:0.75rem;">📜</div>
+        <h3 style="font-weight:600;margin-bottom:0.5rem;">Missing context</h3>
+        <p style="color:var(--muted);font-size:0.9375rem;line-height:1.6;">
+          Traditional PRDs and tickets were designed for humans, not AI agents that need structured, queryable context.
+        </p>
+      </div>
     </div>
   </div>
 </section>

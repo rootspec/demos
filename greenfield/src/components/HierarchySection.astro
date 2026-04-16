@@ -1,14 +1,4 @@
 ---
-// Server-side wrapper for the React hierarchy explorer island
+import HierarchyExplorer from './HierarchyExplorer.tsx';
 ---
-<section class="section-spacing" style="background: var(--bg);">
-  <div class="container-content">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--fg);">The five-level hierarchy</h2>
-      <p class="text-lg max-w-2xl mx-auto" style="color: var(--muted);">
-        Each level can only reference higher levels, never lower. Click a level to explore.
-      </p>
-    </div>
-    <div id="hierarchy-explorer-mount"></div>
-  </div>
-</section>
+<HierarchyExplorer client:load />

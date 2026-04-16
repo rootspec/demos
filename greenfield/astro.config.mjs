@@ -1,16 +1,10 @@
 import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
-import tailwind from '@astrojs/tailwind';
-
-const isProd = process.env.NODE_ENV === 'production';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://rootspec.github.io',
-  base: isProd ? '/demos/greenfield' : '/',
-  integrations: [
-    react(),
-    tailwind(),
-  ],
+  vite: {
+    plugins: [tailwindcss()],
+  },
   server: {
     port: 3000,
   },

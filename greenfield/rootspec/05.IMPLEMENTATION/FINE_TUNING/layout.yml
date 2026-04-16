@@ -3,45 +3,29 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
-
-content_max_width:
-  value: 1200
-  # @unit: pixels
-  # @rationale: Wide enough for desktop reading; narrow enough to avoid overly long line lengths
-  # @constraint: min=960, max=1440
-
-content_padding_horizontal:
-  value: 24
-  # @unit: pixels
-  # @rationale: Provides breathing room on mobile (min padding); scales up on wider viewports
+# @last_updated: 2026-04-16T00:00:00Z
 
 breakpoints:
-  mobile:
+  mobile_max:
     value: 640
-    # @unit: pixels
-    # @rationale: Standard small screen breakpoint; below this, single-column layout applies
-  tablet:
-    value: 768
-    # @unit: pixels
-    # @rationale: iPad portrait and similar; two-column layouts may apply
-  desktop:
+    # @unit: px
+    # @rationale: Standard small-viewport breakpoint; below this, single-column layouts apply
+    # @constraint: min=480, max=768
+
+  tablet_max:
     value: 1024
-    # @unit: pixels
-    # @rationale: Desktop-first layouts activate; full interactive component widths apply
+    # @unit: px
+    # @rationale: Mid-range breakpoint; two-column layouts become appropriate above mobile
+    # @constraint: min=768, max=1280
 
-section_vertical_spacing:
-  value: 96
-  # @unit: pixels
-  # @rationale: Generous spacing between sections creates visual breathing room and separates conceptual areas
-  # @constraint: min=64, max=128
+scroll_behavior:
+  anchor_scroll_duration:
+    value: 400
+    # @unit: milliseconds
+    # @rationale: Smooth scroll fast enough to feel responsive, long enough to orient the user
+    # @constraint: min=200, max=800
 
-meta_banner_z_index:
-  value: 50
-  # @unit: z-index
-  # @rationale: Above page content, below any modal overlays; ensures banner is always readable
-
-header_z_index:
-  value: 40
-  # @unit: z-index
-  # @rationale: Sticky header stays above page content; below meta banner when both visible
+base_path:
+  value: "/demos/greenfield/"
+  # @rationale: GitHub Pages deployment subpath — all asset URLs and internal links must resolve relative to this
+  # @inviolable: true

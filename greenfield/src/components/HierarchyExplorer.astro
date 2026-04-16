@@ -1,0 +1,91 @@
+---
+const levels = [
+  {
+    id: 1,
+    label: 'L1',
+    title: 'Philosophy',
+    color: '#7c3aed',
+    detail: 'The foundational beliefs and principles that guide every product decision. Immutable core values that persist across all versions.',
+    example: '> "We believe software should reduce cognitive load, not add to it."',
+  },
+  {
+    id: 2,
+    label: 'L2',
+    title: 'Truths',
+    color: '#2563eb',
+    detail: 'Absolute product constraints — things that must always be true. These are the non-negotiables derived from philosophy.',
+    example: '> "The application will never require account creation to access core functionality."',
+  },
+  {
+    id: 3,
+    label: 'L3',
+    title: 'Interactions',
+    color: '#059669',
+    detail: 'How users flow through the product. The canonical journeys and interaction patterns that define the UX.',
+    example: '> "JOURNEY: User discovers → tries → adopts without friction."',
+  },
+  {
+    id: 4,
+    label: 'L4',
+    title: 'Systems',
+    color: '#d97706',
+    detail: 'Technical and design systems that implement the interactions. Component libraries, data models, and architecture patterns.',
+    example: '> "SYSTEM: Content delivery is static-first, hydrated only for interactive components."',
+  },
+  {
+    id: 5,
+    label: 'L5',
+    title: 'Implementation',
+    color: '#dc2626',
+    detail: 'Executable user stories with Given/When/Then acceptance criteria. Directly consumed by the rs-impl agent skill.',
+    example: '> "Given I visit the homepage, when the page loads, then I see the hero section."',
+  },
+];
+---
+<section
+  id="explore"
+  data-test="hierarchy-explorer"
+  style="padding:5rem 1.5rem;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);"
+>
+  <div style="max-width:900px;margin:0 auto;">
+    <p style="font-size:0.75rem;font-weight:700;letter-spacing:0.12em;color:var(--accent);text-transform:uppercase;margin-bottom:0.75rem;">The five levels</p>
+    <h2 style="font-size:clamp(1.75rem,4vw,2.75rem);font-weight:700;margin-bottom:1rem;letter-spacing:-0.02em;">
+      A hierarchy of spec documents
+    </h2>
+    <p style="color:var(--muted);font-size:1.0625rem;line-height:1.65;max-width:580px;margin-bottom:2.5rem;">
+      Click any level to see what it contains and how it relates to the others.
+    </p>
+
+    <div style="display:flex;flex-direction:column;gap:0.75rem;">
+      {levels.map((level) => (
+        <details class="level-details" style="background:var(--bg);border:1px solid var(--border);border-radius:0.625rem;overflow:hidden;">
+          <summary
+            data-test={`level-card-${level.id}`}
+            style={`display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;cursor:pointer;list-style:none;color:var(--fg);`}
+          >
+            <span style={`flex-shrink:0;width:2.25rem;height:2.25rem;border-radius:0.5rem;background:${level.color};display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8125rem;color:#fff;`}>
+              {level.label}
+            </span>
+            <span style="font-weight:600;flex-grow:1;">{level.title}</span>
+            <span class="level-icon" style="color:var(--muted);font-size:1.25rem;line-height:1;user-select:none;">+</span>
+          </summary>
+          <div
+            data-test={`level-detail-${level.id}`}
+            style={`padding:1.25rem 1.5rem;border-top:1px solid ${level.color};`}
+          >
+            <p style="color:var(--muted);line-height:1.65;margin-bottom:0.875rem;">{level.detail}</p>
+            <pre style="background:var(--surface);border:1px solid var(--border);border-radius:0.375rem;padding:0.875rem 1rem;font-size:0.875rem;color:var(--accent-light);white-space:pre-wrap;word-break:break-word;margin:0;font-family:ui-monospace,monospace;">{level.example}</pre>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  details.level-details summary::-webkit-details-marker { display: none; }
+  details.level-details[open] .level-icon::after { content: '−'; }
+  details.level-details:not([open]) .level-icon::after { content: '+'; }
+  details.level-details .level-icon { font-size: 0; }
+  details.level-details .level-icon::after { font-size: 1.25rem; }
+</style>
