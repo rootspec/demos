@@ -1,77 +1,116 @@
 # Layout System
 
-**Version:** 7.3.2
-**Status:** Draft
+**References:** `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`, `SYSTEMS_OVERVIEW.md`, `CONTENT_SYSTEM.md`, `THEME_SYSTEM.md`
 
 ---
 
 ## Responsibility
 
-Owns the responsive grid, section structure, scroll behavior, and base path configuration for the static deployment. Provides the structural shell that all content and interactive sections are rendered within.
+Manages overall page structure: the meta banner, site header (including theme toggle and version badge), section layout, responsive breakpoints, and navigation. This system owns how content is positioned and structured on the page — not what the content says or how it animates.
 
-## Boundaries
+---
 
-- **Owns:** Page structure, responsive breakpoints, section spacing, base path (`/demos/greenfield/`)
-- **Does not own:** Content copy (CONTENT_SYSTEM), theme state (THEME_SYSTEM), component-level interaction state (INTERACTIVE_SYSTEM)
-
-## Data Owned
-
-| Data | Source | Mutability |
-|------|--------|------------|
-| Viewport width | Browser | Read-only (observed) |
-| Scroll position | Browser | Read-only (observed) |
-| Base path | Build config | Static |
-
-## Layout Structure
+## Page Structure
 
 ```
-<html>
-  <head> (meta, styles, theme init script) </head>
-  <body>
-    <header> (logo, version badge, theme toggle, nav) </header>
-    <main>
-      <MetaBanner />
-      <HeroSection />
-      <ProblemSection />
-      <HowItWorksSection />
-      <HierarchyExplorerSection />
-      <SpecWizardSection />
-      <ComparisonSection />
-      <CTASection />
-    </main>
-    <footer> (attribution, build date) </footer>
-  </body>
-</html>
+┌─────────────────────────────────┐
+│ Meta Banner (always visible)    │
+├─────────────────────────────────┤
+│ Site Header                     │
+│  ├─ Logo / wordmark             │
+│  ├─ Version badge               │
+│  └─ Theme toggle                │
+├─────────────────────────────────┤
+│ Hero Section                    │
+│  ├─ Tagline                     │
+│  └─ One-sentence explanation    │
+├─────────────────────────────────┤
+│ Problem Section                 │
+├─────────────────────────────────┤
+│ How It Works Section            │
+│  └─ Methodology Diagram (SVG)  │
+├─────────────────────────────────┤
+│ Hierarchy Explorer Section      │
+├─────────────────────────────────┤
+│ Spec Wizard Section             │
+├─────────────────────────────────┤
+│ Before/After Comparison Section │
+├─────────────────────────────────┤
+│ Open Source CTA Section         │
+├─────────────────────────────────┤
+│ Footer                          │
+│  └─ Builder name, build date   │
+└─────────────────────────────────┘
 ```
 
-## Responsive Behavior
+---
 
-| Breakpoint | Layout Changes |
-|-----------|----------------|
-| Mobile (narrow) | Single column; touch targets expanded; comparison shows one panel |
-| Tablet (medium) | Two-column where appropriate; hierarchy explorer stacks |
-| Desktop (wide) | Full layout; side-by-side comparison; hierarchy explorer grid |
+## Meta Banner
 
-## Base Path
+- Persists at the top of every page view
+- Never hidden, scrolled away, or dismissible
+- Contains: build method description + two absolute GitHub links
+- Must be readable in both dark and light modes
 
-The site is deployed to GitHub Pages at `/demos/greenfield/`. All asset URLs (CSS, JS, images/SVG), internal links, and the sitemap must be prefixed with this base path. The framework's base path configuration handles this at build time — not at runtime.
+---
 
-## Scroll Behavior
+## Header
 
-- Sections transition smoothly as the user scrolls
-- Section entry animations are triggered by scroll position (delegated to PRESENTATION_SYSTEM)
-- No horizontal scroll on any viewport size
-- Header remains visible (sticky or fixed) so theme toggle and version badge are always accessible
+- Contains: version badge (from CONTENT_SYSTEM), theme toggle (from THEME_SYSTEM)
+- Version badge is prominent — visible without searching
+- Theme toggle is accessible via keyboard
+
+---
+
+## Responsive Strategy
+
+| Breakpoint | Layout Behavior |
+|-----------|-----------------|
+| Mobile ([small width]) | Single-column, stacked sections, touch-sized tap targets |
+| Tablet ([medium width]) | Single or two-column depending on section content |
+| Desktop ([large width]) | Wider content with side-by-side where appropriate |
+
+All interactive features must be fully functional at minimum supported mobile width.
+
+---
+
+## Navigation
+
+This is a single-page marketing site — no multi-page routing is required. Smooth scroll to sections if navigation anchors are present. No sticky navigation is required (meta banner takes that position).
+
+---
+
+## Base Path Configuration
+
+The site is deployed at `/demos/greenfield/`. The framework's base path must be configured so:
+- All asset URLs (CSS, JS, images, fonts) resolve correctly from the subpath
+- Internal links work correctly from the subpath
+- The static prerenderer does not use relative URLs for external links (already handled by CONTENT_SYSTEM using absolute URLs)
+
+---
+
+## Data Ownership
+
+- Receives version string from CONTENT_SYSTEM for badge
+- Receives `currentMode` from THEME_SYSTEM for visual state
+- Emits toggle events to THEME_SYSTEM on toggle activation
+- Emits viewport/breakpoint signals to INTERACTIVE_SYSTEM
+
+---
 
 ## Rules
 
-- No layout-level JavaScript that cannot degrade gracefully
-- The base path must be set in framework config, not hardcoded in individual components
-- Section order matches the narrative flow: meta → hero → problem → methodology → interactive → CTA
+- Meta banner must be visible on page load without user action on all viewport sizes
+- No section may be completely hidden from view — all content must be reachable by scrolling
+- Footer must include builder name and build date (per L1 attribution requirement)
+- Base path configuration is a build-time concern, not runtime — do not patch URLs dynamically
+
+---
 
 ## Interactions with Other Systems
 
-- **CONTENT_SYSTEM:** Provides the shell that content sections render within; does not control content
-- **INTERACTIVE_SYSTEM:** Provides viewport size context; interactive components adapt their layout accordingly
-- **PRESENTATION_SYSTEM:** Scroll positions are passed to PRESENTATION_SYSTEM for triggering section entry animations
-- **THEME_SYSTEM:** Root element receives theme class before layout renders; no layout-specific theme logic
+- Provides viewport and breakpoint signals to: INTERACTIVE_SYSTEM
+- Receives: version string from CONTENT_SYSTEM
+- Receives: theme mode from THEME_SYSTEM
+- Emits: theme toggle events to THEME_SYSTEM
+- Contains: INTERACTIVE_SYSTEM components (Hierarchy Explorer, Spec Wizard, Before/After)

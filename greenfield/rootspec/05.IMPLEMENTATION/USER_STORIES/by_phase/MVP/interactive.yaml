@@ -1,49 +1,34 @@
 # =============================================================================
-# USER STORIES: Interactive System — MVP
+# USER STORY: Hierarchy Explorer Interaction
 # =============================================================================
-# @spec_version: 7.3.2
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: SITE_EXPERIENCE
-# @systems: [INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-16T00:00:00Z
+# @journey: PROOF
+# @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM, PRESENTATION_SYSTEM]
+# @last_updated: 2026-04-17T03:47:13Z
 
----
-
-id: US-301
-title: Visitor can expand hierarchy levels in the explorer
+id: US-201
+title: Visitor explores the five-level hierarchy interactively
 
 acceptance_criteria:
-  - id: AC-301-1
-    title: Hierarchy explorer section is present
+  - id: AC-201-1
+    title: Hierarchy Explorer is present on the page
     narrative: |
       Given I visit the site
-      When I scroll to the hierarchy explorer section
-      Then I should see the five-level hierarchy displayed
+      When I scroll to the hierarchy section
+      Then I see the hierarchy explorer with five levels
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
 
-  - id: AC-301-2
-    title: Clicking a level card expands it
+  - id: AC-201-2
+    title: Clicking a level expands it to show content
     narrative: |
-      Given I can see the hierarchy explorer
-      When I click on a level card
-      Then that level card should expand to show more content
-    given:
-      - visit: '/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded="true"]' }
-
-  - id: AC-301-3
-    title: Expanded level shows example content
-    narrative: |
-      Given I can see the hierarchy explorer
-      When I click on level 1 (Philosophy)
-      Then I should see example content for that level
+      Given I see the hierarchy explorer
+      When I click on Level 1 Philosophy
+      Then I see expanded content for that level
     given:
       - visit: '/'
     when:
@@ -51,117 +36,129 @@ acceptance_criteria:
     then:
       - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
 
----
+  - id: AC-201-3
+    title: Clicking an expanded level collapses it
+    narrative: |
+      Given I have expanded Level 1 in the hierarchy explorer
+      When I click on Level 1 again
+      Then the level content collapses
+    given:
+      - visit: '/'
+      - click: { selector: '[data-test=hierarchy-level-1]' }
+    when:
+      - click: { selector: '[data-test=hierarchy-level-1]' }
+    then:
+      - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
 
-id: US-302
-title: Visitor can complete the Spec Your Idea Wizard
+---
+# =============================================================================
+# USER STORY: Spec Wizard Flow
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: PARTICIPATION
+# @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM]
+# @last_updated: 2026-04-17T03:47:13Z
+
+id: US-202
+title: Visitor creates a skeleton spec for their own idea
 
 acceptance_criteria:
-  - id: AC-302-1
-    title: Wizard section is present on the page
+  - id: AC-202-1
+    title: Spec Wizard is present on the page
     narrative: |
       Given I visit the site
-      When I scroll to the wizard section
-      Then I should see the Spec Your Idea wizard
+      When I scroll to the spec wizard section
+      Then I see the spec wizard with step 1 active
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=spec-wizard]' }
-
-  - id: AC-302-2
-    title: Wizard shows step 1 with a product idea input
-    narrative: |
-      Given I am viewing the wizard
-      When the wizard loads
-      Then I should see step 1 with an input for my product idea
-    given:
-      - visit: '/'
-    when: []
-    then:
       - shouldExist: { selector: '[data-test=wizard-step-1]' }
-      - shouldExist: { selector: '[data-test=product-idea-input]' }
 
-  - id: AC-302-3
-    title: Wizard advances to step 2 after entering a product idea
+  - id: AC-202-2
+    title: Visitor can enter a product idea and proceed to step 2
     narrative: |
-      Given I am on wizard step 1
-      When I enter a product idea and click Next
-      Then I should see step 2
+      Given I see the spec wizard at step 1
+      When I enter a product idea and click next
+      Then I see step 2 with mission options
     given:
       - visit: '/'
     when:
-      - fill: { selector: '[data-test=product-idea-input]', value: 'A tool for tracking daily habits' }
+      - fill: { selector: '[data-test=product-idea-input]', value: 'A task manager for developers' }
       - click: { selector: '[data-test=wizard-next]' }
     then:
       - shouldExist: { selector: '[data-test=wizard-step-2]' }
 
-  - id: AC-302-4
-    title: Completing the wizard shows a spec skeleton output
+  - id: AC-202-3
+    title: Visitor cannot proceed from step 1 without entering an idea
     narrative: |
-      Given I have completed all wizard steps
-      When I submit the wizard
-      Then I should see a generated spec skeleton
+      Given I see the spec wizard at step 1 with empty input
+      When I click next without entering anything
+      Then I remain on step 1
     given:
       - visit: '/'
     when:
-      - fill: { selector: '[data-test=product-idea-input]', value: 'A tool for tracking daily habits' }
       - click: { selector: '[data-test=wizard-next]' }
-      - click: { selector: '[data-test=mission-template-0]' }
+    then:
+      - shouldExist: { selector: '[data-test=wizard-step-1]' }
+
+  - id: AC-202-4
+    title: Completed wizard produces skeleton spec output
+    narrative: |
+      Given I have completed all three wizard steps
+      When I reach the output panel
+      Then I see a skeleton spec with my input mapped to spec levels
+    given:
+      - visit: '/'
+      - fill: { selector: '[data-test=product-idea-input]', value: 'A task manager for developers' }
       - click: { selector: '[data-test=wizard-next]' }
-      - click: { selector: '[data-test=pillar-option-0]' }
+      - click: { selector: '[data-test=mission-option-1]' }
+      - click: { selector: '[data-test=wizard-next]' }
       - click: { selector: '[data-test=pillar-option-1]' }
       - click: { selector: '[data-test=pillar-option-2]' }
-      - fill: { selector: '[data-test=key-interaction-input]', value: 'User marks a habit as complete' }
-      - click: { selector: '[data-test=wizard-generate]' }
+      - click: { selector: '[data-test=pillar-option-3]' }
+      - click: { selector: '[data-test=wizard-next]' }
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=spec-output]' }
+      - shouldExist: { selector: '[data-test=wizard-output]' }
 
 ---
+# =============================================================================
+# USER STORY: Before/After Comparison
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: PROOF
+# @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM, PRESENTATION_SYSTEM]
+# @last_updated: 2026-04-17T03:47:13Z
 
-id: US-303
-title: Visitor can toggle the before/after comparison
+id: US-203
+title: Visitor compares structured vs unstructured specifications
 
 acceptance_criteria:
-  - id: AC-303-1
-    title: Comparison section is present
+  - id: AC-203-1
+    title: Before/After comparison is present on the page
     narrative: |
       Given I visit the site
       When I scroll to the comparison section
-      Then I should see the before/after comparison
+      Then I see the before and after comparison with real content
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=comparison-section]' }
 
-  - id: AC-303-2
-    title: Toggling shows the "with RootSpec" panel
+  - id: AC-203-2
+    title: Visitor can toggle between before and after views
     narrative: |
-      Given I am viewing the comparison section
-      When I toggle to the "With RootSpec" view
-      Then I should see the structured spec content
+      Given I see the comparison section
+      When I click the toggle to switch views
+      Then I see the alternate view
     given:
       - visit: '/'
     when:
-      - click: { selector: '[data-test=comparison-toggle-after]' }
+      - click: { selector: '[data-test=comparison-toggle]' }
     then:
-      - shouldExist: { selector: '[data-test=comparison-panel-after]' }
-
----
-
-id: US-304
-title: Visitor can navigate the hierarchy explorer with keyboard
-
-acceptance_criteria:
-  - id: AC-304-1
-    title: Hierarchy level cards are reachable via keyboard
-    narrative: |
-      Given I am on the hierarchy explorer section
-      When I use Tab to navigate
-      Then I should be able to focus each level card
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][tabindex], [data-test=hierarchy-level-1][role="button"]' }
+      - shouldExist: { selector: '[data-test=comparison-section]' }

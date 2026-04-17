@@ -1,32 +1,57 @@
 ---
+const skills = [
+  {
+    cmd: 'rs-init',
+    label: 'Initialize',
+    description: 'Bootstrap the spec structure and file hierarchy for your project.',
+    color: 'text-blue-500',
+  },
+  {
+    cmd: 'rs-spec',
+    label: 'Specify',
+    description: 'Translate a product description into a validated five-level specification.',
+    color: 'text-purple-500',
+  },
+  {
+    cmd: 'rs-impl',
+    label: 'Implement',
+    description: 'Generate working code from user stories, one acceptance criterion at a time.',
+    color: 'text-indigo-500',
+  },
+  {
+    cmd: 'rs-validate',
+    label: 'Validate',
+    description: 'Run tests, measure coverage, and produce a machine-readable quality report.',
+    color: 'text-green-500',
+  },
+];
 ---
-<section id="how-it-works" data-test="how-it-works-section" class="py-20 px-4">
-  <div class="max-w-5xl mx-auto">
-    <h2 class="text-3xl font-bold text-center mb-4 text-[var(--fg)]">Four skills. One methodology.</h2>
-    <p class="text-center text-[var(--muted)] mb-12 max-w-2xl mx-auto">
-      RootSpec breaks the spec-to-ship pipeline into four composable skills you can run at any stage of development.
-    </p>
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="p-6 rounded-xl border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/30">
-        <div class="font-mono text-purple-600 dark:text-purple-400 font-bold text-lg mb-2">rs-init</div>
-        <h3 class="font-semibold mb-2 text-[var(--fg)]">Initialize</h3>
-        <p class="text-sm text-[var(--muted)]">Scaffold the spec directory, conventions, and test infrastructure for your project.</p>
-      </div>
-      <div class="p-6 rounded-xl border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
-        <div class="font-mono text-blue-600 dark:text-blue-400 font-bold text-lg mb-2">rs-spec</div>
-        <h3 class="font-semibold mb-2 text-[var(--fg)]">Specify</h3>
-        <p class="text-sm text-[var(--muted)]">Transform a product seed into a structured 5-level specification with user stories and acceptance criteria.</p>
-      </div>
-      <div class="p-6 rounded-xl border border-cyan-200 dark:border-cyan-800 bg-cyan-50 dark:bg-cyan-950/30">
-        <div class="font-mono text-cyan-600 dark:text-cyan-400 font-bold text-lg mb-2">rs-impl</div>
-        <h3 class="font-semibold mb-2 text-[var(--fg)]">Implement</h3>
-        <p class="text-sm text-[var(--muted)]">Build features from user stories, test-driven, one story at a time, with automated verification.</p>
-      </div>
-      <div class="p-6 rounded-xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/30">
-        <div class="font-mono text-green-600 dark:text-green-400 font-bold text-lg mb-2">rs-validate</div>
-        <h3 class="font-semibold mb-2 text-[var(--fg)]">Validate</h3>
-        <p class="text-sm text-[var(--muted)]">Run a full review pass — automated tests, spec coverage, and LLM review — to surface gaps.</p>
-      </div>
+
+<section
+  id="how-it-works"
+  data-test="how-it-works"
+  class="py-20 px-4"
+>
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        Four skills. One coherent workflow.
+      </h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        RootSpec gives your AI agent a repeatable, structured process — from idea to shipping code.
+      </p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {skills.map((skill, i) => (
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-gray-400 text-sm font-mono">0{i + 1}</span>
+            <span class={`font-mono font-bold ${skill.color}`}>{skill.cmd}</span>
+          </div>
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{skill.label}</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">{skill.description}</p>
+        </div>
+      ))}
     </div>
   </div>
 </section>

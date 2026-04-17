@@ -1,27 +1,49 @@
 ---
+const problems = [
+  {
+    title: 'Spec Drift',
+    description: 'Your requirements doc says one thing, the code does another, and nobody noticed until QA.',
+  },
+  {
+    title: 'AI Hallucinations',
+    description: 'AI coding tools fill in ambiguity with plausible-but-wrong decisions, creating technical debt you didn\'t ask for.',
+  },
+  {
+    title: 'No Single Source of Truth',
+    description: 'Design in Figma, requirements in Notion, stories in Jira — none of them agree with each other.',
+  },
+  {
+    title: 'Unverifiable Output',
+    description: 'When you ask AI to implement a feature, there\'s no systematic way to know if it actually did what you wanted.',
+  },
+];
 ---
-<section data-test="problem-section" class="py-20 px-4 bg-[var(--card)]">
-  <div class="max-w-5xl mx-auto">
-    <h2 class="text-3xl font-bold text-center mb-4 text-[var(--fg)]">Why existing approaches fall short</h2>
-    <p class="text-center text-[var(--muted)] mb-12 max-w-2xl mx-auto">
-      Most teams ship code that diverges from their original intent — not because they're careless, but because there's no shared language between vision, spec, and implementation.
-    </p>
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="p-6 rounded-xl border border-[var(--border)] bg-[var(--bg)]">
-        <div class="text-2xl mb-3">📋</div>
-        <h3 class="font-semibold mb-2 text-[var(--fg)]">PRDs get stale</h3>
-        <p class="text-sm text-[var(--muted)]">Product requirements docs are written once and forgotten. By sprint 3, nobody reads them.</p>
-      </div>
-      <div class="p-6 rounded-xl border border-[var(--border)] bg-[var(--bg)]">
-        <div class="text-2xl mb-3">🔀</div>
-        <h3 class="font-semibold mb-2 text-[var(--fg)]">Stories drift from code</h3>
-        <p class="text-sm text-[var(--muted)]">User stories live in Jira. Code lives in GitHub. They're never reconciled.</p>
-      </div>
-      <div class="p-6 rounded-xl border border-[var(--border)] bg-[var(--bg)]">
-        <div class="text-2xl mb-3">🤖</div>
-        <h3 class="font-semibold mb-2 text-[var(--fg)]">AI makes it worse</h3>
-        <p class="text-sm text-[var(--muted)]">Coding agents write what they infer, not what you meant. Without a spec, they hallucinate direction.</p>
-      </div>
+
+<section
+  data-test="problem-section"
+  class="py-20 px-4 bg-gray-50 dark:bg-gray-900"
+>
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        The problem with modern software development
+      </h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        AI writes code faster than ever — but without a structured spec, it's building the wrong thing at speed.
+      </p>
+    </div>
+    <div class="grid sm:grid-cols-2 gap-6">
+      {problems.map((p) => (
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div class="flex items-start gap-3">
+            <span class="text-red-500 text-xl mt-0.5">✗</span>
+            <div>
+              <h3 class="font-semibold text-gray-900 dark:text-white mb-1">{p.title}</h3>
+              <p class="text-gray-600 dark:text-gray-400 text-sm">{p.description}</p>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   </div>
 </section>

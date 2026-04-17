@@ -3,23 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --bg: #ffffff;
-  --fg: #0f172a;
-  --muted: #64748b;
-  --border: #e2e8f0;
-  --card: #f8fafc;
+  --brand: #6366f1;
+  --brand-dark: #4f46e5;
 }
 
-html.dark {
-  --bg: #0f172a;
-  --fg: #f1f5f9;
-  --muted: #94a3b8;
-  --border: #1e293b;
-  --card: #1e293b;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--bg);
-  color: var(--fg);
-  transition: background-color 0.2s, color 0.2s;
+  @apply bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 transition-colors duration-300;
 }

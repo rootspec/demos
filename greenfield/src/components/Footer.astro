@@ -1,14 +1,26 @@
 ---
+const BUILD_DATE = new Date().toISOString().split('T')[0];
+const BUILDER = 'Claude (claude-sonnet-4-6) via RootSpec rs-impl';
 ---
-<footer data-test="footer" class="py-10 px-4 border-t border-[var(--border)] bg-[var(--bg)]">
-  <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-[var(--muted)]">
-    <div data-test="footer-attribution">
-      Built with <a href="https://github.com/rootspec/rootspec" class="underline hover:text-[var(--fg)]">RootSpec</a> — spec-first development methodology.
-      <span class="ml-2">© {new Date().getFullYear()} RootSpec Contributors</span>
+
+<footer data-test="footer" class="py-12 px-4 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <span class="font-mono font-bold text-indigo-600 dark:text-indigo-400">RootSpec</span>
+        <span class="text-gray-400 text-sm">Specification-first development</span>
+      </div>
+      <div data-test="footer-attribution" class="text-sm text-gray-500 dark:text-gray-400 text-center sm:text-right">
+        <p>Built by <span class="font-medium text-gray-700 dark:text-gray-300">{BUILDER}</span></p>
+        <p class="text-xs mt-0.5">Generated on {BUILD_DATE} using the RootSpec pipeline</p>
+      </div>
     </div>
-    <div class="flex gap-4">
-      <a href="https://github.com/rootspec/rootspec" class="hover:text-[var(--fg)] transition-colors">GitHub</a>
-      <a href="https://github.com/rootspec/demos" class="hover:text-[var(--fg)] transition-colors">Demos</a>
+    <div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-gray-400">
+      <p>© {new Date().getFullYear()} RootSpec. Open source under MIT.</p>
+      <div class="flex gap-4">
+        <a href="https://github.com/rootspec" class="hover:text-indigo-500 transition-colors">GitHub</a>
+        <a href="https://github.com/rootspec/demos/tree/main/greenfield/rootspec" class="hover:text-indigo-500 transition-colors">View Spec</a>
+      </div>
     </div>
   </div>
 </footer>

@@ -1,261 +1,203 @@
 import { useState } from 'react';
 
-const missionTemplates = [
-  { label: 'Productivity Tool', description: 'Help users accomplish more with less friction' },
-  { label: 'Social Platform', description: 'Connect people around shared interests or goals' },
-  { label: 'Commerce/Marketplace', description: 'Enable buying, selling, or exchanging value' },
-  { label: 'Data/Analytics', description: 'Surface insights from complex information' },
-  { label: 'Creative Tool', description: 'Enable users to make, express, or build things' },
-  { label: 'Other', description: 'Define your own mission direction' },
+const missions = [
+  'Help users accomplish a core task faster and with less friction',
+  'Provide insight and clarity through data visualization',
+  'Connect people with shared interests or complementary needs',
+  'Automate repetitive processes to free up human creativity',
 ];
 
-const pillarOptions = [
-  'Simplicity — do one thing extremely well',
-  'Speed — minimize friction and time to value',
-  'Trust — earn and maintain user confidence',
-  'Delight — create memorable, enjoyable moments',
-  'Power — give experts full control',
-  'Accessibility — serve the broadest possible audience',
+const pillars = [
+  'Speed — every interaction should feel instant',
+  'Clarity — no user should ever be confused',
+  'Trust — data and privacy are non-negotiable',
+  'Delight — moments of joy that make users smile',
+  'Power — expose advanced capabilities for experts',
+  'Simplicity — fewer features, done perfectly',
 ];
 
-interface WizardData {
-  productIdea: string;
-  missionTemplate: number | null;
+interface WizardState {
+  step: number;
+  idea: string;
+  mission: number | null;
   pillars: number[];
-  keyInteraction: string;
-}
-
-function generateSpec(data: WizardData): string {
-  const template = data.missionTemplate !== null ? missionTemplates[data.missionTemplate] : null;
-  const selectedPillars = data.pillars.map((i) => pillarOptions[i]);
-
-  return `# RootSpec Skeleton — ${data.productIdea}
-
-## L1 · Philosophy
-${template ? `Mission direction: ${template.label} — ${template.description}` : ''}
-
-Design pillars:
-${selectedPillars.map((p) => `- ${p}`).join('\n')}
-
-## L2 · Truths
-- Users need: [define based on research]
-- Market context: [define based on research]
-- Key constraints: [define based on your context]
-
-## L3 · Interactions
-- Core moment: ${data.keyInteraction}
-- Supporting interactions: [expand based on your product]
-
-## L4 · Systems
-- UI System: [define components and patterns]
-- Data System: [define data flows and storage]
-
-## L5 · User Stories
----
-id: US-101
-title: User can ${data.keyInteraction.toLowerCase()}
-acceptance_criteria:
-  - id: AC-101-1
-    title: Core interaction works
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=core-element]' }
-`;
 }
 
 export default function SpecWizard() {
-  const [step, setStep] = useState(1);
-  const [data, setData] = useState<WizardData>({
-    productIdea: '',
-    missionTemplate: null,
+  const [state, setState] = useState<WizardState>({
+    step: 1,
+    idea: '',
+    mission: null,
     pillars: [],
-    keyInteraction: '',
   });
-  const [output, setOutput] = useState<string | null>(null);
 
-  function handleGenerate() {
-    setOutput(generateSpec(data));
-  }
+  const canProceedStep1 = state.idea.trim().length > 0;
 
-  function togglePillar(index: number) {
-    setData((d) => ({
-      ...d,
-      pillars: d.pillars.includes(index)
-        ? d.pillars.filter((p) => p !== index)
-        : [...d.pillars, index],
+  const goNext = () => {
+    if (state.step === 1 && !canProceedStep1) return;
+    setState((s) => ({ ...s, step: s.step + 1 }));
+  };
+
+  const togglePillar = (i: number) => {
+    setState((s) => ({
+      ...s,
+      pillars: s.pillars.includes(i) ? s.pillars.filter((p) => p !== i) : [...s.pillars, i],
     }));
-  }
+  };
+
+  const selectedMission = state.mission !== null ? missions[state.mission] : '';
 
   return (
-    <section id="spec-wizard" className="py-20 px-4 bg-[var(--card)]">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-4 text-[var(--fg)]">Spec Your Idea</h2>
-        <p className="text-center text-[var(--muted)] mb-10 max-w-xl mx-auto">
-          Answer a few questions and get a RootSpec skeleton you can take to your AI agent.
-        </p>
-
-        <div data-test="spec-wizard" className="bg-[var(--bg)] border border-[var(--border)] rounded-2xl p-8">
-          {/* Progress */}
-          <div className="flex gap-2 mb-8">
-            {[1, 2, 3].map((s) => (
-              <div
-                key={s}
-                className={`h-1.5 flex-1 rounded-full transition-colors ${
-                  s <= step ? 'bg-purple-600' : 'bg-[var(--border)]'
-                }`}
-              />
-            ))}
+    <div data-test="spec-wizard" className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden">
+      {/* Progress bar */}
+      <div className="flex border-b border-gray-200 dark:border-gray-700">
+        {[1, 2, 3].map((s) => (
+          <div
+            key={s}
+            className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
+              state.step === s
+                ? 'bg-indigo-600 text-white'
+                : state.step > s
+                ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-400'
+                : 'text-gray-400'
+            }`}
+          >
+            Step {s}
           </div>
-
-          {/* Step 1 */}
-          {step === 1 && (
-            <div data-test="wizard-step-1">
-              <h3 className="text-xl font-semibold mb-2 text-[var(--fg)]">Step 1: Describe your product</h3>
-              <p className="text-[var(--muted)] mb-6 text-sm">What are you building? Be brief — one or two sentences.</p>
-              <textarea
-                data-test="product-idea-input"
-                value={data.productIdea}
-                onChange={(e) => setData((d) => ({ ...d, productIdea: e.target.value }))}
-                placeholder="e.g. A tool for tracking daily habits and building streaks"
-                rows={3}
-                className="w-full px-4 py-3 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--fg)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
-              />
-              <div className="flex justify-end mt-6">
-                <button
-                  data-test="wizard-next"
-                  disabled={!data.productIdea.trim()}
-                  onClick={() => setStep(2)}
-                  className="px-6 py-2.5 bg-purple-600 text-white rounded-lg font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-purple-700 transition-colors"
-                >
-                  Next →
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Step 2 */}
-          {step === 2 && (
-            <div data-test="wizard-step-2">
-              <h3 className="text-xl font-semibold mb-2 text-[var(--fg)]">Step 2: Choose a mission direction</h3>
-              <p className="text-[var(--muted)] mb-6 text-sm">Which best describes the purpose of your product?</p>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
-                {missionTemplates.map((tmpl, i) => (
-                  <button
-                    key={i}
-                    data-test={`mission-template-${i}`}
-                    onClick={() => setData((d) => ({ ...d, missionTemplate: i }))}
-                    className={`p-3 rounded-lg border text-left text-sm transition-colors ${
-                      data.missionTemplate === i
-                        ? 'border-purple-500 bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300'
-                        : 'border-[var(--border)] hover:border-purple-300 hover:bg-[var(--card)]'
-                    }`}
-                  >
-                    <div className="font-medium text-[var(--fg)]">{tmpl.label}</div>
-                    <div className="text-[var(--muted)] text-xs mt-0.5">{tmpl.description}</div>
-                  </button>
-                ))}
-              </div>
-              <div className="flex justify-between">
-                <button
-                  onClick={() => setStep(1)}
-                  className="px-6 py-2.5 border border-[var(--border)] rounded-lg font-medium hover:bg-[var(--card)] transition-colors"
-                >
-                  ← Back
-                </button>
-                <button
-                  data-test="wizard-next"
-                  disabled={data.missionTemplate === null}
-                  onClick={() => setStep(3)}
-                  className="px-6 py-2.5 bg-purple-600 text-white rounded-lg font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-purple-700 transition-colors"
-                >
-                  Next →
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Step 3 */}
-          {step === 3 && !output && (
-            <div data-test="wizard-step-3">
-              <h3 className="text-xl font-semibold mb-2 text-[var(--fg)]">Step 3: Set your design pillars</h3>
-              <p className="text-[var(--muted)] mb-4 text-sm">Pick 2–3 principles that will guide every decision. Then describe one key interaction.</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
-                {pillarOptions.map((pillar, i) => (
-                  <button
-                    key={i}
-                    data-test={`pillar-option-${i}`}
-                    onClick={() => togglePillar(i)}
-                    className={`p-3 rounded-lg border text-left text-sm transition-colors ${
-                      data.pillars.includes(i)
-                        ? 'border-purple-500 bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300'
-                        : 'border-[var(--border)] hover:border-purple-300 hover:bg-[var(--card)]'
-                    }`}
-                  >
-                    {pillar}
-                  </button>
-                ))}
-              </div>
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-[var(--fg)] mb-2">Key interaction</label>
-                <input
-                  data-test="key-interaction-input"
-                  type="text"
-                  value={data.keyInteraction}
-                  onChange={(e) => setData((d) => ({ ...d, keyInteraction: e.target.value }))}
-                  placeholder="e.g. User marks a habit as complete"
-                  className="w-full px-4 py-3 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--fg)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
-              <div className="flex justify-between">
-                <button
-                  onClick={() => setStep(2)}
-                  className="px-6 py-2.5 border border-[var(--border)] rounded-lg font-medium hover:bg-[var(--card)] transition-colors"
-                >
-                  ← Back
-                </button>
-                <button
-                  data-test="wizard-generate"
-                  disabled={data.pillars.length === 0 || !data.keyInteraction.trim()}
-                  onClick={handleGenerate}
-                  className="px-6 py-2.5 bg-purple-600 text-white rounded-lg font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-purple-700 transition-colors"
-                >
-                  Generate Spec →
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Output */}
-          {output && (
-            <div data-test="spec-output">
-              <h3 className="text-xl font-semibold mb-4 text-[var(--fg)]">Your RootSpec Skeleton</h3>
-              <pre className="bg-[var(--card)] border border-[var(--border)] rounded-lg p-4 text-xs font-mono text-[var(--fg)] overflow-auto max-h-80 whitespace-pre-wrap">
-                {output}
-              </pre>
-              <div className="mt-4 flex justify-between items-center">
-                <button
-                  onClick={() => {
-                    setOutput(null);
-                    setStep(1);
-                    setData({ productIdea: '', missionTemplate: null, pillars: [], keyInteraction: '' });
-                  }}
-                  className="px-4 py-2 border border-[var(--border)] rounded-lg text-sm font-medium hover:bg-[var(--card)] transition-colors"
-                >
-                  Start over
-                </button>
-                <button
-                  onClick={() => navigator.clipboard.writeText(output)}
-                  className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors"
-                >
-                  Copy to clipboard
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        ))}
       </div>
-    </section>
+
+      <div className="p-6">
+        {/* Step 1 */}
+        {state.step === 1 && (
+          <div data-test="wizard-step-1">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">What are you building?</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Describe your product idea in one or two sentences. Be as specific or broad as you like.
+            </p>
+            <textarea
+              data-test="product-idea-input"
+              value={state.idea}
+              onChange={(e) => setState((s) => ({ ...s, idea: e.target.value }))}
+              placeholder="e.g. A task manager that helps developers track work without leaving their IDE"
+              className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[80px]"
+            />
+            {!canProceedStep1 && (
+              <p className="text-xs text-red-500 mt-1">Enter your product idea to continue.</p>
+            )}
+          </div>
+        )}
+
+        {/* Step 2 */}
+        {state.step === 2 && (
+          <div data-test="wizard-step-2">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">What's the core mission?</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Choose the primary mission that drives "{state.idea.slice(0, 40)}{state.idea.length > 40 ? '...' : ''}".
+            </p>
+            <div className="space-y-2">
+              {missions.map((m, i) => (
+                <button
+                  key={i}
+                  data-test={`mission-option-${i + 1}`}
+                  onClick={() => setState((s) => ({ ...s, mission: i }))}
+                  className={`w-full text-left p-3 rounded-lg border text-sm transition-colors ${
+                    state.mission === i
+                      ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 text-gray-700 dark:text-gray-300'
+                  }`}
+                >
+                  {m}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 3 */}
+        {state.step === 3 && (
+          <div data-test="wizard-step-3">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Pick your design pillars</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Select 2-3 principles that will guide every design decision.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {pillars.map((p, i) => (
+                <button
+                  key={i}
+                  data-test={`pillar-option-${i + 1}`}
+                  onClick={() => togglePillar(i)}
+                  className={`text-left p-3 rounded-lg border text-sm transition-colors ${
+                    state.pillars.includes(i)
+                      ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 text-gray-700 dark:text-gray-300'
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Output */}
+        {state.step === 4 && (
+          <div data-test="wizard-output">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Your Skeleton Spec</h3>
+            <div className="bg-gray-900 dark:bg-gray-950 rounded-xl p-4 font-mono text-xs space-y-2 overflow-auto">
+              <p className="text-gray-400"># L1 Philosophy</p>
+              <p className="text-white">product: <span className="text-green-400">"{state.idea}"</span></p>
+              <p className="text-gray-400 mt-2"># Mission</p>
+              <p className="text-white">mission: <span className="text-yellow-400">"{selectedMission}"</span></p>
+              {state.pillars.length > 0 && (
+                <>
+                  <p className="text-gray-400 mt-2"># L1 Design Pillars</p>
+                  {state.pillars.map((pi) => (
+                    <p key={pi} className="text-white">  - <span className="text-cyan-400">"{pillars[pi]}"</span></p>
+                  ))}
+                </>
+              )}
+              <p className="text-gray-400 mt-2"># L5 User Stories</p>
+              <p className="text-gray-500">  # → Run /rs-spec to generate full user stories</p>
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
+              Run <span className="font-mono text-indigo-500">/rs-spec</span> in your Claude project to generate the full specification.
+            </p>
+          </div>
+        )}
+
+        {/* Navigation */}
+        {state.step < 4 && (
+          <div className="mt-6 flex justify-end">
+            <button
+              data-test="wizard-next"
+              onClick={goNext}
+              className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold px-5 py-2 rounded-lg transition-colors"
+            >
+              {state.step === 3 ? 'Generate Spec →' : 'Next →'}
+            </button>
+          </div>
+        )}
+
+        {state.step === 4 && (
+          <div className="mt-4 flex justify-between items-center">
+            <button
+              onClick={() => setState({ step: 1, idea: '', mission: null, pillars: [] })}
+              className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+            >
+              ← Start over
+            </button>
+            <a
+              href="https://github.com/rootspec"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2 rounded-lg transition-colors text-sm"
+            >
+              Get RootSpec ↗
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

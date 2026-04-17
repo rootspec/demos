@@ -1,27 +1,33 @@
 ---
 import '../styles/global.css';
-const { title = 'RootSpec — Spec-first development' } = Astro.props;
+
+interface Props {
+  title?: string;
+}
+
+const { title = 'RootSpec — Specification-First Development' } = Astro.props;
 ---
+
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-    <script is:inline>
-      // Theme init: only override default (dark) if there's a stored preference
-      (function () {
-        const stored = localStorage.getItem('theme');
-        if (stored === 'light') {
-          document.documentElement.classList.remove('dark');
-          document.documentElement.classList.add('light');
-          document.documentElement.setAttribute('data-theme', 'light');
-        }
-        // Default is dark (already set in html tag above)
-      })();
-    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   </head>
   <body>
     <slot />
+    <script>
+      // Theme init: read from localStorage or default to dark
+      const stored = localStorage.getItem('theme');
+      if (stored === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
   </body>
 </html>
