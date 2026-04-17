@@ -47,7 +47,7 @@ jobs:
           working-directory: greenfield
           install: false
           start: bash scripts/dev.sh start
-          wait-on: http://localhost:3000
+          wait-on: http://localhost:3000/demos/greenfield/
           wait-on-timeout: 30
           browser: chrome
       - run: ./scripts/dev.sh stop || true
