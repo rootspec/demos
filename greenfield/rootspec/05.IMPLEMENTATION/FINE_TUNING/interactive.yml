@@ -1,42 +1,44 @@
 # =============================================================================
-# FINE-TUNING: Interactive System
+# LEVEL 5: FINE TUNING - Interactive System
 # =============================================================================
-# @spec_version: 7.3.2
+# @spec_version: 1.0.0
+# @system: INTERACTIVE_SYSTEM
+# @last_updated: 2026-04-17T03:47:13Z
+# @status: draft
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-# @last_updated: 2026-04-16T00:00:00Z
 
-hierarchy_expand_duration:
-  value: 250
-  # @unit: milliseconds
-  # @rationale: Smooth but not sluggish; allows user to perceive the expansion without waiting
-  # @constraint: min=150, max=400
+# -----------------------------------------------------------------------------
+# Spec Wizard Configuration
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
-wizard_step_transition_duration:
-  value: 200
-  # @unit: milliseconds
-  # @rationale: Snappy step transitions keep momentum; too long feels sluggish
-  # @constraint: min=100, max=350
+wizard:
+  min_pillars: 3
+  # @rationale: Three pillars is the minimum to demonstrate the concept meaningfully
+  # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+  # @constraints: min=2, max=3, type=integer
 
-wizard_min_pillars:
-  value: 3
-  # @unit: count
-  # @rationale: Three pillars is the minimum to produce meaningful spec output; matches L1 guidance
-  # @constraint: min=2, max=3
+  max_pillars: 5
+  # @rationale: Five pillars matches the RootSpec L1 recommendation; more dilutes focus
+  # @spec_source: 01.PHILOSOPHY.md, 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+  # @constraints: min=4, max=8, type=integer
 
-wizard_max_pillars:
-  value: 5
-  # @unit: count
-  # @rationale: Five is the L1-specified maximum for design pillars; keeps output focused
-  # @constraint: max=5
+  mission_template_count: 6
+  # @rationale: Enough variety for common product types without overwhelming choice
+  # @constraints: min=4, max=10, type=integer
 
-wizard_mission_template_count:
-  value: 4
-  # @unit: count
-  # @rationale: Enough variety to cover common product types; not so many that choice is paralyzing
-  # @constraint: min=3, max=6
+  pillar_suggestion_count: 12
+  # @rationale: Rich enough for visitors to find resonant options; scan-friendly at this count
+  # @constraints: min=8, max=20, type=integer
 
-comparison_panel_transition_duration:
-  value: 180
-  # @unit: milliseconds
-  # @rationale: Slightly faster than expand — comparison is a simple toggle, not a reveal
-  # @constraint: min=100, max=300
+# -----------------------------------------------------------------------------
+# Touch Targets
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+
+touch:
+  min_target_size_px: 44
+  # @rationale: Apple HIG and WCAG 2.5.5 recommend 44x44px minimum for touch targets
+  # @reference: https://developer.apple.com/design/human-interface-guidelines/accessibility
+  # @constraints: min=44, max=64, type=integer
+  # @inviolable: true

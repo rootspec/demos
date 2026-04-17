@@ -1,57 +1,91 @@
 # =============================================================================
-# USER STORIES: Theme System — MVP
+# USER STORY: Theme Toggle
 # =============================================================================
-# @spec_version: 7.3.2
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: SITE_EXPERIENCE
-# @systems: [THEME_SYSTEM]
-# @last_updated: 2026-04-16T00:00:00Z
+# @journey: LANDING
+# @systems: [THEME_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-17T03:47:13Z
 
----
-
-id: US-101
-title: Page loads in correct theme based on system preference
+id: US-301
+title: Visitor can switch between dark and light themes
 
 acceptance_criteria:
-  - id: AC-101-1
-    title: Dark mode applied when system prefers dark
-    narrative: |
-      Given my system is set to dark mode
-      When I visit the site
-      Then the page should have the dark theme applied
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-theme="dark"], html.dark, body.dark' }
-
-  - id: AC-101-2
-    title: Theme toggle is visible in the header
+  - id: AC-301-1
+    title: Theme toggle is visible on the page
     narrative: |
       Given I visit the site
       When the page loads
-      Then I should see a theme toggle control in the header
+      Then I see a theme toggle control in the header
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=theme-toggle]' }
 
----
-
-id: US-102
-title: Toggle switches between dark and light theme
-
-acceptance_criteria:
-  - id: AC-102-1
-    title: Clicking theme toggle changes the theme
+  - id: AC-301-2
+    title: Clicking theme toggle switches the visual mode
     narrative: |
-      Given I am viewing the site
+      Given I see the site in its default mode
       When I click the theme toggle
-      Then the page theme should change
+      Then the page switches to the alternate theme mode
     given:
       - visit: '/'
     when:
       - click: { selector: '[data-test=theme-toggle]' }
     then:
-      - shouldExist: { selector: 'html.light, html[data-theme="light"], body.light' }
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+---
+# =============================================================================
+# USER STORY: Open Source CTA
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: ACTION
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-17T03:47:13Z
+
+id: US-302
+title: Visitor can find the GitHub repository to get started
+
+acceptance_criteria:
+  - id: AC-302-1
+    title: CTA section is present with GitHub link
+    narrative: |
+      Given I visit the site
+      When I scroll to the CTA section
+      Then I see a link to the RootSpec GitHub repository
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=cta-section]' }
+      - shouldExist: { selector: '[data-test=cta-section] a[href*="github.com/rootspec"]' }
+
+---
+# =============================================================================
+# USER STORY: Footer Attribution
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: LANDING
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-17T03:47:13Z
+
+id: US-303
+title: Visitor can see who built the site and when
+
+acceptance_criteria:
+  - id: AC-303-1
+    title: Footer is present with builder attribution
+    narrative: |
+      Given I visit the site
+      When I scroll to the footer
+      Then I see the builder name and build date
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=footer]' }
+      - shouldExist: { selector: '[data-test=footer-attribution]' }

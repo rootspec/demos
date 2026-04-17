@@ -6,11 +6,12 @@ import HeroSection from '../components/HeroSection.astro';
 import ProblemSection from '../components/ProblemSection.astro';
 import WorkflowSection from '../components/WorkflowSection.astro';
 import HierarchySection from '../components/HierarchySection.astro';
-import ComparisonSection from '../components/ComparisonSection';
-import SpecWizard from '../components/SpecWizard';
+import SpecWizardSection from '../components/SpecWizardSection.astro';
+import ComparisonSection from '../components/ComparisonSection.tsx';
 import CTASection from '../components/CTASection.astro';
 import Footer from '../components/Footer.astro';
 ---
+
 <Layout>
   <MetaBanner />
   <Header />
@@ -19,8 +20,8 @@ import Footer from '../components/Footer.astro';
     <ProblemSection />
     <WorkflowSection />
     <HierarchySection />
+    <SpecWizardSection />
     <ComparisonSection client:load />
-    <SpecWizard client:load />
     <CTASection />
   </main>
   <Footer />

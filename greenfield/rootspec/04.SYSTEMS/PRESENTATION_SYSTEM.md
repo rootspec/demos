@@ -1,93 +1,73 @@
 # Presentation System
 
-**Version:** 7.3.2
-**Status:** Draft
+**References:** `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`, `SYSTEMS_OVERVIEW.md`, `THEME_SYSTEM.md`
 
 ---
 
 ## Responsibility
 
-Owns all animation, motion, accessibility enforcement, and keyboard navigation behavior. Translates state changes from other systems into visual transitions. Ensures all interactive elements meet accessibility requirements.
+Manages all visual polish: scroll-triggered animations, interactive state transitions, and motion behavior. This system owns when and how things move — not what they say or what happens when the user interacts. It responds to signals from other systems and executes visual transitions.
 
-## Boundaries
-
-- **Owns:** Animation timing, motion curves, keyboard event handling for interactive components, focus management, ARIA state management
-- **Does not own:** Interaction state (INTERACTIVE_SYSTEM), theme state (THEME_SYSTEM), layout grid (LAYOUT_SYSTEM), content copy (CONTENT_SYSTEM)
-
-## Data Owned
-
-| Data | Type | Default |
-|------|------|---------|
-| Scroll position (observed) | integer | 0 |
-| Sections in view | boolean map | all false |
-| Reduced motion preference | boolean | from OS |
-| Currently focused interactive element | reference or null | null |
+---
 
 ## Animation Catalog
 
-| Animation | Trigger | Behavior |
-|-----------|---------|---------|
-| Section entry | Section scrolls into view | Fade up from [slight offset]; duration [brief] |
-| Hierarchy level expand | Level card activated | Height expand, content fade in; duration [brief] |
-| Hierarchy arrow highlight | Level active or hovered | Arrow color/weight transition; duration [very brief] |
-| Wizard step transition | Step advance or back | Slide out old step, slide in new step; duration [brief] |
-| Comparison panel switch | Toggle activated | Cross-fade between panels; duration [brief] |
-| Theme toggle | Theme state changes | Background/text color transition; duration [brief] |
+### Section Entrance Animations
+
+- **Trigger:** Section enters viewport (IntersectionObserver or equivalent)
+- **Behavior:** Fade-in with slight upward motion (from slightly below to final position)
+- **Applies to:** All major page sections
+- **Once-only:** Each section animates once on first viewport entry; does not repeat on scroll-back
+
+### Interactive State Transitions
+
+| Component | State Change | Transition |
+|-----------|-------------|------------|
+| Hierarchy Explorer | Level expanded | Content reveals with smooth height animation |
+| Hierarchy Explorer | Level collapsed | Content collapses with smooth height animation |
+| Hierarchy Explorer | Level hovered/focused | Reference highlights fade in |
+| Spec Wizard | Step forward | Current step fades out, next step fades in |
+| Spec Wizard | Step back | Reverse transition (next fades out, current fades in) |
+| Before/After Comparison | View toggle | Panel crossfade or slide |
+| Theme Toggle | Mode switch | Smooth color transition across page |
+
+### Hover States
+
+- Interactive elements (buttons, level cards, links) respond to hover with visual feedback
+- Feedback is immediate — no perceptible delay
+- Hover states do not cause layout shift
+
+---
 
 ## Reduced Motion
 
-When `prefers-reduced-motion: reduce` is detected:
-- All transitions replace motion with instant or opacity-only transitions
-- No sliding, expanding, or positional animations
-- Fade-in/out replaces all directional motion
-- PRESENTATION_SYSTEM reads this preference at page load; does not re-check mid-session
+All animations must respect `prefers-reduced-motion: reduce`:
+- Section entrances: appear immediately without motion
+- Transitions: instant switch (no fade, no movement)
+- Theme toggle: instant color change
+- The feature must work identically with or without motion — no functionality depends on animation
 
-## Keyboard Navigation
+---
 
-### Hierarchy Explorer
-- Tab / Shift-Tab: move between level cards
-- Enter or Space: activate (expand) focused card
-- Escape: collapse currently expanded card, return focus to card header
-- Arrow keys (optional enhancement): move between adjacent levels
+## Performance Rules
 
-### Spec Wizard
-- Tab / Shift-Tab: move through form elements within active step
-- Enter: advance to next step (when focused on primary action button)
-- Escape: no action (wizard has no dismiss behavior)
-- Multi-select pillars: Space to toggle selection on focused pillar
+- Animations use CSS transitions or `transform`/`opacity` (GPU-accelerated properties)
+- No layout-triggering properties animated (no `width`, `height` changes directly — use `max-height` or wrapper transforms)
+- IntersectionObserver (not scroll events) for entrance triggers
+- Transitions complete within [brief duration] — long animations are a distraction, not a feature
 
-### Before/After Comparison
-- Tab: reach toggle control
-- Enter or Space: switch active panel
-- Arrow keys (optional): switch panel if toggle is a slider
-
-## Focus Management
-
-- When a wizard step transitions, focus moves to the first interactive element of the new step
-- When a hierarchy level card expands, focus remains on the card header (not the expanded content)
-- Modal or overlay patterns are not used; no focus trap needed
-- Visible focus indicator is always present (never removed via `outline: none` without replacement)
-
-## ARIA State
-
-| Component | ARIA Pattern |
-|-----------|-------------|
-| Hierarchy level cards | `role="button"`, `aria-expanded` |
-| Wizard steps | `role="group"`, `aria-label` with step title; step indicator is `aria-live="polite"` |
-| Theme toggle | `role="button"`, `aria-label` describes action (not current state) |
-| Comparison toggle | `role="tab"` with `aria-selected` |
+---
 
 ## Rules
 
-- Animations must never block interaction — no "wait for animation to finish" gates
-- Reduced motion preference is always respected; there is no override
-- All interactive elements have visible focus indicators meeting WCAG AA contrast
-- Touch targets meet minimum size requirements (no specific pixel values at this level)
-- PRESENTATION_SYSTEM does not make decisions about what content to show — only how to show it
+- No animation delays visitor from accessing content — animations are additive, not blocking
+- No animation conveys information that isn't available without it (accessibility requirement)
+- SVG methodology diagram elements may animate on entrance but must be legible in static state
+
+---
 
 ## Interactions with Other Systems
 
-- **INTERACTIVE_SYSTEM:** Listens for state changes; plays corresponding animations
-- **LAYOUT_SYSTEM:** Listens for scroll position; triggers section entry animations
-- **THEME_SYSTEM:** Theme transitions are animated by this system; state is owned by THEME_SYSTEM
-- **CONTENT_SYSTEM:** No direct interaction; content renders and PRESENTATION_SYSTEM handles scroll-triggered effects
+- Receives: animation trigger events from INTERACTIVE_SYSTEM (expand, collapse, step change)
+- Receives: `currentMode` from THEME_SYSTEM (to animate theme transitions)
+- Responds to: IntersectionObserver signals from page scroll (no dependency on other systems)

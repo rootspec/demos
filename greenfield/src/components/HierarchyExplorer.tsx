@@ -2,97 +2,100 @@ import { useState } from 'react';
 
 const levels = [
   {
-    id: 1,
-    label: 'L1 · Philosophy',
-    color: 'purple',
-    summary: 'The foundational beliefs and values that drive every product decision.',
-    example: `"We believe software should serve human goals, not create new burdens. Every feature must reduce friction, not introduce it."`,
+    num: 1,
+    label: 'L1 Philosophy',
+    title: 'Philosophy & Principles',
+    description: 'The immutable "why" behind the product — values, mission, and design principles that never change.',
+    example: 'Principle: "Prefer explicit over implicit. Every decision should be traceable to a user need."',
+    color: 'border-purple-500 bg-purple-50 dark:bg-purple-950',
+    badgeColor: 'bg-purple-500',
   },
   {
-    id: 2,
-    label: 'L2 · Truths',
-    color: 'blue',
-    summary: 'Verifiable facts about your users, market, and constraints.',
-    example: `"Our users are time-poor professionals. They have 90 seconds per session on mobile. They will not read documentation."`,
+    num: 2,
+    label: 'L2 Truths',
+    title: 'Truths & Constraints',
+    description: 'Hard constraints and facts that bound the solution space — technical, legal, or business reality.',
+    example: 'Truth: "All user data must be stored in the EU. No exceptions."',
+    color: 'border-blue-500 bg-blue-50 dark:bg-blue-950',
+    badgeColor: 'bg-blue-500',
   },
   {
-    id: 3,
-    label: 'L3 · Interactions',
-    color: 'cyan',
-    summary: 'The meaningful moments of engagement between user and product.',
-    example: `"User opens the app and immediately sees their highest-priority task — no navigation required."`,
+    num: 3,
+    label: 'L3 Interactions',
+    title: 'Interactions & Journeys',
+    description: 'How users move through the product — key flows, decision points, and state transitions.',
+    example: 'Journey: "New user → Onboarding → First value moment → Retained user"',
+    color: 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950',
+    badgeColor: 'bg-cyan-500',
   },
   {
-    id: 4,
-    label: 'L4 · Systems',
-    color: 'green',
-    summary: 'The technical and design systems that enable those interactions.',
-    example: `"Notification System: surfaces time-sensitive items using push and in-app banners with a 5-second dismiss window."`,
+    num: 4,
+    label: 'L4 Systems',
+    title: 'Systems & Architecture',
+    description: 'The technical systems that implement the interactions — components, APIs, and data models.',
+    example: 'System: "AUTH_SYSTEM: JWT tokens, 7-day refresh, bcrypt password hashing"',
+    color: 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950',
+    badgeColor: 'bg-indigo-500',
   },
   {
-    id: 5,
-    label: 'L5 · Implementation',
-    color: 'orange',
-    summary: 'Concrete user stories with testable acceptance criteria.',
-    example: `"US-101: User sees daily summary on login\n  AC-101-1: given visit '/', then shouldExist '[data-test=daily-summary]'"`,
+    num: 5,
+    label: 'L5 Implementation',
+    title: 'Implementation & Stories',
+    description: 'Concrete user stories with Gherkin-style acceptance criteria that map to test cases.',
+    example: 'Story: "Given I visit /, When the page loads, Then I see [data-test=hero]"',
+    color: 'border-green-500 bg-green-50 dark:bg-green-950',
+    badgeColor: 'bg-green-500',
   },
 ];
-
-const colorMap: Record<string, string> = {
-  purple: 'border-purple-300 dark:border-purple-700 bg-purple-50 dark:bg-purple-950/30',
-  blue: 'border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-950/30',
-  cyan: 'border-cyan-300 dark:border-cyan-700 bg-cyan-50 dark:bg-cyan-950/30',
-  green: 'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-950/30',
-  orange: 'border-orange-300 dark:border-orange-700 bg-orange-50 dark:bg-orange-950/30',
-};
-
-const labelColorMap: Record<string, string> = {
-  purple: 'text-purple-700 dark:text-purple-300',
-  blue: 'text-blue-700 dark:text-blue-300',
-  cyan: 'text-cyan-700 dark:text-cyan-300',
-  green: 'text-green-700 dark:text-green-300',
-  orange: 'text-orange-700 dark:text-orange-300',
-};
 
 export default function HierarchyExplorer() {
   const [expanded, setExpanded] = useState<number | null>(null);
 
+  const toggle = (num: number) => {
+    setExpanded((prev) => (prev === num ? null : num));
+  };
+
   return (
     <div data-test="hierarchy-explorer" className="space-y-3">
-      {levels.map((level) => {
-        const isExpanded = expanded === level.id;
-        return (
-          <div
-            key={level.id}
-            data-test={`hierarchy-level-${level.id}`}
-            aria-expanded={isExpanded}
-            role="button"
-            tabIndex={0}
-            onClick={() => setExpanded(isExpanded ? null : level.id)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                setExpanded(isExpanded ? null : level.id);
-              }
-            }}
-            className={`rounded-xl border-2 p-4 cursor-pointer transition-all select-none ${colorMap[level.color]}`}
+      {levels.map((level) => (
+        <div
+          key={level.num}
+          className={`rounded-xl border-l-4 ${level.color} border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-200`}
+        >
+          <button
+            data-test={`hierarchy-level-${level.num}`}
+            onClick={() => toggle(level.num)}
+            className="w-full flex items-center justify-between p-4 text-left hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+            aria-expanded={expanded === level.num}
           >
-            <div className="flex items-center justify-between">
-              <span className={`font-bold font-mono ${labelColorMap[level.color]}`}>{level.label}</span>
-              <span className="text-[var(--muted)] text-sm">{isExpanded ? '▲' : '▼'}</span>
+            <div className="flex items-center gap-3">
+              <span className={`${level.badgeColor} text-white text-xs font-mono font-bold px-2 py-0.5 rounded`}>
+                L{level.num}
+              </span>
+              <span className="font-semibold text-gray-900 dark:text-white">{level.label}</span>
             </div>
-            <p className="text-sm text-[var(--muted)] mt-1">{level.summary}</p>
-            {isExpanded && (
-              <div
-                data-test={`hierarchy-level-${level.id}-content`}
-                className="mt-3 p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-[var(--border)]"
-              >
-                <p className="text-xs font-mono text-[var(--fg)] whitespace-pre-wrap">{level.example}</p>
-              </div>
-            )}
+            <svg
+              className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${expanded === level.num ? 'rotate-180' : ''}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div
+            data-test={`hierarchy-level-${level.num}-content`}
+            style={{ display: expanded === level.num ? 'block' : 'none' }}
+            className="px-4 pb-4"
+          >
+            <h3 className="font-bold text-gray-900 dark:text-white mb-2">{level.title}</h3>
+            <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">{level.description}</p>
+            <div className="bg-gray-900 dark:bg-gray-950 rounded-lg p-3">
+              <p className="font-mono text-xs text-green-400">{level.example}</p>
+            </div>
           </div>
-        );
-      })}
+        </div>
+      ))}
     </div>
   );
 }

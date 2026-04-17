@@ -6,10 +6,12 @@ export default {
     extend: {
       colors: {
         brand: {
-          purple: '#7c3aed',
-          blue: '#2563eb',
-          cyan: '#0891b2',
+          DEFAULT: '#6366f1',
+          dark: '#4f46e5',
         },
+      },
+      fontFamily: {
+        mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
       },
     },
   },

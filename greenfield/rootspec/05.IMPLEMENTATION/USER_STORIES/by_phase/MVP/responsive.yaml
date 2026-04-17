@@ -1,48 +1,52 @@
 # =============================================================================
-# USER STORIES: Responsive Layout — MVP
+# USER STORY: Mobile Responsiveness
 # =============================================================================
-# @spec_version: 7.3.2
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: SITE_EXPERIENCE
+# @journey: LANDING
 # @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-16T00:00:00Z
-
----
+# @last_updated: 2026-04-17T03:47:13Z
 
 id: US-401
-title: Site renders correctly on mobile viewport
+title: Visitor on mobile can access all content and interactive features
 
 acceptance_criteria:
   - id: AC-401-1
-    title: Page is usable on a narrow viewport
+    title: Page layout is usable on mobile viewport
     narrative: |
       Given I visit the site on a mobile device
       When the page loads
-      Then all major sections should be visible without horizontal scrolling
+      Then the content is readable and the meta banner is visible
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=hero-section]' }
-      - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
+      - shouldExist: { selector: '[data-test=hero]' }
 
----
-
-id: US-402
-title: Site is navigable without JavaScript
-
-acceptance_criteria:
-  - id: AC-402-1
-    title: Core content is visible without JavaScript
+  - id: AC-401-2
+    title: Hierarchy Explorer is usable on mobile
     narrative: |
-      Given JavaScript is unavailable
-      When I visit the site
-      Then I should still see the meta-banner, hero, problem, and CTA sections
+      Given I visit the site on a mobile device
+      When I tap on a hierarchy level
+      Then the level expands to show content
     given:
       - visit: '/'
+      - click: { selector: '[data-test=hierarchy-level-1]' }
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=hero-section]' }
-      - shouldExist: { selector: '[data-test=cta-section]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+
+  - id: AC-401-3
+    title: Spec Wizard is usable on mobile
+    narrative: |
+      Given I visit the site on a mobile device
+      When I interact with the spec wizard
+      Then I can enter text and navigate between steps
+    given:
+      - visit: '/'
+      - fill: { selector: '[data-test=product-idea-input]', value: 'My product idea' }
+      - click: { selector: '[data-test=wizard-next]' }
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=wizard-step-2]' }
