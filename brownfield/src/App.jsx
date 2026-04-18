@@ -70,12 +70,17 @@ function App() {
   };
 
   const handleRemoveFavorite = (fav) => {
-    setFavorites(favorites.filter(
+    const next = favorites.filter(
       (f) => f.latitude !== fav.latitude || f.longitude !== fav.longitude
-    ));
+    );
+    setFavorites(next);
     // Clear default if removed
     if (defaultCity === fav.name) {
       setDefaultCity(null);
+    }
+    // Clear active city when no favorites remain so empty state shows
+    if (next.length === 0) {
+      setCity(null);
     }
   };
 
@@ -196,18 +201,19 @@ function App() {
               onRemove={handleRemoveFavorite}
             />
 
+            {city && !isFavorite && (
+              <div className="actions">
+                <button className="save-btn" onClick={handleAddFavorite}>
+                  ⭐ Save Location
+                </button>
+              </div>
+            )}
+
             {loading && <div className="loading">Loading weather data...</div>}
             {error && <div className="error">Error: {error}</div>}
 
             {weather && city && (
               <>
-                <div className="actions">
-                  {!isFavorite && (
-                    <button className="save-btn" onClick={handleAddFavorite}>
-                      ⭐ Save Location
-                    </button>
-                  )}
-                </div>
                 <WeatherAlerts weather={weather} />
                 <CurrentWeather weather={weather} unit={unit} cityName={city.name} />
                 <HourlyForecast weather={weather} unit={unit} timeFormat={timeFormat} />

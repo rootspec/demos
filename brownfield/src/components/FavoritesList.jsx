@@ -53,11 +53,13 @@ function FavoritesList({ favorites, activeCity, onSelect, onRemove }) {
         {favorites.map((fav) => (
           <Chip
             key={`${fav.latitude}-${fav.longitude}`}
+            className="Chip"
             $active={activeCity && activeCity.name === fav.name}
             onClick={() => onSelect(fav)}
           >
             {fav.name}
             <RemoveBtn
+              className="RemoveBtn"
               onClick={(e) => {
                 e.stopPropagation();
                 onRemove(fav);

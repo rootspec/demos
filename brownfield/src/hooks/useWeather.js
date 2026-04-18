@@ -8,7 +8,11 @@ export function useWeather(lat, lon) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!lat || !lon) return;
+    if (!lat || !lon) {
+      setLoading(false);
+      setWeather(null);
+      return;
+    }
     let cancelled = false;
     setLoading(true);
     setError(null);
