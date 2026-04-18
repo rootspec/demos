@@ -1,152 +1,110 @@
-# Interactive System
-
-**References:** `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`, `SYSTEMS_OVERVIEW.md`, `CONTENT_SYSTEM.md`, `THEME_SYSTEM.md`
+# Level 4: Interactive System
+# RootSpec Marketing Site
 
 ---
 
 ## Responsibility
 
-Manages all client-side interactive components: the Hierarchy Explorer, the Spec Wizard, and the Before/After Comparison. This system owns interactive state and user-driven transformations. It does not manage theme or layout — only user interaction logic.
+The Interactive System owns the three interactive sections of the site: the Hierarchy Explorer, the Spec Wizard, and the Before/After Comparison. It manages all in-session state for these features and renders outputs from user input combined with Content System templates.
 
 ---
 
-## Components
+## Boundaries
 
-### Hierarchy Explorer
+**Owns:**
+- Hierarchy Explorer: active level state, expand/collapse logic, reference highlight logic
+- Spec Wizard: step state, collected user inputs, output skeleton generation
+- Before/After Comparison: active panel state, toggle logic
 
-**Purpose:** Let visitors experience the five-level structure by interacting with it.
-
-**State:**
-| Property | Type | Initial Value |
-|----------|------|---------------|
-| `expandedLevel` | enum: null \| 1 \| 2 \| 3 \| 4 \| 5 | null |
-| `hoveredLevel` | enum: null \| 1 \| 2 \| 3 \| 4 \| 5 | null |
-
-**Level Data (from CONTENT_SYSTEM):**
-- Level name and icon
-- Brief description
-- Example content (condensed)
-- Allowed references (which levels it can reference)
-
-**State Transitions:**
-```
-User clicks/taps level card:
-  expandedLevel = that level (toggle: if already expanded → null)
-
-User hovers/focuses level card:
-  hoveredLevel = that level
-
-User leaves hover/blur:
-  hoveredLevel = null
-```
-
-**Reference Visualization:**
-- When a level is hovered/focused, levels it CAN reference are highlighted
-- Levels it CANNOT reference are visually de-emphasized
-- Arrows or lines between levels indicate allowed reference directions (upward only)
-
-**Accessibility:**
-- Each level card is focusable (`tabindex=0` or button element)
-- Enter or Space expands/collapses
-- Arrow keys navigate between levels
-- Expanded content is announced to screen readers
-- Focus does not trap; visitor can tab out
+**Does not own:**
+- Content data (level descriptions, wizard templates) — provided by Content System
+- Visual transitions and animations — delegated to Presentation System
+- Layout breakpoints that determine interaction variants — queried from Layout System
+- Any external API calls
 
 ---
 
-### Spec Wizard
+## Subsystem: Hierarchy Explorer
 
-**Purpose:** Let visitors apply the methodology to their own idea and produce a skeleton spec.
+### State
+- `active_level`: `null` | `1` | `2` | `3` | `4` | `5`
+- `hovered_level`: `null` | `1` | `2` | `3` | `4` | `5`
 
-**State:**
-| Property | Type | Initial Value |
-|----------|------|---------------|
-| `currentStep` | enum: 1 \| 2 \| 3 \| output | 1 |
-| `productIdea` | string | "" |
-| `selectedMission` | string | "" |
-| `selectedPillars` | string[] | [] |
-| `keyInteraction` | string | "" |
+### Behavior
+- Clicking a level sets it as `active_level` and collapses any previously active level
+- Clicking the active level again collapses it (toggles)
+- Hovering a level sets `hovered_level`, which triggers reference highlighting in the UI
+- Reference arrows between levels are drawn based on the reference matrix in the Content System's level descriptions
+- Arrows always flow upward (lower levels reference higher levels, never the reverse)
 
-**Step Structure:**
-```
-Step 1: Product Idea
-  - Text input: "Describe your product idea in one line"
-  - Forward navigation requires non-empty input
+### Keyboard Navigation
+- `ArrowUp` / `ArrowDown` move focus between level cards
+- `Enter` / `Space` expand or collapse the focused level
+- `Escape` collapses any open level
 
-Step 2: Mission
-  - Display [N] mission templates (from CONTENT_SYSTEM)
-  - Visitor selects one OR writes their own (free text fallback)
-  - Forward navigation requires selection or non-empty custom text
-
-Step 3: Design Pillars
-  - Display [M] pillar suggestions (from CONTENT_SYSTEM)
-  - Visitor selects 3-5 OR writes custom pillars
-  - Forward navigation requires 3-5 selections
-
-Output Panel:
-  - Shows skeleton spec with visitor's input mapped to L1-L3 structure
-  - Displays as formatted text/code block
-  - No submission — output is client-side only
-  - "Start over" resets state to Step 1
-```
-
-**Template Engine:**
-- Assembles skeleton spec from static templates + visitor inputs
-- No AI, no external API — pure string interpolation
-- Output format mirrors actual RootSpec L1-L3 structure
-
-**Accessibility:**
-- Step navigation via keyboard (Next/Back buttons are standard buttons)
-- Template selections via keyboard (radio or checkbox inputs)
-- Output panel is readable by screen readers
-- Error states (insufficient pillars, empty input) announced inline
+### Mobile Variant
+- On narrow viewports, the explorer renders as a vertically stacked list
+- Reference arrows are replaced by parenthetical labels (e.g., "References L1–L2")
+- Tap targets meet minimum size standards
 
 ---
 
-### Before/After Comparison
+## Subsystem: Spec Wizard
 
-**Purpose:** Show real contrast between unstructured and RootSpec-structured approaches.
+### State
+- `current_step`: `1` | `2` | `3` | `complete`
+- `step_1_input`: user-entered product idea (string)
+- `step_1_mission`: selected or written mission statement (string)
+- `step_2_pillars`: array of selected design pillars (min [N], max [M])
+- `step_3_interaction`: user-entered interaction description (string)
+- `output`: generated spec skeleton (derived from collected inputs + templates)
 
-**State:**
-| Property | Type | Initial Value |
-|----------|------|---------------|
-| `activeView` | enum: before \| after | before |
+### Steps
 
-**Content (from CONTENT_SYSTEM):**
-- "Before" panel: excerpt from a realistic vague requirements doc with ambiguous stories
-- "After" panel: same product idea expressed as RootSpec hierarchy with testable stories and design pillar traces
+**Step 1: Product Mission**
+- User enters a one-line product idea
+- User selects a mission template or writes their own
+- Validation: idea field must not be empty; mission must be selected or entered
 
-**Toggle Mechanism:**
-- Toggle button or labeled tab: "Without RootSpec" / "With RootSpec"
-- OR slider mechanism if visual comparison is appropriate
-- Keyboard accessible: toggle via keyboard, labeled for screen readers
+**Step 2: Design Pillars**
+- User selects [3–5] design pillar suggestions from the Content System's list
+- Or: user writes their own pillar
+- Validation: minimum [3] pillars selected before advancing
 
-**State Transitions:**
-```
-User clicks "Without RootSpec" / toggles to before:
-  activeView = before
+**Step 3: Key Interaction**
+- User describes one core user interaction in free text
+- Validation: field must not be empty
 
-User clicks "With RootSpec" / toggles to after:
-  activeView = after
-```
+**Completion: Output**
+- The system combines inputs with templates to generate a skeleton spec covering L1 (mission, pillars) and L3 (interaction pattern)
+- Output is formatted to resemble real RootSpec file content (markdown-like structure)
+- Output is rendered inline below the wizard steps
+
+### Rules
+- Validation failures show inline feedback, not modal dialogs
+- Advancing without completing a required field does nothing — the step does not advance
+- Users can navigate backward through steps freely
+- Wizard state resets on page reload (no persistence)
+- No AI or API call — all output is generated from static templates and string interpolation
+
+### Keyboard Support
+- Tab navigates through inputs and controls
+- Enter advances to next step
+- Escape resets the wizard
 
 ---
 
-## Rules
+## Subsystem: Before/After Comparison
 
-- No external API calls from any interactive component
-- Spec Wizard uses templates only — no generation
-- Wizard output must clearly label which part of output corresponds to which spec level
-- All interactive state is ephemeral (in-memory) — no persistence except theme (owned by THEME_SYSTEM)
-- Touch targets must be [minimum accessible size] for mobile usability
+### State
+- `active_panel`: `without_spec` | `with_rootspec`
 
----
+### Behavior
+- On desktop: side-by-side panels with a slider or tab/button toggle
+- On mobile: stacked panels with a tab toggle
+- Switching panels brings the active panel into focus; the inactive panel dims
+- Content is fully static — all text comes from the Content System
 
-## Interactions with Other Systems
-
-- Reads level content from CONTENT_SYSTEM (for Hierarchy Explorer)
-- Reads templates from CONTENT_SYSTEM (for Spec Wizard)
-- Reads panel content from CONTENT_SYSTEM (for Before/After)
-- Reads `currentMode` from THEME_SYSTEM (for dark/light visual rendering)
-- Emits animation triggers to PRESENTATION_SYSTEM (expand/collapse transitions)
-- Receives viewport signals from LAYOUT_SYSTEM (to adapt touch vs. hover behavior)
+### Rules
+- The default active panel is `without_spec` (shows the problem state first)
+- No user input is required beyond the toggle interaction

@@ -1,5 +1,5 @@
 {
-  "lastRun": "2026-04-17T04:11:47.408Z",
+  "lastRun": "2026-04-18T15:36:48.893Z",
   "stories": {
     "US-101": {
       "status": "pass",
@@ -11,8 +11,7 @@
     "US-102": {
       "status": "pass",
       "criteria": {
-        "AC-102-1": "pass",
-        "AC-102-2": "pass"
+        "AC-102-1": "pass"
       }
     },
     "US-103": {
@@ -27,55 +26,54 @@
         "AC-104-1": "pass"
       }
     },
-    "US-201": {
+    "US-105": {
       "status": "pass",
       "criteria": {
-        "AC-201-1": "pass",
-        "AC-201-2": "pass",
-        "AC-201-3": "pass"
+        "AC-105-1": "pass"
       }
     },
-    "US-202": {
+    "US-106": {
       "status": "pass",
       "criteria": {
-        "AC-202-1": "pass",
-        "AC-202-2": "pass",
-        "AC-202-3": "pass",
-        "AC-202-4": "pass"
-      }
-    },
-    "US-203": {
-      "status": "pass",
-      "criteria": {
-        "AC-203-1": "pass",
-        "AC-203-2": "pass"
-      }
-    },
-    "US-401": {
-      "status": "pass",
-      "criteria": {
-        "AC-401-1": "pass",
-        "AC-401-2": "pass",
-        "AC-401-3": "pass"
+        "AC-106-1": "pass"
       }
     },
     "US-301": {
       "status": "pass",
       "criteria": {
         "AC-301-1": "pass",
-        "AC-301-2": "pass"
+        "AC-301-2": "pass",
+        "AC-301-3": "pass"
       }
     },
     "US-302": {
       "status": "pass",
       "criteria": {
-        "AC-302-1": "pass"
+        "AC-302-1": "pass",
+        "AC-302-2": "pass",
+        "AC-302-3": "pass"
       }
     },
     "US-303": {
       "status": "pass",
       "criteria": {
-        "AC-303-1": "pass"
+        "AC-303-1": "pass",
+        "AC-303-2": "pass"
+      }
+    },
+    "US-401": {
+      "status": "pass",
+      "criteria": {
+        "AC-401-1": "pass",
+        "AC-401-2": "pass"
+      }
+    },
+    "US-201": {
+      "status": "pass",
+      "criteria": {
+        "AC-201-1": "pass",
+        "AC-201-2": "pass",
+        "AC-201-3": "pass"
       }
     }
   }

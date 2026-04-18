@@ -1,116 +1,79 @@
-# Layout System
-
-**References:** `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`, `SYSTEMS_OVERVIEW.md`, `CONTENT_SYSTEM.md`, `THEME_SYSTEM.md`
+# Level 4: Layout System
+# RootSpec Marketing Site
 
 ---
 
 ## Responsibility
 
-Manages overall page structure: the meta banner, site header (including theme toggle and version badge), section layout, responsive breakpoints, and navigation. This system owns how content is positioned and structured on the page — not what the content says or how it animates.
+The Layout System owns the structural organization of the page: the section order, the header, the footer, the responsive grid, and the viewport breakpoints that determine how each section is rendered.
+
+---
+
+## Boundaries
+
+**Owns:**
+- Page section order and hierarchy
+- Header structure (logo, version badge, theme toggle, navigation links)
+- Footer structure (attribution, build date, links)
+- Responsive breakpoints and their associated layout rules
+- Scroll observation (which sections are currently visible)
+- Subpath base URL configuration for GitHub Pages deployment
+
+**Does not own:**
+- Content within sections (→ Content System)
+- Theme colors or visual style (→ Theme System)
+- Animation and transitions (→ Presentation System)
+- Interactive behavior within sections (→ Interactive System)
 
 ---
 
 ## Page Structure
 
-```
-┌─────────────────────────────────┐
-│ Meta Banner (always visible)    │
-├─────────────────────────────────┤
-│ Site Header                     │
-│  ├─ Logo / wordmark             │
-│  ├─ Version badge               │
-│  └─ Theme toggle                │
-├─────────────────────────────────┤
-│ Hero Section                    │
-│  ├─ Tagline                     │
-│  └─ One-sentence explanation    │
-├─────────────────────────────────┤
-│ Problem Section                 │
-├─────────────────────────────────┤
-│ How It Works Section            │
-│  └─ Methodology Diagram (SVG)  │
-├─────────────────────────────────┤
-│ Hierarchy Explorer Section      │
-├─────────────────────────────────┤
-│ Spec Wizard Section             │
-├─────────────────────────────────┤
-│ Before/After Comparison Section │
-├─────────────────────────────────┤
-│ Open Source CTA Section         │
-├─────────────────────────────────┤
-│ Footer                          │
-│  └─ Builder name, build date   │
-└─────────────────────────────────┘
-```
+### Sections (in order)
+1. **Header** — Persistent; contains logo/wordmark, version badge, theme toggle, anchor nav
+2. **Meta Banner** — Full-width informational strip below header; always visible
+3. **Hero** — Tagline, one-sentence explanation, primary CTA
+4. **Problem Section** — Why existing approaches fail
+5. **How It Works** — Four-skill walkthrough (init → spec → impl → validate)
+6. **Hierarchy Explorer** — Interactive section
+7. **Spec Wizard** — Interactive section
+8. **Before/After Comparison** — Interactive section
+9. **CTA Section** — GitHub link, getting started prompt
+10. **Footer** — Attribution, build date, links
 
 ---
 
-## Meta Banner
+## Breakpoints
 
-- Persists at the top of every page view
-- Never hidden, scrolled away, or dismissible
-- Contains: build method description + two absolute GitHub links
-- Must be readable in both dark and light modes
-
----
-
-## Header
-
-- Contains: version badge (from CONTENT_SYSTEM), theme toggle (from THEME_SYSTEM)
-- Version badge is prominent — visible without searching
-- Theme toggle is accessible via keyboard
+| Name | Condition | Layout Behavior |
+|------|-----------|-----------------|
+| Mobile | Narrower than [tablet threshold] | Single column; stacked interactive variants |
+| Tablet | Between [tablet threshold] and [desktop threshold] | Two-column where applicable; hybrid interactive variants |
+| Desktop | Wider than [desktop threshold] | Full layouts; side-by-side comparison; expanded explorer |
 
 ---
 
-## Responsive Strategy
+## Header Behavior
 
-| Breakpoint | Layout Behavior |
-|-----------|-----------------|
-| Mobile ([small width]) | Single-column, stacked sections, touch-sized tap targets |
-| Tablet ([medium width]) | Single or two-column depending on section content |
-| Desktop ([large width]) | Wider content with side-by-side where appropriate |
-
-All interactive features must be fully functional at minimum supported mobile width.
+- Sticky — stays at top of viewport as user scrolls
+- Contains: site logo/wordmark, RootSpec version badge, theme toggle button
+- On mobile: version badge and nav links may collapse or hide to preserve space
 
 ---
 
-## Navigation
+## Subpath Deployment
 
-This is a single-page marketing site — no multi-page routing is required. Smooth scroll to sections if navigation anchors are present. No sticky navigation is required (meta banner takes that position).
-
----
-
-## Base Path Configuration
-
-The site is deployed at `/demos/greenfield/`. The framework's base path must be configured so:
-- All asset URLs (CSS, JS, images, fonts) resolve correctly from the subpath
-- Internal links work correctly from the subpath
-- The static prerenderer does not use relative URLs for external links (already handled by CONTENT_SYSTEM using absolute URLs)
-
----
-
-## Data Ownership
-
-- Receives version string from CONTENT_SYSTEM for badge
-- Receives `currentMode` from THEME_SYSTEM for visual state
-- Emits toggle events to THEME_SYSTEM on toggle activation
-- Emits viewport/breakpoint signals to INTERACTIVE_SYSTEM
+The site is deployed at `/demos/greenfield/`. The build configuration must set the base path so that:
+- All asset references (CSS, JS, images) use the subpath
+- All internal anchor links resolve correctly relative to the subpath
+- The site root (`/`) redirects to or is separate from this deployment path
 
 ---
 
 ## Rules
 
-- Meta banner must be visible on page load without user action on all viewport sizes
-- No section may be completely hidden from view — all content must be reachable by scrolling
-- Footer must include builder name and build date (per L1 attribution requirement)
-- Base path configuration is a build-time concern, not runtime — do not patch URLs dynamically
-
----
-
-## Interactions with Other Systems
-
-- Provides viewport and breakpoint signals to: INTERACTIVE_SYSTEM
-- Receives: version string from CONTENT_SYSTEM
-- Receives: theme mode from THEME_SYSTEM
-- Emits: theme toggle events to THEME_SYSTEM
-- Contains: INTERACTIVE_SYSTEM components (Hierarchy Explorer, Spec Wizard, Before/After)
+- Section order is fixed — no dynamic reordering
+- All sections render on a single scrollable page (no client-side routing)
+- External links (GitHub, docs) open in new browser tabs
+- Header is always visible — no hide-on-scroll behavior that would remove access to the theme toggle
+- The meta banner is never dismissible — it is a permanent part of the page

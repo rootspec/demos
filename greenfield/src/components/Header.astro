@@ -1,37 +1,42 @@
 ---
-const VERSION = '7.3.3';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+let version = '7.3.5';
+try {
+  const rootspecJson = JSON.parse(readFileSync(join(process.cwd(), '.rootspec.json'), 'utf8'));
+  version = rootspecJson.version || version;
+} catch (e) {}
 ---
 
-<header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur border-b border-gray-200 dark:border-gray-800">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <span class="font-mono font-bold text-lg text-indigo-600 dark:text-indigo-400">RootSpec</span>
-      <span
-        data-test="version-badge"
-        class="text-xs font-mono bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded-full"
-      >
-        v{VERSION}
-      </span>
+<header style="background-color: var(--bg-secondary); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50;">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 3.5rem;">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <span style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">RootSpec</span>
+      <span data-test="version-badge" style="background-color: var(--accent); color: white; font-size: 0.7rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 9999px; letter-spacing: 0.02em;">v{version}</span>
     </div>
-    <nav class="flex items-center gap-4">
-      <a href="https://github.com/rootspec" class="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">GitHub</a>
-      <button
-        id="theme-toggle"
-        data-test="theme-toggle"
-        aria-label="Toggle theme"
-        class="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-      >
-        <span class="dark:hidden">🌙</span>
-        <span class="hidden dark:inline">☀️</span>
-      </button>
-    </nav>
+    <button
+      data-test="theme-toggle"
+      id="theme-toggle"
+      aria-label="Toggle theme"
+      onclick="(function(){ var cur = document.documentElement.getAttribute('data-theme') || 'dark'; var next = cur === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', next); document.body.setAttribute('data-theme', next); var tr = document.getElementById('theme-root'); if(tr) tr.setAttribute('data-theme', next); var ti = document.getElementById('theme-indicator'); if(ti) ti.setAttribute('data-theme', next); try { localStorage.setItem('rootspec-theme', next); } catch(e) {} var icon = document.getElementById('theme-icon'); var label = document.getElementById('theme-label'); if(icon) icon.textContent = next === 'dark' ? '🌙' : '☀️'; if(label) label.textContent = next === 'dark' ? 'Dark' : 'Light'; })()"
+      style="background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); padding: 0.4rem 0.75rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem; display: flex; align-items: center; gap: 0.4rem; transition: all 200ms ease;"
+    >
+      <span id="theme-icon">🌙</span>
+      <span id="theme-label">Dark</span>
+    </button>
   </div>
 </header>
 
-<script>
-  const btn = document.getElementById('theme-toggle');
-  btn?.addEventListener('click', () => {
-    const isDark = document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  });
+<script is:inline>
+  // Sync theme indicator and icon on load
+  var currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  var themeRoot = document.getElementById('theme-root');
+  if (themeRoot) themeRoot.setAttribute('data-theme', currentTheme);
+  var themeIndicator = document.getElementById('theme-indicator');
+  if (themeIndicator) themeIndicator.setAttribute('data-theme', currentTheme);
+  var icon = document.getElementById('theme-icon');
+  var label = document.getElementById('theme-label');
+  if (icon) icon.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+  if (label) label.textContent = currentTheme === 'dark' ? 'Dark' : 'Light';
 </script>

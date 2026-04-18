@@ -1,47 +1,25 @@
 ---
-const problems = [
-  {
-    title: 'Spec Drift',
-    description: 'Your requirements doc says one thing, the code does another, and nobody noticed until QA.',
-  },
-  {
-    title: 'AI Hallucinations',
-    description: 'AI coding tools fill in ambiguity with plausible-but-wrong decisions, creating technical debt you didn\'t ask for.',
-  },
-  {
-    title: 'No Single Source of Truth',
-    description: 'Design in Figma, requirements in Notion, stories in Jira — none of them agree with each other.',
-  },
-  {
-    title: 'Unverifiable Output',
-    description: 'When you ask AI to implement a feature, there\'s no systematic way to know if it actually did what you wanted.',
-  },
-];
 ---
 
-<section
-  data-test="problem-section"
-  class="py-20 px-4 bg-gray-50 dark:bg-gray-900"
->
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-14">
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        The problem with modern software development
-      </h2>
-      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-        AI writes code faster than ever — but without a structured spec, it's building the wrong thing at speed.
-      </p>
-    </div>
-    <div class="grid sm:grid-cols-2 gap-6">
-      {problems.map((p) => (
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-          <div class="flex items-start gap-3">
-            <span class="text-red-500 text-xl mt-0.5">✗</span>
-            <div>
-              <h3 class="font-semibold text-gray-900 dark:text-white mb-1">{p.title}</h3>
-              <p class="text-gray-600 dark:text-gray-400 text-sm">{p.description}</p>
-            </div>
-          </div>
+<section data-test="problem-section" id="problem" style="padding: 4rem 1.5rem; background-color: var(--bg-primary);">
+  <div style="max-width: 1000px; margin: 0 auto;">
+    <h2 data-test="problem-heading" style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; color: var(--text-primary); text-align: center; margin: 0 0 1rem;">
+      Why Existing Spec Approaches Fail
+    </h2>
+    <p style="text-align: center; color: var(--text-secondary); font-size: 1.05rem; margin: 0 0 3rem; max-width: 640px; margin-left: auto; margin-right: auto;">
+      Most specification methods were designed for human developers. They produce artifacts that AI agents struggle to interpret, leading to misbuilt features and costly rework.
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+      {[
+        { icon: '📄', title: 'Too Vague', body: 'User stories like "the user should be able to log in" leave implementation details entirely to interpretation.' },
+        { icon: '🌀', title: 'No Hierarchy', body: 'Flat requirements lists have no structure. An AI agent has no way to understand which decisions constrain others.' },
+        { icon: '🔀', title: 'Untestable', body: 'Requirements written without acceptance criteria cannot be validated automatically — you\'re stuck manual testing forever.' },
+        { icon: '💸', title: 'Expensive to Fix', body: 'When an AI builds the wrong thing, you pay twice: once to build it wrong, once to rebuild it right.' },
+      ].map(({ icon, title, body }) => (
+        <div style="background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.5rem;">
+          <div style="font-size: 1.75rem; margin-bottom: 0.75rem;">{icon}</div>
+          <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.5rem;">{title}</h3>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">{body}</p>
         </div>
       ))}
     </div>

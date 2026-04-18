@@ -1,19 +1,15 @@
 ---
-// Meta Banner: honest disclosure about how the site was built
+const GITHUB_BASE = 'https://github.com/rootspec/demos/blob/main/greenfield';
+const seedUrl = `${GITHUB_BASE}/SEED.md`;
+const specUrl = `${GITHUB_BASE}/rootspec`;
 ---
 
-<div
-  data-test="meta-banner"
-  class="w-full bg-indigo-600 dark:bg-indigo-700 text-white text-sm py-2 px-4 text-center"
->
-  This site was generated from a product description using the
-  <strong>RootSpec</strong> pipeline (rs-spec → rs-impl → rs-validate).
-  <a
-    href="https://github.com/rootspec/demos/tree/main/greenfield/rootspec"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="underline ml-1 font-semibold hover:text-indigo-200 transition-colors"
-  >
-    View the spec on GitHub ↗
-  </a>
+<div data-test="meta-banner" style="background-color: var(--meta-bg); border-bottom: 1px solid var(--meta-border); padding: 0.6rem 1.5rem;">
+  <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--meta-text);">
+    <span>🧪 <strong>RootSpec Demo</strong> — This site was built from a spec using the RootSpec methodology.</span>
+    <span style="display: flex; gap: 0.75rem; margin-left: auto;">
+      <a data-test="meta-banner-seed-link" href={seedUrl} target="_blank" rel="noopener noreferrer" style="color: var(--meta-text); font-weight: 600; text-decoration: underline;">View SEED.md</a>
+      <a data-test="meta-banner-spec-link" href={specUrl} target="_blank" rel="noopener noreferrer" style="color: var(--meta-text); font-weight: 600; text-decoration: underline;">View Spec</a>
+    </span>
+  </div>
 </div>

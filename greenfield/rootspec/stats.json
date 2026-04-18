@@ -1,10 +1,10 @@
 {
   "runs": [
     {
-      "runId": "50079702",
-      "startedAt": "2026-04-17T03:47:09.512Z",
-      "completedAt": "2026-04-17T04:12:06.069Z",
-      "totalCostUsd": 3.94,
+      "runId": "9bcd9b76",
+      "startedAt": "2026-04-18T14:59:19.687Z",
+      "completedAt": "2026-04-18T15:37:25.631Z",
+      "totalCostUsd": 6,
       "phases": {
         "init": {
           "status": "success",
@@ -14,33 +14,33 @@
         },
         "spec": {
           "status": "success",
-          "costUsd": 1.3,
-          "turns": 45,
-          "durationSeconds": 416
+          "costUsd": 0.93,
+          "turns": 41,
+          "durationSeconds": 358
         },
         "impl": {
           "status": "success",
-          "costUsd": 1.95,
-          "turns": 90,
-          "durationSeconds": 791
-        },
-        "validate": {
-          "status": "success",
-          "costUsd": 0.55,
-          "turns": 32,
-          "durationSeconds": 248
+          "costUsd": 4.78,
+          "turns": 162,
+          "durationSeconds": 1778
         },
         "review": {
           "status": "success",
-          "costUsd": 0.14,
-          "turns": 9,
-          "durationSeconds": 33
+          "costUsd": 0,
+          "turns": 0,
+          "durationSeconds": 0
+        },
+        "validate": {
+          "status": "success",
+          "costUsd": 0.29,
+          "turns": 23,
+          "durationSeconds": 142
         }
       },
       "review": {
         "staticBlockers": 0,
-        "staticWarnings": 0,
-        "llmAssessment": "clean"
+        "staticWarnings": 1,
+        "llmAssessment": "skipped"
       }
     }
   ]
