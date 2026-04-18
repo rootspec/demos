@@ -1,101 +1,97 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const levels = [
   {
-    num: 1,
-    label: 'L1 Philosophy',
-    title: 'Philosophy & Principles',
-    description: 'The immutable "why" behind the product — values, mission, and design principles that never change.',
-    example: 'Principle: "Prefer explicit over implicit. Every decision should be traceable to a user need."',
-    color: 'border-purple-500 bg-purple-50 dark:bg-purple-950',
-    badgeColor: 'bg-purple-500',
+    id: 1,
+    name: 'L1 — Philosophy',
+    description: 'The "why" of the product. Mission, values, and the principles that never change.',
+    example: 'Mission: Help teams ship with confidence by making specs the single source of truth.',
+    color: '#8194fa',
   },
   {
-    num: 2,
-    label: 'L2 Truths',
-    title: 'Truths & Constraints',
-    description: 'Hard constraints and facts that bound the solution space — technical, legal, or business reality.',
-    example: 'Truth: "All user data must be stored in the EU. No exceptions."',
-    color: 'border-blue-500 bg-blue-50 dark:bg-blue-950',
-    badgeColor: 'bg-blue-500',
+    id: 2,
+    name: 'L2 — Truths',
+    description: 'Core axioms and non-negotiable constraints that govern all decisions.',
+    example: 'Truth: Every feature must have a corresponding user story before implementation begins.',
+    color: '#a78bfa',
   },
   {
-    num: 3,
-    label: 'L3 Interactions',
-    title: 'Interactions & Journeys',
-    description: 'How users move through the product — key flows, decision points, and state transitions.',
-    example: 'Journey: "New user → Onboarding → First value moment → Retained user"',
-    color: 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950',
-    badgeColor: 'bg-cyan-500',
+    id: 3,
+    name: 'L3 — Interactions',
+    description: 'How users move through the product — journeys, flows, and behaviours.',
+    example: 'Flow: User visits landing page → reads value prop → tries wizard → visits GitHub.',
+    color: '#60a5fa',
   },
   {
-    num: 4,
-    label: 'L4 Systems',
-    title: 'Systems & Architecture',
-    description: 'The technical systems that implement the interactions — components, APIs, and data models.',
-    example: 'System: "AUTH_SYSTEM: JWT tokens, 7-day refresh, bcrypt password hashing"',
-    color: 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950',
-    badgeColor: 'bg-indigo-500',
+    id: 4,
+    name: 'L4 — Systems',
+    description: 'The architectural systems that implement interactions: content, theme, layout, interactive.',
+    example: 'System: THEME_SYSTEM manages dark/light mode preference with persistence.',
+    color: '#34d399',
   },
   {
-    num: 5,
-    label: 'L5 Implementation',
-    title: 'Implementation & Stories',
-    description: 'Concrete user stories with Gherkin-style acceptance criteria that map to test cases.',
-    example: 'Story: "Given I visit /, When the page loads, Then I see [data-test=hero]"',
-    color: 'border-green-500 bg-green-50 dark:bg-green-950',
-    badgeColor: 'bg-green-500',
+    id: 5,
+    name: 'L5 — Implementation',
+    description: 'Executable user stories with acceptance criteria, fine-tuning, and conventions.',
+    example: 'US-301: Given I visit the site, When I click the theme toggle, Then the theme changes.',
+    color: '#fbbf24',
   },
 ];
 
 export default function HierarchyExplorer() {
   const [expanded, setExpanded] = useState<number | null>(null);
 
-  const toggle = (num: number) => {
-    setExpanded((prev) => (prev === num ? null : num));
+  const toggle = (id: number) => {
+    setExpanded(prev => (prev === id ? null : id));
   };
 
   return (
-    <div data-test="hierarchy-explorer" className="space-y-3">
-      {levels.map((level) => (
-        <div
-          key={level.num}
-          className={`rounded-xl border-l-4 ${level.color} border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-200`}
-        >
-          <button
-            data-test={`hierarchy-level-${level.num}`}
-            onClick={() => toggle(level.num)}
-            className="w-full flex items-center justify-between p-4 text-left hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-            aria-expanded={expanded === level.num}
-          >
-            <div className="flex items-center gap-3">
-              <span className={`${level.badgeColor} text-white text-xs font-mono font-bold px-2 py-0.5 rounded`}>
-                L{level.num}
-              </span>
-              <span className="font-semibold text-gray-900 dark:text-white">{level.label}</span>
-            </div>
-            <svg
-              className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${expanded === level.num ? 'rotate-180' : ''}`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+    <section className="px-6 py-20 max-w-4xl mx-auto">
+      <h2 className="text-3xl font-bold text-center mb-4" style={{ color: 'var(--color-text)' }}>
+        The Five-Level Hierarchy
+      </h2>
+      <p className="text-center mb-12" style={{ color: 'var(--color-text)', opacity: 0.6 }}>
+        RootSpec organises every product into five layers — from philosophy to code.
+        Click a level to explore it.
+      </p>
+
+      <div data-test="hierarchy-explorer" className="space-y-3">
+        {levels.map(level => (
+          <div key={level.id} className="rounded-xl border overflow-hidden" style={{ borderColor: 'var(--color-border)' }}>
+            <button
+              data-test={`hierarchy-level-${level.id}`}
+              tabIndex={0}
+              onClick={() => toggle(level.id)}
+              className="w-full flex items-center justify-between px-5 py-4 text-left transition-colors hover:opacity-90"
+              style={{ background: 'var(--color-surface)', color: 'var(--color-text)' }}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-          <div
-            data-test={`hierarchy-level-${level.num}-content`}
-            style={{ display: expanded === level.num ? 'block' : 'none' }}
-            className="px-4 pb-4"
-          >
-            <h3 className="font-bold text-gray-900 dark:text-white mb-2">{level.title}</h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">{level.description}</p>
-            <div className="bg-gray-900 dark:bg-gray-950 rounded-lg p-3">
-              <p className="font-mono text-xs text-green-400">{level.example}</p>
-            </div>
+              <span className="font-semibold" style={{ color: level.color }}>{level.name}</span>
+              <span className="text-sm" style={{ color: 'var(--color-text)', opacity: 0.5 }}>
+                {expanded === level.id ? '▲' : '▼'}
+              </span>
+            </button>
+
+              {/* Always render content in DOM; show/hide via display */}
+              <div
+                data-test={`hierarchy-level-${level.id}-content`}
+                style={{
+                  display: expanded === level.id ? 'block' : 'none',
+                  background: 'var(--color-bg)',
+                  borderTop: '1px solid var(--color-border)',
+                }}
+                className="px-5 py-4"
+              >
+                <p className="mb-3 text-sm" style={{ color: 'var(--color-text)', opacity: 0.8 }}>{level.description}</p>
+                <div
+                  className="rounded-lg p-3 font-mono text-xs"
+                  style={{ background: 'var(--color-surface)', color: level.color }}
+                >
+                  {level.example}
+                </div>
+              </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </section>
   );
 }

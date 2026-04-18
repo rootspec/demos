@@ -1,34 +1,21 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Theme System
+# FINE TUNING: Theme System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: THEME_SYSTEM
-# @last_updated: 2026-04-17T03:47:13Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
-
-# -----------------------------------------------------------------------------
-# Theme Transition
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# @last_updated: 2026-04-18T03:23:18Z
+# @status: production
 
 transition:
-  duration_ms: 200
-  # @rationale: Fast enough to feel instant, slow enough to avoid jarring flash
-  # @reference: Nielsen Norman Group - Response Times
-  # @alternatives: [100, 200, 300]
-  # @constraints: min=100, max=400, type=integer
-
-  easing: ease-in-out
-  # @rationale: Symmetric easing feels natural for bidirectional mode switching
-  # @constraints: type=string, values=[linear, ease, ease-in, ease-out, ease-in-out]
-
-# -----------------------------------------------------------------------------
-# Storage
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+  duration:
+    value: 200
+    # @unit: milliseconds
+    # @rationale: Fast enough to feel instant, slow enough to confirm the change occurred
+    # @constraint: min=100, max=400, type=integer
+    # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
 storage:
-  key: rootspec-theme-preference
-  # @rationale: Stable, namespaced key prevents collision with other localStorage entries
-  # @constraints: type=string
+  key:
+    value: "rootspec-theme"
+    # @rationale: Namespaced to avoid collisions with other apps in localStorage
+    # @inviolable: true — changing this key loses all stored preferences

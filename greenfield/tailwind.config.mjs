@@ -6,12 +6,22 @@ export default {
     extend: {
       colors: {
         brand: {
-          DEFAULT: '#6366f1',
-          dark: '#4f46e5',
+          50: '#f0f4ff',
+          100: '#e0e9ff',
+          200: '#c7d7fe',
+          300: '#a5bbfd',
+          400: '#8194fa',
+          500: '#6270f5',
+          600: '#4f55e9',
+          700: '#3f42d0',
+          800: '#3437a8',
+          900: '#2e3485',
+          950: '#1c1f55',
         },
       },
       fontFamily: {
-        mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
     },
   },

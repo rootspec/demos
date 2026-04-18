@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["ES2017", "dom"],
-    "types": ["cypress"],
-    "ignoreDeprecations": "6.0"
+    "target": "es5",
+    "lib": ["es5", "dom", "es2015.promise"],
+    "types": ["cypress"]
   },
   "include": ["**/*.ts"]
 }

@@ -1,44 +1,38 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Interactive System
+# FINE TUNING: Interactive System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: INTERACTIVE_SYSTEM
-# @last_updated: 2026-04-17T03:47:13Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+# @last_updated: 2026-04-18T03:23:18Z
+# @status: production
 
-# -----------------------------------------------------------------------------
-# Spec Wizard Configuration
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+hierarchy_explorer:
+  expand_duration:
+    value: 250
+    # @unit: milliseconds
+    # @rationale: Long enough to see content appearing, short enough not to feel slow
+    # @constraint: min=150, max=500, type=integer
 
 wizard:
-  min_pillars: 3
-  # @rationale: Three pillars is the minimum to demonstrate the concept meaningfully
-  # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-  # @constraints: min=2, max=3, type=integer
+  min_pillars:
+    value: 3
+    # @rationale: Fewer than 3 pillars produces a spec without meaningful differentiation
+    # @constraint: min=2, max=3, type=integer
 
-  max_pillars: 5
-  # @rationale: Five pillars matches the RootSpec L1 recommendation; more dilutes focus
-  # @spec_source: 01.PHILOSOPHY.md, 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-  # @constraints: min=4, max=8, type=integer
+  max_pillars:
+    value: 5
+    # @rationale: More than 5 pillars creates decision paralysis and dilutes focus
+    # @constraint: min=5, max=7, type=integer
 
-  mission_template_count: 6
-  # @rationale: Enough variety for common product types without overwhelming choice
-  # @constraints: min=4, max=10, type=integer
+  step_transition_duration:
+    value: 200
+    # @unit: milliseconds
+    # @rationale: Consistent with theme transition; fast enough to feel responsive
+    # @constraint: min=100, max=400, type=integer
 
-  pillar_suggestion_count: 12
-  # @rationale: Rich enough for visitors to find resonant options; scan-friendly at this count
-  # @constraints: min=8, max=20, type=integer
-
-# -----------------------------------------------------------------------------
-# Touch Targets
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-
-touch:
-  min_target_size_px: 44
-  # @rationale: Apple HIG and WCAG 2.5.5 recommend 44x44px minimum for touch targets
-  # @reference: https://developer.apple.com/design/human-interface-guidelines/accessibility
-  # @constraints: min=44, max=64, type=integer
-  # @inviolable: true
+comparison:
+  panel_transition_duration:
+    value: 150
+    # @unit: milliseconds
+    # @rationale: Mobile toggle should feel snappy; content change is the focus, not the animation
+    # @constraint: min=100, max=300, type=integer

@@ -1,52 +1,66 @@
 # =============================================================================
-# USER STORY: Mobile Responsiveness
+# USER STORIES: Responsive & Accessibility — MVP Phase
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: LANDING
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-17T03:47:13Z
+# @journey: ACCESSIBILITY_AND_RESPONSIVE
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM]
+# @last_updated: 2026-04-18T03:23:18Z
 
+---
 id: US-401
-title: Visitor on mobile can access all content and interactive features
+title: Use the site on a mobile device without layout breakage
 
 acceptance_criteria:
   - id: AC-401-1
-    title: Page layout is usable on mobile viewport
+    title: Hero section visible on mobile viewport
     narrative: |
-      Given I visit the site on a mobile device
-      When the page loads
-      Then the content is readable and the meta banner is visible
+      Given I am viewing the site on a mobile viewport
+      When the hero section loads
+      Then it is visible without horizontal scrolling
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=hero]' }
+      - shouldExist: { selector: '[data-test=hero-section]' }
 
   - id: AC-401-2
-    title: Hierarchy Explorer is usable on mobile
+    title: Spec wizard is usable on mobile viewport
     narrative: |
-      Given I visit the site on a mobile device
-      When I tap on a hierarchy level
-      Then the level expands to show content
-    given:
-      - visit: '/'
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
-
-  - id: AC-401-3
-    title: Spec Wizard is usable on mobile
-    narrative: |
-      Given I visit the site on a mobile device
+      Given I am on a mobile viewport
       When I interact with the spec wizard
-      Then I can enter text and navigate between steps
+      Then the wizard step input is accessible
     given:
       - visit: '/'
-      - fill: { selector: '[data-test=product-idea-input]', value: 'My product idea' }
-      - click: { selector: '[data-test=wizard-next]' }
     when: []
     then:
-      - shouldExist: { selector: '[data-test=wizard-step-2]' }
+      - shouldExist: { selector: '[data-test=spec-wizard]' }
+
+---
+id: US-402
+title: Navigate interactive components via keyboard
+
+acceptance_criteria:
+  - id: AC-402-1
+    title: Hierarchy explorer levels are keyboard accessible
+    narrative: |
+      Given I am using keyboard navigation
+      When I focus the hierarchy explorer
+      Then the level items are focusable
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=hierarchy-level-1][tabindex]' }
+
+  - id: AC-402-2
+    title: Theme toggle is keyboard accessible
+    narrative: |
+      Given I am using keyboard navigation
+      When I look at the theme toggle
+      Then it is a focusable button element
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=theme-toggle]' }

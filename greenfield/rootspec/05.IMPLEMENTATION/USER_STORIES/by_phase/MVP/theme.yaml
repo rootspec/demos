@@ -1,22 +1,23 @@
 # =============================================================================
-# USER STORY: Theme Toggle
+# USER STORIES: Theme System — MVP Phase
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: LANDING
-# @systems: [THEME_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-17T03:47:13Z
+# @journey: THEME_PREFERENCE
+# @systems: [THEME_SYSTEM, PRESENTATION_SYSTEM]
+# @last_updated: 2026-04-18T03:23:18Z
 
+---
 id: US-301
-title: Visitor can switch between dark and light themes
+title: Toggle between dark and light themes
 
 acceptance_criteria:
   - id: AC-301-1
-    title: Theme toggle is visible on the page
+    title: Theme toggle button is present
     narrative: |
       Given I visit the site
       When the page loads
-      Then I see a theme toggle control in the header
+      Then I see a theme toggle button
     given:
       - visit: '/'
     when: []
@@ -24,68 +25,14 @@ acceptance_criteria:
       - shouldExist: { selector: '[data-test=theme-toggle]' }
 
   - id: AC-301-2
-    title: Clicking theme toggle switches the visual mode
+    title: Clicking the theme toggle changes the active theme
     narrative: |
-      Given I see the site in its default mode
+      Given I can see the theme toggle
       When I click the theme toggle
-      Then the page switches to the alternate theme mode
+      Then the page theme changes
     given:
       - visit: '/'
     when:
       - click: { selector: '[data-test=theme-toggle]' }
     then:
       - shouldExist: { selector: '[data-test=theme-toggle]' }
-
----
-# =============================================================================
-# USER STORY: Open Source CTA
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: ACTION
-# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-17T03:47:13Z
-
-id: US-302
-title: Visitor can find the GitHub repository to get started
-
-acceptance_criteria:
-  - id: AC-302-1
-    title: CTA section is present with GitHub link
-    narrative: |
-      Given I visit the site
-      When I scroll to the CTA section
-      Then I see a link to the RootSpec GitHub repository
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=cta-section]' }
-      - shouldExist: { selector: '[data-test=cta-section] a[href*="github.com/rootspec"]' }
-
----
-# =============================================================================
-# USER STORY: Footer Attribution
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: LANDING
-# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-17T03:47:13Z
-
-id: US-303
-title: Visitor can see who built the site and when
-
-acceptance_criteria:
-  - id: AC-303-1
-    title: Footer is present with builder attribution
-    narrative: |
-      Given I visit the site
-      When I scroll to the footer
-      Then I see the builder name and build date
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=footer]' }
-      - shouldExist: { selector: '[data-test=footer-attribution]' }

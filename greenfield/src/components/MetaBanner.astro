@@ -1,19 +1,24 @@
 ---
-// Meta Banner: honest disclosure about how the site was built
+// Meta banner explaining this site is itself a RootSpec demo
 ---
-
-<div
-  data-test="meta-banner"
-  class="w-full bg-indigo-600 dark:bg-indigo-700 text-white text-sm py-2 px-4 text-center"
->
-  This site was generated from a product description using the
-  <strong>RootSpec</strong> pipeline (rs-spec → rs-impl → rs-validate).
+<div data-test="meta-banner" class="bg-brand-950 border-b border-brand-800 text-brand-200 text-sm py-2 px-4 text-center">
+  <span>This site is a RootSpec demo — built spec-first from a SEED.md using the RootSpec methodology.</span>
   <a
+    data-test="meta-banner-spec-link"
     href="https://github.com/rootspec/demos/tree/main/greenfield/rootspec"
     target="_blank"
     rel="noopener noreferrer"
-    class="underline ml-1 font-semibold hover:text-indigo-200 transition-colors"
+    class="ml-2 underline hover:text-white"
   >
-    View the spec on GitHub ↗
+    View Spec
+  </a>
+  <a
+    data-test="meta-banner-seed-link"
+    href="https://github.com/rootspec/demos/blob/main/greenfield/SEED.md"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="ml-2 underline hover:text-white"
+  >
+    View Seed
   </a>
 </div>

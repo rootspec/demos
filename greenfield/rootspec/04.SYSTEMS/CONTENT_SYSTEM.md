@@ -1,84 +1,74 @@
-# Content System
-
-**References:** `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`, `SYSTEMS_OVERVIEW.md`
-
----
+# Level 4: Content System
 
 ## Responsibility
 
-Manages all static page content: copy, section structure, version badge data, and GitHub link targets. This system owns what the page says, not how it looks or behaves.
-
----
-
-## Content Sections
-
-| Section | Purpose | Key Data |
-|---------|---------|---------|
-| Meta Banner | Honest disclosure of how the site was built | Build method description, GitHub links (absolute URLs) |
-| Hero | Immediate clarity on what RootSpec is | Tagline, one-sentence explanation, version badge |
-| Problem | Validate visitor pain | Four problem statements with specifics |
-| How It Works | Four-skill walkthrough | init/spec/impl/validate with descriptions |
-| Methodology Diagram | Visual proof of concept | SVG diagram of spec as development filter |
-| Hierarchy Explorer | Interactive level content | Example content for each of the five levels |
-| Spec Wizard | Template library for wizard | Mission templates, pillar suggestions |
-| Before/After Comparison | Real content for both panels | "Without RootSpec" doc, "With RootSpec" structure |
-| Open Source CTA | Path to action | GitHub repo URL, getting-started language |
-| Footer | Attribution and date | Builder name, build date |
-
----
+Owns all static and template content for the site. This includes page copy, section text, the meta banner, version badge data, GitHub links, and the structured templates used by the Spec Wizard and Hierarchy Explorer.
 
 ## Data Ownership
 
 ### Version Badge
+- Source: `.rootspec.json` → `version` field
+- Read at build time (Astro static generation)
+- Rendered into: hero section and/or header
+- Format: `v{version}` (e.g., `v7.3.4`)
 
-- Source: `.rootspec.json` field `version`
-- Read at: build time (static rendering)
-- Fallback: display "unknown" if file unavailable
-- Location: Hero section and/or site header
+### Meta Banner
+- Text: "This site was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups. The spec, the code, and the tests were all produced by running four commands."
+- Link 1: View the spec → `https://github.com/rootspec/demos/tree/main/greenfield/rootspec` (absolute GitHub URL)
+- Link 2: View the seed → `https://github.com/rootspec/demos/tree/main/greenfield/SEED.md` (absolute GitHub URL)
+- Visibility: Always visible; not dismissible
 
-### GitHub Links (Meta Banner)
+### GitHub CTA Links
+- Framework repo: `https://github.com/rootspec/rootspec`
+- Demos repo: `https://github.com/rootspec/demos/tree/main/greenfield`
 
-- Seed link: `https://github.com/rootspec/demos/tree/main/greenfield` (or direct file URL for SEED.md)
-- Spec link: same base URL pointing to `rootspec/` directory
-- These must be **absolute URLs** — relative links break static prerenderer
-- Critical: visitors must understand rough edges are from minimal guidance, not carelessness
-
-### Methodology Diagram
-
-- Rendered as SVG (no external image hosting)
-- Concept: spec surrounds the development cycle; only valid solutions pass through
-- Must work in both dark and light mode (SVG colors adapt to theme)
+### Hierarchy Explorer Content
+Each of the five levels has:
+- Level number and name
+- Short description (1-2 sentences)
+- Key question answered
+- Example excerpt (real content from the framework, not lorem ipsum)
+- Allowed references (displayed as a list or visual indicator)
 
 ### Spec Wizard Templates
+**Mission templates** (Step 1):
+- "Transform how [domain] works by prioritizing [value] over [traditional approach]."
+- "[Product] exists because [pain point] costs [audience] [consequence]."
+- "We build [product] so that [user] can [goal] without [obstacle]."
 
-| Template Type | Content |
-|--------------|---------|
-| Mission templates | 4-6 starter missions covering common product categories |
-| Design pillar suggestions | 8-12 emotional pillar phrases visitors can select from |
-| Output skeleton | L1-L3 structure with visitor's inputs mapped to correct levels |
+**Design pillar suggestions** (Step 2, pick 3-5):
+- Clarity, Reliability, Speed, Delight, Control, Trust, Simplicity, Power, Consistency, Transparency, Safety, Creativity
 
----
+**Interaction description** (Step 3):
+- Free text; placeholder: "Describe what happens when a user [core action]..."
 
-## Rules
+### Before/After Comparison Content
+Two panels with real examples (not lorem ipsum):
 
-- All copy uses developer voice: direct, honest, no buzzwords (per L1 inviolable principles)
-- Problem section must name specific, recognizable pain points — not abstract complaints
-- Before/After panels contain real, readable content — no lorem ipsum
-- Footer must identify the site builder by name and include the build date
-- The meta banner must acknowledge limitations honestly, not minimize them
+**Without RootSpec panel:**
+- Vague requirements doc fragment (e.g., "Users should be able to manage their profile")
+- Ambiguous user story (no acceptance criteria, no system reference)
+- Decision buried in a comment thread
 
----
+**With RootSpec panel:**
+- L2 truth statement with explicit trade-off
+- L5 user story with given/when/then acceptance criteria
+- Feature traced from L1 design pillar through L3 interaction to L5 story
 
-## State
+### Footer Attribution
+- Built by: Claude (claude-sonnet-4-6), Anthropic
+- Build date: rendered at build time
 
-This system is largely stateless at runtime — content is rendered at build time. The exception is the Spec Wizard template library, which is a static data structure loaded client-side.
+## Interfaces
 
----
+- Exposes version string to LAYOUT_SYSTEM (hero, header)
+- Exposes banner content + links to LAYOUT_SYSTEM (meta banner)
+- Exposes wizard templates to INTERACTIVE_SYSTEM
+- Exposes explorer level data to INTERACTIVE_SYSTEM
+- Exposes comparison copy to INTERACTIVE_SYSTEM
 
-## Interactions with Other Systems
+## Constraints
 
-- Provides version string to LAYOUT_SYSTEM for badge display
-- Provides section copy to LAYOUT_SYSTEM for page rendering
-- Provides Hierarchy Explorer level content to INTERACTIVE_SYSTEM
-- Provides Spec Wizard templates to INTERACTIVE_SYSTEM
-- Provides Before/After panel content to INTERACTIVE_SYSTEM
+- All GitHub links must be absolute URLs (relative links break the static prerenderer)
+- Build-time data (version) must not be fetched at runtime
+- No lorem ipsum — all example content must be real and representative

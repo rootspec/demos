@@ -1,49 +1,11 @@
 ---
-const problems = [
-  {
-    title: 'Spec Drift',
-    description: 'Your requirements doc says one thing, the code does another, and nobody noticed until QA.',
-  },
-  {
-    title: 'AI Hallucinations',
-    description: 'AI coding tools fill in ambiguity with plausible-but-wrong decisions, creating technical debt you didn\'t ask for.',
-  },
-  {
-    title: 'No Single Source of Truth',
-    description: 'Design in Figma, requirements in Notion, stories in Jira — none of them agree with each other.',
-  },
-  {
-    title: 'Unverifiable Output',
-    description: 'When you ask AI to implement a feature, there\'s no systematic way to know if it actually did what you wanted.',
-  },
-];
 ---
-
-<section
-  data-test="problem-section"
-  class="py-20 px-4 bg-gray-50 dark:bg-gray-900"
->
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-14">
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        The problem with modern software development
-      </h2>
-      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-        AI writes code faster than ever — but without a structured spec, it's building the wrong thing at speed.
-      </p>
-    </div>
-    <div class="grid sm:grid-cols-2 gap-6">
-      {problems.map((p) => (
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-          <div class="flex items-start gap-3">
-            <span class="text-red-500 text-xl mt-0.5">✗</span>
-            <div>
-              <h3 class="font-semibold text-gray-900 dark:text-white mb-1">{p.title}</h3>
-              <p class="text-gray-600 dark:text-gray-400 text-sm">{p.description}</p>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
+<section class="px-6 py-20 max-w-4xl mx-auto text-center">
+  <h2 class="text-3xl font-bold mb-4" style="color: var(--color-text)">
+    The problem with shipping without a spec
+  </h2>
+  <p class="text-lg max-w-2xl mx-auto" style="color: var(--color-text); opacity: 0.6">
+    Requirements drift. Engineers guess. Tests lag. Reviews relitigate. RootSpec solves this
+    by making the specification the central artefact — not a formality.
+  </p>
 </section>

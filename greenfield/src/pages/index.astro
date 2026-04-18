@@ -4,25 +4,21 @@ import MetaBanner from '../components/MetaBanner.astro';
 import Header from '../components/Header.astro';
 import HeroSection from '../components/HeroSection.astro';
 import ProblemSection from '../components/ProblemSection.astro';
-import WorkflowSection from '../components/WorkflowSection.astro';
-import HierarchySection from '../components/HierarchySection.astro';
-import SpecWizardSection from '../components/SpecWizardSection.astro';
-import ComparisonSection from '../components/ComparisonSection.tsx';
-import CTASection from '../components/CTASection.astro';
+import ComparisonSection from '../components/ComparisonSection';
+import HierarchyExplorer from '../components/HierarchyExplorer';
+import SpecWizard from '../components/SpecWizard';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout>
+<Layout title="RootSpec — Spec-Driven Development">
   <MetaBanner />
   <Header />
   <main>
     <HeroSection />
     <ProblemSection />
-    <WorkflowSection />
-    <HierarchySection />
-    <SpecWizardSection />
     <ComparisonSection client:load />
-    <CTASection />
+    <HierarchyExplorer client:load />
+    <SpecWizard client:load />
   </main>
   <Footer />
 </Layout>

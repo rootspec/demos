@@ -1,152 +1,84 @@
-# Interactive System
-
-**References:** `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`, `SYSTEMS_OVERVIEW.md`, `CONTENT_SYSTEM.md`, `THEME_SYSTEM.md`
-
----
+# Level 4: Interactive System
 
 ## Responsibility
 
-Manages all client-side interactive components: the Hierarchy Explorer, the Spec Wizard, and the Before/After Comparison. This system owns interactive state and user-driven transformations. It does not manage theme or layout — only user interaction logic.
-
----
+Manages the state and logic for all three interactive components: Hierarchy Explorer, Spec Wizard, and Before/After Comparison. Coordinates with CONTENT_SYSTEM for template data and PRESENTATION_SYSTEM for visual feedback.
 
 ## Components
 
 ### Hierarchy Explorer
 
-**Purpose:** Let visitors experience the five-level structure by interacting with it.
-
 **State:**
-| Property | Type | Initial Value |
-|----------|------|---------------|
-| `expandedLevel` | enum: null \| 1 \| 2 \| 3 \| 4 \| 5 | null |
-| `hoveredLevel` | enum: null \| 1 \| 2 \| 3 \| 4 \| 5 | null |
+- `expandedLevel`: number | null — which level (1-5) is currently expanded
+- `hoveredLevel`: number | null — which level is hovered (for reference highlighting)
 
-**Level Data (from CONTENT_SYSTEM):**
-- Level name and icon
-- Brief description
-- Example content (condensed)
-- Allowed references (which levels it can reference)
+**Rules:**
+- Only one level can be expanded at a time
+- Clicking the expanded level collapses it (toggle)
+- Hovering a level highlights its allowed references (levels it can reference)
+- Reference arrows point upward only — L5 can reference L1-L4; L1 can reference nothing internal
 
-**State Transitions:**
-```
-User clicks/taps level card:
-  expandedLevel = that level (toggle: if already expanded → null)
+**Data consumed from CONTENT_SYSTEM:**
+- Level name, description, key question, example content, allowed references list
 
-User hovers/focuses level card:
-  hoveredLevel = that level
-
-User leaves hover/blur:
-  hoveredLevel = null
-```
-
-**Reference Visualization:**
-- When a level is hovered/focused, levels it CAN reference are highlighted
-- Levels it CANNOT reference are visually de-emphasized
-- Arrows or lines between levels indicate allowed reference directions (upward only)
-
-**Accessibility:**
-- Each level card is focusable (`tabindex=0` or button element)
-- Enter or Space expands/collapses
-- Arrow keys navigate between levels
-- Expanded content is announced to screen readers
-- Focus does not trap; visitor can tab out
-
----
+**Keyboard behavior:**
+- Arrow keys move focus between levels
+- Enter/Space toggle the focused level's expanded state
+- Escape collapses any expanded level
 
 ### Spec Wizard
 
-**Purpose:** Let visitors apply the methodology to their own idea and produce a skeleton spec.
-
 **State:**
-| Property | Type | Initial Value |
-|----------|------|---------------|
-| `currentStep` | enum: 1 \| 2 \| 3 \| output | 1 |
-| `productIdea` | string | "" |
-| `selectedMission` | string | "" |
-| `selectedPillars` | string[] | [] |
-| `keyInteraction` | string | "" |
+- `currentStep`: 1 | 2 | 3
+- `missionText`: string (step 1 — free text or selected template)
+- `selectedPillars`: string[] (step 2 — 3-5 items from suggestion list)
+- `interactionText`: string (step 3 — free text)
+- `isComplete`: boolean — true when all three steps have non-empty values
 
-**Step Structure:**
-```
-Step 1: Product Idea
-  - Text input: "Describe your product idea in one line"
-  - Forward navigation requires non-empty input
+**Rules:**
+- Step 2 enforces minimum [N] and maximum [N] pillar selections
+- Output renders when `isComplete === true`
+- Output maps: missionText → L1 Mission, selectedPillars → L1 Design Pillars, interactionText → L3 Interaction Pattern
+- Output is read-only; user cannot edit the generated skeleton directly
+- State is session-only (no persistence on page reload)
 
-Step 2: Mission
-  - Display [N] mission templates (from CONTENT_SYSTEM)
-  - Visitor selects one OR writes their own (free text fallback)
-  - Forward navigation requires selection or non-empty custom text
+**Data consumed from CONTENT_SYSTEM:**
+- Mission templates (Step 1 suggestions)
+- Pillar suggestion list (Step 2)
+- Placeholder text (Step 3)
 
-Step 3: Design Pillars
-  - Display [M] pillar suggestions (from CONTENT_SYSTEM)
-  - Visitor selects 3-5 OR writes custom pillars
-  - Forward navigation requires 3-5 selections
-
-Output Panel:
-  - Shows skeleton spec with visitor's input mapped to L1-L3 structure
-  - Displays as formatted text/code block
-  - No submission — output is client-side only
-  - "Start over" resets state to Step 1
-```
-
-**Template Engine:**
-- Assembles skeleton spec from static templates + visitor inputs
-- No AI, no external API — pure string interpolation
-- Output format mirrors actual RootSpec L1-L3 structure
-
-**Accessibility:**
-- Step navigation via keyboard (Next/Back buttons are standard buttons)
-- Template selections via keyboard (radio or checkbox inputs)
-- Output panel is readable by screen readers
-- Error states (insufficient pillars, empty input) announced inline
-
----
+**Keyboard behavior:**
+- Tab navigates between form elements
+- Enter advances to next step when current step is valid
+- Shift+Tab moves backward through steps
 
 ### Before/After Comparison
 
-**Purpose:** Show real contrast between unstructured and RootSpec-structured approaches.
-
 **State:**
-| Property | Type | Initial Value |
-|----------|------|---------------|
-| `activeView` | enum: before \| after | before |
+- `activePanel`: "without" | "with" — which panel is shown (mobile only)
+- On desktop: both panels visible side-by-side (no toggle state needed)
 
-**Content (from CONTENT_SYSTEM):**
-- "Before" panel: excerpt from a realistic vague requirements doc with ambiguous stories
-- "After" panel: same product idea expressed as RootSpec hierarchy with testable stories and design pillar traces
+**Rules:**
+- Mobile: toggle button switches between panels with transition
+- Desktop: both panels always visible
+- Active panel determined by viewport width at render time and on resize
 
-**Toggle Mechanism:**
-- Toggle button or labeled tab: "Without RootSpec" / "With RootSpec"
-- OR slider mechanism if visual comparison is appropriate
-- Keyboard accessible: toggle via keyboard, labeled for screen readers
+**Data consumed from CONTENT_SYSTEM:**
+- Without-spec panel content (vague requirements, ambiguous story, buried decision)
+- With-spec panel content (L2 truth, L5 story with ACs, traced feature)
 
-**State Transitions:**
-```
-User clicks "Without RootSpec" / toggles to before:
-  activeView = before
+**Keyboard behavior:**
+- Toggle button (mobile) is focusable; Space/Enter activates
 
-User clicks "With RootSpec" / toggles to after:
-  activeView = after
-```
+## Interfaces
 
----
+- **Consumes from CONTENT_SYSTEM:** Wizard templates, explorer level data, comparison copy
+- **Consumes from LAYOUT_SYSTEM:** Container dimensions for responsive panel decisions
+- **Provides to PRESENTATION_SYSTEM:** State change events for animation triggers
 
-## Rules
+## Constraints
 
-- No external API calls from any interactive component
-- Spec Wizard uses templates only — no generation
-- Wizard output must clearly label which part of output corresponds to which spec level
-- All interactive state is ephemeral (in-memory) — no persistence except theme (owned by THEME_SYSTEM)
-- Touch targets must be [minimum accessible size] for mobile usability
-
----
-
-## Interactions with Other Systems
-
-- Reads level content from CONTENT_SYSTEM (for Hierarchy Explorer)
-- Reads templates from CONTENT_SYSTEM (for Spec Wizard)
-- Reads panel content from CONTENT_SYSTEM (for Before/After)
-- Reads `currentMode` from THEME_SYSTEM (for dark/light visual rendering)
-- Emits animation triggers to PRESENTATION_SYSTEM (expand/collapse transitions)
-- Receives viewport signals from LAYOUT_SYSTEM (to adapt touch vs. hover behavior)
+- No external API calls — all content comes from CONTENT_SYSTEM templates
+- No server-side state — wizard output is purely client-side template rendering
+- Session-only state (except theme, which belongs to THEME_SYSTEM)
+- All interactive elements must have accessible labels and keyboard support

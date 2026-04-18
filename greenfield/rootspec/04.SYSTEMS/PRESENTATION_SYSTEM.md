@@ -1,73 +1,56 @@
-# Presentation System
-
-**References:** `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`, `SYSTEMS_OVERVIEW.md`, `THEME_SYSTEM.md`
-
----
+# Level 4: Presentation System
 
 ## Responsibility
 
-Manages all visual polish: scroll-triggered animations, interactive state transitions, and motion behavior. This system owns when and how things move — not what they say or what happens when the user interacts. It responds to signals from other systems and executes visual transitions.
+Owns all animation, transition, and visual feedback behavior. Responds to signals from LAYOUT_SYSTEM (scroll entry) and INTERACTIVE_SYSTEM (state changes). Respects user motion preferences.
 
----
+## Data Ownership
 
-## Animation Catalog
+### Animation Catalog
 
-### Section Entrance Animations
+| Trigger                         | Animation Type         | Applied To                    |
+|---------------------------------|------------------------|-------------------------------|
+| Section scrolls into view       | Fade + slide up        | Each section container        |
+| Hierarchy level expanded        | Height expand + fade   | Level content panel           |
+| Hierarchy level hovered         | Highlight              | Level card + reference arrows |
+| Theme toggle                    | Crossfade              | Entire page                   |
+| Wizard step advance             | Slide left             | Step content area             |
+| Wizard output appears           | Fade in                | Output skeleton panel         |
+| Before/After toggle (mobile)    | Fade crossfade         | Panel content                 |
 
-- **Trigger:** Section enters viewport (IntersectionObserver or equivalent)
-- **Behavior:** Fade-in with slight upward motion (from slightly below to final position)
-- **Applies to:** All major page sections
-- **Once-only:** Each section animates once on first viewport entry; does not repeat on scroll-back
+### Motion Reduction
+- When `prefers-reduced-motion: reduce` is active:
+  - All movement-based animations become instant or fade-only
+  - Slide animations become instant opacity changes
+  - Crossfades are removed (instant switch)
+  - Height expansions remain but without easing duration
 
-### Interactive State Transitions
+### Timing Tokens
+- Section entry delay: staggered by [N]ms per element
+- Level expansion duration: [N]ms
+- Theme transition duration: [N]ms
+- Wizard step transition duration: [N]ms
 
-| Component | State Change | Transition |
-|-----------|-------------|------------|
-| Hierarchy Explorer | Level expanded | Content reveals with smooth height animation |
-| Hierarchy Explorer | Level collapsed | Content collapses with smooth height animation |
-| Hierarchy Explorer | Level hovered/focused | Reference highlights fade in |
-| Spec Wizard | Step forward | Current step fades out, next step fades in |
-| Spec Wizard | Step back | Reverse transition (next fades out, current fades in) |
-| Before/After Comparison | View toggle | Panel crossfade or slide |
-| Theme Toggle | Mode switch | Smooth color transition across page |
+## Interfaces
 
-### Hover States
+- **Consumes from LAYOUT_SYSTEM:** Scroll intersection events (section entry triggers)
+- **Consumes from INTERACTIVE_SYSTEM:** State change events (expand, step advance, panel toggle)
+- **Consumes from THEME_SYSTEM:** Theme change signal (for transition timing)
+- **Provides:** Visual output only — no data ownership beyond timing tokens
 
-- Interactive elements (buttons, level cards, links) respond to hover with visual feedback
-- Feedback is immediate — no perceptible delay
-- Hover states do not cause layout shift
+## SVG Diagram
 
----
+The "RootSpec methodology" diagram is an SVG rendered inline in the How It Works section. It depicts:
+- A circular development cycle (spec → code → test → deploy → repeat)
+- A surrounding "spec boundary" that filters invalid solutions
+- Arrows showing valid solutions passing through the spec gate
+- Labels for each of the four skills: `/rs-init`, `/rs-spec`, `/rs-impl`, `/rs-validate`
 
-## Reduced Motion
+The SVG is authored directly (not generated from data) and is theme-aware via CSS custom properties.
 
-All animations must respect `prefers-reduced-motion: reduce`:
-- Section entrances: appear immediately without motion
-- Transitions: instant switch (no fade, no movement)
-- Theme toggle: instant color change
-- The feature must work identically with or without motion — no functionality depends on animation
+## Constraints
 
----
-
-## Performance Rules
-
-- Animations use CSS transitions or `transform`/`opacity` (GPU-accelerated properties)
-- No layout-triggering properties animated (no `width`, `height` changes directly — use `max-height` or wrapper transforms)
-- IntersectionObserver (not scroll events) for entrance triggers
-- Transitions complete within [brief duration] — long animations are a distraction, not a feature
-
----
-
-## Rules
-
-- No animation delays visitor from accessing content — animations are additive, not blocking
-- No animation conveys information that isn't available without it (accessibility requirement)
-- SVG methodology diagram elements may animate on entrance but must be legible in static state
-
----
-
-## Interactions with Other Systems
-
-- Receives: animation trigger events from INTERACTIVE_SYSTEM (expand, collapse, step change)
-- Receives: `currentMode` from THEME_SYSTEM (to animate theme transitions)
-- Responds to: IntersectionObserver signals from page scroll (no dependency on other systems)
+- No third-party animation libraries required — CSS transitions and Web Animations API are sufficient
+- All transitions must complete within [N]ms to prevent perceived sluggishness
+- Animation state must not block interactivity (no pointer-events: none during transitions except where intentional)
+- SVG diagram must scale correctly at all breakpoints (viewBox-based, not fixed-size)

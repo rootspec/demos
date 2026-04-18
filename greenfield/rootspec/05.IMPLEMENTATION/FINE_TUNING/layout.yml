@@ -1,50 +1,45 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Layout System
+# FINE TUNING: Layout System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-17T03:47:13Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
-
-# -----------------------------------------------------------------------------
-# Responsive Breakpoints
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# @last_updated: 2026-04-18T03:23:18Z
+# @status: production
 
 breakpoints:
-  mobile_max_px: 767
-  # @rationale: Below 768px is canonical mobile; matches Tailwind md: breakpoint
-  # @constraints: min=480, max=767, type=integer
+  mobile_max:
+    value: 768
+    # @unit: pixels
+    # @rationale: Standard mobile breakpoint; covers phones and small tablets in portrait
+    # @constraint: min=640, max=900, type=integer
 
-  tablet_max_px: 1023
-  # @rationale: 768-1023px is tablet range; matches Tailwind lg: breakpoint
-  # @constraints: min=768, max=1023, type=integer
+  tablet_max:
+    value: 1024
+    # @unit: pixels
+    # @rationale: Covers tablets in landscape and small laptops
+    # @constraint: min=900, max=1200, type=integer
 
-  desktop_min_px: 1024
-  # @rationale: 1024px+ treated as desktop; generous enough for most laptops
-  # @constraints: min=1024, max=1280, type=integer
+scroll:
+  section_entry_threshold:
+    value: 15
+    # @unit: percent visibility (0-100)
+    # @rationale: Triggers animation early enough to feel natural without triggering off-screen
+    # @constraint: min=5, max=30, type=integer
 
-  minimum_supported_px: 320
-  # @rationale: 320px is the narrowest common mobile viewport (iPhone SE)
-  # @inviolable: true
-  # @constraints: min=320, max=375, type=integer
+  section_entry_stagger:
+    value: 80
+    # @unit: milliseconds per element
+    # @rationale: Visible stagger without feeling slow for sections with multiple animating elements
+    # @constraint: min=40, max=150, type=integer
 
-# -----------------------------------------------------------------------------
-# Presentation Timing
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/PRESENTATION_SYSTEM.md
+section_entry_duration:
+  value: 400
+  # @unit: milliseconds
+  # @rationale: Section fade+slide is more substantial than component transitions; needs more time
+  # @constraint: min=200, max=600, type=integer
 
-animations:
-  section_entrance_duration_ms: 400
-  # @rationale: Slow enough to be noticed, fast enough not to delay content access
-  # @alternatives: [300, 400, 600]
-  # @constraints: min=200, max=600, type=integer
-
-  section_entrance_offset_px: 24
-  # @rationale: Subtle upward motion; large enough to read as intentional, small enough not to distract
-  # @constraints: min=8, max=48, type=integer
-
-  intersection_threshold: 0.1
-  # @rationale: Trigger animation when 10% of section is visible — early enough to feel responsive
-  # @constraints: min=0.0, max=0.5, type=float
+explorer_label_truncate_mobile:
+  value: 20
+  # @unit: characters
+  # @rationale: Fits level names on small screens without wrapping; long names are truncated with ellipsis
+  # @constraint: min=15, max=30, type=integer
