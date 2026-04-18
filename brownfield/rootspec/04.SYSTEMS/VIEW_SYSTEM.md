@@ -1,111 +1,65 @@
-# View System
+# System: VIEW_SYSTEM
 
-> References: `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`, `SYSTEMS_OVERVIEW.md`
+**Product:** RootWeather
+**Version:** 7.3.7
+**Status:** Baseline
+
+---
 
 ## Responsibility
 
-Manages which view is active, orchestrates layout transitions, and coordinates the comparison flow. The View System is the conductor: it reads state from other systems and decides what the user sees.
+Compose all subsystems into the application shell. Manage the active view state (`weather`, `dashboard`, `compare`), route props and callbacks to the correct child systems, and own the top-level application state that is shared across systems.
 
----
+## Boundaries
+
+**Owns:**
+- `view` state: which primary view is active
+- Top-level state aggregation: `city`, `favorites`, `unit`, `windUnit`, `timeFormat`, `defaultCity`, `compareMode`, `comparedCities`
+- All `useEffect` hooks for persisting preference state to localStorage
+- Header UI (logo, view toggle tabs)
+- Footer UI (attribution, RootSpec version, links)
+- The default city auto-load effect on mount
+- Conditional rendering logic for which view to show
+
+**Does not own:**
+- Weather data fetching (WEATHER_SYSTEM)
+- City search logic (LOCATION_SYSTEM)
+- Preferences UI (SETTINGS_SYSTEM)
+- Comparison selection logic (COMPARISON_SYSTEM)
+
+## Key Files
+
+| File | Role |
+|------|------|
+| `src/App.jsx` | The entire VIEW_SYSTEM; single component managing all state and composition |
+| `src/main.jsx` | React entry point; renders `<App />` into the DOM |
 
 ## View States
 
-The app has three mutually exclusive views:
+| State | Condition | What renders |
+|-------|-----------|-------------|
+| `weather` | Default | SearchBar, SettingsPanel, FavoritesList, weather components (if city selected) |
+| `dashboard` | User clicked "Dashboard" tab; favorites exist | SearchBar, SettingsPanel, LocationsDashboard |
+| `compare` | 2+ cities selected for comparison | SearchBar, SettingsPanel, ComparisonView |
 
-| View | Value | Description |
-|------|-------|-------------|
-| Weather View | `'weather'` | Single-city detail: current conditions, hourly, 7-day chart, alerts |
-| Dashboard View | `'dashboard'` | Grid of all saved cities with current conditions summary |
-| Comparison View | `'compare'` | Side-by-side columns for 2–[max_compare_cities] cities |
+## Tab Visibility Rule
 
-View state is held in memory. It is not persisted across sessions. On mount, the app starts in `weather` view.
+The view toggle tabs ("Weather" / "Dashboard") are only rendered when `favorites.length > 0`. An empty favorites state hides the tabs; the user is always in `weather` view.
 
----
+## Attribution (Footer)
 
-## View Transition Rules
+The footer displays:
+- Product name and tagline
+- A link to the RootSpec project
+- The current RootSpec version (read from `.rootspec.json`)
+- Attribution to Open-Meteo as the data source
+- Links to the SEED.md and rootspec/ spec files in the GitHub repository
 
-| Trigger | From | To |
-|---------|------|----|
-| City selected (search or favorites) | Any | `weather` |
-| "Weather" toggle button clicked | `dashboard` | `weather` |
-| "Dashboard" toggle button clicked | `weather` | `dashboard` |
-| [min_compare_cities]+ cities selected in compare mode | `dashboard` (compare mode active) | `compare` |
-| "Back to Dashboard" clicked | `compare` | `dashboard` |
-| Comparison drops below [min_compare_cities] cities | `compare` | `dashboard` |
+## Interactions with Other Systems
 
-The view toggle ("Weather" / "Dashboard") is only rendered when favorites exist ([min_favorites_for_dashboard] or more saved locations).
-
----
-
-## Layout Behavior
-
-| View | Max Width |
-|------|-----------|
-| Weather / Dashboard | [standard_max_width] |
-| Comparison | [comparison_max_width] |
-
-The app container class changes when comparison is active (`.app.comparison-active`), expanding the max-width to accommodate side-by-side columns.
-
----
-
-## Comparison Mode
-
-Comparison mode is a sub-state of the dashboard view, not a view itself. It activates a selection UI on top of the dashboard:
-
-1. `compareMode: true` is set when the user clicks "Compare"
-2. A prompt appears: "Select at least [min_compare_cities] cities to compare (N selected)"
-3. Location cards become selectable — clicking toggles selection state
-4. Selection is tracked as `comparedCities[]`
-5. When `comparedCities.length >= [min_compare_cities]`, the view auto-transitions to `compare` and `compareMode` is reset to `false`
-6. Maximum [max_compare_cities] cities can be selected; additional clicks are ignored when at the limit
-
-### Comparison View Columns
-
-Each selected city renders in a column containing:
-- City name header with a remove (✕) button
-- WeatherAlerts component
-- CurrentWeather component
-- HourlyForecast component
-- ForecastChart component
-
-Removing a city: if the remaining cities drop below [min_compare_cities], `comparedCities` is cleared and view returns to `dashboard`.
-
----
-
-## Component Rendering Rules
-
-### Weather View (`view === 'weather'`)
-
-Renders:
-- FavoritesList (if favorites exist)
-- Loading indicator (if weather loading)
-- Error message (if weather error)
-- If weather data and active city exist:
-  - "Save Location" button (if city not already in favorites)
-  - WeatherAlerts
-  - CurrentWeather
-  - HourlyForecast
-  - ForecastChart
-- Empty state (if no city selected and not loading)
-
-### Dashboard View (`view === 'dashboard'`)
-
-Renders:
-- LocationsDashboard (with all favorites, compare mode state, and handlers)
-
-### Comparison View (`view === 'compare'`)
-
-Renders:
-- ComparisonView (with selected cities, unit settings, and handlers)
-
----
-
-## Interfaces Consumed
-
-| Interface | Source | Description |
-|-----------|--------|-------------|
-| Active city | LOCATION_SYSTEM | Determines what weather to show; drives view switch |
-| Favorites list | LOCATION_SYSTEM | Controls view toggle visibility; populates dashboard |
-| Weather data / loading / error | WEATHER_SYSTEM | Controls weather view rendering |
-| Temperature unit | SETTINGS_SYSTEM | Passed to weather display components |
-| Time format | SETTINGS_SYSTEM | Passed to hourly forecast component |
+| System | Direction | What |
+|--------|-----------|------|
+| WEATHER_SYSTEM | Sends | `city.latitude`, `city.longitude` via `useWeather` hook; passes `weather`, `loading`, `error` to display components |
+| LOCATION_SYSTEM | Sends + Receives | Sends `favorites[]`, `activeCity`, callbacks; receives city selection events |
+| SETTINGS_SYSTEM | Sends + Receives | Sends all preference values and change callbacks; receives preference change events |
+| COMPARISON_SYSTEM | Sends + Receives | Sends `compareMode`, `comparedCities[]`, compare callbacks; receives selection events and back-navigation |

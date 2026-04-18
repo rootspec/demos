@@ -60,7 +60,6 @@ function WeatherAlerts({ weather }) {
   if (!weather || !weather.current) return null;
 
   const alerts = getAlerts(weather.current);
-  if (alerts.length === 0) return null;
 
   return (
     <AlertsContainer className="weather-alerts">

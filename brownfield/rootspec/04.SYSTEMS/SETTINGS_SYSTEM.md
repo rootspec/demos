@@ -1,87 +1,55 @@
-# Settings System
+# System: SETTINGS_SYSTEM
 
-> References: `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`, `SYSTEMS_OVERVIEW.md`
+**Product:** RootWeather
+**Version:** 7.3.7
+**Status:** Baseline
+
+---
 
 ## Responsibility
 
-Manages user preferences: temperature unit, wind speed unit, time display format, and default city. Persists all preferences to localStorage. Provides display utilities for unit-aware formatting.
+Manage and persist all user display preferences: temperature unit, wind speed unit, time format, and default city. Expose a settings panel UI that applies changes immediately to all rendered data.
 
----
+## Boundaries
 
-## Settings Data
+**Owns:**
+- Settings panel component (`SettingsPanel`)
+- Reading/writing all preference keys to localStorage
+- Default city preference (write side; read side is LOCATION_SYSTEM's responsibility on mount)
 
-| Setting | Key | Type | Default | Options |
-|---------|-----|------|---------|---------|
-| Temperature unit | `rootweather_unit` | enum | `'celsius'` | `'celsius'`, `'fahrenheit'` |
-| Wind speed unit | `rootweather_wind_unit` | enum | `'kmh'` | `'kmh'`, `'mph'` |
-| Time format | `rootweather_time_format` | enum | `'24h'` | `'24h'`, `'12h'` |
-| Default city | `rootweather_default_city` | string \| null | `null` | Any city name from favorites |
+**Does not own:**
+- Weather data rendering (WEATHER_SYSTEM consumes unit/timeFormat as props)
+- Favorites list (LOCATION_SYSTEM owns that; SETTINGS_SYSTEM only reads the favorites array to populate the default city dropdown)
+- App navigation or view state (VIEW_SYSTEM owns that)
 
-All settings are read from localStorage on app mount. All settings are written to localStorage on every change (via React `useEffect`).
+## Data Ownership
 
----
+| Preference | localStorage Key | Default | Options |
+|------------|-----------------|---------|---------|
+| Temperature unit | `rootweather_unit` | `celsius` | `celsius`, `fahrenheit` |
+| Wind unit | `rootweather_wind_unit` | `kmh` | `kmh`, `mph` |
+| Time format | `rootweather_time_format` | `24h` | `24h`, `12h` |
+| Default city | `rootweather_default_city` | `null` | Any city name from favorites |
 
-## Rules
+## Key Files
 
-### Temperature Unit
+| File | Role |
+|------|------|
+| `src/components/SettingsPanel.jsx` | Toggle-able settings panel; button-group selectors for unit/format; dropdown for default city |
+| `src/utils/storage.js` | `loadUnit()`, `saveUnit()`, `loadWindUnit()`, `saveWindUnit()`, `loadTimeFormat()`, `saveTimeFormat()`, `loadDefaultCity()`, `saveDefaultCity()` |
 
-- Controls how all temperature values are displayed throughout the app
-- Raw API data is always in °C; conversion to °F is applied at render time
-- Conversion formula: `°F = (°C × 9/5) + 32`, rounded to nearest integer
-- Display format: `{value}°C` or `{value}°F`
+## Behavior
 
-### Wind Speed Unit
+- Panel is collapsed by default; toggled open/closed by the "⚙️ Settings" / "Hide Settings" button
+- All setting changes call their respective `onChange` callback immediately — no "Apply" step
+- Default city dropdown only appears when favorites list is non-empty
+- Selecting "None" as default city calls `onDefaultCityChange(null)`, which removes the key from localStorage
 
-- Controls how wind speed values are displayed
-- Raw API data is in km/h
-- Setting is stored and respected; wind unit toggle is available in settings panel
-- Display note: km/h is the native API unit; mph conversion would be applied at render time
+## Interactions with Other Systems
 
-### Time Format
-
-- Controls how hours are displayed in the hourly forecast
-- `24h`: zero-padded hours, e.g., `09:00`, `14:00`
-- `12h`: 12-hour format (available as setting; display rendering is time-format-aware)
-
-### Default City
-
-- Must be the name of a city currently in the favorites list
-- When set, the matching favorite is auto-selected as the active city on app mount
-- If the matching city is later removed from favorites, the default city setting is automatically cleared
-- Clearing the setting: removing the city or selecting "None" in the dropdown sets value to `null`, which removes the localStorage key
-
----
-
-## Settings Panel UI
-
-The settings panel is a collapsible panel toggled by a "⚙️ Settings" / "⚙️ Hide Settings" button. The panel contains:
-
-1. **Temperature** — Two-button toggle: °C / °F
-2. **Wind Speed** — Two-button toggle: km/h / mph
-3. **Time Format** — Two-button toggle: 24h / 12h
-4. **Default Location** — Dropdown (only visible when favorites exist); options are "None" plus all saved city names
-
-The panel is always accessible; it does not require navigation away from the current view.
-
----
-
-## Persistence
-
-All reads and writes use synchronous localStorage access wrapped in try/catch. Read failures return the default value. Write failures are silently swallowed.
-
-| Operation | Behavior on Error |
-|-----------|-------------------|
-| Read | Returns default value |
-| Write | Silently fails (no toast, no retry) |
-
----
-
-## Interfaces Exposed
-
-| Interface | Consumer | Description |
-|-----------|----------|-------------|
-| Temperature unit | WEATHER_SYSTEM display, VIEW_SYSTEM components | Passed to all temperature-displaying components |
-| Wind unit | WEATHER_SYSTEM display | Passed to current weather and dashboard cards |
-| Time format | VIEW_SYSTEM (HourlyForecast) | Passed to hourly forecast for time label rendering |
-| Default city | LOCATION_SYSTEM | Read on mount to auto-select active city |
-| Favorites reference | SETTINGS_SYSTEM (self) | Used to populate default city dropdown |
+| System | Direction | What |
+|--------|-----------|------|
+| VIEW_SYSTEM | Receives | `unit`, `windUnit`, `timeFormat`, `defaultCity`, `favorites[]`, all change callbacks |
+| VIEW_SYSTEM | Sends | Updated preference values via callbacks on user interaction |
+| WEATHER_SYSTEM | Props threading | `unit` and `timeFormat` flow from VIEW_SYSTEM through to CurrentWeather, HourlyForecast, ForecastChart |
+| LOCATION_SYSTEM | Reads favorites | SettingsPanel receives `favorites[]` to populate default city dropdown; does not mutate favorites |

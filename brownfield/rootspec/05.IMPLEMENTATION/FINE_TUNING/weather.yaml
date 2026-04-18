@@ -1,125 +1,79 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Weather System Parameters
+# FINE-TUNING: Weather System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: WEATHER_SYSTEM
-# @last_updated: 2026-04-14T00:00:00Z
-# @status: production
 # @spec_source: 04.SYSTEMS/WEATHER_SYSTEM.md
+# @last_updated: 2026-04-18T00:00:00Z
 
-# -----------------------------------------------------------------------------
-# Search Behavior
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/LOCATION_SYSTEM.md
+search_debounce_ms:
+  value: 300
+  # @unit: milliseconds
+  # @rationale: Fast enough to feel responsive; slow enough to avoid excessive geocoding API calls per keystroke
+  # @constraint: min=200, max=500
 
-search_min_chars: 2
-# @rationale: Single characters produce too many irrelevant results; 2 chars is
-#   the minimum meaningful prefix for city name matching
-# @constraints: min=1, max=5, type=integer
+search_min_chars:
+  value: 2
+  # @unit: characters
+  # @rationale: Single-character queries return too many irrelevant results; 2 chars is the minimum for meaningful city disambiguation
 
-search_debounce_ms: 300
-# @rationale: 300ms strikes a balance between responsiveness and avoiding
-#   excessive API calls while the user is still typing
-# @reference: Common debounce convention for typeahead search UIs
-# @constraints: min=100, max=1000, type=integer
+geocoding_result_limit:
+  value: 5
+  # @unit: results
+  # @rationale: 5 results fit a compact dropdown without scrolling; covers most disambiguation needs
 
-search_max_results: 5
-# @rationale: 5 results fit comfortably in a compact dropdown without scrolling
-# @constraints: min=3, max=10, type=integer
+forecast_days:
+  value: 7
+  # @unit: days
+  # @rationale: One week is the standard expectation for a weather forecast; beyond 7 days accuracy degrades significantly
 
-# -----------------------------------------------------------------------------
-# Forecast Range
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/WEATHER_SYSTEM.md
+hourly_hours_shown:
+  value: 24
+  # @unit: hours
+  # @rationale: 24 hours is one full day cycle — the most actionable planning horizon for daily decisions
 
-forecast_days: 7
-# @rationale: 7-day forecast covers a planning week; the Open-Meteo free tier
-#   supports up to 16 days
-# @constraints: min=1, max=16, type=integer
+compare_city_max:
+  value: 3
+  # @unit: cities
+  # @rationale: Side-by-side readability degrades beyond 3 columns on most screens; 2-3 is the common comparison use case
 
-hourly_forecast_hours: 24
-# @rationale: 24 hours covers a full day from the current hour; longer ranges
-#   add visual complexity without proportional value
-# @constraints: min=12, max=48, type=integer
-
-# -----------------------------------------------------------------------------
-# Dashboard Thresholds
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/VIEW_SYSTEM.md
-
-min_favorites_for_dashboard: 1
-# @rationale: Dashboard view is useful even with a single saved location as it
-#   provides a different layout; toggle visible when any favorites exist
-# @constraints: min=1, max=3, type=integer
-
-min_favorites_for_compare: 2
-# @rationale: Comparison requires at least 2 cities by definition
-# @inviolable: true
-# @constraints: min=2, max=2, type=integer
-
-min_compare_cities: 2
-# @rationale: Side-by-side comparison is meaningless with fewer than 2 cities
-# @inviolable: true
-# @constraints: min=2, max=2, type=integer
-
-max_compare_cities: 3
-# @rationale: 3 columns is the maximum that fits comfortably in a 1024px wide
-#   layout; 4+ would require horizontal scrolling
-# @constraints: min=2, max=4, type=integer
-
-# -----------------------------------------------------------------------------
-# Weather Alert Thresholds
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/WEATHER_SYSTEM.md
-
-uv_moderate_threshold: 3
-# @rationale: WHO UV index classification: moderate = 3-5
-# @reference: World Health Organization UV Index classification
-# @constraints: min=1, max=5, type=integer
-
-uv_high_threshold: 6
-# @rationale: WHO UV index classification: high = 6-7
-# @reference: World Health Organization UV Index classification
-# @constraints: min=6, max=7, type=integer
-
-uv_very_high_threshold: 8
-# @rationale: WHO UV index classification: very high = 8-10
-# @reference: World Health Organization UV Index classification
-# @constraints: min=8, max=10, type=integer
-
-wind_breezy_threshold: 25
-# @rationale: Beaufort scale 5 (fresh breeze) begins around 29 km/h;
-#   25 km/h is a practical threshold for noticeable wind
-# @reference: Beaufort Wind Scale
-# @constraints: min=15, max=35, type=integer
-
-wind_strong_threshold: 40
-# @rationale: Beaufort scale 6 (strong breeze) begins at 39 km/h;
-#   40 km/h rounds to the nearest practical threshold
-# @reference: Beaufort Wind Scale
-# @constraints: min=35, max=50, type=integer
-
-wind_storm_threshold: 60
-# @rationale: Beaufort scale 8 (gale) begins at 62 km/h; 60 km/h is the
-#   practical threshold for storm-force alert
-# @reference: Beaufort Wind Scale
-# @constraints: min=50, max=75, type=integer
-
-humidity_high_threshold: 85
-# @rationale: 85% relative humidity is widely accepted as the threshold for
-#   "very humid" conditions that feel uncomfortable
-# @constraints: min=75, max=95, type=integer
-
-temp_freezing_threshold: 0
-# @rationale: 0°C is the physical freezing point of water; ice and frost risk begin
-# @inviolable: true
-# @constraints: min=0, max=0, type=integer
-
-temp_extreme_cold_threshold: -10
-# @rationale: -10°C represents extreme cold with significant frostbite risk
-# @constraints: min=-20, max=-5, type=integer
-
-temp_extreme_heat_threshold: 35
-# @rationale: 35°C is the threshold for extreme heat and significant health risk
-# @reference: WHO heat-health guidance
-# @constraints: min=30, max=40, type=integer
+alert_thresholds:
+  uv_very_high:
+    value: 8
+    # @unit: UV index
+    # @rationale: WHO defines UV index 8+ as "Very High" requiring sun protection
+  uv_high:
+    value: 6
+    # @unit: UV index
+    # @rationale: WHO defines UV index 6-7 as "High"
+  uv_moderate:
+    value: 3
+    # @unit: UV index
+    # @rationale: WHO defines UV index 3-5 as "Moderate"
+  wind_storm:
+    value: 60
+    # @unit: km/h
+    # @rationale: Beaufort scale 10+ (storm force); structural damage risk
+  wind_strong:
+    value: 40
+    # @unit: km/h
+    # @rationale: Beaufort scale 6-7 (strong breeze/near gale); significant outdoor impact
+  wind_breezy:
+    value: 25
+    # @unit: km/h
+    # @rationale: Beaufort scale 4-5 (moderate to fresh breeze); worth noting for outdoor activities
+  humidity_very_high:
+    value: 85
+    # @unit: percent
+    # @rationale: Above 85% relative humidity is generally uncomfortable and can impair heat dissipation
+  temp_extreme_heat:
+    value: 35
+    # @unit: degrees Celsius
+    # @rationale: 35°C is a widely recognized threshold for dangerous heat stress risk
+  temp_extreme_cold:
+    value: -10
+    # @unit: degrees Celsius
+    # @rationale: -10°C is a threshold for significant frostbite risk and outdoor activity impact
+  temp_freezing:
+    value: 0
+    # @unit: degrees Celsius
+    # @rationale: 0°C marks the freezing point — ice risk on roads and surfaces

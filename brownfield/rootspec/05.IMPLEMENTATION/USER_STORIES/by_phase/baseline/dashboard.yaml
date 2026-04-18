@@ -1,44 +1,62 @@
 # =============================================================================
-# USER STORY: View Dashboard
+# USER STORY: Locations Dashboard
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: baseline
-# @journey: DASHBOARD_AND_COMPARE
-# @systems: [VIEW_SYSTEM, LOCATION_SYSTEM, WEATHER_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @journey: DASHBOARD_VIEW
+# @systems: [LOCATION_SYSTEM, WEATHER_SYSTEM]
+# @last_updated: 2026-04-18T00:00:00Z
 
-id: US-016
-title: View all saved locations in dashboard
+id: US-013
+title: View all saved locations on dashboard
 
 acceptance_criteria:
-  - id: AC-016-1
-    title: View toggle appears when favorites exist
+  - id: AC-013-1
+    title: Dashboard tab appears when favorites exist
     narrative: |
       Given I have at least one saved location
-      When I am on the app
-      Then I see the Weather and Dashboard view toggle buttons
+      When I look at the header
+      Then I should see the Dashboard tab in the view toggle
     given:
-      - visit: '/'
+      - visit: '/demos/brownfield/'
     when:
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Rome' }
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Amsterdam' }
       - click: { selector: 'ul li:first-child' }
       - click: { selector: '.save-btn' }
     then:
       - shouldExist: { selector: '.view-toggle' }
-      - shouldContain: { selector: '.view-toggle', text: 'Dashboard' }
 
-  - id: AC-016-2
-    title: Dashboard view shows all locations header
+  - id: AC-013-2
+    title: Clicking Dashboard tab shows locations grid
     narrative: |
-      Given I have saved locations and the view toggle is visible
-      When I click Dashboard
-      Then I see the All Locations heading
+      Given I have at least one saved location
+      When I click the Dashboard tab
+      Then I should see the "All Locations" heading
     given:
-      - visit: '/'
+      - visit: '/demos/brownfield/'
     when:
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Rome' }
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Amsterdam' }
       - click: { selector: 'ul li:first-child' }
       - click: { selector: '.save-btn' }
       - click: { selector: '.view-btn:last-child' }
     then:
       - shouldContain: { selector: 'h3', text: 'All Locations' }
+
+  - id: AC-013-3
+    title: Compare button appears in dashboard when 2+ favorites exist
+    narrative: |
+      Given I have 2 or more saved locations and am on the dashboard view
+      When I view the dashboard header
+      Then I should see the Compare button
+    given:
+      - visit: '/demos/brownfield/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Amsterdam' }
+      - click: { selector: 'ul li:first-child' }
+      - click: { selector: '.save-btn' }
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Brussels' }
+      - click: { selector: 'ul li:first-child' }
+      - click: { selector: '.save-btn' }
+      - click: { selector: '.view-btn:last-child' }
+    then:
+      - shouldExist: { selector: '.compare-btn' }

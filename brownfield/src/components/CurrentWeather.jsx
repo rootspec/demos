@@ -12,7 +12,7 @@ function CurrentWeather({ weather, unit, cityName }) {
   const description = getWeatherDescription(current.weather_code);
 
   return (
-    <div className={styles.card}>
+    <div className={`card ${styles.card}`}>
       <div className={styles.header}>
         <h2 className={styles.city}>{cityName}</h2>
         <span className={styles.emoji}>{emoji}</span>
@@ -21,7 +21,7 @@ function CurrentWeather({ weather, unit, cityName }) {
         {formatTemp(current.temperature_2m, unit)}
       </div>
       <div className={styles.description}>{description}</div>
-      <div className={styles.details}>
+      <div className={`details ${styles.details}`}>
         <span>💧 {current.relative_humidity_2m}%</span>
         <span>💨 {Math.round(current.wind_speed_10m)} km/h</span>
         <span>☀️ UV {current.uv_index}</span>
