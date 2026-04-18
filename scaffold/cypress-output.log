@@ -24,181 +24,186 @@
   Running:  [90mmvp.cy.ts[39m                                                                       [90m(1 of 1)[39m
 
 [0m[0m
-[0m  US-001: View home feed with posts and authors[0m
-  [32m  ✓[0m[90m AC-001-1: Feed displays posts[0m[90m (821ms)[0m
-  [32m  ✓[0m[90m AC-001-2: Posts show author display name[0m[90m (193ms)[0m
-  [32m  ✓[0m[90m AC-001-3: Posts show like count[0m[90m (180ms)[0m
+[0m  US-110: Explore trending tags[0m
+  [32m  ✓[0m[90m AC-110-1: Explore page displays trending tags[0m[90m (1082ms)[0m
+  [32m  ✓[0m[90m AC-110-2: Tags show their post count[0m[90m (268ms)[0m
 
-[0m  US-002: Load more posts in feed[0m
-  [32m  ✓[0m[90m AC-002-1: Load more button is visible[0m[90m (150ms)[0m
-  [32m  ✓[0m[90m AC-002-2: Clicking load more shows additional posts[0m[90m (235ms)[0m
+[0m  US-111: Filter explore posts by tag[0m
+  [32m  ✓[0m[90m AC-111-1: Clicking a tag filters the visible posts[0m[90m (322ms)[0m
+  [32m  ✓[0m[90m AC-111-2: Active tag is visually indicated[0m[90m (290ms)[0m
+  [32m  ✓[0m[90m AC-111-3: Clicking active tag clears the filter[0m[90m (351ms)[0m
 
-[0m  US-003: Like a post[0m
-  [32m  ✓[0m[90m AC-003-1: Like button is present on posts[0m[90m (168ms)[0m
-  [32m  ✓[0m[90m AC-003-2: Clicking like toggles active state[0m[90m (225ms)[0m
+[0m  US-112: Follow a user from the explore page[0m
+  [32m  ✓[0m[90m AC-112-1: Explore page shows suggested users with follow buttons[0m[90m (251ms)[0m
+  [32m  ✓[0m[90m AC-112-2: Following a user from explore updates the button[0m[90m (291ms)[0m
 
-[0m  US-004: Bookmark a post[0m
-  [32m  ✓[0m[90m AC-004-1: Bookmark button is present on posts[0m[90m (220ms)[0m
-  [32m  ✓[0m[90m AC-004-2: Clicking bookmark toggles active state[0m[90m (213ms)[0m
+[0m  US-101: View the home feed[0m
+  [32m  ✓[0m[90m AC-101-1: Home feed displays posts[0m[90m (272ms)[0m
+  [32m  ✓[0m[90m AC-101-2: Posts show author handle and display name[0m[90m (232ms)[0m
+  [32m  ✓[0m[90m AC-101-3: Posts show engagement counts[0m[90m (230ms)[0m
 
-[0m  US-005: Compose and submit a new post[0m
-  [32m  ✓[0m[90m AC-005-1: Post composer is accessible on home feed[0m[90m (149ms)[0m
-  [32m  ✓[0m[90m AC-005-2: Submitting a post adds it to the feed[0m[90m (713ms)[0m
+[0m  US-102: Like a post[0m
+  [32m  ✓[0m[90m AC-102-1: Like button toggles liked state[0m[90m (270ms)[0m
+  [32m  ✓[0m[90m AC-102-2: Like count increments when liked[0m[90m (271ms)[0m
+  [32m  ✓[0m[90m AC-102-3: Like toggles off when clicked again[0m[90m (328ms)[0m
 
-[0m  US-006: View post detail with thread[0m
-  [32m  ✓[0m[90m AC-006-1: Post detail page shows post content[0m[90m (159ms)[0m
-  [32m  ✓[0m[90m AC-006-2: Post detail shows replies when they exist[0m[90m (165ms)[0m
+[0m  US-103: Bookmark a post[0m
+  [32m  ✓[0m[90m AC-103-1: Bookmark button toggles bookmarked state[0m[90m (288ms)[0m
 
-[0m  US-017: View post with parent context[0m
-  [32m  ✓[0m[90m AC-017-1: Reply post shows parent post above it[0m[90m (166ms)[0m
+[0m  US-104: Load more posts[0m
+  [32m  ✓[0m[90m AC-104-1: Load more button exists when more posts are available[0m[90m (214ms)[0m
+  [32m  ✓[0m[90m AC-104-2: Clicking load more reveals additional posts[0m[90m (266ms)[0m
 
-[0m  US-007: View user profile[0m
-  [32m  ✓[0m[90m AC-007-1: Profile page shows user display name[0m[90m (164ms)[0m
-  [32m  ✓[0m[90m AC-007-2: Profile page shows user bio[0m[90m (149ms)[0m
-  [32m  ✓[0m[90m AC-007-3: Profile page shows user posts[0m[90m (150ms)[0m
-  [32m  ✓[0m[90m AC-007-4: Profile page shows follower count[0m[90m (146ms)[0m
+[0m  US-105: Compose and post a new message[0m
+  [32m  ✓[0m[90m AC-105-1: Compose button opens the composer[0m[90m (270ms)[0m
+  [32m  ✓[0m[90m AC-105-2: Submitting a post adds it to the feed[0m[90m (770ms)[0m
 
-[0m  US-008: Follow and unfollow a user[0m
-  [32m  ✓[0m[90m AC-008-1: Follow button is present on profile page[0m[90m (188ms)[0m
-  [32m  ✓[0m[90m AC-008-2: Clicking follow changes button to Unfollow[0m[90m (202ms)[0m
-  [32m  ✓[0m[90m AC-008-3: Clicking unfollow returns button to Follow[0m[90m (257ms)[0m
+[0m  US-113: Toggle dark/light theme[0m
+  [32m  ✓[0m[90m AC-113-1: Theme toggle button is visible in the header[0m[90m (210ms)[0m
+  [32m  ✓[0m[90m AC-113-2: Clicking the theme toggle switches the active theme[0m[90m (277ms)[0m
 
-[0m  US-009: Explore trending tags and people[0m
-  [32m  ✓[0m[90m AC-009-1: Explore page shows trending tags[0m[90m (171ms)[0m
-  [32m  ✓[0m[90m AC-009-2: Explore page shows suggested people[0m[90m (162ms)[0m
+[0m  US-114: See the meta banner on every page[0m
+  [32m  ✓[0m[90m AC-114-1: Meta banner is visible on the home feed[0m[90m (223ms)[0m
+  [32m  ✓[0m[90m AC-114-2: Meta banner contains links to spec and seed[0m[90m (235ms)[0m
+  [32m  ✓[0m[90m AC-114-3: Meta banner is visible on the explore page[0m[90m (228ms)[0m
+  [32m  ✓[0m[90m AC-114-4: Meta banner is visible on the search page[0m[90m (226ms)[0m
 
-[0m  US-010: Filter posts by tag on explore page[0m
-  [32m  ✓[0m[90m AC-010-1: Clicking a tag filters the posts section[0m[90m (211ms)[0m
+[0m  US-115: Navigate using the primary nav[0m
+  [32m  ✓[0m[90m AC-115-1: Nav shows RootFeed brand and version[0m[90m (218ms)[0m
+  [32m  ✓[0m[90m AC-115-2: Nav links to Home, Explore, and Search[0m[90m (276ms)[0m
+  [32m  ✓[0m[90m AC-115-3: Footer shows RootSpec attribution[0m[90m (212ms)[0m
 
-[0m  US-020: Tag filter deselect returns all posts[0m
-  [32m  ✓[0m[90m AC-020-1: Clicking active tag deselects it and shows all posts[0m[90m (268ms)[0m
+[0m  US-106: Navigate to a user profile[0m
+  [32m  ✓[0m[90m AC-106-1: Clicking an author name navigates to their profile[0m[90m (349ms)[0m
+  [32m  ✓[0m[90m AC-106-2: Profile page shows user bio and follow counts[0m[90m (198ms)[0m
+  [32m  ✓[0m[90m AC-106-3: Profile page shows user posts[0m[90m (195ms)[0m
 
-[0m  US-011: Search posts by keyword[0m
-  [32m  ✓[0m[90m AC-011-1: Typing in search box shows matching posts[0m[90m (425ms)[0m
-  [32m  ✓[0m[90m AC-011-2: Search results link to post detail[0m[90m (376ms)[0m
+[0m  US-107: Follow and unfollow a user[0m
+  [32m  ✓[0m[90m AC-107-1: Follow button appears on profile pages[0m[90m (207ms)[0m
+  [32m  ✓[0m[90m AC-107-2: Clicking follow changes button to unfollow[0m[90m (266ms)[0m
+  [32m  ✓[0m[90m AC-107-3: Following a user increments their follower count[0m[90m (249ms)[0m
+  [32m  ✓[0m[90m AC-107-4: Clicking unfollow returns button to follow state[0m[90m (322ms)[0m
 
-[0m  US-018: Search with no results shows message[0m
-  [32m  ✓[0m[90m AC-018-1: No-results message appears for unmatched query[0m[90m (613ms)[0m
+[0m  US-109: Search posts by keyword[0m
+  [32m  ✓[0m[90m AC-109-1: Search page has a text input[0m[90m (202ms)[0m
+  [32m  ✓[0m[90m AC-109-2: Typing a query shows matching posts[0m[90m (509ms)[0m
+  [32m  ✓[0m[90m AC-109-3: No results message shown for unmatched query[0m[90m (599ms)[0m
+  [32m  ✓[0m[90m AC-109-4: Empty query shows no results[0m[90m (189ms)[0m
 
-[0m  US-019: Empty search shows no results[0m
-  [32m  ✓[0m[90m AC-019-1: Empty search box shows no result items[0m[90m (143ms)[0m
-
-[0m  US-012: Toggle dark/light theme[0m
-  [32m  ✓[0m[90m AC-012-1: Theme toggle button is present in nav[0m[90m (190ms)[0m
-  [32m  ✓[0m[90m AC-012-2: Clicking theme toggle switches the theme[0m[90m (199ms)[0m
-
-[0m  US-013: See meta-banner with RootSpec links[0m
-  [32m  ✓[0m[90m AC-013-1: Meta-banner is visible on home page[0m[90m (141ms)[0m
-  [32m  ✓[0m[90m AC-013-2: Meta-banner contains scaffold commit link[0m[90m (146ms)[0m
-  [32m  ✓[0m[90m AC-013-3: Meta-banner contains spec link[0m[90m (147ms)[0m
-  [32m  ✓[0m[90m AC-013-4: Meta-banner contains seed link[0m[90m (149ms)[0m
-
-[0m  US-014: Navigate between routes[0m
-  [32m  ✓[0m[90m AC-014-1: Nav links are present on home page[0m[90m (157ms)[0m
-
-[0m  US-015: See RootSpec version in header[0m
-  [32m  ✓[0m[90m AC-015-1: RootSpec version badge visible in nav[0m[90m (154ms)[0m
-
-[0m  US-016: See footer with attribution[0m
-  [32m  ✓[0m[90m AC-016-1: Footer contains RootSpec attribution[0m[90m (146ms)[0m
+[0m  US-108: View a post thread[0m
+  [32m  ✓[0m[90m AC-108-1: Clicking a post navigates to its detail view[0m[90m (359ms)[0m
+  [32m  ✓[0m[90m AC-108-2: Post detail shows author, content, and engagement[0m[90m (196ms)[0m
+  [32m  ✓[0m[90m AC-108-3: Post thread shows replies[0m[90m (190ms)[0m
+  [32m  ✓[0m[90m AC-108-4: Reply post shows parent context[0m[90m (191ms)[0m
 
 
-[92m [0m[32m 38 passing[0m[90m (33s)[0m
+[92m [0m[32m 42 passing[0m[90m (33s)[0m
 
 
 [32m  ([4m[1mResults[22m[24m)[39m
 
 [90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
-[90m  │[39m [90mTests:[39m        [32m38[39m                                                                               [90m│[39m
-[90m  │[39m [90mPassing:[39m      [32m38[39m                                                                               [90m│[39m
+[90m  │[39m [90mTests:[39m        [32m42[39m                                                                               [90m│[39m
+[90m  │[39m [90mPassing:[39m      [32m42[39m                                                                               [90m│[39m
 [90m  │[39m [90mFailing:[39m      [32m0[39m                                                                                [90m│[39m
 [90m  │[39m [90mPending:[39m      [32m0[39m                                                                                [90m│[39m
 [90m  │[39m [90mSkipped:[39m      [32m0[39m                                                                                [90m│[39m
-[90m  │[39m [90mScreenshots:[39m  [32m38[39m                                                                               [90m│[39m
+[90m  │[39m [90mScreenshots:[39m  [32m42[39m                                                                               [90m│[39m
 [90m  │[39m [90mVideo:[39m        [32mfalse[39m                                                                            [90m│[39m
-[90m  │[39m [90mDuration:[39m     [32m32 seconds[39m                                                                       [90m│[39m
+[90m  │[39m [90mDuration:[39m     [32m33 seconds[39m                                                                       [90m│[39m
 [90m  │[39m [90mSpec Ran:[39m     [32m[32mmvp.cy.ts[32m[39m                                                                        [90m│[39m
 [90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
 
 
 [33m  ([4m[1mScreenshots[22m[24m)[39m
 
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-001--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m001-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-001--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m001-2.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-001--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m001-3.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-002--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m002-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-002--AC-[0m    [90m[90m(1000x3232)[90m[39m
-[90m [39m    [0m002-2.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-003--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m003-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-003--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m003-2.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-004--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m004-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-004--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m004-2.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-005--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m005-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-005--AC-[0m    [90m[90m(1000x1838)[90m[39m
-[90m [39m    [0m005-2.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-006--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m006-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-006--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m006-2.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-017--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m017-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-007--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m007-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-007--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m007-2.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-007--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m007-3.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-007--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m007-4.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-008--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m008-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-008--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m008-2.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-008--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m008-3.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-009--AC-[0m    [90m[90m(1000x3442)[90m[39m
-[90m [39m    [0m009-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-009--AC-[0m    [90m[90m(1000x3442)[90m[39m
-[90m [39m    [0m009-2.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-010--AC-[0m    [90m[90m(1000x1682)[90m[39m
-[90m [39m    [0m010-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-020--AC-[0m    [90m[90m(1000x3442)[90m[39m
-[90m [39m    [0m020-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-011--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m011-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-011--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m011-2.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-018--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m018-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-019--AC-[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0m019-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-012--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m012-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-012--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m012-2.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-013--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m013-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-013--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m013-2.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-013--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m013-3.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-013--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m013-4.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-014--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m014-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-015--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m015-1.png[0m                                                                                      
-[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-016--AC-[0m    [90m[90m(1000x1862)[90m[39m
-[90m [39m    [0m016-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-110--AC-[0m    [90m[90m(1000x1463)[90m[39m
+[90m [39m    [0m110-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-110--AC-[0m    [90m[90m(1000x1463)[90m[39m
+[90m [39m    [0m110-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-111--AC-[0m    [90m[90m(1000x1536)[90m[39m
+[90m [39m    [0m111-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-111--AC-[0m    [90m[90m(1000x1536)[90m[39m
+[90m [39m    [0m111-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-111--AC-[0m    [90m[90m(1000x1463)[90m[39m
+[90m [39m    [0m111-3.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-112--AC-[0m    [90m[90m(1000x1463)[90m[39m
+[90m [39m    [0m112-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-112--AC-[0m    [90m[90m(1000x1463)[90m[39m
+[90m [39m    [0m112-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-101--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m101-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-101--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m101-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-101--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m101-3.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-102--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m102-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-102--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m102-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-102--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m102-3.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-103--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m103-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-104--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m104-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-104--AC-[0m    [90m[90m(1000x1598)[90m[39m
+[90m [39m    [0m104-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-105--AC-[0m    [90m[90m(1000x1116)[90m[39m
+[90m [39m    [0m105-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-105--AC-[0m     [90m[90m(1000x929)[90m[39m
+[90m [39m    [0m105-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-113--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m113-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-113--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m113-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-114--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m114-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-114--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m114-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-114--AC-[0m    [90m[90m(1000x1463)[90m[39m
+[90m [39m    [0m114-3.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-114--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m114-4.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-115--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m115-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-115--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m115-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-115--AC-[0m     [90m[90m(1000x953)[90m[39m
+[90m [39m    [0m115-3.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-106--AC-[0m     [90m[90m(1000x804)[90m[39m
+[90m [39m    [0m106-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-106--AC-[0m     [90m[90m(1000x804)[90m[39m
+[90m [39m    [0m106-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-106--AC-[0m     [90m[90m(1000x804)[90m[39m
+[90m [39m    [0m106-3.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-107--AC-[0m     [90m[90m(1000x804)[90m[39m
+[90m [39m    [0m107-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-107--AC-[0m     [90m[90m(1000x804)[90m[39m
+[90m [39m    [0m107-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-107--AC-[0m     [90m[90m(1000x804)[90m[39m
+[90m [39m    [0m107-3.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-107--AC-[0m     [90m[90m(1000x804)[90m[39m
+[90m [39m    [0m107-4.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-109--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m109-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-109--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m109-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-109--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m109-3.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-109--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m109-4.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-108--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m108-1.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-108--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m108-2.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-108--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m108-3.png[0m                                                                                      
+[90m [39m -  [0m/home/runner/work/demos/demos/scaffold/cypress/screenshots/mvp.cy.ts/US-108--AC-[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0m108-4.png[0m                                                                                      
+
+
+[rootspec] Updated rootspec/tests-status.json — 15/15 stories passing
 
 
 [90m====================================================================================================[39m
@@ -208,7 +213,7 @@
 
 [90m   [39m    [90mSpec[39m                                              [90mTests[39m  [90mPassing[39m  [90mFailing[39m  [90mPending[39m  [90mSkipped[39m [90m [39m
 [90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
-[90m  │[39m [32m✔[39m  [0mmvp.cy.ts[0m                                [90m00:32[39m       [0m38[0m       [32m38[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m│[39m
+[90m  │[39m [32m✔[39m  [0mmvp.cy.ts[0m                                [90m00:33[39m       [0m42[0m       [32m42[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m│[39m
 [90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
-[90m   [39m [32m✔[39m  [32mAll specs passed![39m                        [90m00:32[39m       [0m38[0m       [32m38[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m [39m
+[90m   [39m [32m✔[39m  [32mAll specs passed![39m                        [90m00:33[39m       [0m42[0m       [32m42[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m [39m
 
