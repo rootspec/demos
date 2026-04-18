@@ -19,7 +19,7 @@
     "rs-shared": {
       "source": "rootspec/rootspec",
       "sourceType": "github",
-      "computedHash": "0244f8a64e038e8b3746172079aefd39e9aceec172722f85b8caab42f63fea4a"
+      "computedHash": "6f9cf96cd064f89e91e29988417e09bedf8ea39d80b690288ee599a3806f8842"
     },
     "rs-spec": {
       "source": "rootspec/rootspec",
@@ -29,7 +29,7 @@
     "rs-update": {
       "source": "rootspec/rootspec",
       "sourceType": "github",
-      "computedHash": "ae8f252f1efaf02aadf4dad2fb0a1c221ecdaf6345685c611d79966f78c3eafb"
+      "computedHash": "82523ad66b974cc626e8163ca994652bbac475592f066ef4b8295270a0ed4f24"
     },
     "rs-validate": {
       "source": "rootspec/rootspec",
