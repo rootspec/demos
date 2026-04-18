@@ -1,14 +1,17 @@
-import type { Tag, User, Post } from '$lib/types';
+import type { Post, Tag, User } from '$lib/types';
 import tags from '$lib/data/tags.json';
 import users from '$lib/data/users.json';
 import posts from '$lib/data/posts.json';
 
 export function load() {
 	const sortedTags = (tags as Tag[]).sort((a, b) => b.postCount - a.postCount);
-	const topLevelPosts = (posts as Post[]).filter((p) => p.parentId === null);
+	const popularPosts = (posts as Post[])
+		.filter((p) => p.parentId === null)
+		.sort((a, b) => b.likeCount - a.likeCount)
+		.slice(0, 10);
 	return {
 		tags: sortedTags,
 		users: users as User[],
-		posts: topLevelPosts
+		posts: popularPosts
 	};
 }

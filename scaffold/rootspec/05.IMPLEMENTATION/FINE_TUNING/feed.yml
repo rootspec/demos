@@ -3,29 +3,21 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-18T17:11:18Z
 
-pagination:
-  initial_count:
-    value: 10
-    # @unit: posts
-    # @rationale: Shows enough content to convey a real feed without overwhelming; matches common social app defaults
-    # @constraint: min=5, max=20
+initial_page_size:
+  value: 10
+  # @unit: posts
+  # @rationale: Shows enough content to feel like a real feed without overwhelming; standard for social feed demos
+  # @constraint: min=5, max=20
 
-  load_more_increment:
-    value: 10
-    # @unit: posts
-    # @rationale: Consistent with initial count; predictable UX pattern
-    # @constraint: min=5, max=20
+page_increment:
+  value: 10
+  # @unit: posts
+  # @rationale: Matches initial page size for consistent mental model; user always gets the same batch
 
-composer:
-  max_length:
-    value: 280
-    # @unit: characters
-    # @rationale: Matches Bluesky/Twitter convention; well-understood by target audience
-    # @constraint: min=140, max=500
-
-  min_length:
-    value: 1
-    # @unit: characters
-    # @rationale: Empty posts should not be created; any non-whitespace content is valid
+max_post_length:
+  value: 300
+  # @unit: characters
+  # @rationale: Long enough for substantive thoughts, short enough to stay microblog-like; similar to Bluesky's limit
+  # @constraint: min=140, max=500

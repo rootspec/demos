@@ -70,14 +70,5 @@
     "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=hector",
     "followerCount": 1567,
     "followingCount": 190
-  },
-  {
-    "id": "u9",
-    "handle": "devguru",
-    "displayName": "Dev Guru",
-    "bio": "Senior engineer. Mentor. Coffee-driven development.",
-    "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=devguru",
-    "followerCount": 3210,
-    "followingCount": 420
   }
 ]

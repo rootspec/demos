@@ -1,77 +1,76 @@
 # Level 4: Systems Overview
 
-**Depends on:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md
-**Last Updated:** 2026-04-14
+**References:** L1 (Philosophy), L2 (Truths), L3 (Interactions)
 
 ---
 
 ## System Map
 
-| System | File | Responsibility |
-|---|---|---|
-| DATA_SYSTEM | DATA_SYSTEM.md | Static JSON loading, mock data access, prerender entry generation |
-| FEED_SYSTEM | FEED_SYSTEM.md | Home feed rendering, pagination, post composer, like/bookmark state |
-| PROFILE_SYSTEM | PROFILE_SYSTEM.md | User profile rendering, follow/unfollow state |
-| DISCOVERY_SYSTEM | DISCOVERY_SYSTEM.md | Explore page (trending tags, people), tag filtering, search |
-| THEME_SYSTEM | THEME_SYSTEM.md | Dark/light mode, system preference detection, localStorage persistence |
-| VIEW_SYSTEM | VIEW_SYSTEM.md | Layout, meta-banner, nav, footer, RootSpec version display |
-
----
-
-## System Interactions
-
-| From | To | What crosses the boundary |
-|---|---|---|
-| DATA_SYSTEM | FEED_SYSTEM | Posts array + users map for home feed |
-| DATA_SYSTEM | PROFILE_SYSTEM | User object + filtered posts for profile |
-| DATA_SYSTEM | DISCOVERY_SYSTEM | Tags array, users array, posts array |
-| DATA_SYSTEM | FEED_SYSTEM | Post detail + replies for thread view |
-| FEED_SYSTEM | VIEW_SYSTEM | Rendered post cards (client-side state remains in FEED_SYSTEM) |
-| PROFILE_SYSTEM | VIEW_SYSTEM | Rendered profile header and post list |
-| DISCOVERY_SYSTEM | VIEW_SYSTEM | Rendered tag chips, user cards, filtered post list |
-| THEME_SYSTEM | VIEW_SYSTEM | Active theme class/attribute applied to root element |
-
----
-
-## Data Flow
+RootFeed is composed of five systems. Each system owns a distinct concern; no two systems own the same data or state.
 
 ```
-src/lib/data/*.json
-        │
-        ▼
-  DATA_SYSTEM
-  (SvelteKit +page.ts loaders)
-        │
-   ┌────┴──────────┬──────────────┬─────────────┐
-   ▼               ▼              ▼             ▼
-FEED_SYSTEM  PROFILE_SYSTEM  DISCOVERY_   (thread view
-(/ route)    (/profile/      SYSTEM       in FEED_SYSTEM)
-              [handle])      (/explore,
-                              /search)
-        │               │              │
-        └───────────────┴──────────────┘
-                        │
-                   VIEW_SYSTEM
-               (layout, banner, nav,
-                footer, theme wrapper)
-                        │
-                  THEME_SYSTEM
-               (theme class on <html>)
+┌─────────────────────────────────────────────────────────────┐
+│                        VIEW SYSTEM                          │
+│  (Routes, layout, nav, banner, theme application)           │
+└──────────────────────┬──────────────────────────────────────┘
+                       │ reads
+     ┌─────────────────┼─────────────────────┐
+     ▼                 ▼                     ▼
+┌──────────┐   ┌──────────────┐   ┌────────────────────┐
+│   DATA   │   │  INTERACTION │   │   DISCOVERY        │
+│  SYSTEM  │   │    SYSTEM    │   │   SYSTEM           │
+│          │   │              │   │                    │
+│ JSON →   │   │ Svelte stores│   │ Tag filtering,     │
+│ typed    │   │ likes, follows│  │ explore surface    │
+│ objects  │   │ bookmarks,   │   │                    │
+└──────────┘   │ composer     │   └────────────────────┘
+               └──────────────┘
+                       │
+                       ▼
+              ┌──────────────────┐
+              │   THEME SYSTEM   │
+              │                  │
+              │ dark/light mode, │
+              │ localStorage,    │
+              │ system pref      │
+              └──────────────────┘
 ```
 
 ---
 
-## Prerendering Strategy
+## Systems
 
-All dynamic routes (`/post/[id]`, `/profile/[handle]`) export `entries()` functions that return all known IDs/handles from mock data. SvelteKit prerender generates one static HTML file per entry. Unknown parameters produce no page — acceptable per spec.
+| System | File | Primary Responsibility |
+|--------|------|------------------------|
+| DATA_SYSTEM | `DATA_SYSTEM.md` | Owns all mock data loading and typed shapes |
+| FEED_SYSTEM | `FEED_SYSTEM.md` | Manages timeline display, pagination, post composer |
+| PROFILE_SYSTEM | `PROFILE_SYSTEM.md` | User profile pages, follow state, user posts |
+| DISCOVERY_SYSTEM | `DISCOVERY_SYSTEM.md` | Explore page, tag filtering, search functionality |
+| VIEW_SYSTEM | `VIEW_SYSTEM.md` | Layout, navigation, meta banner, route rendering |
+| THEME_SYSTEM | `THEME_SYSTEM.md` | Dark/light mode, system preference, persistence |
 
 ---
 
-## State Management
+## Interactions Between Systems
 
-All interactive state is client-side only (Svelte 5 `$state` runes). No shared store needed — each page/component owns its own state:
+| From | To | Data / Signal |
+|------|----|---------------|
+| DATA_SYSTEM | FEED_SYSTEM | Post objects, User objects |
+| DATA_SYSTEM | PROFILE_SYSTEM | User object, User's posts |
+| DATA_SYSTEM | DISCOVERY_SYSTEM | Tags, Users, Posts (for explore/search) |
+| DATA_SYSTEM | VIEW_SYSTEM | Route prerender data |
+| INTERACTION_SYSTEM | FEED_SYSTEM | Like/bookmark toggles, composed posts |
+| INTERACTION_SYSTEM | PROFILE_SYSTEM | Follow/unfollow state |
+| INTERACTION_SYSTEM | DISCOVERY_SYSTEM | Follow state on explore page |
+| THEME_SYSTEM | VIEW_SYSTEM | Current theme class applied to root element |
 
-- Feed page: `likedPosts: Set<string>`, `bookmarkedPosts: Set<string>`, `visibleCount: number`, `composerOpen: boolean`, `composerText: string`
-- Profile page: `isFollowing: boolean`
-- Explore page: `activeTag: string | null`
-- Theme: `theme: 'light' | 'dark'` in layout, persisted to localStorage
+> Note: FEED_SYSTEM, PROFILE_SYSTEM, and DISCOVERY_SYSTEM all depend on DATA_SYSTEM for initial data and INTERACTION_SYSTEM for mutable state. INTERACTION_SYSTEM does not depend on any other system — it owns state and exposes it.
+
+---
+
+## Data Flow Summary
+
+1. **At build time:** SvelteKit `+page.ts` loaders read JSON from `DATA_SYSTEM` and pass typed props to page components
+2. **At runtime:** Page components subscribe to `INTERACTION_SYSTEM` stores for mutable state (likes, follows, composer posts)
+3. **On user action:** INTERACTION_SYSTEM store is updated; derived reactive values in page components update automatically
+4. **Theme:** THEME_SYSTEM reads `localStorage` and `prefers-color-scheme` on mount; applies class to `<html>` element; VIEW_SYSTEM's layout consumes this class

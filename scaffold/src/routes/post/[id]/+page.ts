@@ -6,10 +6,10 @@ export function load({ params }: { params: { id: string } }) {
 	const allPosts = posts as Post[];
 	const allUsers = users as User[];
 	const post = allPosts.find((p) => p.id === params.id);
-	const parent = post?.parentId ? allPosts.find((p) => p.id === post.parentId) : null;
 	const replies = allPosts
 		.filter((p) => p.parentId === params.id)
 		.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-	return { post, parent: parent ?? null, replies, users: allUsers };
+	const parentPost = post?.parentId ? allPosts.find((p) => p.id === post.parentId) ?? null : null;
+	return { post, replies, parentPost, users: allUsers };
 }

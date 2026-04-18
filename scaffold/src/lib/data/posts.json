@@ -46,7 +46,7 @@
     "createdAt": "2026-04-03T10:45:00Z",
     "likeCount": 301,
     "repostCount": 67,
-    "parentId": "p1",
+    "parentId": null,
     "tags": ["design", "rant"]
   },
   {
@@ -298,25 +298,5 @@
     "repostCount": 89,
     "parentId": null,
     "tags": ["writing", "docs"]
-  },
-  {
-    "id": "p31",
-    "authorId": "u9",
-    "content": "Code review tip: praise what's good, not just what's wrong. Junior devs need to know what to keep doing, not just what to fix.",
-    "createdAt": "2026-04-04T10:00:00Z",
-    "likeCount": 234,
-    "repostCount": 67,
-    "parentId": null,
-    "tags": ["mentorship", "engineering"]
-  },
-  {
-    "id": "p32",
-    "authorId": "u9",
-    "content": "The best senior engineers I know spend 30% of their time making other engineers better. Technical skills scale linearly, mentorship compounds.",
-    "createdAt": "2026-04-04T08:00:00Z",
-    "likeCount": 445,
-    "repostCount": 112,
-    "parentId": null,
-    "tags": ["leadership", "engineering"]
   }
 ]

@@ -1,114 +1,95 @@
 # =============================================================================
-# USER STORY: View user profile
+# USER STORIES: Profile
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_TIME_DEVELOPER_VISIT
-# @systems: [PROFILE_SYSTEM, DATA_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @journey: PROFILE_VISITOR
+# @systems: [PROFILE_SYSTEM, DATA_SYSTEM, INTERACTION_SYSTEM]
+# @last_updated: 2026-04-18T17:11:18Z
 
-id: US-007
+---
+
+id: US-201
 title: View user profile
+requirement_id: R-201
 
 acceptance_criteria:
-  - id: AC-007-1
-    title: Profile page shows user display name
+  - id: AC-201-1
+    title: Profile page shows display name
     narrative: |
-      Given I visit a user profile page
+      Given I navigate to a user profile
       When the page loads
-      Then I should see the user display name
+      Then I should see the user's display name
     given:
-      - visit: '/demos/scaffold/profile/devguru'
+      - visit: '/demos/scaffold/profile/alice.dev'
     when: []
     then:
       - shouldExist: { selector: '[data-test=profile-display-name]' }
 
-  - id: AC-007-2
+  - id: AC-201-2
+    title: Profile page shows user handle
+    narrative: |
+      Given I navigate to a user profile
+      When the page loads
+      Then I should see the user's handle
+    given:
+      - visit: '/demos/scaffold/profile/alice.dev'
+    when: []
+    then:
+      - shouldContain: { selector: '[data-test=profile-handle]', text: '@alice.dev' }
+
+  - id: AC-201-3
     title: Profile page shows user bio
     narrative: |
-      Given I visit a user profile page
+      Given I navigate to a user profile
       When the page loads
-      Then I should see the user bio
+      Then I should see the user's bio
     given:
-      - visit: '/demos/scaffold/profile/devguru'
+      - visit: '/demos/scaffold/profile/alice.dev'
     when: []
     then:
       - shouldExist: { selector: '[data-test=profile-bio]' }
 
-  - id: AC-007-3
+  - id: AC-201-4
     title: Profile page shows user posts
     narrative: |
-      Given I visit a user profile page
+      Given I navigate to a user profile
       When the page loads
-      Then I should see a list of posts by that user
+      Then I should see the user's posts
     given:
-      - visit: '/demos/scaffold/profile/devguru'
+      - visit: '/demos/scaffold/profile/alice.dev'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=profile-post-item]' }
-
-  - id: AC-007-4
-    title: Profile page shows follower count
-    narrative: |
-      Given I visit a user profile page
-      When the page loads
-      Then I should see the follower count
-    given:
-      - visit: '/demos/scaffold/profile/devguru'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=profile-follower-count]' }
+      - shouldExist: { selector: '[data-test=profile-posts]' }
 
 ---
 
-# =============================================================================
-# USER STORY: Follow and unfollow a user
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: INTERACTIVE_EXPLORATION
-# @systems: [PROFILE_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
-
-id: US-008
-title: Follow and unfollow a user
+id: US-202
+title: Follow a user
+requirement_id: R-202
 
 acceptance_criteria:
-  - id: AC-008-1
-    title: Follow button is present on profile page
+  - id: AC-202-1
+    title: Follow button is visible on profile page
     narrative: |
-      Given I visit a user profile page
+      Given I navigate to a user profile
       When the page loads
       Then I should see a follow button
     given:
-      - visit: '/demos/scaffold/profile/devguru'
+      - visit: '/demos/scaffold/profile/alice.dev'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=follow-button]' }
+      - shouldExist: { selector: '[data-test=follow-btn]' }
 
-  - id: AC-008-2
-    title: Clicking follow changes button to Unfollow
+  - id: AC-202-2
+    title: Clicking follow changes button to unfollow
     narrative: |
-      Given I visit a user profile page
+      Given I am on a user profile that I am not following
       When I click the follow button
-      Then the button should change to show Unfollow
+      Then the button should change to indicate I am following
     given:
-      - visit: '/demos/scaffold/profile/devguru'
+      - visit: '/demos/scaffold/profile/alice.dev'
     when:
-      - click: { selector: '[data-test=follow-button]' }
+      - click: { selector: '[data-test=follow-btn]' }
     then:
-      - shouldContain: { selector: '[data-test=follow-button]', text: 'Unfollow' }
-
-  - id: AC-008-3
-    title: Clicking unfollow returns button to Follow
-    narrative: |
-      Given I have clicked follow on a profile
-      When I click the button again
-      Then the button should return to showing Follow
-    given:
-      - visit: '/demos/scaffold/profile/devguru'
-    when:
-      - click: { selector: '[data-test=follow-button]' }
-      - click: { selector: '[data-test=follow-button]' }
-    then:
-      - shouldContain: { selector: '[data-test=follow-button]', text: 'Follow' }
+      - shouldExist: { selector: '[data-test=follow-btn][data-following=true]' }

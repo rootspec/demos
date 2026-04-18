@@ -1,64 +1,59 @@
 # =============================================================================
-# USER STORY: View post detail with thread
+# USER STORIES: Thread
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_TIME_DEVELOPER_VISIT
-# @systems: [FEED_SYSTEM, DATA_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @journey: THREAD_READER
+# @systems: [FEED_SYSTEM, DATA_SYSTEM, INTERACTION_SYSTEM]
+# @last_updated: 2026-04-18T17:11:18Z
 
-id: US-006
-title: View post detail with thread
+---
+
+id: US-501
+title: View parent post context in thread
+requirement_id: R-501
 
 acceptance_criteria:
-  - id: AC-006-1
-    title: Post detail page shows post content
+  - id: AC-501-1
+    title: Thread detail shows parent post when reply
     narrative: |
-      Given I visit a post detail page
+      Given I navigate to a post that is a reply
       When the page loads
-      Then I should see the post content
+      Then I should see the parent post above the focal post
+    given:
+      - visit: '/demos/scaffold/post/p9'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=parent-post]' }
+
+---
+
+id: US-502
+title: Like a post from the thread detail page
+requirement_id: R-502
+
+acceptance_criteria:
+  - id: AC-502-1
+    title: Like button exists on thread detail
+    narrative: |
+      Given I navigate to a post detail page
+      When the page loads
+      Then I should see a like button for the focal post
     given:
       - visit: '/demos/scaffold/post/p1'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=post-detail]' }
-      - shouldContain: { selector: '[data-test=post-detail]', text: 'CSS grid' }
+      - shouldExist: { selector: '[data-test=like-btn]' }
 
-  - id: AC-006-2
-    title: Post detail shows replies when they exist
+  - id: AC-502-2
+    title: Clicking like on thread detail marks post as liked
     narrative: |
-      Given I visit a post that has replies
-      When the page loads
-      Then I should see the replies section
+      Given I am on a post detail page
+      When I click the like button
+      Then the post should be marked as liked
     given:
-      - visit: '/demos/scaffold/post/p2'
-    when: []
+      - visit: '/demos/scaffold/post/p1'
+    when:
+      - click: { selector: '[data-test=like-btn]' }
     then:
-      - shouldExist: { selector: '[data-test=replies-section]' }
-
----
-
-# =============================================================================
-# USER STORY: View post with parent context
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_TIME_DEVELOPER_VISIT
-# @systems: [FEED_SYSTEM, DATA_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
-
-id: US-017
-title: View post with parent context
-
-acceptance_criteria:
-  - id: AC-017-1
-    title: Reply post shows parent post above it
-    narrative: |
-      Given I visit a post detail page for a reply post
-      When the page loads
-      Then I should see the parent post displayed above the reply
-    given:
-      - visit: '/demos/scaffold/post/p5'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=parent-post]' }
+      - shouldExist: { selector: '[data-test=like-btn][data-liked=true]' }
