@@ -3,29 +3,24 @@
 # =============================================================================
 # @spec_version: 1.0.0
 # @spec_source: 04.SYSTEMS/FEED_SYSTEM.md
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-18T18:18:27Z
 
 pagination:
   initial_count:
     value: 10
     # @unit: posts
-    # @rationale: Shows enough content to convey a real feed without overwhelming; matches common social app defaults
-    # @constraint: min=5, max=20
+    # @rationale: Shows enough content to scan without overwhelming; matches common social feed conventions
+    # @constraint: min=5, max=20, type=integer
 
-  load_more_increment:
+  page_size:
     value: 10
     # @unit: posts
-    # @rationale: Consistent with initial count; predictable UX pattern
-    # @constraint: min=5, max=20
+    # @rationale: Consistent load-more increment matches the initial count for predictable behavior
+    # @constraint: min=5, max=20, type=integer
 
-composer:
-  max_length:
-    value: 280
-    # @unit: characters
-    # @rationale: Matches Bluesky/Twitter convention; well-understood by target audience
-    # @constraint: min=140, max=500
-
-  min_length:
-    value: 1
-    # @unit: characters
-    # @rationale: Empty posts should not be created; any non-whitespace content is valid
+explore:
+  popular_posts_count:
+    value: 5
+    # @unit: posts
+    # @rationale: Curated top-N keeps the explore page scannable; too many posts defeats the purpose of "popular"
+    # @constraint: min=3, max=10, type=integer

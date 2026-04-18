@@ -1,96 +1,116 @@
 # =============================================================================
-# USER STORY: Explore trending tags and people
+# USER STORIES: Discovery / Explore
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_TIME_DEVELOPER_VISIT
-# @systems: [DISCOVERY_SYSTEM, DATA_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
-
-id: US-009
-title: Explore trending tags and people
-
-acceptance_criteria:
-  - id: AC-009-1
-    title: Explore page shows trending tags
-    narrative: |
-      Given I visit the explore page
-      When the page loads
-      Then I should see a list of trending tags
-    given:
-      - visit: '/demos/scaffold/explore'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=trending-tags]' }
-      - shouldExist: { selector: '[data-test=tag-chip]' }
-
-  - id: AC-009-2
-    title: Explore page shows suggested people
-    narrative: |
-      Given I visit the explore page
-      When the page loads
-      Then I should see a list of suggested people to follow
-    given:
-      - visit: '/demos/scaffold/explore'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=suggested-people]' }
-      - shouldExist: { selector: '[data-test=user-card]' }
+# @journey: DISCOVERY
+# @systems: [DISCOVERY_SYSTEM, PROFILE_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-18T18:18:27Z
 
 ---
 
-# =============================================================================
-# USER STORY: Filter posts by tag on explore page
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: INTERACTIVE_EXPLORATION
-# @systems: [DISCOVERY_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
-
-id: US-010
-title: Filter posts by tag on explore page
+id: US-110
+title: Explore trending tags
 
 acceptance_criteria:
-  - id: AC-010-1
-    title: Clicking a tag filters the posts section
+  - id: AC-110-1
+    title: Explore page displays trending tags
     narrative: |
       Given I visit the explore page
-      When I click a tag chip
-      Then the posts section should show only posts with that tag
+      When the page loads
+      Then I see a list of trending tags
     given:
-      - visit: '/demos/scaffold/explore'
+      - visit: '/explore'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=tag-chip]' }
+
+  - id: AC-110-2
+    title: Tags show their post count
+    narrative: |
+      Given I visit the explore page
+      When the page loads
+      Then each tag chip shows how many posts use that tag
+    given:
+      - visit: '/explore'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=tag-post-count]' }
+
+---
+
+id: US-111
+title: Filter explore posts by tag
+
+acceptance_criteria:
+  - id: AC-111-1
+    title: Clicking a tag filters the visible posts
+    narrative: |
+      Given I am on the explore page
+      When I click a tag chip
+      Then only posts with that tag are shown
+    given:
+      - visit: '/explore'
+    when:
+      - click: { selector: '[data-test=tag-chip]' }
+    then:
+      - shouldExist: { selector: '[data-test=filtered-posts]' }
+
+  - id: AC-111-2
+    title: Active tag is visually indicated
+    narrative: |
+      Given I am on the explore page
+      When I click a tag chip
+      Then that tag chip is styled as active
+    given:
+      - visit: '/explore'
     when:
       - click: { selector: '[data-test=tag-chip]' }
     then:
       - shouldExist: { selector: '[data-test=tag-chip][data-active=true]' }
-      - shouldExist: { selector: '[data-test=explore-post-item]' }
 
----
-
-# =============================================================================
-# USER STORY: Tag filter deselect returns all posts
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: INTERACTIVE_EXPLORATION
-# @systems: [DISCOVERY_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
-
-id: US-020
-title: Tag filter deselect returns all posts
-
-acceptance_criteria:
-  - id: AC-020-1
-    title: Clicking active tag deselects it and shows all posts
+  - id: AC-111-3
+    title: Clicking active tag clears the filter
     narrative: |
-      Given I have clicked a tag on the explore page
-      When I click the same tag again
-      Then all posts should be shown and no tag should be active
+      Given I have an active tag filter on the explore page
+      When I click the active tag again
+      Then all posts are shown and no tag is active
     given:
-      - visit: '/demos/scaffold/explore'
+      - visit: '/explore'
     when:
       - click: { selector: '[data-test=tag-chip]' }
       - click: { selector: '[data-test=tag-chip][data-active=true]' }
     then:
-      - shouldExist: { selector: '[data-test=explore-post-item]' }
+      - shouldExist: { selector: '[data-test=popular-posts]' }
+
+---
+
+id: US-112
+title: Follow a user from the explore page
+
+acceptance_criteria:
+  - id: AC-112-1
+    title: Explore page shows suggested users with follow buttons
+    narrative: |
+      Given I visit the explore page
+      When the page loads
+      Then I see a list of users each with a follow button
+    given:
+      - visit: '/explore'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=suggested-user]' }
+      - shouldExist: { selector: '[data-test=follow-button]' }
+
+  - id: AC-112-2
+    title: Following a user from explore updates the button
+    narrative: |
+      Given I am on the explore page
+      When I click the follow button for a user
+      Then the button changes to show unfollow
+    given:
+      - visit: '/explore'
+    when:
+      - click: { selector: '[data-test=follow-button]' }
+    then:
+      - shouldContain: { selector: '[data-test=follow-button]', text: 'Unfollow' }

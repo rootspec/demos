@@ -1,39 +1,26 @@
 # User Stories Overview
 
 **Product:** RootFeed
-**Last Updated:** 2026-04-14
-
----
-
-## Phases
-
-| Phase | Description | Stories |
-|---|---|---|
-| MVP | Full demo implementation — all 5 routes, all interactions, meta-banner, theme | feed.yaml, profile.yaml, discovery.yaml, search.yaml, thread.yaml, meta.yaml |
+**Phase:** MVP
 
 ---
 
 ## Story Index
 
-| ID | Title | Phase | Systems |
-|---|---|---|---|
-| US-001 | View home feed with posts and authors | MVP | FEED_SYSTEM, DATA_SYSTEM |
-| US-002 | Load more posts in feed | MVP | FEED_SYSTEM |
-| US-003 | Like a post | MVP | FEED_SYSTEM |
-| US-004 | Bookmark a post | MVP | FEED_SYSTEM |
-| US-005 | Compose and submit a new post | MVP | FEED_SYSTEM |
-| US-006 | View post detail with thread | MVP | FEED_SYSTEM, DATA_SYSTEM |
-| US-007 | View user profile | MVP | PROFILE_SYSTEM, DATA_SYSTEM |
-| US-008 | Follow and unfollow a user | MVP | PROFILE_SYSTEM |
-| US-009 | Explore trending tags and people | MVP | DISCOVERY_SYSTEM, DATA_SYSTEM |
-| US-010 | Filter posts by tag on explore page | MVP | DISCOVERY_SYSTEM |
-| US-011 | Search posts by keyword | MVP | DISCOVERY_SYSTEM, DATA_SYSTEM |
-| US-012 | Toggle dark/light theme | MVP | THEME_SYSTEM, VIEW_SYSTEM |
-| US-013 | See meta-banner with RootSpec links | MVP | VIEW_SYSTEM |
-| US-014 | Navigate between routes | MVP | VIEW_SYSTEM |
-| US-015 | See RootSpec version in header | MVP | VIEW_SYSTEM |
-| US-016 | See footer with attribution | MVP | VIEW_SYSTEM |
-| US-017 | View post with parent context | MVP | FEED_SYSTEM, DATA_SYSTEM |
-| US-018 | Search with no results shows message | MVP | DISCOVERY_SYSTEM |
-| US-019 | Empty search shows no results | MVP | DISCOVERY_SYSTEM |
-| US-020 | Tag filter deselect returns all posts | MVP | DISCOVERY_SYSTEM |
+| ID     | Title                                         | Systems                          | File        |
+|--------|-----------------------------------------------|----------------------------------|-------------|
+| US-101 | View the home feed                            | FEED_SYSTEM, VIEW_SYSTEM         | feed.yaml   |
+| US-102 | Like a post                                   | FEED_SYSTEM                      | feed.yaml   |
+| US-103 | Bookmark a post                               | FEED_SYSTEM                      | feed.yaml   |
+| US-104 | Load more posts                               | FEED_SYSTEM                      | feed.yaml   |
+| US-105 | Compose and post a new message                | FEED_SYSTEM                      | feed.yaml   |
+| US-106 | Navigate to a user profile                    | PROFILE_SYSTEM, VIEW_SYSTEM      | profile.yaml |
+| US-107 | Follow and unfollow a user                    | PROFILE_SYSTEM                   | profile.yaml |
+| US-108 | View a post thread                            | FEED_SYSTEM, DATA_SYSTEM         | thread.yaml |
+| US-109 | Search posts by keyword                       | DISCOVERY_SYSTEM                 | search.yaml |
+| US-110 | Explore trending tags                         | DISCOVERY_SYSTEM                 | discovery.yaml |
+| US-111 | Filter explore posts by tag                   | DISCOVERY_SYSTEM                 | discovery.yaml |
+| US-112 | Follow a user from the explore page           | DISCOVERY_SYSTEM, PROFILE_SYSTEM | discovery.yaml |
+| US-113 | Toggle dark/light theme                       | VIEW_SYSTEM                      | meta.yaml   |
+| US-114 | See the meta banner on every page             | VIEW_SYSTEM                      | meta.yaml   |
+| US-115 | Navigate using the primary nav                | VIEW_SYSTEM                      | meta.yaml   |

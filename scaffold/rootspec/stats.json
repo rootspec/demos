@@ -33,5 +33,23 @@
       },
       "qualityScore": null
     }
+,
+  {
+    "skill": "rs-spec",
+    "startedAt": "2026-04-18T18:18:27Z",
+    "completedAt": "2026-04-18T18:26:03Z",
+    "durationSeconds": 456,
+    "iterations": null,
+    "stories": null
+  }
+,
+  {
+    "skill": "rs-impl",
+    "startedAt": "2026-04-18T18:26:26Z",
+    "completedAt": "2026-04-18T18:30:57Z",
+    "durationSeconds": 271,
+    "iterations": 1,
+    "stories": {"US-101":{"attempts":1},"US-102":{"attempts":1},"US-103":{"attempts":1},"US-104":{"attempts":1},"US-105":{"attempts":1},"US-106":{"attempts":1},"US-107":{"attempts":1},"US-108":{"attempts":1},"US-109":{"attempts":1},"US-110":{"attempts":1},"US-111":{"attempts":1},"US-112":{"attempts":1},"US-113":{"attempts":1},"US-114":{"attempts":1},"US-115":{"attempts":1}}
+  }
   ]
 }

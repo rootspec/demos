@@ -1,10 +1,19 @@
 <script lang="ts">
+	import { base } from '$app/paths';
+	import type { Post, User } from '$lib/types';
+
 	let { data } = $props();
 
-	let isFollowing = $state(false);
+	let following = $state(false);
+	let followerCount = $state(data.user?.followerCount ?? 0);
 
 	function toggleFollow() {
-		isFollowing = !isFollowing;
+		following = !following;
+		followerCount = following ? followerCount + 1 : followerCount - 1;
+	}
+
+	function getAuthor(authorId: string): User | undefined {
+		return data.users?.find((u: User) => u.id === authorId);
 	}
 </script>
 
@@ -13,31 +22,28 @@
 		<h1 data-test="profile-display-name" class="text-xl font-bold">{data.user.displayName}</h1>
 		<p class="text-sm text-gray-500 dark:text-gray-400">@{data.user.handle}</p>
 		<p data-test="profile-bio" class="mt-2 text-gray-700 dark:text-gray-300">{data.user.bio}</p>
-		<div class="mt-2 flex items-center gap-4">
-			<span data-test="profile-follower-count" class="text-sm text-gray-500 dark:text-gray-400">
-				{isFollowing ? data.user.followerCount + 1 : data.user.followerCount} followers
-			</span>
-			<span class="text-sm text-gray-500 dark:text-gray-400">{data.user.followingCount} following</span>
-			<button
-				data-test="follow-button"
-				onclick={toggleFollow}
-				class="rounded px-4 py-1.5 text-sm font-medium transition-colors {isFollowing
-					? 'bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200'
-					: 'bg-blue-600 text-white hover:bg-blue-700'}"
-			>
-				{isFollowing ? 'Unfollow' : 'Follow'}
-			</button>
+		<div class="mt-2 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+			<span><span data-test="profile-follower-count" class="font-semibold text-gray-900 dark:text-gray-100">{followerCount}</span> followers</span>
+			<span><span data-test="profile-following-count" class="font-semibold text-gray-900 dark:text-gray-100">{data.user.followingCount}</span> following</span>
 		</div>
+		<button
+			data-test="follow-button"
+			onclick={toggleFollow}
+			class="mt-3 rounded border px-4 py-1 text-sm {following ? 'border-blue-600 bg-blue-600 text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300'}"
+		>
+			{following ? 'Unfollow' : 'Follow'}
+		</button>
 	</div>
 
-	<h2 class="mb-2 font-bold">Posts</h2>
-	{#each data.posts as post}
-		<div data-test="profile-post-item" class="border-b border-gray-200 py-3 dark:border-gray-700">
-			<a href="/demos/scaffold/post/{post.id}" class="block">
+	<h2 class="mb-2 font-semibold">Posts</h2>
+	{#each data.posts as post (post.id)}
+		<div data-test="post-item" class="border-b border-gray-200 py-3 dark:border-gray-700">
+			<a href="{base}/post/{post.id}" class="text-gray-900 hover:underline dark:text-gray-100">
 				<p>{post.content}</p>
 			</a>
-			<div class="mt-1 text-xs text-gray-400">
-				{post.likeCount} likes &middot; {post.repostCount} reposts
+			<div class="mt-1 flex gap-4 text-xs text-gray-400">
+				<span>♡ <span data-test="post-like-count">{post.likeCount}</span></span>
+				<span>↻ <span data-test="post-repost-count">{post.repostCount}</span></span>
 			</div>
 		</div>
 	{/each}

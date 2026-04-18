@@ -1,56 +1,94 @@
 # FEED_SYSTEM
 
-**Responsibility:** Home feed rendering, post pagination, post composer, post detail/thread view, like and bookmark client-side state.
-
-**Depends on:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, DATA_SYSTEM
-
----
-
-## Routes Owned
-
-| Route | File | Purpose |
-|---|---|---|
-| `/` | `src/routes/+page.svelte` | Home feed with pagination and composer |
-| `/post/[id]` | `src/routes/post/[id]/+page.svelte` | Single post with thread (parent + replies) |
+**Level:** 4 — Systems
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md, DATA_SYSTEM.md
 
 ---
 
-## State Managed
+## Responsibility
 
-All state is local to the page component (Svelte 5 `$state` runes):
-
-| State | Type | Default | Description |
-|---|---|---|---|
-| `likedPosts` | `Set<string>` | empty | Post IDs the user has liked |
-| `bookmarkedPosts` | `Set<string>` | empty | Post IDs the user has bookmarked |
-| `visibleCount` | `number` | 10 | Number of posts visible in feed |
-| `composerText` | `string` | `''` | Text in the post composer |
-| `composerPosts` | `Post[]` | `[]` | Posts created in this session |
+FEED_SYSTEM owns the home feed experience: displaying posts in reverse-chronological order, managing pagination, handling post-level engagement (likes, bookmarks), and providing the post composer. It is the primary interactive surface of RootFeed.
 
 ---
 
-## Responsibilities
+## State
 
-1. **Render feed:** Display posts in reverse-chronological order (newest first), showing avatar, display name, handle, content, timestamp, like count, repost count, like button, bookmark button.
-2. **Pagination:** Show first `visibleCount` posts; "Load more" button appends 10 more; button hides when `visibleCount >= totalPosts`.
-3. **Like toggle:** On like click, toggle post ID in `likedPosts`; display count reflects base count ± client adjustment.
-4. **Bookmark toggle:** On bookmark click, toggle post ID in `bookmarkedPosts`; icon reflects state.
-5. **Post composer:** Text area for new post; submit creates a new post object prepended to the feed; composer resets after submit; empty submissions are ignored.
-6. **Thread view:** `/post/[id]` displays parent post (if `parentId` is set), the main post, and all direct replies.
+FEED_SYSTEM manages the following reactive state, initialized from DATA_SYSTEM and mutated by user actions:
+
+| State Key          | Type                  | Initial Value                          | Mutation                         |
+|--------------------|-----------------------|----------------------------------------|----------------------------------|
+| likedPostIds       | Set\<string\>         | Empty (no posts liked on load)         | Toggle on like button click      |
+| bookmarkedPostIds  | Set\<string\>         | Empty (no posts bookmarked on load)    | Toggle on bookmark button click  |
+| likeCounts         | Map\<string, number\> | Post.likeCount values from mock data   | Increment/decrement on like      |
+| visiblePostCount   | number                | [initial page size]                    | Increment by [page size] on "Load more" |
+| composedPosts      | Post[]                | Empty array                            | Prepended on successful compose  |
+
+All state is component-local or held in Svelte reactive variables. It is not persisted across sessions.
 
 ---
 
-## Boundaries
+## Post Display Rules
 
-- Does NOT own user data — resolves authors by looking up `authorId` in the users array received from DATA_SYSTEM.
-- Does NOT persist state — all interaction state resets on page reload.
-- Does NOT own tag filtering — that lives in DISCOVERY_SYSTEM.
+Each post in the feed renders:
+- Author avatar (links to author profile)
+- Author display name (links to author profile)
+- Author handle (links to author profile)
+- Post content text
+- Relative timestamp (e.g., "2h ago")
+- Like count + like toggle button
+- Repost count (display only — reposting is not an interaction in this demo)
+- Bookmark toggle button
+- Link to full post thread view
+
+Posts are sorted reverse-chronologically. Composed posts (session-only) appear at the top of the list, prepended to the mock data posts.
+
+---
+
+## Pagination
+
+The feed displays [initial page size] posts at a time. A "Load more" button at the bottom of the list reveals the next [page size] posts. The button is hidden when all posts are visible.
+
+Composed posts are always visible regardless of pagination state — they exist outside the paginated window.
+
+---
+
+## Post Composer
+
+The composer is triggered by a visible "Post" or "Compose" button on the home feed. It provides:
+- A text input area for post content
+- A submit action that creates an ephemeral post and prepends it to the feed
+- A cancel action that dismisses the composer without creating a post
+
+Composed posts have:
+- Content from the user's input
+- A synthetic author (the "viewer" — a mock identity defined in the system, not from mock data users)
+- A generated timestamp (current time at composition)
+- Initial like/repost counts of zero
+
+The composer does not support tags, threading, or image attachment.
+
+---
+
+## Like / Bookmark Rules
+
+**Like toggle:**
+- If post is not liked: increment likeCount by 1, add to likedPostIds
+- If post is liked: decrement likeCount by 1, remove from likedPostIds
+- Like button has distinct visual states for liked vs. not-liked
+
+**Bookmark toggle:**
+- If post is not bookmarked: add to bookmarkedPostIds
+- If post is bookmarked: remove from bookmarkedPostIds
+- Bookmark button has distinct visual states for bookmarked vs. not-bookmarked
+
+Both actions are instant with no loading state or network call.
 
 ---
 
 ## Interactions with Other Systems
 
-| System | Interaction |
-|---|---|
-| DATA_SYSTEM | Receives posts and users via SvelteKit `data` prop |
-| VIEW_SYSTEM | Renders within the shared layout; post cards are internal components |
+| System          | Relationship                                                      |
+|-----------------|-------------------------------------------------------------------|
+| DATA_SYSTEM     | Receives posts and users from page loader                         |
+| VIEW_SYSTEM     | Renders output into the main content area; receives user actions  |
+| PROFILE_SYSTEM  | No direct interaction; profile navigation is handled by VIEW_SYSTEM |
