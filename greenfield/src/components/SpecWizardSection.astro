@@ -1,17 +1,4 @@
 ---
-import SpecWizard from './SpecWizard.tsx';
+import SpecWizard from './SpecWizard';
 ---
-
-<section class="py-20 px-4 bg-gray-50 dark:bg-gray-900">
-  <div class="max-w-3xl mx-auto">
-    <div class="text-center mb-10">
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        Try it: build your own skeleton spec
-      </h2>
-      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
-        Answer three questions and get a skeleton RootSpec structure for your idea — ready to drop into a Claude project.
-      </p>
-    </div>
-    <SpecWizard client:load />
-  </div>
-</section>
+<SpecWizard client:only="react" />

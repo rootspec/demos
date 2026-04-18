@@ -1,101 +1,126 @@
 import { useState } from 'react';
 
-const levels = [
+const LEVELS = [
   {
-    num: 1,
-    label: 'L1 Philosophy',
-    title: 'Philosophy & Principles',
-    description: 'The immutable "why" behind the product — values, mission, and design principles that never change.',
-    example: 'Principle: "Prefer explicit over implicit. Every decision should be traceable to a user need."',
-    color: 'border-purple-500 bg-purple-50 dark:bg-purple-950',
-    badgeColor: 'bg-purple-500',
+    id: 1,
+    name: 'Philosophy',
+    icon: '🌱',
+    tagline: 'Why does this product exist? What mission drives it?',
+    example: `# L1: Philosophy\n## Mission\nTo give developers a rigorous, AI-compatible specification methodology that eliminates ambiguity between intent and implementation.\n\n## Design Pillars\n- Hierarchical clarity\n- Testable outcomes\n- AI-first authoring`,
   },
   {
-    num: 2,
-    label: 'L2 Truths',
-    title: 'Truths & Constraints',
-    description: 'Hard constraints and facts that bound the solution space — technical, legal, or business reality.',
-    example: 'Truth: "All user data must be stored in the EU. No exceptions."',
-    color: 'border-blue-500 bg-blue-50 dark:bg-blue-950',
-    badgeColor: 'bg-blue-500',
+    id: 2,
+    name: 'Truths',
+    icon: '🔭',
+    tagline: 'What are the non-negotiable constraints and invariants?',
+    example: `# L2: Truths\n## System Invariants\n- Every spec must have at least one user story per system\n- Acceptance criteria must be expressed as given/when/then\n- The spec version must match the implementation version`,
   },
   {
-    num: 3,
-    label: 'L3 Interactions',
-    title: 'Interactions & Journeys',
-    description: 'How users move through the product — key flows, decision points, and state transitions.',
-    example: 'Journey: "New user → Onboarding → First value moment → Retained user"',
-    color: 'border-cyan-500 bg-cyan-50 dark:bg-cyan-950',
-    badgeColor: 'bg-cyan-500',
+    id: 3,
+    name: 'Interactions',
+    icon: '🔄',
+    tagline: 'What are the core user flows and data transformations?',
+    example: `# L3: Interactions\n## Core Flow: Spec Wizard\n1. User enters product idea\n2. User selects mission template\n3. User selects design pillars\n4. User describes key interaction\n5. System generates spec skeleton`,
   },
   {
-    num: 4,
-    label: 'L4 Systems',
-    title: 'Systems & Architecture',
-    description: 'The technical systems that implement the interactions — components, APIs, and data models.',
-    example: 'System: "AUTH_SYSTEM: JWT tokens, 7-day refresh, bcrypt password hashing"',
-    color: 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950',
-    badgeColor: 'bg-indigo-500',
+    id: 4,
+    name: 'Systems',
+    icon: '⚙️',
+    tagline: 'What subsystems own which responsibilities?',
+    example: `# L4: Systems\n## Content System\n- Owns all human-readable copy\n- Reads version from .rootspec.json at build time\n## Theme System\n- Manages dark/light mode state\n- Persists preference to localStorage`,
   },
   {
-    num: 5,
-    label: 'L5 Implementation',
-    title: 'Implementation & Stories',
-    description: 'Concrete user stories with Gherkin-style acceptance criteria that map to test cases.',
-    example: 'Story: "Given I visit /, When the page loads, Then I see [data-test=hero]"',
-    color: 'border-green-500 bg-green-50 dark:bg-green-950',
-    badgeColor: 'bg-green-500',
+    id: 5,
+    name: 'Implementation',
+    icon: '🛠️',
+    tagline: 'User stories, fine-tuning parameters, and acceptance criteria.',
+    example: `# L5: Implementation\n## User Story: US-101\nAs a visitor, I want to read what RootSpec is on arrival.\n\n### AC-101-1\nGiven: I visit /\nWhen: page loads\nThen: hero-heading exists, hero-subheading exists`,
   },
 ];
 
 export default function HierarchyExplorer() {
-  const [expanded, setExpanded] = useState<number | null>(null);
+  const [activeLevel, setActiveLevel] = useState<number | null>(null);
 
-  const toggle = (num: number) => {
-    setExpanded((prev) => (prev === num ? null : num));
-  };
+  function handleClick(id: number) {
+    setActiveLevel(prev => (prev === id ? null : id));
+  }
 
   return (
-    <div data-test="hierarchy-explorer" className="space-y-3">
-      {levels.map((level) => (
-        <div
-          key={level.num}
-          className={`rounded-xl border-l-4 ${level.color} border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-200`}
-        >
-          <button
-            data-test={`hierarchy-level-${level.num}`}
-            onClick={() => toggle(level.num)}
-            className="w-full flex items-center justify-between p-4 text-left hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-            aria-expanded={expanded === level.num}
-          >
-            <div className="flex items-center gap-3">
-              <span className={`${level.badgeColor} text-white text-xs font-mono font-bold px-2 py-0.5 rounded`}>
-                L{level.num}
-              </span>
-              <span className="font-semibold text-gray-900 dark:text-white">{level.label}</span>
-            </div>
-            <svg
-              className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${expanded === level.num ? 'rotate-180' : ''}`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-          <div
-            data-test={`hierarchy-level-${level.num}-content`}
-            style={{ display: expanded === level.num ? 'block' : 'none' }}
-            className="px-4 pb-4"
-          >
-            <h3 className="font-bold text-gray-900 dark:text-white mb-2">{level.title}</h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">{level.description}</p>
-            <div className="bg-gray-900 dark:bg-gray-950 rounded-lg p-3">
-              <p className="font-mono text-xs text-green-400">{level.example}</p>
-            </div>
-          </div>
+    <section
+      data-test="hierarchy-explorer"
+      style={{ padding: '4rem 1.5rem', backgroundColor: 'var(--bg-primary)' }}
+    >
+      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+        <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', fontWeight: 700, color: 'var(--text-primary)', textAlign: 'center', margin: '0 0 1rem' }}>
+          The RootSpec Hierarchy
+        </h2>
+        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '1.05rem', margin: '0 0 2.5rem', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto' }}>
+          Five levels of specification, each constraining the levels below. Click a level to see an example.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {LEVELS.map(level => {
+            const isActive = activeLevel === level.id;
+            return (
+              <div key={level.id}>
+                <button
+                  data-test={`level-${level.id}`}
+                  aria-expanded={isActive}
+                  onClick={() => handleClick(level.id)}
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                    padding: '1rem 1.25rem',
+                    backgroundColor: isActive ? 'var(--accent)' : 'var(--bg-card)',
+                    border: `1px solid ${isActive ? 'var(--accent)' : 'var(--border)'}`,
+                    borderRadius: '0.625rem',
+                    cursor: 'pointer',
+                    color: isActive ? 'white' : 'var(--text-primary)',
+                    textAlign: 'left',
+                    transition: 'all 250ms ease',
+                  }}
+                >
+                  <span style={{ fontSize: '1.5rem', flexShrink: 0 }}>{level.icon}</span>
+                  <span style={{ fontWeight: 700, minWidth: '1.5rem', opacity: 0.6, fontSize: '0.875rem' }}>L{level.id}</span>
+                  <span style={{ fontWeight: 700, fontSize: '1rem' }}>{level.name}</span>
+                  <span style={{ fontSize: '0.875rem', opacity: 0.75, flex: 1, display: 'none' }} className="tablet-show">{level.tagline}</span>
+                  <span style={{ marginLeft: 'auto', fontSize: '0.75rem', opacity: 0.6 }}>{isActive ? '▲' : '▼'}</span>
+                </button>
+                {isActive && (
+                  <div
+                    data-test={`level-${level.id}-content`}
+                    style={{
+                      backgroundColor: 'var(--bg-card)',
+                      border: '1px solid var(--border)',
+                      borderTop: 'none',
+                      borderRadius: '0 0 0.625rem 0.625rem',
+                      padding: '1.25rem',
+                    }}
+                  >
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', margin: '0 0 1rem', fontStyle: 'italic' }}>
+                      {level.tagline}
+                    </p>
+                    <pre style={{
+                      backgroundColor: 'var(--bg-secondary)',
+                      border: '1px solid var(--border)',
+                      borderRadius: '0.5rem',
+                      padding: '1rem',
+                      fontSize: '0.8rem',
+                      color: 'var(--text-secondary)',
+                      overflow: 'auto',
+                      whiteSpace: 'pre-wrap',
+                      margin: 0,
+                    }}>
+                      {level.example}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
-      ))}
-    </div>
+      </div>
+    </section>
   );
 }

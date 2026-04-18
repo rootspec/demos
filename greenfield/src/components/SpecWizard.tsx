@@ -1,203 +1,334 @@
 import { useState } from 'react';
 
-const missions = [
-  'Help users accomplish a core task faster and with less friction',
-  'Provide insight and clarity through data visualization',
-  'Connect people with shared interests or complementary needs',
-  'Automate repetitive processes to free up human creativity',
+const MISSION_TEMPLATES = [
+  'To help {users} {achieve goal} by {mechanism}.',
+  'To eliminate {pain point} for {users} through {approach}.',
+  'To enable {users} to {capability} without {obstacle}.',
+  'To provide {users} with {value} that {benefit}.',
 ];
 
-const pillars = [
-  'Speed — every interaction should feel instant',
-  'Clarity — no user should ever be confused',
-  'Trust — data and privacy are non-negotiable',
-  'Delight — moments of joy that make users smile',
-  'Power — expose advanced capabilities for experts',
-  'Simplicity — fewer features, done perfectly',
+const PILLAR_OPTIONS = [
+  'Speed & Performance',
+  'Simplicity',
+  'Reliability',
+  'Accessibility',
+  'Privacy',
+  'Extensibility',
+  'Collaboration',
+  'Transparency',
 ];
 
-interface WizardState {
-  step: number;
-  idea: string;
-  mission: number | null;
-  pillars: number[];
-}
+type Step = 1 | 2 | 3 | 'complete';
 
 export default function SpecWizard() {
-  const [state, setState] = useState<WizardState>({
-    step: 1,
-    idea: '',
-    mission: null,
-    pillars: [],
-  });
+  const [step, setStep] = useState<Step>(1);
+  const [idea, setIdea] = useState('');
+  const [selectedMission, setSelectedMission] = useState<number | null>(null);
+  const [selectedPillars, setSelectedPillars] = useState<number[]>([]);
+  const [interaction, setInteraction] = useState('');
+  const [output, setOutput] = useState('');
 
-  const canProceedStep1 = state.idea.trim().length > 0;
+  function generateOutput() {
+    const mission = selectedMission !== null
+      ? MISSION_TEMPLATES[selectedMission].replace('{users}', 'users').replace('{achieve goal}', 'achieve their goals').replace('{mechanism}', 'a structured approach').replace('{pain point}', 'friction').replace('{approach}', 'automation').replace('{capability}', 'take action').replace('{obstacle}', 'complexity').replace('{value}', 'clarity').replace('{benefit}', 'drives results')
+      : 'Custom mission';
+    const pillars = selectedPillars.map(i => PILLAR_OPTIONS[i]).join(', ');
 
-  const goNext = () => {
-    if (state.step === 1 && !canProceedStep1) return;
-    setState((s) => ({ ...s, step: s.step + 1 }));
-  };
+    return `# L1: Philosophy
+## Product Idea
+${idea}
 
-  const togglePillar = (i: number) => {
-    setState((s) => ({
-      ...s,
-      pillars: s.pillars.includes(i) ? s.pillars.filter((p) => p !== i) : [...s.pillars, i],
-    }));
-  };
+## Mission
+${mission}
 
-  const selectedMission = state.mission !== null ? missions[state.mission] : '';
+## Design Pillars
+${selectedPillars.map(i => `- ${PILLAR_OPTIONS[i]}`).join('\n')}
+
+---
+
+# L3: Core Interaction
+## Key Interaction
+${interaction}
+
+### Pattern
+1. User triggers: "${interaction}"
+2. System validates input
+3. System executes action
+4. User sees confirmation
+
+---
+
+# L5: User Story (Generated)
+## US-001: ${idea.slice(0, 40)}
+As a user,
+I want to ${interaction.toLowerCase()},
+So that I can achieve my goal with ${pillars.split(',')[0]?.trim() || 'ease'}.
+
+### AC-001-1
+Given: I am on the main page
+When: I initiate "${interaction}"
+Then: The system completes the action successfully
+`;
+  }
+
+  function handleNext() {
+    if (step === 1) {
+      if (!idea.trim() || selectedMission === null) return;
+      setStep(2);
+    } else if (step === 2) {
+      if (selectedPillars.length < 3) return;
+      setStep(3);
+    } else if (step === 3) {
+      if (!interaction.trim()) return;
+      setOutput(generateOutput());
+      setStep('complete');
+    }
+  }
+
+  function togglePillar(idx: number) {
+    setSelectedPillars(prev =>
+      prev.includes(idx) ? prev.filter(p => p !== idx) : [...prev, idx]
+    );
+  }
 
   return (
-    <div data-test="spec-wizard" className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden">
-      {/* Progress bar */}
-      <div className="flex border-b border-gray-200 dark:border-gray-700">
-        {[1, 2, 3].map((s) => (
-          <div
-            key={s}
-            className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
-              state.step === s
-                ? 'bg-indigo-600 text-white'
-                : state.step > s
-                ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-400'
-                : 'text-gray-400'
-            }`}
-          >
-            Step {s}
-          </div>
-        ))}
-      </div>
+    <section data-test="spec-wizard" style={{ padding: '4rem 1.5rem', backgroundColor: 'var(--bg-primary)' }}>
+      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+        <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', fontWeight: 700, color: 'var(--text-primary)', textAlign: 'center', margin: '0 0 1rem' }}>
+          Spec Wizard
+        </h2>
+        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '1.05rem', margin: '0 0 2rem' }}>
+          Map your product idea to a RootSpec skeleton in three steps.
+        </p>
 
-      <div className="p-6">
+        {/* Step indicator */}
+        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', justifyContent: 'center' }}>
+          {[1, 2, 3].map(s => (
+            <div
+              key={s}
+              style={{
+                width: '2rem',
+                height: '2rem',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '0.875rem',
+                fontWeight: 700,
+                backgroundColor: (step === s || (step === 'complete' && s <= 3)) ? 'var(--accent)' : 'var(--bg-card)',
+                color: (step === s || (step === 'complete' && s <= 3)) ? 'white' : 'var(--text-muted)',
+                border: '1px solid var(--border)',
+                transition: 'all 200ms ease',
+              }}
+            >
+              {s}
+            </div>
+          ))}
+        </div>
+
         {/* Step 1 */}
-        {state.step === 1 && (
-          <div data-test="wizard-step-1">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">What are you building?</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Describe your product idea in one or two sentences. Be as specific or broad as you like.
-            </p>
-            <textarea
-              data-test="product-idea-input"
-              value={state.idea}
-              onChange={(e) => setState((s) => ({ ...s, idea: e.target.value }))}
-              placeholder="e.g. A task manager that helps developers track work without leaving their IDE"
-              className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[80px]"
+        {step === 1 && (
+          <div data-test="wizard-step-1" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '0.75rem', padding: '1.5rem' }}>
+            <h3 style={{ color: 'var(--text-primary)', margin: '0 0 1rem', fontSize: '1.1rem', fontWeight: 600 }}>
+              Step 1: Product Mission
+            </h3>
+            <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+              What is your product idea?
+            </label>
+            <input
+              data-test="wizard-idea-input"
+              type="text"
+              value={idea}
+              onChange={e => setIdea(e.target.value)}
+              placeholder="e.g., A tool for tracking learning goals"
+              style={{
+                width: '100%',
+                padding: '0.625rem 0.875rem',
+                backgroundColor: 'var(--bg-secondary)',
+                border: '1px solid var(--border)',
+                borderRadius: '0.5rem',
+                color: 'var(--text-primary)',
+                fontSize: '0.9rem',
+                marginBottom: '1.25rem',
+                boxSizing: 'border-box',
+              }}
             />
-            {!canProceedStep1 && (
-              <p className="text-xs text-red-500 mt-1">Enter your product idea to continue.</p>
-            )}
+            <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+              Select a mission template:
+            </label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
+              {MISSION_TEMPLATES.map((template, idx) => (
+                <button
+                  key={idx}
+                  data-test="wizard-mission-option"
+                  onClick={() => setSelectedMission(idx)}
+                  style={{
+                    padding: '0.625rem 1rem',
+                    backgroundColor: selectedMission === idx ? 'var(--accent)' : 'var(--bg-secondary)',
+                    border: `1px solid ${selectedMission === idx ? 'var(--accent)' : 'var(--border)'}`,
+                    borderRadius: '0.5rem',
+                    color: selectedMission === idx ? 'white' : 'var(--text-secondary)',
+                    fontSize: '0.8rem',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    transition: 'all 200ms ease',
+                    fontFamily: 'monospace',
+                  }}
+                >
+                  {template}
+                </button>
+              ))}
+            </div>
+            <button
+              data-test="wizard-next"
+              onClick={handleNext}
+              disabled={!idea.trim() || selectedMission === null}
+              style={{
+                padding: '0.625rem 1.5rem',
+                backgroundColor: !idea.trim() || selectedMission === null ? 'var(--text-muted)' : 'var(--accent)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.5rem',
+                fontWeight: 600,
+                cursor: !idea.trim() || selectedMission === null ? 'not-allowed' : 'pointer',
+                transition: 'background-color 200ms ease',
+              }}
+            >
+              Next →
+            </button>
           </div>
         )}
 
         {/* Step 2 */}
-        {state.step === 2 && (
-          <div data-test="wizard-step-2">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">What's the core mission?</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Choose the primary mission that drives "{state.idea.slice(0, 40)}{state.idea.length > 40 ? '...' : ''}".
+        {step === 2 && (
+          <div data-test="wizard-step-2" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '0.75rem', padding: '1.5rem' }}>
+            <h3 style={{ color: 'var(--text-primary)', margin: '0 0 1rem', fontSize: '1.1rem', fontWeight: 600 }}>
+              Step 2: Design Pillars
+            </h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', margin: '0 0 1rem' }}>
+              Select at least 3 design pillars that define your product's priorities:
             </p>
-            <div className="space-y-2">
-              {missions.map((m, i) => (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
+              {PILLAR_OPTIONS.map((pillar, idx) => (
                 <button
-                  key={i}
-                  data-test={`mission-option-${i + 1}`}
-                  onClick={() => setState((s) => ({ ...s, mission: i }))}
-                  className={`w-full text-left p-3 rounded-lg border text-sm transition-colors ${
-                    state.mission === i
-                      ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300'
-                      : 'border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 text-gray-700 dark:text-gray-300'
-                  }`}
+                  key={idx}
+                  data-test="wizard-pillar-option"
+                  onClick={() => togglePillar(idx)}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    backgroundColor: selectedPillars.includes(idx) ? 'var(--accent)' : 'var(--bg-secondary)',
+                    border: `1px solid ${selectedPillars.includes(idx) ? 'var(--accent)' : 'var(--border)'}`,
+                    borderRadius: '9999px',
+                    color: selectedPillars.includes(idx) ? 'white' : 'var(--text-secondary)',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    fontWeight: 500,
+                    transition: 'all 200ms ease',
+                  }}
                 >
-                  {m}
+                  {selectedPillars.includes(idx) ? '✓ ' : ''}{pillar}
                 </button>
               ))}
             </div>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', margin: '0 0 1rem' }}>
+              {selectedPillars.length}/3 minimum selected
+            </p>
+            <button
+              data-test="wizard-next"
+              onClick={handleNext}
+              disabled={selectedPillars.length < 3}
+              style={{
+                padding: '0.625rem 1.5rem',
+                backgroundColor: selectedPillars.length < 3 ? 'var(--text-muted)' : 'var(--accent)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.5rem',
+                fontWeight: 600,
+                cursor: selectedPillars.length < 3 ? 'not-allowed' : 'pointer',
+                transition: 'background-color 200ms ease',
+              }}
+            >
+              Next →
+            </button>
           </div>
         )}
 
         {/* Step 3 */}
-        {state.step === 3 && (
-          <div data-test="wizard-step-3">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Pick your design pillars</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Select 2-3 principles that will guide every design decision.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {pillars.map((p, i) => (
-                <button
-                  key={i}
-                  data-test={`pillar-option-${i + 1}`}
-                  onClick={() => togglePillar(i)}
-                  className={`text-left p-3 rounded-lg border text-sm transition-colors ${
-                    state.pillars.includes(i)
-                      ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300'
-                      : 'border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 text-gray-700 dark:text-gray-300'
-                  }`}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Output */}
-        {state.step === 4 && (
-          <div data-test="wizard-output">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Your Skeleton Spec</h3>
-            <div className="bg-gray-900 dark:bg-gray-950 rounded-xl p-4 font-mono text-xs space-y-2 overflow-auto">
-              <p className="text-gray-400"># L1 Philosophy</p>
-              <p className="text-white">product: <span className="text-green-400">"{state.idea}"</span></p>
-              <p className="text-gray-400 mt-2"># Mission</p>
-              <p className="text-white">mission: <span className="text-yellow-400">"{selectedMission}"</span></p>
-              {state.pillars.length > 0 && (
-                <>
-                  <p className="text-gray-400 mt-2"># L1 Design Pillars</p>
-                  {state.pillars.map((pi) => (
-                    <p key={pi} className="text-white">  - <span className="text-cyan-400">"{pillars[pi]}"</span></p>
-                  ))}
-                </>
-              )}
-              <p className="text-gray-400 mt-2"># L5 User Stories</p>
-              <p className="text-gray-500">  # → Run /rs-spec to generate full user stories</p>
-            </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
-              Run <span className="font-mono text-indigo-500">/rs-spec</span> in your Claude project to generate the full specification.
-            </p>
-          </div>
-        )}
-
-        {/* Navigation */}
-        {state.step < 4 && (
-          <div className="mt-6 flex justify-end">
+        {step === 3 && (
+          <div data-test="wizard-step-3" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '0.75rem', padding: '1.5rem' }}>
+            <h3 style={{ color: 'var(--text-primary)', margin: '0 0 1rem', fontSize: '1.1rem', fontWeight: 600 }}>
+              Step 3: Key Interaction
+            </h3>
+            <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+              Describe one core user interaction:
+            </label>
+            <input
+              data-test="wizard-interaction-input"
+              type="text"
+              value={interaction}
+              onChange={e => setInteraction(e.target.value)}
+              placeholder="e.g., User marks a goal complete"
+              style={{
+                width: '100%',
+                padding: '0.625rem 0.875rem',
+                backgroundColor: 'var(--bg-secondary)',
+                border: '1px solid var(--border)',
+                borderRadius: '0.5rem',
+                color: 'var(--text-primary)',
+                fontSize: '0.9rem',
+                marginBottom: '1.5rem',
+                boxSizing: 'border-box',
+              }}
+            />
             <button
               data-test="wizard-next"
-              onClick={goNext}
-              className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold px-5 py-2 rounded-lg transition-colors"
+              onClick={handleNext}
+              disabled={!interaction.trim()}
+              style={{
+                padding: '0.625rem 1.5rem',
+                backgroundColor: !interaction.trim() ? 'var(--text-muted)' : 'var(--accent)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.5rem',
+                fontWeight: 600,
+                cursor: !interaction.trim() ? 'not-allowed' : 'pointer',
+                transition: 'background-color 200ms ease',
+              }}
             >
-              {state.step === 3 ? 'Generate Spec →' : 'Next →'}
+              Generate Spec →
             </button>
           </div>
         )}
 
-        {state.step === 4 && (
-          <div className="mt-4 flex justify-between items-center">
-            <button
-              onClick={() => setState({ step: 1, idea: '', mission: null, pillars: [] })}
-              className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+        {/* Complete */}
+        {step === 'complete' && (
+          <div>
+            <div data-test="wizard-step-complete" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '0.75rem 0.75rem 0 0', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ color: 'var(--accent)', fontWeight: 700 }}>✅ Spec skeleton generated!</span>
+              <button
+                onClick={() => { setStep(1); setIdea(''); setSelectedMission(null); setSelectedPillars([]); setInteraction(''); setOutput(''); }}
+                style={{ marginLeft: 'auto', padding: '0.375rem 0.75rem', backgroundColor: 'transparent', border: '1px solid var(--border)', borderRadius: '0.375rem', color: 'var(--text-secondary)', fontSize: '0.8rem', cursor: 'pointer' }}
+              >
+                Start Over
+              </button>
+            </div>
+            <div
+              data-test="wizard-output"
+              style={{
+                backgroundColor: 'var(--bg-secondary)',
+                border: '1px solid var(--border)',
+                borderTop: 'none',
+                borderRadius: '0 0 0.75rem 0.75rem',
+                padding: '1.25rem',
+                maxHeight: '400px',
+                overflowY: 'auto',
+              }}
             >
-              ← Start over
-            </button>
-            <a
-              href="https://github.com/rootspec"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2 rounded-lg transition-colors text-sm"
-            >
-              Get RootSpec ↗
-            </a>
+              <pre style={{ whiteSpace: 'pre-wrap', color: 'var(--text-secondary)', fontSize: '0.8rem', margin: 0, lineHeight: 1.7 }}>{output}</pre>
+            </div>
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 }

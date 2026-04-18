@@ -1,75 +1,74 @@
 # =============================================================================
-# USER STORY: Hierarchy Explorer Interaction
+# USER STORIES: Interactive Features
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: PROOF
+# @journey: INTERACTIVE_EXPLORATION
 # @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-17T03:47:13Z
+# @last_updated: 2026-04-18T14:59:27Z
 
-id: US-201
-title: Visitor explores the five-level hierarchy interactively
+---
+
+id: US-301
+title: Explore the RootSpec hierarchy levels
 
 acceptance_criteria:
-  - id: AC-201-1
-    title: Hierarchy Explorer is present on the page
+  - id: AC-301-1
+    title: Hierarchy Explorer section renders with all five levels
     narrative: |
       Given I visit the site
-      When I scroll to the hierarchy section
-      Then I see the hierarchy explorer with five levels
+      When I view the Hierarchy Explorer section
+      Then I see five level cards representing each RootSpec level
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
+      - shouldExist: { selector: '[data-test=level-1]' }
+      - shouldExist: { selector: '[data-test=level-2]' }
+      - shouldExist: { selector: '[data-test=level-3]' }
+      - shouldExist: { selector: '[data-test=level-4]' }
+      - shouldExist: { selector: '[data-test=level-5]' }
 
-  - id: AC-201-2
-    title: Clicking a level expands it to show content
+  - id: AC-301-2
+    title: Clicking a level reveals its example content
     narrative: |
-      Given I see the hierarchy explorer
-      When I click on Level 1 Philosophy
-      Then I see expanded content for that level
+      Given the Hierarchy Explorer is displayed
+      When I click on level 1
+      Then I see the expanded content for level 1
     given:
       - visit: '/'
     when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+      - click: { selector: '[data-test=level-1]' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+      - shouldExist: { selector: '[data-test=level-1-content]' }
 
-  - id: AC-201-3
-    title: Clicking an expanded level collapses it
+  - id: AC-301-3
+    title: Clicking the active level collapses it
     narrative: |
-      Given I have expanded Level 1 in the hierarchy explorer
-      When I click on Level 1 again
-      Then the level content collapses
+      Given level 1 is expanded in the Hierarchy Explorer
+      When I click on level 1 again
+      Then the level 1 content collapses
     given:
       - visit: '/'
-      - click: { selector: '[data-test=hierarchy-level-1]' }
     when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+      - click: { selector: '[data-test=level-1]' }
+      - click: { selector: '[data-test=level-1]' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
+      - shouldExist: { selector: '[data-test=level-1][aria-expanded=false]' }
 
 ---
-# =============================================================================
-# USER STORY: Spec Wizard Flow
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: PARTICIPATION
-# @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-17T03:47:13Z
 
-id: US-202
-title: Visitor creates a skeleton spec for their own idea
+id: US-302
+title: Use the Spec Wizard to map a product idea to RootSpec
 
 acceptance_criteria:
-  - id: AC-202-1
-    title: Spec Wizard is present on the page
+  - id: AC-302-1
+    title: Spec Wizard section is present on the page
     narrative: |
       Given I visit the site
-      When I scroll to the spec wizard section
-      Then I see the spec wizard with step 1 active
+      When the page loads
+      Then I see the Spec Wizard section with a step-one input
     given:
       - visit: '/'
     when: []
@@ -77,88 +76,71 @@ acceptance_criteria:
       - shouldExist: { selector: '[data-test=spec-wizard]' }
       - shouldExist: { selector: '[data-test=wizard-step-1]' }
 
-  - id: AC-202-2
-    title: Visitor can enter a product idea and proceed to step 2
+  - id: AC-302-2
+    title: Entering a product idea and selecting a mission advances the wizard
     narrative: |
-      Given I see the spec wizard at step 1
-      When I enter a product idea and click next
-      Then I see step 2 with mission options
+      Given I am on step 1 of the Spec Wizard
+      When I fill in a product idea and select a mission template
+      And I click the advance button
+      Then I see step 2 of the wizard
     given:
       - visit: '/'
     when:
-      - fill: { selector: '[data-test=product-idea-input]', value: 'A task manager for developers' }
+      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A tool for tracking learning goals' }
+      - click: { selector: '[data-test=wizard-mission-option]:first-child' }
       - click: { selector: '[data-test=wizard-next]' }
     then:
       - shouldExist: { selector: '[data-test=wizard-step-2]' }
 
-  - id: AC-202-3
-    title: Visitor cannot proceed from step 1 without entering an idea
+  - id: AC-302-3
+    title: Completing the wizard generates a spec skeleton
     narrative: |
-      Given I see the spec wizard at step 1 with empty input
-      When I click next without entering anything
-      Then I remain on step 1
+      Given I have completed all three wizard steps
+      When the wizard reaches the completion state
+      Then I see a generated spec skeleton displayed below the wizard
     given:
       - visit: '/'
     when:
+      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A tool for tracking learning goals' }
+      - click: { selector: '[data-test=wizard-mission-option]:first-child' }
       - click: { selector: '[data-test=wizard-next]' }
-    then:
-      - shouldExist: { selector: '[data-test=wizard-step-1]' }
-
-  - id: AC-202-4
-    title: Completed wizard produces skeleton spec output
-    narrative: |
-      Given I have completed all three wizard steps
-      When I reach the output panel
-      Then I see a skeleton spec with my input mapped to spec levels
-    given:
-      - visit: '/'
-      - fill: { selector: '[data-test=product-idea-input]', value: 'A task manager for developers' }
+      - click: { selector: '[data-test=wizard-pillar-option]:first-child' }
+      - click: { selector: '[data-test=wizard-pillar-option]:nth-child(2)' }
+      - click: { selector: '[data-test=wizard-pillar-option]:nth-child(3)' }
       - click: { selector: '[data-test=wizard-next]' }
-      - click: { selector: '[data-test=mission-option-1]' }
+      - fill: { selector: '[data-test=wizard-interaction-input]', value: 'User marks a goal complete' }
       - click: { selector: '[data-test=wizard-next]' }
-      - click: { selector: '[data-test=pillar-option-1]' }
-      - click: { selector: '[data-test=pillar-option-2]' }
-      - click: { selector: '[data-test=pillar-option-3]' }
-      - click: { selector: '[data-test=wizard-next]' }
-    when: []
     then:
       - shouldExist: { selector: '[data-test=wizard-output]' }
 
 ---
-# =============================================================================
-# USER STORY: Before/After Comparison
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: PROOF
-# @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-17T03:47:13Z
 
-id: US-203
-title: Visitor compares structured vs unstructured specifications
+id: US-303
+title: View the before/after comparison of specs vs. no specs
 
 acceptance_criteria:
-  - id: AC-203-1
-    title: Before/After comparison is present on the page
+  - id: AC-303-1
+    title: Comparison section renders with both panels accessible
     narrative: |
       Given I visit the site
-      When I scroll to the comparison section
-      Then I see the before and after comparison with real content
+      When I view the Before/After Comparison section
+      Then I see a toggle or slider to switch between the two panels
     given:
       - visit: '/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=comparison-section]' }
+      - shouldExist: { selector: '[data-test=comparison-toggle]' }
 
-  - id: AC-203-2
-    title: Visitor can toggle between before and after views
+  - id: AC-303-2
+    title: Toggling the comparison shows the RootSpec panel
     narrative: |
-      Given I see the comparison section
-      When I click the toggle to switch views
-      Then I see the alternate view
+      Given the comparison section defaults to the without-spec panel
+      When I click the toggle to switch to the with-rootspec panel
+      Then I see the RootSpec-structured content
     given:
       - visit: '/'
     when:
-      - click: { selector: '[data-test=comparison-toggle]' }
+      - click: { selector: '[data-test=comparison-toggle-rootspec]' }
     then:
-      - shouldExist: { selector: '[data-test=comparison-section]' }
+      - shouldExist: { selector: '[data-test=comparison-panel-rootspec][data-active=true]' }

@@ -1,33 +1,37 @@
 ---
-import '../styles/global.css';
-
 interface Props {
   title?: string;
+  description?: string;
 }
 
-const { title = 'RootSpec — Specification-First Development' } = Astro.props;
+const { title = 'RootSpec — Specification Methodology for AI-Assisted Development', description = 'RootSpec is a structured specification methodology that turns product ideas into validated, AI-ready specs.' } = Astro.props;
 ---
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <!-- Theme init: runs before first paint to prevent flash -->
+  <script is:inline>
+    (function() {
+      var stored = null;
+      try { stored = localStorage.getItem('rootspec-theme'); } catch(e) {}
+      var theme = stored || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+<body>
+  <span id="theme-indicator" data-theme="dark" style="display:none;" aria-hidden="true"></span>
+  <div id="theme-root" data-theme="dark">
     <slot />
-    <script>
-      // Theme init: read from localStorage or default to dark
-      const stored = localStorage.getItem('theme');
-      if (stored === 'light') {
-        document.documentElement.classList.remove('dark');
-      } else {
-        document.documentElement.classList.add('dark');
-      }
-    </script>
-  </body>
+  </div>
+</body>
 </html>

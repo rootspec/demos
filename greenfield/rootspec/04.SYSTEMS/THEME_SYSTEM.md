@@ -1,82 +1,64 @@
-# Theme System
-
-**References:** `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`, `SYSTEMS_OVERVIEW.md`
+# Level 4: Theme System
+# RootSpec Marketing Site
 
 ---
 
 ## Responsibility
 
-Manages visual mode (dark/light theme): detection of system preference, manual user toggle, and persistence of preference across sessions. This system is the single source of truth for current visual mode — no other system makes independent dark/light decisions.
+The Theme System manages dark/light mode state across the entire site. It is the single authority on which theme is active and how that preference is persisted and applied.
+
+---
+
+## Boundaries
+
+**Owns:**
+- Current theme state (`dark` | `light`)
+- Theme preference persistence (localStorage)
+- CSS custom property application on the document root
+- Initial theme resolution logic (localStorage → system preference → default)
+
+**Does not own:**
+- Visual design of each theme (colors, typography, shadows — defined in CSS)
+- Theme toggle UI element (→ Layout System owns placement; Presentation System owns animation)
+- Any user content or copy
 
 ---
 
 ## State
 
-| State Property | Type | Source | Persistence |
-|---------------|------|--------|-------------|
-| `currentMode` | enum: dark \| light | system preference OR user override | localStorage |
-| `userOverride` | boolean | manual toggle action | localStorage |
+### Theme State
+- `current_theme`: `dark` | `light`
+- `source`: `persisted` | `system` | `default`
 
-### State Transitions
-
-```
-Initial load:
-  userOverride=false → read system preference → set currentMode
-  userOverride=true  → read localStorage value → set currentMode (ignores system preference)
-
-Toggle action:
-  currentMode=dark  → currentMode=light, userOverride=true
-  currentMode=light → currentMode=dark,  userOverride=true
-```
+### Resolution Order (on page load)
+1. Read `localStorage` key `rootspec-theme`
+2. If not set, read `prefers-color-scheme` media query
+3. If unavailable, default to `dark`
 
 ---
 
-## Detection
+## Behavior
 
-- System preference: read via `prefers-color-scheme` media query
-- Preference changes (e.g., OS switches at sunset): optionally re-apply if no user override is set
-- Initial render: mode must be applied before first paint to prevent flash of wrong theme
+### Applying the theme
+When `current_theme` changes:
+1. Set `data-theme` attribute on the document root element
+2. CSS custom properties scoped to `[data-theme="dark"]` and `[data-theme="light"]` handle all visual changes
+3. No inline styles are set by this system — everything flows through CSS
 
----
+### Persisting the theme
+When the user manually toggles the theme:
+1. Update `current_theme`
+2. Write to `localStorage` key `rootspec-theme`
+3. Dispatch a DOM event so other systems can react (e.g., Presentation System plays transition)
 
-## Toggle
-
-- Visible toggle control available in site header or accessible location
-- Toggle must be keyboard accessible (focusable, activatable via Enter/Space)
-- Transition between modes: smooth fade rather than hard flash
-- Icon or label communicates current mode and what clicking will do
-
----
-
-## Persistence
-
-- Preference stored in localStorage under a stable key
-- Survives page reload and navigation
-- Cleared on explicit system-preference-only request (if implemented)
-- No server-side storage — client-side only
-
----
-
-## Integration
-
-All visual systems read theme state from this system. They do not:
-- Detect `prefers-color-scheme` themselves
-- Store their own theme preference
-- Apply hardcoded color values that ignore theme
-
-SVG elements in the methodology diagram must adapt to theme state.
+### Privacy / restricted environments
+If `localStorage` is unavailable (e.g., private browsing, storage denied), the system operates in memory only. Preference is not persisted. No error is surfaced to the user.
 
 ---
 
 ## Rules
 
-- Flash of wrong theme is a failure state — server-side or inline script must apply theme class before rendering
-- Theme toggle is an accessibility feature, not a cosmetic one — it must be reachable via keyboard
-- User autonomy is respected: if a user sets a preference, it persists until they change it
-
----
-
-## Interactions with Other Systems
-
-- Provides `currentMode` to: LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM
-- Receives: toggle events from LAYOUT_SYSTEM (header toggle control)
+- Theme must be applied before first paint — initialization runs synchronously in a `<script>` tag in the document `<head>` to prevent flash of incorrect theme
+- CSS custom properties are the only mechanism for applying theme — no JavaScript DOM manipulation of colors or backgrounds
+- Both themes must meet WCAG AA contrast requirements for all text on background combinations
+- Theme state is the only data persisted across sessions by any system on this site

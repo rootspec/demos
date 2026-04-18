@@ -1,55 +1,27 @@
 ---
-const skills = [
-  {
-    cmd: 'rs-init',
-    label: 'Initialize',
-    description: 'Bootstrap the spec structure and file hierarchy for your project.',
-    color: 'text-blue-500',
-  },
-  {
-    cmd: 'rs-spec',
-    label: 'Specify',
-    description: 'Translate a product description into a validated five-level specification.',
-    color: 'text-purple-500',
-  },
-  {
-    cmd: 'rs-impl',
-    label: 'Implement',
-    description: 'Generate working code from user stories, one acceptance criterion at a time.',
-    color: 'text-indigo-500',
-  },
-  {
-    cmd: 'rs-validate',
-    label: 'Validate',
-    description: 'Run tests, measure coverage, and produce a machine-readable quality report.',
-    color: 'text-green-500',
-  },
-];
 ---
 
-<section
-  id="how-it-works"
-  data-test="how-it-works"
-  class="py-20 px-4"
->
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-14">
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        Four skills. One coherent workflow.
-      </h2>
-      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-        RootSpec gives your AI agent a repeatable, structured process — from idea to shipping code.
-      </p>
-    </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {skills.map((skill, i) => (
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="text-gray-400 text-sm font-mono">0{i + 1}</span>
-            <span class={`font-mono font-bold ${skill.color}`}>{skill.cmd}</span>
-          </div>
-          <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{skill.label}</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400">{skill.description}</p>
+<section data-test="how-it-works-section" id="how-it-works" style="padding: 4rem 1.5rem; background-color: var(--bg-secondary);">
+  <div style="max-width: 1000px; margin: 0 auto;">
+    <h2 style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; color: var(--text-primary); text-align: center; margin: 0 0 1rem;">
+      How It Works
+    </h2>
+    <p style="text-align: center; color: var(--text-secondary); font-size: 1.05rem; margin: 0 0 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+      Four skills, one workflow. From idea to validated implementation in a structured, repeatable process.
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+      {[
+        { id: 'skill-init', icon: '🚀', name: '/rs-init', step: '01', title: 'Initialize', body: 'Scaffold the project structure and conventions file. Creates rootspec/ directory, scripts, and git hooks.' },
+        { id: 'skill-spec', icon: '📐', name: '/rs-spec', step: '02', title: 'Specify', body: 'Write the five-level specification from a SEED.md product description. Validates consistency across levels.' },
+        { id: 'skill-impl', icon: '⚙️', name: '/rs-impl', step: '03', title: 'Implement', body: 'Build features story by story, test-driven. Each story has acceptance criteria that must pass before moving on.' },
+        { id: 'skill-validate', icon: '✅', name: '/rs-validate', step: '04', title: 'Validate', body: 'Run the full validation suite — spec coverage, test results, build checks — and generate a structured report.' },
+      ].map(({ id, icon, name, step, title, body }) => (
+        <div data-test={id} style="background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.5rem; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 0.75rem; right: 1rem; font-size: 2.5rem; font-weight: 900; color: var(--border); line-height: 1;">{step}</div>
+          <div style="font-size: 1.75rem; margin-bottom: 0.75rem;">{icon}</div>
+          <code style="font-size: 0.8rem; color: var(--accent); font-weight: 600; background: transparent;">{name}</code>
+          <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0.25rem 0 0.5rem;">{title}</h3>
+          <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">{body}</p>
         </div>
       ))}
     </div>

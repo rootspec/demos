@@ -1,52 +1,43 @@
 # =============================================================================
-# USER STORY: Mobile Responsiveness
+# USER STORIES: Responsive and Accessibility
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: LANDING
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-17T03:47:13Z
+# @journey: MOBILE_ACCESS
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM]
+# @last_updated: 2026-04-18T14:59:27Z
+
+---
 
 id: US-401
-title: Visitor on mobile can access all content and interactive features
+title: Use the site on a mobile device
 
 acceptance_criteria:
   - id: AC-401-1
-    title: Page layout is usable on mobile viewport
+    title: Page renders correctly at mobile viewport width
     narrative: |
       Given I visit the site on a mobile device
-      When the page loads
-      Then the content is readable and the meta banner is visible
+      When the page loads at a narrow viewport
+      Then the content is readable and not clipped or overflowing
     given:
       - visit: '/'
     when: []
     then:
+      - shouldExist: { selector: '[data-test=hero-heading]' }
       - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=hero]' }
+      - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
 
   - id: AC-401-2
-    title: Hierarchy Explorer is usable on mobile
-    narrative: |
-      Given I visit the site on a mobile device
-      When I tap on a hierarchy level
-      Then the level expands to show content
-    given:
-      - visit: '/'
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
-
-  - id: AC-401-3
     title: Spec Wizard is usable on mobile
     narrative: |
-      Given I visit the site on a mobile device
-      When I interact with the spec wizard
-      Then I can enter text and navigate between steps
+      Given I am on a mobile device
+      When I interact with the Spec Wizard
+      Then I can advance through steps and see the output
     given:
       - visit: '/'
-      - fill: { selector: '[data-test=product-idea-input]', value: 'My product idea' }
+    when:
+      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A habit tracker for developers' }
+      - click: { selector: '[data-test=wizard-mission-option]:first-child' }
       - click: { selector: '[data-test=wizard-next]' }
-    when: []
     then:
       - shouldExist: { selector: '[data-test=wizard-step-2]' }

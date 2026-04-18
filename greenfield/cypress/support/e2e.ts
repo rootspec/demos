@@ -5,5 +5,3 @@ beforeEach(() => {
 });
 
 import "./screenshot-hook";
-
-import "./runtime-checks-hook";

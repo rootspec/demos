@@ -1,37 +1,36 @@
 ---
 ---
 
-<section
-  data-test="hero"
-  class="pt-24 pb-20 px-4 text-center max-w-4xl mx-auto"
->
-  <p
-    data-test="hero-tagline"
-    class="text-indigo-600 dark:text-indigo-400 font-mono text-sm font-semibold uppercase tracking-widest mb-4"
-  >
-    Specification-first development, done right
-  </p>
-  <h1 class="text-5xl sm:text-6xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-6 leading-tight">
-    Build software from<br />
-    <span class="text-indigo-600 dark:text-indigo-400">structured specs</span>
-  </h1>
-  <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-10">
-    RootSpec is an AI-native specification methodology that keeps your product vision, design, and implementation in sync — from idea to shipping code.
-  </p>
-  <div class="flex flex-col sm:flex-row gap-4 justify-center">
-    <a
-      href="https://github.com/rootspec"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+<section style="padding: 5rem 1.5rem 4rem; text-align: center; background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);">
+  <div style="max-width: 800px; margin: 0 auto;">
+    <h1
+      data-test="hero-heading"
+      style="font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.15; color: var(--text-primary); margin: 0 0 1.25rem;"
     >
-      Get Started on GitHub ↗
-    </a>
-    <a
-      href="#how-it-works"
-      class="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-700 hover:border-indigo-600 dark:hover:border-indigo-400 text-gray-700 dark:text-gray-300 font-semibold px-6 py-3 rounded-lg transition-colors"
+      Stop Guessing.<br />
+      <span style="color: var(--accent);">Spec It with RootSpec.</span>
+    </h1>
+    <p
+      data-test="hero-subheading"
+      style="font-size: clamp(1rem, 2vw, 1.25rem); color: var(--text-secondary); line-height: 1.7; margin: 0 0 2rem; max-width: 600px; margin-left: auto; margin-right: auto;"
     >
-      See How It Works
-    </a>
+      RootSpec is a structured specification methodology that turns product ideas into validated, AI-ready specs — so your development agent builds exactly what you mean.
+    </p>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <a
+        href="#cta"
+        style="background-color: var(--accent); color: white; padding: 0.75rem 2rem; border-radius: 0.5rem; font-weight: 600; font-size: 1rem; text-decoration: none; transition: background-color 200ms ease;"
+        onmouseover="this.style.backgroundColor='var(--accent-hover)'"
+        onmouseout="this.style.backgroundColor='var(--accent)'"
+      >
+        Get Started on GitHub
+      </a>
+      <a
+        href="#how-it-works"
+        style="background-color: var(--bg-card); color: var(--text-primary); padding: 0.75rem 2rem; border-radius: 0.5rem; font-weight: 600; font-size: 1rem; text-decoration: none; border: 1px solid var(--border); transition: border-color 200ms ease;"
+      >
+        See How It Works
+      </a>
+    </div>
   </div>
 </section>

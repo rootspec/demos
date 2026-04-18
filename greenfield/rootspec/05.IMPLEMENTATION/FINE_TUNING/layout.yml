@@ -1,50 +1,20 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Layout System
+# FINE-TUNING: Layout System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-17T03:47:13Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
-
-# -----------------------------------------------------------------------------
-# Responsive Breakpoints
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# @last_updated: 2026-04-18T14:59:27Z
+# @status: production
 
 breakpoints:
-  mobile_max_px: 767
-  # @rationale: Below 768px is canonical mobile; matches Tailwind md: breakpoint
-  # @constraints: min=480, max=767, type=integer
+  mobile_max:
+    value: 767
+    # @unit: pixels
+    # @rationale: Below this width, single-column layout and stacked interactive variants apply
+    # @constraint: min=480, max=900, type=integer
 
-  tablet_max_px: 1023
-  # @rationale: 768-1023px is tablet range; matches Tailwind lg: breakpoint
-  # @constraints: min=768, max=1023, type=integer
-
-  desktop_min_px: 1024
-  # @rationale: 1024px+ treated as desktop; generous enough for most laptops
-  # @constraints: min=1024, max=1280, type=integer
-
-  minimum_supported_px: 320
-  # @rationale: 320px is the narrowest common mobile viewport (iPhone SE)
-  # @inviolable: true
-  # @constraints: min=320, max=375, type=integer
-
-# -----------------------------------------------------------------------------
-# Presentation Timing
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/PRESENTATION_SYSTEM.md
-
-animations:
-  section_entrance_duration_ms: 400
-  # @rationale: Slow enough to be noticed, fast enough not to delay content access
-  # @alternatives: [300, 400, 600]
-  # @constraints: min=200, max=600, type=integer
-
-  section_entrance_offset_px: 24
-  # @rationale: Subtle upward motion; large enough to read as intentional, small enough not to distract
-  # @constraints: min=8, max=48, type=integer
-
-  intersection_threshold: 0.1
-  # @rationale: Trigger animation when 10% of section is visible — early enough to feel responsive
-  # @constraints: min=0.0, max=0.5, type=float
+  tablet_max:
+    value: 1023
+    # @unit: pixels
+    # @rationale: Standard tablet breakpoint; two-column layouts activate above mobile_max
+    # @constraint: min=768, max=1200, type=integer
