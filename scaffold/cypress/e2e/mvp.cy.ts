@@ -4,439 +4,555 @@ import type { UserStory } from '../support/schema';
 import { runSetupSteps, runAssertionSteps } from '../support/steps';
 
 function loadAndRun(yamlContent: string) {
-	const docs = yaml.loadAll(yamlContent) as UserStory[];
-	for (const doc of docs) {
-		if (!doc || !doc.id) continue;
-		const story = UserStorySchema.parse(doc);
-		const describeFn = story.skip ? describe.skip : story.only ? describe.only : describe;
-		describeFn(`${story.id}: ${story.title}`, () => {
-			for (const ac of story.acceptance_criteria) {
-				const itFn = ac.skip ? it.skip : ac.only ? it.only : it;
-				itFn(`${ac.id}: ${ac.title}`, () => {
-					if (ac.given) runSetupSteps(ac.given);
-					if (ac.when) runSetupSteps(ac.when);
-					if (ac.then) runAssertionSteps(ac.then);
-				});
-			}
-		});
-	}
+  const docs = yaml.loadAll(yamlContent) as UserStory[];
+  for (const doc of docs) {
+    if (!doc || !doc.id) continue;
+    const story = UserStorySchema.parse(doc);
+    const describeFn = story.skip ? describe.skip : story.only ? describe.only : describe;
+    describeFn(`${story.id}: ${story.title}`, () => {
+      for (const ac of story.acceptance_criteria) {
+        const itFn = ac.skip ? it.skip : ac.only ? it.only : it;
+        itFn(`${ac.id}: ${ac.title}`, () => {
+          if (ac.given) runSetupSteps(ac.given);
+          if (ac.when) runSetupSteps(ac.when);
+          if (ac.then) runAssertionSteps(ac.then);
+        });
+      }
+    });
+  }
 }
 
-// ============================================================================
-// FEED STORIES
-// ============================================================================
+// US-110: Explore trending tags
+const stories_110 = `
+id: US-110
+title: Explore trending tags
+acceptance_criteria:
+  - id: AC-110-1
+    title: Explore page displays trending tags
+    given:
+      - visit: /explore
+    then:
+      - shouldExist:
+          selector: '[data-test=tag-chip]'
+    when: []
+  - id: AC-110-2
+    title: Tags show their post count
+    given:
+      - visit: /explore
+    then:
+      - shouldExist:
+          selector: '[data-test=tag-post-count]'
+    when: []
+`;
+loadAndRun(stories_110);
 
-const feedStories = `
-id: US-001
-title: View home feed with posts and authors
+// US-111: Filter explore posts by tag
+const stories_111 = `
+id: US-111
+title: Filter explore posts by tag
 acceptance_criteria:
-  - id: AC-001-1
-    title: Feed displays posts
+  - id: AC-111-1
+    title: Clicking a tag filters the visible posts
     given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=post-item]' }
-  - id: AC-001-2
-    title: Posts show author display name
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=post-author]' }
-  - id: AC-001-3
-    title: Posts show like count
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=post-like-count]' }
----
-id: US-002
-title: Load more posts in feed
-acceptance_criteria:
-  - id: AC-002-1
-    title: Load more button is visible
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=load-more]' }
-  - id: AC-002-2
-    title: Clicking load more shows additional posts
-    given:
-      - visit: '/demos/scaffold/'
+      - visit: /explore
     when:
-      - click: { selector: '[data-test=load-more]' }
+      - click:
+          selector: '[data-test=tag-chip]'
     then:
-      - shouldExist: { selector: '[data-test=post-item]' }
----
-id: US-003
+      - shouldExist:
+          selector: '[data-test=filtered-posts]'
+  - id: AC-111-2
+    title: Active tag is visually indicated
+    given:
+      - visit: /explore
+    when:
+      - click:
+          selector: '[data-test=tag-chip]'
+    then:
+      - shouldExist:
+          selector: '[data-test=tag-chip][data-active=true]'
+  - id: AC-111-3
+    title: Clicking active tag clears the filter
+    given:
+      - visit: /explore
+    when:
+      - click:
+          selector: '[data-test=tag-chip]'
+      - click:
+          selector: '[data-test=tag-chip][data-active=true]'
+    then:
+      - shouldExist:
+          selector: '[data-test=popular-posts]'
+`;
+loadAndRun(stories_111);
+
+// US-112: Follow a user from the explore page
+const stories_112 = `
+id: US-112
+title: Follow a user from the explore page
+acceptance_criteria:
+  - id: AC-112-1
+    title: Explore page shows suggested users with follow buttons
+    given:
+      - visit: /explore
+    then:
+      - shouldExist:
+          selector: '[data-test=suggested-user]'
+      - shouldExist:
+          selector: '[data-test=follow-button]'
+    when: []
+  - id: AC-112-2
+    title: Following a user from explore updates the button
+    given:
+      - visit: /explore
+    when:
+      - click:
+          selector: '[data-test=follow-button]'
+    then:
+      - shouldContain:
+          selector: '[data-test=follow-button]'
+          text: Unfollow
+`;
+loadAndRun(stories_112);
+
+// US-101: View the home feed
+const stories_101 = `
+id: US-101
+title: View the home feed
+acceptance_criteria:
+  - id: AC-101-1
+    title: Home feed displays posts
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=post-item]'
+    when: []
+  - id: AC-101-2
+    title: Posts show author handle and display name
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=post-author-name]'
+      - shouldExist:
+          selector: '[data-test=post-author-handle]'
+    when: []
+  - id: AC-101-3
+    title: Posts show engagement counts
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=post-like-count]'
+      - shouldExist:
+          selector: '[data-test=post-repost-count]'
+    when: []
+`;
+loadAndRun(stories_101);
+
+// US-102: Like a post
+const stories_102 = `
+id: US-102
 title: Like a post
 acceptance_criteria:
-  - id: AC-003-1
-    title: Like button is present on posts
+  - id: AC-102-1
+    title: Like button toggles liked state
     given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=like-button]' }
-  - id: AC-003-2
-    title: Clicking like toggles active state
-    given:
-      - visit: '/demos/scaffold/'
+      - visit: /
     when:
-      - click: { selector: '[data-test=like-button]' }
+      - click:
+          selector: '[data-test=like-button]'
     then:
-      - shouldExist: { selector: '[data-test=like-button][data-liked=true]' }
----
-id: US-004
+      - shouldExist:
+          selector: '[data-test=like-button][data-liked=true]'
+  - id: AC-102-2
+    title: Like count increments when liked
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=like-button]'
+    then:
+      - shouldExist:
+          selector: '[data-test=post-like-count]'
+  - id: AC-102-3
+    title: Like toggles off when clicked again
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=like-button]'
+      - click:
+          selector: '[data-test=like-button]'
+    then:
+      - shouldExist:
+          selector: '[data-test=like-button][data-liked=false]'
+`;
+loadAndRun(stories_102);
+
+// US-103: Bookmark a post
+const stories_103 = `
+id: US-103
 title: Bookmark a post
 acceptance_criteria:
-  - id: AC-004-1
-    title: Bookmark button is present on posts
+  - id: AC-103-1
+    title: Bookmark button toggles bookmarked state
     given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=bookmark-button]' }
-  - id: AC-004-2
-    title: Clicking bookmark toggles active state
-    given:
-      - visit: '/demos/scaffold/'
+      - visit: /
     when:
-      - click: { selector: '[data-test=bookmark-button]' }
+      - click:
+          selector: '[data-test=bookmark-button]'
     then:
-      - shouldExist: { selector: '[data-test=bookmark-button][data-bookmarked=true]' }
----
-id: US-005
-title: Compose and submit a new post
+      - shouldExist:
+          selector: '[data-test=bookmark-button][data-bookmarked=true]'
+`;
+loadAndRun(stories_103);
+
+// US-104: Load more posts
+const stories_104 = `
+id: US-104
+title: Load more posts
 acceptance_criteria:
-  - id: AC-005-1
-    title: Post composer is accessible on home feed
+  - id: AC-104-1
+    title: Load more button exists when more posts are available
     given:
-      - visit: '/demos/scaffold/'
-    when: []
+      - visit: /
     then:
-      - shouldExist: { selector: '[data-test=composer]' }
-  - id: AC-005-2
+      - shouldExist:
+          selector: '[data-test=load-more-button]'
+    when: []
+  - id: AC-104-2
+    title: Clicking load more reveals additional posts
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=load-more-button]'
+    then:
+      - shouldExist:
+          selector: '[data-test=post-item]'
+`;
+loadAndRun(stories_104);
+
+// US-105: Compose and post a new message
+const stories_105 = `
+id: US-105
+title: Compose and post a new message
+acceptance_criteria:
+  - id: AC-105-1
+    title: Compose button opens the composer
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=compose-button]'
+    then:
+      - shouldExist:
+          selector: '[data-test=post-composer]'
+  - id: AC-105-2
     title: Submitting a post adds it to the feed
     given:
-      - visit: '/demos/scaffold/'
+      - visit: /
     when:
-      - fill: { selector: '[data-test=composer-input]', value: 'Hello from the composer' }
-      - click: { selector: '[data-test=composer-submit]' }
+      - click:
+          selector: '[data-test=compose-button]'
+      - fill:
+          selector: '[data-test=composer-input]'
+          value: Hello from the composer
+      - click:
+          selector: '[data-test=composer-submit]'
     then:
-      - shouldContain: { selector: '[data-test=post-item]', text: 'Hello from the composer' }
+      - shouldContain:
+          selector: '[data-test=post-item]'
+          text: Hello from the composer
 `;
-loadAndRun(feedStories);
+loadAndRun(stories_105);
 
-// ============================================================================
-// THREAD STORIES
-// ============================================================================
-
-const threadStories = `
-id: US-006
-title: View post detail with thread
-acceptance_criteria:
-  - id: AC-006-1
-    title: Post detail page shows post content
-    given:
-      - visit: '/demos/scaffold/post/p1'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=post-detail]' }
-      - shouldContain: { selector: '[data-test=post-detail]', text: 'CSS grid' }
-  - id: AC-006-2
-    title: Post detail shows replies when they exist
-    given:
-      - visit: '/demos/scaffold/post/p2'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=replies-section]' }
----
-id: US-017
-title: View post with parent context
-acceptance_criteria:
-  - id: AC-017-1
-    title: Reply post shows parent post above it
-    given:
-      - visit: '/demos/scaffold/post/p5'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=parent-post]' }
-`;
-loadAndRun(threadStories);
-
-// ============================================================================
-// PROFILE STORIES
-// ============================================================================
-
-const profileStories = `
-id: US-007
-title: View user profile
-acceptance_criteria:
-  - id: AC-007-1
-    title: Profile page shows user display name
-    given:
-      - visit: '/demos/scaffold/profile/devguru'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=profile-display-name]' }
-  - id: AC-007-2
-    title: Profile page shows user bio
-    given:
-      - visit: '/demos/scaffold/profile/devguru'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=profile-bio]' }
-  - id: AC-007-3
-    title: Profile page shows user posts
-    given:
-      - visit: '/demos/scaffold/profile/devguru'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=profile-post-item]' }
-  - id: AC-007-4
-    title: Profile page shows follower count
-    given:
-      - visit: '/demos/scaffold/profile/devguru'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=profile-follower-count]' }
----
-id: US-008
-title: Follow and unfollow a user
-acceptance_criteria:
-  - id: AC-008-1
-    title: Follow button is present on profile page
-    given:
-      - visit: '/demos/scaffold/profile/devguru'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=follow-button]' }
-  - id: AC-008-2
-    title: Clicking follow changes button to Unfollow
-    given:
-      - visit: '/demos/scaffold/profile/devguru'
-    when:
-      - click: { selector: '[data-test=follow-button]' }
-    then:
-      - shouldContain: { selector: '[data-test=follow-button]', text: 'Unfollow' }
-  - id: AC-008-3
-    title: Clicking unfollow returns button to Follow
-    given:
-      - visit: '/demos/scaffold/profile/devguru'
-    when:
-      - click: { selector: '[data-test=follow-button]' }
-      - click: { selector: '[data-test=follow-button]' }
-    then:
-      - shouldContain: { selector: '[data-test=follow-button]', text: 'Follow' }
-`;
-loadAndRun(profileStories);
-
-// ============================================================================
-// DISCOVERY STORIES
-// ============================================================================
-
-const discoveryStories = `
-id: US-009
-title: Explore trending tags and people
-acceptance_criteria:
-  - id: AC-009-1
-    title: Explore page shows trending tags
-    given:
-      - visit: '/demos/scaffold/explore'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=trending-tags]' }
-      - shouldExist: { selector: '[data-test=tag-chip]' }
-  - id: AC-009-2
-    title: Explore page shows suggested people
-    given:
-      - visit: '/demos/scaffold/explore'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=suggested-people]' }
-      - shouldExist: { selector: '[data-test=user-card]' }
----
-id: US-010
-title: Filter posts by tag on explore page
-acceptance_criteria:
-  - id: AC-010-1
-    title: Clicking a tag filters the posts section
-    given:
-      - visit: '/demos/scaffold/explore'
-    when:
-      - click: { selector: '[data-test=tag-chip]' }
-    then:
-      - shouldExist: { selector: '[data-test=tag-chip][data-active=true]' }
-      - shouldExist: { selector: '[data-test=explore-post-item]' }
----
-id: US-020
-title: Tag filter deselect returns all posts
-acceptance_criteria:
-  - id: AC-020-1
-    title: Clicking active tag deselects it and shows all posts
-    given:
-      - visit: '/demos/scaffold/explore'
-    when:
-      - click: { selector: '[data-test=tag-chip]' }
-      - click: { selector: '[data-test=tag-chip][data-active=true]' }
-    then:
-      - shouldExist: { selector: '[data-test=explore-post-item]' }
-`;
-loadAndRun(discoveryStories);
-
-// ============================================================================
-// SEARCH STORIES
-// ============================================================================
-
-const searchStories = `
-id: US-011
-title: Search posts by keyword
-acceptance_criteria:
-  - id: AC-011-1
-    title: Typing in search box shows matching posts
-    given:
-      - visit: '/demos/scaffold/search'
-    when:
-      - fill: { selector: '[data-test=search-input]', value: 'CSS' }
-    then:
-      - shouldExist: { selector: '[data-test=search-result]' }
-  - id: AC-011-2
-    title: Search results link to post detail
-    given:
-      - visit: '/demos/scaffold/search'
-    when:
-      - fill: { selector: '[data-test=search-input]', value: 'CSS' }
-    then:
-      - shouldExist: { selector: '[data-test=search-result] a' }
----
-id: US-018
-title: Search with no results shows message
-acceptance_criteria:
-  - id: AC-018-1
-    title: No-results message appears for unmatched query
-    given:
-      - visit: '/demos/scaffold/search'
-    when:
-      - fill: { selector: '[data-test=search-input]', value: 'zxqwerty12345notarealword' }
-    then:
-      - shouldExist: { selector: '[data-test=search-no-results]' }
----
-id: US-019
-title: Empty search shows no results
-acceptance_criteria:
-  - id: AC-019-1
-    title: Empty search box shows no result items
-    given:
-      - visit: '/demos/scaffold/search'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=search-input]' }
-`;
-loadAndRun(searchStories);
-
-// ============================================================================
-// THEME STORIES
-// ============================================================================
-
-const themeStories = `
-id: US-012
+// US-113: Toggle dark/light theme
+const stories_113 = `
+id: US-113
 title: Toggle dark/light theme
 acceptance_criteria:
-  - id: AC-012-1
-    title: Theme toggle button is present in nav
+  - id: AC-113-1
+    title: Theme toggle button is visible in the header
     given:
-      - visit: '/demos/scaffold/'
-    when: []
+      - visit: /
     then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
-  - id: AC-012-2
-    title: Clicking theme toggle switches the theme
+      - shouldExist:
+          selector: '[data-test=theme-toggle]'
+    when: []
+  - id: AC-113-2
+    title: Clicking the theme toggle switches the active theme
     given:
-      - visit: '/demos/scaffold/'
+      - visit: /
     when:
-      - click: { selector: '[data-test=theme-toggle]' }
+      - click:
+          selector: '[data-test=theme-toggle]'
     then:
-      - shouldExist: { selector: 'html[data-theme]' }
+      - shouldExist:
+          selector: '[data-test=theme-toggle]'
 `;
-loadAndRun(themeStories);
+loadAndRun(stories_113);
 
-// ============================================================================
-// META / VIEW STORIES
-// ============================================================================
-
-const metaStories = `
-id: US-013
-title: See meta-banner with RootSpec links
+// US-114: See the meta banner on every page
+const stories_114 = `
+id: US-114
+title: See the meta banner on every page
 acceptance_criteria:
-  - id: AC-013-1
-    title: Meta-banner is visible on home page
+  - id: AC-114-1
+    title: Meta banner is visible on the home feed
     given:
-      - visit: '/demos/scaffold/'
-    when: []
+      - visit: /
     then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldContain: { selector: '[data-test=meta-banner]', text: 'RootSpec' }
-  - id: AC-013-2
-    title: Meta-banner contains scaffold commit link
+      - shouldExist:
+          selector: '[data-test=meta-banner]'
+    when: []
+  - id: AC-114-2
+    title: Meta banner contains links to spec and seed
     given:
-      - visit: '/demos/scaffold/'
-    when: []
+      - visit: /
     then:
-      - shouldExist: { selector: '[data-test=meta-banner-scaffold-link]' }
-  - id: AC-013-3
-    title: Meta-banner contains spec link
+      - shouldExist:
+          selector: '[data-test=meta-banner-spec-link]'
+      - shouldExist:
+          selector: '[data-test=meta-banner-seed-link]'
+    when: []
+  - id: AC-114-3
+    title: Meta banner is visible on the explore page
     given:
-      - visit: '/demos/scaffold/'
-    when: []
+      - visit: /explore
     then:
-      - shouldExist: { selector: '[data-test=meta-banner-spec-link]' }
-  - id: AC-013-4
-    title: Meta-banner contains seed link
+      - shouldExist:
+          selector: '[data-test=meta-banner]'
+    when: []
+  - id: AC-114-4
+    title: Meta banner is visible on the search page
     given:
-      - visit: '/demos/scaffold/'
-    when: []
+      - visit: /search
     then:
-      - shouldExist: { selector: '[data-test=meta-banner-seed-link]' }
----
-id: US-014
-title: Navigate between routes
-acceptance_criteria:
-  - id: AC-014-1
-    title: Nav links are present on home page
-    given:
-      - visit: '/demos/scaffold/'
+      - shouldExist:
+          selector: '[data-test=meta-banner]'
     when: []
-    then:
-      - shouldExist: { selector: '[data-test=nav-home]' }
-      - shouldExist: { selector: '[data-test=nav-explore]' }
-      - shouldExist: { selector: '[data-test=nav-search]' }
----
-id: US-015
-title: See RootSpec version in header
-acceptance_criteria:
-  - id: AC-015-1
-    title: RootSpec version badge visible in nav
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=rootspec-version]' }
-      - shouldContain: { selector: '[data-test=rootspec-version]', text: 'v7.2.7' }
----
-id: US-016
-title: See footer with attribution
-acceptance_criteria:
-  - id: AC-016-1
-    title: Footer contains RootSpec attribution
-    given:
-      - visit: '/demos/scaffold/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=footer]' }
-      - shouldContain: { selector: '[data-test=footer]', text: 'RootSpec' }
 `;
-loadAndRun(metaStories);
+loadAndRun(stories_114);
+
+// US-115: Navigate using the primary nav
+const stories_115 = `
+id: US-115
+title: Navigate using the primary nav
+acceptance_criteria:
+  - id: AC-115-1
+    title: Nav shows RootFeed brand and version
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=nav-brand]'
+      - shouldExist:
+          selector: '[data-test=nav-version]'
+    when: []
+  - id: AC-115-2
+    title: Nav links to Home, Explore, and Search
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=nav-home]'
+      - shouldExist:
+          selector: '[data-test=nav-explore]'
+      - shouldExist:
+          selector: '[data-test=nav-search]'
+    when: []
+  - id: AC-115-3
+    title: Footer shows RootSpec attribution
+    given:
+      - visit: /
+    then:
+      - shouldExist:
+          selector: '[data-test=footer]'
+      - shouldExist:
+          selector: '[data-test=footer-attribution]'
+    when: []
+`;
+loadAndRun(stories_115);
+
+// US-106: Navigate to a user profile
+const stories_106 = `
+id: US-106
+title: Navigate to a user profile
+acceptance_criteria:
+  - id: AC-106-1
+    title: Clicking an author name navigates to their profile
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=post-author-name]'
+    then:
+      - shouldExist:
+          selector: '[data-test=profile-display-name]'
+  - id: AC-106-2
+    title: Profile page shows user bio and follow counts
+    given:
+      - visit: /profile/alice.dev
+    then:
+      - shouldExist:
+          selector: '[data-test=profile-bio]'
+      - shouldExist:
+          selector: '[data-test=profile-follower-count]'
+      - shouldExist:
+          selector: '[data-test=profile-following-count]'
+    when: []
+  - id: AC-106-3
+    title: Profile page shows user posts
+    given:
+      - visit: /profile/alice.dev
+    then:
+      - shouldExist:
+          selector: '[data-test=post-item]'
+    when: []
+`;
+loadAndRun(stories_106);
+
+// US-107: Follow and unfollow a user
+const stories_107 = `
+id: US-107
+title: Follow and unfollow a user
+acceptance_criteria:
+  - id: AC-107-1
+    title: Follow button appears on profile pages
+    given:
+      - visit: /profile/alice.dev
+    then:
+      - shouldExist:
+          selector: '[data-test=follow-button]'
+    when: []
+  - id: AC-107-2
+    title: Clicking follow changes button to unfollow
+    given:
+      - visit: /profile/alice.dev
+    when:
+      - click:
+          selector: '[data-test=follow-button]'
+    then:
+      - shouldContain:
+          selector: '[data-test=follow-button]'
+          text: Unfollow
+  - id: AC-107-3
+    title: Following a user increments their follower count
+    given:
+      - visit: /profile/alice.dev
+    when:
+      - click:
+          selector: '[data-test=follow-button]'
+    then:
+      - shouldExist:
+          selector: '[data-test=profile-follower-count]'
+  - id: AC-107-4
+    title: Clicking unfollow returns button to follow state
+    given:
+      - visit: /profile/alice.dev
+    when:
+      - click:
+          selector: '[data-test=follow-button]'
+      - click:
+          selector: '[data-test=follow-button]'
+    then:
+      - shouldContain:
+          selector: '[data-test=follow-button]'
+          text: Follow
+`;
+loadAndRun(stories_107);
+
+// US-109: Search posts by keyword
+const stories_109 = `
+id: US-109
+title: Search posts by keyword
+acceptance_criteria:
+  - id: AC-109-1
+    title: Search page has a text input
+    given:
+      - visit: /search
+    then:
+      - shouldExist:
+          selector: '[data-test=search-input]'
+    when: []
+  - id: AC-109-2
+    title: Typing a query shows matching posts
+    given:
+      - visit: /search
+    when:
+      - fill:
+          selector: '[data-test=search-input]'
+          value: kubernetes
+    then:
+      - shouldExist:
+          selector: '[data-test=search-result]'
+  - id: AC-109-3
+    title: No results message shown for unmatched query
+    given:
+      - visit: /search
+    when:
+      - fill:
+          selector: '[data-test=search-input]'
+          value: xyzzy-no-match-9999
+    then:
+      - shouldExist:
+          selector: '[data-test=search-empty]'
+  - id: AC-109-4
+    title: Empty query shows no results
+    given:
+      - visit: /search
+    then:
+      - shouldExist:
+          selector: '[data-test=search-empty-default]'
+    when: []
+`;
+loadAndRun(stories_109);
+
+// US-108: View a post thread
+const stories_108 = `
+id: US-108
+title: View a post thread
+acceptance_criteria:
+  - id: AC-108-1
+    title: Clicking a post navigates to its detail view
+    given:
+      - visit: /
+    when:
+      - click:
+          selector: '[data-test=post-link]'
+    then:
+      - shouldExist:
+          selector: '[data-test=post-detail]'
+  - id: AC-108-2
+    title: Post detail shows author, content, and engagement
+    given:
+      - visit: /post/p1
+    then:
+      - shouldExist:
+          selector: '[data-test=post-detail-content]'
+      - shouldExist:
+          selector: '[data-test=post-author-name]'
+      - shouldExist:
+          selector: '[data-test=post-like-count]'
+    when: []
+  - id: AC-108-3
+    title: Post thread shows replies
+    given:
+      - visit: /post/p1
+    then:
+      - shouldExist:
+          selector: '[data-test=post-replies]'
+    when: []
+  - id: AC-108-4
+    title: Reply post shows parent context
+    given:
+      - visit: /post/p9
+    then:
+      - shouldExist:
+          selector: '[data-test=parent-post]'
+    when: []
+`;
+loadAndRun(stories_108);

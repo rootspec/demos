@@ -1,10 +1,10 @@
 {
   "runs": [
     {
-      "runId": "870836b1",
-      "startedAt": "2026-04-14T22:18:34.243Z",
-      "completedAt": "2026-04-14T22:34:02.573Z",
-      "totalCostUsd": 3.2,
+      "runId": "c01bdb39",
+      "startedAt": "2026-04-18T18:18:22.996Z",
+      "completedAt": "2026-04-18T18:37:13.900Z",
+      "totalCostUsd": 3.62,
       "phases": {
         "init": {
           "status": "success",
@@ -14,24 +14,34 @@
         },
         "spec": {
           "status": "success",
-          "costUsd": 1.47,
-          "turns": 54,
-          "durationSeconds": 354
+          "costUsd": 1.68,
+          "turns": 65,
+          "durationSeconds": 473
         },
         "impl": {
           "status": "success",
-          "costUsd": 1.36,
-          "turns": 48,
-          "durationSeconds": 454
+          "costUsd": 1.45,
+          "turns": 77,
+          "durationSeconds": 443
         },
         "validate": {
           "status": "success",
-          "costUsd": 0.36,
-          "turns": 19,
-          "durationSeconds": 116
+          "costUsd": 0.49,
+          "turns": 35,
+          "durationSeconds": 206
+        },
+        "review": {
+          "status": "success",
+          "costUsd": 0,
+          "turns": 0,
+          "durationSeconds": 0
         }
       },
-      "qualityScore": null
+      "review": {
+        "staticBlockers": 1,
+        "staticWarnings": 0,
+        "llmAssessment": "skipped"
+      }
     }
   ]
 }

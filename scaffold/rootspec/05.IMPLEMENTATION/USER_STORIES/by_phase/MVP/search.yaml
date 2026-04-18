@@ -1,133 +1,64 @@
 # =============================================================================
-# USER STORY: Search posts by keyword
+# USER STORIES: Search
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: SEARCH
-# @systems: [DISCOVERY_SYSTEM, DATA_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @systems: [DISCOVERY_SYSTEM, VIEW_SYSTEM]
+# @last_updated: 2026-04-18T18:18:27Z
 
-id: US-011
+---
+
+id: US-109
 title: Search posts by keyword
 
 acceptance_criteria:
-  - id: AC-011-1
-    title: Typing in search box shows matching posts
+  - id: AC-109-1
+    title: Search page has a text input
     narrative: |
       Given I visit the search page
-      When I type a keyword into the search box
-      Then I should see posts containing that keyword
+      When the page loads
+      Then I see a search input field
     given:
-      - visit: '/demos/scaffold/search'
-    when:
-      - fill: { selector: '[data-test=search-input]', value: 'CSS' }
-    then:
-      - shouldExist: { selector: '[data-test=search-result]' }
-
-  - id: AC-011-2
-    title: Search results link to post detail
-    narrative: |
-      Given I have typed a search query with results
-      When the results appear
-      Then each result should be a link to the post detail page
-    given:
-      - visit: '/demos/scaffold/search'
-    when:
-      - fill: { selector: '[data-test=search-input]', value: 'CSS' }
-    then:
-      - shouldExist: { selector: '[data-test=search-result] a' }
-
----
-
-# =============================================================================
-# USER STORY: Search with no results shows message
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: SEARCH
-# @systems: [DISCOVERY_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
-
-id: US-018
-title: Search with no results shows message
-
-acceptance_criteria:
-  - id: AC-018-1
-    title: No-results message appears for unmatched query
-    narrative: |
-      Given I visit the search page
-      When I type a query that matches no posts
-      Then I should see a no-results message
-    given:
-      - visit: '/demos/scaffold/search'
-    when:
-      - fill: { selector: '[data-test=search-input]', value: 'zxqwerty12345notarealword' }
-    then:
-      - shouldExist: { selector: '[data-test=search-no-results]' }
-
----
-
-# =============================================================================
-# USER STORY: Empty search shows no results
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: SEARCH
-# @systems: [DISCOVERY_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
-
-id: US-019
-title: Empty search shows no results
-
-acceptance_criteria:
-  - id: AC-019-1
-    title: Empty search box shows no result items
-    narrative: |
-      Given I visit the search page
-      When I have not typed anything
-      Then no search results should be shown
-    given:
-      - visit: '/demos/scaffold/search'
+      - visit: '/search'
     when: []
     then:
       - shouldExist: { selector: '[data-test=search-input]' }
 
----
-
-# =============================================================================
-# USER STORY: Toggle dark/light theme
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: INTERACTIVE_EXPLORATION
-# @systems: [THEME_SYSTEM, VIEW_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
-
-id: US-012
-title: Toggle dark/light theme
-
-acceptance_criteria:
-  - id: AC-012-1
-    title: Theme toggle button is present in nav
+  - id: AC-109-2
+    title: Typing a query shows matching posts
     narrative: |
-      Given I visit the home feed
-      When the page loads
-      Then I should see a theme toggle button in the navigation
+      Given I am on the search page
+      When I type a keyword that exists in a post
+      Then matching posts appear in the results
     given:
-      - visit: '/demos/scaffold/'
+      - visit: '/search'
+    when:
+      - fill: { selector: '[data-test=search-input]', value: 'kubernetes' }
+    then:
+      - shouldExist: { selector: '[data-test=search-result]' }
+
+  - id: AC-109-3
+    title: No results message shown for unmatched query
+    narrative: |
+      Given I am on the search page
+      When I type a query that matches no posts
+      Then a no results message is shown
+    given:
+      - visit: '/search'
+    when:
+      - fill: { selector: '[data-test=search-input]', value: 'xyzzy-no-match-9999' }
+    then:
+      - shouldExist: { selector: '[data-test=search-empty]' }
+
+  - id: AC-109-4
+    title: Empty query shows no results
+    narrative: |
+      Given I am on the search page
+      When the input is empty
+      Then no results are shown
+    given:
+      - visit: '/search'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
-
-  - id: AC-012-2
-    title: Clicking theme toggle switches the theme
-    narrative: |
-      Given I visit the home feed
-      When I click the theme toggle button
-      Then the page should switch to the other theme
-    given:
-      - visit: '/demos/scaffold/'
-    when:
-      - click: { selector: '[data-test=theme-toggle]' }
-    then:
-      - shouldExist: { selector: 'html[data-theme]' }
+      - shouldExist: { selector: '[data-test=search-empty-default]' }

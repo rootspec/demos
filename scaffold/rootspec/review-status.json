@@ -1,0 +1,27 @@
+{
+  "lastReview": "2026-04-18T18:37:13.898Z",
+  "status": "fail",
+  "summary": {
+    "staticBlockers": 1,
+    "staticWarnings": 0,
+    "staticNitpicks": 0,
+    "pagesScanned": 42
+  },
+  "issues": [
+    {
+      "severity": "blocker",
+      "category": "deploy_path",
+      "file": "build/explore.html",
+      "excerpt": "Found \"/_app/\" without \"/demos/scaffold/\" prefix",
+      "message": "Asset references use root paths but SEED.md declares deploy path \"/demos/scaffold/\" — framework base path config likely missing",
+      "id": "REV-001"
+    }
+  ],
+  "llmInputs": {
+    "screenshots": [
+      "cypress/screenshots/mvp.cy.ts/US-101--AC-101-1.png",
+      "cypress/screenshots/mvp.cy.ts/US-102--AC-102-1.png",
+      "cypress/screenshots/mvp.cy.ts/US-103--AC-103-1.png"
+    ]
+  }
+}
