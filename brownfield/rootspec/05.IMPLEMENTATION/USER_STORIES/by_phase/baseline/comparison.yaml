@@ -1,113 +1,99 @@
 # =============================================================================
-# USER STORY: Compare Cities
+# USER STORY: City Comparison
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: baseline
-# @journey: DASHBOARD_AND_COMPARE
-# @systems: [VIEW_SYSTEM, WEATHER_SYSTEM, LOCATION_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @journey: COMPARISON_VIEW
+# @systems: [COMPARISON_SYSTEM, WEATHER_SYSTEM]
+# @last_updated: 2026-04-18T00:00:00Z
 
-id: US-019
-title: Compare weather for multiple cities side by side
+id: US-014
+title: Compare two or more cities side by side
 
 acceptance_criteria:
-  - id: AC-019-1
-    title: Compare button appears in dashboard when 2+ favorites exist
+  - id: AC-014-1
+    title: Entering compare mode shows city selection affordance
     narrative: |
-      Given I have two or more saved locations
-      When I open the dashboard view
-      Then I see a Compare button
+      Given I have 2 or more saved locations and am on the dashboard
+      When I click the Compare button
+      Then I should see compare-mode cards with selection affordance
     given:
-      - visit: '/'
+      - visit: '/demos/brownfield/'
     when:
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Madrid' }
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Copenhagen' }
       - click: { selector: 'ul li:first-child' }
       - click: { selector: '.save-btn' }
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Lisbon' }
-      - click: { selector: 'ul li:first-child' }
-      - click: { selector: '.save-btn' }
-      - click: { selector: '.view-btn:last-child' }
-    then:
-      - shouldExist: { selector: '.compare-btn' }
-
-  - id: AC-019-2
-    title: Selecting 2 cities from compare mode triggers comparison view
-    narrative: |
-      Given I am in compare mode in the dashboard
-      When I select two location cards
-      Then the comparison view appears with both cities as columns
-    given:
-      - visit: '/'
-    when:
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Madrid' }
-      - click: { selector: 'ul li:first-child' }
-      - click: { selector: '.save-btn' }
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Lisbon' }
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Stockholm' }
       - click: { selector: 'ul li:first-child' }
       - click: { selector: '.save-btn' }
       - click: { selector: '.view-btn:last-child' }
       - click: { selector: '.compare-btn' }
-      - click: { selector: '[data-testid="compare-card"]:first-child' }
-      - click: { selector: '[data-testid="compare-card"]:last-child' }
+    then:
+      - shouldExist: { selector: '[data-testid="compare-card"]' }
+
+  - id: AC-014-2
+    title: Selecting 2 cities auto-transitions to comparison view
+    narrative: |
+      Given I am in compare mode with cards visible
+      When I click 2 city cards
+      Then I should see the comparison view with columns for each city
+    given:
+      - visit: '/demos/brownfield/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Copenhagen' }
+      - click: { selector: 'ul li:first-child' }
+      - click: { selector: '.save-btn' }
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Stockholm' }
+      - click: { selector: 'ul li:first-child' }
+      - click: { selector: '.save-btn' }
+      - click: { selector: '.view-btn:last-child' }
+      - click: { selector: '.compare-btn' }
+      - click: { selector: '[data-testid="compare-card"]:nth-child(1)' }
+      - click: { selector: '[data-testid="compare-card"]:nth-child(2)' }
     then:
       - shouldExist: { selector: '.comparison-view' }
+
+  - id: AC-014-3
+    title: Comparison view shows columns for each city
+    narrative: |
+      Given I am in the comparison view with 2 cities
+      When I view the comparison layout
+      Then I should see individual columns for each compared city
+    given:
+      - visit: '/demos/brownfield/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Copenhagen' }
+      - click: { selector: 'ul li:first-child' }
+      - click: { selector: '.save-btn' }
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Stockholm' }
+      - click: { selector: 'ul li:first-child' }
+      - click: { selector: '.save-btn' }
+      - click: { selector: '.view-btn:last-child' }
+      - click: { selector: '.compare-btn' }
+      - click: { selector: '[data-testid="compare-card"]:nth-child(1)' }
+      - click: { selector: '[data-testid="compare-card"]:nth-child(2)' }
+    then:
       - shouldExist: { selector: '[data-testid="comparison-column"]' }
 
-  - id: AC-019-3
+  - id: AC-014-4
     title: Back to Dashboard button returns to dashboard view
     narrative: |
       Given I am in the comparison view
-      When I click Back to Dashboard
-      Then I see the dashboard view again
+      When I click "Back to Dashboard"
+      Then I should return to the dashboard view
     given:
-      - visit: '/'
+      - visit: '/demos/brownfield/'
     when:
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Madrid' }
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Copenhagen' }
       - click: { selector: 'ul li:first-child' }
       - click: { selector: '.save-btn' }
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Lisbon' }
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Stockholm' }
       - click: { selector: 'ul li:first-child' }
       - click: { selector: '.save-btn' }
       - click: { selector: '.view-btn:last-child' }
       - click: { selector: '.compare-btn' }
-      - click: { selector: '[data-testid="compare-card"]:first-child' }
-      - click: { selector: '[data-testid="compare-card"]:last-child' }
+      - click: { selector: '[data-testid="compare-card"]:nth-child(1)' }
+      - click: { selector: '[data-testid="compare-card"]:nth-child(2)' }
       - click: { selector: '.back-to-dashboard' }
     then:
       - shouldContain: { selector: 'h3', text: 'All Locations' }
-
----
-# =============================================================================
-# USER STORY: Remove City from Comparison
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: baseline
-# @journey: DASHBOARD_AND_COMPARE
-# @systems: [VIEW_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
-
-id: US-020
-title: Remove a city from the comparison view
-
-acceptance_criteria:
-  - id: AC-020-1
-    title: Each comparison column has a remove button
-    narrative: |
-      Given I am in the comparison view with multiple cities
-      When I look at each column
-      Then I see a remove button for each city
-    given:
-      - visit: '/'
-    when:
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Madrid' }
-      - click: { selector: 'ul li:first-child' }
-      - click: { selector: '.save-btn' }
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Lisbon' }
-      - click: { selector: 'ul li:first-child' }
-      - click: { selector: '.save-btn' }
-      - click: { selector: '.view-btn:last-child' }
-      - click: { selector: '.compare-btn' }
-      - click: { selector: '[data-testid="compare-card"]:first-child' }
-      - click: { selector: '[data-testid="compare-card"]:last-child' }
-    then:
-      - shouldExist: { selector: '[data-testid="comparison-remove"]' }

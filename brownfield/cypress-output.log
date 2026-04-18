@@ -1,4 +1,4 @@
-Dev server already running (PID 45753)
+Dev server already running (PID 60838)
 [35m[95mWarning:[39m[35m The [33mallowCypressEnv[39m[35m configuration option is enabled. This allows any browser code to read values from [33mCypress.env()[39m[35m. This is insecure and will be removed in a future major version.[39m
 [35m[39m
 [35m1. Replace [33mCypress.env()[39m[35m calls with [33mcy.env()[39m[35m (for sensitive values) or [33mCypress.expose()[39m[35m (for public configuration)[39m
@@ -25,115 +25,137 @@ Dev server already running (PID 45753)
   Running:  [90mmvp.cy.ts[39m                                                                       [90m(1 of 1)[39m
 
 [0m[0m
-[0m  US-019: Compare weather for multiple cities side by side[0m
-    [33m(Attempt 1 of 3)[0m AC-019-1: Compare button appears in dashboard when 2+ favorites exist
-    [33m(Attempt 2 of 3)[0m AC-019-1: Compare button appears in dashboard when 2+ favorites exist
-  [32m  ✓[0m[90m AC-019-1: Compare button appears in dashboard when 2+ favorites exist[0m[90m (3129ms)[0m
-  [32m  ✓[0m[90m AC-019-2: Selecting 2 cities from compare mode triggers comparison view[0m[90m (2443ms)[0m
-  [32m  ✓[0m[90m AC-019-3: Back to Dashboard button returns to dashboard view[0m[90m (2742ms)[0m
+[0m  US-014: Compare two or more cities side by side[0m
+  [32m  ✓[0m[90m AC-014-1: Entering compare mode shows city selection affordance[0m[90m (4297ms)[0m
+  [32m  ✓[0m[90m AC-014-2: Selecting 2 cities auto-transitions to comparison view[0m[90m (2629ms)[0m
+    [33m(Attempt 1 of 3)[0m AC-014-3: Comparison view shows columns for each city
+  [32m  ✓[0m[90m AC-014-3: Comparison view shows columns for each city[0m[90m (3594ms)[0m
+  [32m  ✓[0m[90m AC-014-4: Back to Dashboard button returns to dashboard view[0m[90m (3018ms)[0m
 
-[0m  US-020: Remove a city from the comparison view[0m
-  [32m  ✓[0m[90m AC-020-1: Each comparison column has a remove button[0m[90m (2476ms)[0m
+[0m  US-013: View all saved locations on dashboard[0m
+  [32m  ✓[0m[90m AC-013-1: Dashboard tab appears when favorites exist[0m[90m (1126ms)[0m
+  [32m  ✓[0m[90m AC-013-2: Clicking Dashboard tab shows locations grid[0m[90m (1352ms)[0m
+  [32m  ✓[0m[90m AC-013-3: Compare button appears in dashboard when 2+ favorites exist[0m[90m (2302ms)[0m
 
-[0m  US-016: View all saved locations in dashboard[0m
-  [32m  ✓[0m[90m AC-016-1: View toggle appears when favorites exist[0m[90m (1072ms)[0m
-  [32m  ✓[0m[90m AC-016-2: Dashboard view shows all locations header[0m[90m (1280ms)[0m
+[0m  US-002: Save a location to favorites[0m
+  [32m  ✓[0m[90m AC-002-1: Save button appears after selecting a city not yet in favorites[0m[90m (1032ms)[0m
+  [32m  ✓[0m[90m AC-002-2: Saved city appears in favorites bar[0m[90m (1105ms)[0m
 
-[0m  US-009: Navigate between saved locations[0m
-  [32m  ✓[0m[90m AC-009-1: Saved Locations heading is displayed when locations are saved[0m[90m (1120ms)[0m
-  [32m  ✓[0m[90m AC-009-2: Clicking a favorite chip updates the weather view[0m[90m (1222ms)[0m
+[0m  US-003: Switch between saved locations[0m
+  [32m  ✓[0m[90m AC-003-1: Clicking a favorites chip loads that city's weather[0m[90m (1165ms)[0m
 
-[0m  US-010: Remove a city from favorites[0m
-  [32m  ✓[0m[90m AC-010-1: Remove span is visible inside each favorite chip button[0m[90m (1088ms)[0m
+[0m  US-004: Remove a location from favorites[0m
+  [32m  ✓[0m[90m AC-004-1: Clicking the remove button on a chip removes the city[0m[90m (1191ms)[0m
 
-[0m  US-001: Search for a city by name[0m
-  [32m  ✓[0m[90m AC-001-1: Search input is present on load[0m[90m (147ms)[0m
-  [32m  ✓[0m[90m AC-001-2: Typing triggers city suggestions[0m[90m (826ms)[0m
-  [32m  ✓[0m[90m AC-001-3: Selecting a city loads the weather view[0m[90m (1008ms)[0m
+[0m  US-001: Search for a city and see weather[0m
+  [32m  ✓[0m[90m AC-001-1: Search input is visible on load[0m[90m (229ms)[0m
+  [32m  ✓[0m[90m AC-001-2: Typing a city name shows dropdown results[0m[90m (973ms)[0m
+  [32m  ✓[0m[90m AC-001-3: Selecting a city shows weather[0m[90m (1142ms)[0m
+  [32m  ✓[0m[90m AC-001-4: Empty state shown before any city is selected[0m[90m (268ms)[0m
 
-[0m  US-013: Change temperature unit[0m
-  [32m  ✓[0m[90m AC-013-1: Settings panel can be opened via the Settings button[0m[90m (217ms)[0m
-  [32m  ✓[0m[90m AC-013-2: Temperature unit buttons are visible in settings[0m[90m (226ms)[0m
+[0m  US-009: Change temperature unit[0m
+  [32m  ✓[0m[90m AC-009-1: Settings panel opens on button click[0m[90m (311ms)[0m
+  [32m  ✓[0m[90m AC-009-2: Temperature unit buttons are visible in settings[0m[90m (305ms)[0m
 
-[0m  US-014: Change wind speed unit and time format[0m
-  [32m  ✓[0m[90m AC-014-1: Wind speed and time format options are visible in settings[0m[90m (223ms)[0m
+[0m  US-010: Change wind unit[0m
+  [32m  ✓[0m[90m AC-010-1: Wind unit buttons are visible in settings panel[0m[90m (310ms)[0m
 
-[0m  US-005: View current weather conditions for a city[0m
-  [32m  ✓[0m[90m AC-005-1: Actions area appears after selecting a city and weather loads[0m[90m (1040ms)[0m
-  [32m  ✓[0m[90m AC-005-2: Empty state shown when no city selected[0m[90m (145ms)[0m
+[0m  US-011: Change time format[0m
+  [32m  ✓[0m[90m AC-011-1: Time format buttons are visible in settings panel[0m[90m (309ms)[0m
 
-[0m  US-006: Save a location to favorites[0m
-  [32m  ✓[0m[90m AC-006-1: Save button appears after selecting a new city[0m[90m (989ms)[0m
-  [32m  ✓[0m[90m AC-006-2: Saved Locations heading appears after saving[0m[90m (1068ms)[0m
+[0m  US-012: Set a default city[0m
+  [32m  ✓[0m[90m AC-012-1: Default city dropdown appears in settings when favorites exist[0m[90m (1171ms)[0m
+
+[0m  US-005: See current conditions[0m
+  [32m  ✓[0m[90m AC-005-1: Current weather card shows city name and temperature[0m[90m (1161ms)[0m
+  [32m  ✓[0m[90m AC-005-2: Current weather card shows humidity, wind, and UV[0m[90m (1173ms)[0m
+
+[0m  US-006: See hourly forecast[0m
+  [32m  ✓[0m[90m AC-006-1: Hourly forecast strip is visible after city selection[0m[90m (1150ms)[0m
+
+[0m  US-007: See 7-day forecast[0m
+  [32m  ✓[0m[90m AC-007-1: 7-day forecast chart is visible after city selection[0m[90m (1123ms)[0m
+
+[0m  US-008: See condition alerts[0m
+  [32m  ✓[0m[90m AC-008-1: Alert badges container is present in the DOM when weather loads[0m[90m (1123ms)[0m
 
 
-[92m [0m[32m 19 passing[0m[90m (50s)[0m
+[92m [0m[32m 25 passing[0m[90m (53s)[0m
 
 
 [32m  ([4m[1mResults[22m[24m)[39m
 
 [90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
-[90m  │[39m [90mTests:[39m        [32m19[39m                                                                               [90m│[39m
-[90m  │[39m [90mPassing:[39m      [32m19[39m                                                                               [90m│[39m
+[90m  │[39m [90mTests:[39m        [32m25[39m                                                                               [90m│[39m
+[90m  │[39m [90mPassing:[39m      [32m25[39m                                                                               [90m│[39m
 [90m  │[39m [90mFailing:[39m      [32m0[39m                                                                                [90m│[39m
 [90m  │[39m [90mPending:[39m      [32m0[39m                                                                                [90m│[39m
 [90m  │[39m [90mSkipped:[39m      [32m0[39m                                                                                [90m│[39m
-[90m  │[39m [90mScreenshots:[39m  [32m21[39m                                                                               [90m│[39m
+[90m  │[39m [90mScreenshots:[39m  [32m26[39m                                                                               [90m│[39m
 [90m  │[39m [90mVideo:[39m        [32mfalse[39m                                                                            [90m│[39m
-[90m  │[39m [90mDuration:[39m     [32m49 seconds[39m                                                                       [90m│[39m
+[90m  │[39m [90mDuration:[39m     [32m53 seconds[39m                                                                       [90m│[39m
 [90m  │[39m [90mSpec Ran:[39m     [32m[32mmvp.cy.ts[32m[39m                                                                        [90m│[39m
 [90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
 
 
 [33m  ([4m[1mScreenshots[22m[24m)[39m
 
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-019 Co[0m     [90m[90m(1280x720)[90m[39m
-[90m [39m    [0mmpare weather for multiple cities side by side -- AC-019-1 Compare button appear[0m               
-[90m [39m    [0ms in dashboard when 2+ favorites exist (failed).png[0m                                            
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-019 Co[0m     [90m[90m(1280x720)[90m[39m
-[90m [39m    [0mmpare weather for multiple cities side by side -- AC-019-1 Compare button appear[0m               
-[90m [39m    [0ms in dashboard when 2+ favorites exist (failed) (attempt 2).png[0m                                
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-019--A[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0mC-019-1 (attempt 3).png[0m                                                                        
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-019--A[0m    [90m[90m(1000x1135)[90m[39m
-[90m [39m    [0mC-019-2.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-019--A[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0mC-019-3.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-020--A[0m    [90m[90m(1000x1135)[90m[39m
-[90m [39m    [0mC-020-1.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-016--A[0m    [90m[90m(1000x1066)[90m[39m
-[90m [39m    [0mC-016-1.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-016--A[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0mC-016-2.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-009--A[0m    [90m[90m(1000x1031)[90m[39m
-[90m [39m    [0mC-009-1.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-009--A[0m    [90m[90m(1000x1031)[90m[39m
-[90m [39m    [0mC-009-2.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-010--A[0m    [90m[90m(1000x1074)[90m[39m
-[90m [39m    [0mC-010-1.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-001--A[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0mC-001-1.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-001--A[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0mC-001-2.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-001--A[0m     [90m[90m(1000x997)[90m[39m
-[90m [39m    [0mC-001-3.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-014--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-014-1.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-014--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-014-2.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-014 Co[0m     [90m[90m(1280x720)[90m[39m
+[90m [39m    [0mmpare two or more cities side by side -- AC-014-3 Comparison view shows columns [0m               
+[90m [39m    [0mfor each city (failed).png[0m                                                                     
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-014--A[0m    [90m[90m(1000x1124)[90m[39m
+[90m [39m    [0mC-014-3 (attempt 2).png[0m                                                                        
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-014--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-014-4.png[0m                                                                                    
 [90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-013--A[0m     [90m[90m(1000x660)[90m[39m
 [90m [39m    [0mC-013-1.png[0m                                                                                    
 [90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-013--A[0m     [90m[90m(1000x660)[90m[39m
 [90m [39m    [0mC-013-2.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-014--A[0m     [90m[90m(1000x660)[90m[39m
-[90m [39m    [0mC-014-1.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-005--A[0m    [90m[90m(1000x1040)[90m[39m
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-013--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-013-3.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-002--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-002-1.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-002--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-002-2.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-003--A[0m    [90m[90m(1000x1074)[90m[39m
+[90m [39m    [0mC-003-1.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-004--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-004-1.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-001--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-001-1.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-001--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-001-2.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-001--A[0m    [90m[90m(1000x1013)[90m[39m
+[90m [39m    [0mC-001-3.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-001--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-001-4.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-009--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-009-1.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-009--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-009-2.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-010--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-010-1.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-011--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m    [0mC-011-1.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-012--A[0m    [90m[90m(1000x1258)[90m[39m
+[90m [39m    [0mC-012-1.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-005--A[0m     [90m[90m(1000x998)[90m[39m
 [90m [39m    [0mC-005-1.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-005--A[0m     [90m[90m(1000x660)[90m[39m
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-005--A[0m     [90m[90m(1000x998)[90m[39m
 [90m [39m    [0mC-005-2.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-006--A[0m    [90m[90m(1000x1040)[90m[39m
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-006--A[0m    [90m[90m(1000x1013)[90m[39m
 [90m [39m    [0mC-006-1.png[0m                                                                                    
-[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-006--A[0m    [90m[90m(1000x1074)[90m[39m
-[90m [39m    [0mC-006-2.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-007--A[0m    [90m[90m(1000x1028)[90m[39m
+[90m [39m    [0mC-007-1.png[0m                                                                                    
+[90m [39m -  [0m/home/runner/work/demos/demos/brownfield/cypress/screenshots/mvp.cy.ts/US-008--A[0m     [90m[90m(1000x983)[90m[39m
+[90m [39m    [0mC-008-1.png[0m                                                                                    
 
 
-[rootspec] Updated rootspec/tests-status.json — 10/10 stories passing
+[rootspec] Updated rootspec/tests-status.json — 14/14 stories passing
 
 
 [90m====================================================================================================[39m
@@ -143,9 +165,9 @@ Dev server already running (PID 45753)
 
 [90m   [39m    [90mSpec[39m                                              [90mTests[39m  [90mPassing[39m  [90mFailing[39m  [90mPending[39m  [90mSkipped[39m [90m [39m
 [90m  ┌[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┐[39m
-[90m  │[39m [32m✔[39m  [0mmvp.cy.ts[0m                                [90m00:49[39m       [0m19[0m       [32m19[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m│[39m
+[90m  │[39m [32m✔[39m  [0mmvp.cy.ts[0m                                [90m00:53[39m       [0m25[0m       [32m25[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m│[39m
 [90m  └[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m─[39m[90m┘[39m
-[90m   [39m [32m✔[39m  [32mAll specs passed![39m                        [90m00:49[39m       [0m19[0m       [32m19[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m [39m
+[90m   [39m [32m✔[39m  [32mAll specs passed![39m                        [90m00:53[39m       [0m25[0m       [32m25[39m        [90m-[39m        [90m-[39m        [90m-[39m [90m [39m
 
-Stopping dev server (PID 45753)...
+Stopping dev server (PID 60838)...
 Dev server stopped

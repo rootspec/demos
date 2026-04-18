@@ -1,10 +1,10 @@
 {
   "runs": [
     {
-      "runId": "ef2983a6",
-      "startedAt": "2026-04-14T23:44:17.380Z",
-      "completedAt": "2026-04-14T23:56:12.465Z",
-      "totalCostUsd": 2.82,
+      "runId": "24bf7894",
+      "startedAt": "2026-04-18T20:53:00.578Z",
+      "completedAt": "2026-04-18T21:19:37.472Z",
+      "totalCostUsd": 3.71,
       "phases": {
         "init": {
           "status": "success",
@@ -14,42 +14,34 @@
         },
         "spec": {
           "status": "success",
-          "costUsd": 2.11,
-          "turns": 69,
-          "durationSeconds": 444
+          "costUsd": 1.59,
+          "turns": 71,
+          "durationSeconds": 430
         },
         "impl": {
           "status": "success",
-          "costUsd": 0.49,
-          "turns": 23,
-          "durationSeconds": 157
+          "costUsd": 1.8,
+          "turns": 73,
+          "durationSeconds": 1021
         },
         "validate": {
           "status": "success",
-          "costUsd": 0.21,
-          "turns": 16,
-          "durationSeconds": 111
+          "costUsd": 0.32,
+          "turns": 19,
+          "durationSeconds": 141
+        },
+        "review": {
+          "status": "success",
+          "costUsd": 0,
+          "turns": 0,
+          "durationSeconds": 0
         }
       },
-      "qualityScore": null
+      "review": {
+        "staticBlockers": 0,
+        "staticWarnings": 0,
+        "llmAssessment": "skipped"
+      }
     }
-,
-  {
-    "skill": "rs-spec",
-    "startedAt": "2026-04-18T20:58:56Z",
-    "completedAt": "2026-04-18T20:59:58Z",
-    "durationSeconds": 62,
-    "iterations": null,
-    "stories": null
-  }
-,
-  {
-    "skill": "rs-impl",
-    "startedAt": "2026-04-18T21:00:21Z",
-    "completedAt": "2026-04-18T21:16:09Z",
-    "durationSeconds": 948,
-    "iterations": 3,
-    "stories": {"US-001":{"attempts":1},"US-002":{"attempts":2},"US-003":{"attempts":2},"US-004":{"attempts":2},"US-005":{"attempts":1},"US-006":{"attempts":1},"US-007":{"attempts":1},"US-008":{"attempts":1},"US-009":{"attempts":1},"US-010":{"attempts":1},"US-011":{"attempts":1},"US-012":{"attempts":1},"US-013":{"attempts":1},"US-014":{"attempts":2}}
-  }
   ]
 }

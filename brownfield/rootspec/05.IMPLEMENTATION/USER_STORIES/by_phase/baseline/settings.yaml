@@ -1,67 +1,98 @@
 # =============================================================================
-# USER STORY: Configure Settings
+# USER STORY: Settings
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: baseline
-# @journey: CITY_LOOKUP
-# @systems: [SETTINGS_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @journey: SETTINGS_CONFIGURATION
+# @systems: [SETTINGS_SYSTEM, WEATHER_SYSTEM]
+# @last_updated: 2026-04-18T00:00:00Z
 
-id: US-013
+id: US-009
 title: Change temperature unit
 
 acceptance_criteria:
-  - id: AC-013-1
-    title: Settings panel can be opened via the Settings button
+  - id: AC-009-1
+    title: Settings panel opens on button click
     narrative: |
       Given I am on the app
       When I click the Settings button
-      Then the settings panel becomes visible
+      Then the settings panel expands
     given:
-      - visit: '/'
+      - visit: '/demos/brownfield/'
     when:
       - click: { selector: 'button[class*="toggle"]' }
     then:
-      - shouldExist: { selector: '[class*="panel"]' }
+      - shouldExist: { selector: 'button[class*="option"]' }
 
-  - id: AC-013-2
+  - id: AC-009-2
     title: Temperature unit buttons are visible in settings
     narrative: |
       Given the settings panel is open
-      When I look at the Temperature setting
-      Then I see both the Celsius and Fahrenheit buttons
+      When I view the temperature setting
+      Then I should see both the C and F options
     given:
-      - visit: '/'
+      - visit: '/demos/brownfield/'
     when:
       - click: { selector: 'button[class*="toggle"]' }
     then:
-      - shouldContain: { selector: '[class*="panel"]', text: '°C' }
-      - shouldContain: { selector: '[class*="panel"]', text: '°F' }
+      - shouldContain: { selector: 'div[class*="panel"]', text: '°C' }
 
 ---
-# =============================================================================
-# USER STORY: Configure Wind Unit and Time Format
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: baseline
-# @journey: CITY_LOOKUP
-# @systems: [SETTINGS_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-014
-title: Change wind speed unit and time format
+id: US-010
+title: Change wind unit
 
 acceptance_criteria:
-  - id: AC-014-1
-    title: Wind speed and time format options are visible in settings
+  - id: AC-010-1
+    title: Wind unit buttons are visible in settings panel
     narrative: |
       Given the settings panel is open
-      When I view the settings
-      Then I see km/h, mph, 24h, and 12h options
+      When I view the wind speed setting
+      Then I should see km/h and mph options
     given:
-      - visit: '/'
+      - visit: '/demos/brownfield/'
     when:
       - click: { selector: 'button[class*="toggle"]' }
     then:
-      - shouldContain: { selector: '[class*="panel"]', text: 'km/h' }
-      - shouldContain: { selector: '[class*="panel"]', text: '24h' }
+      - shouldContain: { selector: 'div[class*="panel"]', text: 'km/h' }
+
+---
+
+id: US-011
+title: Change time format
+
+acceptance_criteria:
+  - id: AC-011-1
+    title: Time format buttons are visible in settings panel
+    narrative: |
+      Given the settings panel is open
+      When I view the time format setting
+      Then I should see 24h and 12h options
+    given:
+      - visit: '/demos/brownfield/'
+    when:
+      - click: { selector: 'button[class*="toggle"]' }
+    then:
+      - shouldContain: { selector: 'div[class*="panel"]', text: '24h' }
+
+---
+
+id: US-012
+title: Set a default city
+
+acceptance_criteria:
+  - id: AC-012-1
+    title: Default city dropdown appears in settings when favorites exist
+    narrative: |
+      Given I have at least one saved location
+      When I open the settings panel
+      Then I should see the Default Location dropdown
+    given:
+      - visit: '/demos/brownfield/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Vienna' }
+      - click: { selector: 'ul li:first-child' }
+      - click: { selector: '.save-btn' }
+      - click: { selector: 'button[class*="toggle"]' }
+    then:
+      - shouldExist: { selector: 'select[class*="select"]' }

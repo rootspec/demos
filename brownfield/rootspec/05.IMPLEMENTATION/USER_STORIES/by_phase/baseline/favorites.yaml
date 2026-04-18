@@ -1,72 +1,85 @@
 # =============================================================================
-# USER STORY: Manage Favorites
+# USER STORY: Manage saved locations
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: baseline
-# @journey: CITY_LOOKUP
+# @journey: FAVORITES_MANAGEMENT
 # @systems: [LOCATION_SYSTEM, VIEW_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
+# @last_updated: 2026-04-18T00:00:00Z
 
-id: US-009
-title: Navigate between saved locations
+id: US-002
+title: Save a location to favorites
 
 acceptance_criteria:
-  - id: AC-009-1
-    title: Saved Locations heading is displayed when locations are saved
+  - id: AC-002-1
+    title: Save button appears after selecting a city not yet in favorites
     narrative: |
-      Given I have saved at least one location
-      When I am on the weather view
-      Then I see the Saved Locations heading
+      Given I have searched for and selected a city
+      When the weather data loads
+      Then I should see the "Save Location" button
     given:
-      - visit: '/'
+      - visit: '/demos/brownfield/'
     when:
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Amsterdam' }
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Berlin' }
       - click: { selector: 'ul li:first-child' }
-      - click: { selector: '.save-btn' }
     then:
-      - shouldContain: { selector: 'h3', text: 'Saved Locations' }
+      - shouldExist: { selector: '.save-btn' }
 
-  - id: AC-009-2
-    title: Clicking a favorite chip updates the weather view
+  - id: AC-002-2
+    title: Saved city appears in favorites bar
     narrative: |
-      Given I have saved locations shown as chips
-      When I click a chip
-      Then the actions area is visible (city weather loaded)
+      Given I have selected a city and clicked Save Location
+      When I look at the favorites bar
+      Then I should see the city name as a chip
     given:
-      - visit: '/'
+      - visit: '/demos/brownfield/'
     when:
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Amsterdam' }
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Berlin' }
       - click: { selector: 'ul li:first-child' }
       - click: { selector: '.save-btn' }
-      - click: { selector: 'h3 + div button:first-child' }
     then:
-      - shouldExist: { selector: '.actions' }
+      - shouldExist: { selector: 'button[class*="Chip"]' }
 
 ---
-# =============================================================================
-# USER STORY: Remove a Saved Location
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: baseline
-# @journey: CITY_LOOKUP
-# @systems: [LOCATION_SYSTEM]
-# @last_updated: 2026-04-14T00:00:00Z
 
-id: US-010
-title: Remove a city from favorites
+id: US-003
+title: Switch between saved locations
 
 acceptance_criteria:
-  - id: AC-010-1
-    title: Remove span is visible inside each favorite chip button
+  - id: AC-003-1
+    title: Clicking a favorites chip loads that city's weather
     narrative: |
-      Given I have a saved location shown as a chip
-      When I look at the chip
-      Then I see a remove span (✕) inside the button
+      Given I have at least one saved location
+      When I click a favorites chip
+      Then I should see weather data for that location
     given:
-      - visit: '/'
+      - visit: '/demos/brownfield/'
     when:
-      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Sydney' }
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Tokyo' }
       - click: { selector: 'ul li:first-child' }
       - click: { selector: '.save-btn' }
+      - click: { selector: 'button[class*="Chip"]:first-child' }
     then:
-      - shouldContain: { selector: 'h3 + div button span', text: '✕' }
+      - shouldExist: { selector: '.card' }
+
+---
+
+id: US-004
+title: Remove a location from favorites
+
+acceptance_criteria:
+  - id: AC-004-1
+    title: Clicking the remove button on a chip removes the city
+    narrative: |
+      Given I have a saved location in the favorites bar
+      When I click the remove button on the chip
+      Then that city's chip disappears from the favorites bar
+    given:
+      - visit: '/demos/brownfield/'
+    when:
+      - fill: { selector: 'input[placeholder="Search for a city..."]', value: 'Rome' }
+      - click: { selector: 'ul li:first-child' }
+      - click: { selector: '.save-btn' }
+      - click: { selector: 'span[class*="RemoveBtn"]' }
+    then:
+      - shouldExist: { selector: '.empty' }

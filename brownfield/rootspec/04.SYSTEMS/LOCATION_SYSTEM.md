@@ -1,77 +1,67 @@
-# Location System
+# System: LOCATION_SYSTEM
 
-> References: `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`, `SYSTEMS_OVERVIEW.md`
+**Product:** RootWeather
+**Version:** 7.3.7
+**Status:** Baseline
+
+---
 
 ## Responsibility
 
-Manages everything related to cities: search, selection, favorites (saved locations), and default city. It is the primary entry point for the user's intent — "I want weather for THIS place."
+Allow users to discover cities via search, save them as favorites, switch between saved locations, and manage their saved list (add, remove, select). Also responsible for loading and applying the user's default city on app start.
 
----
+## Boundaries
 
-## Data Owned
+**Owns:**
+- City search UI and geocoding API calls (`SearchBar`)
+- Favorites list display and interaction (`FavoritesList`)
+- Locations dashboard grid display (`LocationsDashboard`)
+- Reading/writing favorites from localStorage
+- Default city resolution on app mount
 
-### City Entity
+**Does not own:**
+- The weather data for any city (owned by WEATHER_SYSTEM)
+- Unit/format preferences (owned by SETTINGS_SYSTEM)
+- Compare mode activation or comparison selection (owned by COMPARISON_SYSTEM)
 
-| Attribute | Type | Description |
-|-----------|------|-------------|
-| name | string | City display name |
-| latitude | float | Geographic latitude |
-| longitude | float | Geographic longitude |
-| country | string | Country code or name |
-| admin1 | string (optional) | State / province / region |
+## Data Ownership
 
-Cities are identified by their lat/lon coordinate pair, not by name alone. Two cities with the same name in different regions are distinct entities.
+| Data | Type | Source | Persisted |
+|------|------|--------|-----------|
+| `favorites[]` | Array of `{name, latitude, longitude, country}` | User actions | Yes (localStorage: `rootweather_favorites`) |
+| `city` | Selected city object or null | User actions + default city | No (in-memory; loaded from favorites on mount) |
 
-### Favorites List
+## Key Files
 
-An ordered array of City entities saved by the user. Stored in localStorage under a fixed key. Loaded on app mount; written on every change.
+| File | Role |
+|------|------|
+| `src/components/SearchBar.jsx` | Debounced city search input; dropdown with up to 5 results; calls `searchCities()` |
+| `src/components/FavoritesList.jsx` | Horizontal chip list of saved locations; supports select and remove |
+| `src/components/LocationsDashboard.jsx` | Grid of favorite city cards with live weather summaries; supports compare mode selection |
+| `src/utils/storage.js` | `loadFavorites()`, `saveFavorites()`, `loadDefaultCity()`, `saveDefaultCity()` |
 
-### Active City
+## Search Behavior
 
-The currently selected city whose weather is being displayed. Held in memory only; not persisted. On return visits, the active city is restored from the default city setting if one is configured.
+- Minimum 2 characters before geocoding request fires
+- 300ms debounce on keystroke
+- Returns up to 5 results: `{name, admin1, country, latitude, longitude}`
+- Selecting a city populates the search field with the city name and triggers weather load
 
----
+## Default City Behavior
 
-## Rules
+On app mount:
+1. Load `defaultCity` name from localStorage
+2. Load `favorites[]` from localStorage
+3. If `defaultCity` is set and a matching favorite exists by name, auto-select that city
 
-### Search
-
-- Query must be at least [search_min_chars] characters to trigger an API call
-- Search is debounced: API call fires after [search_debounce_ms] ms of inactivity
-- Returns up to [search_max_results] candidate cities
-- Dropdown displays: `{name}, {admin1} {country}` per result
-- Selecting a result sets that city as the active city and clears the dropdown
-
-### Favorites
-
-- A city can only appear in favorites once (uniqueness enforced by lat/lon pair)
-- Adding a favorite does not require the city to be currently active (though in practice it always is)
-- Removing a favorite: if the removed city was the default city, the default city is cleared
-- Favorites are saved to localStorage on every mutation
-- Maximum favorites count: unconstrained (no enforced limit)
-
-### Default City
-
-- The default city is a city name string, not a full City entity
-- On mount: if a default city is set and that name exists in favorites, the matching favorite is auto-selected as the active city
-- If the name is not found in favorites (e.g., it was removed), no auto-selection occurs
-
----
-
-## Interfaces Exposed
-
-| Interface | Consumer | Description |
-|-----------|----------|-------------|
-| Active city (lat/lon) | WEATHER_SYSTEM | Triggers weather fetch when changed |
-| Active city selection | VIEW_SYSTEM | Switches view to `weather` mode |
-| Favorites list | VIEW_SYSTEM | Displayed as chips (weather view) and cards (dashboard) |
-| Favorites list | SETTINGS_SYSTEM | Populates default city dropdown |
-| Favorites list | VIEW_SYSTEM (compare) | Source of cities available for comparison selection |
-
----
+Clearing a favorite that was the default city also clears the `defaultCity` preference.
 
 ## Interactions with Other Systems
 
-- **→ WEATHER_SYSTEM:** When a city is selected, its lat/lon is passed to the weather fetch hook
-- **→ VIEW_SYSTEM:** City selection sets view to `weather`
-- **← SETTINGS_SYSTEM:** Default city name read from settings on mount to auto-select active city
+| System | Direction | What |
+|--------|-----------|------|
+| VIEW_SYSTEM | Sends | Selected city object (triggers weather fetch) |
+| VIEW_SYSTEM | Receives | `favorites[]`, `activeCity`, callbacks for select/remove |
+| SETTINGS_SYSTEM | Shares storage | `defaultCity` key in localStorage (written by SETTINGS_SYSTEM, read on mount by LOCATION_SYSTEM) |
+| COMPARISON_SYSTEM | Provides | Favorites list; dashboard's compare mode UI is orchestrated by COMPARISON_SYSTEM |
+| WEATHER_SYSTEM | Consumed by | LocationsDashboard fetches weather for all favorites in parallel via `getWeather()` |

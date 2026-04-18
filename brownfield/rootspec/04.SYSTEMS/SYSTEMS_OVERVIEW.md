@@ -1,75 +1,82 @@
 # Level 4: Systems Overview
 
-> References: `01.PHILOSOPHY.md`, `02.TRUTHS.md`, `03.INTERACTIONS.md`
-
-## System Map
-
-RootWeather is composed of four major systems:
-
-| System | File | Responsibility |
-|--------|------|----------------|
-| LOCATION_SYSTEM | `LOCATION_SYSTEM.md` | City search, favorites management, default city |
-| WEATHER_SYSTEM | `WEATHER_SYSTEM.md` | API integration, data fetching, weather data model |
-| VIEW_SYSTEM | `VIEW_SYSTEM.md` | View state management, comparison mode, layout |
-| SETTINGS_SYSTEM | `SETTINGS_SYSTEM.md` | User preferences, unit conversion, persistence |
+**Product:** RootWeather
+**Version:** 7.3.7
+**Status:** Baseline
 
 ---
 
-## System Interactions
+## System Map
 
-| From | To | Interaction |
-|------|----|-------------|
-| LOCATION_SYSTEM | WEATHER_SYSTEM | Provides lat/lon when a city is selected; triggers weather fetch |
-| LOCATION_SYSTEM | VIEW_SYSTEM | City selection switches view to `weather` mode |
-| SETTINGS_SYSTEM | WEATHER_SYSTEM | Temperature and wind unit affects display of fetched weather values |
-| VIEW_SYSTEM | WEATHER_SYSTEM | Dashboard and comparison views trigger parallel weather fetches for all/selected cities |
-| VIEW_SYSTEM | LOCATION_SYSTEM | Compare mode reads favorites list to populate city selection |
-| SETTINGS_SYSTEM | LOCATION_SYSTEM | Default city setting references favorites list |
+RootWeather is composed of five systems. Each has a single responsibility and communicates with others through props, state callbacks, or shared utility functions.
+
+```
+┌─────────────────────────────────────────────────┐
+│                   VIEW SYSTEM                   │
+│  (App.jsx — view state, navigation, composition) │
+└───────────────┬─────────────────────────────────┘
+                │ uses
+    ┌───────────┼───────────────────────┐
+    ▼           ▼                       ▼
+┌─────────┐ ┌──────────┐  ┌────────────────────┐
+│ WEATHER │ │ LOCATION │  │  SETTINGS SYSTEM   │
+│ SYSTEM  │ │ SYSTEM   │  │  (unit, windUnit,  │
+│ (API,   │ │ (favs,   │  │   timeFormat,      │
+│ hook,   │ │ default  │  │   defaultCity)     │
+│ alerts) │ │ city)    │  └────────────────────┘
+└─────────┘ └──────────┘
+                │
+                ▼
+    ┌───────────────────────┐
+    │  COMPARISON SYSTEM    │
+    │  (compare mode,       │
+    │   selected cities,    │
+    │   side-by-side view)  │
+    └───────────────────────┘
+```
+
+---
+
+## Systems
+
+| System | File(s) | Responsibility |
+|--------|---------|----------------|
+| **WEATHER_SYSTEM** | `utils/api.js`, `hooks/useWeather.js`, `components/CurrentWeather.jsx`, `components/HourlyForecast.jsx`, `components/ForecastChart.jsx`, `components/WeatherAlerts.jsx` | Fetch, decode, and render weather data for a single location |
+| **LOCATION_SYSTEM** | `utils/storage.js` (favorites), `components/SearchBar.jsx`, `components/FavoritesList.jsx`, `components/LocationsDashboard.jsx` | Search cities, manage saved locations, display favorites |
+| **SETTINGS_SYSTEM** | `utils/storage.js` (settings keys), `components/SettingsPanel.jsx` | Manage and persist user preferences (units, time format, default city) |
+| **COMPARISON_SYSTEM** | `components/ComparisonView.jsx`, `components/LocationsDashboard.jsx` (compare mode) | Multi-city comparison selection and side-by-side display |
+| **VIEW_SYSTEM** | `App.jsx` | Compose all systems, manage view state (weather / dashboard / compare), own top-level data flow |
+
+---
+
+## Interactions Table
+
+| From | To | Mechanism | Data |
+|------|----|-----------|------|
+| VIEW_SYSTEM | WEATHER_SYSTEM | Props + `useWeather` hook | `latitude`, `longitude` → `weather`, `loading`, `error` |
+| VIEW_SYSTEM | LOCATION_SYSTEM | Props + callbacks | `favorites[]`, `onSelect`, `onRemove`, `activeCity` |
+| VIEW_SYSTEM | SETTINGS_SYSTEM | Props + callbacks | `unit`, `windUnit`, `timeFormat`, `defaultCity`, change handlers |
+| VIEW_SYSTEM | COMPARISON_SYSTEM | Props + callbacks | `comparedCities[]`, `compareMode`, compare handlers |
+| LOCATION_SYSTEM | WEATHER_SYSTEM | Parent (App) mediates | City selection triggers weather fetch via `city` state |
+| COMPARISON_SYSTEM | WEATHER_SYSTEM | Direct fetch in component | Parallel `getWeather()` calls for all compared cities |
+| SETTINGS_SYSTEM | WEATHER_SYSTEM | Props threading | `unit`, `timeFormat` passed down to all weather display components |
+| SETTINGS_SYSTEM | LOCATION_SYSTEM | Shared storage | `defaultCity` key in localStorage; favorites loaded by location system |
 
 ---
 
 ## Data Flow
 
 ```
-User types query
-  → LOCATION_SYSTEM (search API call)
-    → returns city candidates with lat/lon
-      → user selects city
-        → LOCATION_SYSTEM stores selection
-          → WEATHER_SYSTEM fetches forecast for lat/lon
-            → VIEW_SYSTEM renders: CurrentWeather, HourlyForecast, ForecastChart, WeatherAlerts
-              → SETTINGS_SYSTEM provides unit context for display
-```
+localStorage
+    │
+    ├── favorites[] ──────────────────────► LOCATION_SYSTEM (FavoritesList, LocationsDashboard)
+    ├── unit ─────────────────────────────► SETTINGS_SYSTEM → all weather display components
+    ├── windUnit ─────────────────────────► SETTINGS_SYSTEM → SettingsPanel
+    ├── timeFormat ───────────────────────► SETTINGS_SYSTEM → HourlyForecast
+    └── defaultCity ──────────────────────► LOCATION_SYSTEM → auto-select on mount
 
+User types city
+    └── SearchBar → geocoding API → city object (name, lat, lon, country)
+            └──► App.city state → useWeather(lat, lon) → weather object
+                        └──► CurrentWeather, HourlyForecast, ForecastChart, WeatherAlerts
 ```
-User opens Dashboard
-  → VIEW_SYSTEM reads LOCATION_SYSTEM favorites
-    → WEATHER_SYSTEM fetches current conditions for all favorites in parallel
-      → VIEW_SYSTEM renders location cards with condition summaries
-```
-
-```
-User initiates Comparison
-  → VIEW_SYSTEM enters compare selection mode
-    → User selects cities from favorites
-      → VIEW_SYSTEM transitions to comparison view
-        → WEATHER_SYSTEM fetches full forecast for each selected city
-          → VIEW_SYSTEM renders side-by-side columns
-```
-
----
-
-## State Ownership
-
-| State | Owner | Persistence |
-|-------|-------|-------------|
-| Active city (lat/lon/name) | LOCATION_SYSTEM | In-memory (session only) |
-| Favorites list | LOCATION_SYSTEM | localStorage |
-| Default city name | SETTINGS_SYSTEM | localStorage |
-| Temperature unit | SETTINGS_SYSTEM | localStorage |
-| Wind speed unit | SETTINGS_SYSTEM | localStorage |
-| Time format | SETTINGS_SYSTEM | localStorage |
-| Current view mode | VIEW_SYSTEM | In-memory (session only) |
-| Compare mode active | VIEW_SYSTEM | In-memory (session only) |
-| Cities selected for comparison | VIEW_SYSTEM | In-memory (session only) |
-| Weather data cache | WEATHER_SYSTEM | In-memory (per-fetch, no caching) |
