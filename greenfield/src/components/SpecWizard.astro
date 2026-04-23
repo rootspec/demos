@@ -1,0 +1,305 @@
+---
+const MISSION_OPTIONS = [
+  'Eliminate guesswork from software delivery',
+  'Create a shared language between humans and AI',
+  'Make intent the primary artifact, not code',
+  'Enable AI agents to build from first principles',
+];
+
+const PILLAR_OPTIONS = [
+  'Clarity — every requirement is unambiguous',
+  'Continuity — spec evolves with the product',
+  'Verifiability — every claim is testable',
+  'Autonomy — AI can implement without supervision',
+  'Alignment — team shares a single source of truth',
+];
+---
+
+<div data-test="spec-wizard" class="rounded-2xl p-8 max-w-2xl mx-auto" style="background-color: var(--color-card-bg); border: 1px solid var(--color-card-border);">
+
+  <!-- Step 1 -->
+  <div data-test="wizard-step-1" id="wizard-step-1" class="wizard-step">
+    <p class="text-sm font-medium mb-1" style="color: var(--color-primary);">Step 1 of 4</p>
+    <h3 class="text-2xl font-bold mb-2" style="color: var(--color-text);">What are you building?</h3>
+    <p class="text-sm mb-6" style="color: var(--color-text-muted);">Describe your product in one sentence.</p>
+    <input
+      data-test="wizard-idea-input"
+      id="wizard-idea-input"
+      type="text"
+      placeholder="e.g. A tool to help developers write better commit messages"
+      class="w-full px-4 py-3 rounded-lg text-sm outline-none"
+      style="background-color: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text);"
+    />
+    <div class="flex justify-end mt-6">
+      <button
+        data-test="wizard-next"
+        id="step1-next"
+        disabled
+        class="px-5 py-2 rounded-lg font-semibold text-sm text-white transition-opacity"
+        style="background-color: var(--color-primary); opacity: 0.4; cursor: not-allowed;"
+      >
+        Next →
+      </button>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div data-test="wizard-step-2" id="wizard-step-2" class="wizard-step" style="display: none;">
+    <p class="text-sm font-medium mb-1" style="color: var(--color-primary);">Step 2 of 4</p>
+    <h3 class="text-2xl font-bold mb-2" style="color: var(--color-text);">What's your core mission?</h3>
+    <p class="text-sm mb-6" style="color: var(--color-text-muted);">Choose the statement that best captures why this product exists.</p>
+    <div class="flex flex-col gap-3">
+      {MISSION_OPTIONS.map((opt) => (
+        <button
+          data-test="wizard-mission-option"
+          data-value={opt}
+          class="wizard-mission-btn text-left px-4 py-3 rounded-lg text-sm transition-colors"
+          style="background-color: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border);"
+        >
+          {opt}
+        </button>
+      ))}
+    </div>
+    <div class="flex justify-between mt-6">
+      <button data-wizard-back="1" class="px-5 py-2 rounded-lg text-sm" style="color: var(--color-text-muted);">← Back</button>
+      <button
+        data-test="wizard-next"
+        id="step2-next"
+        disabled
+        class="px-5 py-2 rounded-lg font-semibold text-sm text-white transition-opacity"
+        style="background-color: var(--color-primary); opacity: 0.4; cursor: not-allowed;"
+      >
+        Next →
+      </button>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div data-test="wizard-step-3" id="wizard-step-3" class="wizard-step" style="display: none;">
+    <p class="text-sm font-medium mb-1" style="color: var(--color-primary);">Step 3 of 4</p>
+    <h3 class="text-2xl font-bold mb-2" style="color: var(--color-text);">Choose your core pillars</h3>
+    <p class="text-sm mb-6" style="color: var(--color-text-muted);">Select 2–3 values that will guide every product decision.</p>
+    <div class="flex flex-col gap-3">
+      {PILLAR_OPTIONS.map((opt) => (
+        <button
+          data-test="wizard-pillar-option"
+          data-value={opt}
+          class="wizard-pillar-btn text-left px-4 py-3 rounded-lg text-sm transition-colors"
+          style="background-color: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border);"
+        >
+          {opt}
+        </button>
+      ))}
+    </div>
+    <div class="flex justify-between mt-6">
+      <button data-wizard-back="2" class="px-5 py-2 rounded-lg text-sm" style="color: var(--color-text-muted);">← Back</button>
+      <button
+        data-test="wizard-next"
+        id="step3-next"
+        disabled
+        class="px-5 py-2 rounded-lg font-semibold text-sm text-white transition-opacity"
+        style="background-color: var(--color-primary); opacity: 0.4; cursor: not-allowed;"
+      >
+        Next →
+      </button>
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div data-test="wizard-step-4" id="wizard-step-4" class="wizard-step" style="display: none;">
+    <p class="text-sm font-medium mb-1" style="color: var(--color-primary);">Step 4 of 4</p>
+    <h3 class="text-2xl font-bold mb-2" style="color: var(--color-text);">Describe a core interaction</h3>
+    <p class="text-sm mb-6" style="color: var(--color-text-muted);">Write one key thing a user can do with your product.</p>
+    <input
+      data-test="wizard-interaction-input"
+      id="wizard-interaction-input"
+      type="text"
+      placeholder="e.g. User runs /rs-spec and answers interview questions"
+      class="w-full px-4 py-3 rounded-lg text-sm outline-none"
+      style="background-color: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text);"
+    />
+    <div class="flex justify-between mt-6">
+      <button data-wizard-back="3" class="px-5 py-2 rounded-lg text-sm" style="color: var(--color-text-muted);">← Back</button>
+      <button
+        data-test="wizard-generate"
+        id="wizard-generate"
+        class="px-5 py-2 rounded-lg font-semibold text-sm text-white"
+        style="background-color: var(--color-primary);"
+      >
+        Generate spec →
+      </button>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div data-test="wizard-result" id="wizard-result" class="wizard-step" style="display: none;">
+    <div class="flex items-center gap-3 mb-6">
+      <span class="text-2xl">🎉</span>
+      <h3 class="text-2xl font-bold" style="color: var(--color-text);">Your skeleton spec</h3>
+    </div>
+    <div class="rounded-xl p-6 font-mono text-sm" style="background-color: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text);">
+      <div data-test="wizard-result-l1" id="wizard-result-l1" class="mb-4">
+        <span style="color: var(--color-primary); font-weight: bold;">L1 Philosophy</span><br />
+        <span style="color: var(--color-text-muted);">Product:</span> <span id="result-idea"></span><br />
+        <span style="color: var(--color-text-muted);">Mission:</span> <span id="result-mission"></span>
+      </div>
+      <div class="mb-4">
+        <span style="color: var(--color-primary); font-weight: bold;">L2 Truths</span><br />
+        <span id="result-pillars"></span>
+      </div>
+      <div>
+        <span style="color: var(--color-primary); font-weight: bold;">L3 Interaction</span><br />
+        <span style="color: var(--color-text-muted);">Core journey:</span> <span id="result-interaction"></span>
+      </div>
+    </div>
+    <div class="flex justify-end mt-6">
+      <button id="wizard-reset" class="px-5 py-2 rounded-lg text-sm" style="color: var(--color-text-muted); border: 1px solid var(--color-border);">
+        Start over
+      </button>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function() {
+    var state = { idea: '', mission: '', pillars: [], interaction: '' };
+
+    function showStep(stepId) {
+      document.querySelectorAll('.wizard-step').forEach(function(s) {
+        s.style.display = 'none';
+      });
+      var step = document.getElementById(stepId);
+      if (step) step.style.display = '';
+    }
+
+    function setNextEnabled(btnId, enabled) {
+      var btn = document.getElementById(btnId);
+      if (!btn) return;
+      btn.disabled = !enabled;
+      btn.style.opacity = enabled ? '1' : '0.4';
+      btn.style.cursor = enabled ? 'pointer' : 'not-allowed';
+    }
+
+    // Step 1 - idea input
+    var ideaInput = document.getElementById('wizard-idea-input');
+    if (ideaInput) {
+      ideaInput.addEventListener('input', function() {
+        state.idea = ideaInput.value;
+        setNextEnabled('step1-next', state.idea.trim().length > 0);
+      });
+    }
+
+    var step1Next = document.getElementById('step1-next');
+    if (step1Next) {
+      step1Next.addEventListener('click', function() {
+        if (state.idea.trim()) showStep('wizard-step-2');
+      });
+    }
+
+    // Step 2 - mission selection
+    document.querySelectorAll('.wizard-mission-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        state.mission = btn.getAttribute('data-value');
+        document.querySelectorAll('.wizard-mission-btn').forEach(function(b) {
+          b.style.backgroundColor = 'var(--color-surface)';
+          b.style.color = 'var(--color-text)';
+          b.style.borderColor = 'var(--color-border)';
+        });
+        btn.style.backgroundColor = 'var(--color-primary)';
+        btn.style.color = 'white';
+        btn.style.borderColor = 'var(--color-primary)';
+        setNextEnabled('step2-next', true);
+      });
+    });
+
+    var step2Next = document.getElementById('step2-next');
+    if (step2Next) {
+      step2Next.addEventListener('click', function() {
+        if (state.mission) showStep('wizard-step-3');
+      });
+    }
+
+    document.querySelectorAll('[data-wizard-back="1"]').forEach(function(btn) {
+      btn.addEventListener('click', function() { showStep('wizard-step-1'); });
+    });
+    document.querySelectorAll('[data-wizard-back="2"]').forEach(function(btn) {
+      btn.addEventListener('click', function() { showStep('wizard-step-2'); });
+    });
+    document.querySelectorAll('[data-wizard-back="3"]').forEach(function(btn) {
+      btn.addEventListener('click', function() { showStep('wizard-step-3'); });
+    });
+
+    // Step 3 - pillar selection
+    document.querySelectorAll('.wizard-pillar-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var val = btn.getAttribute('data-value');
+        var idx = state.pillars.indexOf(val);
+        if (idx >= 0) {
+          state.pillars.splice(idx, 1);
+          btn.style.backgroundColor = 'var(--color-surface)';
+          btn.style.color = 'var(--color-text)';
+          btn.style.borderColor = 'var(--color-border)';
+        } else {
+          state.pillars.push(val);
+          btn.style.backgroundColor = 'var(--color-primary)';
+          btn.style.color = 'white';
+          btn.style.borderColor = 'var(--color-primary)';
+        }
+        setNextEnabled('step3-next', state.pillars.length > 0);
+      });
+    });
+
+    var step3Next = document.getElementById('step3-next');
+    if (step3Next) {
+      step3Next.addEventListener('click', function() {
+        if (state.pillars.length > 0) showStep('wizard-step-4');
+      });
+    }
+
+    // Step 4 - interaction input + generate
+    var interactionInput = document.getElementById('wizard-interaction-input');
+    if (interactionInput) {
+      interactionInput.addEventListener('input', function() {
+        state.interaction = interactionInput.value;
+      });
+    }
+
+    var generateBtn = document.getElementById('wizard-generate');
+    if (generateBtn) {
+      generateBtn.addEventListener('click', function() {
+        var resultIdea = document.getElementById('result-idea');
+        var resultMission = document.getElementById('result-mission');
+        var resultPillars = document.getElementById('result-pillars');
+        var resultInteraction = document.getElementById('result-interaction');
+        if (resultIdea) resultIdea.textContent = state.idea;
+        if (resultMission) resultMission.textContent = state.mission;
+        if (resultPillars) {
+          resultPillars.innerHTML = state.pillars.map(function(p, i) {
+            return '<span style="color:var(--color-text-muted)">Pillar ' + (i+1) + ':</span> ' + p + '<br/>';
+          }).join('');
+        }
+        if (resultInteraction) resultInteraction.textContent = state.interaction || '(not specified)';
+        showStep('wizard-result');
+      });
+    }
+
+    // Reset
+    var resetBtn = document.getElementById('wizard-reset');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function() {
+        state = { idea: '', mission: '', pillars: [], interaction: '' };
+        if (ideaInput) ideaInput.value = '';
+        if (interactionInput) interactionInput.value = '';
+        setNextEnabled('step1-next', false);
+        setNextEnabled('step2-next', false);
+        setNextEnabled('step3-next', false);
+        document.querySelectorAll('.wizard-mission-btn, .wizard-pillar-btn').forEach(function(b) {
+          b.style.backgroundColor = 'var(--color-surface)';
+          b.style.color = 'var(--color-text)';
+          b.style.borderColor = 'var(--color-border)';
+        });
+        showStep('wizard-step-1');
+      });
+    }
+  })();
+</script>

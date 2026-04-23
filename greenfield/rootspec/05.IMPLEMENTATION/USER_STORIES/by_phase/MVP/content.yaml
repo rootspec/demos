@@ -1,160 +1,88 @@
 # =============================================================================
-# USER STORY: Meta Banner Visibility
+# USER STORY: Meta-Banner Visibility
 # =============================================================================
-# @spec_version: 1.0.0
+# @spec_version: 7.3.7
 # @phase: MVP
 # @journey: FIRST_VISIT
-# @systems: [PRESENTATION_SYSTEM, LAYOUT_SYSTEM]
+# @systems: [LAYOUT_SYSTEM, CONTENT_SYSTEM, PRESENTATION_SYSTEM]
 # @last_updated: 2026-04-23T00:00:00Z
 
-id: US-101
-title: Visitor reads the meta banner before any other content
+id: US-001
+title: Meta-banner is the first visible element on every page load
 
 acceptance_criteria:
-  - id: AC-101-1
-    title: Meta banner appears above the fold before hero content
+  - id: AC-001-1
+    title: Meta-banner appears above all content on desktop
     narrative: |
-      Given I visit the site for the first time
+      Given I visit the site on a desktop browser
       When the page loads
-      Then I see a banner explaining this is a RootSpec demo before reaching the hero
+      Then I see the meta-banner before the header and hero section
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldContain: { selector: '[data-test=meta-banner]', text: 'RootSpec' }
 
-  - id: AC-101-2
-    title: Meta banner contains links to spec and seed files
-    narrative: |
-      Given I am viewing the meta banner
-      When I look at the banner
-      Then I see links to view the spec and view the seed on GitHub
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=meta-banner] a[href*="github.com"]' }
-
----
-# =============================================================================
-# USER STORY: Hero Section Content
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, PRESENTATION_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
-
-id: US-102
-title: Visitor understands what RootSpec is from the hero
-
-acceptance_criteria:
-  - id: AC-102-1
-    title: Hero displays tagline and version badge
+  - id: AC-001-2
+    title: Meta-banner contains spec link and seed link
     narrative: |
       Given I visit the site
       When the page loads
-      Then I see a hero section with a tagline and the RootSpec version displayed
+      Then I see two links in the meta-banner pointing to GitHub
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=hero]' }
+      - shouldExist: { selector: '[data-test=meta-banner] [data-test=spec-link]' }
+      - shouldExist: { selector: '[data-test=meta-banner] [data-test=seed-link]' }
+
+  - id: AC-001-3
+    title: Meta-banner links are absolute GitHub URLs
+    narrative: |
+      Given I view the meta-banner
+      When I inspect the spec and seed links
+      Then they point to absolute GitHub URLs containing github.com/rootspec/demos
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldContain: { selector: '[data-test=spec-link]', text: 'spec' }
+      - shouldContain: { selector: '[data-test=seed-link]', text: 'seed' }
+
+---
+# =============================================================================
+# USER STORY: Version Badge Display
+# =============================================================================
+# @spec_version: 7.3.7
+# @phase: MVP
+# @journey: FIRST_VISIT
+# @systems: [CONTENT_SYSTEM, PRESENTATION_SYSTEM]
+# @last_updated: 2026-04-23T00:00:00Z
+
+id: US-002
+title: Version badge displays current RootSpec version
+
+acceptance_criteria:
+  - id: AC-002-1
+    title: Version badge is visible in the hero section
+    narrative: |
+      Given I visit the site
+      When the page loads
+      Then I see a version badge in the hero section showing the RootSpec version number
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
       - shouldExist: { selector: '[data-test=version-badge]' }
 
-  - id: AC-102-2
-    title: Version badge shows a version number
+  - id: AC-002-2
+    title: Version badge contains a semver string
     narrative: |
-      Given I am viewing the hero section
-      When I look at the version badge
-      Then I see a version number starting with v
+      Given I view the hero section
+      When I read the version badge
+      Then it displays a version number in the format X.Y.Z
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldContain: { selector: '[data-test=version-badge]', text: 'v' }
-
----
-# =============================================================================
-# USER STORY: Problem Section Content
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
-
-id: US-103
-title: Visitor reads about the spec drift problem
-
-acceptance_criteria:
-  - id: AC-103-1
-    title: Problem section exists with real content
-    narrative: |
-      Given I visit the site
-      When I scroll to the problem section
-      Then I see a section explaining why existing approaches fail
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=problem-section]' }
-      - shouldContain: { selector: '[data-test=problem-section]', text: 'spec' }
-
----
-# =============================================================================
-# USER STORY: How It Works Section
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
-
-id: US-104
-title: Visitor learns about the four RootSpec skills
-
-acceptance_criteria:
-  - id: AC-104-1
-    title: How it works section shows all four skills
-    narrative: |
-      Given I visit the site
-      When I scroll to the how it works section
-      Then I see all four RootSpec skills listed
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=how-it-works]' }
-      - shouldContain: { selector: '[data-test=how-it-works]', text: '/rs-init' }
-      - shouldContain: { selector: '[data-test=how-it-works]', text: '/rs-spec' }
-      - shouldContain: { selector: '[data-test=how-it-works]', text: '/rs-impl' }
-      - shouldContain: { selector: '[data-test=how-it-works]', text: '/rs-validate' }
-
----
-# =============================================================================
-# USER STORY: Open Source CTA
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: CONVERSION
-# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
-
-id: US-105
-title: Visitor finds the GitHub repo link
-
-acceptance_criteria:
-  - id: AC-105-1
-    title: CTA section has a link to the GitHub repo
-    narrative: |
-      Given I visit the site
-      When I scroll to the CTA section
-      Then I see a link to the RootSpec GitHub repository
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=cta-section]' }
-      - shouldExist: { selector: '[data-test=cta-section] a[href*="github.com/rootspec/rootspec"]' }
+      - shouldExist: { selector: '[data-test=version-badge]' }

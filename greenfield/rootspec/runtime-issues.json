@@ -1,1 +1,302 @@
-[]
+[
+  {
+    "type": "network_404",
+    "test": "AC-001-1: Meta-banner appears above all content on desktop",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-001-1: Meta-banner appears above all content on desktop",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-001-1: Meta-banner appears above all content on desktop",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-001-2: Meta-banner contains spec link and seed link",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-001-2: Meta-banner contains spec link and seed link",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-001-2: Meta-banner contains spec link and seed link",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-001-3: Meta-banner links are absolute GitHub URLs",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-001-3: Meta-banner links are absolute GitHub URLs",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-001-3: Meta-banner links are absolute GitHub URLs",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-002-1: Version badge is visible in the hero section",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-002-1: Version badge is visible in the hero section",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-002-1: Version badge is visible in the hero section",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-002-2: Version badge contains a semver string",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-002-2: Version badge contains a semver string",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-002-2: Version badge contains a semver string",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-004-1: All five hierarchy levels are visible",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-004-1: All five hierarchy levels are visible",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-004-1: All five hierarchy levels are visible",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-004-2: Clicking a level card expands it to show content",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-004-2: Clicking a level card expands it to show content",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-004-2: Clicking a level card expands it to show content",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-004-3: Clicking an expanded level collapses it",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-004-3: Clicking an expanded level collapses it",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-004-3: Clicking an expanded level collapses it",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-005-1: Wizard is present and shows Step 1 on load",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-005-1: Wizard is present and shows Step 1 on load",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-005-1: Wizard is present and shows Step 1 on load",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-005-2: User can advance through all three steps",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-005-2: User can advance through all three steps",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-005-2: User can advance through all three steps",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-005-3: Completing all steps generates a skeleton spec",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-005-3: Completing all steps generates a skeleton spec",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-005-3: Completing all steps generates a skeleton spec",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-006-1: Comparison section shows both panels",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-006-1: Comparison section shows both panels",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-006-1: Comparison section shows both panels",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-007-1: Site renders without horizontal overflow on mobile viewport",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-007-1: Site renders without horizontal overflow on mobile viewport",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-007-1: Site renders without horizontal overflow on mobile viewport",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-008-1: All major sections are present on the page",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-008-1: All major sections are present on the page",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-008-1: All major sections are present on the page",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-008-2: CTA section links to the GitHub repository",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-008-2: CTA section links to the GitHub repository",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-008-2: CTA section links to the GitHub repository",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-008-3: Footer shows attribution",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-008-3: Footer shows attribution",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-008-3: Footer shows attribution",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-1: Theme toggle button is present in the header",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-1: Theme toggle button is present in the header",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-1: Theme toggle button is present in the header",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-2: Clicking the toggle switches from light to dark mode",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-2: Clicking the toggle switches from light to dark mode",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-2: Clicking the toggle switches from light to dark mode",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-3: Clicking the toggle again returns to light mode",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-3: Clicking the toggle again returns to light mode",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-3: Clicking the toggle again returns to light mode",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-4: Default theme is light mode",
+    "message": "500 http://localhost:3000/@vite/client"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-4: Default theme is light mode",
+    "message": "504 http://localhost:3000/@id/astro/runtime/client/dev-toolbar/entrypoint.js"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-4: Default theme is light mode",
+    "message": "500 http://localhost:3000/src/styles/global.css"
+  }
+]

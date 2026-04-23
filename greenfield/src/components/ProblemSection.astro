@@ -1,24 +1,46 @@
 ---
+const problems = [
+  {
+    icon: '🔀',
+    title: 'Misaligned teams',
+    desc: 'Developers, designers, and stakeholders interpret requirements differently — causing rework and frustration.',
+  },
+  {
+    icon: '🎯',
+    title: 'Scope drift',
+    desc: 'Without a shared spec, features grow organically. Deadlines slip. Priorities shift. Goals blur.',
+  },
+  {
+    icon: '🧱',
+    title: 'Assumption-driven builds',
+    desc: 'Engineers fill gaps with guesses. Products ship features nobody asked for and miss the ones that matter.',
+  },
+];
 ---
-<section data-test="problem-section" style="padding:4rem 1.5rem;border-top:1px solid var(--color-border);background:var(--color-surface);">
-  <div style="max-width:860px;margin:0 auto;">
-    <h2 style="font-size:0.75rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:1.5rem;">The Problem</h2>
-    <h3 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:300;line-height:1.3;letter-spacing:-0.01em;color:var(--color-text);max-width:680px;margin-bottom:2rem;">
-      Every existing approach fails the same way: the spec and the code drift apart.
-    </h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2rem;margin-top:2.5rem;">
-      <div>
-        <h4 style="font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;">Spec drift is inevitable</h4>
-        <p style="font-size:0.95rem;color:var(--color-text-muted);line-height:1.65;">By the time validation happens, it's far removed from the original intent. Every intermediate step drifts independently.</p>
-      </div>
-      <div>
-        <h4 style="font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;">TDD and BDD don't stick</h4>
-        <p style="font-size:0.95rem;color:var(--color-text-muted);line-height:1.65;">They transform a few pages of spec into a book of pedantic instructions. Expensive, tedious, and abandoned the moment a deadline appears.</p>
-      </div>
-      <div>
-        <h4 style="font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;">AI makes it faster, not better</h4>
-        <p style="font-size:0.95rem;color:var(--color-text-muted);line-height:1.65;">Throwing AI at TDD just automates the tedium without fixing the underlying problem. The drift is still there — it just happens faster.</p>
-      </div>
+<section
+  data-test="problem-section"
+  id="problem"
+  class="py-20 px-4"
+  style="background-color: var(--color-surface);"
+>
+  <div class="section-container">
+    <h2 class="text-3xl font-bold text-center mb-4" style="color: var(--color-text);">
+      The cost of building without a spec
+    </h2>
+    <p class="text-center text-lg mb-12 max-w-2xl mx-auto" style="color: var(--color-text-muted);">
+      Most software projects fail not because of bad engineers, but because of unclear requirements.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {problems.map((p) => (
+        <div
+          class="rounded-xl p-6"
+          style="background-color: var(--color-card-bg); border: 1px solid var(--color-card-border);"
+        >
+          <div class="text-4xl mb-4">{p.icon}</div>
+          <h3 class="text-xl font-semibold mb-2" style="color: var(--color-text);">{p.title}</h3>
+          <p style="color: var(--color-text-muted);">{p.desc}</p>
+        </div>
+      ))}
     </div>
   </div>
 </section>

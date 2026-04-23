@@ -1,88 +1,130 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const levels = [
+interface Level {
+  id: number;
+  label: string;
+  title: string;
+  description: string;
+  example: string;
+  color: string;
+}
+
+const LEVELS: Level[] = [
   {
-    id: 'L1',
-    name: 'Philosophy',
-    tagline: 'WHY and WHAT EXPERIENCE',
-    content: 'The mission and design pillars. Why does this product exist? What experience should users have? This is the only level that never changes — everything else is derived from it.',
-    example: 'Mission: "Help developers ship software that matches their intent, not just their code."',
+    id: 1,
+    label: 'L1',
+    title: 'Philosophy',
+    description: 'The unchanging "why" behind your product. Defines the first principles that guide every decision.',
+    example: '"We believe software should be built from intent, not assumption."',
+    color: '#6d28d9',
   },
   {
-    id: 'L2',
-    name: 'Truths',
-    tagline: 'WHAT STRATEGY',
-    content: 'Trade-offs, commitments, and success criteria. What will we sacrifice to achieve the mission? What does success look like in measurable terms?',
-    example: 'Truth: "We optimise for spec fidelity over development speed. A slower build that matches intent beats a fast build that drifts."',
+    id: 2,
+    label: 'L2',
+    title: 'Truths',
+    description: 'Specific beliefs about your users, market, and domain. These are facts your team aligns on.',
+    example: '"Our users are senior engineers who value precision over hand-holding."',
+    color: '#7c3aed',
   },
   {
-    id: 'L3',
-    name: 'Interactions',
-    tagline: 'HOW USERS & PRODUCT INTERACT',
-    content: 'User flows, interaction patterns, and system feedback. How do users accomplish their goals? What happens when things go wrong?',
-    example: 'Flow: "Visitor enters product idea → selects mission template → picks design pillars → receives skeleton spec."',
+    id: 3,
+    label: 'L3',
+    title: 'Interactions',
+    description: 'The core user journeys — the moments that define the product experience.',
+    example: '"A developer can specify an entire feature in one /rs-spec session."',
+    color: '#8b5cf6',
   },
   {
-    id: 'L4',
-    name: 'Systems',
-    tagline: 'HOW IT IS BUILT',
-    content: 'Architecture decisions, data boundaries, and component structure. Only references higher levels — never drives L1–L3.',
-    example: 'System: "All interactions are client-side. No API calls. State held in React component tree."',
+    id: 4,
+    label: 'L4',
+    title: 'Systems',
+    description: 'The technical and design systems that enable the interactions. How things are structured.',
+    example: '"The CONTENT_SYSTEM manages all text, copy, and informational elements."',
+    color: '#a78bfa',
   },
   {
-    id: 'L5',
-    name: 'Implementation',
-    tagline: 'TESTABLE USER STORIES',
-    content: 'User stories with acceptance criteria in given/when/then form. These become the actual test suite. A story is not done until its test passes.',
-    example: 'Story: "Given I visit the site, When I click next with empty input, Then I remain on step 1."',
+    id: 5,
+    label: 'L5',
+    title: 'User Stories',
+    description: 'Concrete acceptance criteria with given/when/then scenarios that drive automated tests.',
+    example: '"Given I visit the site, when the page loads, then I see the meta-banner."',
+    color: '#c4b5fd',
   },
 ];
 
 export default function HierarchyExplorer() {
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<number | null>(null);
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => { setHydrated(true); }, []);
+
+  const toggle = (id: number) => {
+    setExpanded((prev) => (prev === id ? null : id));
+  };
 
   return (
-    <div data-test="hierarchy-explorer" style={{ display: 'flex', flexDirection: 'column', gap: '0', border: '1px solid var(--color-border)', borderRadius: '6px', overflow: 'hidden' }}>
-      {levels.map((level, i) => {
-        const isOpen = expanded === level.id;
+    <div data-test="hierarchy-explorer" data-hydrated={hydrated ? "true" : undefined} className="flex flex-col gap-3">
+      {LEVELS.map((level) => {
+        const isExpanded = expanded === level.id;
         return (
-          <div key={level.id} style={{ borderBottom: i < levels.length - 1 ? '1px solid var(--color-border)' : 'none' }}>
+          <div key={level.id} className="rounded-xl overflow-hidden" style={{ border: `1px solid ${level.color}33` }}>
             <button
-              data-test={`level-${level.id}`}
-              onClick={() => setExpanded(isOpen ? null : level.id)}
-              aria-expanded={isOpen}
+              data-test={`hierarchy-level-${level.id}`}
+              aria-expanded={isExpanded}
+              onClick={() => toggle(level.id)}
+              className="w-full text-left px-6 py-4 flex items-center gap-4 transition-colors"
               style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1rem',
-                padding: '1rem 1.25rem',
-                background: 'none',
-                border: 'none',
+                backgroundColor: isExpanded ? `${level.color}18` : 'var(--color-card-bg)',
                 cursor: 'pointer',
-                textAlign: 'left',
-                color: 'var(--color-text)',
-                transition: 'background 150ms ease-out',
               }}
             >
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--color-accent)', minWidth: '2rem', fontWeight: 500 }}>{level.id}</span>
-              <span style={{ fontFamily: 'Newsreader, Georgia, serif', fontSize: '1rem' }}>{level.name}</span>
-              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', color: 'var(--color-text-muted)', marginLeft: 'auto', marginRight: '0.5rem' }}>{level.tagline}</span>
-              <span style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem', transition: 'transform 150ms ease-out', transform: isOpen ? 'rotate(90deg)' : 'none' }}>▶</span>
+              <span
+                className="text-xs font-mono font-bold px-2 py-1 rounded shrink-0"
+                style={{ backgroundColor: level.color, color: 'white' }}
+              >
+                {level.label}
+              </span>
+              <span className="font-semibold text-lg flex-1" style={{ color: 'var(--color-text)' }}>
+                {level.title}
+              </span>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{
+                  color: 'var(--color-text-muted)',
+                  transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.2s ease',
+                }}
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
             </button>
-            <div
-              data-test={`level-${level.id}-content`}
-              style={{
-                padding: isOpen ? '0 1.25rem 1.25rem 3.5rem' : '0',
-                borderTop: isOpen ? '1px solid var(--color-border)' : 'none',
-                background: 'var(--color-surface)',
-                display: isOpen ? 'block' : 'none',
-                overflow: 'hidden',
-              }}
-            >
-              <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', lineHeight: 1.7, marginBottom: '0.75rem', marginTop: '1rem' }}>{level.content}</p>
-              <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem', color: 'var(--color-text-muted)', background: 'var(--color-bg)', padding: '0.6rem 0.9rem', borderRadius: '3px', borderLeft: '2px solid var(--color-accent)', lineHeight: 1.6 }}>{level.example}</p>
-            </div>
+            {isExpanded && (
+              <div
+                data-test={`hierarchy-level-${level.id}-content`}
+                className="px-6 py-5"
+                style={{ backgroundColor: `${level.color}10`, borderTop: `1px solid ${level.color}33` }}
+              >
+                <p className="mb-4" style={{ color: 'var(--color-text)' }}>
+                  {level.description}
+                </p>
+                <blockquote
+                  className="text-sm italic px-4 py-3 rounded"
+                  style={{
+                    backgroundColor: 'var(--color-surface)',
+                    borderLeft: `3px solid ${level.color}`,
+                    color: 'var(--color-text-muted)',
+                  }}
+                >
+                  {level.example}
+                </blockquote>
+              </div>
+            )}
           </div>
         );
       })}
