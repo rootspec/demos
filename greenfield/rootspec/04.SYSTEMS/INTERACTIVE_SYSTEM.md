@@ -1,110 +1,134 @@
 # Level 4: Interactive System
-# RootSpec Marketing Site
+
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md
+**Part of:** SYSTEMS_OVERVIEW.md
 
 ---
 
 ## Responsibility
 
-The Interactive System owns the three interactive sections of the site: the Hierarchy Explorer, the Spec Wizard, and the Before/After Comparison. It manages all in-session state for these features and renders outputs from user input combined with Content System templates.
+The Interactive System owns the client-side logic for the two interactive features: the Hierarchy Explorer and the Spec Wizard. It manages all interactive state, user input processing, and output generation. It does not own visual tokens (THEME_SYSTEM) or layout (LAYOUT_SYSTEM).
+
+---
+
+## Subsystem 1: Hierarchy Explorer
+
+### Purpose
+Make the five RootSpec levels tangible and explorable. Visitors click a level to see its role, allowed references, and example content. Visual arrows show that references flow upward only.
+
+### Data Model
+
+**Level entity:**
+```
+id: L1 | L2 | L3 | L4 | L5
+name: string
+icon: string
+purpose: string
+key_question: string
+example_content: string (markdown snippet)
+can_reference: Level[] (always a subset of levels with lower numbers)
+state: collapsed | expanded
+```
+
+**Explorer state:**
+```
+expanded_levels: Level[]  (zero or more levels can be expanded simultaneously)
+hovered_level: Level | null
+```
+
+### State Transitions
+
+- Default state: all levels collapsed, displaying name and icon only
+- On click: level toggles between expanded/collapsed
+- On hover: level and its allowed references are visually highlighted; non-referenced levels are de-emphasized
+- On keyboard (Enter/Space on focused level): same as click
+- On keyboard (Escape): collapse the currently focused level
+
+### Reference Visualization
+
+Visual connectors show which levels each level can reference. Arrows flow upward only (lower levels reference higher ones, never the reverse). When a level is hovered, its reference arrows become visually prominent; others fade.
+
+### Rules
+- All five levels are always visible (collapsed or expanded)
+- A level may be expanded independently of others
+- The reference arrow visualization is always present, not just on hover — hover emphasizes
+- Content inside expanded levels is example content from the framework, not the user's spec
+
+---
+
+## Subsystem 2: Spec Wizard
+
+### Purpose
+Let visitors apply the methodology to their own product idea. Three guided steps produce a skeleton spec showing how their input maps to L1-L3. Client-side only. No data transmitted or persisted.
+
+### Data Model
+
+**Wizard state:**
+```
+current_step: 1 | 2 | 3 | "output"
+step1_input: string (product idea, one line)
+step2_selection: string (mission — chosen from templates or written custom)
+step3_selections: string[] (design pillars — [minimum pillars] to [maximum pillars] selected)
+output: SkeletonSpec | null
+```
+
+**Mission templates:**
+A fixed list of [several] mission statement templates covering common product types (productivity, communication, knowledge, developer tools, etc.). Each template has placeholder text the user can accept or customize.
+
+**Pillar suggestions:**
+A fixed list of [many] design pillar suggestions organized by emotional category (empowerment, clarity, trust, delight, focus, etc.). Visitors select [minimum pillars] to [maximum pillars].
+
+**SkeletonSpec:**
+```
+product_idea: string
+mission: string
+design_pillars: string[]
+l1_preview: string (formatted L1 Philosophy fragment)
+l2_preview: string (formatted L2 Truths fragment — derived from mission)
+l3_preview: string (formatted L3 Interactions fragment — derived from pillars)
+```
+
+### Step Flow
+
+**Step 1 — Product Idea:**
+- Single text input, one line
+- Validation: non-empty, non-whitespace-only
+- Cannot advance with empty input
+
+**Step 2 — Mission:**
+- Display [several] mission templates as selectable options
+- "Write my own" option reveals freeform input
+- Exactly one selection required to advance
+- Selected template pre-fills with the user's product idea interpolated
+
+**Step 3 — Design Pillars:**
+- Display [many] pillar suggestions as multi-select chips
+- Must select between [minimum] and [maximum] pillars
+- Below minimum: soft warning message, Next is enabled after minimum is reached
+- Above maximum: selection is blocked; message explains the limit
+
+**Output:**
+- Rendered skeleton spec with L1-L3 sections populated from the wizard's inputs
+- Format mirrors the structure of a real RootSpec L1-L3 spec
+- Display only — no copy button, no export, no save
+
+### Navigation Rules
+- Back navigation restores previous step's values
+- Progress indicator shows current step (1, 2, 3)
+- Previous step summary (collapsed) appears above current step after step 1
+
+### Rules
+- No data leaves the client
+- Output is deterministic — same inputs produce same output
+- Wizard is reset on page reload (no persistence)
+- All wizard interactions are keyboard-accessible
+- Touch targets are [adequately sized] for mobile use
 
 ---
 
 ## Boundaries
 
-**Owns:**
-- Hierarchy Explorer: active level state, expand/collapse logic, reference highlight logic
-- Spec Wizard: step state, collected user inputs, output skeleton generation
-- Before/After Comparison: active panel state, toggle logic
-
-**Does not own:**
-- Content data (level descriptions, wizard templates) — provided by Content System
-- Visual transitions and animations — delegated to Presentation System
-- Layout breakpoints that determine interaction variants — queried from Layout System
-- Any external API calls
-
----
-
-## Subsystem: Hierarchy Explorer
-
-### State
-- `active_level`: `null` | `1` | `2` | `3` | `4` | `5`
-- `hovered_level`: `null` | `1` | `2` | `3` | `4` | `5`
-
-### Behavior
-- Clicking a level sets it as `active_level` and collapses any previously active level
-- Clicking the active level again collapses it (toggles)
-- Hovering a level sets `hovered_level`, which triggers reference highlighting in the UI
-- Reference arrows between levels are drawn based on the reference matrix in the Content System's level descriptions
-- Arrows always flow upward (lower levels reference higher levels, never the reverse)
-
-### Keyboard Navigation
-- `ArrowUp` / `ArrowDown` move focus between level cards
-- `Enter` / `Space` expand or collapse the focused level
-- `Escape` collapses any open level
-
-### Mobile Variant
-- On narrow viewports, the explorer renders as a vertically stacked list
-- Reference arrows are replaced by parenthetical labels (e.g., "References L1–L2")
-- Tap targets meet minimum size standards
-
----
-
-## Subsystem: Spec Wizard
-
-### State
-- `current_step`: `1` | `2` | `3` | `complete`
-- `step_1_input`: user-entered product idea (string)
-- `step_1_mission`: selected or written mission statement (string)
-- `step_2_pillars`: array of selected design pillars (min [N], max [M])
-- `step_3_interaction`: user-entered interaction description (string)
-- `output`: generated spec skeleton (derived from collected inputs + templates)
-
-### Steps
-
-**Step 1: Product Mission**
-- User enters a one-line product idea
-- User selects a mission template or writes their own
-- Validation: idea field must not be empty; mission must be selected or entered
-
-**Step 2: Design Pillars**
-- User selects [3–5] design pillar suggestions from the Content System's list
-- Or: user writes their own pillar
-- Validation: minimum [3] pillars selected before advancing
-
-**Step 3: Key Interaction**
-- User describes one core user interaction in free text
-- Validation: field must not be empty
-
-**Completion: Output**
-- The system combines inputs with templates to generate a skeleton spec covering L1 (mission, pillars) and L3 (interaction pattern)
-- Output is formatted to resemble real RootSpec file content (markdown-like structure)
-- Output is rendered inline below the wizard steps
-
-### Rules
-- Validation failures show inline feedback, not modal dialogs
-- Advancing without completing a required field does nothing — the step does not advance
-- Users can navigate backward through steps freely
-- Wizard state resets on page reload (no persistence)
-- No AI or API call — all output is generated from static templates and string interpolation
-
-### Keyboard Support
-- Tab navigates through inputs and controls
-- Enter advances to next step
-- Escape resets the wizard
-
----
-
-## Subsystem: Before/After Comparison
-
-### State
-- `active_panel`: `without_spec` | `with_rootspec`
-
-### Behavior
-- On desktop: side-by-side panels with a slider or tab/button toggle
-- On mobile: stacked panels with a tab toggle
-- Switching panels brings the active panel into focus; the inactive panel dims
-- Content is fully static — all text comes from the Content System
-
-### Rules
-- The default active panel is `without_spec` (shows the problem state first)
-- No user input is required beyond the toggle interaction
+- The Interactive System does NOT own visual tokens — consumes from THEME_SYSTEM
+- The Interactive System does NOT own layout — rendered within containers from LAYOUT_SYSTEM
+- The Interactive System does NOT own the before/after comparison toggle — that belongs to PRESENTATION_SYSTEM
+- All wizard content (templates, suggestions) is defined in this system, not in CONTENT_SYSTEM

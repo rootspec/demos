@@ -1,43 +1,91 @@
 # =============================================================================
-# USER STORIES: Responsive and Accessibility
+# USER STORY: Page Navigation
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: MOBILE_ACCESS
-# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-18T14:59:27Z
+# @journey: FIRST_VISIT
+# @systems: [LAYOUT_SYSTEM, CONTENT_SYSTEM]
+# @last_updated: 2026-04-23T00:00:00Z
 
----
-
-id: US-401
-title: Use the site on a mobile device
+id: US-301
+title: Visitor navigates the page and reaches the footer
 
 acceptance_criteria:
-  - id: AC-401-1
-    title: Page renders correctly at mobile viewport width
+  - id: AC-301-1
+    title: Footer is present with attribution
     narrative: |
-      Given I visit the site on a mobile device
-      When the page loads at a narrow viewport
-      Then the content is readable and not clipped or overflowing
+      Given I visit the site
+      When I scroll to the bottom of the page
+      Then I see a footer with attribution to the site builder
     given:
       - visit: '/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=hero-heading]' }
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
+      - shouldExist: { selector: '[data-test=footer]' }
+      - shouldContain: { selector: '[data-test=footer]', text: 'Claude' }
 
-  - id: AC-401-2
-    title: Spec Wizard is usable on mobile
+---
+# =============================================================================
+# USER STORY: Keyboard Accessibility
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: ACCESSIBILITY
+# @systems: [INTERACTIVE_SYSTEM, LAYOUT_SYSTEM, THEME_SYSTEM]
+# @last_updated: 2026-04-23T00:00:00Z
+
+id: US-302
+title: Visitor navigates interactive elements by keyboard
+
+acceptance_criteria:
+  - id: AC-302-1
+    title: Theme toggle is keyboard accessible
     narrative: |
-      Given I am on a mobile device
-      When I interact with the Spec Wizard
-      Then I can advance through steps and see the output
+      Given I visit the site
+      When I look at the theme toggle
+      Then it is a focusable element operable by keyboard
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=theme-toggle]:not([disabled])' }
+
+  - id: AC-302-2
+    title: Wizard next button is keyboard accessible
+    narrative: |
+      Given I am viewing the spec wizard
+      When I look at the next button
+      Then it is a focusable button element
+    given:
+      - visit: '/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=wizard-next]' }
+
+---
+# =============================================================================
+# USER STORY: Theme Persistence
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: RETURN_VISIT
+# @systems: [THEME_SYSTEM]
+# @last_updated: 2026-04-23T00:00:00Z
+
+id: US-303
+title: Theme preference persists across page reloads
+
+acceptance_criteria:
+  - id: AC-303-1
+    title: Dark mode preference is remembered after page reload
+    narrative: |
+      Given I have switched to dark mode by clicking the theme toggle
+      When I reload the page
+      Then the page loads in dark mode
     given:
       - visit: '/'
     when:
-      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A habit tracker for developers' }
-      - click: { selector: '[data-test=wizard-mission-option]:first-child' }
-      - click: { selector: '[data-test=wizard-next]' }
+      - click: { selector: '[data-test=theme-toggle]' }
+      - visit: '/'
     then:
-      - shouldExist: { selector: '[data-test=wizard-step-2]' }
+      - shouldExist: { selector: 'html[data-theme="dark"], html.dark' }

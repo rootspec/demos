@@ -1,17 +1,19 @@
 # Level 4: Systems Overview
-# RootSpec Marketing Site
+
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md
+**Purpose:** How the site is built — system boundaries, responsibilities, and interactions
 
 ---
 
 ## System Map
 
-| System | Responsibility | Owned Data |
-|--------|---------------|------------|
-| [CONTENT_SYSTEM](CONTENT_SYSTEM.md) | Static page content, copy, and metadata | Section text, headings, meta tags |
-| [THEME_SYSTEM](THEME_SYSTEM.md) | Dark/light theme state and persistence | User theme preference |
-| [INTERACTIVE_SYSTEM](INTERACTIVE_SYSTEM.md) | Hierarchy Explorer, Spec Wizard, and Before/After Comparison | Wizard state, active level, comparison panel state |
-| [LAYOUT_SYSTEM](LAYOUT_SYSTEM.md) | Responsive layout, section structure, and navigation | Viewport breakpoints, scroll position |
-| [PRESENTATION_SYSTEM](PRESENTATION_SYSTEM.md) | Animations, transitions, and visual feedback | Animation state, motion preference |
+| System | Responsibility | Primary Output |
+|--------|---------------|----------------|
+| [CONTENT_SYSTEM](CONTENT_SYSTEM.md) | Site sections, copy, and static content delivery | Rendered HTML sections |
+| [THEME_SYSTEM](THEME_SYSTEM.md) | Light/dark theme, typography tokens, color palette | CSS custom properties, theme state |
+| [INTERACTIVE_SYSTEM](INTERACTIVE_SYSTEM.md) | Hierarchy explorer and spec wizard logic | Interactive component state |
+| [LAYOUT_SYSTEM](LAYOUT_SYSTEM.md) | Responsive layout, navigation, header, footer | Page structure and responsive breakpoints |
+| [PRESENTATION_SYSTEM](PRESENTATION_SYSTEM.md) | Before/after comparison, version badge, meta-banner | Rendered UI elements |
 
 ---
 
@@ -19,54 +21,36 @@
 
 | From | To | Interaction |
 |------|----|-------------|
-| THEME_SYSTEM | CONTENT_SYSTEM | Applies CSS custom properties that affect text and background rendering |
-| THEME_SYSTEM | PRESENTATION_SYSTEM | Theme changes trigger a transition animation |
-| LAYOUT_SYSTEM | INTERACTIVE_SYSTEM | Viewport size determines which interaction variant renders (e.g., stacked vs. side-by-side) |
-| LAYOUT_SYSTEM | PRESENTATION_SYSTEM | Scroll position triggers section reveal animations |
-| INTERACTIVE_SYSTEM | PRESENTATION_SYSTEM | User actions in interactive sections trigger feedback animations |
-| CONTENT_SYSTEM | INTERACTIVE_SYSTEM | Static template data (pillar suggestions, mission templates) feeds the Spec Wizard |
+| THEME_SYSTEM | All systems | Provides CSS custom properties consumed by all rendered components |
+| LAYOUT_SYSTEM | CONTENT_SYSTEM | Wraps content sections in layout containers |
+| LAYOUT_SYSTEM | INTERACTIVE_SYSTEM | Hosts interactive components within section slots |
+| PRESENTATION_SYSTEM | CONTENT_SYSTEM | Reads version from `.rootspec.json` for version badge display |
+| INTERACTIVE_SYSTEM | THEME_SYSTEM | Interactive components respect current theme tokens |
+| LAYOUT_SYSTEM | THEME_SYSTEM | Navigation header hosts theme toggle control |
 
 ---
 
 ## Data Flow
 
 ```
-User arrives at page
-  └─ LAYOUT_SYSTEM reads viewport, initializes scroll observer
-  └─ THEME_SYSTEM reads localStorage → system preference → default (dark)
-       └─ Applies CSS custom properties to document root
+Build time:
+  .rootspec.json → version field → PRESENTATION_SYSTEM (version badge, meta-banner)
+  SEED.md / spec files → GitHub URLs → PRESENTATION_SYSTEM (meta-banner links)
 
-User scrolls
-  └─ LAYOUT_SYSTEM fires section-enter events
-       └─ PRESENTATION_SYSTEM plays section reveal animations
-
-User opens Hierarchy Explorer
-  └─ INTERACTIVE_SYSTEM manages active level state
-       └─ PRESENTATION_SYSTEM animates expand/collapse
-       └─ CONTENT_SYSTEM provides level example content
-
-User runs Spec Wizard
-  └─ INTERACTIVE_SYSTEM manages step state and collected inputs
-       └─ CONTENT_SYSTEM provides templates for mission, pillars, interactions
-       └─ INTERACTIVE_SYSTEM renders output skeleton from templates + inputs
-       └─ PRESENTATION_SYSTEM animates step transitions and output reveal
-
-User toggles Before/After Comparison
-  └─ INTERACTIVE_SYSTEM manages active panel state
-       └─ PRESENTATION_SYSTEM animates panel focus change
-       └─ CONTENT_SYSTEM provides panel content
-
-User toggles theme
-  └─ THEME_SYSTEM updates preference in localStorage
-       └─ CSS custom properties update on document root
-       └─ PRESENTATION_SYSTEM plays theme transition
+Runtime (client):
+  User system preference → THEME_SYSTEM → initial theme state
+  LocalStorage → THEME_SYSTEM → persisted theme preference
+  User input (wizard steps) → INTERACTIVE_SYSTEM → skeleton spec output
+  User clicks (explorer) → INTERACTIVE_SYSTEM → expanded level state
+  User toggle (theme) → THEME_SYSTEM → page re-theme
 ```
 
 ---
 
-## Shared Constraints
+## Architectural Constraints
 
-- No system makes external network requests at runtime
-- All system state is ephemeral (in-memory) except THEME_SYSTEM (localStorage)
-- Systems communicate through DOM events and shared CSS custom properties — no shared mutable JS state between systems
-- All interactive systems degrade gracefully when JavaScript is unavailable
+- All systems produce static, pre-rendered output. No server-side API calls at runtime.
+- Interactive systems (wizard, explorer) run entirely in the browser. No data leaves the client.
+- The THEME_SYSTEM is the single source of truth for all visual tokens — no hardcoded colors or fonts in components.
+- The PRESENTATION_SYSTEM reads the version once at build time and embeds it statically.
+- No external CDN dependencies for fonts or icons — all assets must be bundled or system fonts.

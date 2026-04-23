@@ -1,64 +1,96 @@
 # Level 4: Theme System
-# RootSpec Marketing Site
+
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md
+**Part of:** SYSTEMS_OVERVIEW.md
 
 ---
 
 ## Responsibility
 
-The Theme System manages dark/light mode state across the entire site. It is the single authority on which theme is active and how that preference is persisted and applied.
+The Theme System owns all visual design tokens — typography, color palette, spacing rhythm, and motion timing. It is the single source of truth for all visual decisions. All other systems consume its tokens; none define their own. It also manages the light/dark theme state and the theme toggle interaction.
+
+---
+
+## Typography Stack
+
+Three type families, each with a distinct role:
+
+| Role | Family type | Usage |
+|------|-------------|-------|
+| Body / Editorial | High-quality serif (e.g., Source Serif 4, Newsreader, Charter) | All prose, body copy, section headings |
+| UI / Labels | Clean sans-serif (e.g., Inter, IBM Plex Sans) | Navigation, buttons, captions, metadata |
+| Code / Commands | Monospace (e.g., JetBrains Mono, IBM Plex Mono) | Skill names (`/rs-init`), code examples, version badge |
+
+Typography is the primary design element. Font choices must signal essay-quality writing, not SaaS marketing.
+
+---
+
+## Color Palette
+
+Restrained palette: two to three colors plus neutrals. One accent used sparingly.
+
+| Token | Role | Light value | Dark value |
+|-------|------|-------------|------------|
+| `--color-surface` | Page background | Near-white | Near-black |
+| `--color-text` | Body text | Near-black | Near-white |
+| `--color-text-muted` | Secondary text | Mid-gray | Mid-gray |
+| `--color-accent` | Links, interactive states, emphasis | [single accent color] | [adjusted accent] |
+| `--color-border` | Dividers, section boundaries | Light gray | Dark gray |
+| `--color-surface-raised` | Banners, cards, inset areas | Off-white | Off-black |
+
+Rules:
+- No gradients on any element
+- No glassmorphism, glows, or drop shadows used decoratively
+- The accent color appears sparingly — link underlines, active states, one or two emphasis uses
+- All colors must meet WCAG AA contrast ratios in both themes
+
+---
+
+## Spacing
+
+Generous whitespace. The page breathes. Spacing is based on a consistent scale.
+
+| Token | Purpose |
+|-------|---------|
+| `--space-section` | Vertical padding between page sections — [generous value] |
+| `--space-prose` | Maximum width for prose columns — [comfortable reading width] |
+| `--space-gap` | Standard gap between related elements |
+| `--space-tight` | Tight gap for closely related elements |
+
+---
+
+## Motion
+
+Transitions are quick and functional. No springy animations. No parallax.
+
+| Token | Value | Use |
+|-------|-------|-----|
+| `--duration-quick` | [short duration] | Interactive state changes (hover, focus) |
+| `--duration-transition` | [short duration] | Theme toggle, section reveals |
+| `--easing` | ease-out | All transitions |
+
+No animations play on page load. No scroll-triggered animations. Transitions respond to user action only.
+
+---
+
+## Theme State Management
+
+| State | Description |
+|-------|-------------|
+| `light` | Default. Applied on first visit and when system preference is light. |
+| `dark` | Applied when user toggles, or on first visit when system preference is dark. |
+
+Rules:
+- Light mode is the default
+- System preference (`prefers-color-scheme`) is detected on first load only
+- User preference persists in `localStorage` under a consistent key
+- Theme class is applied to the `<html>` element to enable CSS cascade
 
 ---
 
 ## Boundaries
 
-**Owns:**
-- Current theme state (`dark` | `light`)
-- Theme preference persistence (localStorage)
-- CSS custom property application on the document root
-- Initial theme resolution logic (localStorage → system preference → default)
-
-**Does not own:**
-- Visual design of each theme (colors, typography, shadows — defined in CSS)
-- Theme toggle UI element (→ Layout System owns placement; Presentation System owns animation)
-- Any user content or copy
-
----
-
-## State
-
-### Theme State
-- `current_theme`: `dark` | `light`
-- `source`: `persisted` | `system` | `default`
-
-### Resolution Order (on page load)
-1. Read `localStorage` key `rootspec-theme`
-2. If not set, read `prefers-color-scheme` media query
-3. If unavailable, default to `dark`
-
----
-
-## Behavior
-
-### Applying the theme
-When `current_theme` changes:
-1. Set `data-theme` attribute on the document root element
-2. CSS custom properties scoped to `[data-theme="dark"]` and `[data-theme="light"]` handle all visual changes
-3. No inline styles are set by this system — everything flows through CSS
-
-### Persisting the theme
-When the user manually toggles the theme:
-1. Update `current_theme`
-2. Write to `localStorage` key `rootspec-theme`
-3. Dispatch a DOM event so other systems can react (e.g., Presentation System plays transition)
-
-### Privacy / restricted environments
-If `localStorage` is unavailable (e.g., private browsing, storage denied), the system operates in memory only. Preference is not persisted. No error is surfaced to the user.
-
----
-
-## Rules
-
-- Theme must be applied before first paint — initialization runs synchronously in a `<script>` tag in the document `<head>` to prevent flash of incorrect theme
-- CSS custom properties are the only mechanism for applying theme — no JavaScript DOM manipulation of colors or backgrounds
-- Both themes must meet WCAG AA contrast requirements for all text on background combinations
-- Theme state is the only data persisted across sessions by any system on this site
+- The Theme System does NOT own component structure or layout — that belongs to LAYOUT_SYSTEM
+- The Theme System does NOT own interactive logic — that belongs to INTERACTIVE_SYSTEM
+- All color, font, spacing, and motion decisions live here and nowhere else
+- Components must consume tokens, never hardcode values

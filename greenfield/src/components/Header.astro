@@ -1,42 +1,41 @@
 ---
-import { readFileSync } from 'fs';
-import { join } from 'path';
-
-let version = '7.3.5';
-try {
-  const rootspecJson = JSON.parse(readFileSync(join(process.cwd(), '.rootspec.json'), 'utf8'));
-  version = rootspecJson.version || version;
-} catch (e) {}
+import { version } from '../../.rootspec.json';
 ---
-
-<header style="background-color: var(--bg-secondary); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50;">
-  <div style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 3.5rem;">
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <span style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">RootSpec</span>
-      <span data-test="version-badge" style="background-color: var(--accent); color: white; font-size: 0.7rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 9999px; letter-spacing: 0.02em;">v{version}</span>
+<header style="border-bottom:1px solid var(--color-border);padding:1rem 1.5rem;font-family:'Inter',sans-serif;">
+  <div style="max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-weight:600;font-size:0.9rem;letter-spacing:-0.01em;color:var(--color-text);">RootSpec</span>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span data-test="version-badge" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--color-text-muted);background:var(--color-surface);padding:0.2rem 0.5rem;border-radius:3px;">v{version}</span>
+      <button
+        data-test="theme-toggle"
+        id="theme-toggle"
+        aria-label="Toggle theme"
+        style="background:none;border:1px solid var(--color-border);border-radius:4px;padding:0.3rem 0.6rem;cursor:pointer;font-size:0.8rem;color:var(--color-text-muted);font-family:'Inter',sans-serif;transition:border-color 150ms ease-out;"
+      >
+        <span id="theme-icon">☀</span>
+      </button>
     </div>
-    <button
-      data-test="theme-toggle"
-      id="theme-toggle"
-      aria-label="Toggle theme"
-      onclick="(function(){ var cur = document.documentElement.getAttribute('data-theme') || 'dark'; var next = cur === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', next); document.body.setAttribute('data-theme', next); var tr = document.getElementById('theme-root'); if(tr) tr.setAttribute('data-theme', next); var ti = document.getElementById('theme-indicator'); if(ti) ti.setAttribute('data-theme', next); try { localStorage.setItem('rootspec-theme', next); } catch(e) {} var icon = document.getElementById('theme-icon'); var label = document.getElementById('theme-label'); if(icon) icon.textContent = next === 'dark' ? '🌙' : '☀️'; if(label) label.textContent = next === 'dark' ? 'Dark' : 'Light'; })()"
-      style="background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); padding: 0.4rem 0.75rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem; display: flex; align-items: center; gap: 0.4rem; transition: all 200ms ease;"
-    >
-      <span id="theme-icon">🌙</span>
-      <span id="theme-label">Dark</span>
-    </button>
   </div>
 </header>
 
-<script is:inline>
-  // Sync theme indicator and icon on load
-  var currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-  var themeRoot = document.getElementById('theme-root');
-  if (themeRoot) themeRoot.setAttribute('data-theme', currentTheme);
-  var themeIndicator = document.getElementById('theme-indicator');
-  if (themeIndicator) themeIndicator.setAttribute('data-theme', currentTheme);
-  var icon = document.getElementById('theme-icon');
-  var label = document.getElementById('theme-label');
-  if (icon) icon.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
-  if (label) label.textContent = currentTheme === 'dark' ? 'Dark' : 'Light';
+<script>
+  const btn = document.getElementById('theme-toggle');
+  const icon = document.getElementById('theme-icon');
+
+  function getTheme() {
+    return document.documentElement.getAttribute('data-theme') || 'light';
+  }
+
+  function updateIcon() {
+    if (icon) icon.textContent = getTheme() === 'dark' ? '☽' : '☀';
+  }
+
+  updateIcon();
+
+  btn?.addEventListener('click', () => {
+    const next = getTheme() === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch(e) {}
+    updateIcon();
+  });
 </script>

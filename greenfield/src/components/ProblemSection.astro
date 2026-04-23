@@ -1,27 +1,24 @@
 ---
 ---
-
-<section data-test="problem-section" id="problem" style="padding: 4rem 1.5rem; background-color: var(--bg-primary);">
-  <div style="max-width: 1000px; margin: 0 auto;">
-    <h2 data-test="problem-heading" style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; color: var(--text-primary); text-align: center; margin: 0 0 1rem;">
-      Why Existing Spec Approaches Fail
-    </h2>
-    <p style="text-align: center; color: var(--text-secondary); font-size: 1.05rem; margin: 0 0 3rem; max-width: 640px; margin-left: auto; margin-right: auto;">
-      Most specification methods were designed for human developers. They produce artifacts that AI agents struggle to interpret, leading to misbuilt features and costly rework.
-    </p>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-      {[
-        { icon: '📄', title: 'Too Vague', body: 'User stories like "the user should be able to log in" leave implementation details entirely to interpretation.' },
-        { icon: '🌀', title: 'No Hierarchy', body: 'Flat requirements lists have no structure. An AI agent has no way to understand which decisions constrain others.' },
-        { icon: '🔀', title: 'Untestable', body: 'Requirements written without acceptance criteria cannot be validated automatically — you\'re stuck manual testing forever.' },
-        { icon: '💸', title: 'Expensive to Fix', body: 'When an AI builds the wrong thing, you pay twice: once to build it wrong, once to rebuild it right.' },
-      ].map(({ icon, title, body }) => (
-        <div style="background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.5rem;">
-          <div style="font-size: 1.75rem; margin-bottom: 0.75rem;">{icon}</div>
-          <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.5rem;">{title}</h3>
-          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">{body}</p>
-        </div>
-      ))}
+<section data-test="problem-section" style="padding:4rem 1.5rem;border-top:1px solid var(--color-border);background:var(--color-surface);">
+  <div style="max-width:860px;margin:0 auto;">
+    <h2 style="font-size:0.75rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:1.5rem;">The Problem</h2>
+    <h3 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:300;line-height:1.3;letter-spacing:-0.01em;color:var(--color-text);max-width:680px;margin-bottom:2rem;">
+      Every existing approach fails the same way: the spec and the code drift apart.
+    </h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2rem;margin-top:2.5rem;">
+      <div>
+        <h4 style="font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;">Spec drift is inevitable</h4>
+        <p style="font-size:0.95rem;color:var(--color-text-muted);line-height:1.65;">By the time validation happens, it's far removed from the original intent. Every intermediate step drifts independently.</p>
+      </div>
+      <div>
+        <h4 style="font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;">TDD and BDD don't stick</h4>
+        <p style="font-size:0.95rem;color:var(--color-text-muted);line-height:1.65;">They transform a few pages of spec into a book of pedantic instructions. Expensive, tedious, and abandoned the moment a deadline appears.</p>
+      </div>
+      <div>
+        <h4 style="font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;">AI makes it faster, not better</h4>
+        <p style="font-size:0.95rem;color:var(--color-text-muted);line-height:1.65;">Throwing AI at TDD just automates the tedium without fixing the underlying problem. The drift is still there — it just happens faster.</p>
+      </div>
     </div>
   </div>
 </section>

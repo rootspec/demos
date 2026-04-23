@@ -1,15 +1,11 @@
 ---
-const GITHUB_BASE = 'https://github.com/rootspec/demos/blob/main/greenfield';
-const seedUrl = `${GITHUB_BASE}/SEED.md`;
-const specUrl = `${GITHUB_BASE}/rootspec`;
 ---
-
-<div data-test="meta-banner" style="background-color: var(--meta-bg); border-bottom: 1px solid var(--meta-border); padding: 0.6rem 1.5rem;">
-  <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--meta-text);">
-    <span>🧪 <strong>RootSpec Demo</strong> — This site was built from a spec using the RootSpec methodology.</span>
-    <span style="display: flex; gap: 0.75rem; margin-left: auto;">
-      <a data-test="meta-banner-seed-link" href={seedUrl} target="_blank" rel="noopener noreferrer" style="color: var(--meta-text); font-weight: 600; text-decoration: underline;">View SEED.md</a>
-      <a data-test="meta-banner-spec-link" href={specUrl} target="_blank" rel="noopener noreferrer" style="color: var(--meta-text); font-weight: 600; text-decoration: underline;">View Spec</a>
+<div data-test="meta-banner" style="background:var(--color-banner-bg);border-bottom:1px solid var(--color-border);padding:0.6rem 1.5rem;font-family:'Inter',sans-serif;font-size:0.82rem;color:var(--color-text-muted);line-height:1.5;">
+  <div style="max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:0.5rem;align-items:baseline;">
+    <span>This site was generated from a ~100-line product description using the <strong style="color:var(--color-text);">RootSpec</strong> pipeline — no manual code, no design mockups. The spec, code, and tests were produced by running four commands.</span>
+    <span style="display:inline-flex;gap:0.75rem;white-space:nowrap;">
+      <a href="https://github.com/rootspec/demos/tree/main/greenfield/rootspec" target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:2px;">View the spec →</a>
+      <a href="https://github.com/rootspec/demos/tree/main/greenfield/SEED.md" target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:2px;">View the seed →</a>
     </span>
   </div>
 </div>
