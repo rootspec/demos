@@ -8,37 +8,46 @@
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Responsive Breakpoints
+# Breakpoints
 # -----------------------------------------------------------------------------
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
 
 breakpoints:
-  mobile: 640
-  # @unit: pixels
-  # @rationale: Standard mobile breakpoint; below this, wizard and
-  #   before/after comparison switch to touch-optimized layouts
-  # @constraints: min=480, max=768, type=integer
+  mobile_max_px: 767
+  # @rationale: Standard mobile breakpoint; below this width, single-column layout
+  # @constraints: min=320, max=1024, type=integer
 
-  tablet: 768
-  # @unit: pixels
-  # @rationale: Tablet breakpoint; side-by-side panels become viable
-  # @constraints: min=640, max=1024, type=integer
+  tablet_min_px: 768
+  # @rationale: Tablet range starts at 768 (typical portrait tablet width)
+  # @constraints: type=integer
 
-  desktop: 1024
-  # @unit: pixels
-  # @rationale: Full desktop layout; all interactive features in
-  #   their intended orientation
-  # @constraints: min=960, max=1280, type=integer
+  tablet_max_px: 1023
+  # @rationale: Tablets below 1024 get tablet layout; above switches to full desktop
+  # @constraints: type=integer
+
+  desktop_min_px: 1024
+  # @rationale: Desktop layouts start at 1024; before/after comparison uses side-by-side
+  # @constraints: type=integer
 
 # -----------------------------------------------------------------------------
-# Touch Targets
+# Content Widths
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md, 03.INTERACTIONS.md
 
-touch:
-  min_target_size: 44
-  # @unit: pixels
-  # @rationale: WCAG 2.5.5 Success Criterion; 44x44px minimum touch target
-  # @reference: WCAG 2.1 - Success Criterion 2.5.5 Target Size
-  # @inviolable: true
-  # @constraints: min=44, max=80, type=integer
+content:
+  prose_width: 680
+  # @rationale: Approximately 75 characters per line at base font size; optimal for editorial reading
+  # @reference: Bringhurst, "The Elements of Typographic Style" - 45-75 characters optimal
+  # @constraints: min=400, max=900, type=integer
+
+  wide_width: 1100
+  # @rationale: Used for full-bleed sections (comparison, wizard); wider but still constrained
+  # @constraints: min=800, max=1400, type=integer
+
+  page_max_width: 1280
+  # @rationale: Prevents excessive whitespace on very large screens
+  # @constraints: min=1024, max=1920, type=integer
+
+  max_line_length: 75
+  # @rationale: characters per line; beyond 80ch, line tracking becomes difficult
+  # @reference: WCAG 2.1 Success Criterion 1.4.8 - no more than 80 characters per line
+  # @constraints: min=45, max=90, type=integer

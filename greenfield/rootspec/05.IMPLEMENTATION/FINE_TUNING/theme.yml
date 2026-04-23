@@ -8,73 +8,23 @@
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Motion Timing
+# Transition Timing
 # -----------------------------------------------------------------------------
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
-motion:
-  duration_quick: 150
-  # @unit: milliseconds
-  # @rationale: Fast enough to feel immediate for hover/focus states;
-  #   matches common UI framework defaults for micro-interactions
-  # @reference: Material Design - Motion duration guidelines
-  # @constraints: min=80, max=250, type=integer
+transitions:
+  theme_switch_ms: 200
+  # @rationale: Fast enough to feel immediate, noticeable enough to register
+  # @reference: 03.INTERACTIONS.md - "150-250ms ease-out" for all transitions
+  # @constraints: min=0, max=500, type=integer
+  # @inviolable: false
 
-  duration_transition: 200
-  # @unit: milliseconds
-  # @rationale: Functional transition speed per 02.TRUTHS.md —
-  #   quick and purposeful, not decorative; 200ms is at the boundary of
-  #   "noticeable but not slow"
-  # @reference: Nielsen Norman Group - Response Times
-  # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md, 02.TRUTHS.md
-  # @constraints: min=150, max=300, type=integer
+  interactive_state_ms: 150
+  # @rationale: Hover/focus state changes should feel snappy, not delayed
+  # @spec_source: 03.INTERACTIONS.md
+  # @constraints: min=0, max=300, type=integer
 
-  easing: ease-out
-  # @rationale: ease-out matches natural deceleration; feels mechanical
-  #   (decelerates to a stop) rather than bouncy
-  # @inviolable: true
-  # @spec_source: 02.TRUTHS.md - Interactivity demonstrates, not decorates
-
-# -----------------------------------------------------------------------------
-# Layout Metrics
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
-
-layout:
-  max_content_width: 1200
-  # @unit: pixels
-  # @rationale: Wide enough for side-by-side interactive elements at desktop;
-  #   not so wide that prose lines become unreadable
-  # @constraints: min=900, max=1440, type=integer
-
-  prose_max_width: 680
-  # @unit: pixels
-  # @rationale: 65-75 characters per line for optimal reading comfort;
-  #   680px achieves this at 16-18px font sizes
-  # @reference: Bringhurst - The Elements of Typographic Style
-  # @constraints: min=560, max=780, type=integer
-
-  section_padding_vertical: 96
-  # @unit: pixels
-  # @rationale: Generous whitespace between sections signals editorial quality;
-  #   allows sections to breathe and be scanned independently
-  # @spec_source: 02.TRUTHS.md - Typography carries the argument
-  # @constraints: min=64, max=160, type=integer
-
-# -----------------------------------------------------------------------------
-# Typography Scale
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
-
-typography:
-  base_size: 18
-  # @unit: pixels
-  # @rationale: Slightly larger than browser default (16px) for editorial
-  #   readability; comfortable for extended reading
-  # @constraints: min=16, max=20, type=integer
-
-  line_height_prose: 1.7
-  # @unit: ratio
-  # @rationale: Generous line height for body copy; editorial reading comfort
-  # @reference: Bringhurst - The Elements of Typographic Style
-  # @constraints: min=1.5, max=1.9, type=float
+  expand_collapse_ms: 200
+  # @rationale: Expand/collapse for hierarchy explorer; slightly longer to convey content appearing
+  # @spec_source: 03.INTERACTIONS.md
+  # @constraints: min=100, max=400, type=integer

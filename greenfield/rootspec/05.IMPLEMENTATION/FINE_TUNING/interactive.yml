@@ -8,48 +8,32 @@
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Hierarchy Explorer
+# Spec Wizard Input Limits
 # -----------------------------------------------------------------------------
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
-hierarchy_explorer:
-  levels_count: 5
-  # @rationale: Five levels are defined by the RootSpec framework
-  # @inviolable: true
-  # @spec_source: 01.PHILOSOPHY.md, 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-  # @constraints: min=5, max=5, type=integer
+wizard:
+  idea_max_chars: 200
+  # @rationale: Long enough for a clear one-liner; short enough to force clarity
+  # @constraints: min=50, max=500, type=integer
 
-# -----------------------------------------------------------------------------
-# Spec Wizard
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+  mission_max_chars: 300
+  # @rationale: Mission statements should be concise; one to two sentences max
+  # @constraints: min=100, max=1000, type=integer
 
-spec_wizard:
-  steps: 3
-  # @rationale: Three steps (idea, mission, pillars) provides enough depth
-  #   without overwhelming a casual visitor
-  # @constraints: min=2, max=5, type=integer
+  min_pillars: 3
+  # @rationale: Fewer than 3 pillars suggests insufficient differentiation
+  # @constraints: min=1, max=5, type=integer
 
-  mission_templates: 6
-  # @rationale: Enough variety to cover common product types without
-  #   overwhelming choice; fewer than 10 to prevent decision paralysis
-  # @constraints: min=4, max=10, type=integer
-  # @review_date: 2026-07-01
-
-  pillar_suggestions: 20
-  # @rationale: Wide enough to cover most product categories;
-  #   visitors rarely see all options before finding relevant ones
-  # @constraints: min=12, max=30, type=integer
-
-  pillars_min: 3
-  # @rationale: Three pillars is the minimum for meaningful spec structure;
-  #   fewer doesn't provide enough constraints on the product identity
-  # @spec_source: 01.PHILOSOPHY.md - Design Pillars section
-  # @constraints: min=2, max=5, type=integer
-
-  pillars_max: 5
-  # @rationale: Five pillars is the framework recommended maximum;
-  #   more than five dilutes focus per 01.PHILOSOPHY.md guidelines
-  # @inviolable: true
-  # @spec_source: 01.PHILOSOPHY.md - Design Pillars section
+  max_pillars: 5
+  # @rationale: More than 5 pillars indicates lack of focus (per L1 inviolable principles)
+  # @reference: 01.PHILOSOPHY.md - Design Pillars guidance (3-5 recommended)
   # @constraints: min=3, max=8, type=integer
+
+  pillar_max_chars: 100
+  # @rationale: Each pillar should be a short phrase, not a paragraph
+  # @constraints: min=10, max=300, type=integer
+
+  interaction_max_chars: 500
+  # @rationale: Key interaction description; enough for specificity without design docs
+  # @constraints: min=50, max=2000, type=integer

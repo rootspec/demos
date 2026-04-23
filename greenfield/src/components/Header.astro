@@ -1,41 +1,43 @@
 ---
-import { version } from '../../.rootspec.json';
 ---
-<header style="border-bottom:1px solid var(--color-border);padding:1rem 1.5rem;font-family:'Inter',sans-serif;">
-  <div style="max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
-    <span style="font-weight:600;font-size:0.9rem;letter-spacing:-0.01em;color:var(--color-text);">RootSpec</span>
-    <div style="display:flex;align-items:center;gap:1rem;">
-      <span data-test="version-badge" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--color-text-muted);background:var(--color-surface);padding:0.2rem 0.5rem;border-radius:3px;">v{version}</span>
-      <button
-        data-test="theme-toggle"
-        id="theme-toggle"
-        aria-label="Toggle theme"
-        style="background:none;border:1px solid var(--color-border);border-radius:4px;padding:0.3rem 0.6rem;cursor:pointer;font-size:0.8rem;color:var(--color-text-muted);font-family:'Inter',sans-serif;transition:border-color 150ms ease-out;"
-      >
-        <span id="theme-icon">☀</span>
-      </button>
+<header class="sticky top-0 z-50 w-full border-b" style="background-color:var(--bg);border-color:var(--border);">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <span class="font-bold text-lg" style="color:var(--text);">RootSpec</span>
     </div>
+    <button
+      data-test="theme-toggle"
+      id="theme-toggle"
+      aria-label="Toggle theme"
+      class="p-2 rounded-lg transition-colors hover:opacity-80"
+      style="background-color:var(--surface);color:var(--text);"
+    >
+      <span id="theme-icon-light" class="text-base">☀️</span>
+      <span id="theme-icon-dark" class="text-base hidden">🌙</span>
+    </button>
   </div>
 </header>
 
 <script>
   const btn = document.getElementById('theme-toggle');
-  const icon = document.getElementById('theme-icon');
+  const iconLight = document.getElementById('theme-icon-light');
+  const iconDark = document.getElementById('theme-icon-dark');
+  const html = document.documentElement;
 
-  function getTheme() {
-    return document.documentElement.getAttribute('data-theme') || 'light';
+  function syncIcons() {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    iconLight!.classList.toggle('hidden', isDark);
+    iconDark!.classList.toggle('hidden', !isDark);
   }
 
-  function updateIcon() {
-    if (icon) icon.textContent = getTheme() === 'dark' ? '☽' : '☀';
-  }
-
-  updateIcon();
+  // Sync on load
+  syncIcons();
 
   btn?.addEventListener('click', () => {
-    const next = getTheme() === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    try { localStorage.setItem('theme', next); } catch(e) {}
-    updateIcon();
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    syncIcons();
   });
 </script>

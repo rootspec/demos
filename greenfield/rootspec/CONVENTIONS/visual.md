@@ -1,48 +1,41 @@
+## Color Tokens (CSS Variables)
+- **--bg:** `#ffffff` (light) / `#0f172a` (dark) — page background
+- **--text:** `#0f172a` (light) / `#f1f5f9` (dark) — primary text
+- **--text-muted:** `#64748b` (light) / `#94a3b8` (dark) — secondary text
+- **--border:** `#e2e8f0` (light) / `#1e293b` (dark) — borders
+- **--surface:** `#f8fafc` (light) / `#1e293b` (dark) — card/section backgrounds
+- **--accent:** `#0ea5e9` (light) / `#38bdf8` (dark) — brand blue (sky-500/400)
+- **--accent-dark:** `#0284c7` — hover/gradient end for accent
+
 ## Typography
-- **Serif (body/headings):** Newsreader (Google Fonts) — editorial, essay quality
-- **Sans-serif (UI/labels):** Inter (Google Fonts) — navigation, labels, captions
-- **Monospace (code/skills):** JetBrains Mono (Google Fonts) — commands, skill names, code examples
-- **Heading weight:** 300 (light) for large display headings; 600 for section labels
-- **Section labels:** 0.75rem, uppercase, 0.1em letter-spacing, `var(--color-text-muted)`
+- **Body font:** System sans-serif (Tailwind default)
+- **Mono font:** JetBrains Mono (Google Fonts), fallback: Fira Code, monospace
+- **Headings:** `font-bold`, sizes: `text-3xl` / `text-4xl` / `text-6xl` per breakpoint
+- **Code samples:** `<pre>` with `font-mono text-sm`, surface background
 
-## Color Palette (CSS Custom Properties)
-### Light mode (default)
-- `--color-bg`: `#fafaf8` (warm off-white)
-- `--color-text`: `#1a1a18`
-- `--color-text-muted`: `#5a5a52`
-- `--color-border`: `#e2e2da`
-- `--color-accent`: `#1a56db`
-- `--color-surface`: `#f0f0eb` (section alternates)
-- `--color-banner-bg`: `#f5f3ef`
-
-### Dark mode (data-theme="dark")
-- `--color-bg`: `#111110`
-- `--color-text`: `#e8e8e2`
-- `--color-text-muted`: `#8a8a80`
-- `--color-border`: `#2a2a26`
-- `--color-accent`: `#5b8df8`
-- `--color-surface`: `#1e1e1c`
-- `--color-banner-bg`: `#1a1a18`
-
-## Layout
-- **Max width:** 860px centered with `margin: 0 auto`
-- **Section padding:** `4rem 1.5rem` standard; `5rem 1.5rem 4rem` hero
-- **Section dividers:** `border-top: 1px solid var(--color-border)`
-- **Alternating section backgrounds:** light sections use `var(--color-surface)`
-
-## Interactive Elements
-- **Transitions:** 150ms ease-out on border-color, background, transform
-- **Border radius:** 3–6px (functional, not decorative)
-- **Buttons:** no border-radius > 4px; flat, bordered, low-decoration
-- **No:** gradients, glassmorphism, glows, springy animations, parallax
-
-## Theme Toggle
-- Button in header with `data-test=theme-toggle`
-- Toggles `data-theme="dark"` on `<html>` element
-- Persisted in `localStorage` under key `theme`
-- Inline script in Layout prevents flash of wrong theme on page load
+## Spacing
+- **Section padding:** `py-20 px-4` standard; `py-24` for hero/CTA
+- **Content max-width:** `max-w-4xl` for text sections, `max-w-5xl` for comparison, `max-w-2xl` for wizard
+- **Card padding:** `p-6` for feature cards, `p-8` for wizard interior
 
 ## Component Patterns
-- Static sections: `.astro` components with inline styles using CSS custom properties
-- Interactive sections: React `.tsx` islands mounted with `client:load`
-- All data-test attributes use kebab-case identifiers matching spec selectors
+- **Cards:** `rounded-xl border` with `var(--surface)` bg and `var(--border)` border
+- **Buttons (primary):** `var(--accent)` bg, white text, `rounded-lg px-6 py-2`
+- **Buttons (secondary):** `var(--bg)` bg, `var(--text)` color, `var(--border)` border
+- **Chips/pills:** `rounded-full px-4 py-2`, accent when selected
+- **Meta banner:** Amber-50 bg, amber-200 border, amber-800 text (hardcoded for visibility)
+
+## Alternating Section Backgrounds
+- Hero → `var(--bg)` gradient
+- Problem → `var(--surface)`
+- How It Works → `var(--bg)`
+- Hierarchy → `var(--bg)`
+- Comparison → `var(--surface)`
+- Wizard → `var(--surface)`
+- CTA → accent gradient (blue)
+- Footer → `var(--bg)`
+
+## Theme Toggle
+- Light mode default; stored in `localStorage` key `theme`
+- Icon: ☀️ for light, 🌙 for dark
+- Toggle button: `[data-test=theme-toggle]` in sticky header

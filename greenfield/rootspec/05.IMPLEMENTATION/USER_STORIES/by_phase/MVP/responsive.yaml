@@ -1,91 +1,51 @@
 # =============================================================================
-# USER STORY: Page Navigation
+# USER STORY: Responsive Layout
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: FIRST_VISIT
-# @systems: [LAYOUT_SYSTEM, CONTENT_SYSTEM]
+# @systems: [LAYOUT_SYSTEM]
 # @last_updated: 2026-04-23T00:00:00Z
 
-id: US-301
-title: Visitor navigates the page and reaches the footer
+id: US-401
+title: Visitor on a mobile device sees a usable layout
 
 acceptance_criteria:
-  - id: AC-301-1
-    title: Footer is present with attribution
+  - id: AC-401-1
+    title: Page renders without horizontal scrolling on mobile viewport
     narrative: |
-      Given I visit the site
-      When I scroll to the bottom of the page
-      Then I see a footer with attribution to the site builder
+      Given I am viewing the site on a mobile device
+      When the page loads
+      Then no horizontal scrollbar is present and all content fits within the viewport
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=footer]' }
-      - shouldContain: { selector: '[data-test=footer]', text: 'Claude' }
+      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: '[data-test=hero]' }
 
----
-# =============================================================================
-# USER STORY: Keyboard Accessibility
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: ACCESSIBILITY
-# @systems: [INTERACTIVE_SYSTEM, LAYOUT_SYSTEM, THEME_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
-
-id: US-302
-title: Visitor navigates interactive elements by keyboard
-
-acceptance_criteria:
-  - id: AC-302-1
-    title: Theme toggle is keyboard accessible
+  - id: AC-401-2
+    title: Hierarchy explorer is usable on mobile
     narrative: |
-      Given I visit the site
-      When I look at the theme toggle
-      Then it is a focusable element operable by keyboard
+      Given I am viewing the site on a mobile device
+      When I tap a hierarchy level
+      Then the level expands to show its content
     given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=theme-toggle]:not([disabled])' }
-
-  - id: AC-302-2
-    title: Wizard next button is keyboard accessible
-    narrative: |
-      Given I am viewing the spec wizard
-      When I look at the next button
-      Then it is a focusable button element
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=wizard-next]' }
-
----
-# =============================================================================
-# USER STORY: Theme Persistence
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: RETURN_VISIT
-# @systems: [THEME_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
-
-id: US-303
-title: Theme preference persists across page reloads
-
-acceptance_criteria:
-  - id: AC-303-1
-    title: Dark mode preference is remembered after page reload
-    narrative: |
-      Given I have switched to dark mode by clicking the theme toggle
-      When I reload the page
-      Then the page loads in dark mode
-    given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when:
-      - click: { selector: '[data-test=theme-toggle]' }
-      - visit: '/'
+      - click: { selector: '[data-test=hierarchy-level-1]' }
     then:
-      - shouldExist: { selector: 'html[data-theme="dark"], html.dark' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded="true"]' }
+
+  - id: AC-401-3
+    title: Spec wizard is usable on mobile
+    narrative: |
+      Given I am viewing the site on a mobile device
+      When I navigate to the wizard section
+      Then I can interact with the wizard inputs
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=spec-wizard]' }
+      - shouldExist: { selector: '[data-test=wizard-idea-input]' }

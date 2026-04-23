@@ -1,86 +1,63 @@
 # =============================================================================
-# USER STORY: Visual Quality - No Generic AI Design Patterns
+# USER STORY: Theme Toggle
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
 # @journey: FIRST_VISIT
-# @systems: [THEME_SYSTEM, LAYOUT_SYSTEM, PRESENTATION_SYSTEM]
+# @systems: [THEME_SYSTEM, LAYOUT_SYSTEM]
 # @last_updated: 2026-04-23T00:00:00Z
 
-id: US-401
-title: Site loads in light mode by default with editorial typography
+id: US-301
+title: Visitor toggles between light and dark mode
 
 acceptance_criteria:
-  - id: AC-401-1
-    title: Page defaults to light mode on first visit
+  - id: AC-301-1
+    title: Page loads in light mode by default
     narrative: |
-      Given a visitor has no stored theme preference
-      When they visit the site for the first time
-      Then the page renders in light mode
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: 'html:not([data-theme="dark"]):not(.dark), html[data-theme="light"], html.light' }
-
-  - id: AC-401-2
-    title: Body text is rendered in a serif typeface
-    narrative: |
-      Given I visit the site
+      Given I have no stored theme preference
       When the page loads
-      Then the body text area uses a serif font family
+      Then the page is in light mode
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=body-content]' }
+      - shouldExist: { selector: 'html[data-theme="light"], body[data-theme="light"], :root[data-theme="light"]' }
 
-  - id: AC-401-3
-    title: Skill names are rendered in monospace
+  - id: AC-301-2
+    title: Theme toggle button is visible in the header
     narrative: |
-      Given I visit the site and view the how it works section
-      When I look at the skill names
-      Then rs-init and other skill names are in monospace styling
-    given:
-      - visit: '/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=how-it-works] code, [data-test=how-it-works] [data-test=skill-name]' }
-
----
-# =============================================================================
-# USER STORY: RootSpec Diagram
-# =============================================================================
-# @spec_version: 1.0.0
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [PRESENTATION_SYSTEM, THEME_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
-
-id: US-402
-title: Visitor sees the RootSpec methodology diagram
-
-acceptance_criteria:
-  - id: AC-402-1
-    title: Methodology diagram is present on the page
-    narrative: |
-      Given I visit the site
+      Given I arrive at the site
       When the page loads
-      Then I see an SVG diagram depicting the RootSpec methodology
+      Then I can see a theme toggle button in the header
     given:
-      - visit: '/'
+      - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=methodology-diagram]' }
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
 
-  - id: AC-402-2
-    title: Diagram is an SVG element
+  - id: AC-301-3
+    title: Clicking the toggle switches to dark mode
     narrative: |
-      Given I visit the site
-      When the page loads
-      Then the methodology diagram is rendered as an SVG
+      Given the page is in light mode
+      When I click the theme toggle
+      Then the page switches to dark mode
     given:
-      - visit: '/'
-    when: []
+      - visit: '/demos/greenfield/'
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
     then:
-      - shouldExist: { selector: '[data-test=methodology-diagram] svg, svg[data-test=methodology-diagram]' }
+      - shouldExist: { selector: 'html[data-theme="dark"], body[data-theme="dark"]' }
+
+  - id: AC-301-4
+    title: Clicking the toggle again switches back to light mode
+    narrative: |
+      Given the page is in dark mode
+      When I click the theme toggle
+      Then the page switches back to light mode
+    given:
+      - visit: '/demos/greenfield/'
+      - click: { selector: '[data-test=theme-toggle]' }
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldExist: { selector: 'html[data-theme="light"], body[data-theme="light"]' }

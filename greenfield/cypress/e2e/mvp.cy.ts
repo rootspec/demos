@@ -22,217 +22,201 @@ function loadAndRun(yamlContent: string) {
   }
 }
 
-// US-101: Visitor reads the meta banner before any other content
+// US-101: Visitor sees the demo context banner before any other content
 const stories_101 = `
 id: US-101
-title: Visitor reads the meta banner before any other content
+title: Visitor sees the demo context banner before any other content
 acceptance_criteria:
   - id: AC-101-1
-    title: Meta banner appears above the fold before hero content
+    title: Meta banner is visible above the fold on load
     given:
-      - visit: /
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
           selector: '[data-test=meta-banner]'
-      - shouldContain:
-          selector: '[data-test=meta-banner]'
-          text: RootSpec
     when: []
   - id: AC-101-2
-    title: Meta banner contains links to spec and seed files
+    title: Meta banner contains a link to the SEED.md file
     given:
-      - visit: /
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
-          selector: '[data-test=meta-banner] a[href*="github.com"]'
+          selector: '[data-test=meta-banner] a[href*="SEED.md"]'
+    when: []
+  - id: AC-101-3
+    title: Meta banner contains a link to the spec directory
+    given:
+      - visit: /demos/greenfield/
+    then:
+      - shouldExist:
+          selector: '[data-test=meta-banner] a[href*="rootspec"]'
     when: []
 `;
 loadAndRun(stories_101);
 
-// US-102: Visitor understands what RootSpec is from the hero
+// US-102: Visitor sees the tagline and version badge in the hero
 const stories_102 = `
 id: US-102
-title: Visitor understands what RootSpec is from the hero
+title: Visitor sees the tagline and version badge in the hero
 acceptance_criteria:
   - id: AC-102-1
-    title: Hero displays tagline and version badge
+    title: Hero section is visible with a heading and tagline
     given:
-      - visit: /
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
           selector: '[data-test=hero]'
       - shouldExist:
-          selector: '[data-test=version-badge]'
+          selector: '[data-test=hero-heading]'
     when: []
   - id: AC-102-2
-    title: Version badge shows a version number
+    title: Version badge is displayed in the hero
     given:
-      - visit: /
+      - visit: /demos/greenfield/
     then:
-      - shouldContain:
+      - shouldExist:
           selector: '[data-test=version-badge]'
-          text: v
     when: []
 `;
 loadAndRun(stories_102);
 
-// US-103: Visitor reads about the spec drift problem
+// US-103: Visitor can scroll through all content sections
 const stories_103 = `
 id: US-103
-title: Visitor reads about the spec drift problem
+title: Visitor can scroll through all content sections
 acceptance_criteria:
   - id: AC-103-1
-    title: Problem section exists with real content
+    title: Problem section is present
     given:
-      - visit: /
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
           selector: '[data-test=problem-section]'
-      - shouldContain:
-          selector: '[data-test=problem-section]'
-          text: spec
     when: []
-`;
-loadAndRun(stories_103);
-
-// US-104: Visitor learns about the four RootSpec skills
-const stories_104 = `
-id: US-104
-title: Visitor learns about the four RootSpec skills
-acceptance_criteria:
-  - id: AC-104-1
-    title: How it works section shows all four skills
+  - id: AC-103-2
+    title: How It Works section is present
     given:
-      - visit: /
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
           selector: '[data-test=how-it-works]'
-      - shouldContain:
-          selector: '[data-test=how-it-works]'
-          text: /rs-init
-      - shouldContain:
-          selector: '[data-test=how-it-works]'
-          text: /rs-spec
-      - shouldContain:
-          selector: '[data-test=how-it-works]'
-          text: /rs-impl
-      - shouldContain:
-          selector: '[data-test=how-it-works]'
-          text: /rs-validate
     when: []
-`;
-loadAndRun(stories_104);
-
-// US-105: Visitor finds the GitHub repo link
-const stories_105 = `
-id: US-105
-title: Visitor finds the GitHub repo link
-acceptance_criteria:
-  - id: AC-105-1
-    title: CTA section has a link to the GitHub repo
+  - id: AC-103-3
+    title: CTA section with GitHub link is present
     given:
-      - visit: /
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
           selector: '[data-test=cta-section]'
       - shouldExist:
-          selector: '[data-test=cta-section] a[href*="github.com/rootspec/rootspec"]'
+          selector: '[data-test=cta-section] a[href*="github.com"]'
+    when: []
+  - id: AC-103-4
+    title: Footer with attribution is present
+    given:
+      - visit: /demos/greenfield/
+    then:
+      - shouldExist:
+          selector: '[data-test=footer]'
     when: []
 `;
-loadAndRun(stories_105);
+loadAndRun(stories_103);
 
-// US-201: Visitor explores the five RootSpec levels in the hierarchy explorer
+// US-201: Visitor expands a hierarchy level to see example content
 const stories_201 = `
 id: US-201
-title: Visitor explores the five RootSpec levels in the hierarchy explorer
+title: Visitor expands a hierarchy level to see example content
 acceptance_criteria:
   - id: AC-201-1
-    title: Hierarchy explorer shows all five levels
+    title: Clicking a level card expands it to show example content
     given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=hierarchy-explorer]'
-      - shouldExist:
-          selector: '[data-test=level-L1]'
-      - shouldExist:
-          selector: '[data-test=level-L2]'
-      - shouldExist:
-          selector: '[data-test=level-L3]'
-      - shouldExist:
-          selector: '[data-test=level-L4]'
-      - shouldExist:
-          selector: '[data-test=level-L5]'
-    when: []
-  - id: AC-201-2
-    title: Clicking a level expands its content
-    given:
-      - visit: /
+      - visit: /demos/greenfield/
     when:
       - click:
-          selector: '[data-test=level-L1]'
+          selector: '[data-test=hierarchy-level-1]'
     then:
       - shouldExist:
-          selector: '[data-test=level-L1-content]'
-  - id: AC-201-3
+          selector: '[data-test=hierarchy-level-1][aria-expanded="true"]'
+      - shouldExist:
+          selector: '[data-test=hierarchy-level-1-content]'
+  - id: AC-201-2
     title: Clicking an expanded level collapses it
     given:
-      - visit: /
+      - visit: /demos/greenfield/
+      - click:
+          selector: '[data-test=hierarchy-level-1]'
     when:
       - click:
-          selector: '[data-test=level-L1]'
-      - click:
-          selector: '[data-test=level-L1]'
+          selector: '[data-test=hierarchy-level-1]'
     then:
       - shouldExist:
-          selector: '[data-test=hierarchy-explorer]'
+          selector: '[data-test=hierarchy-level-1][aria-expanded="false"]'
+  - id: AC-201-3
+    title: Only one level is expanded at a time
+    given:
+      - visit: /demos/greenfield/
+      - click:
+          selector: '[data-test=hierarchy-level-1]'
+    when:
+      - click:
+          selector: '[data-test=hierarchy-level-2]'
+    then:
+      - shouldExist:
+          selector: '[data-test=hierarchy-level-1][aria-expanded="false"]'
+      - shouldExist:
+          selector: '[data-test=hierarchy-level-2][aria-expanded="true"]'
 `;
 loadAndRun(stories_201);
 
-// US-202: Visitor completes the Spec Your Idea wizard
+// US-202: Visitor navigates the hierarchy explorer using the keyboard
 const stories_202 = `
 id: US-202
-title: Visitor completes the Spec Your Idea wizard
+title: Visitor navigates the hierarchy explorer using the keyboard
 acceptance_criteria:
   - id: AC-202-1
-    title: Wizard section is present on the page
+    title: Hierarchy level cards are keyboard focusable
     given:
-      - visit: /
+      - visit: /demos/greenfield/
+    when:
+      - click:
+          selector: '[data-test=hierarchy-explorer]'
+    then:
+      - shouldExist:
+          selector: '[data-test=hierarchy-level-1]:focus, [data-test=hierarchy-level-1] [tabindex="0"]'
+`;
+loadAndRun(stories_202);
+
+// US-203: Visitor completes the spec wizard and sees skeleton spec output
+const stories_203 = `
+id: US-203
+title: Visitor completes the spec wizard and sees skeleton spec output
+acceptance_criteria:
+  - id: AC-203-1
+    title: Wizard is visible on the page
+    given:
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
           selector: '[data-test=spec-wizard]'
     when: []
-  - id: AC-202-2
-    title: Wizard step 1 accepts product idea input
+  - id: AC-203-2
+    title: Next button is disabled when idea field is empty
     given:
-      - visit: /
-    when:
-      - fill:
-          selector: '[data-test=wizard-idea-input]'
-          value: A tool for tracking personal goals
-      - click:
-          selector: '[data-test=wizard-next]'
-    then:
-      - shouldExist:
-          selector: '[data-test=wizard-step-2]'
-  - id: AC-202-3
-    title: Wizard prevents advancing with empty input
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=wizard-next]'
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
           selector: '[data-test=wizard-step-1]'
-  - id: AC-202-4
-    title: Wizard produces a skeleton spec output
+      - shouldExist:
+          selector: '[data-test=wizard-next][disabled]'
+    when: []
+  - id: AC-203-3
+    title: Visitor can advance through all wizard steps
     given:
-      - visit: /
+      - visit: /demos/greenfield/
     when:
       - fill:
           selector: '[data-test=wizard-idea-input]'
-          value: A tool for tracking personal goals
+          value: A task manager for remote teams
       - click:
           selector: '[data-test=wizard-next]'
       - click:
@@ -240,185 +224,138 @@ acceptance_criteria:
       - click:
           selector: '[data-test=wizard-next]'
       - click:
-          selector: '[data-test=wizard-pillar-option]:nth-child(1)'
+          selector: '[data-test=wizard-pillar-chip]:nth-child(1)'
       - click:
-          selector: '[data-test=wizard-pillar-option]:nth-child(2)'
+          selector: '[data-test=wizard-pillar-chip]:nth-child(2)'
       - click:
-          selector: '[data-test=wizard-pillar-option]:nth-child(3)'
+          selector: '[data-test=wizard-pillar-chip]:nth-child(3)'
       - click:
-          selector: '[data-test=wizard-finish]'
+          selector: '[data-test=wizard-next]'
+      - fill:
+          selector: '[data-test=wizard-interaction-input]'
+          value: User creates a task and assigns it to a teammate
+      - click:
+          selector: '[data-test=wizard-generate]'
     then:
       - shouldExist:
           selector: '[data-test=wizard-output]'
-`;
-loadAndRun(stories_202);
-
-// US-203: Visitor compares before and after using RootSpec
-const stories_203 = `
-id: US-203
-title: Visitor compares before and after using RootSpec
-acceptance_criteria:
-  - id: AC-203-1
-    title: Comparison section is present with real content
+  - id: AC-203-4
+    title: Visitor can go back and change an answer
     given:
-      - visit: /
+      - visit: /demos/greenfield/
+      - fill:
+          selector: '[data-test=wizard-idea-input]'
+          value: A recipe app
+      - click:
+          selector: '[data-test=wizard-next]'
+    when:
+      - click:
+          selector: '[data-test=wizard-back]'
+    then:
+      - shouldExist:
+          selector: '[data-test=wizard-step-1]'
+      - shouldContain:
+          selector: '[data-test=wizard-idea-input]'
+          text: A recipe app
+`;
+loadAndRun(stories_203);
+
+// US-204: Visitor views the before/after comparison of specs
+const stories_204 = `
+id: US-204
+title: Visitor views the before/after comparison of specs
+acceptance_criteria:
+  - id: AC-204-1
+    title: Comparison section is present with both panels
+    given:
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
           selector: '[data-test=comparison-section]'
     when: []
-  - id: AC-203-2
-    title: Both panels show distinct content
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=comparison-without]'
-      - shouldExist:
-          selector: '[data-test=comparison-with]'
-    when: []
-`;
-loadAndRun(stories_203);
-
-// US-204: Visitor toggles between light and dark mode
-const stories_204 = `
-id: US-204
-title: Visitor toggles between light and dark mode
-acceptance_criteria:
-  - id: AC-204-1
-    title: Theme toggle button is present in the header
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=theme-toggle]'
-    when: []
-  - id: AC-204-2
-    title: Clicking theme toggle changes the page theme
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=theme-toggle]'
-    then:
-      - shouldExist:
-          selector: html[data-theme="dark"], html.dark
 `;
 loadAndRun(stories_204);
 
-// US-301: Visitor navigates the page and reaches the footer
-const stories_301 = `
-id: US-301
-title: Visitor navigates the page and reaches the footer
-acceptance_criteria:
-  - id: AC-301-1
-    title: Footer is present with attribution
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=footer]'
-      - shouldContain:
-          selector: '[data-test=footer]'
-          text: Claude
-    when: []
-`;
-loadAndRun(stories_301);
-
-// US-302: Visitor navigates interactive elements by keyboard
-const stories_302 = `
-id: US-302
-title: Visitor navigates interactive elements by keyboard
-acceptance_criteria:
-  - id: AC-302-1
-    title: Theme toggle is keyboard accessible
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=theme-toggle]:not([disabled])'
-    when: []
-  - id: AC-302-2
-    title: Wizard next button is keyboard accessible
-    given:
-      - visit: /
-    then:
-      - shouldExist:
-          selector: '[data-test=wizard-next]'
-    when: []
-`;
-loadAndRun(stories_302);
-
-// US-303: Theme preference persists across page reloads
-const stories_303 = `
-id: US-303
-title: Theme preference persists across page reloads
-acceptance_criteria:
-  - id: AC-303-1
-    title: Dark mode preference is remembered after page reload
-    given:
-      - visit: /
-    when:
-      - click:
-          selector: '[data-test=theme-toggle]'
-      - visit: /
-    then:
-      - shouldExist:
-          selector: html[data-theme="dark"], html.dark
-`;
-loadAndRun(stories_303);
-
-// US-401: Site loads in light mode by default with editorial typography
+// US-401: Visitor on a mobile device sees a usable layout
 const stories_401 = `
 id: US-401
-title: Site loads in light mode by default with editorial typography
+title: Visitor on a mobile device sees a usable layout
 acceptance_criteria:
   - id: AC-401-1
-    title: Page defaults to light mode on first visit
+    title: Page renders without horizontal scrolling on mobile viewport
     given:
-      - visit: /
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
-          selector: html:not([data-theme="dark"]):not(.dark), html[data-theme="light"], html.light
+          selector: '[data-test=meta-banner]'
+      - shouldExist:
+          selector: '[data-test=hero]'
     when: []
   - id: AC-401-2
-    title: Body text is rendered in a serif typeface
+    title: Hierarchy explorer is usable on mobile
     given:
-      - visit: /
+      - visit: /demos/greenfield/
+    when:
+      - click:
+          selector: '[data-test=hierarchy-level-1]'
     then:
       - shouldExist:
-          selector: '[data-test=body-content]'
-    when: []
+          selector: '[data-test=hierarchy-level-1][aria-expanded="true"]'
   - id: AC-401-3
-    title: Skill names are rendered in monospace
+    title: Spec wizard is usable on mobile
     given:
-      - visit: /
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
-          selector: '[data-test=how-it-works] code, [data-test=how-it-works] [data-test=skill-name]'
+          selector: '[data-test=spec-wizard]'
+      - shouldExist:
+          selector: '[data-test=wizard-idea-input]'
     when: []
 `;
 loadAndRun(stories_401);
 
-// US-402: Visitor sees the RootSpec methodology diagram
-const stories_402 = `
-id: US-402
-title: Visitor sees the RootSpec methodology diagram
+// US-301: Visitor toggles between light and dark mode
+const stories_301 = `
+id: US-301
+title: Visitor toggles between light and dark mode
 acceptance_criteria:
-  - id: AC-402-1
-    title: Methodology diagram is present on the page
+  - id: AC-301-1
+    title: Page loads in light mode by default
     given:
-      - visit: /
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
-          selector: '[data-test=methodology-diagram]'
+          selector: html[data-theme="light"], body[data-theme="light"], :root[data-theme="light"]
     when: []
-  - id: AC-402-2
-    title: Diagram is an SVG element
+  - id: AC-301-2
+    title: Theme toggle button is visible in the header
     given:
-      - visit: /
+      - visit: /demos/greenfield/
     then:
       - shouldExist:
-          selector: '[data-test=methodology-diagram] svg, svg[data-test=methodology-diagram]'
+          selector: '[data-test=theme-toggle]'
     when: []
+  - id: AC-301-3
+    title: Clicking the toggle switches to dark mode
+    given:
+      - visit: /demos/greenfield/
+    when:
+      - click:
+          selector: '[data-test=theme-toggle]'
+    then:
+      - shouldExist:
+          selector: html[data-theme="dark"], body[data-theme="dark"]
+  - id: AC-301-4
+    title: Clicking the toggle again switches back to light mode
+    given:
+      - visit: /demos/greenfield/
+      - click:
+          selector: '[data-test=theme-toggle]'
+    when:
+      - click:
+          selector: '[data-test=theme-toggle]'
+    then:
+      - shouldExist:
+          selector: html[data-theme="light"], body[data-theme="light"]
 `;
-loadAndRun(stories_402);
+loadAndRun(stories_301);

@@ -1,11 +1,23 @@
 ---
+const REPO_BASE = 'https://github.com/anthropics/claude-code-demos/tree/main/greenfield';
 ---
-<div data-test="meta-banner" style="background:var(--color-banner-bg);border-bottom:1px solid var(--color-border);padding:0.6rem 1.5rem;font-family:'Inter',sans-serif;font-size:0.82rem;color:var(--color-text-muted);line-height:1.5;">
-  <div style="max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:0.5rem;align-items:baseline;">
-    <span>This site was generated from a ~100-line product description using the <strong style="color:var(--color-text);">RootSpec</strong> pipeline — no manual code, no design mockups. The spec, code, and tests were produced by running four commands.</span>
-    <span style="display:inline-flex;gap:0.75rem;white-space:nowrap;">
-      <a href="https://github.com/rootspec/demos/tree/main/greenfield/rootspec" target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:2px;">View the spec →</a>
-      <a href="https://github.com/rootspec/demos/tree/main/greenfield/SEED.md" target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);text-decoration:underline;text-underline-offset:2px;">View the seed →</a>
-    </span>
-  </div>
+<div
+  data-test="meta-banner"
+  class="w-full bg-amber-50 border-b border-amber-200 py-2 px-4 text-center text-sm text-amber-800"
+  style="background-color:#fffbeb;border-bottom:1px solid #fcd34d;color:#92400e;"
+>
+  <span>This is a RootSpec demo — </span>
+  <a
+    href={`${REPO_BASE}/SEED.md`}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="underline font-medium hover:text-amber-900"
+  >SEED.md</a>
+  <span> · </span>
+  <a
+    href={`${REPO_BASE}/rootspec`}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="underline font-medium hover:text-amber-900"
+  >rootspec/</a>
 </div>

@@ -13,7 +13,15 @@ export function runSetupSteps(steps: Step[]) {
 export function runAssertionSteps(steps: Step[]) {
   for (const s of steps ?? []) {
     if ('shouldContain' in s) {
-      cy.get(s.shouldContain.selector).should('contain', s.shouldContain.text);
+      // For inputs/textareas check .value, for other elements check text content
+      cy.get(s.shouldContain.selector).then(($el) => {
+        const tagName = $el.prop('tagName')?.toLowerCase();
+        if (tagName === 'input' || tagName === 'textarea') {
+          cy.wrap($el).should('have.value', s.shouldContain.text);
+        } else {
+          cy.wrap($el).should('contain', s.shouldContain.text);
+        }
+      });
     }
     else if ('shouldExist' in s) {
       cy.get(s.shouldExist.selector).should('exist');

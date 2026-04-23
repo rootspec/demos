@@ -1,28 +1,32 @@
 ---
 ---
-<section data-test="how-it-works" style="padding:4rem 1.5rem;border-top:1px solid var(--color-border);">
-  <div style="max-width:860px;margin:0 auto;">
-    <h2 style="font-size:0.75rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:1.5rem;">How It Works</h2>
-    <h3 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:300;line-height:1.3;letter-spacing:-0.01em;color:var(--color-text);max-width:600px;margin-bottom:3rem;">
-      Four skills drive every workflow, from first idea to shipped product.
-    </h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0;border:1px solid var(--color-border);border-radius:6px;overflow:hidden;">
-      <div style="padding:1.5rem;border-right:1px solid var(--color-border);">
-        <code data-test="skill-name" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--color-accent);display:block;margin-bottom:0.75rem;">/rs-init</code>
-        <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;">Initialise a project with a RootSpec scaffold — spec directory, hooks, and CI config.</p>
-      </div>
-      <div style="padding:1.5rem;border-right:1px solid var(--color-border);">
-        <code data-test="skill-name" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--color-accent);display:block;margin-bottom:0.75rem;">/rs-spec</code>
-        <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;">Interview-driven spec authoring. Philosophy → Truths → Interactions → Systems → Stories.</p>
-      </div>
-      <div style="padding:1.5rem;border-right:1px solid var(--color-border);">
-        <code data-test="skill-name" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--color-accent);display:block;margin-bottom:0.75rem;">/rs-impl</code>
-        <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;">Test-driven implementation. User stories become Cypress tests; code must make them pass.</p>
-      </div>
-      <div style="padding:1.5rem;">
-        <code data-test="skill-name" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--color-accent);display:block;margin-bottom:0.75rem;">/rs-validate</code>
-        <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;">Full spec-to-code audit. Generates a report linking every test result back to its story.</p>
-      </div>
+<section
+  id="how-it-works"
+  data-test="how-it-works"
+  class="w-full py-20 px-4"
+  style="background-color:var(--bg);"
+>
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center" style="color:var(--text);">
+      Four skills. One methodology.
+    </h2>
+    <p class="text-center mb-12 text-lg" style="color:var(--text-muted);">
+      RootSpec gives AI agents a structured workflow to build software correctly, every time.
+    </p>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {[
+        { step: '01', name: 'rs-init', label: 'Initialize', desc: 'Bootstrap the project with spec scaffolding and conventions.' },
+        { step: '02', name: 'rs-spec', label: 'Specify', desc: 'Write L1–L5 spec from a SEED.md product description.' },
+        { step: '03', name: 'rs-impl', label: 'Implement', desc: 'Build features from user stories with test-driven development.' },
+        { step: '04', name: 'rs-validate', label: 'Validate', desc: 'Run tests, generate a report, and verify spec completeness.' },
+      ].map(({ step, name, label, desc }) => (
+        <div class="p-6 rounded-xl border flex flex-col gap-3" style="background-color:var(--surface);border-color:var(--border);">
+          <span class="text-xs font-mono font-bold" style="color:var(--accent);">STEP {step}</span>
+          <code class="text-sm font-mono font-bold px-2 py-1 rounded" style="background-color:var(--bg);color:var(--text);">/{name}</code>
+          <h3 class="font-bold" style="color:var(--text);">{label}</h3>
+          <p class="text-sm" style="color:var(--text-muted);">{desc}</p>
+        </div>
+      ))}
     </div>
   </div>
 </section>

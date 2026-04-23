@@ -1,23 +1,32 @@
 ---
 ---
-<section data-test="problem-section" style="padding:4rem 1.5rem;border-top:1px solid var(--color-border);background:var(--color-surface);">
-  <div style="max-width:860px;margin:0 auto;">
-    <h2 style="font-size:0.75rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:1.5rem;">The Problem</h2>
-    <h3 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:300;line-height:1.3;letter-spacing:-0.01em;color:var(--color-text);max-width:680px;margin-bottom:2rem;">
-      Every existing approach fails the same way: the spec and the code drift apart.
-    </h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2rem;margin-top:2.5rem;">
-      <div>
-        <h4 style="font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;">Spec drift is inevitable</h4>
-        <p style="font-size:0.95rem;color:var(--color-text-muted);line-height:1.65;">By the time validation happens, it's far removed from the original intent. Every intermediate step drifts independently.</p>
+<section
+  data-test="problem-section"
+  class="w-full py-20 px-4"
+  style="background-color:var(--surface);"
+>
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center" style="color:var(--text);">
+      AI coding without a spec is chaos
+    </h2>
+    <p class="text-center mb-12 text-lg" style="color:var(--text-muted);">
+      Prompting AI agents to build software leads to inconsistency, drift, and untestable output.
+    </p>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="p-6 rounded-xl border" style="background-color:var(--bg);border-color:var(--border);">
+        <div class="text-3xl mb-3">🎲</div>
+        <h3 class="font-bold text-lg mb-2" style="color:var(--text);">Non-deterministic</h3>
+        <p style="color:var(--text-muted);">Every agent run produces different output. No guarantee the same feature works tomorrow.</p>
       </div>
-      <div>
-        <h4 style="font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;">TDD and BDD don't stick</h4>
-        <p style="font-size:0.95rem;color:var(--color-text-muted);line-height:1.65;">They transform a few pages of spec into a book of pedantic instructions. Expensive, tedious, and abandoned the moment a deadline appears.</p>
+      <div class="p-6 rounded-xl border" style="background-color:var(--bg);border-color:var(--border);">
+        <div class="text-3xl mb-3">🌀</div>
+        <h3 class="font-bold text-lg mb-2" style="color:var(--text);">Spec drift</h3>
+        <p style="color:var(--text-muted);">Without a source of truth, agents hallucinate requirements and build the wrong thing.</p>
       </div>
-      <div>
-        <h4 style="font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;color:var(--color-text);margin-bottom:0.5rem;">AI makes it faster, not better</h4>
-        <p style="font-size:0.95rem;color:var(--color-text-muted);line-height:1.65;">Throwing AI at TDD just automates the tedium without fixing the underlying problem. The drift is still there — it just happens faster.</p>
+      <div class="p-6 rounded-xl border" style="background-color:var(--bg);border-color:var(--border);">
+        <div class="text-3xl mb-3">🔍</div>
+        <h3 class="font-bold text-lg mb-2" style="color:var(--text);">Unverifiable</h3>
+        <p style="color:var(--text-muted);">How do you know if an AI-built feature is correct? Without spec-driven tests, you can't.</p>
       </div>
     </div>
   </div>
