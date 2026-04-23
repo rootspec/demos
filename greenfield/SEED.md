@@ -134,7 +134,7 @@ Link to the framework GitHub repo at https://github.com/rootspec/rootspec — ge
 
 ## Deployment
 
-This site is deployed to GitHub Pages at the subpath `/demos/greenfield/`. Configure the framework's base path so that all asset URLs (CSS, JS, images) and internal links resolve correctly when served from that subpath, not from the site root.
+This site deploys to GitHub Pages at `/demos/greenfield/`. Use that as the canonical base path. Configure the framework's base so all asset URLs (CSS, JS, images) and internal links resolve under that subpath. The base path must be the same value in dev, preview, and production builds — do not switch it based on `NODE_ENV` or similar. Cypress runs against the dev server and expects to reach the app at the configured subpath.
 
 ## Interactive & Visual Requirements
 
@@ -192,7 +192,7 @@ This site is rootspec.dev itself — the project page and the demo are the same 
 - The meta-banner is the most important element on the page; it must appear above the fold and before any interactive content. Without it, visitors will mistakenly evaluate this as a conventional marketing site and miss the entire point.
 - All RootSpec messaging — what it is, why it exists, how to start — must be present on this page. There is no "marketing site" elsewhere doing that work.
 - The "Open Source CTA" section should function as the primary entry point to the framework repo, the docs, and the npm package. Treat it as the page's main conversion target alongside the "Spec Your Idea" wizard.
-- The deployment subpath in the framework's base path config should still be set correctly for the GitHub Pages serving setup, but understand that visitors will reach this via rootspec.dev as the apex domain — internal links and asset URLs must work correctly under both the apex domain and the GitHub Pages subpath in case of fallback.
+- The apex domain `rootspec.dev` is out of scope for this spec — treat `/demos/greenfield/` as the single canonical serving path. If/when rootspec.dev goes live, it will front the same artifact via a CDN-level path rewrite; no app-level changes should be needed.
 
 ## Attributions
 
