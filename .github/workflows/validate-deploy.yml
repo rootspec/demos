@@ -36,7 +36,7 @@ jobs:
         if: steps.check.outputs.ready == 'true'
         with:
           node-version: "22"
-      - run: npm install --legacy-peer-deps
+      - run: npm ci --legacy-peer-deps
         if: steps.check.outputs.ready == 'true'
       - run: chmod +x scripts/dev.sh scripts/test.sh
         if: steps.check.outputs.ready == 'true'
