@@ -1,79 +1,109 @@
 # Level 4: Layout System
-# RootSpec Marketing Site
+
+**References:** 01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md
+**Part of:** SYSTEMS_OVERVIEW.md
 
 ---
 
 ## Responsibility
 
-The Layout System owns the structural organization of the page: the section order, the header, the footer, the responsive grid, and the viewport breakpoints that determine how each section is rendered.
-
----
-
-## Boundaries
-
-**Owns:**
-- Page section order and hierarchy
-- Header structure (logo, version badge, theme toggle, navigation links)
-- Footer structure (attribution, build date, links)
-- Responsive breakpoints and their associated layout rules
-- Scroll observation (which sections are currently visible)
-- Subpath base URL configuration for GitHub Pages deployment
-
-**Does not own:**
-- Content within sections (→ Content System)
-- Theme colors or visual style (→ Theme System)
-- Animation and transitions (→ Presentation System)
-- Interactive behavior within sections (→ Interactive System)
+The Layout System owns the page structure, responsive behavior, navigation, and section containers. It defines how sections are arranged, how the header and footer are composed, and how content reflows across screen sizes. It does not own copy (CONTENT_SYSTEM), tokens (THEME_SYSTEM), or interactive logic (INTERACTIVE_SYSTEM).
 
 ---
 
 ## Page Structure
 
-### Sections (in order)
-1. **Header** — Persistent; contains logo/wordmark, version badge, theme toggle, anchor nav
-2. **Meta Banner** — Full-width informational strip below header; always visible
-3. **Hero** — Tagline, one-sentence explanation, primary CTA
-4. **Problem Section** — Why existing approaches fail
-5. **How It Works** — Four-skill walkthrough (init → spec → impl → validate)
-6. **Hierarchy Explorer** — Interactive section
-7. **Spec Wizard** — Interactive section
-8. **Before/After Comparison** — Interactive section
-9. **CTA Section** — GitHub link, getting started prompt
-10. **Footer** — Attribution, build date, links
+The page is a single-column document with a persistent header and footer. Sections stack vertically in reading order.
+
+```
+[Header — sticky or fixed]
+  [Version badge]
+  [Theme toggle]
+  [Navigation anchor links — optional]
+
+[Page body — single column]
+  [Meta Banner]
+  [Hero Section]
+  [Problem Section]
+  [How It Works Section]
+  [Hierarchy Explorer Section]
+  [Spec Wizard Section]
+  [Before/After Comparison Section]
+  [Open Source CTA Section]
+
+[Footer]
+  [Attribution, build date, version]
+```
 
 ---
 
-## Breakpoints
+## Section Layout Rules
 
-| Name | Condition | Layout Behavior |
-|------|-----------|-----------------|
-| Mobile | Narrower than [tablet threshold] | Single column; stacked interactive variants |
-| Tablet | Between [tablet threshold] and [desktop threshold] | Two-column where applicable; hybrid interactive variants |
-| Desktop | Wider than [desktop threshold] | Full layouts; side-by-side comparison; expanded explorer |
+Each section follows a consistent container pattern:
+- Maximum content width: [comfortable reading width]
+- Centered horizontally with auto margins
+- Generous vertical padding (from `--space-section` token)
+- Section heading is the entry point; body follows
 
----
+Prose sections (Problem, How It Works, CTA):
+- Body text constrained to [comfortable prose width]
+- Left-aligned (not centered) for readability
 
-## Header Behavior
-
-- Sticky — stays at top of viewport as user scrolls
-- Contains: site logo/wordmark, RootSpec version badge, theme toggle button
-- On mobile: version badge and nav links may collapse or hide to preserve space
-
----
-
-## Subpath Deployment
-
-The site is deployed at `/demos/greenfield/`. The build configuration must set the base path so that:
-- All asset references (CSS, JS, images) use the subpath
-- All internal anchor links resolve correctly relative to the subpath
-- The site root (`/`) redirects to or is separate from this deployment path
+Interactive sections (Hierarchy Explorer, Spec Wizard, Before/After):
+- May use wider containers than prose
+- But still bounded by the page maximum width
 
 ---
 
-## Rules
+## Header
 
-- Section order is fixed — no dynamic reordering
-- All sections render on a single scrollable page (no client-side routing)
-- External links (GitHub, docs) open in new browser tabs
-- Header is always visible — no hide-on-scroll behavior that would remove access to the theme toggle
-- The meta banner is never dismissible — it is a permanent part of the page
+| Element | Behavior |
+|---------|----------|
+| Version badge | Displays current RootSpec version; read at build time |
+| Theme toggle | Icon button; triggers THEME_SYSTEM toggle |
+| Site title / logo | Text-based; links to page top |
+| Nav links | Optional anchor links to major sections |
+
+Header is sticky (remains visible on scroll) or placed at the very top with sufficient visual weight to orient the visitor. Light background in light mode, dark in dark mode. No heavy drop shadow — a simple border-bottom or slight background is sufficient.
+
+---
+
+## Responsive Strategy
+
+| Breakpoint | Layout behavior |
+|------------|----------------|
+| Mobile (<[mobile breakpoint]) | Single column; wizard steps stack vertically; before/after uses toggle instead of slider |
+| Tablet ([tablet breakpoint]+) | Wider content containers; before/after may use side-by-side panels |
+| Desktop ([desktop breakpoint]+) | Full layout; all interactive features in intended orientation |
+
+Rules:
+- All interactive features must work on touch devices
+- Touch targets must be [adequately sized]
+- No horizontal scrolling at any breakpoint
+- Font sizes scale appropriately — no fixed pixel sizes for body text
+
+---
+
+## Navigation
+
+Navigation is anchor-link based. No JavaScript-driven routing. Section IDs are stable and predictable.
+
+| Section | Anchor |
+|---------|--------|
+| Meta Banner | `#meta-banner` |
+| Hero | `#hero` |
+| Problem | `#problem` |
+| How It Works | `#how-it-works` |
+| Hierarchy Explorer | `#hierarchy` |
+| Spec Wizard | `#wizard` |
+| Before/After | `#comparison` |
+| CTA | `#cta` |
+
+---
+
+## Boundaries
+
+- The Layout System does NOT own copy or text content — that belongs to CONTENT_SYSTEM
+- The Layout System does NOT own visual tokens (colors, fonts) — that belongs to THEME_SYSTEM
+- The Layout System does NOT own interactive behavior — that belongs to INTERACTIVE_SYSTEM
+- The Layout System provides the container and slot structure that other systems fill

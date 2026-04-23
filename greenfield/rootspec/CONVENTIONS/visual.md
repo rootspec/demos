@@ -1,61 +1,48 @@
-## Color Tokens (CSS Custom Properties)
-
-- **`--bg-primary`:** Main page background
-- **`--bg-secondary`:** Alternate section background (slightly lighter/darker)
-- **`--bg-card`:** Card/panel backgrounds
-- **`--text-primary`:** Headings and primary text
-- **`--text-secondary`:** Body text and descriptions
-- **`--text-muted`:** Subdued labels, metadata
-- **`--accent`:** Brand purple (`#7c3aed` dark / `#6d28d9` light)
-- **`--accent-hover`:** Accent hover state
-- **`--border`:** Card and divider borders
-- **`--meta-bg`:** Meta banner background
-- **`--meta-text`:** Meta banner text
-- **`--meta-border`:** Meta banner border
-
 ## Typography
+- **Serif (body/headings):** Newsreader (Google Fonts) — editorial, essay quality
+- **Sans-serif (UI/labels):** Inter (Google Fonts) — navigation, labels, captions
+- **Monospace (code/skills):** JetBrains Mono (Google Fonts) — commands, skill names, code examples
+- **Heading weight:** 300 (light) for large display headings; 600 for section labels
+- **Section labels:** 0.75rem, uppercase, 0.1em letter-spacing, `var(--color-text-muted)`
 
-- **Font stack:** System UI (`ui-sans-serif, system-ui, sans-serif`)
-- **Monospace:** System monospace for code elements
-- **Heading sizes:** `clamp()` for fluid scaling (e.g., `clamp(2rem, 5vw, 3.5rem)` for H1)
-- **Font weights:** 400 (body), 600 (semibold), 700 (bold), 800 (display headings)
+## Color Palette (CSS Custom Properties)
+### Light mode (default)
+- `--color-bg`: `#fafaf8` (warm off-white)
+- `--color-text`: `#1a1a18`
+- `--color-text-muted`: `#5a5a52`
+- `--color-border`: `#e2e2da`
+- `--color-accent`: `#1a56db`
+- `--color-surface`: `#f0f0eb` (section alternates)
+- `--color-banner-bg`: `#f5f3ef`
 
-## Spacing
-
-- **Section padding:** `4rem 1.5rem` to `5rem 1.5rem`
-- **Card padding:** `1.5rem`
-- **Card gap:** `1rem` to `1.5rem`
-- **Max content width:** `1000px` to `1200px`
-
-## Component Styles
-
-- **Cards:** `border-radius: 0.75rem`, `border: 1px solid var(--border)`, `background: var(--bg-card)`
-- **Buttons (primary):** `background: var(--accent)`, `color: white`, `border-radius: 0.5rem`, `font-weight: 600`
-- **Buttons (secondary):** `background: var(--bg-card)`, `border: 1px solid var(--border)`
-- **Pill tags:** `border-radius: 9999px`
+### Dark mode (data-theme="dark")
+- `--color-bg`: `#111110`
+- `--color-text`: `#e8e8e2`
+- `--color-text-muted`: `#8a8a80`
+- `--color-border`: `#2a2a26`
+- `--color-accent`: `#5b8df8`
+- `--color-surface`: `#1e1e1c`
+- `--color-banner-bg`: `#1a1a18`
 
 ## Layout
+- **Max width:** 860px centered with `margin: 0 auto`
+- **Section padding:** `4rem 1.5rem` standard; `5rem 1.5rem 4rem` hero
+- **Section dividers:** `border-top: 1px solid var(--color-border)`
+- **Alternating section backgrounds:** light sections use `var(--color-surface)`
 
-- **Grid:** `repeat(auto-fit, minmax(200px-280px, 1fr))` for card grids
-- **Flex:** `flex-wrap: wrap` for responsive button groups
-- **Sticky header:** `position: sticky; top: 0; z-index: 50; height: 3.5rem`
+## Interactive Elements
+- **Transitions:** 150ms ease-out on border-color, background, transform
+- **Border radius:** 3–6px (functional, not decorative)
+- **Buttons:** no border-radius > 4px; flat, bordered, low-decoration
+- **No:** gradients, glassmorphism, glows, springy animations, parallax
 
-## Themes
+## Theme Toggle
+- Button in header with `data-test=theme-toggle`
+- Toggles `data-theme="dark"` on `<html>` element
+- Persisted in `localStorage` under key `theme`
+- Inline script in Layout prevents flash of wrong theme on page load
 
-### Dark mode (`[data-theme=dark]`)
-- `--bg-primary: #0f0f13` (near-black)
-- `--bg-secondary: #16161d`
-- `--bg-card: #1e1e2d`
-- `--text-primary: #f1f1f6`
-- `--text-secondary: #a0a0b8`
-- `--accent: #7c3aed`
-- `--border: #2a2a3d`
-
-### Light mode (`[data-theme=light]`)
-- `--bg-primary: #ffffff`
-- `--bg-secondary: #f8f7ff`
-- `--bg-card: #f0eeff`
-- `--text-primary: #111118`
-- `--text-secondary: #4a4a65`
-- `--accent: #6d28d9`
-- `--border: #e0dff0`
+## Component Patterns
+- Static sections: `.astro` components with inline styles using CSS custom properties
+- Interactive sections: React `.tsx` islands mounted with `client:load`
+- All data-test attributes use kebab-case identifiers matching spec selectors

@@ -1,37 +1,33 @@
 ---
-interface Props {
+import '../styles/global.css';
+
+export interface Props {
   title?: string;
-  description?: string;
 }
 
-const { title = 'RootSpec — Specification Methodology for AI-Assisted Development', description = 'RootSpec is a structured specification methodology that turns product ideas into validated, AI-ready specs.' } = Astro.props;
+const { title = 'RootSpec — Specification that stays honest' } = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{title}</title>
-  <meta name="description" content={description} />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:type" content="website" />
-  <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
-  <!-- Theme init: runs before first paint to prevent flash -->
-  <script is:inline>
-    (function() {
-      var stored = null;
-      try { stored = localStorage.getItem('rootspec-theme'); } catch(e) {}
-      var theme = stored || 'dark';
-      document.documentElement.setAttribute('data-theme', theme);
-    })();
-  </script>
-</head>
-<body>
-  <span id="theme-indicator" data-theme="dark" style="display:none;" aria-hidden="true"></span>
-  <div id="theme-root" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="RootSpec: purpose-aligned declarative specification for software. Philosophy drives implementation — never the reverse." />
+    <title>{title}</title>
+    <script is:inline>
+      // Apply saved theme before first paint to avoid flash
+      (function() {
+        try {
+          const saved = localStorage.getItem('theme');
+          if (saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          }
+        } catch(e) {}
+      })();
+    </script>
+  </head>
+  <body>
     <slot />
-  </div>
-</body>
+  </body>
 </html>

@@ -1,0 +1,74 @@
+---
+---
+<section style="padding:4rem 1.5rem;border-top:1px solid var(--color-border);background:var(--color-surface);">
+  <div style="max-width:860px;margin:0 auto;">
+    <h2 style="font-size:0.75rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:2rem;">The Methodology</h2>
+    <div data-test="methodology-diagram" style="display:flex;justify-content:center;">
+      <svg
+        data-test="methodology-diagram"
+        viewBox="0 0 560 340"
+        width="560"
+        height="340"
+        style="max-width:100%;height:auto;"
+        aria-label="RootSpec methodology diagram: spec surrounds a development cycle and only valid solutions pass through"
+      >
+        <!-- Outer boundary: The Spec -->
+        <rect x="10" y="10" width="540" height="320" rx="6" ry="6"
+          fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.25"/>
+        <text x="20" y="26" font-family="JetBrains Mono, monospace" font-size="10" fill="currentColor" opacity="0.45">spec</text>
+
+        <!-- Level boxes (L1–L5) stacked -->
+        <g font-family="JetBrains Mono, monospace" font-size="10.5">
+          <!-- L1 Philosophy -->
+          <rect x="40" y="38" width="480" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+          <text x="56" y="55" fill="currentColor" opacity="0.5" font-size="9" font-family="Inter, sans-serif" font-weight="600" letter-spacing="0.06em" text-transform="uppercase">L1</text>
+          <text x="76" y="55" fill="currentColor" opacity="0.9">Philosophy</text>
+          <text x="56" y="72" fill="currentColor" opacity="0.5" font-size="9">WHY &amp; WHAT EXPERIENCE — mission, design pillars</text>
+
+          <!-- Arrow down -->
+          <line x1="280" y1="82" x2="280" y2="94" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+          <polygon points="275,92 280,100 285,92" fill="currentColor" opacity="0.25"/>
+
+          <!-- L2 Truths -->
+          <rect x="40" y="100" width="480" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+          <text x="56" y="117" fill="currentColor" opacity="0.5" font-size="9" font-family="Inter, sans-serif" font-weight="600" letter-spacing="0.06em">L2</text>
+          <text x="76" y="117" fill="currentColor" opacity="0.9">Truths</text>
+          <text x="56" y="134" fill="currentColor" opacity="0.5" font-size="9">WHAT STRATEGY — trade-offs, commitments, success criteria</text>
+
+          <!-- Arrow down -->
+          <line x1="280" y1="144" x2="280" y2="156" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+          <polygon points="275,154 280,162 285,154" fill="currentColor" opacity="0.25"/>
+
+          <!-- L3 Interactions -->
+          <rect x="40" y="162" width="480" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+          <text x="56" y="179" fill="currentColor" opacity="0.5" font-size="9" font-family="Inter, sans-serif" font-weight="600" letter-spacing="0.06em">L3</text>
+          <text x="76" y="179" fill="currentColor" opacity="0.9">Interactions</text>
+          <text x="56" y="196" fill="currentColor" opacity="0.5" font-size="9">HOW USERS &amp; PRODUCT INTERACT — flows, patterns, feedback</text>
+
+          <!-- Arrow down -->
+          <line x1="280" y1="206" x2="280" y2="218" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+          <polygon points="275,216 280,224 285,216" fill="currentColor" opacity="0.25"/>
+
+          <!-- L4 Systems -->
+          <rect x="40" y="224" width="480" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+          <text x="56" y="241" fill="currentColor" opacity="0.5" font-size="9" font-family="Inter, sans-serif" font-weight="600" letter-spacing="0.06em">L4</text>
+          <text x="76" y="241" fill="currentColor" opacity="0.9">Systems</text>
+          <text x="56" y="258" fill="currentColor" opacity="0.5" font-size="9">HOW IT'S BUILT — architecture, boundaries, data</text>
+
+          <!-- Arrow down -->
+          <line x1="280" y1="268" x2="280" y2="280" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+          <polygon points="275,278 280,286 285,278" fill="currentColor" opacity="0.25"/>
+
+          <!-- L5 Implementation -->
+          <rect x="40" y="286" width="480" height="34" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+          <text x="56" y="298" fill="currentColor" opacity="0.5" font-size="9" font-family="Inter, sans-serif" font-weight="600" letter-spacing="0.06em">L5</text>
+          <text x="76" y="298" fill="currentColor" opacity="0.9">Implementation</text>
+          <text x="56" y="312" fill="currentColor" opacity="0.5" font-size="9">Testable user stories · only valid solutions pass</text>
+
+          <!-- Validation gate indicator -->
+          <text x="445" y="307" fill="currentColor" opacity="0.6" font-size="9">✓ validated</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>

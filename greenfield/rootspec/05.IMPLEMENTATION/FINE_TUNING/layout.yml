@@ -1,20 +1,44 @@
 # =============================================================================
-# FINE-TUNING: Layout System
+# LEVEL 5: FINE TUNING - Layout System
 # =============================================================================
 # @spec_version: 1.0.0
+# @system: LAYOUT_SYSTEM
+# @last_updated: 2026-04-23T00:00:00Z
+# @status: draft
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
-# @last_updated: 2026-04-18T14:59:27Z
-# @status: production
+
+# -----------------------------------------------------------------------------
+# Responsive Breakpoints
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
 
 breakpoints:
-  mobile_max:
-    value: 767
-    # @unit: pixels
-    # @rationale: Below this width, single-column layout and stacked interactive variants apply
-    # @constraint: min=480, max=900, type=integer
+  mobile: 640
+  # @unit: pixels
+  # @rationale: Standard mobile breakpoint; below this, wizard and
+  #   before/after comparison switch to touch-optimized layouts
+  # @constraints: min=480, max=768, type=integer
 
-  tablet_max:
-    value: 1023
-    # @unit: pixels
-    # @rationale: Standard tablet breakpoint; two-column layouts activate above mobile_max
-    # @constraint: min=768, max=1200, type=integer
+  tablet: 768
+  # @unit: pixels
+  # @rationale: Tablet breakpoint; side-by-side panels become viable
+  # @constraints: min=640, max=1024, type=integer
+
+  desktop: 1024
+  # @unit: pixels
+  # @rationale: Full desktop layout; all interactive features in
+  #   their intended orientation
+  # @constraints: min=960, max=1280, type=integer
+
+# -----------------------------------------------------------------------------
+# Touch Targets
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md, 03.INTERACTIONS.md
+
+touch:
+  min_target_size: 44
+  # @unit: pixels
+  # @rationale: WCAG 2.5.5 Success Criterion; 44x44px minimum touch target
+  # @reference: WCAG 2.1 - Success Criterion 2.5.5 Target Size
+  # @inviolable: true
+  # @constraints: min=44, max=80, type=integer

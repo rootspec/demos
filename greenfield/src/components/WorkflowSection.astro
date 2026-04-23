@@ -1,29 +1,28 @@
 ---
 ---
-
-<section data-test="how-it-works-section" id="how-it-works" style="padding: 4rem 1.5rem; background-color: var(--bg-secondary);">
-  <div style="max-width: 1000px; margin: 0 auto;">
-    <h2 style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; color: var(--text-primary); text-align: center; margin: 0 0 1rem;">
-      How It Works
-    </h2>
-    <p style="text-align: center; color: var(--text-secondary); font-size: 1.05rem; margin: 0 0 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-      Four skills, one workflow. From idea to validated implementation in a structured, repeatable process.
-    </p>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-      {[
-        { id: 'skill-init', icon: '🚀', name: '/rs-init', step: '01', title: 'Initialize', body: 'Scaffold the project structure and conventions file. Creates rootspec/ directory, scripts, and git hooks.' },
-        { id: 'skill-spec', icon: '📐', name: '/rs-spec', step: '02', title: 'Specify', body: 'Write the five-level specification from a SEED.md product description. Validates consistency across levels.' },
-        { id: 'skill-impl', icon: '⚙️', name: '/rs-impl', step: '03', title: 'Implement', body: 'Build features story by story, test-driven. Each story has acceptance criteria that must pass before moving on.' },
-        { id: 'skill-validate', icon: '✅', name: '/rs-validate', step: '04', title: 'Validate', body: 'Run the full validation suite — spec coverage, test results, build checks — and generate a structured report.' },
-      ].map(({ id, icon, name, step, title, body }) => (
-        <div data-test={id} style="background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.5rem; position: relative; overflow: hidden;">
-          <div style="position: absolute; top: 0.75rem; right: 1rem; font-size: 2.5rem; font-weight: 900; color: var(--border); line-height: 1;">{step}</div>
-          <div style="font-size: 1.75rem; margin-bottom: 0.75rem;">{icon}</div>
-          <code style="font-size: 0.8rem; color: var(--accent); font-weight: 600; background: transparent;">{name}</code>
-          <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0.25rem 0 0.5rem;">{title}</h3>
-          <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">{body}</p>
-        </div>
-      ))}
+<section data-test="how-it-works" style="padding:4rem 1.5rem;border-top:1px solid var(--color-border);">
+  <div style="max-width:860px;margin:0 auto;">
+    <h2 style="font-size:0.75rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:1.5rem;">How It Works</h2>
+    <h3 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:300;line-height:1.3;letter-spacing:-0.01em;color:var(--color-text);max-width:600px;margin-bottom:3rem;">
+      Four skills drive every workflow, from first idea to shipped product.
+    </h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0;border:1px solid var(--color-border);border-radius:6px;overflow:hidden;">
+      <div style="padding:1.5rem;border-right:1px solid var(--color-border);">
+        <code data-test="skill-name" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--color-accent);display:block;margin-bottom:0.75rem;">/rs-init</code>
+        <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;">Initialise a project with a RootSpec scaffold — spec directory, hooks, and CI config.</p>
+      </div>
+      <div style="padding:1.5rem;border-right:1px solid var(--color-border);">
+        <code data-test="skill-name" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--color-accent);display:block;margin-bottom:0.75rem;">/rs-spec</code>
+        <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;">Interview-driven spec authoring. Philosophy → Truths → Interactions → Systems → Stories.</p>
+      </div>
+      <div style="padding:1.5rem;border-right:1px solid var(--color-border);">
+        <code data-test="skill-name" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--color-accent);display:block;margin-bottom:0.75rem;">/rs-impl</code>
+        <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;">Test-driven implementation. User stories become Cypress tests; code must make them pass.</p>
+      </div>
+      <div style="padding:1.5rem;">
+        <code data-test="skill-name" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--color-accent);display:block;margin-bottom:0.75rem;">/rs-validate</code>
+        <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;">Full spec-to-code audit. Generates a report linking every test result back to its story.</p>
+      </div>
     </div>
   </div>
 </section>

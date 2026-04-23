@@ -1,32 +1,55 @@
 # =============================================================================
-# FINE-TUNING: Interactive System
+# LEVEL 5: FINE TUNING - Interactive System
 # =============================================================================
 # @spec_version: 1.0.0
+# @system: INTERACTIVE_SYSTEM
+# @last_updated: 2026-04-23T00:00:00Z
+# @status: draft
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-# @last_updated: 2026-04-18T14:59:27Z
-# @status: production
 
-wizard:
-  min_pillars:
-    value: 3
-    # @unit: count
-    # @rationale: Fewer than 3 pillars produces a spec too sparse to be meaningful
-    # @constraint: min=2, max=5, type=integer
+# -----------------------------------------------------------------------------
+# Hierarchy Explorer
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
-  max_pillars:
-    value: 5
-    # @unit: count
-    # @rationale: More than 5 pillars dilutes the design focus; 3-5 is RootSpec convention
-    # @constraint: min=3, max=7, type=integer
+hierarchy_explorer:
+  levels_count: 5
+  # @rationale: Five levels are defined by the RootSpec framework
+  # @inviolable: true
+  # @spec_source: 01.PHILOSOPHY.md, 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+  # @constraints: min=5, max=5, type=integer
 
-  mission_templates_count:
-    value: 6
-    # @unit: count
-    # @rationale: Enough variety for a developer audience without overwhelming choice
-    # @constraint: min=4, max=12, type=integer
+# -----------------------------------------------------------------------------
+# Spec Wizard
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
-  pillar_suggestions_count:
-    value: 12
-    # @unit: count
-    # @rationale: Large enough pool to feel responsive to diverse product ideas; small enough to scan quickly
-    # @constraint: min=8, max=20, type=integer
+spec_wizard:
+  steps: 3
+  # @rationale: Three steps (idea, mission, pillars) provides enough depth
+  #   without overwhelming a casual visitor
+  # @constraints: min=2, max=5, type=integer
+
+  mission_templates: 6
+  # @rationale: Enough variety to cover common product types without
+  #   overwhelming choice; fewer than 10 to prevent decision paralysis
+  # @constraints: min=4, max=10, type=integer
+  # @review_date: 2026-07-01
+
+  pillar_suggestions: 20
+  # @rationale: Wide enough to cover most product categories;
+  #   visitors rarely see all options before finding relevant ones
+  # @constraints: min=12, max=30, type=integer
+
+  pillars_min: 3
+  # @rationale: Three pillars is the minimum for meaningful spec structure;
+  #   fewer doesn't provide enough constraints on the product identity
+  # @spec_source: 01.PHILOSOPHY.md - Design Pillars section
+  # @constraints: min=2, max=5, type=integer
+
+  pillars_max: 5
+  # @rationale: Five pillars is the framework recommended maximum;
+  #   more than five dilutes focus per 01.PHILOSOPHY.md guidelines
+  # @inviolable: true
+  # @spec_source: 01.PHILOSOPHY.md - Design Pillars section
+  # @constraints: min=3, max=8, type=integer
