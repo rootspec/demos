@@ -101,6 +101,10 @@ Why existing approaches fail: spec drift, philosophy-implementation gap, unrelia
 
 Visual walkthrough of the four skills (init → spec → impl → validate) with clear before/after.
 
+### Author's Notes
+
+A dedicated section containing the **full** text of the "Author's Notes" code block above, reproduced **verbatim**. Do not summarize, paraphrase, condense, reorder, or stylistically rewrite any part of it. Preserve every paragraph break and any inline emphasis exactly as written. Treat the code-block content as a literal string to embed, not as guidance to interpret. Introduce the section with a heading (e.g. "Why I built RootSpec" or "From the author") and then render the prose as-is. This is the author's voice speaking directly to visitors; the site's job is to carry that voice through unaltered.
+
 ### Interactive: Hierarchy Explorer
 
 An interactive visualization of the five levels. Users click a level to expand it and see example content. Visual connections show which levels each can reference (arrows flow upward only). Hovering a level highlights its allowed references. This is the core concept of RootSpec made tangible.
