@@ -50,8 +50,6 @@ jobs:
           wait-on: http://localhost:3000/demos/greenfield/
           wait-on-timeout: 30
           browser: chrome
-        env:
-          CYPRESS_BASE_URL: http://localhost:3000/demos/greenfield/
       - run: ./scripts/dev.sh stop || true
         if: steps.check.outputs.ready == 'true'
       - name: Dump dev server log on failure
