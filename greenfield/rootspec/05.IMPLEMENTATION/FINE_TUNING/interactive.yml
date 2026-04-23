@@ -1,7 +1,7 @@
 # =============================================================================
 # LEVEL 5: FINE TUNING - Interactive System
 # =============================================================================
-# @spec_version: 1.0.0
+# @spec_version: 7.3.7
 # @system: INTERACTIVE_SYSTEM
 # @last_updated: 2026-04-23T00:00:00Z
 # @status: draft
@@ -13,43 +13,55 @@
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
 hierarchy_explorer:
-  levels_count: 5
-  # @rationale: Five levels are defined by the RootSpec framework
-  # @inviolable: true
-  # @spec_source: 01.PHILOSOPHY.md, 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-  # @constraints: min=5, max=5, type=integer
+  expand_transition_ms: 200
+  # @rationale: Quick enough to feel mechanical, not slow enough to feel sluggish
+  # @constraints: min=100, max=400, type=integer
+  # @reference: L2 Truths - transitions should be 150-250ms ease-out
+
+  min_pillar_selections: 3
+  # @rationale: Three pillars is the minimum for meaningful design direction per L1 Design Pillars section
+  # @constraints: min=1, max=5, type=integer
+  # @inviolable: false
+
+  max_pillar_selections: 5
+  # @rationale: More than five pillars dilutes focus - L1 warns against too many pillars
+  # @reference: 01.PHILOSOPHY.md - Design Pillars
+  # @constraints: min=3, max=8, type=integer
 
 # -----------------------------------------------------------------------------
 # Spec Wizard
 # -----------------------------------------------------------------------------
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
-spec_wizard:
-  steps: 3
-  # @rationale: Three steps (idea, mission, pillars) provides enough depth
-  #   without overwhelming a casual visitor
-  # @constraints: min=2, max=5, type=integer
-
-  mission_templates: 6
-  # @rationale: Enough variety to cover common product types without
-  #   overwhelming choice; fewer than 10 to prevent decision paralysis
-  # @constraints: min=4, max=10, type=integer
-  # @review_date: 2026-07-01
-
-  pillar_suggestions: 20
-  # @rationale: Wide enough to cover most product categories;
-  #   visitors rarely see all options before finding relevant ones
-  # @constraints: min=12, max=30, type=integer
-
-  pillars_min: 3
-  # @rationale: Three pillars is the minimum for meaningful spec structure;
-  #   fewer doesn't provide enough constraints on the product identity
-  # @spec_source: 01.PHILOSOPHY.md - Design Pillars section
-  # @constraints: min=2, max=5, type=integer
-
-  pillars_max: 5
-  # @rationale: Five pillars is the framework recommended maximum;
-  #   more than five dilutes focus per 01.PHILOSOPHY.md guidelines
+wizard:
+  total_steps: 3
+  # @rationale: Three steps (mission, pillars, interaction) maps directly to L1-L3
+  # @constraints: type=integer
   # @inviolable: true
-  # @spec_source: 01.PHILOSOPHY.md - Design Pillars section
-  # @constraints: min=3, max=8, type=integer
+
+  min_idea_length: 5
+  # @rationale: Prevents trivially short inputs that produce meaningless output
+  # @constraints: min=1, max=20, type=integer
+
+  max_idea_length: 200
+  # @rationale: One-line product idea; longer inputs suggest misuse of the field
+  # @constraints: min=100, max=500, type=integer
+
+  min_interaction_length: 10
+  # @rationale: Needs enough substance to generate a meaningful L3 stub
+  # @constraints: min=5, max=50, type=integer
+
+# -----------------------------------------------------------------------------
+# Theme System
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+
+theme:
+  transition_ms: 150
+  # @rationale: Fast enough that theme switch feels instant, not jarring
+  # @constraints: min=0, max=300, type=integer
+  # @reference: L2 Truths - quick and functional transitions
+
+  storage_key: "rootspec-theme"
+  # @rationale: Namespaced to avoid collision with other localStorage keys
+  # @inviolable: false

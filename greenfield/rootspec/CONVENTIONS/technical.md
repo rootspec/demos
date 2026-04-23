@@ -1,32 +1,37 @@
 ## Framework
-- **Framework:** Astro 6.x with static output
-- **Renderer:** React 19 islands via `@astrojs/react` (client:load)
-- **Styling:** Tailwind CSS 3.x via `@astrojs/tailwind` + inline CSS custom properties
-- **Language:** TypeScript (strict mode for app code, relaxed for Cypress)
+- **Runtime:** Astro 6 with React integration (`@astrojs/react`)
+- **CSS:** Tailwind CSS v4 via `@tailwindcss/vite`
+- **Language:** TypeScript (strict mode via `astro/tsconfigs/strict`)
+- **Build:** `astro build`
+- **Dev server:** `npm run dev` → `./scripts/dev.sh start` → `astro dev` on port 3000
+- **Test runner:** Cypress with `js-yaml` + `zod` for DSL validation
 
-## Project Structure
-- **Pages:** `src/pages/` — Astro pages
-- **Components:** `src/components/` — `.astro` for static, `.tsx` for interactive React islands
-- **Layouts:** `src/layouts/Layout.astro` — single root layout
-- **Styles:** `src/styles/global.css` — global CSS with custom property variables
+## File organization
+- `src/pages/` — Astro page routes
+- `src/layouts/` — Shared HTML shells
+- `src/components/` — Astro and React components
+- `src/styles/` — Global CSS (Tailwind + CSS variables)
+- `cypress/e2e/` — Cypress test specs
+- `cypress/support/` — DSL steps, schema, reporter
 
-## Build
-- **Dev command:** `npx astro dev` (via `scripts/dev.sh`, port 3000)
-- **Build command:** `astro build`
-- **Base path:** `/demos/greenfield` for production; `/` for development (env-conditional in `astro.config.mjs`)
-- **Dev port:** 3000
+## Component conventions
+- Static sections: `.astro` components
+- Interactive islands: `.tsx` React components with `client:load` directive
+- All interactive components export a default function
+- Sections receive their data inline (no external data files)
 
-## State Management
-- React `useState` for interactive components (no external state library)
-- Theme persisted via `localStorage` + `data-theme` attribute on `<html>`
-- Theme applied via inline `<script is:inline>` in Layout to prevent flash
+## Base path
+- **Base:** `/demos/greenfield` (set in `astro.config.mjs`)
+- All internal links use `/demos/greenfield/` as root
+- `Astro.props` and layouts handle path prefixing automatically
+
+## Routing
+- Single-page marketing site at `/demos/greenfield/`
+- No dynamic routes or API endpoints in MVP
+- Anchor-based section navigation (`#how-it-works`, `#hierarchy`, etc.)
 
 ## Testing
-- **Framework:** Cypress 15.x with TypeScript
-- **Test file:** `cypress/e2e/mvp.cy.ts`
-- **Support:** `cypress/support/` — steps.ts, schema.ts, e2e.ts, rootspec-reporter.ts
-- **Base URL:** `http://localhost:3000` (root, since dev serves without base prefix)
-
-## Imports
-- `.rootspec.json` version imported directly in `Header.astro` for build-time version badge
-- No external API calls — all client-side
+- Cypress base URL: `http://localhost:3000`
+- Test entry: `cypress/e2e/mvp.cy.ts`
+- Results written to `rootspec/tests-status.json` via rootspec-reporter
+- All stories use `loadAndRun()` with embedded YAML string literals

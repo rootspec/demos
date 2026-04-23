@@ -1,245 +1,315 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const missionTemplates = [
-  { id: 'm1', text: 'Help users accomplish a specific task faster and more reliably' },
-  { id: 'm2', text: 'Give people visibility into something that was previously opaque' },
-  { id: 'm3', text: 'Reduce the cost or friction of an existing workflow' },
-  { id: 'm4', text: 'Connect people or information that belongs together' },
-];
+type Step = 1 | 2 | 3 | 4 | 'result';
 
-const pillarOptions = [
-  { id: 'p1', text: 'Clarity over cleverness' },
-  { id: 'p2', text: 'Fast to start, powerful when needed' },
-  { id: 'p3', text: 'Honest about trade-offs' },
-  { id: 'p4', text: 'Respects the user\'s time' },
-  { id: 'p5', text: 'Works without explanation' },
-  { id: 'p6', text: 'Reliable over flashy' },
-  { id: 'p7', text: 'Minimal surface area' },
-  { id: 'p8', text: 'Composable by design' },
-];
-
-interface WizardState {
-  step: number;
+interface WizardResult {
   idea: string;
   mission: string;
   pillars: string[];
-  error: string;
+  interaction: string;
 }
 
-function generateSpec(state: WizardState) {
-  const mission = missionTemplates.find(m => m.id === state.mission);
-  const pillars = state.pillars.map(id => pillarOptions.find(p => p.id === id)?.text).filter(Boolean);
-  return `# L1: Philosophy
-## Mission
-${state.idea.trim()} — ${mission?.text ?? 'to serve users well'}.
+const MISSION_OPTIONS = [
+  'Eliminate guesswork from software delivery',
+  'Create a shared language between humans and AI',
+  'Make intent the primary artifact, not code',
+  'Enable AI agents to build from first principles',
+];
 
-## Design Pillars
-${pillars.map((p, i) => `${i + 1}. ${p}`).join('\n')}
-
----
-# L2: Truths (to be derived)
-Success criteria and trade-offs follow from the mission above.
-
----
-# L3: Interactions (to be derived)
-Key user flows follow from the design pillars above.`;
-}
+const PILLAR_OPTIONS = [
+  'Clarity — every requirement is unambiguous',
+  'Continuity — spec evolves with the product',
+  'Verifiability — every claim is testable',
+  'Autonomy — AI can implement without supervision',
+  'Alignment — team shares a single source of truth',
+];
 
 export default function SpecWizard() {
-  const [state, setState] = useState<WizardState>({
-    step: 1,
-    idea: '',
-    mission: '',
-    pillars: [],
-    error: '',
-  });
+  const [step, setStep] = useState<Step>(1);
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => { setHydrated(true); }, []);
+  const [idea, setIdea] = useState('');
+  const [mission, setMission] = useState('');
+  const [pillars, setPillars] = useState<string[]>([]);
+  const [interaction, setInteraction] = useState('');
+  const [result, setResult] = useState<WizardResult | null>(null);
 
-  const handleNext = () => {
-    if (state.step === 1) {
-      if (!state.idea.trim()) {
-        setState(s => ({ ...s, error: 'Please enter a product idea.' }));
-        return;
-      }
-      setState(s => ({ ...s, step: 2, error: '' }));
-    } else if (state.step === 2) {
-      setState(s => ({ ...s, step: 3, error: '' }));
-    }
+  const togglePillar = (p: string) => {
+    setPillars((prev) =>
+      prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]
+    );
   };
 
-  const handleFinish = () => {
-    setState(s => ({ ...s, step: 4, error: '' }));
+  const canGoNext = () => {
+    if (step === 1) return idea.trim().length > 0;
+    if (step === 2) return mission.length > 0;
+    if (step === 3) return pillars.length > 0;
+    return false;
   };
 
-  const togglePillar = (id: string) => {
-    setState(s => ({
-      ...s,
-      pillars: s.pillars.includes(id)
-        ? s.pillars.filter(p => p !== id)
-        : [...s.pillars, id],
-    }));
+  const advance = () => {
+    if (step === 1) setStep(2);
+    else if (step === 2) setStep(3);
+    else if (step === 3) setStep(4);
   };
 
-  const baseStyle: React.CSSProperties = {
-    padding: '1.5rem',
-    background: 'var(--color-surface)',
-    borderRadius: '4px',
-    border: '1px solid var(--color-border)',
+  const generate = () => {
+    setResult({ idea, mission, pillars, interaction });
+    setStep('result');
   };
 
-  const btnStyle: React.CSSProperties = {
-    fontFamily: 'Inter, sans-serif',
-    fontSize: '0.85rem',
-    padding: '0.5rem 1.1rem',
-    borderRadius: '3px',
-    border: '1px solid var(--color-border)',
-    cursor: 'pointer',
-    background: 'var(--color-bg)',
-    color: 'var(--color-text)',
-    transition: 'border-color 150ms ease-out',
+  const reset = () => {
+    setStep(1);
+    setIdea('');
+    setMission('');
+    setPillars([]);
+    setInteraction('');
+    setResult(null);
   };
-
-  const primaryBtnStyle: React.CSSProperties = {
-    ...btnStyle,
-    background: 'var(--color-accent)',
-    color: '#fff',
-    border: '1px solid var(--color-accent)',
-  };
-
-  const steps = [
-    { num: 1, label: 'Idea' },
-    { num: 2, label: 'Mission' },
-    { num: 3, label: 'Pillars' },
-  ];
 
   return (
-    <div data-test="spec-wizard" style={{ maxWidth: '600px' }}>
-      {state.step < 4 && (
-        <div style={{ display: 'flex', gap: '0', marginBottom: '1.5rem', border: '1px solid var(--color-border)', borderRadius: '4px', overflow: 'hidden', fontFamily: 'Inter, sans-serif', fontSize: '0.8rem' }}>
-          {steps.map((s, i) => (
-            <div key={s.num} style={{
-              padding: '0.5rem 1rem',
-              background: state.step === s.num ? 'var(--color-accent)' : 'var(--color-surface)',
-              color: state.step === s.num ? '#fff' : 'var(--color-text-muted)',
-              borderRight: i < steps.length - 1 ? '1px solid var(--color-border)' : 'none',
-              flex: 1,
-              textAlign: 'center',
-            }}>
-              {s.num}. {s.label}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {state.step === 1 && (
-        <div data-test="wizard-step-1" style={baseStyle}>
-          <label style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: 'var(--color-text-muted)', display: 'block', marginBottom: '0.6rem' }}>
-            Describe your product idea in one sentence:
-          </label>
+    <div
+      data-test="spec-wizard"
+      data-hydrated={hydrated ? "true" : undefined}
+      className="rounded-2xl p-8 max-w-2xl mx-auto"
+      style={{
+        backgroundColor: 'var(--color-card-bg)',
+        border: '1px solid var(--color-card-border)',
+      }}
+    >
+      {/* Step 1 */}
+      {step === 1 && (
+        <div data-test="wizard-step-1">
+          <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-primary)' }}>
+            Step 1 of 4
+          </p>
+          <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
+            What are you building?
+          </h3>
+          <p className="text-sm mb-6" style={{ color: 'var(--color-text-muted)' }}>
+            Describe your product in one sentence. Don't overthink it.
+          </p>
           <input
             data-test="wizard-idea-input"
             type="text"
-            value={state.idea}
-            onChange={e => setState(s => ({ ...s, idea: e.target.value }))}
-            placeholder="e.g. A tool for tracking personal goals"
+            value={idea}
+            onChange={(e) => setIdea(e.target.value)}
+            placeholder="e.g. A tool to help developers write better commit messages"
+            className="w-full px-4 py-3 rounded-lg text-sm outline-none"
             style={{
-              width: '100%',
-              padding: '0.6rem 0.75rem',
-              fontFamily: 'Newsreader, Georgia, serif',
-              fontSize: '1rem',
+              backgroundColor: 'var(--color-surface)',
               border: '1px solid var(--color-border)',
-              borderRadius: '3px',
-              background: 'var(--color-bg)',
               color: 'var(--color-text)',
-              boxSizing: 'border-box',
-              marginBottom: state.error ? '0.5rem' : '1rem',
             }}
-            onKeyDown={e => { if (e.key === 'Enter') handleNext(); }}
           />
-          {state.error && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: '#c0392b', marginBottom: '0.75rem' }}>{state.error}</p>}
-          <button data-test="wizard-next" onClick={handleNext} style={primaryBtnStyle}>
-            Next →
-          </button>
+          <div className="flex justify-end mt-6">
+            <button
+              data-test="wizard-next"
+              onClick={advance}
+              disabled={!canGoNext()}
+              className="px-5 py-2 rounded-lg font-semibold text-sm text-white disabled:opacity-40 transition-opacity"
+              style={{ backgroundColor: 'var(--color-primary)' }}
+            >
+              Next →
+            </button>
+          </div>
         </div>
       )}
 
-      {state.step === 2 && (
-        <div data-test="wizard-step-2" style={baseStyle}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
-            Which mission template best fits <em style={{ color: 'var(--color-text)' }}>"{state.idea}"</em>?
+      {/* Step 2 */}
+      {step === 2 && (
+        <div data-test="wizard-step-2">
+          <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-primary)' }}>
+            Step 2 of 4
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' }}>
-            {missionTemplates.map(m => (
+          <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
+            What's your core mission?
+          </h3>
+          <p className="text-sm mb-6" style={{ color: 'var(--color-text-muted)' }}>
+            Choose the statement that best captures why this product exists.
+          </p>
+          <div className="flex flex-col gap-3">
+            {MISSION_OPTIONS.map((opt) => (
               <button
-                key={m.id}
+                key={opt}
                 data-test="wizard-mission-option"
-                onClick={() => setState(s => ({ ...s, mission: m.id }))}
+                onClick={() => setMission(opt)}
+                className="text-left px-4 py-3 rounded-lg text-sm transition-colors"
                 style={{
-                  ...btnStyle,
-                  textAlign: 'left',
-                  borderColor: state.mission === m.id ? 'var(--color-accent)' : 'var(--color-border)',
-                  color: state.mission === m.id ? 'var(--color-accent)' : 'var(--color-text)',
+                  backgroundColor: mission === opt ? 'var(--color-primary)' : 'var(--color-surface)',
+                  color: mission === opt ? 'white' : 'var(--color-text)',
+                  border: `1px solid ${mission === opt ? 'var(--color-primary)' : 'var(--color-border)'}`,
                 }}
               >
-                {m.text}
+                {opt}
               </button>
             ))}
           </div>
-          <button data-test="wizard-next" onClick={handleNext} style={primaryBtnStyle}>
-            Next →
-          </button>
+          <div className="flex justify-between mt-6">
+            <button
+              onClick={() => setStep(1)}
+              className="px-5 py-2 rounded-lg text-sm"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
+              ← Back
+            </button>
+            <button
+              data-test="wizard-next"
+              onClick={advance}
+              disabled={!canGoNext()}
+              className="px-5 py-2 rounded-lg font-semibold text-sm text-white disabled:opacity-40 transition-opacity"
+              style={{ backgroundColor: 'var(--color-primary)' }}
+            >
+              Next →
+            </button>
+          </div>
         </div>
       )}
 
-      {state.step === 3 && (
-        <div data-test="wizard-step-3" style={baseStyle}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
-            Choose 3–5 design pillars (selected: {state.pillars.length}):
+      {/* Step 3 */}
+      {step === 3 && (
+        <div data-test="wizard-step-3">
+          <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-primary)' }}>
+            Step 3 of 4
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '1rem' }}>
-            {pillarOptions.map(p => (
+          <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
+            Choose your core pillars
+          </h3>
+          <p className="text-sm mb-6" style={{ color: 'var(--color-text-muted)' }}>
+            Select 2–3 values that will guide every product decision.
+          </p>
+          <div className="flex flex-col gap-3">
+            {PILLAR_OPTIONS.map((opt) => (
               <button
-                key={p.id}
+                key={opt}
                 data-test="wizard-pillar-option"
-                onClick={() => togglePillar(p.id)}
+                onClick={() => togglePillar(opt)}
+                className="text-left px-4 py-3 rounded-lg text-sm transition-colors"
                 style={{
-                  ...btnStyle,
-                  textAlign: 'left',
-                  fontSize: '0.8rem',
-                  padding: '0.5rem 0.75rem',
-                  borderColor: state.pillars.includes(p.id) ? 'var(--color-accent)' : 'var(--color-border)',
-                  color: state.pillars.includes(p.id) ? 'var(--color-accent)' : 'var(--color-text)',
+                  backgroundColor: pillars.includes(opt) ? 'var(--color-primary)' : 'var(--color-surface)',
+                  color: pillars.includes(opt) ? 'white' : 'var(--color-text)',
+                  border: `1px solid ${pillars.includes(opt) ? 'var(--color-primary)' : 'var(--color-border)'}`,
                 }}
               >
-                {state.pillars.includes(p.id) ? '✓ ' : ''}{p.text}
+                {opt}
               </button>
             ))}
           </div>
-          <button data-test="wizard-finish" onClick={handleFinish} style={primaryBtnStyle} disabled={state.pillars.length < 1}>
-            Generate Spec →
-          </button>
+          <div className="flex justify-between mt-6">
+            <button
+              onClick={() => setStep(2)}
+              className="px-5 py-2 rounded-lg text-sm"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
+              ← Back
+            </button>
+            <button
+              data-test="wizard-next"
+              onClick={advance}
+              disabled={!canGoNext()}
+              className="px-5 py-2 rounded-lg font-semibold text-sm text-white disabled:opacity-40 transition-opacity"
+              style={{ backgroundColor: 'var(--color-primary)' }}
+            >
+              Next →
+            </button>
+          </div>
         </div>
       )}
 
-      {state.step === 4 && (
-        <div data-test="wizard-output" style={{ ...baseStyle, borderColor: 'var(--color-accent)' }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Skeleton Spec Output</p>
-          <pre style={{
-            fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '0.78rem',
-            color: 'var(--color-text)',
-            background: 'var(--color-bg)',
-            padding: '1rem',
-            borderRadius: '3px',
-            overflowX: 'auto',
-            lineHeight: 1.65,
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-          }}>
-            {generateSpec(state)}
-          </pre>
-          <button onClick={() => setState({ step: 1, idea: '', mission: '', pillars: [], error: '' })} style={{ ...btnStyle, marginTop: '1rem' }}>
-            Start over
-          </button>
+      {/* Step 4 */}
+      {step === 4 && (
+        <div data-test="wizard-step-4">
+          <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-primary)' }}>
+            Step 4 of 4
+          </p>
+          <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
+            Describe a core interaction
+          </h3>
+          <p className="text-sm mb-6" style={{ color: 'var(--color-text-muted)' }}>
+            Write one key thing a user can do with your product.
+          </p>
+          <input
+            data-test="wizard-interaction-input"
+            type="text"
+            value={interaction}
+            onChange={(e) => setInteraction(e.target.value)}
+            placeholder="e.g. User runs /rs-spec and answers interview questions"
+            className="w-full px-4 py-3 rounded-lg text-sm outline-none"
+            style={{
+              backgroundColor: 'var(--color-surface)',
+              border: '1px solid var(--color-border)',
+              color: 'var(--color-text)',
+            }}
+          />
+          <div className="flex justify-between mt-6">
+            <button
+              onClick={() => setStep(3)}
+              className="px-5 py-2 rounded-lg text-sm"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
+              ← Back
+            </button>
+            <button
+              data-test="wizard-generate"
+              onClick={generate}
+              className="px-5 py-2 rounded-lg font-semibold text-sm text-white"
+              style={{ backgroundColor: 'var(--color-primary)' }}
+            >
+              Generate spec →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Result */}
+      {step === 'result' && result && (
+        <div data-test="wizard-result">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-2xl">🎉</span>
+            <h3 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
+              Your skeleton spec
+            </h3>
+          </div>
+          <div
+            className="rounded-xl p-6 font-mono text-sm"
+            style={{
+              backgroundColor: 'var(--color-surface)',
+              border: '1px solid var(--color-border)',
+              color: 'var(--color-text)',
+            }}
+          >
+            <div data-test="wizard-result-l1" className="mb-4">
+              <span style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>L1 Philosophy</span>
+              <br />
+              <span style={{ color: 'var(--color-text-muted)' }}>Product:</span> {result.idea}
+              <br />
+              <span style={{ color: 'var(--color-text-muted)' }}>Mission:</span> {result.mission}
+            </div>
+            <div className="mb-4">
+              <span style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>L2 Truths</span>
+              <br />
+              {result.pillars.map((p, i) => (
+                <span key={i}>
+                  <span style={{ color: 'var(--color-text-muted)' }}>Pillar {i + 1}:</span> {p}
+                  <br />
+                </span>
+              ))}
+            </div>
+            <div>
+              <span style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>L3 Interaction</span>
+              <br />
+              <span style={{ color: 'var(--color-text-muted)' }}>Core journey:</span> {result.interaction || '(not specified)'}
+            </div>
+          </div>
+          <div className="flex justify-end mt-6">
+            <button
+              onClick={reset}
+              className="px-5 py-2 rounded-lg text-sm"
+              style={{ color: 'var(--color-text-muted)', border: '1px solid var(--color-border)' }}
+            >
+              Start over
+            </button>
+          </div>
         </div>
       )}
     </div>

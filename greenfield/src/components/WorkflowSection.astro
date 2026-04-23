@@ -1,28 +1,63 @@
 ---
+const steps = [
+  {
+    num: '01',
+    cmd: '/rs-init',
+    title: 'Initialize',
+    desc: 'Set up the RootSpec structure in your project with a single command.',
+  },
+  {
+    num: '02',
+    cmd: '/rs-spec',
+    title: 'Specify',
+    desc: 'Answer guided questions to generate a 5-level spec: philosophy, truths, interactions, systems, and user stories.',
+  },
+  {
+    num: '03',
+    cmd: '/rs-impl',
+    title: 'Implement',
+    desc: 'An AI agent reads the spec and builds your features — test-driven, autonomous, one story at a time.',
+  },
+  {
+    num: '04',
+    cmd: '/rs-validate',
+    title: 'Validate',
+    desc: 'Run automated tests against your spec. Every acceptance criterion is verified against the live app.',
+  },
+];
 ---
-<section data-test="how-it-works" style="padding:4rem 1.5rem;border-top:1px solid var(--color-border);">
-  <div style="max-width:860px;margin:0 auto;">
-    <h2 style="font-size:0.75rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:1.5rem;">How It Works</h2>
-    <h3 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:300;line-height:1.3;letter-spacing:-0.01em;color:var(--color-text);max-width:600px;margin-bottom:3rem;">
-      Four skills drive every workflow, from first idea to shipped product.
-    </h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0;border:1px solid var(--color-border);border-radius:6px;overflow:hidden;">
-      <div style="padding:1.5rem;border-right:1px solid var(--color-border);">
-        <code data-test="skill-name" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--color-accent);display:block;margin-bottom:0.75rem;">/rs-init</code>
-        <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;">Initialise a project with a RootSpec scaffold — spec directory, hooks, and CI config.</p>
-      </div>
-      <div style="padding:1.5rem;border-right:1px solid var(--color-border);">
-        <code data-test="skill-name" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--color-accent);display:block;margin-bottom:0.75rem;">/rs-spec</code>
-        <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;">Interview-driven spec authoring. Philosophy → Truths → Interactions → Systems → Stories.</p>
-      </div>
-      <div style="padding:1.5rem;border-right:1px solid var(--color-border);">
-        <code data-test="skill-name" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--color-accent);display:block;margin-bottom:0.75rem;">/rs-impl</code>
-        <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;">Test-driven implementation. User stories become Cypress tests; code must make them pass.</p>
-      </div>
-      <div style="padding:1.5rem;">
-        <code data-test="skill-name" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--color-accent);display:block;margin-bottom:0.75rem;">/rs-validate</code>
-        <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;">Full spec-to-code audit. Generates a report linking every test result back to its story.</p>
-      </div>
+<section
+  data-test="how-it-works"
+  id="how-it-works"
+  class="py-20 px-4"
+  style="background-color: var(--color-bg);"
+>
+  <div class="section-container">
+    <h2 class="text-3xl font-bold text-center mb-4" style="color: var(--color-text);">
+      How RootSpec works
+    </h2>
+    <p class="text-center text-lg mb-14 max-w-2xl mx-auto" style="color: var(--color-text-muted);">
+      Four commands. One source of truth. Software that ships what was actually intended.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {steps.map((s) => (
+        <div
+          class="rounded-xl p-6 flex flex-col gap-3"
+          style="background-color: var(--color-surface); border: 1px solid var(--color-card-border);"
+        >
+          <div class="text-4xl font-extrabold opacity-20" style="color: var(--color-primary);">
+            {s.num}
+          </div>
+          <code
+            class="text-sm font-mono font-bold px-2 py-1 rounded self-start"
+            style="background-color: var(--color-surface-alt); color: var(--color-primary);"
+          >
+            {s.cmd}
+          </code>
+          <h3 class="text-lg font-semibold" style="color: var(--color-text);">{s.title}</h3>
+          <p class="text-sm" style="color: var(--color-text-muted);">{s.desc}</p>
+        </div>
+      ))}
     </div>
   </div>
 </section>

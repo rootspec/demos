@@ -1,13 +1,32 @@
 ---
-const buildDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+const buildDate = new Date().toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
 ---
-<footer data-test="footer" style="padding:2rem 1.5rem;border-top:1px solid var(--color-border);">
-  <div style="max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;">
-    <p style="font-family:'Inter',sans-serif;font-size:0.8rem;color:var(--color-text-muted);">
-      Built by <strong style="color:var(--color-text);">Claude</strong> using the RootSpec pipeline. {buildDate}.
+<footer
+  data-test="footer"
+  class="py-8 px-4"
+  style="background-color: var(--color-surface); border-top: 1px solid var(--color-border);"
+>
+  <div class="section-container flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <svg width="20" height="20" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="6" fill="#6d28d9"/>
+        <path d="M7 9h14M7 14h10M7 19h12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="font-semibold" style="color: var(--color-text);">RootSpec</span>
+    </div>
+    <p
+      data-test="footer-attribution"
+      class="text-sm text-center"
+      style="color: var(--color-text-muted);"
+    >
+      Built autonomously by Claude · {buildDate}
     </p>
-    <p style="font-family:'Inter',sans-serif;font-size:0.8rem;color:var(--color-text-muted);">
-      <a href="https://github.com/rootspec/rootspec" target="_blank" rel="noopener noreferrer" style="color:var(--color-text-muted);text-decoration:underline;text-underline-offset:2px;">RootSpec on GitHub</a>
+    <p class="text-xs" style="color: var(--color-text-muted);">
+      Open source · MIT License
     </p>
   </div>
 </footer>

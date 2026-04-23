@@ -1,30 +1,32 @@
 ---
+const GITHUB_URL = 'https://github.com/anthropics/claude-code';
 ---
-<section data-test="cta-section" style="padding:4rem 1.5rem;border-top:1px solid var(--color-border);background:var(--color-surface);">
-  <div style="max-width:860px;margin:0 auto;">
-    <h2 style="font-size:0.75rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:1.5rem;">Open Source</h2>
-    <h3 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:300;line-height:1.3;letter-spacing:-0.01em;color:var(--color-text);max-width:640px;margin-bottom:1.5rem;">
-      RootSpec is open source and works with any stack, any team, any AI tooling.
-    </h3>
-    <p style="font-size:0.95rem;color:var(--color-text-muted);line-height:1.7;max-width:560px;margin-bottom:2rem;">
-      The framework, all four skills, and the complete spec for this site are available on GitHub. Four commands from a seed to a deployed, tested site.
+<section
+  data-test="cta-section"
+  id="cta"
+  class="py-24 px-4 text-center"
+  style="background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%);"
+>
+  <div class="section-container">
+    <h2 class="text-4xl font-extrabold mb-4" style="color: var(--color-text);">
+      Ready to build from intent?
+    </h2>
+    <p class="text-xl mb-10 max-w-xl mx-auto" style="color: var(--color-text-muted);">
+      RootSpec is open source. Star the repo and start specifying your next project today.
     </p>
-    <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
+    <div class="flex flex-wrap gap-4 justify-center">
       <a
-        href="https://github.com/rootspec/rootspec"
+        data-test="github-link"
+        href={GITHUB_URL}
         target="_blank"
         rel="noopener noreferrer"
-        style="font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:500;padding:0.65rem 1.25rem;background:var(--color-accent);color:#fff;border-radius:3px;text-decoration:none;transition:opacity 150ms ease-out;"
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-white transition-colors"
+        style="background-color: var(--color-primary);"
       >
-        View on GitHub →
-      </a>
-      <a
-        href="https://github.com/rootspec/demos/tree/main/greenfield"
-        target="_blank"
-        rel="noopener noreferrer"
-        style="font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--color-text-muted);text-decoration:underline;text-underline-offset:2px;"
-      >
-        See this demo's source
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        View on GitHub
       </a>
     </div>
   </div>

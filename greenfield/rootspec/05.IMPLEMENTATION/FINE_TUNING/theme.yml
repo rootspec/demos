@@ -1,80 +1,69 @@
 # =============================================================================
 # LEVEL 5: FINE TUNING - Theme System
 # =============================================================================
-# @spec_version: 1.0.0
+# @spec_version: 7.3.7
 # @system: THEME_SYSTEM
 # @last_updated: 2026-04-23T00:00:00Z
 # @status: draft
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Motion Timing
+# Light Mode Color Tokens
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# @spec_source: 04.SYSTEMS/PRESENTATION_SYSTEM.md
 
-motion:
-  duration_quick: 150
-  # @unit: milliseconds
-  # @rationale: Fast enough to feel immediate for hover/focus states;
-  #   matches common UI framework defaults for micro-interactions
-  # @reference: Material Design - Motion duration guidelines
-  # @constraints: min=80, max=250, type=integer
+light:
+  background: "#FAFAF8"
+  # @rationale: Near-white with slight warmth; not pure white which feels clinical
+  # @constraints: type=hex_color
 
-  duration_transition: 200
-  # @unit: milliseconds
-  # @rationale: Functional transition speed per 02.TRUTHS.md —
-  #   quick and purposeful, not decorative; 200ms is at the boundary of
-  #   "noticeable but not slow"
-  # @reference: Nielsen Norman Group - Response Times
-  # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md, 02.TRUTHS.md
-  # @constraints: min=150, max=300, type=integer
+  surface: "#FFFFFF"
+  # @rationale: Pure white for card surfaces that need to lift off background
+  # @constraints: type=hex_color
 
-  easing: ease-out
-  # @rationale: ease-out matches natural deceleration; feels mechanical
-  #   (decelerates to a stop) rather than bouncy
-  # @inviolable: true
-  # @spec_source: 02.TRUTHS.md - Interactivity demonstrates, not decorates
+  text_primary: "#1A1A18"
+  # @rationale: Near-black with slight warmth; not pure black which is harsh on near-white bg
+  # @constraints: type=hex_color
 
-# -----------------------------------------------------------------------------
-# Layout Metrics
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+  text_secondary: "#5C5C56"
+  # @rationale: Muted for secondary text; sufficient contrast on both bg and surface
+  # @constraints: type=hex_color
 
-layout:
-  max_content_width: 1200
-  # @unit: pixels
-  # @rationale: Wide enough for side-by-side interactive elements at desktop;
-  #   not so wide that prose lines become unreadable
-  # @constraints: min=900, max=1440, type=integer
+  border: "#E2E2DC"
+  # @rationale: Subtle border that separates without competing
+  # @constraints: type=hex_color
 
-  prose_max_width: 680
-  # @unit: pixels
-  # @rationale: 65-75 characters per line for optimal reading comfort;
-  #   680px achieves this at 16-18px font sizes
-  # @reference: Bringhurst - The Elements of Typographic Style
-  # @constraints: min=560, max=780, type=integer
-
-  section_padding_vertical: 96
-  # @unit: pixels
-  # @rationale: Generous whitespace between sections signals editorial quality;
-  #   allows sections to breathe and be scanned independently
-  # @spec_source: 02.TRUTHS.md - Typography carries the argument
-  # @constraints: min=64, max=160, type=integer
+  accent: "#2D6A4F"
+  # @rationale: Muted green; signals "this works, this validates" — connected to the methodology's validation-first philosophy
+  # @reference: L1 Design Pillar "Proof Over Plausibility"
+  # @constraints: type=hex_color
+  # @alternatives: ["#2563EB (blue)", "#7C3AED (purple)", "#B45309 (amber)"]
 
 # -----------------------------------------------------------------------------
-# Typography Scale
+# Dark Mode Color Tokens
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
-typography:
-  base_size: 18
-  # @unit: pixels
-  # @rationale: Slightly larger than browser default (16px) for editorial
-  #   readability; comfortable for extended reading
-  # @constraints: min=16, max=20, type=integer
+dark:
+  background: "#141414"
+  # @rationale: Dark neutral; not pure black
+  # @constraints: type=hex_color
 
-  line_height_prose: 1.7
-  # @unit: ratio
-  # @rationale: Generous line height for body copy; editorial reading comfort
-  # @reference: Bringhurst - The Elements of Typographic Style
-  # @constraints: min=1.5, max=1.9, type=float
+  surface: "#1E1E1E"
+  # @rationale: Slightly lighter than background for surface elevation
+  # @constraints: type=hex_color
+
+  text_primary: "#F0F0EC"
+  # @rationale: Near-white with warmth to match light mode philosophy
+  # @constraints: type=hex_color
+
+  text_secondary: "#9E9E96"
+  # @rationale: Muted but readable on dark background
+  # @constraints: type=hex_color
+
+  border: "#2A2A28"
+  # @rationale: Subtle dark border
+  # @constraints: type=hex_color
+
+  accent: "#52B788"
+  # @rationale: Lighter green for dark mode; maintains meaning, improves contrast
+  # @constraints: type=hex_color

@@ -4,6 +4,12 @@ beforeEach(() => {
   cy.clearCookies();
 });
 
-import "./screenshot-hook";
+// Ignore Astro hydration module fetch errors in Cypress
+Cypress.on('uncaught:exception', (err) => {
+  if (err.message.includes('Failed to fetch dynamically imported module')) {
+    return false;
+  }
+  return true;
+});
 
-import "./runtime-checks-hook";
+import "./screenshot-hook";

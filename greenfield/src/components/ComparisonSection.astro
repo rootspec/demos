@@ -1,53 +1,71 @@
 ---
+const withoutSpec = [
+  'Requirements live in Slack threads',
+  'Engineers make assumptions to fill gaps',
+  'Stakeholders review after code is written',
+  'Rework costs spike near launch',
+  'Tests are written after the fact — if at all',
+];
+
+const withSpec = [
+  'L1–L5 hierarchy is the single source of truth',
+  'Acceptance criteria are defined before coding',
+  'AI agents implement features from the spec directly',
+  'Tests are auto-generated from user stories',
+  'Validation runs continuously against live code',
+];
 ---
-<section data-test="comparison-section" style="padding:4rem 1.5rem;border-top:1px solid var(--color-border);">
-  <div style="max-width:860px;margin:0 auto;">
-    <h2 style="font-size:0.75rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:1.5rem;">Before / After</h2>
-    <h3 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:300;line-height:1.3;letter-spacing:-0.01em;color:var(--color-text);max-width:680px;margin-bottom:2.5rem;">
-      The difference between a spec that drifts and one that doesn't.
-    </h3>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
-      <div data-test="comparison-without" style="border:1px solid var(--color-border);border-radius:4px;overflow:hidden;">
-        <div style="padding:0.7rem 1rem;background:var(--color-surface);border-bottom:1px solid var(--color-border);font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--color-text-muted);letter-spacing:0.05em;text-transform:uppercase;">Without RootSpec</div>
-        <div style="padding:1.25rem;display:flex;flex-direction:column;gap:0.9rem;">
-          <div>
-            <p style="font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--color-text-muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Requirements</p>
-            <p style="font-size:0.88rem;line-height:1.6;color:var(--color-text);">"The dashboard should show user data in a useful way. Make it look modern."</p>
-          </div>
-          <div>
-            <p style="font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--color-text-muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">User Story</p>
-            <p style="font-size:0.88rem;line-height:1.6;color:var(--color-text);">"As a user I want to see my data so that I can make decisions."</p>
-          </div>
-          <div>
-            <p style="font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--color-text-muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Traceability</p>
-            <p style="font-size:0.88rem;line-height:1.6;color:var(--color-text-muted);font-style:italic;">None. The story can't be traced to any decision.</p>
-          </div>
-          <div>
-            <p style="font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--color-text-muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Validation</p>
-            <p style="font-size:0.88rem;line-height:1.6;color:var(--color-text-muted);font-style:italic;">Manual QA, hope for the best, ship anyway.</p>
-          </div>
+<section
+  data-test="comparison-section"
+  id="comparison"
+  class="py-20 px-4"
+  style="background-color: var(--color-bg);"
+>
+  <div class="section-container">
+    <h2 class="text-3xl font-bold text-center mb-4" style="color: var(--color-text);">
+      With and without a spec
+    </h2>
+    <p class="text-center text-lg mb-12 max-w-2xl mx-auto" style="color: var(--color-text-muted);">
+      The difference isn't just process — it's outcomes.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Without spec -->
+      <div
+        data-test="comparison-without"
+        class="rounded-xl p-8"
+        style="background-color: var(--color-card-bg); border: 1px solid #ef444433;"
+      >
+        <div class="flex items-center gap-3 mb-6">
+          <span class="text-2xl">❌</span>
+          <h3 class="text-xl font-bold" style="color: #ef4444;">Without a spec</h3>
         </div>
+        <ul class="flex flex-col gap-3">
+          {withoutSpec.map((item) => (
+            <li class="flex items-start gap-3 text-sm" style="color: var(--color-text-muted);">
+              <span class="mt-0.5 shrink-0" style="color: #ef4444;">✗</span>
+              {item}
+            </li>
+          ))}
+        </ul>
       </div>
-      <div data-test="comparison-with" style="border:1px solid var(--color-accent);border-radius:4px;overflow:hidden;">
-        <div style="padding:0.7rem 1rem;background:var(--color-surface);border-bottom:1px solid var(--color-border);font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--color-accent);letter-spacing:0.05em;text-transform:uppercase;">With RootSpec</div>
-        <div style="padding:1.25rem;display:flex;flex-direction:column;gap:0.9rem;">
-          <div>
-            <p style="font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--color-text-muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">L1 Design Pillar</p>
-            <p style="font-size:0.88rem;line-height:1.6;color:var(--color-text);">"Respects the user's time — show only what's actionable, hide what isn't."</p>
-          </div>
-          <div>
-            <p style="font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--color-text-muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">L5 User Story</p>
-            <p style="font-size:0.88rem;line-height:1.6;color:var(--color-text);">"Given I am on the dashboard, When the page loads, Then I see only items requiring action."</p>
-          </div>
-          <div>
-            <p style="font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--color-text-muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Traceability</p>
-            <p style="font-size:0.88rem;line-height:1.6;color:var(--color-text);">Story → L3 Interaction → L2 Truth → L1 Pillar. Every decision auditable.</p>
-          </div>
-          <div>
-            <p style="font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;color:var(--color-text-muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Validation</p>
-            <p style="font-size:0.88rem;line-height:1.6;color:var(--color-text);">Automated Cypress test. Story passes or it doesn't. No ambiguity.</p>
-          </div>
+      <!-- With spec -->
+      <div
+        data-test="comparison-with"
+        class="rounded-xl p-8"
+        style="background-color: var(--color-card-bg); border: 1px solid #22c55e33;"
+      >
+        <div class="flex items-center gap-3 mb-6">
+          <span class="text-2xl">✅</span>
+          <h3 class="text-xl font-bold" style="color: #22c55e;">With RootSpec</h3>
         </div>
+        <ul class="flex flex-col gap-3">
+          {withSpec.map((item) => (
+            <li class="flex items-start gap-3 text-sm" style="color: var(--color-text-muted);">
+              <span class="mt-0.5 shrink-0" style="color: #22c55e;">✓</span>
+              {item}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   </div>

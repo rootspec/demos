@@ -1,7 +1,7 @@
 # =============================================================================
 # LEVEL 5: FINE TUNING - Layout System
 # =============================================================================
-# @spec_version: 1.0.0
+# @spec_version: 7.3.7
 # @system: LAYOUT_SYSTEM
 # @last_updated: 2026-04-23T00:00:00Z
 # @status: draft
@@ -10,35 +10,49 @@
 # -----------------------------------------------------------------------------
 # Responsive Breakpoints
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md, 04.SYSTEMS/PRESENTATION_SYSTEM.md
 
 breakpoints:
-  mobile: 640
-  # @unit: pixels
-  # @rationale: Standard mobile breakpoint; below this, wizard and
-  #   before/after comparison switch to touch-optimized layouts
-  # @constraints: min=480, max=768, type=integer
+  mobile_max: 767
+  # @rationale: Standard mobile breakpoint; covers all phones in portrait and most in landscape
+  # @constraints: type=integer
 
-  tablet: 768
-  # @unit: pixels
-  # @rationale: Tablet breakpoint; side-by-side panels become viable
-  # @constraints: min=640, max=1024, type=integer
+  tablet_max: 1023
+  # @rationale: Covers tablets and small laptops
+  # @constraints: type=integer
 
-  desktop: 1024
-  # @unit: pixels
-  # @rationale: Full desktop layout; all interactive features in
-  #   their intended orientation
-  # @constraints: min=960, max=1280, type=integer
+  desktop_min: 1024
+  # @rationale: Full layout begins at 1024px
+  # @constraints: type=integer
+
+# -----------------------------------------------------------------------------
+# Prose and Reading Width
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/PRESENTATION_SYSTEM.md
+
+typography:
+  max_prose_width_ch: 72
+  # @rationale: 60-75 characters is the accepted optimal line length for reading
+  # @reference: Robert Bringhurst, The Elements of Typographic Style
+  # @constraints: min=50, max=90, type=integer
+
+  body_size_px: 18
+  # @rationale: 18px is comfortable for long-form reading; 16px is minimum, 18px is editorial standard
+  # @constraints: min=16, max=22, type=integer
+  # @reference: L2 Truths - typography is the primary design medium
+
+  base_line_height: 1.6
+  # @rationale: 1.6 provides comfortable leading for serif body text at 18px
+  # @constraints: min=1.4, max=1.8, type=float
 
 # -----------------------------------------------------------------------------
 # Touch Targets
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md, 03.INTERACTIONS.md
+# @spec_source: 04.SYSTEMS/PRESENTATION_SYSTEM.md
 
 touch:
-  min_target_size: 44
-  # @unit: pixels
-  # @rationale: WCAG 2.5.5 Success Criterion; 44x44px minimum touch target
-  # @reference: WCAG 2.1 - Success Criterion 2.5.5 Target Size
+  min_target_px: 44
+  # @rationale: Apple HIG minimum touch target size; also matches WCAG 2.5.5
+  # @reference: https://developer.apple.com/design/human-interface-guidelines/buttons
+  # @constraints: min=44, max=64, type=integer
   # @inviolable: true
-  # @constraints: min=44, max=80, type=integer
