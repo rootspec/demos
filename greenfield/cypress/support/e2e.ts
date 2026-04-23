@@ -13,3 +13,5 @@ Cypress.on('uncaught:exception', (err) => {
 });
 
 import "./screenshot-hook";
+
+import "./runtime-checks-hook";
