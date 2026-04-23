@@ -54,6 +54,9 @@ jobs:
           CYPRESS_BASE_URL: http://localhost:3000/demos/greenfield/
       - run: ./scripts/dev.sh stop || true
         if: steps.check.outputs.ready == 'true'
+      - name: Dump dev server log on failure
+        if: failure() && steps.check.outputs.ready == 'true'
+        run: cat .dev-server.log 2>/dev/null || echo "No dev-server.log found"
       - uses: actions/upload-artifact@v4
         if: always() && steps.check.outputs.ready == 'true'
         with:
@@ -61,6 +64,7 @@ jobs:
           path: |
             greenfield/dist
             greenfield/public
+            greenfield/.dev-server.log
 
   scaffold:
     runs-on: ubuntu-latest
