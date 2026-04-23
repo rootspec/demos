@@ -17,5 +17,14 @@
     "iterations": 8,
     "stories": {"US-101":{"attempts":1},"US-102":{"attempts":1},"US-103":{"attempts":1},"US-201":{"attempts":3},"US-202":{"attempts":2},"US-203":{"attempts":2},"US-204":{"attempts":1},"US-301":{"attempts":1},"US-401":{"attempts":1}}
   }
+,
+  {
+    "skill": "rs-validate",
+    "startedAt": "2026-04-23T14:29:33Z",
+    "completedAt": "2026-04-23T14:32:30Z",
+    "durationSeconds": 177,
+    "iterations": null,
+    "stories": null
+  }
   ]
 }

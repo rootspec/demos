@@ -1,5 +1,5 @@
 {
-  "lastRun": "2026-04-23T14:28:29.240Z",
+  "lastRun": "2026-04-23T14:32:12.311Z",
   "stories": {
     "US-101": {
       "status": "pass",
@@ -26,10 +26,10 @@
       }
     },
     "US-201": {
-      "status": "pass",
+      "status": "fail",
       "criteria": {
-        "AC-201-1": "pass",
-        "AC-201-2": "pass",
+        "AC-201-1": "fail",
+        "AC-201-2": "fail",
         "AC-201-3": "pass"
       }
     },
@@ -55,10 +55,10 @@
       }
     },
     "US-401": {
-      "status": "pass",
+      "status": "fail",
       "criteria": {
         "AC-401-1": "pass",
-        "AC-401-2": "pass",
+        "AC-401-2": "fail",
         "AC-401-3": "pass"
       }
     },
