@@ -1,0 +1,35 @@
+{
+  "lastReview": "2026-04-24T11:08:44.223Z",
+  "status": "pass",
+  "summary": {
+    "staticBlockers": 0,
+    "staticWarnings": 1,
+    "staticNitpicks": 0,
+    "pagesScanned": 1
+  },
+  "issues": [
+    {
+      "severity": "warning",
+      "category": "broken_link",
+      "file": "dist/index.html",
+      "excerpt": "href=\"/demos/greenfield/_astro/index@_@astro.CE-qViwU.css\"",
+      "message": "Rooted href does not resolve within build output",
+      "id": "REV-001"
+    }
+  ],
+  "llmInputs": {
+    "screenshots": [
+      "cypress/screenshots/mvp.cy.ts/US-001--AC-001-1.png"
+    ]
+  },
+  "llmFindings": {
+    "assessment": "needs_review",
+    "observations": [
+      "The meta banner is present at the top but renders in very small text at screenshot resolution, making it easy to miss the critical demo-context message before the hero.",
+      "Typography is generally editorial and serif-forward as specified, though body text density in the Author's Notes section is quite tight and may feel cramped on real viewport widths.",
+      "The five-level hierarchy section and 'Spec Your Idea' wizard are both visible and structurally intact, but interactive affordances (clickable levels, wizard steps) are not apparent from the static screenshot alone.",
+      "The before/after comparison panel is present with real content in both columns, satisfying the spec requirement for non-placeholder copy.",
+      "Overall the page avoids the anti-patterns (no gradient blobs, no stat counters, no dark default background), and the light-mode editorial aesthetic is intact."
+    ]
+  }
+}
