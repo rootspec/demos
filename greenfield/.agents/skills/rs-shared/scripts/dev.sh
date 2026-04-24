@@ -173,6 +173,12 @@ do_logs() {
   fi
 }
 
+do_url() {
+  local resolved_port
+  resolved_port=$(detect_port)
+  echo "http://localhost:$resolved_port"
+}
+
 # --- Main ---
 case "${1:-start}" in
   start)   do_start ;;
@@ -180,8 +186,9 @@ case "${1:-start}" in
   restart) do_restart ;;
   status)  do_status ;;
   logs)    do_logs ;;
+  url)     do_url ;;
   *)
-    echo "Usage: $0 [start|stop|restart|status|logs]"
+    echo "Usage: $0 [start|stop|restart|status|logs|url]"
     exit 1
     ;;
 esac

@@ -1,8 +1,22 @@
 #!/usr/bin/env bash
-# Test runner — starts dev server, runs Cypress, stops server
+# Test runner — defaults to preview mode (built artifact + preview server).
+# Override via .rootspec.json prerequisites.testMode = "dev".
 set -euo pipefail
-./scripts/dev.sh start
+
+MODE=$(grep -o '"testMode"[^,}]*' .rootspec.json 2>/dev/null \
+  | sed -E 's/.*"testMode"[[:space:]]*:[[:space:]]*"([^"]*)".*/\1/')
+MODE="${MODE:-preview}"
+
+if [[ "$MODE" == "dev" ]]; then
+  ./scripts/dev.sh start
+  trap "./scripts/dev.sh stop" EXIT
+  export CYPRESS_BASE_URL="$(./scripts/dev.sh url)"
+else
+  # preview mode (default): build + preview
+  npm run build
+  ./scripts/preview.sh start
+  trap "./scripts/preview.sh stop" EXIT
+  export CYPRESS_BASE_URL="$(./scripts/preview.sh url)"
+fi
+
 npx cypress run --config-file cypress.config.ts 2>&1
-EXIT_CODE=$?
-./scripts/dev.sh stop
-exit $EXIT_CODE

@@ -20,7 +20,7 @@ acceptance_criteria:
       When the page loads
       Then I see a list of posts with author names and content
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=post-item]' }
@@ -32,7 +32,7 @@ acceptance_criteria:
       When the page loads
       Then each post shows the author display name and handle
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=post-author-name]' }
@@ -45,7 +45,7 @@ acceptance_criteria:
       When the page loads
       Then each post shows like and repost counts
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=post-like-count]' }
@@ -64,7 +64,7 @@ acceptance_criteria:
       When I click the like button on a post
       Then the like button shows as active
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=like-button]' }
     then:
@@ -77,7 +77,7 @@ acceptance_criteria:
       When I click the like button
       Then the like count increases by one
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=like-button]' }
     then:
@@ -90,7 +90,7 @@ acceptance_criteria:
       When I click the like button again
       Then the like button returns to the inactive state
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=like-button]' }
       - click: { selector: '[data-test=like-button]' }
@@ -110,7 +110,7 @@ acceptance_criteria:
       When I click the bookmark button on a post
       Then the bookmark button shows as active
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=bookmark-button]' }
     then:
@@ -129,7 +129,7 @@ acceptance_criteria:
       When the initial posts are displayed
       Then I see a load more button
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=load-more-button]' }
@@ -141,7 +141,7 @@ acceptance_criteria:
       When I click the load more button
       Then more posts appear in the feed
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=load-more-button]' }
     then:
@@ -160,7 +160,7 @@ acceptance_criteria:
       When I click the compose button
       Then the post composer appears
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=compose-button]' }
     then:
@@ -173,7 +173,7 @@ acceptance_criteria:
       When I type content and submit
       Then the new post appears at the top of the feed
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=compose-button]' }
       - fill: { selector: '[data-test=composer-input]', value: 'Hello from the composer' }

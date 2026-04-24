@@ -20,7 +20,7 @@ acceptance_criteria:
       When I click an author display name
       Then I see that user's profile page
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=post-author-name]' }
     then:
@@ -33,7 +33,7 @@ acceptance_criteria:
       When the page loads
       Then I see the user's bio, follower count, and following count
     given:
-      - visit: '/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/alice.dev'
     when: []
     then:
       - shouldExist: { selector: '[data-test=profile-bio]' }
@@ -47,7 +47,7 @@ acceptance_criteria:
       When the page loads
       Then I see posts authored by that user
     given:
-      - visit: '/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/alice.dev'
     when: []
     then:
       - shouldExist: { selector: '[data-test=post-item]' }
@@ -65,7 +65,7 @@ acceptance_criteria:
       When the page loads
       Then I see a follow button
     given:
-      - visit: '/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/alice.dev'
     when: []
     then:
       - shouldExist: { selector: '[data-test=follow-button]' }
@@ -77,7 +77,7 @@ acceptance_criteria:
       When I click the follow button
       Then the button changes to show unfollow
     given:
-      - visit: '/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/alice.dev'
     when:
       - click: { selector: '[data-test=follow-button]' }
     then:
@@ -90,7 +90,7 @@ acceptance_criteria:
       When I click the follow button
       Then the follower count increases
     given:
-      - visit: '/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/alice.dev'
     when:
       - click: { selector: '[data-test=follow-button]' }
     then:
@@ -103,7 +103,7 @@ acceptance_criteria:
       When I click the unfollow button
       Then the button returns to the follow state
     given:
-      - visit: '/profile/alice.dev'
+      - visit: '/demos/scaffold/profile/alice.dev'
     when:
       - click: { selector: '[data-test=follow-button]' }
       - click: { selector: '[data-test=follow-button]' }

@@ -49,11 +49,17 @@ The script filters by:
 
 Otherwise, run all tests.
 
-### Start the dev server
+### Start the test server
 
-Check `.rootspec.json` for the `devServer` prerequisite. If it points to `scripts/dev.sh`, run `./scripts/dev.sh status` first — only start if not already running. Use `./scripts/dev.sh start` to start. If `.rootspec.json` has no `devServer` entry or doesn't exist, check for `scripts/dev.sh` directly, then fall back to `nohup npm run dev > /dev/null 2>&1 &` and wait a few seconds for startup.
+Read `.rootspec.json` `prerequisites.testMode` (default `"preview"`).
 
-If the dev server fails to start, report the error and exit. Do not guess or try alternative commands.
+**Preferred path:** if `validationScript` (e.g., `scripts/test.sh`) exists, just invoke it — it handles build + server lifecycle for the configured mode. This is the canonical entry point and what the pre-commit hook uses.
+
+If you must start the server yourself (no `test.sh`):
+- `testMode == "preview"`: run `npm run build`, then `./scripts/preview.sh start` (or check `previewServer` prerequisite). Export `CYPRESS_BASE_URL=$(./scripts/preview.sh url)`.
+- `testMode == "dev"` (or unset and no preview infra): `./scripts/dev.sh status` first, only start if not running. Export `CYPRESS_BASE_URL=$(./scripts/dev.sh url)`.
+
+If the server fails to start, report the error and exit. Do not guess or try alternative commands. Do not silently switch modes to make startup succeed.
 
 ### Back up and run
 
@@ -87,6 +93,8 @@ Run the test suite and capture its output (e.g., pipe through `tee cypress-outpu
 A story passes only if all its criteria pass. If you can't parse the output at all, report the error and exit.
 
 **If the test runner crashes** (not test failures — actual errors, missing dependencies, server not responding): retry once. If it fails again, report the error and exit.
+
+**If tests fail at `cy.get('body').should('have.attr', 'data-ready', 'true')`** (timeout at the visit step): the page is not signaling interactive readiness. The implementation must set `<body data-ready="true">` when the page's interactive handlers are attached — see `../rs-shared/fragments/framework-rules.md` → Interactive Readiness. Report this distinctly from ordinary assertion failures; the fix is in the application code, not the test.
 
 **Story statuses:**
 - **pass** — all acceptance criteria pass

@@ -20,7 +20,7 @@ acceptance_criteria:
       When the page loads
       Then I see a theme toggle button in the navigation
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=theme-toggle]' }
@@ -32,7 +32,7 @@ acceptance_criteria:
       When I click the theme toggle
       Then the page applies the opposite color scheme
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=theme-toggle]' }
     then:
@@ -51,7 +51,7 @@ acceptance_criteria:
       When the page loads
       Then I see the meta banner explaining RootFeed is a demo
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
@@ -63,7 +63,7 @@ acceptance_criteria:
       When the page loads
       Then I see links to the scaffold commit, spec, and seed on GitHub
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner-spec-link]' }
@@ -76,7 +76,7 @@ acceptance_criteria:
       When the page loads
       Then I see the meta banner
     given:
-      - visit: '/explore'
+      - visit: '/demos/scaffold/explore'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
@@ -88,7 +88,7 @@ acceptance_criteria:
       When the page loads
       Then I see the meta banner
     given:
-      - visit: '/search'
+      - visit: '/demos/scaffold/search'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
@@ -106,7 +106,7 @@ acceptance_criteria:
       When the page loads
       Then I see the RootFeed brand name and RootSpec version in the nav
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=nav-brand]' }
@@ -119,7 +119,7 @@ acceptance_criteria:
       When the page loads
       Then I see navigation links for Home, Explore, and Search
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=nav-home]' }
@@ -133,7 +133,7 @@ acceptance_criteria:
       When the page loads
       Then I see a footer with RootSpec version and attribution
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=footer]' }

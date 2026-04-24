@@ -20,7 +20,7 @@ acceptance_criteria:
       When the page loads
       Then I see a list of trending tags
     given:
-      - visit: '/explore'
+      - visit: '/demos/scaffold/explore'
     when: []
     then:
       - shouldExist: { selector: '[data-test=tag-chip]' }
@@ -32,7 +32,7 @@ acceptance_criteria:
       When the page loads
       Then each tag chip shows how many posts use that tag
     given:
-      - visit: '/explore'
+      - visit: '/demos/scaffold/explore'
     when: []
     then:
       - shouldExist: { selector: '[data-test=tag-post-count]' }
@@ -50,7 +50,7 @@ acceptance_criteria:
       When I click a tag chip
       Then only posts with that tag are shown
     given:
-      - visit: '/explore'
+      - visit: '/demos/scaffold/explore'
     when:
       - click: { selector: '[data-test=tag-chip]' }
     then:
@@ -63,7 +63,7 @@ acceptance_criteria:
       When I click a tag chip
       Then that tag chip is styled as active
     given:
-      - visit: '/explore'
+      - visit: '/demos/scaffold/explore'
     when:
       - click: { selector: '[data-test=tag-chip]' }
     then:
@@ -76,7 +76,7 @@ acceptance_criteria:
       When I click the active tag again
       Then all posts are shown and no tag is active
     given:
-      - visit: '/explore'
+      - visit: '/demos/scaffold/explore'
     when:
       - click: { selector: '[data-test=tag-chip]' }
       - click: { selector: '[data-test=tag-chip][data-active=true]' }
@@ -96,7 +96,7 @@ acceptance_criteria:
       When the page loads
       Then I see a list of users each with a follow button
     given:
-      - visit: '/explore'
+      - visit: '/demos/scaffold/explore'
     when: []
     then:
       - shouldExist: { selector: '[data-test=suggested-user]' }
@@ -109,7 +109,7 @@ acceptance_criteria:
       When I click the follow button for a user
       Then the button changes to show unfollow
     given:
-      - visit: '/explore'
+      - visit: '/demos/scaffold/explore'
     when:
       - click: { selector: '[data-test=follow-button]' }
     then:
