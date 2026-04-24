@@ -75,7 +75,7 @@ jobs:
 
             claude -p \
               --dangerously-skip-permissions \
-              --max-turns 30 \
+              --max-turns 60 \
               --max-budget-usd "$BUDGET_PER_DEMO" \
               --model claude-sonnet-4-20250514 \
               "Run /rs-update. This is non-interactive — proceed without asking questions.
