@@ -1,166 +1,212 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-type Step = 1 | 2 | 3 | 4 | 'result';
-
-interface WizardResult {
-  idea: string;
-  mission: string;
-  pillars: string[];
-  interaction: string;
-}
-
-const MISSION_OPTIONS = [
-  'Eliminate guesswork from software delivery',
-  'Create a shared language between humans and AI',
-  'Make intent the primary artifact, not code',
-  'Enable AI agents to build from first principles',
+const missionTemplates = [
+  'To help {audience} {achieve outcome} without {pain point}.',
+  'To give {audience} the confidence to {achieve outcome} by removing {obstacle}.',
+  'To make {outcome} accessible to {audience} who have struggled with {pain}.',
+  'To eliminate {pain point} for {audience} so they can focus on {core value}.',
+  'To transform how {audience} {activity} by making it {quality}.',
 ];
 
-const PILLAR_OPTIONS = [
-  'Clarity — every requirement is unambiguous',
-  'Continuity — spec evolves with the product',
-  'Verifiability — every claim is testable',
-  'Autonomy — AI can implement without supervision',
-  'Alignment — team shares a single source of truth',
+const pillarSuggestions = [
+  'Effortless Relief',
+  'Earned Confidence',
+  'Delightful Simplicity',
+  'Trusted Reliability',
+  'Quiet Control',
+  'Radical Transparency',
+  'Focused Depth',
+  'Gentle Learning',
+  'Swift Mastery',
+  'Honest Feedback',
 ];
+
+type Step = 1 | 2 | 3 | 'output';
 
 export default function SpecWizard() {
   const [step, setStep] = useState<Step>(1);
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => { setHydrated(true); }, []);
-  const [idea, setIdea] = useState('');
-  const [mission, setMission] = useState('');
-  const [pillars, setPillars] = useState<string[]>([]);
-  const [interaction, setInteraction] = useState('');
-  const [result, setResult] = useState<WizardResult | null>(null);
+  const [productIdea, setProductIdea] = useState('');
+  const [missionChoice, setMissionChoice] = useState('');
+  const [selectedPillars, setSelectedPillars] = useState<string[]>([]);
+  const [keyInteraction, setKeyInteraction] = useState('');
 
-  const togglePillar = (p: string) => {
-    setPillars((prev) =>
+  function togglePillar(p: string) {
+    setSelectedPillars((prev) =>
       prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]
     );
-  };
+  }
 
-  const canGoNext = () => {
-    if (step === 1) return idea.trim().length > 0;
-    if (step === 2) return mission.length > 0;
-    if (step === 3) return pillars.length > 0;
-    return false;
-  };
+  function canAdvanceStep1() {
+    return productIdea.trim().length > 0 && missionChoice.length > 0;
+  }
 
-  const advance = () => {
-    if (step === 1) setStep(2);
-    else if (step === 2) setStep(3);
-    else if (step === 3) setStep(4);
-  };
+  function canAdvanceStep2() {
+    return selectedPillars.length >= 3;
+  }
 
-  const generate = () => {
-    setResult({ idea, mission, pillars, interaction });
-    setStep('result');
-  };
+  function canAdvanceStep3() {
+    return keyInteraction.trim().length > 0;
+  }
 
-  const reset = () => {
-    setStep(1);
-    setIdea('');
-    setMission('');
-    setPillars([]);
-    setInteraction('');
-    setResult(null);
-  };
+  const resolvedMission = missionChoice
+    ? missionTemplates[parseInt(missionChoice)].replace('{audience}', 'users').replace('{achieve outcome}', productIdea.trim() || 'achieve their goal').replace('{pain point}', 'existing friction').replace('{obstacle}', 'complexity').replace('{pain}', 'prior tools').replace('{core value}', 'what matters').replace('{activity}', 'work').replace('{quality}', 'effortless').replace('{outcome}', productIdea.trim() || 'the outcome')
+    : '';
 
   return (
     <div
       data-test="spec-wizard"
-      data-hydrated={hydrated ? "true" : undefined}
-      className="rounded-2xl p-8 max-w-2xl mx-auto"
       style={{
-        backgroundColor: 'var(--color-card-bg)',
-        border: '1px solid var(--color-card-border)',
+        border: '1px solid var(--color-border)',
+        borderRadius: '6px',
+        backgroundColor: 'var(--color-bg-surface)',
+        padding: '2rem',
+        maxWidth: '640px',
       }}
     >
       {/* Step 1 */}
       {step === 1 && (
-        <div data-test="wizard-step-1">
-          <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-primary)' }}>
-            Step 1 of 4
-          </p>
-          <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
-            What are you building?
-          </h3>
-          <p className="text-sm mb-6" style={{ color: 'var(--color-text-muted)' }}>
-            Describe your product in one sentence. Don't overthink it.
-          </p>
+        <div>
+          <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            Step 1 of 3 — Mission
+          </div>
+
+          <label style={{ display: 'block', fontFamily: 'system-ui, sans-serif', fontSize: '0.9375rem', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '0.5rem' }}>
+            What's your product idea?
+          </label>
           <input
-            data-test="wizard-idea-input"
+            data-test="wizard-product-idea"
             type="text"
-            value={idea}
-            onChange={(e) => setIdea(e.target.value)}
-            placeholder="e.g. A tool to help developers write better commit messages"
-            className="w-full px-4 py-3 rounded-lg text-sm outline-none"
+            value={productIdea}
+            onChange={(e) => setProductIdea(e.target.value)}
+            placeholder="e.g. A tool for tracking reading habits"
             style={{
-              backgroundColor: 'var(--color-surface)',
+              width: '100%',
+              padding: '0.625rem 0.875rem',
+              fontFamily: 'Georgia, serif',
+              fontSize: '0.9375rem',
+              backgroundColor: 'var(--color-bg)',
+              color: 'var(--color-text-primary)',
               border: '1px solid var(--color-border)',
-              color: 'var(--color-text)',
+              borderRadius: '4px',
+              marginBottom: '1.5rem',
+              boxSizing: 'border-box',
+              outline: 'none',
             }}
           />
-          <div className="flex justify-end mt-6">
-            <button
-              data-test="wizard-next"
-              onClick={advance}
-              disabled={!canGoNext()}
-              className="px-5 py-2 rounded-lg font-semibold text-sm text-white disabled:opacity-40 transition-opacity"
-              style={{ backgroundColor: 'var(--color-primary)' }}
-            >
-              Next →
-            </button>
+
+          <label style={{ display: 'block', fontFamily: 'system-ui, sans-serif', fontSize: '0.9375rem', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '0.75rem' }}>
+            Choose a mission template:
+          </label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
+            {missionTemplates.map((t, i) => (
+              <button
+                key={i}
+                data-test={`wizard-mission-option-${i}`}
+                onClick={() => setMissionChoice(String(i))}
+                style={{
+                  textAlign: 'left',
+                  padding: '0.625rem 0.875rem',
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '0.875rem',
+                  color: missionChoice === String(i) ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+                  backgroundColor: missionChoice === String(i) ? 'var(--color-bg)' : 'transparent',
+                  border: `1px solid ${missionChoice === String(i) ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  transition: 'border-color 150ms, color 150ms',
+                }}
+              >
+                {t}
+              </button>
+            ))}
           </div>
+
+          <button
+            data-test="wizard-next-step"
+            onClick={() => setStep(2)}
+            disabled={!canAdvanceStep1()}
+            style={{
+              fontFamily: 'system-ui, sans-serif',
+              fontSize: '0.9375rem',
+              backgroundColor: canAdvanceStep1() ? 'var(--color-accent)' : 'var(--color-border)',
+              color: canAdvanceStep1() ? '#fff' : 'var(--color-text-secondary)',
+              border: 'none',
+              borderRadius: '4px',
+              padding: '0.625rem 1.25rem',
+              cursor: canAdvanceStep1() ? 'pointer' : 'not-allowed',
+              transition: 'background-color 150ms',
+            }}
+          >
+            Next: Design Pillars →
+          </button>
         </div>
       )}
 
       {/* Step 2 */}
       {step === 2 && (
         <div data-test="wizard-step-2">
-          <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-primary)' }}>
-            Step 2 of 4
-          </p>
-          <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
-            What's your core mission?
-          </h3>
-          <p className="text-sm mb-6" style={{ color: 'var(--color-text-muted)' }}>
-            Choose the statement that best captures why this product exists.
-          </p>
-          <div className="flex flex-col gap-3">
-            {MISSION_OPTIONS.map((opt) => (
-              <button
-                key={opt}
-                data-test="wizard-mission-option"
-                onClick={() => setMission(opt)}
-                className="text-left px-4 py-3 rounded-lg text-sm transition-colors"
-                style={{
-                  backgroundColor: mission === opt ? 'var(--color-primary)' : 'var(--color-surface)',
-                  color: mission === opt ? 'white' : 'var(--color-text)',
-                  border: `1px solid ${mission === opt ? 'var(--color-primary)' : 'var(--color-border)'}`,
-                }}
-              >
-                {opt}
-              </button>
-            ))}
+          <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            Step 2 of 3 — Design Pillars
           </div>
-          <div className="flex justify-between mt-6">
+
+          <label style={{ display: 'block', fontFamily: 'system-ui, sans-serif', fontSize: '0.9375rem', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '0.375rem' }}>
+            What should users feel? Choose 3–5 pillars.
+          </label>
+          <p style={{ fontFamily: 'system-ui, sans-serif', fontSize: '0.8125rem', color: 'var(--color-text-secondary)', marginBottom: '1rem' }}>
+            {selectedPillars.length}/5 selected
+          </p>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
+            {pillarSuggestions.map((p, i) => {
+              const selected = selectedPillars.includes(p);
+              return (
+                <button
+                  key={i}
+                  data-test={`wizard-pillar-${i}`}
+                  onClick={() => togglePillar(p)}
+                  disabled={!selected && selectedPillars.length >= 5}
+                  style={{
+                    fontFamily: 'system-ui, sans-serif',
+                    fontSize: '0.875rem',
+                    padding: '0.375rem 0.875rem',
+                    borderRadius: '999px',
+                    border: `1px solid ${selected ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                    backgroundColor: selected ? 'var(--color-accent)' : 'transparent',
+                    color: selected ? '#fff' : 'var(--color-text-secondary)',
+                    cursor: (!selected && selectedPillars.length >= 5) ? 'not-allowed' : 'pointer',
+                    transition: 'all 150ms',
+                  }}
+                >
+                  {p}
+                </button>
+              );
+            })}
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button
               onClick={() => setStep(1)}
-              className="px-5 py-2 rounded-lg text-sm"
-              style={{ color: 'var(--color-text-muted)' }}
+              style={{ fontFamily: 'system-ui, sans-serif', fontSize: '0.875rem', background: 'none', border: '1px solid var(--color-border)', borderRadius: '4px', padding: '0.5rem 1rem', cursor: 'pointer', color: 'var(--color-text-secondary)' }}
             >
               ← Back
             </button>
             <button
-              data-test="wizard-next"
-              onClick={advance}
-              disabled={!canGoNext()}
-              className="px-5 py-2 rounded-lg font-semibold text-sm text-white disabled:opacity-40 transition-opacity"
-              style={{ backgroundColor: 'var(--color-primary)' }}
+              data-test="wizard-next-step"
+              onClick={() => setStep(3)}
+              disabled={!canAdvanceStep2()}
+              style={{
+                fontFamily: 'system-ui, sans-serif',
+                fontSize: '0.9375rem',
+                backgroundColor: canAdvanceStep2() ? 'var(--color-accent)' : 'var(--color-border)',
+                color: canAdvanceStep2() ? '#fff' : 'var(--color-text-secondary)',
+                border: 'none',
+                borderRadius: '4px',
+                padding: '0.625rem 1.25rem',
+                cursor: canAdvanceStep2() ? 'pointer' : 'not-allowed',
+                transition: 'background-color 150ms',
+              }}
             >
-              Next →
+              Next: Key Interaction →
             </button>
           </div>
         </div>
@@ -168,148 +214,124 @@ export default function SpecWizard() {
 
       {/* Step 3 */}
       {step === 3 && (
-        <div data-test="wizard-step-3">
-          <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-primary)' }}>
-            Step 3 of 4
-          </p>
-          <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
-            Choose your core pillars
-          </h3>
-          <p className="text-sm mb-6" style={{ color: 'var(--color-text-muted)' }}>
-            Select 2–3 values that will guide every product decision.
-          </p>
-          <div className="flex flex-col gap-3">
-            {PILLAR_OPTIONS.map((opt) => (
-              <button
-                key={opt}
-                data-test="wizard-pillar-option"
-                onClick={() => togglePillar(opt)}
-                className="text-left px-4 py-3 rounded-lg text-sm transition-colors"
-                style={{
-                  backgroundColor: pillars.includes(opt) ? 'var(--color-primary)' : 'var(--color-surface)',
-                  color: pillars.includes(opt) ? 'white' : 'var(--color-text)',
-                  border: `1px solid ${pillars.includes(opt) ? 'var(--color-primary)' : 'var(--color-border)'}`,
-                }}
-              >
-                {opt}
-              </button>
-            ))}
+        <div>
+          <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            Step 3 of 3 — Key Interaction
           </div>
-          <div className="flex justify-between mt-6">
-            <button
-              onClick={() => setStep(2)}
-              className="px-5 py-2 rounded-lg text-sm"
-              style={{ color: 'var(--color-text-muted)' }}
-            >
-              ← Back
-            </button>
-            <button
-              data-test="wizard-next"
-              onClick={advance}
-              disabled={!canGoNext()}
-              className="px-5 py-2 rounded-lg font-semibold text-sm text-white disabled:opacity-40 transition-opacity"
-              style={{ backgroundColor: 'var(--color-primary)' }}
-            >
-              Next →
-            </button>
-          </div>
-        </div>
-      )}
 
-      {/* Step 4 */}
-      {step === 4 && (
-        <div data-test="wizard-step-4">
-          <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-primary)' }}>
-            Step 4 of 4
-          </p>
-          <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
-            Describe a core interaction
-          </h3>
-          <p className="text-sm mb-6" style={{ color: 'var(--color-text-muted)' }}>
-            Write one key thing a user can do with your product.
+          <label style={{ display: 'block', fontFamily: 'system-ui, sans-serif', fontSize: '0.9375rem', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '0.5rem' }}>
+            Describe one key interaction.
+          </label>
+          <p style={{ fontFamily: 'system-ui, sans-serif', fontSize: '0.8125rem', color: 'var(--color-text-secondary)', marginBottom: '0.75rem' }}>
+            What triggers it? What happens? What does the user feel?
           </p>
           <input
-            data-test="wizard-interaction-input"
+            data-test="wizard-key-interaction"
             type="text"
-            value={interaction}
-            onChange={(e) => setInteraction(e.target.value)}
-            placeholder="e.g. User runs /rs-spec and answers interview questions"
-            className="w-full px-4 py-3 rounded-lg text-sm outline-none"
+            value={keyInteraction}
+            onChange={(e) => setKeyInteraction(e.target.value)}
+            placeholder="e.g. User logs a book they just finished"
             style={{
-              backgroundColor: 'var(--color-surface)',
+              width: '100%',
+              padding: '0.625rem 0.875rem',
+              fontFamily: 'Georgia, serif',
+              fontSize: '0.9375rem',
+              backgroundColor: 'var(--color-bg)',
+              color: 'var(--color-text-primary)',
               border: '1px solid var(--color-border)',
-              color: 'var(--color-text)',
+              borderRadius: '4px',
+              marginBottom: '1.5rem',
+              boxSizing: 'border-box',
+              outline: 'none',
             }}
           />
-          <div className="flex justify-between mt-6">
+
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button
-              onClick={() => setStep(3)}
-              className="px-5 py-2 rounded-lg text-sm"
-              style={{ color: 'var(--color-text-muted)' }}
+              onClick={() => setStep(2)}
+              style={{ fontFamily: 'system-ui, sans-serif', fontSize: '0.875rem', background: 'none', border: '1px solid var(--color-border)', borderRadius: '4px', padding: '0.5rem 1rem', cursor: 'pointer', color: 'var(--color-text-secondary)' }}
             >
               ← Back
             </button>
             <button
-              data-test="wizard-generate"
-              onClick={generate}
-              className="px-5 py-2 rounded-lg font-semibold text-sm text-white"
-              style={{ backgroundColor: 'var(--color-primary)' }}
+              data-test="wizard-next-step"
+              onClick={() => setStep('output')}
+              disabled={!canAdvanceStep3()}
+              style={{
+                fontFamily: 'system-ui, sans-serif',
+                fontSize: '0.9375rem',
+                backgroundColor: canAdvanceStep3() ? 'var(--color-accent)' : 'var(--color-border)',
+                color: canAdvanceStep3() ? '#fff' : 'var(--color-text-secondary)',
+                border: 'none',
+                borderRadius: '4px',
+                padding: '0.625rem 1.25rem',
+                cursor: canAdvanceStep3() ? 'pointer' : 'not-allowed',
+                transition: 'background-color 150ms',
+              }}
             >
-              Generate spec →
+              Generate skeleton spec →
             </button>
           </div>
         </div>
       )}
 
-      {/* Result */}
-      {step === 'result' && result && (
-        <div data-test="wizard-result">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="text-2xl">🎉</span>
-            <h3 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-              Your skeleton spec
-            </h3>
+      {/* Output */}
+      {step === 'output' && (
+        <div data-test="wizard-output">
+          <div style={{ fontFamily: 'system-ui, sans-serif', fontSize: '0.75rem', color: 'var(--color-accent)', marginBottom: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+            Your skeleton spec
           </div>
+          <p style={{ fontFamily: 'system-ui, sans-serif', fontSize: '0.8125rem', color: 'var(--color-text-secondary)', marginBottom: '1.25rem', fontStyle: 'italic' }}>
+            Template-based output — not AI generated. This is what L1–L3 looks like for your idea.
+          </p>
+
           <div
-            className="rounded-xl p-6 font-mono text-sm"
             style={{
-              backgroundColor: 'var(--color-surface)',
+              fontFamily: "'Courier New', monospace",
+              fontSize: '0.8125rem',
+              backgroundColor: 'var(--color-bg)',
               border: '1px solid var(--color-border)',
-              color: 'var(--color-text)',
+              borderRadius: '4px',
+              padding: '1.25rem',
+              color: 'var(--color-text-code)',
+              lineHeight: 1.7,
+              whiteSpace: 'pre-wrap',
             }}
           >
-            <div data-test="wizard-result-l1" className="mb-4">
-              <span style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>L1 Philosophy</span>
-              <br />
-              <span style={{ color: 'var(--color-text-muted)' }}>Product:</span> {result.idea}
-              <br />
-              <span style={{ color: 'var(--color-text-muted)' }}>Mission:</span> {result.mission}
-            </div>
-            <div className="mb-4">
-              <span style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>L2 Truths</span>
-              <br />
-              {result.pillars.map((p, i) => (
-                <span key={i}>
-                  <span style={{ color: 'var(--color-text-muted)' }}>Pillar {i + 1}:</span> {p}
-                  <br />
-                </span>
-              ))}
-            </div>
-            <div>
-              <span style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>L3 Interaction</span>
-              <br />
-              <span style={{ color: 'var(--color-text-muted)' }}>Core journey:</span> {result.interaction || '(not specified)'}
-            </div>
+{`# L1: Philosophy
+## Product: ${productIdea}
+
+### Mission
+${resolvedMission}
+
+### Design Pillars
+${selectedPillars.map((p, i) => `${i + 1}. ${p}`).join('\n')}
+
+---
+
+# L2: Truths
+
+### Truth: [Derive from mission]
+The product exists to fulfill the mission above.
+Every trade-off must serve the design pillars.
+
+---
+
+# L3: Interactions
+
+### Interaction: Core Flow
+Given: a user who wants to ${productIdea.toLowerCase() || 'achieve the goal'}
+When: ${keyInteraction}
+Then: the user feels ${selectedPillars[0] || 'the primary pillar'}
+      and the system confirms the action`}
           </div>
-          <div className="flex justify-end mt-6">
-            <button
-              onClick={reset}
-              className="px-5 py-2 rounded-lg text-sm"
-              style={{ color: 'var(--color-text-muted)', border: '1px solid var(--color-border)' }}
-            >
-              Start over
-            </button>
-          </div>
+
+          <button
+            onClick={() => { setStep(1); setProductIdea(''); setMissionChoice(''); setSelectedPillars([]); setKeyInteraction(''); }}
+            style={{ marginTop: '1.25rem', fontFamily: 'system-ui, sans-serif', fontSize: '0.875rem', background: 'none', border: '1px solid var(--color-border)', borderRadius: '4px', padding: '0.5rem 1rem', cursor: 'pointer', color: 'var(--color-text-secondary)' }}
+          >
+            Start over
+          </button>
         </div>
       )}
     </div>

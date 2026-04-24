@@ -1,0 +1,62 @@
+---
+---
+
+<section
+  data-test="authors-notes"
+  style="padding: 4rem 1.5rem; border-top: 1px solid var(--color-border);"
+>
+  <div style="max-width: 72rem; margin: 0 auto;">
+    <h2 style="font-family: Georgia, serif; font-size: clamp(1.375rem, 3vw, 2rem); font-weight: 400; color: var(--color-text-primary); margin-bottom: 0.5rem;">
+      Why I built RootSpec
+    </h2>
+    <p style="font-family: system-ui, sans-serif; font-size: 0.8125rem; color: var(--color-text-secondary); margin-bottom: 2.5rem; font-style: italic;">
+      From the author — reproduced verbatim from the project seed
+    </p>
+
+    <div style="max-width: 48rem; font-family: Georgia, serif; font-size: 1rem; line-height: 1.8; color: var(--color-text-primary);">
+      <p style="margin-bottom: 1.25rem;">This page explains why I built Rootspec.</p>
+
+      <p style="margin-bottom: 1.25rem;">Most thinking about AI in software development starts from our existing human roles and workflows and asks how to fit AI into them. Let's skip that, and imagine we are inventing a new process. The central problem of software development, with or without AI, is <em>capturing human intent</em> and <em>generating something that satisfies it</em>. Imagine a replicator from Star Trek.</p>
+
+      <p style="margin-bottom: 1.25rem;">How do we know we've satisfied the original intent? If we're replicating a cup of coffee, we can taste it, and 95% good is probably good enough to drink. But if we're replicating a bicycle, 95% isn't good enough, and getting the last 5% wrong could be catastrophic. So how do we know we've made a 100% bicycle?</p>
+
+      <p style="margin-bottom: 1.25rem;">Validation. Maybe we get a bicycle expert to say, "yep, that's a bike." Or, better, we get the same person to define what a bike is (the intent) and then confirm we've built a bike that matches their definition.</p>
+
+      <p style="margin-bottom: 1.25rem;">In software, we almost never use the same person to author intent and validate the result. Solo developers aside, most applications are too complex for that: they require multiple people, often multiple teams, each performing specialized functions across the development lifecycle. By the time validation happens, it's far removed from the original intent. It has drifted.</p>
+
+      <p style="margin-bottom: 1.25rem;">And it's not just validation that drifts. Every intermediate step drifts too, independently. No wonder we pile on so much overhead, paperwork, and process trying to keep everyone aligned. We still ship bugs constantly, and every deploy is a risk.</p>
+
+      <p style="margin-bottom: 1.25rem;">Drift also isn't simply a flaw in how intent gets interpreted downstream. The intent author holds internal assumptions and biases, as everyone does. These implicit sources of intent—unstated expectations, unconscious priorities—trigger mid-cycle pivots, re-scopes, and quiet disconnects with end users. The drift starts at the source.</p>
+
+      <p style="margin-bottom: 1.25rem;">So how do we design a development lifecycle that catches drift, or at least minimizes it? By driving development with something other than the pure vibes of the engineer writing the code.</p>
+
+      <p style="margin-bottom: 1.25rem;">We've been here before, with test-driven development, behavior-driven development, spec-driven development. These all use constraints as guardrails to keep intent intact, or to update the source when the work legitimately pivots. Nearly every organization that's serious about quality has tried one of them. But they don't stick. Why?</p>
+
+      <p style="margin-bottom: 1.25rem;">Because they're expensive and tedious in every way that matters:</p>
+
+      <ul style="margin-bottom: 1.25rem; padding-left: 1.5rem;">
+        <li style="margin-bottom: 0.5rem;">They transform a few pages of specification into a book of pedantic, finely-tipped instructions.</li>
+        <li style="margin-bottom: 0.5rem;">They force a meticulous back-and-forth between dev and QA.</li>
+        <li style="margin-bottom: 0.5rem;">For engineers, they turn the pleasure of problem-solving into the rote assembly of brick-like functions.</li>
+      </ul>
+
+      <p style="margin-bottom: 1.25rem;">All is not lost, however. LLMs love doing these things.</p>
+
+      <p style="margin-bottom: 1.25rem;">But throwing AI at TDD or BDD just automates the tedium without fixing the underlying problem. The drift is still there; it just happens faster.</p>
+
+      <p style="margin-bottom: 1.25rem;">RootSpec starts somewhere different. It treats the specification itself as the source of truth across the entire development lifecycle, and uses AI to keep everything downstream—user stories, tests, implementation—in lockstep with it. The spec and codebase become one, much like a TDD die-hard might argue that code doesn't exist without tests that prove it works as intended.</p>
+
+      <p style="margin-bottom: 1.25rem;">Validation is everything.</p>
+
+      <p style="margin-bottom: 1.25rem;">In RootSpec, the spec validates the code directly, all but eliminating drift. AI generates user stories (all reviewable) from the higher-level specification and keeps them in sync as either side evolves. During implementation, those user stories are wired into the platform's end-to-end testing tool and run as the actual tests. The story is the test.</p>
+
+      <p style="margin-bottom: 1.25rem;">The spec itself begins as a prompt or seed and grows through an interview phase: AI asks the kinds of questions a thoughtful collaborator would, surfacing the why of the product before any of the what or how. Users who prefer speed can skip the interview and let the AI infer from existing context (a README, a conversation, a rough doc) though the interview produces stronger foundations.</p>
+
+      <p style="margin-bottom: 1.25rem;">The result is a hardened spec: one that has been pressure-tested against human scrutiny, mid-course pivots, emerging lessons, gray areas, and edge cases. Implementation is then handled entirely by AI agents whose only job is to make the user stories pass. This is the most ambitious claim in the methodology, and I'll defend it elsewhere, but the short version is that once the spec is hardened and validation is airtight, the act of writing code becomes the least interesting problem in the room.</p>
+
+      <p style="margin-bottom: 1.25rem;">Validation gates the entire workflow. Only verified solutions pass through. Risk plummets, and the principal concern of software development shifts from "did we build the right thing correctly?" to something much simpler: lifecycle cost.</p>
+
+      <p>Generating code is now trivial, and <em>proof</em> matters more than ever. Validation is no longer just a phase. Getting better at generation and verifying it is <em>the whole job</em>. RootSpec is an answer to that shift: a way to carry intent, intact, from the first question to the last test.</p>
+    </div>
+  </div>
+</section>

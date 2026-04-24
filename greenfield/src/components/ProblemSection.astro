@@ -1,44 +1,45 @@
 ---
 const problems = [
   {
-    icon: '🔀',
-    title: 'Misaligned teams',
-    desc: 'Developers, designers, and stakeholders interpret requirements differently — causing rework and frustration.',
+    title: 'Spec drift',
+    body: 'By the time a feature ships, the original intent has been filtered through interpretation, assumption, and urgency. The spec and the code no longer describe the same thing.',
   },
   {
-    icon: '🎯',
-    title: 'Scope drift',
-    desc: 'Without a shared spec, features grow organically. Deadlines slip. Priorities shift. Goals blur.',
+    title: 'Philosophy–implementation gap',
+    body: 'There is no mechanism for ensuring code satisfies the original "why." Features that pass QA can still betray the design intent that motivated them.',
   },
   {
-    icon: '🧱',
-    title: 'Assumption-driven builds',
-    desc: 'Engineers fill gaps with guesses. Products ship features nobody asked for and miss the ones that matter.',
+    title: 'Unreliable AI output without validation',
+    body: 'AI can generate code quickly. It cannot verify that code satisfies intent. Speed without validation doesn\'t reduce risk — it compounds it.',
+  },
+  {
+    title: 'Documents nobody reads',
+    body: 'Google Docs specs exist outside the development workflow. They\'re consulted rarely and abandoned freely. They are not the source of truth; they are a record of what was once intended.',
   },
 ];
 ---
+
 <section
   data-test="problem-section"
-  id="problem"
-  class="py-20 px-4"
-  style="background-color: var(--color-surface);"
+  style="padding: 4rem 1.5rem; border-top: 1px solid var(--color-border);"
 >
-  <div class="section-container">
-    <h2 class="text-3xl font-bold text-center mb-4" style="color: var(--color-text);">
-      The cost of building without a spec
+  <div style="max-width: 72rem; margin: 0 auto;">
+    <h2 style="font-family: Georgia, serif; font-size: clamp(1.375rem, 3vw, 2rem); font-weight: 400; color: var(--color-text-primary); margin-bottom: 0.75rem;">
+      Why existing approaches fail
     </h2>
-    <p class="text-center text-lg mb-12 max-w-2xl mx-auto" style="color: var(--color-text-muted);">
-      Most software projects fail not because of bad engineers, but because of unclear requirements.
+    <p style="font-family: system-ui, sans-serif; font-size: 0.9375rem; color: var(--color-text-secondary); margin-bottom: 3rem; max-width: 40rem;">
+      The drift problem is not unique to any team or toolchain. It emerges from the structure of software development itself.
     </p>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 2rem;">
       {problems.map((p) => (
-        <div
-          class="rounded-xl p-6"
-          style="background-color: var(--color-card-bg); border: 1px solid var(--color-card-border);"
-        >
-          <div class="text-4xl mb-4">{p.icon}</div>
-          <h3 class="text-xl font-semibold mb-2" style="color: var(--color-text);">{p.title}</h3>
-          <p style="color: var(--color-text-muted);">{p.desc}</p>
+        <div style="border-left: 2px solid var(--color-border); padding-left: 1.25rem;">
+          <h3 style="font-family: system-ui, sans-serif; font-size: 0.9375rem; font-weight: 600; color: var(--color-text-primary); margin-bottom: 0.5rem;">
+            {p.title}
+          </h3>
+          <p style="font-family: Georgia, serif; font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.65;">
+            {p.body}
+          </p>
         </div>
       ))}
     </div>

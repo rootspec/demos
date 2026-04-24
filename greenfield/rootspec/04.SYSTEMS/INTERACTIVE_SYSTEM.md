@@ -1,93 +1,150 @@
-# Level 4: Interactive System
+# Level 4: Interactive Systems
 
-## Responsibility
+**Product:** RootSpec Marketing Site
+**Version:** 1.0.0
+**Status:** Active
 
-Owns all client-side interactive logic: the hierarchy explorer, the spec wizard, and the comparison view. Manages the state for each component and exposes that state to PRESENTATION_SYSTEM for rendering. No network calls. No server state.
+---
 
-## Boundaries
+## Overview
 
-- Owns: interactive component state, state transitions, client-side logic
-- Does not own: rendering (PRESENTATION_SYSTEM), content/copy (CONTENT_SYSTEM), theme (THEME_SYSTEM)
-- All data is either static (from CONTENT_SYSTEM) or derived from user input
-- No persistence beyond the current page session (wizard state is ephemeral)
+This document covers the three interactive client-side islands: the Hierarchy Explorer, the Spec Wizard, and the Before/After Comparison. All three are React components mounted as Astro islands with `client:load` or `client:visible` directive. All three run entirely client-side; no server communication occurs.
 
-## Components
+---
 
-### Hierarchy Explorer
+## HIERARCHY_EXPLORER
 
-**State:**
-- `expandedLevel`: null | 1 | 2 | 3 | 4 | 5 — which level is currently expanded
-- `hoveredLevel`: null | 1 | 2 | 3 | 4 | 5 — which level the pointer is over
+### Responsibility
 
-**State transitions:**
-- Click/tap level card → toggle `expandedLevel` (expand if collapsed, collapse if expanded)
-- Hover level card → set `hoveredLevel`; highlight allowed upward references
-- Hover end → clear `hoveredLevel`
-- Keyboard: ArrowDown/ArrowUp navigate levels; Enter/Space toggle expansion; Tab moves through interactive elements
+Provide an interactive visualization of the RootSpec five-level hierarchy. Visitors click a level to expand it and see example content. Visual indicators show which levels each level can reference. The explorer makes the core concept of the methodology tangible without requiring the visitor to read the full specification.
 
-**Reference highlighting rules:**
-- When L2 is hovered: highlight L1 (it can reference L1)
-- When L3 is hovered: highlight L1, L2
-- When L4 is hovered: highlight L1, L2, L3, and sibling L4 entries
-- When L5 is hovered: highlight all levels
-- When L1 is hovered: no levels highlighted (references external only)
+### Data Ownership
 
-**Content rendered when expanded:**
-Each level shows: purpose, key contents, reference rules, example content snippet. All content sourced from CONTENT_SYSTEM.
+| Data | Description |
+|------|-------------|
+| Level definitions | Static array of 5 levels (L1–L5), each with: name, icon, tagline, example content, allowed references list |
+| Explorer state | Which levels are currently expanded (array of level IDs) |
 
-### Spec Wizard
+The level definitions are hardcoded in the component — they do not come from the spec files at build time and are not user-configurable.
 
-**State:**
-- `currentStep`: 1 | 2 | 3 | 'result'
-- `productIdea`: string — user's one-line product idea
-- `selectedMission`: string — chosen or typed mission statement
-- `selectedPillars`: string[] — 3-5 selected design pillar names
-- `keyInteraction`: string — user's free-text description of one interaction
+### State
 
-**State transitions:**
-- Step 1: User fills in product idea, selects or types mission → `Next` advances to step 2
-- Step 2: User selects 3-5 design pillars → `Next` advances to step 3 (validation: must select at least 3)
-- Step 3: User describes key interaction → `Generate` transitions to `result`
-- Result: Skeleton spec rendered from state; `Start Over` resets all state to step 1
-- `Back` button on steps 2 and 3 navigates to previous step without clearing state
-- Keyboard: Tab/Shift-Tab navigate fields; Enter submits current step; Escape does not clear state
+- `expandedLevels: Set<number>` — which levels the visitor has expanded. Starts empty (all collapsed) or with L1 expanded as a hint.
+- No persistence — state resets on page reload.
 
-**Skeleton spec generation:**
-Produces a structured text output (markdown or formatted block) showing:
-- L1: Mission (from `selectedMission`), Design Pillars (from `selectedPillars` rendered as pillar stubs)
-- L2: One trade-off stub derived from the product idea
-- L3: Key interaction formatted as a basic interaction loop (Given/When/Then narrative)
+### Interaction Rules
 
-No AI involved — all generation is template substitution using content from CONTENT_SYSTEM.
+- Clicking an unexpanded level expands it; clicking an expanded level collapses it
+- When a level is focused or hovered, levels it can reference are visually highlighted (e.g., dimmed or accented border)
+- Reference arrows or indicators flow upward only — L5 can point to L1-L4; L1 has no outgoing references
+- Keyboard: Tab moves focus between levels; Enter/Space expands or collapses the focused level
 
-**Validation rules:**
-- Step 1: `productIdea` must be non-empty; `selectedMission` must be non-empty
-- Step 2: `selectedPillars` length must be >= 3 and <= 5
-- Step 3: `keyInteraction` must be non-empty
+### Reference Visualization Rules
 
-### Comparison View
+| Level | Can Reference |
+|-------|--------------|
+| L1 (Philosophy) | External only — no other levels highlighted |
+| L2 (Truths) | L1 |
+| L3 (Interactions) | L1, L2 |
+| L4 (Systems) | L1, L2, L3, sibling L4 |
+| L5 (Implementation) | L1, L2, L3, L4 |
 
-**State:**
-- `activePanel`: 'without' | 'with' — which panel is shown on mobile (desktop shows both)
-- `viewport`: 'mobile' | 'desktop' — derived from viewport width at render time
+### Constraints
 
-**State transitions:**
-- Mobile: toggle button switches `activePanel` between 'without' and 'with'
-- Desktop: both panels shown simultaneously; toggle not needed
-- Window resize crossing breakpoint: `viewport` updates; layout adapts
+- Must work on touch devices — tap targets [sufficient tap target size] minimum
+- Must be keyboard navigable
+- Reference indicators must be legible at small viewport widths; may simplify to text-only on narrow breakpoints
+- Animations are quick and functional ([brief transition duration]); no spring physics, no parallax
 
-**Content:**
-Both panels display real content sourced from CONTENT_SYSTEM. No lorem ipsum.
+---
 
-## Cross-Component Rules
+## SPEC_WIZARD
 
-- All components are independent; no shared state between explorer, wizard, and comparison view
-- All components work without any prior user interaction (clean initial state renders correctly)
-- All components degrade gracefully if JavaScript fails to load (static fallback from PRESENTATION_SYSTEM)
-- Touch events are handled explicitly; pointer-only interactions have touch equivalents
+### Responsibility
 
-## Data Dependencies
+A three-step guided experience that accepts a one-line product idea from the visitor and walks them through selecting a mission, design pillars, and a key interaction. The output is a skeleton spec showing how their input maps to L1, L2, and L3 in RootSpec format.
 
-- CONTENT_SYSTEM provides: hierarchy level definitions, wizard template options, comparison panel content
-- PRESENTATION_SYSTEM consumes: component state to render current UI
-- No dependency on THEME_SYSTEM or LAYOUT_SYSTEM
+### Data Ownership
+
+| Data | Description |
+|------|-------------|
+| Mission templates | Static list of mission statement templates (selectable or free-text) |
+| Pillar suggestions | Static list of [min pillar options count] or more design pillar suggestions |
+| Step state | Current step (1, 2, or 3), plus the visitor's selections/text at each step |
+| Output | Derived from step state at completion; not stored independently |
+
+### Wizard Steps
+
+**Step 1 — Mission**
+- Input: Product idea (text field, required)
+- Selection: Mission statement — pick from templates or write custom
+- Templates include varied options (transformation-focused, access-focused, quality-focused, etc.)
+- Advance when product idea + mission are both filled
+
+**Step 2 — Design Pillars**
+- Selection: Choose [min pillars count] to [max pillars count] design pillars from suggestions
+- Each suggestion is a short emotional phrase (e.g., "Effortless Relief", "Earned Confidence")
+- Custom pillar input available for users who want to define their own
+- Advance when [min pillars count] or more pillars are selected
+
+**Step 3 — Key Interaction**
+- Input: Describe one key interaction — what triggers it, what happens, what the user feels
+- Free text, no template required
+- Advance to output when field is filled
+
+**Output**
+- Rendered skeleton spec showing:
+  - L1 section: Mission (visitor's text) + Design Pillars (visitor's selections)
+  - L2 section: One derived truth (template-generated from mission phrasing)
+  - L3 section: One interaction pattern (formatted from Step 3 input)
+- Output uses RootSpec document format with level labels and section headers
+- Output is rendered in the page; no download, no copy-to-clipboard required (optional nice-to-have)
+
+### State
+
+- `currentStep: 1 | 2 | 3 | 'output'`
+- `productIdea: string`
+- `missionChoice: string` (template selection or custom text)
+- `selectedPillars: string[]`
+- `keyInteraction: string`
+
+State is in-memory only. Navigating away or reloading loses progress.
+
+### Constraints
+
+- Advance buttons are disabled until required inputs are filled
+- Previous step navigation is available at any step
+- The output section must clearly label all three levels (L1, L2, L3)
+- No AI API calls — all output is template-based
+- The section framing (outside the wizard component) must indicate that output is template-based, not AI-generated
+
+---
+
+## COMPARISON_SYSTEM
+
+### Responsibility
+
+Present a side-by-side or toggled view comparing a feature described without a spec ("Without RootSpec") versus the same feature described with the RootSpec methodology ("With RootSpec").
+
+### Data Ownership
+
+| Data | Description |
+|------|-------------|
+| Without-spec panel content | Static: vague requirements doc, ambiguous user story, untraceable decisions |
+| With-spec panel content | Static: structured hierarchy entry, testable story with acceptance criteria, feature tracing to a design pillar |
+| Toggle state | `activePanel: 'without' | 'with'` — only relevant on narrow viewports where panels stack |
+
+### Panel Content
+
+Both panels use the same fictional feature (e.g., "User Notifications") to make the contrast meaningful. Content is real and specific — not lorem ipsum. The "without" panel shows plausible developer-domain entropy; the "with" panel shows the corresponding RootSpec artifacts.
+
+### Layout Rules
+
+- Wide viewports: Both panels visible side by side
+- Narrow viewports: Toggle or tab interface to switch between panels; toggle state persists in session (does not persist across reloads)
+
+### Constraints
+
+- Panel content is static — no dynamic generation
+- The feature chosen for comparison must be plausible and relatable to the target audience (developers who've experienced scope drift)
+- No animation required; panels are static content containers

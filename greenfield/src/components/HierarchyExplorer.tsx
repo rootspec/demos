@@ -1,128 +1,217 @@
 import { useState, useEffect } from 'react';
 
-interface Level {
-  id: number;
-  label: string;
-  title: string;
-  description: string;
-  example: string;
-  color: string;
-}
-
-const LEVELS: Level[] = [
+const levels = [
   {
     id: 1,
     label: 'L1',
-    title: 'Philosophy',
-    description: 'The unchanging "why" behind your product. Defines the first principles that guide every decision.',
-    example: '"We believe software should be built from intent, not assumption."',
-    color: '#6d28d9',
+    name: 'Philosophy',
+    tagline: 'WHY and WHAT EXPERIENCE',
+    content: [
+      'Mission statement and core purpose',
+      'Design pillars — what should users feel?',
+      'Competitors and table stakes',
+      'Inviolable principles',
+    ],
+    canReference: [],
   },
   {
     id: 2,
     label: 'L2',
-    title: 'Truths',
-    description: 'Specific beliefs about your users, market, and domain. These are facts your team aligns on.',
-    example: '"Our users are senior engineers who value precision over hand-holding."',
-    color: '#7c3aed',
+    name: 'Truths',
+    tagline: 'WHAT strategy',
+    content: [
+      'Architectural commitments',
+      'Trade-offs made explicit',
+      'Success criteria',
+      'Constraints that flow from philosophy',
+    ],
+    canReference: ['L1'],
   },
   {
     id: 3,
     label: 'L3',
-    title: 'Interactions',
-    description: 'The core user journeys — the moments that define the product experience.',
-    example: '"A developer can specify an entire feature in one /rs-spec session."',
-    color: '#8b5cf6',
+    name: 'Interactions',
+    tagline: 'HOW users and product interact',
+    content: [
+      'User journeys and flows',
+      'Interaction patterns',
+      'Feedback and error states',
+      'Edge cases and exceptions',
+    ],
+    canReference: ['L1', 'L2'],
   },
   {
     id: 4,
     label: 'L4',
-    title: 'Systems',
-    description: 'The technical and design systems that enable the interactions. How things are structured.',
-    example: '"The CONTENT_SYSTEM manages all text, copy, and informational elements."',
-    color: '#a78bfa',
+    name: 'Systems',
+    tagline: 'HOW it\'s built',
+    content: [
+      'Architecture and component boundaries',
+      'Data ownership and flow',
+      'Integration points',
+      'System constraints',
+    ],
+    canReference: ['L1', 'L2', 'L3', 'sibling L4'],
   },
   {
     id: 5,
     label: 'L5',
-    title: 'User Stories',
-    description: 'Concrete acceptance criteria with given/when/then scenarios that drive automated tests.',
-    example: '"Given I visit the site, when the page loads, then I see the meta-banner."',
-    color: '#c4b5fd',
+    name: 'Implementation',
+    tagline: 'Testable stories and tuning',
+    content: [
+      'User stories with acceptance criteria',
+      'Fine-tuning parameters',
+      'The story is the test',
+      'Agents make stories pass',
+    ],
+    canReference: ['L1', 'L2', 'L3', 'L4'],
   },
 ];
 
 export default function HierarchyExplorer() {
-  const [expanded, setExpanded] = useState<number | null>(null);
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => { setHydrated(true); }, []);
+  const [expanded, setExpanded] = useState<Set<number>>(new Set());
 
-  const toggle = (id: number) => {
-    setExpanded((prev) => (prev === id ? null : id));
-  };
+  function toggle(id: number) {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }
 
   return (
-    <div data-test="hierarchy-explorer" data-hydrated={hydrated ? "true" : undefined} className="flex flex-col gap-3">
-      {LEVELS.map((level) => {
-        const isExpanded = expanded === level.id;
+    <div
+      data-test="hierarchy-explorer"
+      style={{
+        border: '1px solid var(--color-border)',
+        borderRadius: '6px',
+        overflow: 'hidden',
+      }}
+    >
+      {levels.map((level) => {
+        const isExpanded = expanded.has(level.id);
         return (
-          <div key={level.id} className="rounded-xl overflow-hidden" style={{ border: `1px solid ${level.color}33` }}>
+          <div key={level.id}>
             <button
               data-test={`hierarchy-level-${level.id}`}
-              aria-expanded={isExpanded}
               onClick={() => toggle(level.id)}
-              className="w-full text-left px-6 py-4 flex items-center gap-4 transition-colors"
+              aria-expanded={isExpanded}
               style={{
-                backgroundColor: isExpanded ? `${level.color}18` : 'var(--color-card-bg)',
+                width: '100%',
+                background: 'none',
+                border: 'none',
+                borderBottom: '1px solid var(--color-border)',
                 cursor: 'pointer',
+                padding: '1rem 1.25rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.875rem',
+                textAlign: 'left',
+                backgroundColor: isExpanded ? 'var(--color-bg-surface)' : 'transparent',
+                transition: 'background-color 150ms ease-out',
               }}
             >
               <span
-                className="text-xs font-mono font-bold px-2 py-1 rounded shrink-0"
-                style={{ backgroundColor: level.color, color: 'white' }}
+                style={{
+                  fontFamily: "'Courier New', monospace",
+                  fontSize: '0.75rem',
+                  color: 'var(--color-accent)',
+                  fontWeight: 600,
+                  minWidth: '2rem',
+                }}
               >
                 {level.label}
               </span>
-              <span className="font-semibold text-lg flex-1" style={{ color: 'var(--color-text)' }}>
-                {level.title}
-              </span>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              <span
                 style={{
-                  color: 'var(--color-text-muted)',
-                  transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                  transition: 'transform 0.2s ease',
+                  fontFamily: 'system-ui, sans-serif',
+                  fontSize: '0.9375rem',
+                  fontWeight: 600,
+                  color: 'var(--color-text-primary)',
+                  flex: 1,
                 }}
               >
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
+                {level.name}
+                <span
+                  style={{
+                    fontFamily: 'system-ui, sans-serif',
+                    fontSize: '0.8125rem',
+                    fontWeight: 400,
+                    color: 'var(--color-text-secondary)',
+                    marginLeft: '0.5rem',
+                  }}
+                >
+                  — {level.tagline}
+                </span>
+              </span>
+              <span
+                style={{
+                  fontFamily: 'system-ui, sans-serif',
+                  fontSize: '0.75rem',
+                  color: 'var(--color-text-secondary)',
+                  transform: isExpanded ? 'rotate(90deg)' : 'none',
+                  transition: 'transform 150ms ease-out',
+                  display: 'inline-block',
+                }}
+              >
+                ›
+              </span>
             </button>
+
             {isExpanded && (
               <div
                 data-test={`hierarchy-level-${level.id}-content`}
-                className="px-6 py-5"
-                style={{ backgroundColor: `${level.color}10`, borderTop: `1px solid ${level.color}33` }}
+                style={{
+                  padding: '1.25rem 1.25rem 1.25rem 3.5rem',
+                  backgroundColor: 'var(--color-bg-surface)',
+                  borderBottom: '1px solid var(--color-border)',
+                }}
               >
-                <p className="mb-4" style={{ color: 'var(--color-text)' }}>
-                  {level.description}
-                </p>
-                <blockquote
-                  className="text-sm italic px-4 py-3 rounded"
-                  style={{
-                    backgroundColor: 'var(--color-surface)',
-                    borderLeft: `3px solid ${level.color}`,
-                    color: 'var(--color-text-muted)',
-                  }}
-                >
-                  {level.example}
-                </blockquote>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {level.content.map((item, i) => (
+                    <li
+                      key={i}
+                      style={{
+                        fontFamily: 'Georgia, serif',
+                        fontSize: '0.9375rem',
+                        color: 'var(--color-text-secondary)',
+                        lineHeight: 1.65,
+                        marginBottom: '0.375rem',
+                        paddingLeft: '1rem',
+                        position: 'relative',
+                      }}
+                    >
+                      <span
+                        style={{
+                          position: 'absolute',
+                          left: 0,
+                          color: 'var(--color-accent)',
+                        }}
+                      >
+                        ·
+                      </span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                {level.canReference.length > 0 && (
+                  <p
+                    style={{
+                      fontFamily: 'system-ui, sans-serif',
+                      fontSize: '0.8125rem',
+                      color: 'var(--color-text-secondary)',
+                      marginTop: '0.75rem',
+                      paddingTop: '0.75rem',
+                      borderTop: '1px solid var(--color-border)',
+                    }}
+                  >
+                    Can reference: {level.canReference.join(', ')}
+                  </p>
+                )}
               </div>
             )}
           </div>

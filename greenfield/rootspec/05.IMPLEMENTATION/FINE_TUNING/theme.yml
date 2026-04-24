@@ -1,69 +1,38 @@
 # =============================================================================
 # LEVEL 5: FINE TUNING - Theme System
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @system: THEME_SYSTEM
-# @last_updated: 2026-04-23T00:00:00Z
+# @last_updated: 2026-04-24T10:48:33Z
 # @status: draft
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Light Mode Color Tokens
+# Transition Timing
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/PRESENTATION_SYSTEM.md
+# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
-light:
-  background: "#FAFAF8"
-  # @rationale: Near-white with slight warmth; not pure white which feels clinical
-  # @constraints: type=hex_color
+transitions:
+  theme_switch_duration_ms: 200
+  # @rationale: Fast enough to feel immediate, slow enough to be visible as intentional
+  # @reference: Nielsen Norman Group - Response Times (perceptible at 100ms, comfortable up to 250ms)
+  # @constraints: min=100, max=300, type=integer
+  # @unit: milliseconds
 
-  surface: "#FFFFFF"
-  # @rationale: Pure white for card surfaces that need to lift off background
-  # @constraints: type=hex_color
-
-  text_primary: "#1A1A18"
-  # @rationale: Near-black with slight warmth; not pure black which is harsh on near-white bg
-  # @constraints: type=hex_color
-
-  text_secondary: "#5C5C56"
-  # @rationale: Muted for secondary text; sufficient contrast on both bg and surface
-  # @constraints: type=hex_color
-
-  border: "#E2E2DC"
-  # @rationale: Subtle border that separates without competing
-  # @constraints: type=hex_color
-
-  accent: "#2D6A4F"
-  # @rationale: Muted green; signals "this works, this validates" — connected to the methodology's validation-first philosophy
-  # @reference: L1 Design Pillar "Proof Over Plausibility"
-  # @constraints: type=hex_color
-  # @alternatives: ["#2563EB (blue)", "#7C3AED (purple)", "#B45309 (amber)"]
+  element_transition_duration_ms: 150
+  # @rationale: Functional transitions for hover and focus states; not decorative
+  # @constraints: min=50, max=250, type=integer
+  # @unit: milliseconds
 
 # -----------------------------------------------------------------------------
-# Dark Mode Color Tokens
+# Default Theme
 # -----------------------------------------------------------------------------
 
-dark:
-  background: "#141414"
-  # @rationale: Dark neutral; not pure black
-  # @constraints: type=hex_color
+defaults:
+  preferred_mode: "light"
+  # @rationale: Editorial sites read better in light mode per L1/L2 aesthetic principles
+  # @inviolable: true
+  # @spec_source: 01.PHILOSOPHY.md, 02.TRUTHS.md
 
-  surface: "#1E1E1E"
-  # @rationale: Slightly lighter than background for surface elevation
-  # @constraints: type=hex_color
-
-  text_primary: "#F0F0EC"
-  # @rationale: Near-white with warmth to match light mode philosophy
-  # @constraints: type=hex_color
-
-  text_secondary: "#9E9E96"
-  # @rationale: Muted but readable on dark background
-  # @constraints: type=hex_color
-
-  border: "#2A2A28"
-  # @rationale: Subtle dark border
-  # @constraints: type=hex_color
-
-  accent: "#52B788"
-  # @rationale: Lighter green for dark mode; maintains meaning, improves contrast
-  # @constraints: type=hex_color
+  storage_key: "rootspec-theme"
+  # @rationale: Namespaced to avoid localStorage collisions with other sites on same origin

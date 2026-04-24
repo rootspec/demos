@@ -1,49 +1,45 @@
-## Color system
-- **Primary:** `#6d28d9` (violet-700) — buttons, links, accents
-- **Primary hover:** `#5b21b6` (violet-800)
-- **Accent:** `#7c3aed` / `#a78bfa` (dark/light mode)
-- **Meta banner background:** `#1e1b4b` (indigo-950)
-- **Meta banner text:** `#e0e7ff` (indigo-100)
-- All semantic colors defined as CSS variables in `src/styles/global.css`
-
-## Light theme tokens
-- `--color-bg`: `#ffffff`
-- `--color-text`: `#0f172a`
-- `--color-text-muted`: `#64748b`
-- `--color-border`: `#e2e8f0`
-- `--color-surface`: `#f8fafc`
-- `--color-card-bg`: `#ffffff`
-
-## Dark theme tokens
-- `--color-bg`: `#0f172a`
-- `--color-text`: `#f1f5f9`
-- `--color-text-muted`: `#94a3b8`
-- `--color-border`: `#1e293b`
-- `--color-surface`: `#1e293b`
-- `--color-card-bg`: `#1e293b`
-
 ## Typography
-- **Font:** `ui-sans-serif, system-ui, -apple-system, sans-serif`
-- **Headings:** `font-extrabold` or `font-bold` with Tailwind classes
-- **Hero h1:** `text-5xl font-extrabold`
-- **Section h2:** `text-3xl font-bold`
-- **Card h3:** `text-xl font-semibold` or `text-lg font-semibold`
-- **Body:** default size, `var(--color-text-muted)` for secondary text
 
-## Layout
-- **Max content width:** 1100px (`section-container` class)
-- **Section padding:** `py-20 px-4` (standard), `py-24` (hero/CTA)
-- **Card border-radius:** `rounded-xl`
-- **Grid:** 1-column mobile, 2–4 column desktop with Tailwind `grid` utilities
+- **Body / prose:** Georgia, Cambria, 'Times New Roman' serif — for all editorial content
+- **UI / navigation:** system-ui, sans-serif — for buttons, labels, metadata
+- **Code / commands:** 'Courier New', monospace — for skill names (`/rs-init`), version badges, code blocks
 
-## Theming
-- Theme stored in `localStorage` under key `rootspec-theme`
-- Applied as `data-theme="light"` or `data-theme="dark"` on `<html>`
-- Default: `light`
-- Toggle button in header with sun/moon icon swap
+## Color Palette
 
-## Component visual patterns
-- Cards: `border: 1px solid var(--color-card-border)`, `background: var(--color-card-bg)`, `rounded-xl`
-- Buttons: solid primary for CTAs, ghost border for secondary
-- Code/version labels: `font-mono`, `var(--color-surface-alt)` background
-- Meta banner: full-width strip, dark indigo, small text with links
+### Light Mode
+- Background: `#fafaf8` (warm off-white)
+- Surface: `#f4f3f0` (subtle warm card bg)
+- Text primary: `#1a1a1a`
+- Text secondary: `#555550`
+- Text code: `#2d4a7a`
+- Border: `#e0ddd8`
+- Accent: `#2d4a7a` (deep blue — used sparingly)
+
+### Dark Mode
+- Background: `#111110`
+- Surface: `#1c1c1a`
+- Text primary: `#e8e6e1`
+- Text secondary: `#9e9b94`
+- Text code: `#8ab4e0`
+- Border: `#2e2d2a`
+- Accent: `#8ab4e0`
+
+## Spacing
+
+- Section padding: `4rem 1.5rem` (generous whitespace, editorial)
+- Max content width: `72rem` (wide for editorial reading)
+- Prose max-width: `48rem`
+
+## Transitions
+
+- Theme switch: `200ms ease-out` on `background-color` and `color`
+- Interactive elements: `150ms ease-out`
+- No spring physics, no parallax
+
+## Anti-patterns Avoided
+
+- No gradient backgrounds
+- No glassmorphism
+- No hero sections with oversized gradient text
+- No testimonial cards, stat counters, or logo bars
+- No dark mode default (light is default per spec)

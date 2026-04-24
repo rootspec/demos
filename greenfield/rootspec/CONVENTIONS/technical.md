@@ -1,37 +1,50 @@
-## Framework
-- **Runtime:** Astro 6 with React integration (`@astrojs/react`)
-- **CSS:** Tailwind CSS v4 via `@tailwindcss/vite`
-- **Language:** TypeScript (strict mode via `astro/tsconfigs/strict`)
-- **Build:** `astro build`
-- **Dev server:** `npm run dev` → `./scripts/dev.sh start` → `astro dev` on port 3000
-- **Test runner:** Cypress with `js-yaml` + `zod` for DSL validation
+## Stack
 
-## File organization
-- `src/pages/` — Astro page routes
-- `src/layouts/` — Shared HTML shells
-- `src/components/` — Astro and React components
-- `src/styles/` — Global CSS (Tailwind + CSS variables)
-- `cypress/e2e/` — Cypress test specs
-- `cypress/support/` — DSL steps, schema, reporter
+- **Framework:** Astro 6 with static output
+- **Interactivity:** React 19 (islands via `client:load`)
+- **Styles:** Tailwind CSS v4 via `@tailwindcss/vite` plugin (NOT `@astrojs/tailwind`)
+- **Language:** TypeScript
+- **Base path:** `/demos/greenfield` (configured in `astro.config.mjs`)
+- **Build:** `astro build` → `dist/`
+- **Preview:** `astro preview` on port 4173
 
-## Component conventions
-- Static sections: `.astro` components
-- Interactive islands: `.tsx` React components with `client:load` directive
-- All interactive components export a default function
-- Sections receive their data inline (no external data files)
+## File Organization
 
-## Base path
-- **Base:** `/demos/greenfield` (set in `astro.config.mjs`)
-- All internal links use `/demos/greenfield/` as root
-- `Astro.props` and layouts handle path prefixing automatically
+- `src/pages/index.astro` — single page
+- `src/layouts/Layout.astro` — HTML shell, theme script
+- `src/components/` — Astro static components + React island components
+- `src/styles/global.css` — CSS custom properties, Tailwind import
+- `cypress/e2e/mvp.cy.ts` — all tests (YAML embedded as string literals)
+- `cypress/support/` — steps, schema, reporter, screenshot hook
 
-## Routing
-- Single-page marketing site at `/demos/greenfield/`
-- No dynamic routes or API endpoints in MVP
-- Anchor-based section navigation (`#how-it-works`, `#hierarchy`, etc.)
+## Readiness Signal
 
-## Testing
-- Cypress base URL: `http://localhost:3000`
-- Test entry: `cypress/e2e/mvp.cy.ts`
-- Results written to `rootspec/tests-status.json` via rootspec-reporter
-- All stories use `loadAndRun()` with embedded YAML string literals
+Every page sets `document.body.setAttribute('data-ready', 'true')` once interactive handlers are attached. For this static site, it's done in the `<script>` block in `Header.astro` (which executes after the document loads). The `safeVisit` step in `cypress/support/steps.ts` waits for this attribute before proceeding.
+
+## Theme
+
+- Inline script in `<head>` reads `localStorage.getItem('rootspec-theme')` before first paint
+- Falls back to `prefers-color-scheme`, then defaults to `'light'`
+- Storage key: `rootspec-theme`
+- `data-theme` attribute on `<html>` element
+- Theme toggle button in Header calls `document.documentElement.setAttribute('data-theme', next)`
+
+## CSS Custom Properties
+
+Defined on `:root` and `[data-theme="light"]` / `[data-theme="dark"]`:
+- `--color-bg`, `--color-bg-surface`
+- `--color-text-primary`, `--color-text-secondary`, `--color-text-code`
+- `--color-border`
+- `--color-accent`, `--color-accent-hover`
+- `--color-link`, `--color-link-hover`
+
+All components use inline `style` attributes referencing these CSS variables (not Tailwind classes) for theme-aware coloring.
+
+## Version Reading
+
+`Header.astro` and `HeroSection.astro` read `.rootspec.json` at build time using Node.js `fs.readFileSync`. Falls back to `'7.5.0'` if the file is missing.
+
+## TypeScript / Cypress
+
+- `cypress/tsconfig.json` uses `target: "ES2020"`, `ignoreDeprecations: "6.0"` to suppress TypeScript 7.x deprecation warnings
+- Tests compile via Cypress's bundled webpack preprocessor

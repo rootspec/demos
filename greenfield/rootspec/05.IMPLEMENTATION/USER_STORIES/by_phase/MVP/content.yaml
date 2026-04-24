@@ -1,22 +1,22 @@
 # =============================================================================
-# USER STORY: Meta-Banner Visibility
+# USER STORY: Meta Banner Display
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [LAYOUT_SYSTEM, CONTENT_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: FIRST_ARRIVAL
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-24T10:48:33Z
 
 id: US-001
-title: Meta-banner is the first visible element on every page load
+title: Meta banner is visible above the fold
 
 acceptance_criteria:
   - id: AC-001-1
-    title: Meta-banner appears above all content on desktop
+    title: Meta banner appears before any marketing content
     narrative: |
-      Given I visit the site on a desktop browser
+      Given I visit the site home page
       When the page loads
-      Then I see the meta-banner before the header and hero section
+      Then I see the meta banner before any hero or section content
     given:
       - visit: '/demos/greenfield/'
     when: []
@@ -24,65 +24,167 @@ acceptance_criteria:
       - shouldExist: { selector: '[data-test=meta-banner]' }
 
   - id: AC-001-2
-    title: Meta-banner contains spec link and seed link
+    title: Meta banner contains links to seed and spec files
     narrative: |
-      Given I visit the site
+      Given I visit the site home page
       When the page loads
-      Then I see two links in the meta-banner pointing to GitHub
+      Then I see links to the seed file and spec files in the meta banner
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner] [data-test=spec-link]' }
       - shouldExist: { selector: '[data-test=meta-banner] [data-test=seed-link]' }
-
-  - id: AC-001-3
-    title: Meta-banner links are absolute GitHub URLs
-    narrative: |
-      Given I view the meta-banner
-      When I inspect the spec and seed links
-      Then they point to absolute GitHub URLs containing github.com/rootspec/demos
-    given:
-      - visit: '/demos/greenfield/'
-    when: []
-    then:
-      - shouldContain: { selector: '[data-test=spec-link]', text: 'spec' }
-      - shouldContain: { selector: '[data-test=seed-link]', text: 'seed' }
+      - shouldExist: { selector: '[data-test=meta-banner] [data-test=spec-link]' }
 
 ---
 # =============================================================================
 # USER STORY: Version Badge Display
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: FIRST_ARRIVAL
+# @systems: [CONTENT_SYSTEM]
+# @last_updated: 2026-04-24T10:48:33Z
 
 id: US-002
-title: Version badge displays current RootSpec version
+title: RootSpec version is displayed on the page
 
 acceptance_criteria:
   - id: AC-002-1
     title: Version badge is visible in the hero section
     narrative: |
-      Given I visit the site
+      Given I visit the site home page
       When the page loads
-      Then I see a version badge in the hero section showing the RootSpec version number
+      Then I see a version badge displaying the RootSpec version number
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=version-badge]' }
 
-  - id: AC-002-2
-    title: Version badge contains a semver string
+---
+# =============================================================================
+# USER STORY: Author's Notes Section
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: DEEP_READING
+# @systems: [CONTENT_SYSTEM]
+# @last_updated: 2026-04-24T10:48:33Z
+
+id: US-003
+title: Author's Notes section is present with verbatim text
+
+acceptance_criteria:
+  - id: AC-003-1
+    title: Author's Notes section is present on the page
     narrative: |
-      Given I view the hero section
-      When I read the version badge
-      Then it displays a version number in the format X.Y.Z
+      Given I visit the site home page
+      When I scroll to the author's notes section
+      Then I see the section with verbatim content from the seed
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=version-badge]' }
+      - shouldExist: { selector: '[data-test=authors-notes]' }
+
+  - id: AC-003-2
+    title: Author's Notes contains key opening paragraph text
+    narrative: |
+      Given I visit the site home page
+      When I view the author's notes section
+      Then I see text about the central problem of software development
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldContain: { selector: '[data-test=authors-notes]', text: 'capturing human intent' }
+
+---
+# =============================================================================
+# USER STORY: Open Source CTA
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_ARRIVAL
+# @systems: [CONTENT_SYSTEM]
+# @last_updated: 2026-04-24T10:48:33Z
+
+id: US-004
+title: Open source CTA links to the framework GitHub repo
+
+acceptance_criteria:
+  - id: AC-004-1
+    title: CTA section contains a link to the GitHub repo
+    narrative: |
+      Given I visit the site home page
+      When I scroll to the CTA section
+      Then I see a link pointing to the rootspec GitHub repository
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=cta-section] [data-test=github-link]' }
+
+---
+# =============================================================================
+# USER STORY: Page Sections Exist
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: FIRST_ARRIVAL
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-24T10:48:33Z
+
+id: US-005
+title: All required page sections are present
+
+acceptance_criteria:
+  - id: AC-005-1
+    title: Hero section is present
+    narrative: |
+      Given I visit the site home page
+      When the page loads
+      Then I see the hero section with the product name
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=hero-section]' }
+      - shouldContain: { selector: '[data-test=hero-section]', text: 'RootSpec' }
+
+  - id: AC-005-2
+    title: Problem section is present
+    narrative: |
+      Given I visit the site home page
+      When I scroll down
+      Then I see the problem section explaining existing approach failures
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=problem-section]' }
+
+  - id: AC-005-3
+    title: How it works section is present
+    narrative: |
+      Given I visit the site home page
+      When I scroll down
+      Then I see the how it works section with the four skills
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=how-it-works-section]' }
+
+  - id: AC-005-4
+    title: Footer is present with attribution
+    narrative: |
+      Given I visit the site home page
+      When I scroll to the bottom
+      Then I see the footer with the site builder attribution
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=footer]' }

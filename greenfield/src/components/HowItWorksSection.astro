@@ -1,0 +1,58 @@
+---
+const skills = [
+  {
+    cmd: '/rs-init',
+    name: 'Init',
+    desc: 'Bootstrap the spec structure for a new or existing project. Establishes the five-level hierarchy and creates placeholder files.',
+  },
+  {
+    cmd: '/rs-spec',
+    name: 'Spec',
+    desc: 'AI interviews you about your product — surfacing the why before the what. Produces a hardened spec through structured dialogue.',
+  },
+  {
+    cmd: '/rs-impl',
+    name: 'Impl',
+    desc: 'AI agents implement user stories one by one, running tests after each. Implementation is complete only when tests pass.',
+  },
+  {
+    cmd: '/rs-validate',
+    name: 'Validate',
+    desc: 'Runs the full test suite against the built artifact and produces a report. The spec validates the code, not the other way around.',
+  },
+];
+---
+
+<section
+  data-test="how-it-works-section"
+  style="padding: 4rem 1.5rem; border-top: 1px solid var(--color-border);"
+>
+  <div style="max-width: 72rem; margin: 0 auto;">
+    <h2 style="font-family: Georgia, serif; font-size: clamp(1.375rem, 3vw, 2rem); font-weight: 400; color: var(--color-text-primary); margin-bottom: 0.75rem;">
+      How it works
+    </h2>
+    <p style="font-family: system-ui, sans-serif; font-size: 0.9375rem; color: var(--color-text-secondary); margin-bottom: 3rem; max-width: 40rem;">
+      Four skills drive all workflows. Each is an AI agent with a single, testable job.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1.5rem;">
+      {skills.map((s, i) => (
+        <div
+          style="background-color: var(--color-bg-surface); border: 1px solid var(--color-border); border-radius: 6px; padding: 1.5rem;"
+        >
+          <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.75rem;">
+            <span style="font-family: 'Courier New', monospace; font-size: 0.875rem; color: var(--color-accent); font-weight: 600;">
+              {s.cmd}
+            </span>
+            <span style="font-family: system-ui, sans-serif; font-size: 0.75rem; color: var(--color-text-secondary);">
+              Step {i + 1}
+            </span>
+          </div>
+          <p style="font-family: Georgia, serif; font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.65;">
+            {s.desc}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

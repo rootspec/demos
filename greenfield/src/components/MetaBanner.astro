@@ -1,31 +1,35 @@
 ---
-// MetaBanner — shown above everything else on every page load
-const SPEC_URL = 'https://github.com/anthropics/claude-code/tree/main/demos/greenfield/rootspec';
-const SEED_URL = 'https://github.com/anthropics/claude-code/tree/main/demos/greenfield/SEED.md';
+const SEED_URL = 'https://github.com/rootspec/demos/blob/main/greenfield/SEED.md';
+const SPEC_URL = 'https://github.com/rootspec/demos/tree/main/greenfield/rootspec';
 ---
+
 <div
   data-test="meta-banner"
-  style="background-color: var(--color-meta-bg); color: var(--color-meta-text);"
-  class="w-full text-sm py-2 px-4 flex flex-wrap gap-x-4 gap-y-1 justify-center items-center"
+  style="background-color: var(--color-bg-surface); border-bottom: 1px solid var(--color-border); padding: 0.75rem 1.5rem; font-family: system-ui, sans-serif; font-size: 0.875rem; color: var(--color-text-secondary);"
 >
-  <span class="opacity-75">Built with RootSpec —</span>
-  <a
-    data-test="spec-link"
-    href={SPEC_URL}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="underline hover:opacity-90 transition-opacity font-medium"
-  >
-    view spec
-  </a>
-  <span class="opacity-40">·</span>
-  <a
-    data-test="seed-link"
-    href={SEED_URL}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="underline hover:opacity-90 transition-opacity font-medium"
-  >
-    view seed
-  </a>
+  <div style="max-width: 72rem; margin: 0 auto;">
+    <span>
+      This site was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups. The spec, the code, and the tests were all produced by running four commands.
+    </span>
+    {' '}
+    <a
+      href={SEED_URL}
+      data-test="seed-link"
+      target="_blank"
+      rel="noopener noreferrer"
+      style="color: var(--color-link); text-decoration: underline;"
+    >
+      View the seed →
+    </a>
+    {' '}
+    <a
+      href={SPEC_URL}
+      data-test="spec-link"
+      target="_blank"
+      rel="noopener noreferrer"
+      style="color: var(--color-link); text-decoration: underline;"
+    >
+      View the spec →
+    </a>
+  </div>
 </div>

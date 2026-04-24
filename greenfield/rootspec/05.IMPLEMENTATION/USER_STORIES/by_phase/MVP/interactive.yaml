@@ -1,177 +1,193 @@
 # =============================================================================
-# USER STORY: Hierarchy Explorer
+# USER STORY: Hierarchy Explorer - Basic Interaction
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: EXPLORATION
-# @systems: [INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: METHODOLOGY_EXPLORATION
+# @systems: [INTERACTIVE_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-24T10:48:33Z
 
-id: US-004
-title: User can explore the five-level hierarchy interactively
+id: US-101
+title: Visitor can expand a level in the hierarchy explorer
 
 acceptance_criteria:
-  - id: AC-004-1
-    title: All five hierarchy levels are visible
+  - id: AC-101-1
+    title: Hierarchy explorer is present on the page
     narrative: |
-      Given I visit the site and scroll to the hierarchy section
-      When the section loads
-      Then I see five level cards for L1 through L5
+      Given I visit the site home page
+      When I scroll to the hierarchy explorer section
+      Then I see the interactive hierarchy explorer
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
+
+  - id: AC-101-2
+    title: Clicking a level expands it to show content
+    narrative: |
+      Given I can see the hierarchy explorer
+      When I click on the Level 1 Philosophy item
+      Then I see expanded content for that level
+    given:
+      - visit: '/demos/greenfield/'
+    when:
+      - click: { selector: '[data-test=hierarchy-level-1]' }
+    then:
+      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+
+  - id: AC-101-3
+    title: All five levels are present in the explorer
+    narrative: |
+      Given I visit the site home page
+      When I view the hierarchy explorer
+      Then I see all five levels listed
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
       - shouldExist: { selector: '[data-test=hierarchy-level-1]' }
       - shouldExist: { selector: '[data-test=hierarchy-level-2]' }
       - shouldExist: { selector: '[data-test=hierarchy-level-3]' }
       - shouldExist: { selector: '[data-test=hierarchy-level-4]' }
       - shouldExist: { selector: '[data-test=hierarchy-level-5]' }
 
-  - id: AC-004-2
-    title: Clicking a level card expands it to show content
-    narrative: |
-      Given I see the hierarchy explorer with all five levels collapsed
-      When I click on Level 1
-      Then Level 1 expands to show its description and example content
-    given:
-      - visit: '/demos/greenfield/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded="true"]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
-
-  - id: AC-004-3
-    title: Clicking an expanded level collapses it
-    narrative: |
-      Given Level 1 is expanded in the hierarchy explorer
-      When I click Level 1 again
-      Then Level 1 collapses and its content is hidden
-    given:
-      - visit: '/demos/greenfield/'
-    when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-    then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded="false"]' }
-
 ---
 # =============================================================================
-# USER STORY: Spec Wizard
+# USER STORY: Spec Wizard - Completion
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: EXPLORATION
-# @systems: [INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: METHODOLOGY_EXPLORATION
+# @systems: [INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-24T10:48:33Z
 
-id: US-005
-title: User can generate a skeleton spec from a one-line product idea
+id: US-102
+title: Visitor can complete the spec wizard and see output
 
 acceptance_criteria:
-  - id: AC-005-1
-    title: Wizard is present and shows Step 1 on load
+  - id: AC-102-1
+    title: Spec wizard is present on the page
     narrative: |
-      Given I visit the site and scroll to the wizard section
-      When the section loads
-      Then I see the spec wizard showing Step 1 with a product idea input
+      Given I visit the site home page
+      When I scroll to the spec wizard section
+      Then I see the spec your idea wizard
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=spec-wizard]' }
-      - shouldExist: { selector: '[data-test=wizard-step-1]' }
-      - shouldExist: { selector: '[data-test=wizard-idea-input]' }
 
-  - id: AC-005-2
-    title: User can advance through all three steps
+  - id: AC-102-2
+    title: Entering a product idea enables advancing to step 2
     narrative: |
-      Given I am on Step 1 of the wizard
-      When I enter a product idea and click Next
-      Then I see Step 2 for mission selection
+      Given I can see the spec wizard
+      When I fill in the product idea field and fill in a mission
+      Then I can advance to step 2
     given:
       - visit: '/demos/greenfield/'
     when:
-      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A tool to help developers write better commit messages' }
-      - click: { selector: '[data-test=wizard-next]' }
+      - fill: { selector: '[data-test=wizard-product-idea]', value: 'A tool for tracking reading habits' }
+      - click: { selector: '[data-test=wizard-mission-option-0]' }
+      - click: { selector: '[data-test=wizard-next-step]' }
     then:
       - shouldExist: { selector: '[data-test=wizard-step-2]' }
 
-  - id: AC-005-3
-    title: Completing all steps generates a skeleton spec
+  - id: AC-102-3
+    title: Completing all steps produces a spec output
     narrative: |
       Given I have completed all three wizard steps
-      When the wizard reaches the result step
-      Then I see a skeleton spec showing L1 through L3 populated with my inputs
+      When I view the output
+      Then I see a skeleton spec with L1 L2 and L3 sections
     given:
       - visit: '/demos/greenfield/'
     when:
-      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A tool to help teams avoid scope drift' }
-      - click: { selector: '[data-test=wizard-next]' }
-      - click: { selector: '[data-test=wizard-mission-option]' }
-      - click: { selector: '[data-test=wizard-next]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-next]' }
-      - fill: { selector: '[data-test=wizard-interaction-input]', value: 'User runs /rs-spec and answers interview questions' }
-      - click: { selector: '[data-test=wizard-generate]' }
+      - fill: { selector: '[data-test=wizard-product-idea]', value: 'A tool for tracking reading habits' }
+      - click: { selector: '[data-test=wizard-mission-option-0]' }
+      - click: { selector: '[data-test=wizard-next-step]' }
+      - click: { selector: '[data-test=wizard-pillar-0]' }
+      - click: { selector: '[data-test=wizard-pillar-1]' }
+      - click: { selector: '[data-test=wizard-pillar-2]' }
+      - click: { selector: '[data-test=wizard-next-step]' }
+      - fill: { selector: '[data-test=wizard-key-interaction]', value: 'User logs a book they just finished' }
+      - click: { selector: '[data-test=wizard-next-step]' }
     then:
-      - shouldExist: { selector: '[data-test=wizard-result]' }
-      - shouldExist: { selector: '[data-test=wizard-result-l1]' }
+      - shouldExist: { selector: '[data-test=wizard-output]' }
 
 ---
 # =============================================================================
-# USER STORY: Comparison View
+# USER STORY: Theme Toggle
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: EXPLORATION
-# @systems: [INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: FIRST_ARRIVAL
+# @systems: [THEME_SYSTEM]
+# @last_updated: 2026-04-24T10:48:33Z
 
-id: US-006
-title: User can see a before/after comparison of spec vs no spec
+id: US-103
+title: Visitor can toggle between light and dark themes
 
 acceptance_criteria:
-  - id: AC-006-1
-    title: Comparison section shows both panels
+  - id: AC-103-1
+    title: Theme toggle button is present in the header
     narrative: |
-      Given I visit the site and scroll to the comparison section
-      When the section loads
-      Then I see content comparing the without-spec and with-spec approaches
+      Given I visit the site home page
+      When the page loads
+      Then I see the theme toggle in the header
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+  - id: AC-103-2
+    title: Clicking the theme toggle changes the theme
+    narrative: |
+      Given the page is in light mode
+      When I click the theme toggle
+      Then the page switches to dark mode
+    given:
+      - visit: '/demos/greenfield/'
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldExist: { selector: '[data-theme=dark]' }
+
+---
+# =============================================================================
+# USER STORY: Before/After Comparison
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: METHODOLOGY_EXPLORATION
+# @systems: [INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-24T10:48:33Z
+
+id: US-104
+title: Visitor can view the before and after comparison
+
+acceptance_criteria:
+  - id: AC-104-1
+    title: Comparison section is present on the page
+    narrative: |
+      Given I visit the site home page
+      When I scroll to the comparison section
+      Then I see the before and after comparison
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=comparison-section]' }
-      - shouldExist: { selector: '[data-test=comparison-without]' }
-      - shouldExist: { selector: '[data-test=comparison-with]' }
 
----
-# =============================================================================
-# USER STORY: Responsive Layout
-# =============================================================================
-# @spec_version: 7.3.7
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [LAYOUT_SYSTEM, PRESENTATION_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
-
-id: US-007
-title: Site is usable on mobile devices
-
-acceptance_criteria:
-  - id: AC-007-1
-    title: Site renders without horizontal overflow on mobile viewport
+  - id: AC-104-2
+    title: Both panels contain real content
     narrative: |
-      Given I visit the site on a mobile viewport
-      When the page loads
-      Then the content fits within the viewport without horizontal scrolling
+      Given I can see the comparison section
+      When I view the panels
+      Then I see content in both the without-spec and with-spec panels
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=hero]' }
+      - shouldExist: { selector: '[data-test=comparison-without]' }
+      - shouldExist: { selector: '[data-test=comparison-with]' }

@@ -1,58 +1,65 @@
 # =============================================================================
 # LEVEL 5: FINE TUNING - Layout System
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-23T00:00:00Z
+# @last_updated: 2026-04-24T10:48:33Z
 # @status: draft
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Responsive Breakpoints
+# Typography Scale
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md, 04.SYSTEMS/PRESENTATION_SYSTEM.md
-
-breakpoints:
-  mobile_max: 767
-  # @rationale: Standard mobile breakpoint; covers all phones in portrait and most in landscape
-  # @constraints: type=integer
-
-  tablet_max: 1023
-  # @rationale: Covers tablets and small laptops
-  # @constraints: type=integer
-
-  desktop_min: 1024
-  # @rationale: Full layout begins at 1024px
-  # @constraints: type=integer
-
-# -----------------------------------------------------------------------------
-# Prose and Reading Width
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/PRESENTATION_SYSTEM.md
+# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
 
 typography:
-  max_prose_width_ch: 72
-  # @rationale: 60-75 characters is the accepted optimal line length for reading
-  # @reference: Robert Bringhurst, The Elements of Typographic Style
-  # @constraints: min=50, max=90, type=integer
+  body_font_size_px: 18
+  # @rationale: Editorial sites use slightly larger body text for comfortable long-form reading
+  # @reference: Optimal web typography reading size per typographic research (16-20px)
+  # @constraints: min=16, max=20, type=integer
+  # @unit: pixels
 
-  body_size_px: 18
-  # @rationale: 18px is comfortable for long-form reading; 16px is minimum, 18px is editorial standard
-  # @constraints: min=16, max=22, type=integer
-  # @reference: L2 Truths - typography is the primary design medium
+  body_line_height: 1.75
+  # @rationale: Generous line height for long-form prose; supports easy tracking across wide lines
+  # @constraints: min=1.5, max=2.0, type=float
 
-  base_line_height: 1.6
-  # @rationale: 1.6 provides comfortable leading for serif body text at 18px
-  # @constraints: min=1.4, max=1.8, type=float
+  prose_max_width_ch: 70
+  # @rationale: 65-75 characters per line is the accepted range for comfortable prose reading
+  # @reference: Bringhurst, The Elements of Typographic Style
+  # @constraints: min=55, max=80, type=integer
+  # @unit: characters
 
 # -----------------------------------------------------------------------------
-# Touch Targets
+# Spacing Scale
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/PRESENTATION_SYSTEM.md
 
-touch:
-  min_target_px: 44
-  # @rationale: Apple HIG minimum touch target size; also matches WCAG 2.5.5
-  # @reference: https://developer.apple.com/design/human-interface-guidelines/buttons
-  # @constraints: min=44, max=64, type=integer
-  # @inviolable: true
+spacing:
+  base_unit_px: 8
+  # @rationale: 8px base unit aligns with most design systems and screen pixel densities
+  # @constraints: min=4, max=16, type=integer
+  # @unit: pixels
+
+  section_gap_px: 96
+  # @rationale: Generous section breathing room per L2 editorial aesthetic truth (12 × base)
+  # @constraints: min=48, max=128, type=integer
+  # @unit: pixels
+
+  section_internal_gap_px: 32
+  # @rationale: Between section heading and body content (4 × base)
+  # @constraints: min=16, max=48, type=integer
+  # @unit: pixels
+
+  horizontal_page_padding_px: 24
+  # @rationale: Minimum padding preventing content from touching viewport edges at any width
+  # @constraints: min=16, max=48, type=integer
+  # @unit: pixels
+
+# -----------------------------------------------------------------------------
+# Content Width
+# -----------------------------------------------------------------------------
+
+content_width:
+  max_page_width_px: 1200
+  # @rationale: Comfortable reading and interaction at common desktop widths; prevents excessive stretching
+  # @constraints: min=960, max=1440, type=integer
+  # @unit: pixels

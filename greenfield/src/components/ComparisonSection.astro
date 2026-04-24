@@ -1,72 +1,76 @@
 ---
-const withoutSpec = [
-  'Requirements live in Slack threads',
-  'Engineers make assumptions to fill gaps',
-  'Stakeholders review after code is written',
-  'Rework costs spike near launch',
-  'Tests are written after the fact — if at all',
-];
-
-const withSpec = [
-  'L1–L5 hierarchy is the single source of truth',
-  'Acceptance criteria are defined before coding',
-  'AI agents implement features from the spec directly',
-  'Tests are auto-generated from user stories',
-  'Validation runs continuously against live code',
-];
 ---
+
 <section
   data-test="comparison-section"
-  id="comparison"
-  class="py-20 px-4"
-  style="background-color: var(--color-bg);"
+  style="padding: 4rem 1.5rem; border-top: 1px solid var(--color-border);"
 >
-  <div class="section-container">
-    <h2 class="text-3xl font-bold text-center mb-4" style="color: var(--color-text);">
-      With and without a spec
+  <div style="max-width: 72rem; margin: 0 auto;">
+    <h2 style="font-family: Georgia, serif; font-size: clamp(1.375rem, 3vw, 2rem); font-weight: 400; color: var(--color-text-primary); margin-bottom: 0.75rem;">
+      The before and after
     </h2>
-    <p class="text-center text-lg mb-12 max-w-2xl mx-auto" style="color: var(--color-text-muted);">
-      The difference isn't just process — it's outcomes.
+    <p style="font-family: system-ui, sans-serif; font-size: 0.9375rem; color: var(--color-text-secondary); margin-bottom: 3rem; max-width: 40rem;">
+      The same feature — "User Notifications" — described two ways.
     </p>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <!-- Without spec -->
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: 1.5rem;">
+
+      <!-- Without RootSpec -->
       <div
         data-test="comparison-without"
-        class="rounded-xl p-8"
-        style="background-color: var(--color-card-bg); border: 1px solid #ef444433;"
+        style="background-color: var(--color-bg-surface); border: 1px solid var(--color-border); border-radius: 6px; padding: 1.75rem;"
       >
-        <div class="flex items-center gap-3 mb-6">
-          <span class="text-2xl">❌</span>
-          <h3 class="text-xl font-bold" style="color: #ef4444;">Without a spec</h3>
+        <div style="font-family: system-ui, sans-serif; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: 1rem;">
+          Without RootSpec
         </div>
-        <ul class="flex flex-col gap-3">
-          {withoutSpec.map((item) => (
-            <li class="flex items-start gap-3 text-sm" style="color: var(--color-text-muted);">
-              <span class="mt-0.5 shrink-0" style="color: #ef4444;">✗</span>
-              {item}
-            </li>
-          ))}
-        </ul>
+        <h3 style="font-family: system-ui, sans-serif; font-size: 0.9375rem; font-weight: 600; color: var(--color-text-primary); margin-bottom: 1rem;">
+          Slack thread from 3 months ago
+        </h3>
+        <div style="font-family: Georgia, serif; font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.7;">
+          <p style="margin-bottom: 0.75rem; padding: 0.75rem; background-color: var(--color-bg); border-radius: 4px; font-style: italic;">
+            "We need to add notifications. Users have been asking. Just do the basics — email when something happens. Should be quick."
+          </p>
+          <p style="margin-bottom: 0.75rem; font-size: 0.8125rem;">
+            <strong>Story (in Jira):</strong> "As a user, I want to receive notifications so that I know when things happen."
+          </p>
+          <p style="margin-bottom: 0.75rem; font-size: 0.8125rem; color: var(--color-text-secondary);">
+            <em>No acceptance criteria. No rationale. "Something happens" is undefined.
+            Three engineers interpret this differently. The feature ships with email-only,
+            no user controls, and no way to turn it off. Support tickets begin immediately.</em>
+          </p>
+          <p style="font-size: 0.8125rem; color: var(--color-text-secondary);">
+            Two months later: a re-spec, a rewrite, and a migration.
+          </p>
+        </div>
       </div>
-      <!-- With spec -->
+
+      <!-- With RootSpec -->
       <div
         data-test="comparison-with"
-        class="rounded-xl p-8"
-        style="background-color: var(--color-card-bg); border: 1px solid #22c55e33;"
+        style="background-color: var(--color-bg-surface); border: 1px solid var(--color-accent); border-radius: 6px; padding: 1.75rem;"
       >
-        <div class="flex items-center gap-3 mb-6">
-          <span class="text-2xl">✅</span>
-          <h3 class="text-xl font-bold" style="color: #22c55e;">With RootSpec</h3>
+        <div style="font-family: system-ui, sans-serif; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent); margin-bottom: 1rem;">
+          With RootSpec
         </div>
-        <ul class="flex flex-col gap-3">
-          {withSpec.map((item) => (
-            <li class="flex items-start gap-3 text-sm" style="color: var(--color-text-muted);">
-              <span class="mt-0.5 shrink-0" style="color: #22c55e;">✓</span>
-              {item}
-            </li>
-          ))}
-        </ul>
+        <h3 style="font-family: system-ui, sans-serif; font-size: 0.9375rem; font-weight: 600; color: var(--color-text-primary); margin-bottom: 1rem;">
+          User story from the spec
+        </h3>
+        <div style="font-family: 'Courier New', monospace; font-size: 0.8125rem; color: var(--color-text-code); line-height: 1.65; background-color: var(--color-bg); border-radius: 4px; padding: 1rem;">
+          <p style="margin-bottom: 0.5rem;"><strong>id:</strong> US-204</p>
+          <p style="margin-bottom: 0.5rem;"><strong>title:</strong> User controls notification preferences</p>
+          <p style="margin-bottom: 0.5rem;"><strong>pillar:</strong> User Autonomy (L1 Design Pillar 3)</p>
+          <p style="margin-bottom: 0.5rem;"><strong>given:</strong> user navigates to notification settings</p>
+          <p style="margin-bottom: 0.5rem;"><strong>when:</strong> user disables email alerts for comments</p>
+          <p style="margin-bottom: 0.5rem;"><strong>then:</strong></p>
+          <p style="padding-left: 1rem; margin-bottom: 0.25rem;">- no email is sent on subsequent comments</p>
+          <p style="padding-left: 1rem; margin-bottom: 0.25rem;">- in-app notification still appears</p>
+          <p style="padding-left: 1rem;">- preference persists across sessions</p>
+        </div>
+        <p style="font-family: system-ui, sans-serif; font-size: 0.8125rem; color: var(--color-text-secondary); margin-top: 0.75rem; line-height: 1.6;">
+          <em>Traceable to a design pillar. Acceptance criteria are testable. The story is the test.</em>
+        </p>
       </div>
+
     </div>
   </div>
 </section>
