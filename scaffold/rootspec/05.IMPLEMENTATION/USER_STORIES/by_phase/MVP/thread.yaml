@@ -20,7 +20,7 @@ acceptance_criteria:
       When I click on a post
       Then I see the full post detail page
     given:
-      - visit: '/'
+      - visit: '/demos/scaffold/'
     when:
       - click: { selector: '[data-test=post-link]' }
     then:
@@ -33,7 +33,7 @@ acceptance_criteria:
       When the page loads
       Then I see the post content, author info, like count, and repost count
     given:
-      - visit: '/post/p1'
+      - visit: '/demos/scaffold/post/p1'
     when: []
     then:
       - shouldExist: { selector: '[data-test=post-detail-content]' }
@@ -47,7 +47,7 @@ acceptance_criteria:
       When the page loads
       Then I see the replies listed below the main post
     given:
-      - visit: '/post/p1'
+      - visit: '/demos/scaffold/post/p1'
     when: []
     then:
       - shouldExist: { selector: '[data-test=post-replies]' }
@@ -59,7 +59,7 @@ acceptance_criteria:
       When the page loads
       Then I see the parent post displayed above the focal post
     given:
-      - visit: '/post/p9'
+      - visit: '/demos/scaffold/post/p9'
     when: []
     then:
       - shouldExist: { selector: '[data-test=parent-post]' }

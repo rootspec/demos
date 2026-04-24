@@ -30,7 +30,7 @@ acceptance_criteria:
   - id: AC-110-1
     title: Explore page displays trending tags
     given:
-      - visit: /explore
+      - visit: /demos/scaffold/explore
     then:
       - shouldExist:
           selector: '[data-test=tag-chip]'
@@ -38,7 +38,7 @@ acceptance_criteria:
   - id: AC-110-2
     title: Tags show their post count
     given:
-      - visit: /explore
+      - visit: /demos/scaffold/explore
     then:
       - shouldExist:
           selector: '[data-test=tag-post-count]'
@@ -54,7 +54,7 @@ acceptance_criteria:
   - id: AC-111-1
     title: Clicking a tag filters the visible posts
     given:
-      - visit: /explore
+      - visit: /demos/scaffold/explore
     when:
       - click:
           selector: '[data-test=tag-chip]'
@@ -64,7 +64,7 @@ acceptance_criteria:
   - id: AC-111-2
     title: Active tag is visually indicated
     given:
-      - visit: /explore
+      - visit: /demos/scaffold/explore
     when:
       - click:
           selector: '[data-test=tag-chip]'
@@ -74,7 +74,7 @@ acceptance_criteria:
   - id: AC-111-3
     title: Clicking active tag clears the filter
     given:
-      - visit: /explore
+      - visit: /demos/scaffold/explore
     when:
       - click:
           selector: '[data-test=tag-chip]'
@@ -94,7 +94,7 @@ acceptance_criteria:
   - id: AC-112-1
     title: Explore page shows suggested users with follow buttons
     given:
-      - visit: /explore
+      - visit: /demos/scaffold/explore
     then:
       - shouldExist:
           selector: '[data-test=suggested-user]'
@@ -104,7 +104,7 @@ acceptance_criteria:
   - id: AC-112-2
     title: Following a user from explore updates the button
     given:
-      - visit: /explore
+      - visit: /demos/scaffold/explore
     when:
       - click:
           selector: '[data-test=follow-button]'
@@ -123,7 +123,7 @@ acceptance_criteria:
   - id: AC-101-1
     title: Home feed displays posts
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=post-item]'
@@ -131,7 +131,7 @@ acceptance_criteria:
   - id: AC-101-2
     title: Posts show author handle and display name
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=post-author-name]'
@@ -141,7 +141,7 @@ acceptance_criteria:
   - id: AC-101-3
     title: Posts show engagement counts
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=post-like-count]'
@@ -159,7 +159,7 @@ acceptance_criteria:
   - id: AC-102-1
     title: Like button toggles liked state
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=like-button]'
@@ -169,7 +169,7 @@ acceptance_criteria:
   - id: AC-102-2
     title: Like count increments when liked
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=like-button]'
@@ -179,7 +179,7 @@ acceptance_criteria:
   - id: AC-102-3
     title: Like toggles off when clicked again
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=like-button]'
@@ -199,7 +199,7 @@ acceptance_criteria:
   - id: AC-103-1
     title: Bookmark button toggles bookmarked state
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=bookmark-button]'
@@ -217,7 +217,7 @@ acceptance_criteria:
   - id: AC-104-1
     title: Load more button exists when more posts are available
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=load-more-button]'
@@ -225,7 +225,7 @@ acceptance_criteria:
   - id: AC-104-2
     title: Clicking load more reveals additional posts
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=load-more-button]'
@@ -243,7 +243,7 @@ acceptance_criteria:
   - id: AC-105-1
     title: Compose button opens the composer
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=compose-button]'
@@ -253,7 +253,7 @@ acceptance_criteria:
   - id: AC-105-2
     title: Submitting a post adds it to the feed
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=compose-button]'
@@ -277,7 +277,7 @@ acceptance_criteria:
   - id: AC-113-1
     title: Theme toggle button is visible in the header
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=theme-toggle]'
@@ -285,7 +285,7 @@ acceptance_criteria:
   - id: AC-113-2
     title: Clicking the theme toggle switches the active theme
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=theme-toggle]'
@@ -303,7 +303,7 @@ acceptance_criteria:
   - id: AC-114-1
     title: Meta banner is visible on the home feed
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=meta-banner]'
@@ -311,7 +311,7 @@ acceptance_criteria:
   - id: AC-114-2
     title: Meta banner contains links to spec and seed
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=meta-banner-spec-link]'
@@ -321,7 +321,7 @@ acceptance_criteria:
   - id: AC-114-3
     title: Meta banner is visible on the explore page
     given:
-      - visit: /explore
+      - visit: /demos/scaffold/explore
     then:
       - shouldExist:
           selector: '[data-test=meta-banner]'
@@ -329,7 +329,7 @@ acceptance_criteria:
   - id: AC-114-4
     title: Meta banner is visible on the search page
     given:
-      - visit: /search
+      - visit: /demos/scaffold/search
     then:
       - shouldExist:
           selector: '[data-test=meta-banner]'
@@ -345,7 +345,7 @@ acceptance_criteria:
   - id: AC-115-1
     title: Nav shows RootFeed brand and version
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=nav-brand]'
@@ -355,7 +355,7 @@ acceptance_criteria:
   - id: AC-115-2
     title: Nav links to Home, Explore, and Search
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=nav-home]'
@@ -367,7 +367,7 @@ acceptance_criteria:
   - id: AC-115-3
     title: Footer shows RootSpec attribution
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     then:
       - shouldExist:
           selector: '[data-test=footer]'
@@ -385,7 +385,7 @@ acceptance_criteria:
   - id: AC-106-1
     title: Clicking an author name navigates to their profile
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=post-author-name]'
@@ -395,7 +395,7 @@ acceptance_criteria:
   - id: AC-106-2
     title: Profile page shows user bio and follow counts
     given:
-      - visit: /profile/alice.dev
+      - visit: /demos/scaffold/profile/alice.dev
     then:
       - shouldExist:
           selector: '[data-test=profile-bio]'
@@ -407,7 +407,7 @@ acceptance_criteria:
   - id: AC-106-3
     title: Profile page shows user posts
     given:
-      - visit: /profile/alice.dev
+      - visit: /demos/scaffold/profile/alice.dev
     then:
       - shouldExist:
           selector: '[data-test=post-item]'
@@ -423,7 +423,7 @@ acceptance_criteria:
   - id: AC-107-1
     title: Follow button appears on profile pages
     given:
-      - visit: /profile/alice.dev
+      - visit: /demos/scaffold/profile/alice.dev
     then:
       - shouldExist:
           selector: '[data-test=follow-button]'
@@ -431,7 +431,7 @@ acceptance_criteria:
   - id: AC-107-2
     title: Clicking follow changes button to unfollow
     given:
-      - visit: /profile/alice.dev
+      - visit: /demos/scaffold/profile/alice.dev
     when:
       - click:
           selector: '[data-test=follow-button]'
@@ -442,7 +442,7 @@ acceptance_criteria:
   - id: AC-107-3
     title: Following a user increments their follower count
     given:
-      - visit: /profile/alice.dev
+      - visit: /demos/scaffold/profile/alice.dev
     when:
       - click:
           selector: '[data-test=follow-button]'
@@ -452,7 +452,7 @@ acceptance_criteria:
   - id: AC-107-4
     title: Clicking unfollow returns button to follow state
     given:
-      - visit: /profile/alice.dev
+      - visit: /demos/scaffold/profile/alice.dev
     when:
       - click:
           selector: '[data-test=follow-button]'
@@ -473,7 +473,7 @@ acceptance_criteria:
   - id: AC-109-1
     title: Search page has a text input
     given:
-      - visit: /search
+      - visit: /demos/scaffold/search
     then:
       - shouldExist:
           selector: '[data-test=search-input]'
@@ -481,7 +481,7 @@ acceptance_criteria:
   - id: AC-109-2
     title: Typing a query shows matching posts
     given:
-      - visit: /search
+      - visit: /demos/scaffold/search
     when:
       - fill:
           selector: '[data-test=search-input]'
@@ -492,7 +492,7 @@ acceptance_criteria:
   - id: AC-109-3
     title: No results message shown for unmatched query
     given:
-      - visit: /search
+      - visit: /demos/scaffold/search
     when:
       - fill:
           selector: '[data-test=search-input]'
@@ -503,7 +503,7 @@ acceptance_criteria:
   - id: AC-109-4
     title: Empty query shows no results
     given:
-      - visit: /search
+      - visit: /demos/scaffold/search
     then:
       - shouldExist:
           selector: '[data-test=search-empty-default]'
@@ -519,7 +519,7 @@ acceptance_criteria:
   - id: AC-108-1
     title: Clicking a post navigates to its detail view
     given:
-      - visit: /
+      - visit: /demos/scaffold/
     when:
       - click:
           selector: '[data-test=post-link]'
@@ -529,7 +529,7 @@ acceptance_criteria:
   - id: AC-108-2
     title: Post detail shows author, content, and engagement
     given:
-      - visit: /post/p1
+      - visit: /demos/scaffold/post/p1
     then:
       - shouldExist:
           selector: '[data-test=post-detail-content]'
@@ -541,7 +541,7 @@ acceptance_criteria:
   - id: AC-108-3
     title: Post thread shows replies
     given:
-      - visit: /post/p1
+      - visit: /demos/scaffold/post/p1
     then:
       - shouldExist:
           selector: '[data-test=post-replies]'
@@ -549,7 +549,7 @@ acceptance_criteria:
   - id: AC-108-4
     title: Reply post shows parent context
     given:
-      - visit: /post/p9
+      - visit: /demos/scaffold/post/p9
     then:
       - shouldExist:
           selector: '[data-test=parent-post]'

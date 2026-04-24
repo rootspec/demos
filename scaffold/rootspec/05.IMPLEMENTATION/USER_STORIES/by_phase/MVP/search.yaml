@@ -20,7 +20,7 @@ acceptance_criteria:
       When the page loads
       Then I see a search input field
     given:
-      - visit: '/search'
+      - visit: '/demos/scaffold/search'
     when: []
     then:
       - shouldExist: { selector: '[data-test=search-input]' }
@@ -32,7 +32,7 @@ acceptance_criteria:
       When I type a keyword that exists in a post
       Then matching posts appear in the results
     given:
-      - visit: '/search'
+      - visit: '/demos/scaffold/search'
     when:
       - fill: { selector: '[data-test=search-input]', value: 'kubernetes' }
     then:
@@ -45,7 +45,7 @@ acceptance_criteria:
       When I type a query that matches no posts
       Then a no results message is shown
     given:
-      - visit: '/search'
+      - visit: '/demos/scaffold/search'
     when:
       - fill: { selector: '[data-test=search-input]', value: 'xyzzy-no-match-9999' }
     then:
@@ -58,7 +58,7 @@ acceptance_criteria:
       When the input is empty
       Then no results are shown
     given:
-      - visit: '/search'
+      - visit: '/demos/scaffold/search'
     when: []
     then:
       - shouldExist: { selector: '[data-test=search-empty-default]' }

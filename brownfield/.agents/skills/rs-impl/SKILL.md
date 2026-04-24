@@ -13,6 +13,8 @@ This is a non-interactive skill. Do not ask the developer questions during imple
 
 **HARD RULE — package.json:** You MUST NOT write or modify the `dependencies` or `devDependencies` fields of package.json. EVER. Not when creating it, not when updating it, not when installing a framework. Use `npm install <pkg1> <pkg2> ...` to add packages — npm writes the deps. You may only edit the `scripts` field directly. If you need a framework, run one command: `npm install astro @astrojs/react react react-dom tailwindcss` (or equivalent). Never use the Write tool on dependencies.
 
+**HARD RULE — peer-dep discipline:** When you install a framework, install ONLY the framework, the framework's intentional integrations, and packages your application code directly imports. Do NOT independently install tooling the framework already pulls in transitively (its bundler, compiler, test runner, CSS processor, etc.). The framework's peer-dep constraints are the source of truth for those versions; independently pinning a major version causes upgrade-compatibility breakage. Concrete failure mode: a project pins `vite ^7` alongside a framework that owns Vite via peer-dep on `^5`, and the next framework upgrade silently breaks because npm picks the wrong Vite. If you think you need a specific version of framework-owned tooling, the framework choice is wrong — not the peer-dep.
+
 ## Step 1: Assess (~2 turns)
 
 Front-load ALL reading in a single script call. Find the scripts directory first — look for `.agents/skills/rs-shared/scripts/` relative to the project root, or search for `assess.sh` under the skills directory.
@@ -72,7 +74,7 @@ This creates the test file with all stories embedded as YAML string literals usi
 - `loginAs` steps → implement the task body in `cypress.config.ts`
 - `seedItem` steps → implement the task body in `cypress.config.ts`
 - Custom DSL steps not in the core set → extend `steps.ts` and `schema.ts`
-- Framework-specific `visit` behavior (e.g., hydration waits for React islands in Astro)
+- Readiness signal wiring — every page the tests visit must set `<body data-ready="true">` once its interactive handlers are attached. See `../rs-shared/fragments/framework-rules.md` → Interactive Readiness. How you satisfy this is implementation-specific (defer rendering until interactive, or set the attribute after client wiring completes) and must be recorded in `CONVENTIONS/technical.md`.
 
 Write all customizations in a single multi-file operation.
 
@@ -84,6 +86,8 @@ Start the dev server AND create conventions if needed in the same turn:
 ./scripts/dev.sh start 2>/dev/null || nohup npm run dev > /dev/null 2>&1 &
 sleep 3
 ```
+
+The dev server is for fast iteration (`npx cypress run` against it during the implement loop). The project's canonical test runner is `./scripts/test.sh`, which respects `.rootspec.json` `prerequisites.testMode` (default `"preview"`: build + preview server). The pre-commit hook calls test.sh, so the gate is preview-mode regardless of how you iterate. Don't change `testMode` to `"dev"` to make tests pass — fix the impl so it passes against a built artifact.
 
 If `rootspec/CONVENTIONS/` doesn't exist, create both `technical.md` and `visual.md` using parallel Write calls in this same turn. Derive from the spec, detected framework, and existing source code. For brownfield projects (existing code, no prior conventions), audit the codebase and document observed patterns — stack, file organization, styling approach, API patterns, component structure. Use `## Heading` sections with `- **Label:** value` entries.
 
@@ -150,6 +154,8 @@ This is mechanical — add the type, add the implementation skeleton. Do it once
 #### Phase A: Build a batch
 
 Pick 2-4 related stories. Write all their code + test YAML in as few turns as possible using parallel Write calls. Every `data-test` attribute in the preflight's `SELECTORS_NEEDED` list must appear in your component code.
+
+Every route in `ROUTES_NEEDED` must set `<body data-ready="true">` when its interactive handlers are attached — the shared `visit` step waits for this attribute. Pick a single mechanism that fits the rendering stack (e.g., effect on mount, post-hydration callback, SSR-then-client hook, or unconditional set for static pages) and apply it uniformly. Record the chosen mechanism in `CONVENTIONS/technical.md` so every subsequent route follows it.
 
 #### Phase B: Test targeted stories
 
