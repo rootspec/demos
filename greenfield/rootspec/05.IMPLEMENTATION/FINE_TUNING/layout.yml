@@ -1,58 +1,31 @@
 # =============================================================================
 # LEVEL 5: FINE TUNING - Layout System
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-23T00:00:00Z
+# @last_updated: 2026-04-25T00:00:00Z
 # @status: draft
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Responsive Breakpoints
+# Base Path
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md, 04.SYSTEMS/PRESENTATION_SYSTEM.md
+
+base_path: '/demos/greenfield/'
+# @rationale: Canonical deployment path on GitHub Pages; same in all environments
+# @inviolable: true
+# @spec_source: 02.TRUTHS.md — Base path consistency commitment
+
+# -----------------------------------------------------------------------------
+# Breakpoints
+# -----------------------------------------------------------------------------
 
 breakpoints:
-  mobile_max: 767
-  # @rationale: Standard mobile breakpoint; covers all phones in portrait and most in landscape
-  # @constraints: type=integer
+  mobile_max_px: 767
+  # @rationale: Standard md breakpoint; below this navigation collapses and
+  #   comparison panels stack vertically
+  # @constraints: min=640, max=900, type=integer
 
-  tablet_max: 1023
-  # @rationale: Covers tablets and small laptops
-  # @constraints: type=integer
-
-  desktop_min: 1024
-  # @rationale: Full layout begins at 1024px
-  # @constraints: type=integer
-
-# -----------------------------------------------------------------------------
-# Prose and Reading Width
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/PRESENTATION_SYSTEM.md
-
-typography:
-  max_prose_width_ch: 72
-  # @rationale: 60-75 characters is the accepted optimal line length for reading
-  # @reference: Robert Bringhurst, The Elements of Typographic Style
-  # @constraints: min=50, max=90, type=integer
-
-  body_size_px: 18
-  # @rationale: 18px is comfortable for long-form reading; 16px is minimum, 18px is editorial standard
-  # @constraints: min=16, max=22, type=integer
-  # @reference: L2 Truths - typography is the primary design medium
-
-  base_line_height: 1.6
-  # @rationale: 1.6 provides comfortable leading for serif body text at 18px
-  # @constraints: min=1.4, max=1.8, type=float
-
-# -----------------------------------------------------------------------------
-# Touch Targets
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/PRESENTATION_SYSTEM.md
-
-touch:
-  min_target_px: 44
-  # @rationale: Apple HIG minimum touch target size; also matches WCAG 2.5.5
-  # @reference: https://developer.apple.com/design/human-interface-guidelines/buttons
-  # @constraints: min=44, max=64, type=integer
-  # @inviolable: true
+  desktop_min_px: 768
+  # @rationale: Paired with mobile_max_px; at this width two-column layouts activate
+  # @constraints: min=641, max=901, type=integer

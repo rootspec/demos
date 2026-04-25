@@ -1,46 +1,24 @@
 ---
-const problems = [
-  {
-    icon: '🔀',
-    title: 'Misaligned teams',
-    desc: 'Developers, designers, and stakeholders interpret requirements differently — causing rework and frustration.',
-  },
-  {
-    icon: '🎯',
-    title: 'Scope drift',
-    desc: 'Without a shared spec, features grow organically. Deadlines slip. Priorities shift. Goals blur.',
-  },
-  {
-    icon: '🧱',
-    title: 'Assumption-driven builds',
-    desc: 'Engineers fill gaps with guesses. Products ship features nobody asked for and miss the ones that matter.',
-  },
-];
 ---
-<section
-  data-test="problem-section"
-  id="problem"
-  class="py-20 px-4"
-  style="background-color: var(--color-surface);"
->
-  <div class="section-container">
-    <h2 class="text-3xl font-bold text-center mb-4" style="color: var(--color-text);">
-      The cost of building without a spec
+
+<section id="problem" style="padding: var(--space-2xl) 1.5rem; background-color: var(--color-surface); border-top: 1px solid var(--color-border);">
+  <div style="max-width: 780px; margin: 0 auto;">
+    <h2 style="font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 1.25rem;">
+      The Problem
     </h2>
-    <p class="text-center text-lg mb-12 max-w-2xl mx-auto" style="color: var(--color-text-muted);">
-      Most software projects fail not because of bad engineers, but because of unclear requirements.
-    </p>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {problems.map((p) => (
-        <div
-          class="rounded-xl p-6"
-          style="background-color: var(--color-card-bg); border: 1px solid var(--color-card-border);"
-        >
-          <div class="text-4xl mb-4">{p.icon}</div>
-          <h3 class="text-xl font-semibold mb-2" style="color: var(--color-text);">{p.title}</h3>
-          <p style="color: var(--color-text-muted);">{p.desc}</p>
-        </div>
-      ))}
+    <h3 style="font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(1.5rem, 3.5vw, 2.25rem); font-weight: 400; line-height: 1.25; color: var(--color-text-primary); margin-bottom: 1.5rem;">
+      Spec drift starts at the source and compounds at every step.
+    </h3>
+    <div style="font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.75; color: var(--color-text-secondary);">
+      <p style="margin-bottom: 1.25rem;">
+        Most development processes treat the specification as a starting artifact — written once, then abandoned as code takes over. By the time features ship, the code reflects what was easy to build, not what was originally intended.
+      </p>
+      <p style="margin-bottom: 1.25rem;">
+        Adding AI to a broken process doesn't fix it. It accelerates it. Faster drift is still drift.
+      </p>
+      <p>
+        Test-driven and behavior-driven approaches tried to solve this. They work — when someone actually uses them. But writing pedantic tests by hand is tedious. Maintaining spec documents that nobody reads is worse. LLMs remove the tedium; RootSpec removes the drift.
+      </p>
     </div>
   </div>
 </section>

@@ -1,177 +1,105 @@
 # =============================================================================
-# USER STORY: Hierarchy Explorer
+# USER STORY: Hierarchy Explorer - Expand a Level
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: EXPLORATION
-# @systems: [INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: EXPLORING
+# @systems: [INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
 
 id: US-004
-title: User can explore the five-level hierarchy interactively
+title: Visitor expands a hierarchy level to see its purpose and example content
 
 acceptance_criteria:
   - id: AC-004-1
-    title: All five hierarchy levels are visible
+    title: Hierarchy Explorer is present on the page
     narrative: |
-      Given I visit the site and scroll to the hierarchy section
-      When the section loads
-      Then I see five level cards for L1 through L5
+      Given I visit the site
+      When I scroll to the Hierarchy Explorer section
+      Then I should see the five hierarchy levels
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-1]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-2]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-3]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-4]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-5]' }
 
   - id: AC-004-2
-    title: Clicking a level card expands it to show content
+    title: Clicking a level reveals expanded content
     narrative: |
-      Given I see the hierarchy explorer with all five levels collapsed
+      Given I am viewing the Hierarchy Explorer
       When I click on Level 1
-      Then Level 1 expands to show its description and example content
+      Then I should see the expanded content for Level 1
     given:
       - visit: '/demos/greenfield/'
     when:
       - click: { selector: '[data-test=hierarchy-level-1]' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded="true"]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-1-expanded]' }
 
   - id: AC-004-3
-    title: Clicking an expanded level collapses it
+    title: Expanding a different level collapses the previous
     narrative: |
-      Given Level 1 is expanded in the hierarchy explorer
-      When I click Level 1 again
-      Then Level 1 collapses and its content is hidden
+      Given I have expanded Level 1 in the Hierarchy Explorer
+      When I click on Level 2
+      Then Level 2 should be expanded and Level 1 should be collapsed
     given:
       - visit: '/demos/greenfield/'
     when:
       - click: { selector: '[data-test=hierarchy-level-1]' }
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+      - click: { selector: '[data-test=hierarchy-level-2]' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded="false"]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-2-expanded]' }
 
 ---
 # =============================================================================
-# USER STORY: Spec Wizard
+# USER STORY: Spec Wizard - Complete All Steps
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: EXPLORATION
-# @systems: [INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: EXPLORING
+# @systems: [INTERACTIVE_SYSTEM, CONTENT_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
 
 id: US-005
-title: User can generate a skeleton spec from a one-line product idea
+title: Visitor completes the Spec Wizard and receives a skeleton spec output
 
 acceptance_criteria:
   - id: AC-005-1
-    title: Wizard is present and shows Step 1 on load
+    title: Spec Wizard is present on the page
     narrative: |
-      Given I visit the site and scroll to the wizard section
-      When the section loads
-      Then I see the spec wizard showing Step 1 with a product idea input
+      Given I visit the site
+      When I scroll to the Spec Wizard section
+      Then I should see the wizard with Step 1 active
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=spec-wizard]' }
       - shouldExist: { selector: '[data-test=wizard-step-1]' }
-      - shouldExist: { selector: '[data-test=wizard-idea-input]' }
 
   - id: AC-005-2
-    title: User can advance through all three steps
+    title: Entering a product idea and advancing shows Step 2
     narrative: |
-      Given I am on Step 1 of the wizard
+      Given I am on Step 1 of the Spec Wizard
       When I enter a product idea and click Next
-      Then I see Step 2 for mission selection
+      Then I should see Step 2
     given:
       - visit: '/demos/greenfield/'
     when:
-      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A tool to help developers write better commit messages' }
+      - fill: { selector: '[data-test=wizard-product-idea]', value: 'A tool for tracking reading habits' }
       - click: { selector: '[data-test=wizard-next]' }
     then:
       - shouldExist: { selector: '[data-test=wizard-step-2]' }
 
   - id: AC-005-3
-    title: Completing all steps generates a skeleton spec
+    title: Empty product idea prevents advancing
     narrative: |
-      Given I have completed all three wizard steps
-      When the wizard reaches the result step
-      Then I see a skeleton spec showing L1 through L3 populated with my inputs
+      Given I am on Step 1 of the Spec Wizard
+      When I click Next without entering a product idea
+      Then I should see a validation error
     given:
       - visit: '/demos/greenfield/'
     when:
-      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A tool to help teams avoid scope drift' }
       - click: { selector: '[data-test=wizard-next]' }
-      - click: { selector: '[data-test=wizard-mission-option]' }
-      - click: { selector: '[data-test=wizard-next]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-next]' }
-      - fill: { selector: '[data-test=wizard-interaction-input]', value: 'User runs /rs-spec and answers interview questions' }
-      - click: { selector: '[data-test=wizard-generate]' }
     then:
-      - shouldExist: { selector: '[data-test=wizard-result]' }
-      - shouldExist: { selector: '[data-test=wizard-result-l1]' }
-
----
-# =============================================================================
-# USER STORY: Comparison View
-# =============================================================================
-# @spec_version: 7.3.7
-# @phase: MVP
-# @journey: EXPLORATION
-# @systems: [INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
-
-id: US-006
-title: User can see a before/after comparison of spec vs no spec
-
-acceptance_criteria:
-  - id: AC-006-1
-    title: Comparison section shows both panels
-    narrative: |
-      Given I visit the site and scroll to the comparison section
-      When the section loads
-      Then I see content comparing the without-spec and with-spec approaches
-    given:
-      - visit: '/demos/greenfield/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=comparison-section]' }
-      - shouldExist: { selector: '[data-test=comparison-without]' }
-      - shouldExist: { selector: '[data-test=comparison-with]' }
-
----
-# =============================================================================
-# USER STORY: Responsive Layout
-# =============================================================================
-# @spec_version: 7.3.7
-# @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [LAYOUT_SYSTEM, PRESENTATION_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
-
-id: US-007
-title: Site is usable on mobile devices
-
-acceptance_criteria:
-  - id: AC-007-1
-    title: Site renders without horizontal overflow on mobile viewport
-    narrative: |
-      Given I visit the site on a mobile viewport
-      When the page loads
-      Then the content fits within the viewport without horizontal scrolling
-    given:
-      - visit: '/demos/greenfield/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=hero]' }
+      - shouldExist: { selector: '[data-test=wizard-error]' }

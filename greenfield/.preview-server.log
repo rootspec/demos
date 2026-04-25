@@ -1,0 +1,7 @@
+
+> rootspec-project@0.1.0 preview
+> astro preview
+
+[42m[1m astro [22m[49m [32mv6.1.9[39m [2mready in[22m 13 [2mms[22m
+[2m┃[22m Local    [36mhttp://localhost:3000/demos/greenfield[39m
+[2m┃[22m Network  [36mhttp://10.1.0.220:3000/demos/greenfield[39m

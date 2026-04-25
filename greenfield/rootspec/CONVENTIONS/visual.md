@@ -1,49 +1,47 @@
-## Color system
-- **Primary:** `#6d28d9` (violet-700) — buttons, links, accents
-- **Primary hover:** `#5b21b6` (violet-800)
-- **Accent:** `#7c3aed` / `#a78bfa` (dark/light mode)
-- **Meta banner background:** `#1e1b4b` (indigo-950)
-- **Meta banner text:** `#e0e7ff` (indigo-100)
-- All semantic colors defined as CSS variables in `src/styles/global.css`
-
-## Light theme tokens
-- `--color-bg`: `#ffffff`
-- `--color-text`: `#0f172a`
-- `--color-text-muted`: `#64748b`
-- `--color-border`: `#e2e8f0`
-- `--color-surface`: `#f8fafc`
-- `--color-card-bg`: `#ffffff`
-
-## Dark theme tokens
-- `--color-bg`: `#0f172a`
-- `--color-text`: `#f1f5f9`
-- `--color-text-muted`: `#94a3b8`
-- `--color-border`: `#1e293b`
-- `--color-surface`: `#1e293b`
-- `--color-card-bg`: `#1e293b`
-
 ## Typography
-- **Font:** `ui-sans-serif, system-ui, -apple-system, sans-serif`
-- **Headings:** `font-extrabold` or `font-bold` with Tailwind classes
-- **Hero h1:** `text-5xl font-extrabold`
-- **Section h2:** `text-3xl font-bold`
-- **Card h3:** `text-xl font-semibold` or `text-lg font-semibold`
-- **Body:** default size, `var(--color-text-muted)` for secondary text
 
-## Layout
-- **Max content width:** 1100px (`section-container` class)
-- **Section padding:** `py-20 px-4` (standard), `py-24` (hero/CTA)
-- **Card border-radius:** `rounded-xl`
-- **Grid:** 1-column mobile, 2–4 column desktop with Tailwind `grid` utilities
+- **Body / prose:** Source Serif 4 (400, 400i, 600) — all running text, Author's Notes, Problem/How It Works
+- **UI / labels:** Inter (400, 500, 600) — navigation, section labels, buttons, meta-banner
+- **Code / commands:** JetBrains Mono (400, 500) — skill names, code examples, version badge
 
-## Theming
-- Theme stored in `localStorage` under key `rootspec-theme`
-- Applied as `data-theme="light"` or `data-theme="dark"` on `<html>`
-- Default: `light`
-- Toggle button in header with sun/moon icon swap
+## Color Tokens
 
-## Component visual patterns
-- Cards: `border: 1px solid var(--color-card-border)`, `background: var(--color-card-bg)`, `rounded-xl`
-- Buttons: solid primary for CTAs, ghost border for secondary
-- Code/version labels: `font-mono`, `var(--color-surface-alt)` background
-- Meta banner: full-width strip, dark indigo, small text with links
+| Token | Light | Dark |
+|-------|-------|------|
+| `--color-bg` | `#f8f7f4` | `#141310` |
+| `--color-surface` | `#f0ede8` | `#1e1c18` |
+| `--color-text-primary` | `#1a1916` | `#e8e5df` |
+| `--color-text-secondary` | `#6b6760` | `#928f88` |
+| `--color-accent` | `#2d5a8e` | `#7aa8d8` |
+| `--color-border` | `#d4d0ca` | `#2e2c27` |
+| `--color-banner-bg` | `#eef2f8` | `#1a2030` |
+
+## Spacing Scale
+
+- `--space-xs`: 0.25rem
+- `--space-sm`: 0.5rem
+- `--space-md`: 1rem
+- `--space-lg`: 1.5rem
+- `--space-xl`: 3rem
+- `--space-2xl`: 5rem
+
+## Motion
+
+- **Transition duration:** 200ms expand, 150ms collapse (hierarchy explorer)
+- **Easing:** ease-out
+- **Theme switch:** Instant (0ms transition)
+- No spring physics, no parallax, no scroll animations
+
+## Theme
+
+- **Default:** Light
+- **Toggle:** Header button with `data-test="theme-toggle"`
+- **Storage key:** `rootspec-theme` (localStorage)
+- **HTML attribute:** `data-theme="dark"` on `<html>` element
+
+## Anti-patterns
+
+- No gradients, glassmorphism, or glow effects
+- No decorative color use
+- No hero sections with massive gradient text
+- No stat counters or testimonial cards

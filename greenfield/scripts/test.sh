@@ -3,6 +3,12 @@
 # Override via .rootspec.json prerequisites.testMode = "dev".
 set -euo pipefail
 
+# Pre-flight: detect shallow cy.appReady() against deferred-execution boundaries.
+# Hard-fails before tests start so flake doesn't masquerade as a green run.
+if [[ -x ./scripts/check-app-ready.sh ]]; then
+  ./scripts/check-app-ready.sh .
+fi
+
 MODE=$(grep -o '"testMode"[^,}]*' .rootspec.json 2>/dev/null \
   | sed -E 's/.*"testMode"[[:space:]]*:[[:space:]]*"([^"]*)".*/\1/')
 MODE="${MODE:-preview}"
@@ -12,7 +18,6 @@ if [[ "$MODE" == "dev" ]]; then
   trap "./scripts/dev.sh stop" EXIT
   export CYPRESS_BASE_URL="$(./scripts/dev.sh url)"
 else
-  # preview mode (default): build + preview
   npm run build
   ./scripts/preview.sh start
   trap "./scripts/preview.sh stop" EXIT

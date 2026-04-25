@@ -1,31 +1,31 @@
 ---
-// MetaBanner — shown above everything else on every page load
-const SPEC_URL = 'https://github.com/anthropics/claude-code/tree/main/demos/greenfield/rootspec';
-const SEED_URL = 'https://github.com/anthropics/claude-code/tree/main/demos/greenfield/SEED.md';
 ---
+
 <div
   data-test="meta-banner"
-  style="background-color: var(--color-meta-bg); color: var(--color-meta-text);"
-  class="w-full text-sm py-2 px-4 flex flex-wrap gap-x-4 gap-y-1 justify-center items-center"
+  style="background-color: var(--color-banner-bg); border-bottom: 1px solid var(--color-border); padding: 0.65rem 1.5rem;"
 >
-  <span class="opacity-75">Built with RootSpec —</span>
-  <a
-    data-test="spec-link"
-    href={SPEC_URL}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="underline hover:opacity-90 transition-opacity font-medium"
-  >
-    view spec
-  </a>
-  <span class="opacity-40">·</span>
-  <a
-    data-test="seed-link"
-    href={SEED_URL}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="underline hover:opacity-90 transition-opacity font-medium"
-  >
-    view seed
-  </a>
+  <div style="max-width: 1100px; margin: 0 auto; font-size: 0.8125rem; color: var(--color-text-secondary); display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+    <span>
+      This site was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups. The spec, the code, and the tests were produced by running four commands.
+    </span>
+    <span style="display: flex; gap: 0.75rem; flex-shrink: 0;">
+      <a
+        href="https://github.com/rootspec/demos/tree/main/greenfield/rootspec"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="color: var(--color-accent); font-weight: 500;"
+      >
+        View the spec →
+      </a>
+      <a
+        href="https://github.com/rootspec/demos/tree/main/greenfield/SEED.md"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="color: var(--color-accent); font-weight: 500;"
+      >
+        View the seed →
+      </a>
+    </span>
+  </div>
 </div>

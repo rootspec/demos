@@ -6,6 +6,7 @@ const StepSchema = z.union([
   z.object({ fill: z.object({ selector: z.string(), value: z.string() }) }),
   z.object({ loginAs: z.string() }),
   z.object({ seedItem: z.record(z.unknown()) }),
+  z.object({ awaitReady: z.literal(true) }),
   z.object({ shouldContain: z.object({ selector: z.string(), text: z.string() }) }),
   z.object({ shouldExist: z.object({ selector: z.string() }) }),
 ]);
