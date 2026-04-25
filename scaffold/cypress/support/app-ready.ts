@@ -25,16 +25,8 @@ declare global {
   }
 }
 
-// STUB IMPLEMENTATION - CUSTOMIZE FOR YOUR APPLICATION
 Cypress.Commands.add('appReady', () => {
-  throw new Error(
-    'cy.appReady() is not implemented. ' +
-    'Customize cypress/support/app-ready.ts for your application:\n' +
-    '- Static sites: return cy.get("body")\n' +
-    '- React apps: wait for hydration markers\n' +
-    '- Data-driven apps: wait for initial data load\n' +
-    'Document your chosen approach in CONVENTIONS/technical.md'
-  )
+  cy.get('body')
 })
 
 export {}

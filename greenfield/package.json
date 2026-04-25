@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "./scripts/dev.sh start",
+    "dev": "astro dev --port 3000",
     "dev:start": "./scripts/dev.sh start",
     "dev:stop": "./scripts/dev.sh stop",
     "dev:restart": "./scripts/dev.sh restart",
