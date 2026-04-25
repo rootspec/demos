@@ -22,14 +22,6 @@ export function runAssertionSteps(steps: Step[]) {
   }
 }
 
-// Combines two contracts:
-// 1. baseUrl must be host:port only — if it carries a path AND the visit
-//    target starts with that path, the runner concatenates them into a 404
-//    like /sub/path/sub/path/. Throws a clear error rather than silently
-//    normalizing — keeps the contract visible to maintainers.
-// 2. After visit, wait for app readiness via cy.appReady(). What 'ready' means
-//    is project-defined in cypress/support/app-ready.ts. The framework makes
-//    no claim about HOW the app signals readiness — only that it must.
 function safeVisit(target: string) {
   const baseUrl = (Cypress.config('baseUrl') || '').replace(/\/+$/, '');
   let basePath = '';

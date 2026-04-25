@@ -1,24 +1,16 @@
 ---
 ---
-
-<section id="problem" style="padding: var(--space-2xl) 1.5rem; background-color: var(--color-surface); border-top: 1px solid var(--color-border);">
-  <div style="max-width: 780px; margin: 0 auto;">
-    <h2 style="font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 1.25rem;">
-      The Problem
-    </h2>
-    <h3 style="font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(1.5rem, 3.5vw, 2.25rem); font-weight: 400; line-height: 1.25; color: var(--color-text-primary); margin-bottom: 1.5rem;">
-      Spec drift starts at the source and compounds at every step.
-    </h3>
-    <div style="font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.75; color: var(--color-text-secondary);">
-      <p style="margin-bottom: 1.25rem;">
-        Most development processes treat the specification as a starting artifact — written once, then abandoned as code takes over. By the time features ship, the code reflects what was easy to build, not what was originally intended.
-      </p>
-      <p style="margin-bottom: 1.25rem;">
-        Adding AI to a broken process doesn't fix it. It accelerates it. Faster drift is still drift.
-      </p>
-      <p>
-        Test-driven and behavior-driven approaches tried to solve this. They work — when someone actually uses them. But writing pedantic tests by hand is tedious. Maintaining spec documents that nobody reads is worse. LLMs remove the tedium; RootSpec removes the drift.
-      </p>
-    </div>
+<section id="the-problem" data-test="problem-section" style="padding:5rem 1.5rem;background:var(--color-surface);">
+  <div style="max-width:48rem;margin:0 auto;">
+    <h2 style="font-size:clamp(1.5rem,4vw,2.25rem);font-weight:700;margin:0 0 1.25rem;color:var(--color-text);">The Problem: Spec Drift</h2>
+    <p style="font-size:1.05rem;color:var(--color-text-muted);line-height:1.7;margin:0 0 1rem;">
+      When you prompt an AI agent to "build a task manager," the agent makes hundreds of micro-decisions — what to name fields, how to handle edge cases, what the UI looks like. These decisions diverge from your intent, and there's no shared artifact to catch the drift.
+    </p>
+    <p style="font-size:1.05rem;color:var(--color-text-muted);line-height:1.7;margin:0 0 1rem;">
+      Traditional specs (PRDs, Figma mocks, Jira tickets) aren't machine-readable. They can't be tested. So agents ignore them, interpret them loosely, or contradict them silently.
+    </p>
+    <p style="font-size:1.05rem;color:var(--color-text-muted);line-height:1.7;margin:0;">
+      The result is software that approximately matches what you wanted — good enough to demo, but wrong in the details that matter.
+    </p>
   </div>
 </section>

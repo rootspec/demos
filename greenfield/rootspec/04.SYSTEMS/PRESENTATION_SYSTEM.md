@@ -2,74 +2,75 @@
 
 ## Responsibility
 
-Owns all visual design tokens: typography, color palette, spacing, and motion parameters. No system uses raw color or spacing values — all styling is expressed through tokens defined here.
+Owns visual artifacts that are not prose content: the methodology diagram (SVG), the version badge, and the display of code and command examples. These elements are the site's primary non-textual signals of quality and credibility.
 
-## Typography
+## Boundaries
 
-**Roles:**
-- **Body / prose:** High-quality serif (e.g., Source Serif, Newsreader, or Charter). Used for all running text, the Author's Notes section, and the Problem/How It Works prose. Signals essay-quality writing.
-- **UI / labels:** Clean sans-serif (e.g., Inter or IBM Plex Sans). Used for navigation, section headings, button labels, meta-banner, and wizard UI chrome.
-- **Code / commands:** Monospace (e.g., JetBrains Mono or IBM Plex Mono). Used for the four skill names (`/rs-init`, etc.), code examples, and the version badge.
+**Owns:**
+- Methodology diagram — inline SVG depicting the RootSpec spec encircling the five-skill development cycle
+- Version badge — reads `.rootspec.json` at build time, renders the version number
+- Code block styling and display for skill names (`/rs-init`, `/rs-spec`, etc.)
+- Command example display throughout the How It Works section
 
-**Scale:** Generous. Long line lengths are acceptable for prose sections — editorial context expects them.
+**Does not own:**
+- Surrounding content sections (CONTENT_SYSTEM)
+- Color tokens applied to diagram and code blocks (THEME_SYSTEM)
+- Layout positioning (LAYOUT_SYSTEM)
 
-## Color Palette
+## Data Ownership
 
-**Principle:** Restrained. Two or three colors plus neutrals. One accent color used sparingly.
+### Version Badge
 
-**Token structure:**
-- `--color-bg`: Page background
-- `--color-surface`: Card/panel background (slightly offset from bg)
-- `--color-text-primary`: Main body text
-- `--color-text-secondary`: Metadata, labels, captions
-- `--color-accent`: Interactive states, links, highlights — used sparingly
-- `--color-border`: Dividers and component borders
-- `--color-banner-bg`: Meta-banner background (slightly distinct from main bg)
+- Source: `.rootspec.json` → `version` field
+- Read at: build time (not runtime)
+- Display locations: hero section, site header
+- Format: a version label, e.g., "v7.7.0" or "Built with RootSpec v7.7.0"
 
-**Light mode:** Light background (off-white, not pure white), dark text, one muted accent.
-**Dark mode:** Dark background, light text, same accent (adjusted for contrast).
+### Methodology Diagram
 
-**Anti-patterns:** No gradients. No glassmorphism. No glow effects. No decorative color use.
+The diagram is inline SVG — no external image files, no raster assets. It depicts:
 
-## Spacing
+1. **The five-skill cycle** (init → spec → impl → validate → review) arranged as a loop
+2. **The specification** encircling the cycle, acting as a gate
+3. **The gate concept** — only solutions that satisfy the spec pass through the cycle
+4. Visual arrows showing the flow direction
+5. Labels for each skill using monospace styling
 
-**Principle:** Generous whitespace. Sections breathe. Content is not cramped.
+**Design constraints (from L1 and L2):**
+- Hand-considered appearance — not a Visio export or generic tech-blog illustration
+- Clear linework, intentional spacing, no clip-art icons
+- Theme-aware: uses CSS custom properties from THEME_SYSTEM for stroke and fill colors
+- SVG is vector-clean — scales without pixelation at any viewport size
+- Diagram must remain legible at mobile viewport widths
 
-**Token structure:**
-- `--space-xs`, `--space-sm`, `--space-md`, `--space-lg`, `--space-xl`, `--space-2xl`: Scale of spacing values
-- Section padding uses `--space-xl` or `--space-2xl` top/bottom
-- Paragraph spacing is generous within prose sections
+**Placement:** Near the hero or alongside the "How It Works" section — not in the footer. It must do real explanatory work, not decorate.
 
-## Motion
+### Code and Command Display
 
-**Principle:** Mechanical, not magical. Transitions are functional signals, not entertainment.
+- Skill names (`/rs-init`, `/rs-spec`, `/rs-impl`, `/rs-validate`, `/rs-review`) use monospace font from THEME_SYSTEM
+- Code examples use a styled `<code>` or `<pre>` block
+- No syntax highlighting library required — monospace + background offset is sufficient
+- Command examples must be copy-friendly
 
-- **Duration:** [short transition duration] for expand/collapse, toggle, and state changes
-- **Easing:** ease-out — quick start, gentle stop
-- **No spring physics, no parallax, no scroll-triggered animations**
-- **Theme switch:** Instant — no transition on color swap
+## State Management
 
-## SVG Diagram (RootSpec Methodology)
+PRESENTATION_SYSTEM is stateless at runtime. The version number is determined at build time and baked into the rendered output. The diagram is static SVG. Code blocks do not change in response to user interaction.
 
-The site includes one SVG diagram depicting the RootSpec methodology: a spec surrounding the development cycle, allowing only valid solutions to pass through.
-
-**Design requirements:**
-- Clear linework, intentional spacing — looks drawn, not generated
-- No clip-art icons, no Visio-style chrome
-- Monochrome or two-color — no decorative palette
-- Scales correctly in both light and dark modes (uses `currentColor` or CSS variables)
-- Inline SVG preferred (avoids separate HTTP request; inherits CSS variables)
-
-## Responsive Strategy
-
-- **Mobile-first:** Base styles target mobile; breakpoints add desktop layout
-- **Typography:** Font sizes scale down on small screens; line lengths shorten
-- **Interactive components:** Explorer and Wizard are touch-friendly at all screen widths
-- **Comparison panels:** Stack vertically on mobile, side by side on desktop
-- **Navigation:** Collapses to compact form on mobile
+Exception: the diagram uses CSS custom properties from THEME_SYSTEM, so its colors update when the theme toggles — but this is a CSS-level change, not component state.
 
 ## Interactions with Other Systems
 
-- Provides CSS custom property tokens consumed by all other systems
-- Receives theme state from THEME_SYSTEM (applied as class or data attribute on `<html>`)
-- All visual styling in INTERACTIVE_SYSTEM, LAYOUT_SYSTEM, and CONTENT_SYSTEM uses tokens from this system
+| System | Interaction |
+|--------|-------------|
+| THEME_SYSTEM | Diagram SVG uses CSS custom property references for stroke/fill; code blocks use monospace token and surface color |
+| CONTENT_SYSTEM | Diagram and version badge are embedded at specific positions within the content flow |
+| LAYOUT_SYSTEM | Diagram is positioned and constrained by the layout grid; must scale within content width |
+
+## Rules
+
+- Version badge must read from `.rootspec.json` at build time — do not hardcode the version string
+- Diagram must be inline SVG — no `<img src="diagram.png">` or external file reference
+- Diagram colors must use CSS custom properties from THEME_SYSTEM — the diagram updates when the theme toggles
+- Diagram placement must be above-the-fold or near the hero — not a footer afterthought
+- At mobile viewport widths, the diagram must scale without horizontal overflow
+- Skill names in prose and in the diagram use monospace font — they are commands, not labels

@@ -1,37 +1,97 @@
 # =============================================================================
-# USER STORY: Responsive Layout
+# USER STORIES: Responsive Behavior
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: LANDING
-# @systems: [LAYOUT_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-25T00:00:00Z
+# @journey: MOBILE_JOURNEY
+# @systems: [LAYOUT_SYSTEM, INTERACTIVE_SYSTEM]
+# @last_updated: 2026-04-25T17:37:48Z
 
-id: US-007
-title: Core page sections are readable and usable on mobile viewports
+---
+
+# =============================================================================
+# USER STORY: No Horizontal Scroll on Mobile
+# =============================================================================
+
+id: US-201
+title: Browse the site on mobile without horizontal scrolling
 
 acceptance_criteria:
-  - id: AC-007-1
-    title: Meta banner is visible on mobile without horizontal scrolling
+  - id: AC-201-1
+    title: Page does not overflow horizontally at mobile width
     narrative: |
       Given I visit the site on a mobile viewport
       When the page loads
-      Then the meta banner should be fully visible without horizontal scrolling
+      Then I do not see any horizontal scrollbar or overflow
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
+      - shouldExist: { selector: 'body' }
 
-  - id: AC-007-2
-    title: Hero section is present and readable on mobile
+---
+
+# =============================================================================
+# USER STORY: Mobile Navigation
+# =============================================================================
+
+id: US-202
+title: Access navigation on mobile
+
+acceptance_criteria:
+  - id: AC-202-1
+    title: Mobile navigation control is present
     narrative: |
       Given I visit the site on a mobile viewport
-      When I view the hero section
-      Then the tagline and version badge should be visible
+      When the page loads
+      Then I see a navigation control (hamburger or compact nav)
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=hero]' }
-      - shouldExist: { selector: '[data-test=version-badge]' }
+      - shouldExist: { selector: '[data-test=nav]' }
+
+---
+
+# =============================================================================
+# USER STORY: Hierarchy Explorer Mobile Usability
+# =============================================================================
+
+id: US-203
+title: Use the hierarchy explorer on mobile
+
+acceptance_criteria:
+  - id: AC-203-1
+    title: Hierarchy explorer is usable on mobile
+    narrative: |
+      Given I visit the site on a mobile viewport
+      When I tap a level in the hierarchy explorer
+      Then the level expands and shows content
+    given:
+      - visit: '/demos/greenfield/'
+    when:
+      - click: { selector: '[data-test=level-1-trigger]' }
+    then:
+      - shouldExist: { selector: '[data-test=level-1-content]' }
+
+---
+
+# =============================================================================
+# USER STORY: Methodology Diagram Mobile Legibility
+# =============================================================================
+
+id: US-204
+title: View the methodology diagram on mobile without overflow
+
+acceptance_criteria:
+  - id: AC-204-1
+    title: Diagram is present and contained on mobile
+    narrative: |
+      Given I visit the site on a mobile viewport
+      When I scroll to the methodology diagram
+      Then I see the diagram without horizontal overflow
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=methodology-diagram]' }

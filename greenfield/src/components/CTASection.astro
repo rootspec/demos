@@ -1,34 +1,19 @@
 ---
 ---
-
-<section id="cta" style="padding: var(--space-2xl) 1.5rem; background-color: var(--color-surface); border-top: 1px solid var(--color-border);">
-  <div style="max-width: 780px; margin: 0 auto;">
-    <h2 style="font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 1.25rem;">
-      Open Source
-    </h2>
-    <h3 style="font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(1.5rem, 3.5vw, 2.25rem); font-weight: 400; line-height: 1.25; color: var(--color-text-primary); margin-bottom: 1rem;">
-      Start speccing.
-    </h3>
-    <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; color: var(--color-text-secondary); line-height: 1.65; margin-bottom: 2rem; max-width: 560px;">
-      RootSpec is open source. The framework, the skills, and the methodology are all available on GitHub.
+<section data-test="cta-section" style="padding:5rem 1.5rem;background:var(--color-surface);text-align:center;">
+  <div style="max-width:40rem;margin:0 auto;">
+    <h2 style="font-size:clamp(1.5rem,4vw,2.25rem);font-weight:700;margin:0 0 1rem;color:var(--color-text);">Open Source</h2>
+    <p style="font-size:1.05rem;color:var(--color-text-muted);line-height:1.65;margin:0 0 2rem;">
+      RootSpec is free and open source. Read the methodology, fork it, contribute, or just use it to build better AI-assisted software.
     </p>
-    <div style="display: flex; flex-wrap: wrap; gap: 0.875rem; align-items: center;">
-      <a
-        href="https://github.com/rootspec/rootspec"
-        target="_blank"
-        rel="noopener noreferrer"
-        style="background-color: var(--color-accent); color: #fff; padding: 0.65rem 1.4rem; border-radius: 4px; text-decoration: none; font-weight: 500; font-size: 0.9375rem;"
-      >
-        View on GitHub →
-      </a>
-      <a
-        href="https://github.com/rootspec/demos/tree/main/greenfield"
-        target="_blank"
-        rel="noopener noreferrer"
-        style="color: var(--color-text-secondary); font-size: 0.9rem; text-decoration: none; border-bottom: 1px solid var(--color-border); padding-bottom: 1px;"
-      >
-        View this demo's source
-      </a>
-    </div>
+    <a
+      data-test="github-link"
+      href="https://github.com/anthropics/claude-code"
+      target="_blank"
+      rel="noopener"
+      style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--color-text);color:var(--color-bg);padding:0.75rem 1.75rem;border-radius:0.5rem;text-decoration:none;font-weight:600;"
+    >
+      ⭐ View on GitHub
+    </a>
   </div>
 </section>

@@ -1,6 +1,4 @@
 // Capture a full-page screenshot after each passing criterion.
-// Screenshots land at cypress/screenshots/<spec>/US-101--AC-101-1.png
-// Used by /rs-review for visual quality inspection.
 afterEach(function () {
   if (this.currentTest?.state === 'passed') {
     const titles: string[] = (this.currentTest as any).titlePath?.() ?? [];

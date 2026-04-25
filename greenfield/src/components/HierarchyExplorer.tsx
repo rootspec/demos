@@ -2,172 +2,82 @@ import { useState } from 'react';
 
 const LEVELS = [
   {
-    num: 1,
-    label: 'Philosophy',
-    subtitle: 'WHY and WHAT EXPERIENCE',
-    purpose: 'Defines mission, design pillars, and the core experience promise. All other levels exist to serve this.',
-    example: 'Mission: "Help developers ship what they intended, not what they had time to build."\nPillars: Clarity, Traceability, Minimal ceremony',
-    rule: 'References nothing. Is the root of all derivation.',
+    id: 1,
+    label: 'L1: Philosophy',
+    content: 'The foundational "why" — mission, vision, and the core problem the product solves. Philosophical alignment before any technical decisions.',
   },
   {
-    num: 2,
-    label: 'Truths',
-    subtitle: 'WHAT strategy',
-    purpose: 'Encodes trade-offs, commitments, and success criteria derived from the philosophy.',
-    example: 'Truth: "We do not ship features whose test coverage traces back to no pillar."\nCommitment: "Spec files are the source of truth, not code comments."',
-    rule: 'May only reference L1 (Philosophy).',
+    id: 2,
+    label: 'L2: Truths',
+    content: 'Non-negotiable constraints that all decisions must respect: performance budgets, accessibility requirements, privacy rules, security policies.',
   },
   {
-    num: 3,
-    label: 'Interactions',
-    subtitle: 'HOW users and product interact',
-    purpose: 'Describes user flows, interaction patterns, and feedback loops that honor the truths.',
-    example: 'Flow: "Visitor reads hero, clicks Spec Your Idea, enters a product description, receives a skeleton spec."\nPattern: "All wizard steps validate before advancing."',
-    rule: 'May only reference L1–L2.',
+    id: 3,
+    label: 'L3: Interactions',
+    content: 'The complete user interaction model: journeys, flows, error states, and edge cases. The behavioral contract between product and user.',
   },
   {
-    num: 4,
-    label: 'Systems',
-    subtitle: 'HOW it\'s built',
-    purpose: 'Defines architecture, component boundaries, data ownership, and system interactions.',
-    example: 'System: "INTERACTIVE_SYSTEM owns HierarchyExplorer and SpecWizard. No network calls."\nBoundary: "CONTENT_SYSTEM provides text. THEME_SYSTEM owns the toggle."',
-    rule: 'May only reference L1–L3.',
+    id: 4,
+    label: 'L4: Systems',
+    content: 'Technical and content architecture: component systems, data models, API contracts, theme systems, and layout rules.',
   },
   {
-    num: 5,
-    label: 'Implementation',
-    subtitle: 'Testable stories and tuning',
-    purpose: 'User stories with acceptance criteria, fine-tuning parameters, and constraints derived from every level above.',
-    example: 'US-004: "Visitor expands a hierarchy level to see its purpose."\nAC-004-2: "Clicking a level reveals expanded content."',
-    rule: 'May only reference L1–L4.',
+    id: 5,
+    label: 'L5: Implementation',
+    content: 'User stories with acceptance criteria in given/when/then format. Directly executable as Cypress tests. The spec closes the loop.',
   },
 ];
 
 export default function HierarchyExplorer() {
-  const [expanded, setExpanded] = useState<number | null>(null);
+  const [open, setOpen] = useState<number | null>(null);
 
-  function toggle(num: number) {
-    setExpanded(prev => (prev === num ? null : num));
-  }
+  const toggle = (id: number) => {
+    setOpen((prev) => (prev === id ? null : id));
+  };
 
   return (
-    <div data-test="hierarchy-explorer" style={{ maxWidth: '780px', margin: '0 auto' }}>
-      {LEVELS.map((level) => {
-        const isExpanded = expanded === level.num;
-        return (
-          <div
-            key={level.num}
+    <div data-test="hierarchy-explorer" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      {LEVELS.map((level) => (
+        <div key={level.id} style={{ border: '1px solid var(--color-border)', borderRadius: '0.5rem', overflow: 'hidden' }}>
+          <button
+            data-test={`level-${level.id}-trigger`}
+            onClick={() => toggle(level.id)}
             style={{
-              borderBottom: '1px solid var(--color-border)',
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '0.875rem 1.25rem',
+              background: open === level.id ? 'var(--color-primary)' : 'var(--color-surface)',
+              color: open === level.id ? 'white' : 'var(--color-text)',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              textAlign: 'left',
+              transition: 'background 0.15s',
             }}
+            aria-expanded={open === level.id}
           >
-            <button
-              data-test={`hierarchy-level-${level.num}`}
-              onClick={() => toggle(level.num)}
-              aria-expanded={isExpanded}
+            <span>{level.label}</span>
+            <span style={{ fontSize: '1.1rem' }}>{open === level.id ? '−' : '+'}</span>
+          </button>
+          {open === level.id && (
+            <div
+              data-test={`level-${level.id}-content`}
               style={{
-                display: 'flex',
-                width: '100%',
-                alignItems: 'center',
-                gap: '1rem',
-                padding: '1rem 0',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                textAlign: 'left',
-                color: 'var(--color-text-primary)',
+                padding: '1rem 1.25rem',
+                background: 'var(--color-bg)',
+                color: 'var(--color-text-muted)',
+                fontSize: '0.9rem',
+                lineHeight: 1.7,
               }}
             >
-              <span
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: '0.75rem',
-                  fontWeight: 500,
-                  width: '1.75rem',
-                  height: '1.75rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '3px',
-                  background: isExpanded ? 'var(--color-accent)' : 'var(--color-surface)',
-                  color: isExpanded ? '#fff' : 'var(--color-text-secondary)',
-                  border: '1px solid var(--color-border)',
-                  flexShrink: 0,
-                  transition: 'background 200ms ease-out, color 200ms ease-out',
-                }}
-              >
-                L{level.num}
-              </span>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.625rem', flexWrap: 'wrap' }}>
-                  <span style={{ fontWeight: 600, fontSize: '0.9375rem' }}>{level.label}</span>
-                  <span style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', fontFamily: "'Inter', sans-serif" }}>
-                    {level.subtitle}
-                  </span>
-                </div>
-              </div>
-              <span
-                style={{
-                  fontSize: '0.75rem',
-                  color: 'var(--color-text-secondary)',
-                  transform: isExpanded ? 'rotate(90deg)' : 'none',
-                  transition: 'transform 200ms ease-out',
-                  flexShrink: 0,
-                }}
-                aria-hidden="true"
-              >
-                ▶
-              </span>
-            </button>
-
-            {isExpanded && (
-              <div
-                data-test={`hierarchy-level-${level.num}-expanded`}
-                style={{
-                  paddingBottom: '1.25rem',
-                  paddingLeft: '2.75rem',
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: "'Source Serif 4', Georgia, serif",
-                    fontSize: '0.9375rem',
-                    lineHeight: 1.65,
-                    color: 'var(--color-text-secondary)',
-                    marginBottom: '0.875rem',
-                  }}
-                >
-                  {level.purpose}
-                </p>
-                <pre
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: '0.8rem',
-                    background: 'var(--color-surface)',
-                    border: '1px solid var(--color-border)',
-                    borderRadius: '4px',
-                    padding: '0.75rem 1rem',
-                    whiteSpace: 'pre-wrap',
-                    color: 'var(--color-text-secondary)',
-                    marginBottom: '0.75rem',
-                  }}
-                >
-                  {level.example}
-                </pre>
-                <p
-                  style={{
-                    fontSize: '0.8125rem',
-                    color: 'var(--color-text-secondary)',
-                    fontStyle: 'italic',
-                  }}
-                >
-                  {level.rule}
-                </p>
-              </div>
-            )}
-          </div>
-        );
-      })}
+              {level.content}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }

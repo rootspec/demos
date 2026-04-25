@@ -4,8 +4,5 @@ beforeEach(() => {
   cy.clearCookies();
 });
 
-import "./screenshot-hook";
-
-import "./app-ready";
-
-import "./runtime-checks-hook";
+import './screenshot-hook';
+import './app-ready';

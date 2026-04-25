@@ -1,23 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
 import MetaBanner from '../components/MetaBanner.astro';
+import Header from '../components/Header.astro';
 import HeroSection from '../components/HeroSection.astro';
 import ProblemSection from '../components/ProblemSection.astro';
+import HowItWorksSection from '../components/HowItWorksSection.astro';
+import MethodologyDiagram from '../components/MethodologyDiagram.astro';
 import HierarchySection from '../components/HierarchySection.astro';
+import BeforeAfterSection from '../components/BeforeAfterSection.astro';
 import SpecWizardSection from '../components/SpecWizardSection.astro';
 import AuthorsNotes from '../components/AuthorsNotes.astro';
 import CTASection from '../components/CTASection.astro';
 import Footer from '../components/Footer.astro';
+import '../styles/global.css';
 ---
-
 <Layout>
-  <Header />
   <MetaBanner />
+  <Header />
   <main>
     <HeroSection />
     <ProblemSection />
+    <HowItWorksSection />
+    <MethodologyDiagram />
     <HierarchySection />
+    <BeforeAfterSection />
     <SpecWizardSection />
     <AuthorsNotes />
     <CTASection />
