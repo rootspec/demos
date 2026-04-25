@@ -7,7 +7,8 @@ const StepSchema = z.union([
 	z.object({ loginAs: z.string() }),
 	z.object({ seedItem: z.record(z.string(), z.unknown()) }),
 	z.object({ shouldContain: z.object({ selector: z.string(), text: z.string() }) }),
-	z.object({ shouldExist: z.object({ selector: z.string() }) })
+	z.object({ shouldExist: z.object({ selector: z.string() }) }),
+	z.object({ awaitReady: z.literal(true) })
 ]);
 
 const AcceptanceCriterionSchema = z.object({
