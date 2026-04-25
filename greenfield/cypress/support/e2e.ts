@@ -7,3 +7,5 @@ beforeEach(() => {
 import "./screenshot-hook";
 
 import "./app-ready";
+
+import "./runtime-checks-hook";
