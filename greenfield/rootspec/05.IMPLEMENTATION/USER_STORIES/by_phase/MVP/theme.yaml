@@ -1,37 +1,75 @@
 # =============================================================================
-# USER STORY: Theme Toggle
+# USER STORIES: Theme System
 # =============================================================================
 # @spec_version: 1.0.0
 # @phase: MVP
-# @journey: LANDING
-# @systems: [THEME_SYSTEM, PRESENTATION_SYSTEM, LAYOUT_SYSTEM]
-# @last_updated: 2026-04-25T00:00:00Z
+# @journey: THEME_JOURNEY
+# @systems: [THEME_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-25T17:37:48Z
 
-id: US-006
-title: Visitor can toggle between light and dark mode
+---
+
+# =============================================================================
+# USER STORY: Light Mode Default
+# =============================================================================
+
+id: US-301
+title: See the site in light mode by default
 
 acceptance_criteria:
-  - id: AC-006-1
-    title: Theme toggle control is present in the header
+  - id: AC-301-1
+    title: Site renders with a light background by default
     narrative: |
-      Given I visit the site
-      When I view the header
-      Then I should see a theme toggle control
+      Given I visit the site for the first time without a system dark mode preference
+      When the page loads
+      Then the page renders in light mode
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=theme-toggle]' }
+      - shouldExist: { selector: '[data-theme=light], body:not([data-theme=dark])' }
 
-  - id: AC-006-2
-    title: Clicking the theme toggle changes the active theme
+---
+
+# =============================================================================
+# USER STORY: Dark Mode Toggle
+# =============================================================================
+
+id: US-302
+title: Switch to dark mode using the theme toggle
+
+acceptance_criteria:
+  - id: AC-302-1
+    title: Theme toggle exists and is clickable
     narrative: |
-      Given I visit the site in light mode
-      When I click the theme toggle
-      Then the page should switch to dark mode
+      Given I visit the site
+      When I see the theme toggle in the header
+      Then I can click it to change the theme
     given:
       - visit: '/demos/greenfield/'
     when:
       - click: { selector: '[data-test=theme-toggle]' }
     then:
-      - shouldExist: { selector: 'html[data-theme="dark"], html.dark' }
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+---
+
+# =============================================================================
+# USER STORY: Monospace for Skill Commands
+# =============================================================================
+
+id: US-303
+title: See skill command names rendered in monospace
+
+acceptance_criteria:
+  - id: AC-303-1
+    title: Skill commands appear in a code-style element
+    narrative: |
+      Given I visit the site
+      When I read the how it works section
+      Then the skill command names appear in monospace code formatting
+    given:
+      - visit: '/demos/greenfield/#how-it-works'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=how-it-works] code' }

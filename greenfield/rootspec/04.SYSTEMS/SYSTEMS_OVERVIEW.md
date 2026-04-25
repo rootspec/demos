@@ -2,46 +2,54 @@
 
 ## System Map
 
-| System | Responsibility | Primary Data |
-|--------|---------------|-------------|
-| CONTENT_SYSTEM | Static prose content for all sections | Markdown/HTML fragments, version string |
-| THEME_SYSTEM | Light/dark mode state and persistence | Theme preference (localStorage) |
-| INTERACTIVE_SYSTEM | Hierarchy Explorer and Spec Wizard components | Explorer state, wizard step/answers |
-| LAYOUT_SYSTEM | Page structure, navigation, base path routing | Route config, section anchors |
-| PRESENTATION_SYSTEM | Typography, spacing tokens, visual design | CSS custom properties, font loading |
+The RootSpec marketing site is a static site with client-side interactive components. Six systems handle the full surface area of the product.
+
+| System | Responsibility | Key Data |
+|--------|---------------|----------|
+| [CONTENT_SYSTEM](CONTENT_SYSTEM.md) | Static page content, section structure, author's notes | Markdown/HTML content, section order |
+| [THEME_SYSTEM](THEME_SYSTEM.md) | Dark/light mode, typography tokens, color palette | Theme preference, CSS custom properties |
+| [LAYOUT_SYSTEM](LAYOUT_SYSTEM.md) | Responsive layout, navigation, meta banner, header/footer | Viewport state, nav open/closed |
+| [INTERACTIVE_SYSTEM](INTERACTIVE_SYSTEM.md) | Hierarchy explorer, spec wizard, before/after comparison | Wizard state, explorer state, comparison state |
+| [PRESENTATION_SYSTEM](PRESENTATION_SYSTEM.md) | Methodology diagram, version badge, code display | Version from .rootspec.json, SVG diagram |
+| [META_SYSTEM](META_SYSTEM.md) | Meta banner, GitHub links, build provenance | Repo URLs, spec file paths |
 
 ## System Interactions
 
 | From | To | Interaction |
-|------|----|------------|
-| LAYOUT_SYSTEM | CONTENT_SYSTEM | Renders section content in the correct slot |
-| LAYOUT_SYSTEM | THEME_SYSTEM | Provides toggle control in header |
-| LAYOUT_SYSTEM | PRESENTATION_SYSTEM | Applies visual tokens to the page shell |
-| THEME_SYSTEM | PRESENTATION_SYSTEM | Switches active CSS custom property set (light/dark) |
-| INTERACTIVE_SYSTEM | CONTENT_SYSTEM | Reads hierarchy level descriptions to populate Explorer |
-| INTERACTIVE_SYSTEM | PRESENTATION_SYSTEM | Uses shared tokens for interactive element styling |
-| CONTENT_SYSTEM | LAYOUT_SYSTEM | Provides section order and anchor IDs |
+|------|----|-------------|
+| THEME_SYSTEM | All systems | Provides CSS custom properties consumed by every visible element |
+| LAYOUT_SYSTEM | CONTENT_SYSTEM | Wraps content sections in responsive containers |
+| LAYOUT_SYSTEM | INTERACTIVE_SYSTEM | Provides viewport context (mobile/desktop) to interactive components |
+| INTERACTIVE_SYSTEM | THEME_SYSTEM | Interactive components consume theme tokens for consistent styling |
+| PRESENTATION_SYSTEM | CONTENT_SYSTEM | Version badge and diagram are embedded within content flow |
+| META_SYSTEM | LAYOUT_SYSTEM | Meta banner occupies a fixed slot above all other layout elements |
 
 ## Data Flow
 
 ```
-.rootspec.json
-    └─→ CONTENT_SYSTEM (version string at build time)
-            └─→ LAYOUT_SYSTEM (renders version badge in hero/header)
-
-User preference (localStorage / prefers-color-scheme)
-    └─→ THEME_SYSTEM
-            └─→ PRESENTATION_SYSTEM (applies :root CSS vars)
-
-User interactions (click, keyboard, touch)
-    └─→ INTERACTIVE_SYSTEM (state machine per component)
-            └─→ PRESENTATION_SYSTEM (reflects state visually)
+.rootspec.json ──────────────────────────────> PRESENTATION_SYSTEM (version badge)
+                                                        │
+GitHub repo URLs ──────────────> META_SYSTEM ──────────> LAYOUT_SYSTEM (banner)
+                                                        │
+User preference (system/manual) ──> THEME_SYSTEM ──────> CSS custom properties
+                                                        │
+User interactions ──────────────> INTERACTIVE_SYSTEM ──> Component state (client-side)
+                                                        │
+Static content (spec, SEED.md) ──> CONTENT_SYSTEM ─────> Rendered HTML sections
 ```
 
-## Key Boundaries
+## Boundary Rules
 
-- **CONTENT_SYSTEM** owns all prose copy. No other system edits content strings.
-- **THEME_SYSTEM** is the single source of truth for current theme. No component manages its own dark/light state independently.
-- **INTERACTIVE_SYSTEM** is purely client-side. It makes no network requests. It owns no persistent state beyond the current session.
-- **LAYOUT_SYSTEM** owns the base path configuration. All internal links and asset references are resolved through it.
-- **PRESENTATION_SYSTEM** owns all visual tokens. No system uses raw color or spacing values — only token references.
+- THEME_SYSTEM owns all color and typography tokens; no other system defines visual values
+- INTERACTIVE_SYSTEM is entirely client-side; it reads no server state and makes no external requests
+- META_SYSTEM owns all external GitHub links; other systems do not construct external URLs
+- PRESENTATION_SYSTEM reads `.rootspec.json` at build time; it does not read it at runtime
+- CONTENT_SYSTEM owns the author's notes text verbatim; no system transforms or summarizes it
+
+## Shared Patterns
+
+- All interactive components use the same expand/collapse animation pattern (defined in THEME_SYSTEM)
+- All external links open in new tab with `rel="noopener noreferrer"`
+- All interactive elements implement keyboard accessibility (focus management, ARIA attributes)
+- Mobile breakpoint is the single responsive threshold (defined in LAYOUT_SYSTEM)
+- All section anchors follow the pattern `#section-name` for nav link targeting

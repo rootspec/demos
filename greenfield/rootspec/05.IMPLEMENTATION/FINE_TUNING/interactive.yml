@@ -1,56 +1,49 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Interactive Components
+# FINE-TUNING: Interactive System Timing
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: INTERACTIVE_SYSTEM
-# @last_updated: 2026-04-25T00:00:00Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+# @last_updated: 2026-04-25T17:37:48Z
 
-# -----------------------------------------------------------------------------
-# Hierarchy Explorer
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
+expand_collapse_duration:
+  value: 200
+  # @unit: milliseconds
+  # @rationale: Quick enough to feel responsive, long enough to feel intentional. 150-250ms range per design spec.
+  # @constraint: min=100, max=300
 
-hierarchy_explorer:
-  expand_duration_ms: 200
-  # @rationale: Quick enough to feel mechanical, not playful; matches editorial feel
-  # @constraints: min=100, max=400, type=integer
-  # @spec_source: 03.INTERACTIONS.md — "mechanical, not magical" motion principle
+theme_transition_duration:
+  value: 150
+  # @unit: milliseconds
+  # @rationale: Theme switches should feel instant but not jarring. Color-only transition; no layout shift.
+  # @constraint: min=50, max=250
 
-  collapse_duration_ms: 150
-  # @rationale: Collapse is faster than expand — disappearance should not linger
-  # @constraints: min=80, max=300, type=integer
+wizard_pillar_min:
+  value: 3
+  # @unit: count
+  # @rationale: Three pillars is the minimum for a meaningful design philosophy; fewer produces degenerate output.
+  # @constraint: min=2, max=3
 
-  max_expanded: 1
-  # @rationale: Only one level expanded at a time; forces deliberate navigation
+wizard_pillar_max:
+  value: 5
+  # @unit: count
+  # @rationale: Five pillars is the maximum before the philosophy becomes unfocused. Enforces constraint from INTERACTIVE_SYSTEM.
+  # @constraint: min=5, max=7
+
+hover_highlight_delay:
+  value: 0
+  # @unit: milliseconds
+  # @rationale: Reference highlighting in the hierarchy explorer should be immediate — delay creates confusion about which level is active.
+  # @constraint: min=0, max=100
+
+copy_button_revert_delay:
+  value: 2000
+  # @unit: milliseconds
+  # @rationale: "Copied!" confirmation should persist long enough to read but not so long it becomes stale.
+  # @constraint: min=1000, max=3000
+
+mobile_tap_target_size:
+  value: 44
+  # @unit: pixels
+  # @rationale: WCAG 2.5.8 minimum touch target size. Apple HIG and Material Design both recommend 44px minimum.
+  # @constraint: min=44, max=60
   # @inviolable: true
-  # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-
-# -----------------------------------------------------------------------------
-# Spec Wizard
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
-
-spec_wizard:
-  total_steps: 4
-  # @rationale: Mission + pillars + key interaction = three substantive inputs
-  #   plus the output review step; four total is the minimum for meaningful output
-  # @inviolable: true
-
-  min_pillars: 3
-  # @rationale: Fewer than 3 pillars does not demonstrate the hierarchy concept
-  # @constraints: min=2, max=3, type=integer
-
-  max_pillars: 5
-  # @rationale: More than 5 dilutes focus; matches L1 Philosophy pillar guidance
-  # @constraints: min=4, max=8, type=integer
-  # @spec_source: 01.PHILOSOPHY.md — Design Pillars section
-
-  pillar_suggestions_count: 12
-  # @rationale: Enough variety to feel useful without overwhelming; visitor picks 3-5
-  # @constraints: min=8, max=20, type=integer
-
-  mission_templates_count: 5
-  # @rationale: Enough to illustrate variety; not so many that choice is paralysing
-  # @constraints: min=3, max=10, type=integer

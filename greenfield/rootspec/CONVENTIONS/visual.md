@@ -1,47 +1,33 @@
+## Color Palette
+
+- **Primary:** Indigo (#6366f1 / indigo-500)
+- **Primary dark:** #4f46e5 / indigo-600
+- **Background light:** #ffffff / white
+- **Background dark:** #0f172a / slate-900
+- **Text light:** #1e293b / slate-800
+- **Text dark:** #f1f5f9 / slate-100
+- **Accent:** #a5b4fc / indigo-300
+
 ## Typography
 
-- **Body / prose:** Source Serif 4 (400, 400i, 600) — all running text, Author's Notes, Problem/How It Works
-- **UI / labels:** Inter (400, 500, 600) — navigation, section labels, buttons, meta-banner
-- **Code / commands:** JetBrains Mono (400, 500) — skill names, code examples, version badge
-
-## Color Tokens
-
-| Token | Light | Dark |
-|-------|-------|------|
-| `--color-bg` | `#f8f7f4` | `#141310` |
-| `--color-surface` | `#f0ede8` | `#1e1c18` |
-| `--color-text-primary` | `#1a1916` | `#e8e5df` |
-| `--color-text-secondary` | `#6b6760` | `#928f88` |
-| `--color-accent` | `#2d5a8e` | `#7aa8d8` |
-| `--color-border` | `#d4d0ca` | `#2e2c27` |
-| `--color-banner-bg` | `#eef2f8` | `#1a2030` |
-
-## Spacing Scale
-
-- `--space-xs`: 0.25rem
-- `--space-sm`: 0.5rem
-- `--space-md`: 1rem
-- `--space-lg`: 1.5rem
-- `--space-xl`: 3rem
-- `--space-2xl`: 5rem
-
-## Motion
-
-- **Transition duration:** 200ms expand, 150ms collapse (hierarchy explorer)
-- **Easing:** ease-out
-- **Theme switch:** Instant (0ms transition)
-- No spring physics, no parallax, no scroll animations
+- **Body font:** System font stack (sans-serif)
+- **Monospace:** `font-mono` for skill command names (code elements)
+- **Hero heading:** Large, bold (text-5xl md:text-6xl font-bold)
+- **Section headings:** text-3xl font-bold
 
 ## Theme
 
-- **Default:** Light
-- **Toggle:** Header button with `data-test="theme-toggle"`
-- **Storage key:** `rootspec-theme` (localStorage)
-- **HTML attribute:** `data-theme="dark"` on `<html>` element
+- Light mode default
+- Dark mode via `data-theme="dark"` on `<html>`
+- Toggle stored in localStorage
 
-## Anti-patterns
+## Spacing
 
-- No gradients, glassmorphism, or glow effects
-- No decorative color use
-- No hero sections with massive gradient text
-- No stat counters or testimonial cards
+- Section padding: `py-20 px-6`
+- Max content width: `max-w-6xl mx-auto`
+- Component gap: `gap-8` or `gap-12`
+
+## Brand
+
+- RootSpec version: v7.7.0
+- GitHub repo: https://github.com/anthropics/claude-code (placeholder — spec defines the link exists, not the URL)

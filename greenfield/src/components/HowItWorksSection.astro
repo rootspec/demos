@@ -1,0 +1,24 @@
+---
+const skills = [
+  { cmd: '/rs-init', label: 'Initialize', desc: 'Bootstrap a new project with RootSpec structure, SEED.md, and conventions.' },
+  { cmd: '/rs-spec', label: 'Specify', desc: 'Turn your SEED.md into a full five-level spec with user stories and acceptance criteria.' },
+  { cmd: '/rs-impl', label: 'Implement', desc: 'Implement stories from the spec test-first, one story at a time.' },
+  { cmd: '/rs-validate', label: 'Validate', desc: 'Run all tests, check coverage, and produce a validation report.' },
+  { cmd: '/rs-review', label: 'Review', desc: 'Visual and quality review of the built artifact against the spec.' },
+];
+---
+<section id="how-it-works" data-test="how-it-works" style="padding:5rem 1.5rem;background:var(--color-surface);">
+  <div style="max-width:64rem;margin:0 auto;">
+    <h2 style="font-size:clamp(1.5rem,4vw,2.25rem);font-weight:700;margin:0 0 0.75rem;color:var(--color-text);">How It Works</h2>
+    <p style="font-size:1.05rem;color:var(--color-text-muted);margin:0 0 3rem;line-height:1.65;">Five skills, invoked as slash commands, take you from idea to tested implementation.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;">
+      {skills.map((skill) => (
+        <div style="background:var(--color-bg);border:1px solid var(--color-border);border-radius:0.75rem;padding:1.5rem;">
+          <code style="font-family:monospace;font-size:0.9rem;color:var(--color-primary);font-weight:600;display:block;margin-bottom:0.5rem;">{skill.cmd}</code>
+          <div style="font-weight:600;margin-bottom:0.5rem;color:var(--color-text);">{skill.label}</div>
+          <p style="font-size:0.875rem;color:var(--color-text-muted);line-height:1.6;margin:0;">{skill.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

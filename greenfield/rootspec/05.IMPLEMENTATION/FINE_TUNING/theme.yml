@@ -1,43 +1,69 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Theme and Presentation
+# FINE-TUNING: Theme System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: THEME_SYSTEM, PRESENTATION_SYSTEM
-# @last_updated: 2026-04-25T00:00:00Z
-# @status: draft
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md, 04.SYSTEMS/PRESENTATION_SYSTEM.md
+# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# @last_updated: 2026-04-25T17:37:48Z
 
-# -----------------------------------------------------------------------------
-# Theme Defaults
-# -----------------------------------------------------------------------------
+# Typography scale (rem units, base = 16px)
+font_size_base:
+  value: 1.125
+  # @unit: rem
+  # @rationale: Slightly larger than 1rem default for comfortable long-form reading at essay line lengths.
+  # @constraint: min=1.0, max=1.25
 
-theme:
-  default: 'light'
-  # @rationale: Editorial sites read better in light mode; dark mode as default
-  #   is a tell that the site was AI-generated from training-data defaults
-  # @inviolable: true
-  # @spec_source: 02.TRUTHS.md — Light mode default commitment
+font_size_hero:
+  value: 3.5
+  # @unit: rem
+  # @rationale: Hero headline needs presence without dominating. Not so large it looks like a SaaS hero.
+  # @constraint: min=2.5, max=4.5
 
-  storage_key: 'rootspec-theme'
-  # @rationale: Stable key for localStorage persistence across sessions
-  # @constraints: type=string
+font_size_section_heading:
+  value: 2.0
+  # @unit: rem
+  # @rationale: Clear section delineation without competing with the hero.
+  # @constraint: min=1.5, max=2.5
 
-  switch_transition_ms: 0
-  # @rationale: No animation on theme switch; jarring color shifts are worse
-  #   than an instant change
-  # @inviolable: true
-  # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+font_size_code:
+  value: 0.9
+  # @unit: em (relative to surrounding text)
+  # @rationale: Monospace reads slightly larger at the same size as proportional; 0.9em compensation is conventional.
+  # @constraint: min=0.8, max=1.0
 
-# -----------------------------------------------------------------------------
-# Motion
-# -----------------------------------------------------------------------------
+line_height_prose:
+  value: 1.7
+  # @unit: ratio
+  # @rationale: Editorial line height for long-form reading. Tighter feels cramped; looser loses visual grouping.
+  # @constraint: min=1.5, max=1.9
 
-motion:
-  transition_duration_ms: 200
-  # @rationale: Quick and functional; ease-out reads as mechanical, not playful
-  # @constraints: min=100, max=350, type=integer
-  # @spec_source: 03.INTERACTIONS.md — "mechanical, not magical" motion principle
+line_height_heading:
+  value: 1.15
+  # @unit: ratio
+  # @rationale: Headings benefit from tighter leading — they are read as a unit, not line by line.
+  # @constraint: min=1.0, max=1.35
 
-  easing: 'ease-out'
-  # @rationale: Quick start, gentle stop; matches functional mechanical feel
-  # @constraints: type=string
+# Accent color (HSL for easy theme-aware adjustment)
+accent_hue:
+  value: 220
+  # @unit: degrees (HSL hue)
+  # @rationale: Blue-adjacent accent. Signals technical credibility without being aggressive. Readable in both light and dark.
+  # @constraint: min=200, max=260
+
+accent_saturation_light:
+  value: 70
+  # @unit: percent (HSL saturation)
+  # @rationale: Saturated enough to be visually distinct from neutrals; restrained enough not to dominate.
+  # @constraint: min=50, max=85
+
+accent_saturation_dark:
+  value: 60
+  # @unit: percent (HSL saturation)
+  # @rationale: Slightly desaturated in dark mode — highly saturated colors vibrate on dark backgrounds.
+  # @constraint: min=40, max=75
+
+# Neutral palette
+gray_scale_steps:
+  value: 12
+  # @unit: count
+  # @rationale: 12-step gray scale provides enough resolution for surface, border, muted text, and body text variations.
+  # @constraint: min=8, max=16

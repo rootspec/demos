@@ -1,31 +1,50 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Layout System
+# FINE-TUNING: Layout System
 # =============================================================================
 # @spec_version: 1.0.0
-# @system: LAYOUT_SYSTEM
-# @last_updated: 2026-04-25T00:00:00Z
-# @status: draft
 # @spec_source: 04.SYSTEMS/LAYOUT_SYSTEM.md
+# @last_updated: 2026-04-25T17:37:48Z
 
-# -----------------------------------------------------------------------------
-# Base Path
-# -----------------------------------------------------------------------------
+mobile_breakpoint:
+  value: 768
+  # @unit: pixels
+  # @rationale: Standard tablet/mobile breakpoint. Below this, single-column layout and collapsed nav apply.
+  # @constraint: min=640, max=1024
 
-base_path: '/demos/greenfield/'
-# @rationale: Canonical deployment path on GitHub Pages; same in all environments
-# @inviolable: true
-# @spec_source: 02.TRUTHS.md — Base path consistency commitment
+minimum_supported_width:
+  value: 320
+  # @unit: pixels
+  # @rationale: Smallest viewport that must support no horizontal scroll. Covers older iPhones and small Android devices.
+  # @constraint: min=320, max=375
+  # @inviolable: true
 
-# -----------------------------------------------------------------------------
-# Breakpoints
-# -----------------------------------------------------------------------------
+prose_max_width:
+  value: 72
+  # @unit: ch (character units)
+  # @rationale: Editorial reading width. ~65-75ch is the classic optimal line length for long-form reading.
+  # @constraint: min=60, max=80
 
-breakpoints:
-  mobile_max_px: 767
-  # @rationale: Standard md breakpoint; below this navigation collapses and
-  #   comparison panels stack vertically
-  # @constraints: min=640, max=900, type=integer
+content_max_width:
+  value: 1200
+  # @unit: pixels
+  # @rationale: Prevents content from becoming too wide on very large screens while allowing generous desktop layout.
+  # @constraint: min=960, max=1440
 
-  desktop_min_px: 768
-  # @rationale: Paired with mobile_max_px; at this width two-column layouts activate
-  # @constraints: min=641, max=901, type=integer
+section_vertical_spacing:
+  value: 96
+  # @unit: pixels
+  # @rationale: Generous whitespace between sections signals editorial quality. Breathing room is a design signal.
+  # @constraint: min=64, max=128
+
+nav_z_index:
+  value: 100
+  # @unit: integer
+  # @rationale: Navigation must sit above all content including sticky diagram and interactive components.
+  # @constraint: min=50, max=200
+
+meta_banner_z_index:
+  value: 200
+  # @unit: integer
+  # @rationale: Meta banner must sit above navigation — it is the most important element on the page.
+  # @constraint: min=100, max=500
+  # @inviolable: true

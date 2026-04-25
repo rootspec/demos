@@ -1,1 +1,192 @@
-[]
+[
+  {
+    "type": "network_404",
+    "test": "AC-001-1: Meta banner is visible without scrolling",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-001-2: Meta banner contains link to the spec",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-001-3: Meta banner contains link to the seed",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-002-1: Hero section is present with tagline",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-002-2: Version badge is visible in the hero",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-1: Why I Built RootSpec section exists with correct heading",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-2: Author's notes contains the opening paragraph verbatim",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-3: Author's notes contains the replicator metaphor",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-003-4: Author's notes contains the closing paragraph",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-004-1: Navigation includes link to author's notes with correct label",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-004-2: Navigation includes link to the interactive section",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-005-1: Footer is present with attribution text",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-005-2: Footer identifies the AI builder",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-006-1: Problem section is present",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-007-1: How It Works section is present",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-007-2: How It Works mentions the five skills",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-008-1: Methodology diagram is present on the page",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-009-1: Open source CTA section is present",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-101-1: Hierarchy explorer is present on the page",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-101-2: Clicking a level expands it",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-101-3: Clicking an open level collapses it",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-101-4: All five levels are present in the explorer",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-102-1: Wizard is present on the page",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-102-2: Wizard has an input field for the product idea",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-102-3: Entering a product idea enables progression",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-102-4: Wizard step 2 shows mission options",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-103-1: Before/after comparison is present on the page",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-103-2: Both without-spec and with-spec content are accessible",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-103-3: The With RootSpec panel is accessible",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-104-1: Theme toggle is present in the header",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-104-2: Clicking the theme toggle changes the theme",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-201-1: Page does not overflow horizontally at mobile width",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-202-1: Mobile navigation control is present",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-203-1: Hierarchy explorer is usable on mobile",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-204-1: Diagram is present and contained on mobile",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-301-1: Site renders with a light background by default",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-302-1: Theme toggle exists and is clickable",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  },
+  {
+    "type": "network_404",
+    "test": "AC-303-1: Skill commands appear in a code-style element",
+    "message": "404 http://localhost:4321/demos/greenfield/_astro/global.css"
+  }
+]

@@ -1,9 +1,9 @@
 {
-  "lastReview": "2026-04-25T14:34:17.012Z",
+  "lastReview": "2026-04-25T18:01:02.675Z",
   "status": "pass",
   "summary": {
     "staticBlockers": 0,
-    "staticWarnings": 2,
+    "staticWarnings": 7,
     "staticNitpicks": 0,
     "pagesScanned": 1
   },
@@ -12,7 +12,7 @@
       "severity": "warning",
       "category": "broken_link",
       "file": "dist/index.html",
-      "excerpt": "href=\"/demos/greenfield/_astro/index@_@astro.CXA5kksG.css\"",
+      "excerpt": "href=\"/demos/greenfield/_astro/global.css\"",
       "message": "Rooted href does not resolve within build output",
       "id": "REV-001"
     },
@@ -20,9 +20,49 @@
       "severity": "warning",
       "category": "broken_link",
       "file": "dist/index.html",
-      "excerpt": "href=\"/demos/greenfield/\"",
+      "excerpt": "href=\"/demos/greenfield/#why-i-built-rootspec\"",
       "message": "Rooted href does not resolve within build output",
       "id": "REV-002"
+    },
+    {
+      "severity": "warning",
+      "category": "broken_link",
+      "file": "dist/index.html",
+      "excerpt": "href=\"/demos/greenfield/#try-it\"",
+      "message": "Rooted href does not resolve within build output",
+      "id": "REV-003"
+    },
+    {
+      "severity": "warning",
+      "category": "broken_link",
+      "file": "dist/index.html",
+      "excerpt": "href=\"/demos/greenfield/#how-it-works\"",
+      "message": "Rooted href does not resolve within build output",
+      "id": "REV-004"
+    },
+    {
+      "severity": "warning",
+      "category": "broken_link",
+      "file": "dist/index.html",
+      "excerpt": "href=\"/demos/greenfield/#how-it-works\"",
+      "message": "Rooted href does not resolve within build output",
+      "id": "REV-005"
+    },
+    {
+      "severity": "warning",
+      "category": "broken_link",
+      "file": "dist/index.html",
+      "excerpt": "href=\"/demos/greenfield/#try-it\"",
+      "message": "Rooted href does not resolve within build output",
+      "id": "REV-006"
+    },
+    {
+      "severity": "warning",
+      "category": "network_404",
+      "file": "test: AC-001-1: Meta banner is visible without scrolling",
+      "excerpt": "404 http://localhost:4321/demos/greenfield/_astro/global.css",
+      "message": "Network request failed: 404 http://localhost:4321/demos/greenfield/_astro/global.css",
+      "id": "REV-007"
     }
   ],
   "llmInputs": {
@@ -35,11 +75,11 @@
   "llmFindings": {
     "assessment": "needs_review",
     "observations": [
-      "The meta banner is present and visible at the top, correctly framing the site as a RootSpec demo before any other content.",
-      "Typography is editorial in character — serif body copy, restrained palette, light mode default — consistent with the SEED's aesthetic direction.",
-      "The hero tagline uses italic emphasis on 'proof' which lands well, but the hero text appears very large and the scroll-through screenshots reveal it repeating across viewport states, suggesting the section may animate or transition through states in a way that could feel sluggish on first load.",
-      "The four skill badges (/rs-init, /rs-spec, /rs-impl, /rs-validate) are rendered in a monospace pill style and are visible beneath the hero CTA, which matches the spec's requirement for prominent skill labeling.",
-      "Section transitions visible in the scrolling screenshots show consistent layout and spacing, with 'THE PROBLEM' and 'THE HIERARCHY' sections clearly delineated — no obviously broken layout regions detected."
+      "The meta banner at the top is present and visible above the fold, clearly labeling this as a RootSpec demo — the most important element is doing its job.",
+      "The hero section repeats twice in the viewport on desktop, which appears to be a layout or scroll-capture artifact rather than an intentional design choice and may confuse first-time visitors.",
+      "The 'How It Works' section skills grid becomes visually cluttered at mobile widths, with card text overlapping the section heading in the third screenshot.",
+      "Typography is clean and editorial in character — the serif/sans pairing reads well and avoids the generic AI-generated startup-page aesthetic the spec explicitly warns against.",
+      "The 'The Problem: Spec Drift' section repeats several times in the long-scroll screenshots, suggesting either a rendering loop or the section is being shown at multiple breakpoints stacked — a human should verify this is intentional."
     ]
   }
 }
