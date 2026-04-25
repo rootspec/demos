@@ -29,6 +29,12 @@
 - styled-components: add explicit className prop ("Chip", "RemoveBtn") for testability
 - data-testid attributes: compare-card, comparison-column, comparison-remove
 
+## App Readiness
+- **Deferred-execution boundaries:** None detected (static React Vite project)
+- **Current implementation:** cypress/support/app-ready.ts throws until customized
+- **Readiness signal:** Not implemented - project appears to be static with no hydration islands, Suspense boundaries, or lazy loading
+- **Framework contract:** cy.appReady() called after cy.visit() in test steps to ensure interactive readiness
+
 ## Build
 - **Dev server:** ./scripts/dev.sh start (port 5173)
 - **Build command:** vite build
