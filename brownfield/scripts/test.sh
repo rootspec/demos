@@ -5,6 +5,9 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# Pre-flight app-readiness check
+"$SCRIPT_DIR/check-app-ready.sh" "$PROJECT_ROOT"
+
 # Start dev server
 "$SCRIPT_DIR/dev.sh" start
 
