@@ -38,30 +38,18 @@ jobs:
           node-version: "22"
       - run: npm ci --legacy-peer-deps
         if: steps.check.outputs.ready == 'true'
-      - run: chmod +x scripts/dev.sh scripts/test.sh
+      - run: chmod +x scripts/*.sh
         if: steps.check.outputs.ready == 'true'
-      - name: Detect dev server URL
-        id: url
+      - name: Run tests via scripts/test.sh
         if: steps.check.outputs.ready == 'true'
-        run: |
-          BASE=$(./scripts/dev.sh url)
-          echo "wait_on=${BASE}/demos/greenfield/" >> "$GITHUB_OUTPUT"
-          echo "Will wait on: ${BASE}/demos/greenfield/"
-      - name: Run Cypress tests
-        if: steps.check.outputs.ready == 'true'
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: greenfield
-          install: false
-          start: bash scripts/dev.sh start
-          wait-on: ${{ steps.url.outputs.wait_on }}
-          wait-on-timeout: 30
-          browser: chrome
-      - run: ./scripts/dev.sh stop || true
-        if: steps.check.outputs.ready == 'true'
-      - name: Dump dev server log on failure
+        run: ./scripts/test.sh
+      - name: Dump server logs on failure
         if: failure() && steps.check.outputs.ready == 'true'
-        run: cat .dev-server.log 2>/dev/null || echo "No dev-server.log found"
+        run: |
+          echo "=== .dev-server.log ==="
+          cat .dev-server.log 2>/dev/null || echo "(none)"
+          echo "=== .preview-server.log ==="
+          cat .preview-server.log 2>/dev/null || echo "(none)"
       - uses: actions/upload-artifact@v4
         if: always() && steps.check.outputs.ready == 'true'
         with:
@@ -70,6 +58,7 @@ jobs:
             greenfield/dist
             greenfield/public
             greenfield/.dev-server.log
+            greenfield/.preview-server.log
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
