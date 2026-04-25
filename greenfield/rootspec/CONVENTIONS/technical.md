@@ -34,3 +34,8 @@
 1. **Deferred-execution boundaries.** Components using `client:load`: `HierarchyExplorer.tsx` (src/components/HierarchyExplorer.tsx) and `SpecWizard.tsx` (src/components/SpecWizard.tsx). These are Astro client directives that hydrate React islands after the initial HTML arrives.
 
 2. **Readiness signal.** Each `astro-island` element starts with a `ssr` attribute and removes it once hydration completes. `cy.appReady()` waits for `document.readyState === 'complete'` then polls until no `astro-island[ssr]` elements remain on the page.
+
+## Test Viewports
+
+- **MOBILE_JOURNEY:** 375x667
+- **TABLET_JOURNEY:** 768x1024
