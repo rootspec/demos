@@ -1,69 +1,43 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Theme System
+# LEVEL 5: FINE TUNING - Theme and Presentation
 # =============================================================================
-# @spec_version: 7.3.7
-# @system: THEME_SYSTEM
-# @last_updated: 2026-04-23T00:00:00Z
+# @spec_version: 1.0.0
+# @system: THEME_SYSTEM, PRESENTATION_SYSTEM
+# @last_updated: 2026-04-25T00:00:00Z
 # @status: draft
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
+# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md, 04.SYSTEMS/PRESENTATION_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Light Mode Color Tokens
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/PRESENTATION_SYSTEM.md
-
-light:
-  background: "#FAFAF8"
-  # @rationale: Near-white with slight warmth; not pure white which feels clinical
-  # @constraints: type=hex_color
-
-  surface: "#FFFFFF"
-  # @rationale: Pure white for card surfaces that need to lift off background
-  # @constraints: type=hex_color
-
-  text_primary: "#1A1A18"
-  # @rationale: Near-black with slight warmth; not pure black which is harsh on near-white bg
-  # @constraints: type=hex_color
-
-  text_secondary: "#5C5C56"
-  # @rationale: Muted for secondary text; sufficient contrast on both bg and surface
-  # @constraints: type=hex_color
-
-  border: "#E2E2DC"
-  # @rationale: Subtle border that separates without competing
-  # @constraints: type=hex_color
-
-  accent: "#2D6A4F"
-  # @rationale: Muted green; signals "this works, this validates" — connected to the methodology's validation-first philosophy
-  # @reference: L1 Design Pillar "Proof Over Plausibility"
-  # @constraints: type=hex_color
-  # @alternatives: ["#2563EB (blue)", "#7C3AED (purple)", "#B45309 (amber)"]
-
-# -----------------------------------------------------------------------------
-# Dark Mode Color Tokens
+# Theme Defaults
 # -----------------------------------------------------------------------------
 
-dark:
-  background: "#141414"
-  # @rationale: Dark neutral; not pure black
-  # @constraints: type=hex_color
+theme:
+  default: 'light'
+  # @rationale: Editorial sites read better in light mode; dark mode as default
+  #   is a tell that the site was AI-generated from training-data defaults
+  # @inviolable: true
+  # @spec_source: 02.TRUTHS.md — Light mode default commitment
 
-  surface: "#1E1E1E"
-  # @rationale: Slightly lighter than background for surface elevation
-  # @constraints: type=hex_color
+  storage_key: 'rootspec-theme'
+  # @rationale: Stable key for localStorage persistence across sessions
+  # @constraints: type=string
 
-  text_primary: "#F0F0EC"
-  # @rationale: Near-white with warmth to match light mode philosophy
-  # @constraints: type=hex_color
+  switch_transition_ms: 0
+  # @rationale: No animation on theme switch; jarring color shifts are worse
+  #   than an instant change
+  # @inviolable: true
+  # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
-  text_secondary: "#9E9E96"
-  # @rationale: Muted but readable on dark background
-  # @constraints: type=hex_color
+# -----------------------------------------------------------------------------
+# Motion
+# -----------------------------------------------------------------------------
 
-  border: "#2A2A28"
-  # @rationale: Subtle dark border
-  # @constraints: type=hex_color
+motion:
+  transition_duration_ms: 200
+  # @rationale: Quick and functional; ease-out reads as mechanical, not playful
+  # @constraints: min=100, max=350, type=integer
+  # @spec_source: 03.INTERACTIONS.md — "mechanical, not magical" motion principle
 
-  accent: "#52B788"
-  # @rationale: Lighter green for dark mode; maintains meaning, improves contrast
-  # @constraints: type=hex_color
+  easing: 'ease-out'
+  # @rationale: Quick start, gentle stop; matches functional mechanical feel
+  # @constraints: type=string

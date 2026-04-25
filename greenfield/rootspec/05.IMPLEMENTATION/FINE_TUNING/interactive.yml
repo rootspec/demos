@@ -1,9 +1,9 @@
 # =============================================================================
-# LEVEL 5: FINE TUNING - Interactive System
+# LEVEL 5: FINE TUNING - Interactive Components
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @system: INTERACTIVE_SYSTEM
-# @last_updated: 2026-04-23T00:00:00Z
+# @last_updated: 2026-04-25T00:00:00Z
 # @status: draft
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
@@ -13,55 +13,44 @@
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
 hierarchy_explorer:
-  expand_transition_ms: 200
-  # @rationale: Quick enough to feel mechanical, not slow enough to feel sluggish
+  expand_duration_ms: 200
+  # @rationale: Quick enough to feel mechanical, not playful; matches editorial feel
   # @constraints: min=100, max=400, type=integer
-  # @reference: L2 Truths - transitions should be 150-250ms ease-out
+  # @spec_source: 03.INTERACTIONS.md — "mechanical, not magical" motion principle
 
-  min_pillar_selections: 3
-  # @rationale: Three pillars is the minimum for meaningful design direction per L1 Design Pillars section
-  # @constraints: min=1, max=5, type=integer
-  # @inviolable: false
+  collapse_duration_ms: 150
+  # @rationale: Collapse is faster than expand — disappearance should not linger
+  # @constraints: min=80, max=300, type=integer
 
-  max_pillar_selections: 5
-  # @rationale: More than five pillars dilutes focus - L1 warns against too many pillars
-  # @reference: 01.PHILOSOPHY.md - Design Pillars
-  # @constraints: min=3, max=8, type=integer
+  max_expanded: 1
+  # @rationale: Only one level expanded at a time; forces deliberate navigation
+  # @inviolable: true
+  # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
 # -----------------------------------------------------------------------------
 # Spec Wizard
 # -----------------------------------------------------------------------------
 # @spec_source: 04.SYSTEMS/INTERACTIVE_SYSTEM.md
 
-wizard:
-  total_steps: 3
-  # @rationale: Three steps (mission, pillars, interaction) maps directly to L1-L3
-  # @constraints: type=integer
+spec_wizard:
+  total_steps: 4
+  # @rationale: Mission + pillars + key interaction = three substantive inputs
+  #   plus the output review step; four total is the minimum for meaningful output
   # @inviolable: true
 
-  min_idea_length: 5
-  # @rationale: Prevents trivially short inputs that produce meaningless output
-  # @constraints: min=1, max=20, type=integer
+  min_pillars: 3
+  # @rationale: Fewer than 3 pillars does not demonstrate the hierarchy concept
+  # @constraints: min=2, max=3, type=integer
 
-  max_idea_length: 200
-  # @rationale: One-line product idea; longer inputs suggest misuse of the field
-  # @constraints: min=100, max=500, type=integer
+  max_pillars: 5
+  # @rationale: More than 5 dilutes focus; matches L1 Philosophy pillar guidance
+  # @constraints: min=4, max=8, type=integer
+  # @spec_source: 01.PHILOSOPHY.md — Design Pillars section
 
-  min_interaction_length: 10
-  # @rationale: Needs enough substance to generate a meaningful L3 stub
-  # @constraints: min=5, max=50, type=integer
+  pillar_suggestions_count: 12
+  # @rationale: Enough variety to feel useful without overwhelming; visitor picks 3-5
+  # @constraints: min=8, max=20, type=integer
 
-# -----------------------------------------------------------------------------
-# Theme System
-# -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
-
-theme:
-  transition_ms: 150
-  # @rationale: Fast enough that theme switch feels instant, not jarring
-  # @constraints: min=0, max=300, type=integer
-  # @reference: L2 Truths - quick and functional transitions
-
-  storage_key: "rootspec-theme"
-  # @rationale: Namespaced to avoid collision with other localStorage keys
-  # @inviolable: false
+  mission_templates_count: 5
+  # @rationale: Enough to illustrate variety; not so many that choice is paralysing
+  # @constraints: min=3, max=10, type=integer

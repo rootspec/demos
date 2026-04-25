@@ -2,100 +2,74 @@
 
 ## Responsibility
 
-Renders all visible page content using the type system, spacing, and color tokens defined by THEME_SYSTEM. Translates layout structure from LAYOUT_SYSTEM into rendered HTML. Applies interactive states from INTERACTIVE_SYSTEM.
+Owns all visual design tokens: typography, color palette, spacing, and motion parameters. No system uses raw color or spacing values — all styling is expressed through tokens defined here.
 
-The presentation layer is the site's argument made visible: typography-first, generous whitespace, restrained palette. A generic-looking presentation layer actively contradicts the product's thesis.
+## Typography
 
-## Boundaries
+**Roles:**
+- **Body / prose:** High-quality serif (e.g., Source Serif, Newsreader, or Charter). Used for all running text, the Author's Notes section, and the Problem/How It Works prose. Signals essay-quality writing.
+- **UI / labels:** Clean sans-serif (e.g., Inter or IBM Plex Sans). Used for navigation, section headings, button labels, meta-banner, and wizard UI chrome.
+- **Code / commands:** Monospace (e.g., JetBrains Mono or IBM Plex Mono). Used for the four skill names (`/rs-init`, etc.), code examples, and the version badge.
 
-- Owns: visual rendering, component markup, CSS, animation behavior
-- Does not own: content strings (CONTENT_SYSTEM), interactive logic (INTERACTIVE_SYSTEM), theme state (THEME_SYSTEM)
-- Does not make network requests
-- Does not write to localStorage
+**Scale:** Generous. Long line lengths are acceptable for prose sections — editorial context expects them.
 
-## Typography System
+## Color Palette
 
-**Body / prose:** High-quality serif typeface (e.g., Source Serif 4, Newsreader, or similar). Signals essay-quality writing. Used for all paragraph text, section descriptions, long-form copy.
+**Principle:** Restrained. Two or three colors plus neutrals. One accent color used sparingly.
 
-**UI / labels / navigation:** Clean sans-serif (e.g., Inter, IBM Plex Sans). Used for navigation, labels, buttons, captions, and short functional text.
+**Token structure:**
+- `--color-bg`: Page background
+- `--color-surface`: Card/panel background (slightly offset from bg)
+- `--color-text-primary`: Main body text
+- `--color-text-secondary`: Metadata, labels, captions
+- `--color-accent`: Interactive states, links, highlights — used sparingly
+- `--color-border`: Dividers and component borders
+- `--color-banner-bg`: Meta-banner background (slightly distinct from main bg)
 
-**Code / commands:** Monospace face (e.g., JetBrains Mono, IBM Plex Mono). Used for all command examples (`/rs-init`, `/rs-spec`, etc.), code snippets, and technical labels.
+**Light mode:** Light background (off-white, not pure white), dark text, one muted accent.
+**Dark mode:** Dark background, light text, same accent (adjusted for contrast).
 
-**Scale:** Modular type scale with [minimum body size] at base, headings derived proportionally. Line length for prose capped at [comfortable reading width] characters.
+**Anti-patterns:** No gradients. No glassmorphism. No glow effects. No decorative color use.
 
-## Color System
+## Spacing
 
-**Palette:** Two or three colors maximum plus neutrals. One accent color used sparingly for interactive states, links, and emphasis.
+**Principle:** Generous whitespace. Sections breathe. Content is not cramped.
 
-**Light mode (default):**
-- Background: near-white (not pure white)
-- Body text: dark neutral (not pure black)
-- Accent: [single accent color]
-- Borders/dividers: light neutral
+**Token structure:**
+- `--space-xs`, `--space-sm`, `--space-md`, `--space-lg`, `--space-xl`, `--space-2xl`: Scale of spacing values
+- Section padding uses `--space-xl` or `--space-2xl` top/bottom
+- Paragraph spacing is generous within prose sections
 
-**Dark mode:**
-- Background: dark neutral (not pure black)
-- Body text: near-white
-- Accent: same or adjusted for contrast
-- Borders/dividers: dark neutral
+## Motion
 
-No gradients. No glassmorphism. No glows. No decorative effects. Color is used for meaning, not decoration.
+**Principle:** Mechanical, not magical. Transitions are functional signals, not entertainment.
 
-## Animation and Motion
+- **Duration:** [short transition duration] for expand/collapse, toggle, and state changes
+- **Easing:** ease-out — quick start, gentle stop
+- **No spring physics, no parallax, no scroll-triggered animations**
+- **Theme switch:** Instant — no transition on color swap
 
-**Philosophy:** Mechanical, not magical. Transitions confirm state change; they do not entertain. Quick and functional.
+## SVG Diagram (RootSpec Methodology)
 
-**Durations:**
-- State transitions (expand/collapse, toggle): [short transition duration] ease-out
-- Theme switch: [short transition duration]
-- No parallax, no springy physics, no entrance animations on scroll
+The site includes one SVG diagram depicting the RootSpec methodology: a spec surrounding the development cycle, allowing only valid solutions to pass through.
 
-**Accessibility:** Respects `prefers-reduced-motion`. All animated transitions degrade to instant state change when reduced motion is preferred.
+**Design requirements:**
+- Clear linework, intentional spacing — looks drawn, not generated
+- No clip-art icons, no Visio-style chrome
+- Monochrome or two-color — no decorative palette
+- Scales correctly in both light and dark modes (uses `currentColor` or CSS variables)
+- Inline SVG preferred (avoids separate HTTP request; inherits CSS variables)
 
-## Responsive Behavior
+## Responsive Strategy
 
-**Breakpoints:**
-- Mobile: single-column, stacked layout
-- Tablet: intermediate adjustments
-- Desktop: full layout with side-by-side comparison, wider prose columns
+- **Mobile-first:** Base styles target mobile; breakpoints add desktop layout
+- **Typography:** Font sizes scale down on small screens; line lengths shorten
+- **Interactive components:** Explorer and Wizard are touch-friendly at all screen widths
+- **Comparison panels:** Stack vertically on mobile, side by side on desktop
+- **Navigation:** Collapses to compact form on mobile
 
-**Interactive components on mobile:**
-- Touch targets minimum [minimum touch target size]
-- Comparison view stacks vertically with toggle instead of side-by-side
-- Hierarchy explorer uses full-width cards
-- Wizard uses full-width single-column steps
+## Interactions with Other Systems
 
-## Component Patterns
-
-### Section
-Each page section has: heading, optional subheading, body content, optional interactive element. Sections are separated by generous whitespace, not decorative dividers.
-
-### Interactive Cards (Hierarchy Explorer)
-Cards with clear borders, no shadows. Expanded state shows content below the header. Reference lines are SVG overlays or CSS-drawn connections.
-
-### Wizard Steps
-Step indicator shows current position. Each step is a discrete panel. Output block renders in a styled code/prose hybrid.
-
-### Comparison Panels
-Two panels with equal visual weight. Toggle or slider control is clearly labeled "Without spec" / "With RootSpec."
-
-### Meta-Banner
-Visually distinct from the rest of the page — uses a background color that separates it from the header. Text is legible at small sizes. Links are clearly actionable.
-
-### Version Badge
-Inline badge element — not a large graphic. Positioned in the hero or header without competing with primary content.
-
-## Accessibility
-
-- Semantic HTML throughout: `<main>`, `<nav>`, `<section>`, `<article>`, `<header>`, `<footer>`
-- All interactive elements have visible focus rings
-- All images and SVGs have descriptive `alt` text or `aria-label`
-- Color contrast meets WCAG AA for all text/background combinations in both modes
-- Interactive components have appropriate ARIA roles and states (`aria-expanded`, `aria-selected`, etc.)
-
-## Interaction with Other Systems
-
-- **Receives from THEME_SYSTEM:** Active theme class/attribute applied to `<html>` or `<body>`; CSS custom properties update accordingly
-- **Receives from CONTENT_SYSTEM:** Version string, meta-banner copy, section content
-- **Receives from INTERACTIVE_SYSTEM:** Component state (which hierarchy level is expanded, which wizard step is active, which comparison panel is shown)
-- **Renders:** All of the above into visible, accessible HTML
+- Provides CSS custom property tokens consumed by all other systems
+- Receives theme state from THEME_SYSTEM (applied as class or data attribute on `<html>`)
+- All visual styling in INTERACTIVE_SYSTEM, LAYOUT_SYSTEM, and CONTENT_SYSTEM uses tokens from this system

@@ -1,10 +1,10 @@
 {
   "runs": [
     {
-      "runId": "61a0047f",
-      "startedAt": "2026-04-23T17:42:51.986Z",
-      "completedAt": "2026-04-23T18:37:18.103Z",
-      "totalCostUsd": 4.94,
+      "runId": "2da5f1e8",
+      "startedAt": "2026-04-25T14:14:59.001Z",
+      "completedAt": "2026-04-25T14:34:47.931Z",
+      "totalCostUsd": 3.97,
       "phases": {
         "init": {
           "status": "success",
@@ -14,32 +14,32 @@
         },
         "spec": {
           "status": "success",
-          "costUsd": 1.08,
-          "turns": 34,
-          "durationSeconds": 367
+          "costUsd": 1.14,
+          "turns": 37,
+          "durationSeconds": 349
         },
         "impl": {
           "status": "success",
-          "costUsd": 3.43,
-          "turns": 104,
-          "durationSeconds": 2731
+          "costUsd": 2.37,
+          "turns": 95,
+          "durationSeconds": 670
         },
         "validate": {
           "status": "success",
-          "costUsd": 0.29,
-          "turns": 23,
-          "durationSeconds": 127
+          "costUsd": 0.32,
+          "turns": 18,
+          "durationSeconds": 132
         },
         "review": {
           "status": "success",
           "costUsd": 0.15,
-          "turns": 7,
-          "durationSeconds": 35
+          "turns": 9,
+          "durationSeconds": 31
         }
       },
       "review": {
         "staticBlockers": 0,
-        "staticWarnings": 6,
+        "staticWarnings": 2,
         "llmAssessment": "needs_review"
       }
     }

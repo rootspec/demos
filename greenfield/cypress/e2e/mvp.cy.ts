@@ -22,13 +22,13 @@ function loadAndRun(yamlContent: string) {
   }
 }
 
-// US-001: Meta-banner is the first visible element on every page load
+// US-001: Meta banner is visible above the fold on page load
 const stories_001 = `
 id: US-001
-title: Meta-banner is the first visible element on every page load
+title: Meta banner is visible above the fold on page load
 acceptance_criteria:
   - id: AC-001-1
-    title: Meta-banner appears above all content on desktop
+    title: Meta banner is present in the page
     given:
       - visit: /demos/greenfield/
     then:
@@ -36,79 +36,92 @@ acceptance_criteria:
           selector: '[data-test=meta-banner]'
     when: []
   - id: AC-001-2
-    title: Meta-banner contains spec link and seed link
+    title: Meta banner contains links to spec and seed files
     given:
       - visit: /demos/greenfield/
     then:
       - shouldExist:
-          selector: '[data-test=meta-banner] [data-test=spec-link]'
-      - shouldExist:
-          selector: '[data-test=meta-banner] [data-test=seed-link]'
-    when: []
-  - id: AC-001-3
-    title: Meta-banner links are absolute GitHub URLs
-    given:
-      - visit: /demos/greenfield/
-    then:
-      - shouldContain:
-          selector: '[data-test=spec-link]'
-          text: spec
-      - shouldContain:
-          selector: '[data-test=seed-link]'
-          text: seed
+          selector: '[data-test=meta-banner] a[href*="github.com"]'
     when: []
 `;
 loadAndRun(stories_001);
 
-// US-002: Version badge displays current RootSpec version
+// US-002: Hero section displays tagline, explanation, and version badge
 const stories_002 = `
 id: US-002
-title: Version badge displays current RootSpec version
+title: Hero section displays tagline, explanation, and version badge
 acceptance_criteria:
   - id: AC-002-1
-    title: Version badge is visible in the hero section
+    title: Hero section is present
     given:
       - visit: /demos/greenfield/
     then:
+      - shouldExist:
+          selector: '[data-test=hero]'
       - shouldExist:
           selector: '[data-test=version-badge]'
     when: []
   - id: AC-002-2
-    title: Version badge contains a semver string
+    title: Version badge displays a version string
     given:
       - visit: /demos/greenfield/
     then:
-      - shouldExist:
+      - shouldContain:
           selector: '[data-test=version-badge]'
+          text: v
     when: []
 `;
 loadAndRun(stories_002);
 
-// US-004: User can explore the five-level hierarchy interactively
+// US-003: Author's Notes section renders the full verbatim text
+const stories_003 = `
+id: US-003
+title: Author's Notes section renders the full verbatim text
+acceptance_criteria:
+  - id: AC-003-1
+    title: Author's Notes section exists with a heading
+    given:
+      - visit: /demos/greenfield/
+    then:
+      - shouldExist:
+          selector: '[data-test=authors-notes]'
+    when: []
+  - id: AC-003-2
+    title: Author's Notes contains the opening sentence of the author's text
+    given:
+      - visit: /demos/greenfield/
+    then:
+      - shouldContain:
+          selector: '[data-test=authors-notes]'
+          text: This page explains why I built Rootspec.
+    when: []
+  - id: AC-003-3
+    title: Author's Notes contains the replicator metaphor
+    given:
+      - visit: /demos/greenfield/
+    then:
+      - shouldContain:
+          selector: '[data-test=authors-notes]'
+          text: replicator from Star Trek
+    when: []
+`;
+loadAndRun(stories_003);
+
+// US-004: Visitor expands a hierarchy level to see its purpose and example content
 const stories_004 = `
 id: US-004
-title: User can explore the five-level hierarchy interactively
+title: Visitor expands a hierarchy level to see its purpose and example content
 acceptance_criteria:
   - id: AC-004-1
-    title: All five hierarchy levels are visible
+    title: Hierarchy Explorer is present on the page
     given:
       - visit: /demos/greenfield/
     then:
       - shouldExist:
           selector: '[data-test=hierarchy-explorer]'
-      - shouldExist:
-          selector: '[data-test=hierarchy-level-1]'
-      - shouldExist:
-          selector: '[data-test=hierarchy-level-2]'
-      - shouldExist:
-          selector: '[data-test=hierarchy-level-3]'
-      - shouldExist:
-          selector: '[data-test=hierarchy-level-4]'
-      - shouldExist:
-          selector: '[data-test=hierarchy-level-5]'
     when: []
   - id: AC-004-2
-    title: Clicking a level card expands it to show content
+    title: Clicking a level reveals expanded content
     given:
       - visit: /demos/greenfield/
     when:
@@ -116,31 +129,29 @@ acceptance_criteria:
           selector: '[data-test=hierarchy-level-1]'
     then:
       - shouldExist:
-          selector: '[data-test=hierarchy-level-1][aria-expanded="true"]'
-      - shouldExist:
-          selector: '[data-test=hierarchy-level-1-content]'
+          selector: '[data-test=hierarchy-level-1-expanded]'
   - id: AC-004-3
-    title: Clicking an expanded level collapses it
+    title: Expanding a different level collapses the previous
     given:
       - visit: /demos/greenfield/
     when:
       - click:
           selector: '[data-test=hierarchy-level-1]'
       - click:
-          selector: '[data-test=hierarchy-level-1]'
+          selector: '[data-test=hierarchy-level-2]'
     then:
       - shouldExist:
-          selector: '[data-test=hierarchy-level-1][aria-expanded="false"]'
+          selector: '[data-test=hierarchy-level-2-expanded]'
 `;
 loadAndRun(stories_004);
 
-// US-005: User can generate a skeleton spec from a one-line product idea
+// US-005: Visitor completes the Spec Wizard and receives a skeleton spec output
 const stories_005 = `
 id: US-005
-title: User can generate a skeleton spec from a one-line product idea
+title: Visitor completes the Spec Wizard and receives a skeleton spec output
 acceptance_criteria:
   - id: AC-005-1
-    title: Wizard is present and shows Step 1 on load
+    title: Spec Wizard is present on the page
     given:
       - visit: /demos/greenfield/
     then:
@@ -148,156 +159,74 @@ acceptance_criteria:
           selector: '[data-test=spec-wizard]'
       - shouldExist:
           selector: '[data-test=wizard-step-1]'
-      - shouldExist:
-          selector: '[data-test=wizard-idea-input]'
     when: []
   - id: AC-005-2
-    title: User can advance through all three steps
+    title: Entering a product idea and advancing shows Step 2
     given:
       - visit: /demos/greenfield/
     when:
       - fill:
-          selector: '[data-test=wizard-idea-input]'
-          value: A tool to help developers write better commit messages
+          selector: '[data-test=wizard-product-idea]'
+          value: A tool for tracking reading habits
       - click:
           selector: '[data-test=wizard-next]'
     then:
       - shouldExist:
           selector: '[data-test=wizard-step-2]'
   - id: AC-005-3
-    title: Completing all steps generates a skeleton spec
+    title: Empty product idea prevents advancing
     given:
       - visit: /demos/greenfield/
     when:
-      - fill:
-          selector: '[data-test=wizard-idea-input]'
-          value: A tool to help teams avoid scope drift
       - click:
           selector: '[data-test=wizard-next]'
-      - click:
-          selector: '[data-test=wizard-mission-option]'
-      - click:
-          selector: '[data-test=wizard-next]'
-      - click:
-          selector: '[data-test=wizard-pillar-option]'
-      - click:
-          selector: '[data-test=wizard-pillar-option]'
-      - click:
-          selector: '[data-test=wizard-pillar-option]'
-      - click:
-          selector: '[data-test=wizard-next]'
-      - fill:
-          selector: '[data-test=wizard-interaction-input]'
-          value: User runs /rs-spec and answers interview questions
-      - click:
-          selector: '[data-test=wizard-generate]'
     then:
       - shouldExist:
-          selector: '[data-test=wizard-result]'
-      - shouldExist:
-          selector: '[data-test=wizard-result-l1]'
+          selector: '[data-test=wizard-error]'
 `;
 loadAndRun(stories_005);
 
-// US-006: User can see a before/after comparison of spec vs no spec
-const stories_006 = `
-id: US-006
-title: User can see a before/after comparison of spec vs no spec
-acceptance_criteria:
-  - id: AC-006-1
-    title: Comparison section shows both panels
-    given:
-      - visit: /demos/greenfield/
-    then:
-      - shouldExist:
-          selector: '[data-test=comparison-section]'
-      - shouldExist:
-          selector: '[data-test=comparison-without]'
-      - shouldExist:
-          selector: '[data-test=comparison-with]'
-    when: []
-`;
-loadAndRun(stories_006);
-
-// US-007: Site is usable on mobile devices
+// US-007: Core page sections are readable and usable on mobile viewports
 const stories_007 = `
 id: US-007
-title: Site is usable on mobile devices
+title: Core page sections are readable and usable on mobile viewports
 acceptance_criteria:
   - id: AC-007-1
-    title: Site renders without horizontal overflow on mobile viewport
+    title: Meta banner is visible on mobile without horizontal scrolling
     given:
       - visit: /demos/greenfield/
     then:
       - shouldExist:
           selector: '[data-test=meta-banner]'
+    when: []
+  - id: AC-007-2
+    title: Hero section is present and readable on mobile
+    given:
+      - visit: /demos/greenfield/
+    then:
       - shouldExist:
           selector: '[data-test=hero]'
+      - shouldExist:
+          selector: '[data-test=version-badge]'
     when: []
 `;
 loadAndRun(stories_007);
 
-// US-008: User can navigate the full page and reach the CTA
-const stories_008 = `
-id: US-008
-title: User can navigate the full page and reach the CTA
+// US-006: Visitor can toggle between light and dark mode
+const stories_006 = `
+id: US-006
+title: Visitor can toggle between light and dark mode
 acceptance_criteria:
-  - id: AC-008-1
-    title: All major sections are present on the page
-    given:
-      - visit: /demos/greenfield/
-    then:
-      - shouldExist:
-          selector: '[data-test=hero]'
-      - shouldExist:
-          selector: '[data-test=problem-section]'
-      - shouldExist:
-          selector: '[data-test=how-it-works]'
-      - shouldExist:
-          selector: '[data-test=hierarchy-explorer]'
-      - shouldExist:
-          selector: '[data-test=spec-wizard]'
-      - shouldExist:
-          selector: '[data-test=comparison-section]'
-      - shouldExist:
-          selector: '[data-test=cta-section]'
-    when: []
-  - id: AC-008-2
-    title: CTA section links to the GitHub repository
-    given:
-      - visit: /demos/greenfield/
-    then:
-      - shouldExist:
-          selector: '[data-test=cta-section] [data-test=github-link]'
-    when: []
-  - id: AC-008-3
-    title: Footer shows attribution
-    given:
-      - visit: /demos/greenfield/
-    then:
-      - shouldExist:
-          selector: '[data-test=footer]'
-      - shouldExist:
-          selector: '[data-test=footer-attribution]'
-    when: []
-`;
-loadAndRun(stories_008);
-
-// US-003: User can toggle between light and dark mode
-const stories_003 = `
-id: US-003
-title: User can toggle between light and dark mode
-acceptance_criteria:
-  - id: AC-003-1
-    title: Theme toggle button is present in the header
+  - id: AC-006-1
+    title: Theme toggle control is present in the header
     given:
       - visit: /demos/greenfield/
     then:
       - shouldExist:
           selector: '[data-test=theme-toggle]'
     when: []
-  - id: AC-003-2
-    title: Clicking the toggle switches from light to dark mode
+  - id: AC-006-2
+    title: Clicking the theme toggle changes the active theme
     given:
       - visit: /demos/greenfield/
     when:
@@ -305,26 +234,6 @@ acceptance_criteria:
           selector: '[data-test=theme-toggle]'
     then:
       - shouldExist:
-          selector: html[data-theme="dark"]
-  - id: AC-003-3
-    title: Clicking the toggle again returns to light mode
-    given:
-      - visit: /demos/greenfield/
-    when:
-      - click:
-          selector: '[data-test=theme-toggle]'
-      - click:
-          selector: '[data-test=theme-toggle]'
-    then:
-      - shouldExist:
-          selector: html[data-theme="light"]
-  - id: AC-003-4
-    title: Default theme is light mode
-    given:
-      - visit: /demos/greenfield/
-    then:
-      - shouldExist:
-          selector: html[data-theme="light"]
-    when: []
+          selector: html[data-theme="dark"], html.dark
 `;
-loadAndRun(stories_003);
+loadAndRun(stories_006);

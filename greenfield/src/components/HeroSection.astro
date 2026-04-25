@@ -1,44 +1,46 @@
 ---
-const ROOTSPEC_VERSION = '7.3.7';
+import rootspecConfig from '../../.rootspec.json';
+const version = rootspecConfig.version;
 ---
-<section
-  data-test="hero"
-  class="py-24 px-4 text-center"
-  style="background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%);"
->
-  <div class="section-container">
-    <div class="inline-flex items-center gap-2 mb-6">
+
+<section id="hero" data-test="hero" style="padding: var(--space-2xl) 1.5rem; background-color: var(--color-bg);">
+  <div style="max-width: 780px; margin: 0 auto;">
+    <div style="margin-bottom: 1.5rem;">
       <span
         data-test="version-badge"
-        class="text-xs font-mono font-semibold px-3 py-1 rounded-full"
-        style="background-color: var(--color-surface-alt); color: var(--color-primary); border: 1px solid var(--color-border);"
+        style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 500; background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: 4px; padding: 0.25rem 0.625rem; color: var(--color-text-secondary);"
       >
-        v{ROOTSPEC_VERSION}
+        v{version}
       </span>
     </div>
-    <h1 class="text-5xl font-extrabold tracking-tight mb-6" style="color: var(--color-text);">
-      Build software from<br />
-      <span style="color: var(--color-primary);">intent</span>, not assumption
+    <h1 style="font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 400; line-height: 1.15; color: var(--color-text-primary); margin-bottom: 1.25rem; letter-spacing: -0.01em;">
+      When code and specs can be generated trivially, <em>proof</em> matters more than ever.
     </h1>
-    <p class="text-xl max-w-2xl mx-auto mb-10" style="color: var(--color-text-muted);">
-      RootSpec is a structured specification methodology that aligns your team around
-      a single source of truth — before a single line of code is written.
+    <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 1.2rem; color: var(--color-text-secondary); line-height: 1.65; margin-bottom: 2rem; max-width: 640px;">
+      RootSpec is a specification methodology for software where philosophy guides implementation, never vice versa. Four commands turn a product description into a validated, running application.
     </p>
-    <div class="flex flex-wrap gap-4 justify-center">
+    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;">
       <a
-        href="#how-it-works"
-        class="px-6 py-3 rounded-lg font-semibold text-white transition-colors"
-        style="background-color: var(--color-primary);"
+        href="#wizard"
+        style="background-color: var(--color-accent); color: #fff; padding: 0.65rem 1.4rem; border-radius: 4px; text-decoration: none; font-weight: 500; font-size: 0.9375rem;"
       >
-        See how it works
+        Spec your idea →
       </a>
       <a
-        href="#spec-wizard"
-        class="px-6 py-3 rounded-lg font-semibold transition-colors"
-        style="border: 1px solid var(--color-border); color: var(--color-text);"
+        href="https://github.com/rootspec/rootspec"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="color: var(--color-text-secondary); font-size: 0.9rem; text-decoration: none; border-bottom: 1px solid var(--color-border); padding-bottom: 1px;"
       >
-        Try the spec wizard
+        View on GitHub
       </a>
+    </div>
+    <div style="margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: 1rem;">
+      {['/rs-init', '/rs-spec', '/rs-impl', '/rs-validate'].map(cmd => (
+        <code style="font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: 3px; padding: 0.25rem 0.5rem; color: var(--color-text-primary);">
+          {cmd}
+        </code>
+      ))}
     </div>
   </div>
 </section>

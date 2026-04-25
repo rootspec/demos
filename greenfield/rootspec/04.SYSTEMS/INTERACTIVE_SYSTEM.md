@@ -2,92 +2,69 @@
 
 ## Responsibility
 
-Owns all client-side interactive logic: the hierarchy explorer, the spec wizard, and the comparison view. Manages the state for each component and exposes that state to PRESENTATION_SYSTEM for rendering. No network calls. No server state.
-
-## Boundaries
-
-- Owns: interactive component state, state transitions, client-side logic
-- Does not own: rendering (PRESENTATION_SYSTEM), content/copy (CONTENT_SYSTEM), theme (THEME_SYSTEM)
-- All data is either static (from CONTENT_SYSTEM) or derived from user input
-- No persistence beyond the current page session (wizard state is ephemeral)
+Manages all client-side interactive components: the Hierarchy Explorer and the Spec Wizard. Both components are stateful, keyboard-accessible, touch-friendly, and operate without network requests.
 
 ## Components
 
 ### Hierarchy Explorer
 
+**Purpose:** Visualizes the five RootSpec levels, their purposes, and their reference rules. Users can expand levels to see example content and see reference arrows that flow upward only.
+
 **State:**
-- `expandedLevel`: null | 1 | 2 | 3 | 4 | 5 — which level is currently expanded
-- `hoveredLevel`: null | 1 | 2 | 3 | 4 | 5 — which level the pointer is over
+- `expandedLevel`: Which level is currently expanded (null | 1 | 2 | 3 | 4 | 5)
+- `hoveredLevel`: Which level the cursor/focus is on (null | 1 | 2 | 3 | 4 | 5)
+- `mode`: Inferred from context (`visual` for desktop, `stacked` for mobile)
 
-**State transitions:**
-- Click/tap level card → toggle `expandedLevel` (expand if collapsed, collapse if expanded)
-- Hover level card → set `hoveredLevel`; highlight allowed upward references
-- Hover end → clear `hoveredLevel`
-- Keyboard: ArrowDown/ArrowUp navigate levels; Enter/Space toggle expansion; Tab moves through interactive elements
+**Behavior rules:**
+- Only one level can be expanded at a time; expanding a new level collapses the previous
+- Clicking the expanded level collapses it
+- Keyboard: Tab to navigate between levels; Enter or Space to expand/collapse; Escape to collapse all
+- Hovering/focusing a level highlights the levels it can reference (upward arrows only)
+- Reference arrows animate on hover/focus; no animation on expand/collapse (mechanical, not playful)
+- If JavaScript is unavailable, all five levels are shown in expanded state (readable without interaction)
 
-**Reference highlighting rules:**
-- When L2 is hovered: highlight L1 (it can reference L1)
-- When L3 is hovered: highlight L1, L2
-- When L4 is hovered: highlight L1, L2, L3, and sibling L4 entries
-- When L5 is hovered: highlight all levels
-- When L1 is hovered: no levels highlighted (references external only)
-
-**Content rendered when expanded:**
-Each level shows: purpose, key contents, reference rules, example content snippet. All content sourced from CONTENT_SYSTEM.
+**Data consumed from CONTENT_SYSTEM:**
+- Level name, purpose sentence, example content (short prose), reference rules (list of allowed levels)
 
 ### Spec Wizard
 
-**State:**
-- `currentStep`: 1 | 2 | 3 | 'result'
-- `productIdea`: string — user's one-line product idea
-- `selectedMission`: string — chosen or typed mission statement
-- `selectedPillars`: string[] — 3-5 selected design pillar names
-- `keyInteraction`: string — user's free-text description of one interaction
-
-**State transitions:**
-- Step 1: User fills in product idea, selects or types mission → `Next` advances to step 2
-- Step 2: User selects 3-5 design pillars → `Next` advances to step 3 (validation: must select at least 3)
-- Step 3: User describes key interaction → `Generate` transitions to `result`
-- Result: Skeleton spec rendered from state; `Start Over` resets all state to step 1
-- `Back` button on steps 2 and 3 navigates to previous step without clearing state
-- Keyboard: Tab/Shift-Tab navigate fields; Enter submits current step; Escape does not clear state
-
-**Skeleton spec generation:**
-Produces a structured text output (markdown or formatted block) showing:
-- L1: Mission (from `selectedMission`), Design Pillars (from `selectedPillars` rendered as pillar stubs)
-- L2: One trade-off stub derived from the product idea
-- L3: Key interaction formatted as a basic interaction loop (Given/When/Then narrative)
-
-No AI involved — all generation is template substitution using content from CONTENT_SYSTEM.
-
-**Validation rules:**
-- Step 1: `productIdea` must be non-empty; `selectedMission` must be non-empty
-- Step 2: `selectedPillars` length must be >= 3 and <= 5
-- Step 3: `keyInteraction` must be non-empty
-
-### Comparison View
+**Purpose:** A four-step mini-wizard where visitors enter a product idea and walk through mission, design pillars, and a key interaction to receive a skeleton spec output.
 
 **State:**
-- `activePanel`: 'without' | 'with' — which panel is shown on mobile (desktop shows both)
-- `viewport`: 'mobile' | 'desktop' — derived from viewport width at render time
+- `currentStep`: 1 | 2 | 3 | 4 | `output`
+- `answers`: Map of step → answer value
+  - Step 1: `productIdea` (string, required)
+  - Step 2: `mission` (string — selected template or free text)
+  - Step 3: `pillars` (array of strings, 3-5 required)
+  - Step 4: `keyInteraction` (string, required)
+- `validationError`: Error message for current step if validation fails
 
-**State transitions:**
-- Mobile: toggle button switches `activePanel` between 'without' and 'with'
-- Desktop: both panels shown simultaneously; toggle not needed
-- Window resize crossing breakpoint: `viewport` updates; layout adapts
+**Step content:**
+- Step 1: Text input for one-line product idea
+- Step 2: Mission selector — [N] template options + "write your own" free text option
+- Step 3: Pillar picker — list of [N] suggestions; visitor selects 3-5; free text entry allowed
+- Step 4: Text area for one key interaction description
+- Output: Skeleton spec rendering L1 (mission + pillars), L2 (one suggested truth), L3 (the key interaction pattern)
 
-**Content:**
-Both panels display real content sourced from CONTENT_SYSTEM. No lorem ipsum.
+**Behavior rules:**
+- Advancing past a step requires its required field(s) to be non-empty
+- On validation failure, display an inline error message; do not advance
+- Progress indicator shows "Step N of 4" above the current step
+- Completed steps are summarized above the current step (read-only summary)
+- Output appears immediately on step 4 completion — no loading state
+- Wizard state is session-only; refreshing resets to Step 1
+- No network requests at any step
+- Keyboard: Tab through fields; Enter to advance; Escape to go back (where possible)
 
-## Cross-Component Rules
+## Key Rules
 
-- All components are independent; no shared state between explorer, wizard, and comparison view
-- All components work without any prior user interaction (clean initial state renders correctly)
-- All components degrade gracefully if JavaScript fails to load (static fallback from PRESENTATION_SYSTEM)
-- Touch events are handled explicitly; pointer-only interactions have touch equivalents
+- **No external calls.** Both components are pure client-side. No fetch, no analytics, no tracking within the components.
+- **Graceful degradation.** If JavaScript fails to load, Explorer shows all levels expanded; Wizard shows a static message explaining the feature requires JavaScript.
+- **Mechanical feel.** Transitions are functional (expand/collapse in [short duration]) not decorative. No spring physics, no parallax.
+- **Accessible.** Both components have correct ARIA roles, labels, and live regions. Focus management is correct for expand/collapse interactions.
 
-## Data Dependencies
+## Interactions with Other Systems
 
-- CONTENT_SYSTEM provides: hierarchy level definitions, wizard template options, comparison panel content
-- PRESENTATION_SYSTEM consumes: component state to render current UI
-- No dependency on THEME_SYSTEM or LAYOUT_SYSTEM
+- Reads hierarchy level descriptions from CONTENT_SYSTEM
+- Uses visual tokens from PRESENTATION_SYSTEM for all styling
+- No interaction with THEME_SYSTEM (theme is applied globally via CSS variables; components inherit automatically)

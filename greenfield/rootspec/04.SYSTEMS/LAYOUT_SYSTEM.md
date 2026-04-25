@@ -2,59 +2,55 @@
 
 ## Responsibility
 
-Defines the page structure: section order, navigation, meta-banner placement, and the overall reading flow. Ensures the meta-banner is always the first visible element. Provides the structural scaffold that PRESENTATION_SYSTEM renders.
-
-## Boundaries
-
-- Owns: section order, section IDs, navigation structure, meta-banner position
-- Does not own: visual rendering (PRESENTATION_SYSTEM), content strings (CONTENT_SYSTEM), interactive state (INTERACTIVE_SYSTEM)
-- No JavaScript logic; purely structural
+Owns the page structure, section order, navigation, and base path configuration. Ensures all assets, links, and internal anchors resolve correctly under the `/demos/greenfield/` base path in all environments.
 
 ## Page Structure
 
-Sections render in this exact order:
+Sections are rendered in this order:
 
-1. **Meta-Banner** — Always first, always visible, always above the fold
-2. **Header / Navigation** — Site name, theme toggle, optional section links
-3. **Hero** — Tagline, one-sentence explanation, version badge, primary CTA anchor
+1. **Header** — Site name/logo, theme toggle, navigation links
+2. **Meta Banner** — Demo context notice with links to spec and seed files; above the fold, before all other content
+3. **Hero** — Tagline, one-sentence explanation, version badge, primary CTA
 4. **Problem** — Why existing approaches fail
-5. **How It Works** — Four-skill workflow walkthrough with methodology diagram
-6. **Hierarchy Explorer** — Interactive five-level visualization
+5. **How It Works** — Four-skill walkthrough
+6. **Hierarchy Explorer** — Interactive L1-L5 visualization
 7. **Spec Wizard** — "Spec Your Idea" interactive wizard
-8. **Comparison** — Before/after comparison view
-9. **CTA** — Open source entry point: GitHub, npm, docs
-10. **Footer** — Attribution, build date
+8. **Comparison** — Before/After side-by-side
+9. **Author's Notes** — Full verbatim author text
+10. **CTA** — Open Source / GitHub / Getting Started
+11. **Footer** — Builder attribution and build date
 
-**Constraint:** The meta-banner position is inviolable. It must not be moved below the header or hidden behind a toggle. See L1 Inviolable Principles.
+## Data Ownership
 
-## Navigation
+- **Section anchor IDs:** Stable IDs for each section (e.g., `#problem`, `#how-it-works`, `#explorer`, `#wizard`, `#comparison`, `#notes`, `#cta`)
+- **Base path:** `/demos/greenfield/` — used for all asset references and internal links
+- **Navigation links:** Ordered list of (label, anchor) pairs for the header nav
 
-- Header is sticky or fixed for easy section jumping on long pages
-- Navigation links (if present) are anchor links to section IDs
-- Section IDs are stable and predictable (used by external links and Cypress tests)
+## Key Rules
 
-**Section IDs:**
-- `#hero`
-- `#problem`
-- `#how-it-works`
-- `#hierarchy`
-- `#wizard`
-- `#comparison`
-- `#cta`
+- **Meta Banner is above all content.** It is rendered immediately after the header and before the hero. It must be visible on initial load without scrolling on all viewport widths.
+- **Base path is consistent across environments.** Dev, preview, and production all use `/demos/greenfield/`. No environment-specific path logic.
+- **All asset URLs are base-path-aware.** CSS, JS, font files, and SVG assets are referenced through the framework's base path configuration, not hardcoded as root-relative paths.
+- **Internal links use anchor fragments.** Navigation within the page uses `#anchor` fragments. The framework resolves these correctly under the base path.
+- **External links are absolute.** Any link to GitHub or other external resources uses the full URL.
 
-## Meta-Banner Placement
+## Navigation Behavior
 
-- Positioned before the `<header>` element in DOM order
-- Full-width, visually distinct (different background from header and hero)
-- Not dismissable, not collapsible
-- Links open in a new tab (absolute GitHub URLs)
+- Header navigation links scroll to the corresponding section on click
+- Active section is highlighted in the nav as the user scrolls (scroll-spy behavior)
+- On mobile, navigation collapses to a compact or hamburger form
 
-## Base Path
+## Interactions with Other Systems
 
-All internal links and asset references are relative to the configured base path (`/demos/greenfield/`). The layout system does not hardcode paths; it uses the framework's base URL mechanism.
+- Receives section content from CONTENT_SYSTEM for each section slot
+- Provides the theme toggle control that sends events to THEME_SYSTEM
+- Applies PRESENTATION_SYSTEM tokens to the page shell (header, footer, section wrappers)
+- Hosts INTERACTIVE_SYSTEM components in the Explorer and Wizard sections
 
-## Interaction with Other Systems
+## Attributes
 
-- **Provides to PRESENTATION_SYSTEM:** Section scaffold and structure for rendering
-- **Provides to CONTENT_SYSTEM:** Section IDs and structure into which content is placed
-- **Receives from CONTENT_SYSTEM:** Meta-banner text and links for placement in first position
+| Attribute | Value |
+|-----------|-------|
+| basePath | `/demos/greenfield/` |
+| defaultSection | Hero |
+| mobileBreakpoint | [small screen width] |
