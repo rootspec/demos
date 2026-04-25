@@ -12,7 +12,6 @@ if [[ "$MODE" == "dev" ]]; then
   trap "./scripts/dev.sh stop" EXIT
   export CYPRESS_BASE_URL="$(./scripts/dev.sh url)"
 else
-  # preview mode (default): build + preview
   npm run build
   ./scripts/preview.sh start
   trap "./scripts/preview.sh stop" EXIT

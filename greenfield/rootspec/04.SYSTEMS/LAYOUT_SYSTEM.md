@@ -1,60 +1,102 @@
 # Level 4: Layout System
 
+References: [01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md, SYSTEMS_OVERVIEW.md]
+
 ## Responsibility
 
-Defines the page structure: section order, navigation, meta-banner placement, and the overall reading flow. Ensures the meta-banner is always the first visible element. Provides the structural scaffold that PRESENTATION_SYSTEM renders.
+The Layout System owns the page structure, navigation chrome, responsive grid, and the placement of all sections. It provides the structural containers into which all other systems render.
 
-## Boundaries
+This system does NOT own:
+- Content or copy within sections (owned by CONTENT_SYSTEM)
+- Visual tokens (owned by THEME_SYSTEM)
+- Interactive component behavior (owned by HIERARCHY_EXPLORER and SPEC_WIZARD)
 
-- Owns: section order, section IDs, navigation structure, meta-banner position
-- Does not own: visual rendering (PRESENTATION_SYSTEM), content strings (CONTENT_SYSTEM), interactive state (INTERACTIVE_SYSTEM)
-- No JavaScript logic; purely structural
+## Page Shell Structure
 
-## Page Structure
+```
+┌─────────────────────────────────────┐
+│ Meta Banner (sticky, above fold)    │
+├─────────────────────────────────────┤
+│ Header (nav, logo, version, toggle) │
+├─────────────────────────────────────┤
+│ Hero Section                        │
+│ Problem Section                     │
+│ How It Works Section                │
+│ Hierarchy Explorer Section          │
+│ Before/After Comparison Section     │
+│ Spec Wizard Section                 │
+│ Author's Notes Section              │
+│ CTA Section                         │
+├─────────────────────────────────────┤
+│ Footer                              │
+└─────────────────────────────────────┘
+```
 
-Sections render in this exact order:
+## Header
 
-1. **Meta-Banner** — Always first, always visible, always above the fold
-2. **Header / Navigation** — Site name, theme toggle, optional section links
-3. **Hero** — Tagline, one-sentence explanation, version badge, primary CTA anchor
-4. **Problem** — Why existing approaches fail
-5. **How It Works** — Four-skill workflow walkthrough with methodology diagram
-6. **Hierarchy Explorer** — Interactive five-level visualization
-7. **Spec Wizard** — "Spec Your Idea" interactive wizard
-8. **Comparison** — Before/after comparison view
-9. **CTA** — Open source entry point: GitHub, npm, docs
-10. **Footer** — Attribution, build date
+Contains:
+- Site name / logo (links to top of page)
+- RootSpec version badge (read from `.rootspec.json` at build time)
+- Theme toggle control
+- No additional navigation items — single-page site; no nav menu needed
 
-**Constraint:** The meta-banner position is inviolable. It must not be moved below the header or hidden behind a toggle. See L1 Inviolable Principles.
+## Meta Banner
 
-## Navigation
+**Rules:**
+- Appears above the header or immediately below it — must be visible before any content
+- Non-dismissable — never hidden
+- Must appear above the fold on all viewports without scrolling
+- Contains links to SEED.md and spec files using absolute GitHub URLs
 
-- Header is sticky or fixed for easy section jumping on long pages
-- Navigation links (if present) are anchor links to section IDs
-- Section IDs are stable and predictable (used by external links and Cypress tests)
+## Section Structure
 
-**Section IDs:**
-- `#hero`
-- `#problem`
-- `#how-it-works`
-- `#hierarchy`
-- `#wizard`
-- `#comparison`
-- `#cta`
+Each section follows a consistent structure:
+- Section container with consistent horizontal padding
+- Maximum content width that supports editorial line lengths for prose
+- Generous vertical padding between sections (the page should breathe)
 
-## Meta-Banner Placement
+## Responsive Strategy
 
-- Positioned before the `<header>` element in DOM order
-- Full-width, visually distinct (different background from header and hero)
-- Not dismissable, not collapsible
-- Links open in a new tab (absolute GitHub URLs)
+**Breakpoints:** Mobile-first. Three key breakpoints:
+- Small (mobile) — single column, full width, touch-optimized
+- Medium (tablet) — slightly wider, still single column for most content
+- Large (desktop) — editorial max-width, centered, generous whitespace
+
+**Interactive elements on mobile:**
+- HIERARCHY_EXPLORER: touch-friendly tap targets; reference arrows replaced with text on small screens
+- SPEC_WIZARD: full-screen step view; large touch targets for pillar selection
 
 ## Base Path
 
-All internal links and asset references are relative to the configured base path (`/demos/greenfield/`). The layout system does not hardcode paths; it uses the framework's base URL mechanism.
+All internal asset URLs and links resolve under `/demos/greenfield/`. This base path is applied uniformly in dev, preview, and production. Does not change based on environment.
 
-## Interaction with Other Systems
+## Accessibility
 
-- **Provides to PRESENTATION_SYSTEM:** Section scaffold and structure for rendering
-- **Provides to CONTENT_SYSTEM:** Section IDs and structure into which content is placed
-- **Receives from CONTENT_SYSTEM:** Meta-banner text and links for placement in first position
+- Semantic HTML: `<header>`, `<main>`, `<section>`, `<nav>`, `<footer>`
+- Each section has an appropriate `aria-label` or a visible heading
+- Skip-to-content link available for keyboard users
+- Tab order follows reading order (top to bottom)
+- Focus is visible on all interactive elements
+
+## State Managed
+
+| State | Type | Source |
+|-------|------|--------|
+| Current theme class | Enum: light, dark | THEME_SYSTEM |
+| RootSpec version | String | Read-only at build time |
+
+Layout System is otherwise stateless. It reads theme state from THEME_SYSTEM and applies the appropriate class to the root element.
+
+## Interfaces
+
+### Consumed from Other Systems
+
+- THEME_SYSTEM: current theme state → applied as `data-theme` attribute on `<html>` or `<body>`
+- CONTENT_SYSTEM: content rendered within section containers
+- HIERARCHY_EXPLORER: island component mounted in explorer section
+- SPEC_WIZARD: island component mounted in wizard section
+
+### Exposes to All Systems
+
+- Section containers with consistent padding and max-width
+- CSS grid and responsive column classes (via Tailwind)

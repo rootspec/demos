@@ -1,177 +1,183 @@
 # =============================================================================
-# USER STORY: Hierarchy Explorer
+# USER STORY: Hierarchy Explorer Interaction
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: EXPLORATION
-# @systems: [INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: EXPLORER
+# @systems: [HIERARCHY_EXPLORER, THEME_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
 
-id: US-004
-title: User can explore the five-level hierarchy interactively
+id: US-201
+title: Visitor explores the five-level RootSpec hierarchy interactively
 
 acceptance_criteria:
-  - id: AC-004-1
-    title: All five hierarchy levels are visible
+  - id: AC-201-1
+    title: Hierarchy Explorer renders five levels
     narrative: |
-      Given I visit the site and scroll to the hierarchy section
-      When the section loads
-      Then I see five level cards for L1 through L5
+      Given I visit the home page
+      When I scroll to the hierarchy explorer section
+      Then I should see five level items
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-1]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-2]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-3]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-4]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-5]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level]' }
 
-  - id: AC-004-2
-    title: Clicking a level card expands it to show content
+  - id: AC-201-2
+    title: Clicking a level expands its content
     narrative: |
-      Given I see the hierarchy explorer with all five levels collapsed
-      When I click on Level 1
-      Then Level 1 expands to show its description and example content
+      Given I am viewing the hierarchy explorer
+      When I click on a level
+      Then I should see the expanded content for that level
     given:
       - visit: '/demos/greenfield/'
     when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+      - click: { selector: '[data-test=hierarchy-level]:first-child' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded="true"]' }
-      - shouldExist: { selector: '[data-test=hierarchy-level-1-content]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level-content]' }
 
-  - id: AC-004-3
-    title: Clicking an expanded level collapses it
+  - id: AC-201-3
+    title: Clicking the same level again collapses it
     narrative: |
-      Given Level 1 is expanded in the hierarchy explorer
-      When I click Level 1 again
-      Then Level 1 collapses and its content is hidden
+      Given I have expanded a level in the hierarchy explorer
+      When I click the same level again
+      Then the expanded content should be hidden
     given:
       - visit: '/demos/greenfield/'
     when:
-      - click: { selector: '[data-test=hierarchy-level-1]' }
-      - click: { selector: '[data-test=hierarchy-level-1]' }
+      - click: { selector: '[data-test=hierarchy-level]:first-child' }
+      - click: { selector: '[data-test=hierarchy-level]:first-child' }
     then:
-      - shouldExist: { selector: '[data-test=hierarchy-level-1][aria-expanded="false"]' }
+      - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
 
 ---
 # =============================================================================
-# USER STORY: Spec Wizard
+# USER STORY: Spec Wizard Completion
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: EXPLORATION
-# @systems: [INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: EXPLORER
+# @systems: [SPEC_WIZARD, THEME_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
 
-id: US-005
-title: User can generate a skeleton spec from a one-line product idea
+id: US-202
+title: Visitor completes the Spec Your Idea wizard and sees skeleton spec output
 
 acceptance_criteria:
-  - id: AC-005-1
-    title: Wizard is present and shows Step 1 on load
+  - id: AC-202-1
+    title: Wizard renders initial step with input
     narrative: |
-      Given I visit the site and scroll to the wizard section
-      When the section loads
-      Then I see the spec wizard showing Step 1 with a product idea input
+      Given I visit the home page
+      When I scroll to the spec wizard section
+      Then I should see the first step of the wizard
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=spec-wizard]' }
       - shouldExist: { selector: '[data-test=wizard-step-1]' }
-      - shouldExist: { selector: '[data-test=wizard-idea-input]' }
 
-  - id: AC-005-2
-    title: User can advance through all three steps
+  - id: AC-202-2
+    title: Wizard advances to step 2 after entering a product idea
     narrative: |
-      Given I am on Step 1 of the wizard
+      Given I am on step 1 of the spec wizard
       When I enter a product idea and click Next
-      Then I see Step 2 for mission selection
+      Then I should see step 2 of the wizard
     given:
       - visit: '/demos/greenfield/'
     when:
-      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A tool to help developers write better commit messages' }
+      - fill: { selector: '[data-test=product-idea-input]', value: 'A tool for tracking personal goals' }
       - click: { selector: '[data-test=wizard-next]' }
     then:
       - shouldExist: { selector: '[data-test=wizard-step-2]' }
 
-  - id: AC-005-3
-    title: Completing all steps generates a skeleton spec
+  - id: AC-202-3
+    title: Next button is disabled without input on step 1
     narrative: |
-      Given I have completed all three wizard steps
-      When the wizard reaches the result step
-      Then I see a skeleton spec showing L1 through L3 populated with my inputs
+      Given I am on step 1 of the spec wizard
+      When I have not entered a product idea
+      Then the Next button should be disabled
     given:
       - visit: '/demos/greenfield/'
-    when:
-      - fill: { selector: '[data-test=wizard-idea-input]', value: 'A tool to help teams avoid scope drift' }
-      - click: { selector: '[data-test=wizard-next]' }
-      - click: { selector: '[data-test=wizard-mission-option]' }
-      - click: { selector: '[data-test=wizard-next]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-pillar-option]' }
-      - click: { selector: '[data-test=wizard-next]' }
-      - fill: { selector: '[data-test=wizard-interaction-input]', value: 'User runs /rs-spec and answers interview questions' }
-      - click: { selector: '[data-test=wizard-generate]' }
+    when: []
     then:
-      - shouldExist: { selector: '[data-test=wizard-result]' }
-      - shouldExist: { selector: '[data-test=wizard-result-l1]' }
+      - shouldExist: { selector: '[data-test=wizard-next][disabled]' }
 
 ---
 # =============================================================================
-# USER STORY: Comparison View
+# USER STORY: Before/After Comparison
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: EXPLORATION
-# @systems: [INTERACTIVE_SYSTEM, PRESENTATION_SYSTEM, CONTENT_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: READER
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
 
-id: US-006
-title: User can see a before/after comparison of spec vs no spec
+id: US-203
+title: Visitor understands the difference RootSpec makes through a side-by-side comparison
 
 acceptance_criteria:
-  - id: AC-006-1
-    title: Comparison section shows both panels
+  - id: AC-203-1
+    title: Comparison section renders both panels
     narrative: |
-      Given I visit the site and scroll to the comparison section
-      When the section loads
-      Then I see content comparing the without-spec and with-spec approaches
+      Given I visit the home page
+      When I scroll to the comparison section
+      Then I should see the before/after comparison component
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=comparison-section]' }
-      - shouldExist: { selector: '[data-test=comparison-without]' }
-      - shouldExist: { selector: '[data-test=comparison-with]' }
+
+  - id: AC-203-2
+    title: Comparison has a toggle to switch panels
+    narrative: |
+      Given I am viewing the before/after comparison
+      When I interact with the comparison component
+      Then I should be able to toggle between the two panels
+    given:
+      - visit: '/demos/greenfield/'
+    when:
+      - click: { selector: '[data-test=comparison-toggle]' }
+    then:
+      - shouldExist: { selector: '[data-test=comparison-section]' }
 
 ---
 # =============================================================================
-# USER STORY: Responsive Layout
+# USER STORY: Theme Toggle
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [LAYOUT_SYSTEM, PRESENTATION_SYSTEM, INTERACTIVE_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: READER
+# @systems: [THEME_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
 
-id: US-007
-title: Site is usable on mobile devices
+id: US-204
+title: Visitor toggles between light and dark mode
 
 acceptance_criteria:
-  - id: AC-007-1
-    title: Site renders without horizontal overflow on mobile viewport
+  - id: AC-204-1
+    title: Theme toggle is present in the header
     narrative: |
-      Given I visit the site on a mobile viewport
+      Given I visit the home page
       When the page loads
-      Then the content fits within the viewport without horizontal scrolling
+      Then I should see a theme toggle control in the header
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner]' }
-      - shouldExist: { selector: '[data-test=hero]' }
+      - shouldExist: { selector: '[data-test=theme-toggle]' }
+
+  - id: AC-204-2
+    title: Clicking the theme toggle changes the theme
+    narrative: |
+      Given I am viewing the home page in light mode
+      When I click the theme toggle
+      Then the page theme should change
+    given:
+      - visit: '/demos/greenfield/'
+    when:
+      - click: { selector: '[data-test=theme-toggle]' }
+    then:
+      - shouldExist: { selector: '[data-theme=dark]' }

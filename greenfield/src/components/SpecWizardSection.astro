@@ -1,18 +1,16 @@
 ---
-import SpecWizard from './SpecWizard.astro';
+import SpecWizard from './SpecWizard.tsx';
 ---
-<section
-  id="spec-wizard"
-  class="py-20 px-4"
-  style="background-color: var(--color-surface);"
->
-  <div class="section-container">
-    <h2 class="text-3xl font-bold text-center mb-4" style="color: var(--color-text);">
-      Try the spec wizard
+<section id="spec-wizard" class="py-16 px-6 max-w-4xl mx-auto">
+  <div class="border-t pt-16" style="border-color: var(--color-border);">
+    <h2 class="font-sans text-sm font-medium uppercase tracking-wider mb-4" style="color: var(--color-text-muted);">
+      Spec Your Idea
     </h2>
-    <p class="text-center text-lg mb-12 max-w-2xl mx-auto" style="color: var(--color-text-muted);">
-      Generate a skeleton spec in 60 seconds. Enter your product idea and we'll build out L1–L3.
+    <p class="font-serif text-lg mb-8 max-w-2xl" style="color: var(--color-text);">
+      Walk through a three-step process to produce a skeleton spec for your product idea. No AI calls — client-side templates.
     </p>
-    <SpecWizard />
+    <div class="max-w-2xl">
+      <SpecWizard client:load />
+    </div>
   </div>
 </section>

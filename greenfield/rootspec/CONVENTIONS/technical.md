@@ -1,37 +1,49 @@
-## Framework
-- **Runtime:** Astro 6 with React integration (`@astrojs/react`)
-- **CSS:** Tailwind CSS v4 via `@tailwindcss/vite`
-- **Language:** TypeScript (strict mode via `astro/tsconfigs/strict`)
-- **Build:** `astro build`
-- **Dev server:** `npm run dev` → `./scripts/dev.sh start` → `astro dev` on port 3000
-- **Test runner:** Cypress with `js-yaml` + `zod` for DSL validation
+## Stack
 
-## File organization
-- `src/pages/` — Astro page routes
-- `src/layouts/` — Shared HTML shells
-- `src/components/` — Astro and React components
-- `src/styles/` — Global CSS (Tailwind + CSS variables)
-- `cypress/e2e/` — Cypress test specs
-- `cypress/support/` — DSL steps, schema, reporter
+- **Framework:** Astro 6 (static site, `output: "static"`)
+- **UI Islands:** React 19 via `@astrojs/react`
+- **Styling:** Tailwind CSS 3 via `@astrojs/tailwind`
+- **Language:** TypeScript (strict)
+- **Test runner:** Cypress 15
+- **Base path:** `/demos/greenfield` (configured in `astro.config.mjs`)
 
-## Component conventions
-- Static sections: `.astro` components
-- Interactive islands: `.tsx` React components with `client:load` directive
-- All interactive components export a default function
-- Sections receive their data inline (no external data files)
+## File Organization
 
-## Base path
-- **Base:** `/demos/greenfield` (set in `astro.config.mjs`)
-- All internal links use `/demos/greenfield/` as root
-- `Astro.props` and layouts handle path prefixing automatically
+- **Pages:** `src/pages/` — Astro pages (index.astro only)
+- **Layouts:** `src/layouts/Layout.astro` — HTML shell, global CSS import, inline theme script
+- **Components:** `src/components/` — `.astro` for static, `.tsx` for interactive islands
+- **Styles:** `src/styles/global.css` — CSS custom properties, Tailwind directives, font imports
 
-## Routing
-- Single-page marketing site at `/demos/greenfield/`
-- No dynamic routes or API endpoints in MVP
-- Anchor-based section navigation (`#how-it-works`, `#hierarchy`, etc.)
+## Component Patterns
 
-## Testing
-- Cypress base URL: `http://localhost:3000`
-- Test entry: `cypress/e2e/mvp.cy.ts`
-- Results written to `rootspec/tests-status.json` via rootspec-reporter
-- All stories use `loadAndRun()` with embedded YAML string literals
+- **Static sections:** `.astro` components with `data-test` attributes in markup
+- **Interactive islands:** React `.tsx` components, mounted with `client:load` in `.astro` wrappers
+- **Island wrappers:** One `.astro` wrapper per React component (e.g., `HierarchySection.astro` wraps `HierarchyExplorer.tsx`)
+
+## Theme System
+
+- **Mechanism:** `data-theme="light|dark"` attribute on `<html>` element
+- **Persistence:** `sessionStorage` key `rs-theme`
+- **Default:** `light` (set in `<html>` tag; overridden by inline script before paint)
+- **Toggle:** `Header.astro` `<script>` block manages toggle click and icon update
+- **CSS tokens:** CSS custom properties on `:root` and `[data-theme="dark"]` in `global.css`
+
+## App Readiness
+
+- **Mechanism:** `document.readyState === 'complete'`
+- **Rationale:** Static Astro site; all `data-test` attributes are in SSR HTML. React islands hydrate progressively after DOM ready; tests only need the DOM.
+- **Implementation:** `cypress/support/app-ready.ts` — `cy.document().its('readyState').should('eq', 'complete')`
+
+## Build
+
+- **Command:** `npm run build` → `astro build`
+- **Preview:** `npm run preview` → `astro preview --host` on port 4173
+- **Dev:** `./scripts/dev.sh start` → `astro dev` on port 3000
+- **Output:** `dist/` with index.html at root (Astro rewrites base path in asset URLs)
+
+## Dependencies
+
+Direct imports only:
+- `astro`, `@astrojs/react`, `@astrojs/tailwind`, `tailwindcss`
+- `react`, `react-dom`
+- `typescript`, `cypress`, `zod`, `js-yaml`, `@types/js-yaml`

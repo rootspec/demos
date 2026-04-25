@@ -1,49 +1,55 @@
-## Color system
-- **Primary:** `#6d28d9` (violet-700) — buttons, links, accents
-- **Primary hover:** `#5b21b6` (violet-800)
-- **Accent:** `#7c3aed` / `#a78bfa` (dark/light mode)
-- **Meta banner background:** `#1e1b4b` (indigo-950)
-- **Meta banner text:** `#e0e7ff` (indigo-100)
-- All semantic colors defined as CSS variables in `src/styles/global.css`
+## Design Direction
 
-## Light theme tokens
-- `--color-bg`: `#ffffff`
-- `--color-text`: `#0f172a`
-- `--color-text-muted`: `#64748b`
-- `--color-border`: `#e2e8f0`
-- `--color-surface`: `#f8fafc`
-- `--color-card-bg`: `#ffffff`
-
-## Dark theme tokens
-- `--color-bg`: `#0f172a`
-- `--color-text`: `#f1f5f9`
-- `--color-text-muted`: `#94a3b8`
-- `--color-border`: `#1e293b`
-- `--color-surface`: `#1e293b`
-- `--color-card-bg`: `#1e293b`
+Editorial-meets-technical. Long-form essay crossed with developer documentation.
+Not a SaaS landing page. The reader should feel they've arrived at a place where someone thinks.
 
 ## Typography
-- **Font:** `ui-sans-serif, system-ui, -apple-system, sans-serif`
-- **Headings:** `font-extrabold` or `font-bold` with Tailwind classes
-- **Hero h1:** `text-5xl font-extrabold`
-- **Section h2:** `text-3xl font-bold`
-- **Card h3:** `text-xl font-semibold` or `text-lg font-semibold`
-- **Body:** default size, `var(--color-text-muted)` for secondary text
+
+- **Serif:** Newsreader (Google Fonts) — prose, long-form content, Author's Notes, Problem section
+- **Sans:** Inter (Google Fonts) — UI, navigation, labels, headings, section titles
+- **Mono:** JetBrains Mono (Google Fonts) — code, commands, skill names (`/rs-init` etc.)
+- **Loading:** `@import` in `global.css` with `display=swap`
+
+## Color Palette
+
+### Light Mode (default)
+
+- **`--color-bg`:** `#fafaf8` — warm off-white background
+- **`--color-text`:** `#1a1a1a` — near-black primary text
+- **`--color-text-muted`:** `#6b7280` — secondary/caption text
+- **`--color-accent`:** `#2563eb` — blue, used sparingly for links, interactive emphasis
+- **`--color-border`:** `#e5e7eb` — dividers and borders
+- **`--color-surface`:** `#f3f4f6` — slightly elevated surfaces (banners, code backgrounds)
+- **`--color-code-bg`:** `#f0f0ef` — code block background
+
+### Dark Mode
+
+- **`--color-bg`:** `#111110`
+- **`--color-text`:** `#e8e6e1`
+- **`--color-text-muted`:** `#9ca3af`
+- **`--color-accent`:** `#3b82f6`
+- **`--color-border`:** `#2d2d2b`
+- **`--color-surface`:** `#1c1c1a`
+- **`--color-code-bg`:** `#1e1e1c`
+
+## Motion
+
+- **Duration:** 150ms — quick, functional
+- **Easing:** `ease-out`
+- **Applied to:** background-color, color on `html`; button hover states; theme toggle; hierarchy level expand/collapse
+
+## Anti-patterns (explicitly avoided)
+
+- Gradient text on dark backgrounds
+- Three-column feature grids with icons
+- Testimonial cards, stat counters
+- Gradient blobs or decorative background effects
+- Stock illustrations
+- Anything resembling a Vercel/shadcn template
 
 ## Layout
-- **Max content width:** 1100px (`section-container` class)
-- **Section padding:** `py-20 px-4` (standard), `py-24` (hero/CTA)
-- **Card border-radius:** `rounded-xl`
-- **Grid:** 1-column mobile, 2–4 column desktop with Tailwind `grid` utilities
 
-## Theming
-- Theme stored in `localStorage` under key `rootspec-theme`
-- Applied as `data-theme="light"` or `data-theme="dark"` on `<html>`
-- Default: `light`
-- Toggle button in header with sun/moon icon swap
-
-## Component visual patterns
-- Cards: `border: 1px solid var(--color-card-border)`, `background: var(--color-card-bg)`, `rounded-xl`
-- Buttons: solid primary for CTAs, ghost border for secondary
-- Code/version labels: `font-mono`, `var(--color-surface-alt)` background
-- Meta banner: full-width strip, dark indigo, small text with links
+- **Max width:** `max-w-4xl` (56rem) for content, centered
+- **Padding:** `px-6` horizontal, `py-16` vertical sections
+- **Section separators:** `border-t` with `pt-16` — simple ruled lines
+- **Section labels:** `text-sm font-medium uppercase tracking-wider` in muted color

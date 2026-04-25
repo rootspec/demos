@@ -1,133 +1,229 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-interface Level {
-  id: number;
-  label: string;
-  title: string;
-  description: string;
-  example: string;
-  color: string;
-}
+const LEVELS = [
+  {
+    id: 'L1',
+    name: 'Philosophy',
+    icon: '◆',
+    tagline: 'WHY and WHAT EXPERIENCE',
+    key_question: 'Why does this product exist? What should users feel?',
+    can_reference: ['External'],
+    example: `## Mission
+RootSpec must exist because generating software from intent is now
+tractable — but validating that the result satisfies the original
+intent is not.
 
-const LEVELS: Level[] = [
-  {
-    id: 1,
-    label: 'L1',
-    title: 'Philosophy',
-    description: 'The unchanging "why" behind your product. Defines the first principles that guide every decision.',
-    example: '"We believe software should be built from intent, not assumption."',
-    color: '#6d28d9',
+## Design Pillars
+1. Validated Intent — users feel confident what ships matches intent
+2. Philosophy First — features have reasons, trade-offs have rationale
+3. Approachable Rigor — demanding without being punishing
+4. Honest Progress — real progress, not compliance theater`,
   },
   {
-    id: 2,
-    label: 'L2',
-    title: 'Truths',
-    description: 'Specific beliefs about your users, market, and domain. These are facts your team aligns on.',
-    example: '"Our users are senior engineers who value precision over hand-holding."',
-    color: '#7c3aed',
+    id: 'L2',
+    name: 'Truths',
+    icon: '◈',
+    tagline: 'WHAT strategy',
+    key_question: 'What are the stable commitments and trade-offs?',
+    can_reference: ['L1', 'External'],
+    example: `## Truth: The spec is the source of truth, not the code
+The specification is not a description of the code — the code is an
+artifact produced by the spec. When spec and implementation diverge,
+the specification wins.
+
+## Truth: Validation gates are the primary output
+A spec that cannot validate an implementation is a PRD.
+A spec that can validate an implementation is a build target.`,
   },
   {
-    id: 3,
-    label: 'L3',
-    title: 'Interactions',
-    description: 'The core user journeys — the moments that define the product experience.',
-    example: '"A developer can specify an entire feature in one /rs-spec session."',
-    color: '#8b5cf6',
+    id: 'L3',
+    name: 'Interactions',
+    icon: '◇',
+    tagline: 'HOW users interact',
+    key_question: 'How do users and the product interact?',
+    can_reference: ['L1', 'L2', 'External'],
+    example: `## Flow: Spec Creation
+1. User provides seed or product description
+2. AI interviews user with targeted questions (surfacing "why" first)
+3. User reviews and refines responses
+4. AI generates structured spec across all five levels
+5. User validates spec — spec status becomes "valid"
+
+## Pattern: Progressive Disclosure
+Higher levels are authored before lower levels.
+Lower levels cannot be created until their parent levels are validated.`,
   },
   {
-    id: 4,
-    label: 'L4',
-    title: 'Systems',
-    description: 'The technical and design systems that enable the interactions. How things are structured.',
-    example: '"The CONTENT_SYSTEM manages all text, copy, and informational elements."',
-    color: '#a78bfa',
+    id: 'L4',
+    name: 'Systems',
+    icon: '○',
+    tagline: 'HOW it\'s built',
+    key_question: 'What systems and boundaries make this work?',
+    can_reference: ['L1', 'L2', 'L3', 'Sibling L4', 'External'],
+    example: `## Content System
+Owns all static prose, structured copy, and section organization.
+Stateless — all content is static.
+Does NOT own: interactive components, page layout, visual tokens.
+
+## Theme System
+Owns visual tokens, typography, and light/dark mode state.
+Exposes CSS custom properties consumed by all systems.
+Manages: current theme (light/dark), system preference detected.`,
   },
   {
-    id: 5,
-    label: 'L5',
-    title: 'User Stories',
-    description: 'Concrete acceptance criteria with given/when/then scenarios that drive automated tests.',
-    example: '"Given I visit the site, when the page loads, then I see the meta-banner."',
-    color: '#c4b5fd',
+    id: 'L5',
+    name: 'Implementation',
+    icon: '·',
+    tagline: 'Testable user stories',
+    key_question: 'What specific, testable behaviors must exist?',
+    can_reference: ['L1', 'L2', 'L3', 'L4', 'External'],
+    example: `## US-101: Visitor sees the meta banner
+acceptance_criteria:
+  - id: AC-101-1
+    title: Meta banner is visible above the fold
+    given:
+      - visit: '/demos/greenfield/'
+    then:
+      - shouldExist:
+          selector: '[data-test=meta-banner]'`,
   },
 ];
 
 export default function HierarchyExplorer() {
-  const [expanded, setExpanded] = useState<number | null>(null);
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => { setHydrated(true); }, []);
+  const [expanded, setExpanded] = useState<string | null>(null);
 
-  const toggle = (id: number) => {
-    setExpanded((prev) => (prev === id ? null : id));
+  const handleToggle = (id: string) => {
+    setExpanded(prev => prev === id ? null : id);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleToggle(id);
+    }
+    if (e.key === 'Escape' && expanded === id) {
+      setExpanded(null);
+    }
   };
 
   return (
-    <div data-test="hierarchy-explorer" data-hydrated={hydrated ? "true" : undefined} className="flex flex-col gap-3">
-      {LEVELS.map((level) => {
-        const isExpanded = expanded === level.id;
-        return (
-          <div key={level.id} className="rounded-xl overflow-hidden" style={{ border: `1px solid ${level.color}33` }}>
-            <button
-              data-test={`hierarchy-level-${level.id}`}
+    <div data-test="hierarchy-explorer" style={{ width: '100%' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+        {LEVELS.map((level) => {
+          const isExpanded = expanded === level.id;
+          return (
+            <div
+              key={level.id}
+              data-test="hierarchy-level"
+              tabIndex={0}
+              role="button"
               aria-expanded={isExpanded}
-              onClick={() => toggle(level.id)}
-              className="w-full text-left px-6 py-4 flex items-center gap-4 transition-colors"
+              onClick={() => handleToggle(level.id)}
+              onKeyDown={(e) => handleKeyDown(e, level.id)}
               style={{
-                backgroundColor: isExpanded ? `${level.color}18` : 'var(--color-card-bg)',
+                border: '1px solid var(--color-border)',
+                borderRadius: '4px',
+                overflow: 'hidden',
                 cursor: 'pointer',
+                outline: 'none',
+                transition: 'border-color 150ms ease-out',
               }}
             >
-              <span
-                className="text-xs font-mono font-bold px-2 py-1 rounded shrink-0"
-                style={{ backgroundColor: level.color, color: 'white' }}
-              >
-                {level.label}
-              </span>
-              <span className="font-semibold text-lg flex-1" style={{ color: 'var(--color-text)' }}>
-                {level.title}
-              </span>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              <div
                 style={{
-                  color: 'var(--color-text-muted)',
-                  transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                  transition: 'transform 0.2s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '12px 16px',
+                  backgroundColor: isExpanded ? 'var(--color-surface)' : 'var(--color-bg)',
+                  transition: 'background-color 150ms ease-out',
                 }}
               >
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </button>
-            {isExpanded && (
-              <div
-                data-test={`hierarchy-level-${level.id}-content`}
-                className="px-6 py-5"
-                style={{ backgroundColor: `${level.color}10`, borderTop: `1px solid ${level.color}33` }}
-              >
-                <p className="mb-4" style={{ color: 'var(--color-text)' }}>
-                  {level.description}
-                </p>
-                <blockquote
-                  className="text-sm italic px-4 py-3 rounded"
+                <span
                   style={{
-                    backgroundColor: 'var(--color-surface)',
-                    borderLeft: `3px solid ${level.color}`,
-                    color: 'var(--color-text-muted)',
+                    fontFamily: 'JetBrains Mono, monospace',
+                    fontSize: '11px',
+                    padding: '2px 6px',
+                    borderRadius: '3px',
+                    backgroundColor: 'var(--color-code-bg)',
+                    color: 'var(--color-accent)',
+                    border: '1px solid var(--color-border)',
+                    flexShrink: 0,
                   }}
                 >
-                  {level.example}
-                </blockquote>
+                  {level.id}
+                </span>
+                <span style={{ fontSize: '18px', flexShrink: 0 }}>{level.icon}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
+                    <strong style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: 'var(--color-text)' }}>
+                      {level.name}
+                    </strong>
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: 'var(--color-text-muted)' }}>
+                      {level.tagline}
+                    </span>
+                  </div>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '2px' }}>
+                    {level.key_question}
+                  </div>
+                </div>
+                <span style={{ color: 'var(--color-text-muted)', fontSize: '12px', flexShrink: 0 }}>
+                  {isExpanded ? '▲' : '▼'}
+                </span>
               </div>
-            )}
-          </div>
-        );
-      })}
+
+              {isExpanded && (
+                <div
+                  data-test="hierarchy-level-content"
+                  style={{
+                    padding: '16px',
+                    borderTop: '1px solid var(--color-border)',
+                    backgroundColor: 'var(--color-bg)',
+                  }}
+                >
+                  <div style={{ marginBottom: '12px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', color: 'var(--color-text-muted)' }}>
+                      Can reference:
+                    </span>
+                    {level.can_reference.map(ref => (
+                      <span
+                        key={ref}
+                        style={{
+                          fontFamily: 'JetBrains Mono, monospace',
+                          fontSize: '11px',
+                          padding: '1px 5px',
+                          borderRadius: '3px',
+                          backgroundColor: 'var(--color-code-bg)',
+                          color: 'var(--color-text-muted)',
+                          border: '1px solid var(--color-border)',
+                        }}
+                      >
+                        {ref}
+                      </span>
+                    ))}
+                  </div>
+                  <pre
+                    style={{
+                      fontFamily: 'JetBrains Mono, monospace',
+                      fontSize: '12px',
+                      lineHeight: '1.6',
+                      color: 'var(--color-text)',
+                      backgroundColor: 'var(--color-code-bg)',
+                      padding: '12px',
+                      borderRadius: '4px',
+                      overflow: 'auto',
+                      whiteSpace: 'pre-wrap',
+                      margin: 0,
+                    }}
+                  >
+                    {level.example}
+                  </pre>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

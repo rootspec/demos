@@ -1,31 +1,29 @@
 ---
-// MetaBanner — shown above everything else on every page load
-const SPEC_URL = 'https://github.com/anthropics/claude-code/tree/main/demos/greenfield/rootspec';
-const SEED_URL = 'https://github.com/anthropics/claude-code/tree/main/demos/greenfield/SEED.md';
 ---
 <div
   data-test="meta-banner"
-  style="background-color: var(--color-meta-bg); color: var(--color-meta-text);"
-  class="w-full text-sm py-2 px-4 flex flex-wrap gap-x-4 gap-y-1 justify-center items-center"
+  class="w-full py-3 px-6 text-sm"
+  style="background-color: var(--color-surface); border-bottom: 1px solid var(--color-border); color: var(--color-text-muted);"
 >
-  <span class="opacity-75">Built with RootSpec —</span>
-  <a
-    data-test="spec-link"
-    href={SPEC_URL}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="underline hover:opacity-90 transition-opacity font-medium"
-  >
-    view spec
-  </a>
-  <span class="opacity-40">·</span>
-  <a
-    data-test="seed-link"
-    href={SEED_URL}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="underline hover:opacity-90 transition-opacity font-medium"
-  >
-    view seed
-  </a>
+  <div class="max-w-4xl mx-auto">
+    <p>
+      This site was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups.
+      The spec, the code, and the tests were all produced by running four commands.
+      {' '}
+      <a
+        href="https://github.com/rootspec/demos/tree/main/greenfield/rootspec"
+        class="underline"
+        style="color: var(--color-accent);"
+      >View the spec →</a>
+      {' '}
+      <a
+        href="https://github.com/rootspec/demos/tree/main/greenfield/SEED.md"
+        class="underline"
+        style="color: var(--color-accent);"
+      >View the seed →</a>
+    </p>
+    <p class="mt-1" style="color: var(--color-text-muted); font-size: 0.8rem;">
+      Any rough edges are the result of minimal human guidance, not carelessness. This is what you get from a sparse seed with no iteration.
+    </p>
+  </div>
 </div>

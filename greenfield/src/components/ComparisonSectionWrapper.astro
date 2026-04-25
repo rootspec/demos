@@ -1,0 +1,14 @@
+---
+import ComparisonSection from './ComparisonSection.tsx';
+---
+<section class="py-16 px-6 max-w-4xl mx-auto">
+  <div class="border-t pt-16" style="border-color: var(--color-border);">
+    <h2 class="font-sans text-sm font-medium uppercase tracking-wider mb-4" style="color: var(--color-text-muted);">
+      Before / After
+    </h2>
+    <p class="font-serif text-lg mb-8 max-w-2xl" style="color: var(--color-text);">
+      The difference RootSpec makes is not in the existence of a specification — it's in the structure and traceability.
+    </p>
+    <ComparisonSection client:load />
+  </div>
+</section>

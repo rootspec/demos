@@ -1,46 +1,50 @@
 ---
-const problems = [
-  {
-    icon: '🔀',
-    title: 'Misaligned teams',
-    desc: 'Developers, designers, and stakeholders interpret requirements differently — causing rework and frustration.',
-  },
-  {
-    icon: '🎯',
-    title: 'Scope drift',
-    desc: 'Without a shared spec, features grow organically. Deadlines slip. Priorities shift. Goals blur.',
-  },
-  {
-    icon: '🧱',
-    title: 'Assumption-driven builds',
-    desc: 'Engineers fill gaps with guesses. Products ship features nobody asked for and miss the ones that matter.',
-  },
-];
 ---
 <section
   data-test="problem-section"
-  id="problem"
-  class="py-20 px-4"
-  style="background-color: var(--color-surface);"
+  class="py-16 px-6 max-w-4xl mx-auto"
 >
-  <div class="section-container">
-    <h2 class="text-3xl font-bold text-center mb-4" style="color: var(--color-text);">
-      The cost of building without a spec
+  <div class="border-t pt-16" style="border-color: var(--color-border);">
+    <h2 class="font-sans text-sm font-medium uppercase tracking-wider mb-8" style="color: var(--color-text-muted);">
+      The Problem
     </h2>
-    <p class="text-center text-lg mb-12 max-w-2xl mx-auto" style="color: var(--color-text-muted);">
-      Most software projects fail not because of bad engineers, but because of unclear requirements.
-    </p>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {problems.map((p) => (
-        <div
-          class="rounded-xl p-6"
-          style="background-color: var(--color-card-bg); border: 1px solid var(--color-card-border);"
-        >
-          <div class="text-4xl mb-4">{p.icon}</div>
-          <h3 class="text-xl font-semibold mb-2" style="color: var(--color-text);">{p.title}</h3>
-          <p style="color: var(--color-text-muted);">{p.desc}</p>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="space-y-6">
+        <div>
+          <h3 class="font-serif text-xl font-medium mb-2" style="color: var(--color-text);">Spec drift</h3>
+          <p class="font-serif text-base leading-relaxed" style="color: var(--color-text-muted);">
+            Specifications written at project start become stale. By launch, they describe a different product than what shipped.
+            The drift is invisible until it's a problem, and by then it's a big one.
+          </p>
         </div>
-      ))}
+
+        <div>
+          <h3 class="font-serif text-xl font-medium mb-2" style="color: var(--color-text);">The philosophy-implementation gap</h3>
+          <p class="font-serif text-base leading-relaxed" style="color: var(--color-text-muted);">
+            The "why" of your product lives in the founders' heads. Implementation teams work from Jira tickets.
+            Somewhere between vision and pull request, coherence quietly collapses.
+          </p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div>
+          <h3 class="font-serif text-xl font-medium mb-2" style="color: var(--color-text);">Unreliable AI output</h3>
+          <p class="font-serif text-base leading-relaxed" style="color: var(--color-text-muted);">
+            LLMs generate plausible code that satisfies stated instructions but violates unstated intent.
+            Without validation, "it compiles" is all you get. That's not good enough.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-serif text-xl font-medium mb-2" style="color: var(--color-text);">Documents nobody reads</h3>
+          <p class="font-serif text-base leading-relaxed" style="color: var(--color-text-muted);">
+            Long PRDs and design docs accumulate. Engineers guess when they can't find answers.
+            Decisions get re-litigated in every sprint. The document is there; it's just wrong.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </section>

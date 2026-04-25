@@ -1,55 +1,51 @@
 # =============================================================================
-# USER STORY: Navigation and Page Structure
+# USER STORY: Mobile Layout
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [LAYOUT_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: READER
+# @systems: [LAYOUT_SYSTEM, THEME_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
 
-id: US-008
-title: User can navigate the full page and reach the CTA
+id: US-301
+title: Visitor on mobile can read all content without horizontal scrolling
 
 acceptance_criteria:
-  - id: AC-008-1
-    title: All major sections are present on the page
+  - id: AC-301-1
+    title: Page loads without horizontal overflow on mobile viewport
     narrative: |
-      Given I visit the site
-      When I scroll through the full page
-      Then I see the hero, problem, how-it-works, hierarchy, wizard, comparison, and CTA sections
+      Given I visit the home page on a mobile viewport
+      When the page loads
+      Then the main content areas should be visible without horizontal scrolling
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=hero]' }
-      - shouldExist: { selector: '[data-test=problem-section]' }
-      - shouldExist: { selector: '[data-test=how-it-works]' }
-      - shouldExist: { selector: '[data-test=hierarchy-explorer]' }
-      - shouldExist: { selector: '[data-test=spec-wizard]' }
-      - shouldExist: { selector: '[data-test=comparison-section]' }
-      - shouldExist: { selector: '[data-test=cta-section]' }
+      - shouldExist: { selector: '[data-test=hero-section]' }
+      - shouldExist: { selector: '[data-test=meta-banner]' }
 
-  - id: AC-008-2
-    title: CTA section links to the GitHub repository
-    narrative: |
-      Given I scroll to the CTA section
-      When I view the primary link
-      Then it points to the RootSpec GitHub repository
-    given:
-      - visit: '/demos/greenfield/'
-    when: []
-    then:
-      - shouldExist: { selector: '[data-test=cta-section] [data-test=github-link]' }
+---
+# =============================================================================
+# USER STORY: Keyboard Navigation
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: EXPLORER
+# @systems: [HIERARCHY_EXPLORER, SPEC_WIZARD, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
 
-  - id: AC-008-3
-    title: Footer shows attribution
+id: US-302
+title: Visitor can navigate the hierarchy explorer with keyboard
+
+acceptance_criteria:
+  - id: AC-302-1
+    title: Hierarchy Explorer levels are keyboard focusable
     narrative: |
-      Given I scroll to the bottom of the page
-      When I read the footer
-      Then I see the builder attribution and build date
+      Given I visit the home page
+      When I tab to the hierarchy explorer
+      Then the level items should be focusable and activatable
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=footer]' }
-      - shouldExist: { selector: '[data-test=footer-attribution]' }
+      - shouldExist: { selector: '[data-test=hierarchy-level][tabindex]' }

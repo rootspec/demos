@@ -1,88 +1,230 @@
 # =============================================================================
-# USER STORY: Meta-Banner Visibility
+# USER STORY: Meta Banner Visibility
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [LAYOUT_SYSTEM, CONTENT_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: READER
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
 
-id: US-001
-title: Meta-banner is the first visible element on every page load
+id: US-101
+title: Visitor sees the meta banner immediately on page load
 
 acceptance_criteria:
-  - id: AC-001-1
-    title: Meta-banner appears above all content on desktop
+  - id: AC-101-1
+    title: Meta banner is visible above the fold
     narrative: |
-      Given I visit the site on a desktop browser
+      Given I visit the home page
       When the page loads
-      Then I see the meta-banner before the header and hero section
+      Then I should see a banner explaining this site is a RootSpec demo
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=meta-banner]' }
 
-  - id: AC-001-2
-    title: Meta-banner contains spec link and seed link
+  - id: AC-101-2
+    title: Meta banner contains a link to the seed file
     narrative: |
-      Given I visit the site
+      Given I visit the home page
       When the page loads
-      Then I see two links in the meta-banner pointing to GitHub
+      Then I should see a link to the SEED.md file in the meta banner
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=meta-banner] [data-test=spec-link]' }
-      - shouldExist: { selector: '[data-test=meta-banner] [data-test=seed-link]' }
-
-  - id: AC-001-3
-    title: Meta-banner links are absolute GitHub URLs
-    narrative: |
-      Given I view the meta-banner
-      When I inspect the spec and seed links
-      Then they point to absolute GitHub URLs containing github.com/rootspec/demos
-    given:
-      - visit: '/demos/greenfield/'
-    when: []
-    then:
-      - shouldContain: { selector: '[data-test=spec-link]', text: 'spec' }
-      - shouldContain: { selector: '[data-test=seed-link]', text: 'seed' }
+      - shouldExist: { selector: '[data-test=meta-banner] a[href*="SEED.md"]' }
 
 ---
 # =============================================================================
 # USER STORY: Version Badge Display
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @phase: MVP
-# @journey: FIRST_VISIT
-# @systems: [CONTENT_SYSTEM, PRESENTATION_SYSTEM]
-# @last_updated: 2026-04-23T00:00:00Z
+# @journey: READER
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
 
-id: US-002
-title: Version badge displays current RootSpec version
+id: US-102
+title: Visitor sees the current RootSpec version prominently displayed
 
 acceptance_criteria:
-  - id: AC-002-1
-    title: Version badge is visible in the hero section
+  - id: AC-102-1
+    title: Version number is visible in the hero section
     narrative: |
-      Given I visit the site
+      Given I visit the home page
       When the page loads
-      Then I see a version badge in the hero section showing the RootSpec version number
+      Then I should see a version badge with a version number
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
       - shouldExist: { selector: '[data-test=version-badge]' }
+      - shouldContain: { selector: '[data-test=version-badge]', text: 'v' }
 
-  - id: AC-002-2
-    title: Version badge contains a semver string
+---
+# =============================================================================
+# USER STORY: Hero Section Clarity
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: READER
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
+
+id: US-103
+title: Visitor immediately understands what RootSpec is from the hero section
+
+acceptance_criteria:
+  - id: AC-103-1
+    title: Hero section contains a tagline and one-sentence explanation
     narrative: |
-      Given I view the hero section
-      When I read the version badge
-      Then it displays a version number in the format X.Y.Z
+      Given I visit the home page
+      When the page loads
+      Then I should see the hero section with a tagline and brief description
     given:
       - visit: '/demos/greenfield/'
     when: []
     then:
-      - shouldExist: { selector: '[data-test=version-badge]' }
+      - shouldExist: { selector: '[data-test=hero-section]' }
+      - shouldExist: { selector: '[data-test=hero-tagline]' }
+      - shouldExist: { selector: '[data-test=hero-description]' }
+
+---
+# =============================================================================
+# USER STORY: Problem Section Recognition
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: READER
+# @systems: [CONTENT_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
+
+id: US-104
+title: Visitor recognizes their pain points in the problem section
+
+acceptance_criteria:
+  - id: AC-104-1
+    title: Problem section addresses spec drift
+    narrative: |
+      Given I visit the home page
+      When I scroll to the problem section
+      Then I should see content about specification drift
+    given:
+      - visit: '/demos/greenfield/'
+    when:
+      - click: { selector: '[data-test=problem-section]' }
+    then:
+      - shouldExist: { selector: '[data-test=problem-section]' }
+      - shouldContain: { selector: '[data-test=problem-section]', text: 'drift' }
+
+---
+# =============================================================================
+# USER STORY: How It Works Section
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: READER
+# @systems: [CONTENT_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
+
+id: US-105
+title: Visitor understands the four-command workflow
+
+acceptance_criteria:
+  - id: AC-105-1
+    title: How It Works section shows all four skills
+    narrative: |
+      Given I visit the home page
+      When I scroll to the how it works section
+      Then I should see all four RootSpec skills listed
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=how-it-works]' }
+      - shouldContain: { selector: '[data-test=how-it-works]', text: '/rs-init' }
+      - shouldContain: { selector: '[data-test=how-it-works]', text: '/rs-spec' }
+      - shouldContain: { selector: '[data-test=how-it-works]', text: '/rs-impl' }
+      - shouldContain: { selector: '[data-test=how-it-works]', text: '/rs-validate' }
+
+---
+# =============================================================================
+# USER STORY: Author's Notes Verbatim
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: READER
+# @systems: [CONTENT_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
+
+id: US-106
+title: Visitor reads the full author's notes verbatim
+
+acceptance_criteria:
+  - id: AC-106-1
+    title: Author's Notes section exists and contains the opening text
+    narrative: |
+      Given I visit the home page
+      When I scroll to the author's notes section
+      Then I should see the verbatim author's notes text beginning with the expected opening
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=authors-notes]' }
+      - shouldContain: { selector: '[data-test=authors-notes]', text: 'Most thinking about AI in software development' }
+
+---
+# =============================================================================
+# USER STORY: Open Source CTA
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: READER
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
+
+id: US-107
+title: Visitor finds a clear path to the GitHub repository
+
+acceptance_criteria:
+  - id: AC-107-1
+    title: CTA section has a link to the framework GitHub repo
+    narrative: |
+      Given I visit the home page
+      When I scroll to the CTA section
+      Then I should see a link to the rootspec GitHub repository
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=cta-section]' }
+      - shouldExist: { selector: '[data-test=cta-section] a[href*="github.com/rootspec"]' }
+
+---
+# =============================================================================
+# USER STORY: Footer Attribution
+# =============================================================================
+# @spec_version: 1.0.0
+# @phase: MVP
+# @journey: READER
+# @systems: [CONTENT_SYSTEM, LAYOUT_SYSTEM]
+# @last_updated: 2026-04-25T00:00:00Z
+
+id: US-108
+title: Visitor sees site builder attribution in the footer
+
+acceptance_criteria:
+  - id: AC-108-1
+    title: Footer contains builder attribution
+    narrative: |
+      Given I visit the home page
+      When I scroll to the footer
+      Then I should see attribution identifying the site builder
+    given:
+      - visit: '/demos/greenfield/'
+    when: []
+    then:
+      - shouldExist: { selector: '[data-test=footer]' }
+      - shouldContain: { selector: '[data-test=footer]', text: 'Claude' }

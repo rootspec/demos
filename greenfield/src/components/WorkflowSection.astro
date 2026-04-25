@@ -1,61 +1,60 @@
 ---
-const steps = [
-  {
-    num: '01',
-    cmd: '/rs-init',
-    title: 'Initialize',
-    desc: 'Set up the RootSpec structure in your project with a single command.',
-  },
-  {
-    num: '02',
-    cmd: '/rs-spec',
-    title: 'Specify',
-    desc: 'Answer guided questions to generate a 5-level spec: philosophy, truths, interactions, systems, and user stories.',
-  },
-  {
-    num: '03',
-    cmd: '/rs-impl',
-    title: 'Implement',
-    desc: 'An AI agent reads the spec and builds your features — test-driven, autonomous, one story at a time.',
-  },
-  {
-    num: '04',
-    cmd: '/rs-validate',
-    title: 'Validate',
-    desc: 'Run automated tests against your spec. Every acceptance criterion is verified against the live app.',
-  },
-];
 ---
 <section
   data-test="how-it-works"
-  id="how-it-works"
-  class="py-20 px-4"
-  style="background-color: var(--color-bg);"
+  class="py-16 px-6 max-w-4xl mx-auto"
 >
-  <div class="section-container">
-    <h2 class="text-3xl font-bold text-center mb-4" style="color: var(--color-text);">
-      How RootSpec works
+  <div class="border-t pt-16" style="border-color: var(--color-border);">
+    <h2 class="font-sans text-sm font-medium uppercase tracking-wider mb-10" style="color: var(--color-text-muted);">
+      How It Works
     </h2>
-    <p class="text-center text-lg mb-14 max-w-2xl mx-auto" style="color: var(--color-text-muted);">
-      Four commands. One source of truth. Software that ships what was actually intended.
+
+    <p class="font-serif text-lg mb-10 max-w-2xl" style="color: var(--color-text);">
+      Four commands drive the entire workflow, in order. Each hands off to the next.
+      The spec is the source of truth throughout.
     </p>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {steps.map((s) => (
-        <div
-          class="rounded-xl p-6 flex flex-col gap-3"
-          style="background-color: var(--color-surface); border: 1px solid var(--color-card-border);"
-        >
-          <div class="text-4xl font-extrabold opacity-20" style="color: var(--color-primary);">
-            {s.num}
+
+    <div class="space-y-8">
+      {[
+        {
+          cmd: '/rs-init',
+          title: 'Initialize',
+          desc: 'Scaffold the RootSpec directory structure and configure your project. Sets up the five-level hierarchy and convention files.',
+          io: 'Input: empty directory → Output: scaffold + configuration',
+        },
+        {
+          cmd: '/rs-spec',
+          title: 'Specify',
+          desc: 'AI-driven interview that extracts your product\'s philosophy, truths, and interactions. Produces a validated, executable specification across all five levels.',
+          io: 'Input: product idea / seed → Output: validated spec',
+        },
+        {
+          cmd: '/rs-impl',
+          title: 'Implement',
+          desc: 'AI agents implement features from the validated user stories, one story at a time. Each story is tested before the next begins. Stops when all stories pass.',
+          io: 'Input: validated spec → Output: working code + tests',
+        },
+        {
+          cmd: '/rs-validate',
+          title: 'Validate',
+          desc: 'Continuous validation gate. Runs all user stories against the current implementation. Generates a compliance report. Catches drift before it compounds.',
+          io: 'Input: spec + code → Output: validation report',
+        },
+      ].map(({ cmd, title, desc, io }) => (
+        <div class="flex gap-6 items-start">
+          <div class="flex-shrink-0 pt-1">
+            <code
+              class="font-mono text-sm px-2 py-1 rounded"
+              style="background-color: var(--color-code-bg); color: var(--color-accent); border: 1px solid var(--color-border); white-space: nowrap;"
+            >
+              {cmd}
+            </code>
           </div>
-          <code
-            class="text-sm font-mono font-bold px-2 py-1 rounded self-start"
-            style="background-color: var(--color-surface-alt); color: var(--color-primary);"
-          >
-            {s.cmd}
-          </code>
-          <h3 class="text-lg font-semibold" style="color: var(--color-text);">{s.title}</h3>
-          <p class="text-sm" style="color: var(--color-text-muted);">{s.desc}</p>
+          <div>
+            <h3 class="font-sans text-base font-medium mb-1" style="color: var(--color-text);">{title}</h3>
+            <p class="font-serif text-sm leading-relaxed mb-1" style="color: var(--color-text-muted);">{desc}</p>
+            <p class="font-mono text-xs" style="color: var(--color-text-muted); opacity: 0.7;">{io}</p>
+          </div>
         </div>
       ))}
     </div>

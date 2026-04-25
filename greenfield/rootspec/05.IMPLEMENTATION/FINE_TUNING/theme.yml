@@ -1,69 +1,84 @@
 # =============================================================================
 # LEVEL 5: FINE TUNING - Theme System
 # =============================================================================
-# @spec_version: 7.3.7
+# @spec_version: 1.0.0
 # @system: THEME_SYSTEM
-# @last_updated: 2026-04-23T00:00:00Z
+# @last_updated: 2026-04-25T00:00:00Z
 # @status: draft
 # @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Light Mode Color Tokens
+# Motion / Transition Timing
 # -----------------------------------------------------------------------------
-# @spec_source: 04.SYSTEMS/PRESENTATION_SYSTEM.md
+# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
-light:
-  background: "#FAFAF8"
-  # @rationale: Near-white with slight warmth; not pure white which feels clinical
-  # @constraints: type=hex_color
+transitions:
+  quick: 150
+  # @unit: milliseconds
+  # @rationale: Fast enough to feel responsive, visible enough to feel intentional
+  # @constraints: min=100, max=250, type=integer
+  # @spec_source: 03.INTERACTIONS.md
 
-  surface: "#FFFFFF"
-  # @rationale: Pure white for card surfaces that need to lift off background
-  # @constraints: type=hex_color
+  standard: 250
+  # @unit: milliseconds
+  # @rationale: Standard ease-out for component state changes; mechanical not magical
+  # @alternatives: [200, 300]
+  # @constraints: min=150, max=350, type=integer
 
-  text_primary: "#1A1A18"
-  # @rationale: Near-black with slight warmth; not pure black which is harsh on near-white bg
-  # @constraints: type=hex_color
+  theme_switch: 200
+  # @unit: milliseconds
+  # @rationale: Theme changes should be perceptible but not distracting
+  # @constraints: min=100, max=300, type=integer
 
-  text_secondary: "#5C5C56"
-  # @rationale: Muted for secondary text; sufficient contrast on both bg and surface
-  # @constraints: type=hex_color
-
-  border: "#E2E2DC"
-  # @rationale: Subtle border that separates without competing
-  # @constraints: type=hex_color
-
-  accent: "#2D6A4F"
-  # @rationale: Muted green; signals "this works, this validates" — connected to the methodology's validation-first philosophy
-  # @reference: L1 Design Pillar "Proof Over Plausibility"
-  # @constraints: type=hex_color
-  # @alternatives: ["#2563EB (blue)", "#7C3AED (purple)", "#B45309 (amber)"]
+easing: "ease-out"
+# @rationale: Quick start, smooth stop — tool-like, not playful
+# @alternatives: ["linear", "ease-in-out"]
+# @inviolable: true
+# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
 # -----------------------------------------------------------------------------
-# Dark Mode Color Tokens
+# Typography Scale
 # -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/THEME_SYSTEM.md
 
-dark:
-  background: "#141414"
-  # @rationale: Dark neutral; not pure black
-  # @constraints: type=hex_color
+typography:
+  prose_max_width: 72
+  # @unit: characters (ch)
+  # @rationale: Comfortable reading line length for long-form prose; editorial standard
+  # @reference: https://practicaltypography.com/line-length.html
+  # @constraints: min=60, max=85, type=integer
 
-  surface: "#1E1E1E"
-  # @rationale: Slightly lighter than background for surface elevation
-  # @constraints: type=hex_color
+  touch_target_min: 44
+  # @unit: pixels
+  # @rationale: WCAG 2.5.5 recommended minimum touch target size
+  # @reference: https://www.w3.org/WAI/WCAG21/Understanding/target-size.html
+  # @inviolable: true
+  # @constraints: min=44, type=integer
 
-  text_primary: "#F0F0EC"
-  # @rationale: Near-white with warmth to match light mode philosophy
-  # @constraints: type=hex_color
+# -----------------------------------------------------------------------------
+# Wizard Parameters
+# -----------------------------------------------------------------------------
+# @spec_source: 04.SYSTEMS/SPEC_WIZARD.md
 
-  text_secondary: "#9E9E96"
-  # @rationale: Muted but readable on dark background
-  # @constraints: type=hex_color
+wizard:
+  pillar_min_count: 3
+  # @rationale: Three pillars is the philosophical minimum for a coherent product identity; matches L1 spec guidance
+  # @constraints: min=2, max=4, type=integer
 
-  border: "#2A2A28"
-  # @rationale: Subtle dark border
-  # @constraints: type=hex_color
+  pillar_max_count: 5
+  # @rationale: More than five pillars dilutes focus; matches L1 spec guidance (3-5 pillars)
+  # @constraints: min=4, max=8, type=integer
 
-  accent: "#52B788"
-  # @rationale: Lighter green for dark mode; maintains meaning, improves contrast
-  # @constraints: type=hex_color
+  pillar_suggestion_count: 12
+  # @rationale: Enough variety to cover common product types without overwhelming the interface
+  # @constraints: min=8, max=20, type=integer
+
+  product_idea_min_length: 10
+  # @unit: characters
+  # @rationale: Minimum viable product description; filters out accidental clicks
+  # @constraints: min=5, max=30, type=integer
+
+  key_interaction_min_length: 20
+  # @unit: characters
+  # @rationale: Long enough to describe a meaningful interaction; short enough to not be intimidating
+  # @constraints: min=10, max=50, type=integer

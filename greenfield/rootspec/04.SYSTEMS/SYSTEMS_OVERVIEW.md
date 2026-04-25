@@ -1,46 +1,62 @@
 # Level 4: Systems Overview
 
+References: [01.PHILOSOPHY.md, 02.TRUTHS.md, 03.INTERACTIONS.md]
+
 ## System Map
 
-| System | Responsibility | Key Data |
-|--------|---------------|----------|
-| PRESENTATION_SYSTEM | Page layout, typography, theme, responsive behavior | Theme state, viewport |
-| CONTENT_SYSTEM | Static content, copy, version data, GitHub links | Version, section content |
-| INTERACTIVE_SYSTEM | Hierarchy explorer, spec wizard, comparison view | Explorer state, wizard state |
-| LAYOUT_SYSTEM | Section structure, navigation, meta-banner | Scroll position, active section |
-| THEME_SYSTEM | Light/dark mode, color tokens, preference persistence | Theme preference |
+The RootSpec marketing site is composed of five primary systems. All systems are client-side only — no backend, no authentication, no external API calls.
+
+| System | Responsibility | Primary User |
+|--------|---------------|-------------|
+| [CONTENT_SYSTEM](CONTENT_SYSTEM.md) | Static page content, prose, and structured copy | Reader visitor |
+| [THEME_SYSTEM](THEME_SYSTEM.md) | Light/dark mode, typography, color palette, visual tokens | All visitors |
+| [HIERARCHY_EXPLORER](HIERARCHY_EXPLORER.md) | Interactive visualization of the five-level RootSpec hierarchy | Explorer visitor |
+| [SPEC_WIZARD](SPEC_WIZARD.md) | Multi-step wizard for generating a skeleton spec from visitor input | Explorer visitor |
+| [LAYOUT_SYSTEM](LAYOUT_SYSTEM.md) | Page structure, navigation, meta banner, responsive grid, header/footer | All visitors |
 
 ## System Interactions
 
 | From | To | Interaction |
 |------|----|-------------|
-| THEME_SYSTEM | PRESENTATION_SYSTEM | Provides active theme tokens; PRESENTATION_SYSTEM applies them to all components |
-| CONTENT_SYSTEM | LAYOUT_SYSTEM | Supplies version badge, meta-banner text, and GitHub URLs |
-| CONTENT_SYSTEM | INTERACTIVE_SYSTEM | Supplies wizard templates, hierarchy level definitions |
-| LAYOUT_SYSTEM | PRESENTATION_SYSTEM | Provides section structure; PRESENTATION_SYSTEM renders sections |
-| INTERACTIVE_SYSTEM | PRESENTATION_SYSTEM | Provides interactive component state; PRESENTATION_SYSTEM renders current state |
+| LAYOUT_SYSTEM | THEME_SYSTEM | Reads current theme state to apply theme class to root element |
+| LAYOUT_SYSTEM | CONTENT_SYSTEM | Provides structural containers into which content is rendered |
+| THEME_SYSTEM | All systems | Provides CSS custom properties (color tokens) consumed by all components |
+| HIERARCHY_EXPLORER | THEME_SYSTEM | Uses accent color tokens for hover and focus states |
+| SPEC_WIZARD | THEME_SYSTEM | Uses form element tokens for input and button styles |
+| CONTENT_SYSTEM | LAYOUT_SYSTEM | Content renders within layout section boundaries |
 
 ## Data Flow
 
 ```
-Build Time:
-  .rootspec.json → CONTENT_SYSTEM (version, status)
-  GitHub URLs (hardcoded) → CONTENT_SYSTEM (meta-banner links)
+User Input
+    │
+    ▼
+SPEC_WIZARD ──── generates ──── Skeleton Spec Output (ephemeral, in-memory)
 
-Runtime:
-  localStorage → THEME_SYSTEM (persisted preference)
-  prefers-color-scheme → THEME_SYSTEM (system default)
-  THEME_SYSTEM → PRESENTATION_SYSTEM (active CSS class / data attribute)
+HIERARCHY_EXPLORER ──── reads ──── Static Level Definitions (bundled at build)
 
-User Interaction:
-  User click/tap → INTERACTIVE_SYSTEM (state update)
-  INTERACTIVE_SYSTEM → PRESENTATION_SYSTEM (re-render affected component)
-  Theme toggle → THEME_SYSTEM → PRESENTATION_SYSTEM
+THEME_SYSTEM ──── reads ──── System Preference API (browser)
+             ──── writes ─── Session State (in-memory toggle override)
+             ──── exposes ── CSS Custom Properties (consumed by all)
+
+CONTENT_SYSTEM ──── reads ──── Build-time data (.rootspec.json version field)
+               ──── renders ── Static HTML (no dynamic data)
+
+LAYOUT_SYSTEM ──── reads ──── THEME_SYSTEM (for root class)
+              ──── renders ── Page shell, navigation, meta banner
 ```
 
-## Boundaries
+## Shared Boundaries
 
-- No system makes external network requests at runtime
-- INTERACTIVE_SYSTEM contains all client-side JS logic; PRESENTATION_SYSTEM is primarily declarative
-- CONTENT_SYSTEM owns all copy and data; no other system hardcodes content strings
-- THEME_SYSTEM owns the single source of truth for active theme; no other system writes to localStorage directly
+- **No persistent storage:** No localStorage, no cookies, no database — all state is session-ephemeral or stateless
+- **No external network calls:** All content is bundled at build time; no fetch calls at runtime
+- **No authentication:** All content is public; no user identity
+- **Framework:** Astro with selective client-side hydration for interactive islands (HIERARCHY_EXPLORER and SPEC_WIZARD)
+- **Styling:** Tailwind CSS for utility classes, CSS custom properties for theme tokens
+
+## Build-time Data
+
+The following values are resolved at build time (not runtime):
+- RootSpec version — read from `.rootspec.json` → displayed in hero and header
+- GitHub repository URLs — hardcoded as absolute paths to `https://github.com/rootspec/demos/tree/main/greenfield`
+- Base path — `/demos/greenfield/` — applied uniformly in dev, preview, and production
