@@ -1,0 +1,44 @@
+{
+  "lastReview": "2026-04-25T04:40:35.411Z",
+  "status": "pass",
+  "summary": {
+    "staticBlockers": 0,
+    "staticWarnings": 2,
+    "staticNitpicks": 0,
+    "pagesScanned": 1
+  },
+  "issues": [
+    {
+      "severity": "warning",
+      "category": "broken_link",
+      "file": "dist/index.html",
+      "excerpt": "href=\"/demos/greenfield/_astro/index@_@astro.BcH2wLJj.css\"",
+      "message": "Rooted href does not resolve within build output",
+      "id": "REV-001"
+    },
+    {
+      "severity": "warning",
+      "category": "broken_link",
+      "file": "dist/index.html",
+      "excerpt": "href=\"/demos/greenfield/\"",
+      "message": "Rooted href does not resolve within build output",
+      "id": "REV-002"
+    }
+  ],
+  "llmInputs": {
+    "screenshots": [
+      "cypress/screenshots/mvp.cy.ts/US-101--AC-101-1.png",
+      "cypress/screenshots/mvp.cy.ts/US-402--AC-402-1.png"
+    ]
+  },
+  "llmFindings": {
+    "assessment": "needs_review",
+    "observations": [
+      "The meta banner is present above the fold and clearly communicates the demo context with links, which is the most critical requirement.",
+      "Typography uses a serif/sans pairing with generous whitespace — the editorial intent from SEED.md reads through, though at small viewport scale the hero tagline italic serif and the body text appear very close in weight, which may reduce visual hierarchy.",
+      "The dark-mode variant (second screenshot) renders cleanly with good contrast, and the light/dark toggle is visible in the header.",
+      "The 'How It Works' four-step flow and the Hierarchy Explorer are both visible and structured, though the interactive elements are too small to assess touch-target adequacy from the screenshot alone.",
+      "The Author's Notes section and the Open Source CTA are both present in the full-page view, confirming all major SEED.md sections are represented."
+    ]
+  }
+}
