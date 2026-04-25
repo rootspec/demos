@@ -22,7 +22,7 @@ Each level can only reference higher levels, never lower. This prevents circular
 
 - "When code and specs can be generated trivially, the real value is validation and proof."
 - AI has knowledge but not wisdom. Humans supply philosophy; AI executes implementation. The spec bridges the gap.
-- Four skills drive all workflows: `/rs-init`, `/rs-spec`, `/rs-impl`, `/rs-validate`
+- Five skills drive all workflows: `/rs-init`, `/rs-spec`, `/rs-impl`, `/rs-validate`, `/rs-review`
 - The spec is declarative, executable, and acts as a validation gate.
 - Good for complex products, long-lived systems, team collaboration, AI-assisted development.
 
@@ -36,8 +36,6 @@ Each level can only reference higher levels, never lower. This prevents circular
 ### Author's Notes
 
 ```
-This page explains why I built Rootspec.
-
 Most thinking about AI in software development starts from our existing human roles and workflows and asks how to fit AI into them. Let's skip that, and imagine we are inventing a new process. The central problem of software development, with or without AI, is _capturing human intent_ and _generating something that satisfies it_. Imagine a replicator from Star Trek.
 
 How do we know we've satisfied the original intent? If we're replicating a cup of coffee, we can taste it, and 95% good is probably good enough to drink. But if we're replicating a bicycle, 95% isn't good enough, and getting the last 5% wrong could be catastrophic. So how do we know we've made a 100% bicycle?
@@ -85,7 +83,7 @@ Generating code is now trivial, and _proof_ matters more than ever. Validation i
 
 A persistent, visible banner (top of page or below the hero) that explains this site is itself a RootSpec demo. Something like:
 
-> "This site was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups. The spec, the code, and the tests were all produced by running four commands. [View the spec →] [View the seed →]"
+> "This site was generated from a ~100-line product description using the RootSpec pipeline — no manual code, no design mockups. The spec, the code, and the tests were all produced by running five commands. [View the spec →] [View the seed →]"
 
 Link to the SEED.md and spec files in the GitHub repo at https://github.com/rootspec/demos/tree/main/greenfield. These must be absolute GitHub URLs, not relative paths — relative links will break the static build's prerenderer. This is critical — visitors must understand that any rough edges are the result of minimal human guidance, not carelessness. The banner should be honest and direct: this is what you get from a sparse seed with no iteration.
 
@@ -99,11 +97,17 @@ Why existing approaches fail: spec drift, philosophy-implementation gap, unrelia
 
 ### How It Works
 
-Visual walkthrough of the four skills (init → spec → impl → validate) with clear before/after.
+Visual walkthrough of the five skills (init → spec → impl → validate → review) with clear before/after.
+
+### Methodology Diagram
+
+A required, prominent diagram that depicts the RootSpec methodology visually: a specification encircling the development cycle (init → spec → impl → validate → review) and acting as a gate — only solutions that satisfy the spec pass through. Inline SVG is preferred (vector-clean, theme-aware, no asset pipeline). The diagram should look hand-considered, not generic — clear linework, intentional spacing, no clip-art icons. Place it where it can do real work: near the hero, alongside the "How It Works" section, or as the visual anchor of the page. Not a footer afterthought.
 
 ### Author's Notes
 
-A dedicated section containing the **full** text of the "Author's Notes" code block above, reproduced **verbatim**. Do not summarize, paraphrase, condense, reorder, or stylistically rewrite any part of it. Preserve every paragraph break and any inline emphasis exactly as written. Treat the code-block content as a literal string to embed, not as guidance to interpret. Introduce the section with a heading (e.g. "Why I built RootSpec" or "From the author") and then render the prose as-is. This is the author's voice speaking directly to visitors; the site's job is to carry that voice through unaltered.
+A dedicated section containing the **full** text of the "Author's Notes" code block above, reproduced **verbatim**. Do not summarize, paraphrase, condense, reorder, or stylistically rewrite any part of it. Preserve every paragraph break and any inline emphasis exactly as written. Treat the code-block content as a literal string to embed, not as guidance to interpret. Introduce the section with a heading like "Why I built RootSpec" or "Why this exists" and render the prose as-is. This is the author's voice speaking directly to visitors; the site's job is to carry it through unaltered.
+
+This section is a primary destination, not an afterthought. The navigation entry that links to it must use the section's primary heading verbatim (e.g. "Why I built RootSpec") — generic labels like "Notes" or "About" undersell its weight and bury the lede. Visitors should know from the nav alone that this is where the author speaks.
 
 ### Interactive: Hierarchy Explorer
 
@@ -147,7 +151,6 @@ This site deploys to GitHub Pages at `/demos/greenfield/`. Use that as the canon
 - **Responsive** — all interactive features must work on mobile (touch-friendly)
 - **Keyboard accessible** — hierarchy explorer and wizard navigable via keyboard
 - **No external API calls** — everything runs client-side
-- **Simple RootSpec diagram** — if possible, create an image that depicts the RootSpec methodology in a simple way: a spec surrounding the development cycle and only allowing valid solutions to pass through. If an image is not possible, create a diagram using SVG.
 
 ## Audience
 
@@ -170,7 +173,7 @@ The site's visual quality is part of the argument. A polished, considered aesthe
 
 **Specifics:**
 
-- **Typography is the primary design element.** Use a high-quality serif for body copy (e.g., Source Serif, Newsreader, Charter, or similar) to signal essay-quality writing. Pair with a clean sans-serif (e.g., Inter, Söhne, IBM Plex Sans) for UI elements, navigation, and code labels. Use a monospace face (e.g., JetBrains Mono, IBM Plex Mono, Berkeley Mono) for code, command examples, and the four skill names (`/rs-init`, etc.).
+- **Typography is the primary design element.** Use a high-quality serif for body copy (e.g., Source Serif, Newsreader, Charter, or similar) to signal essay-quality writing. Pair with a clean sans-serif (e.g., Inter, Söhne, IBM Plex Sans) for UI elements, navigation, and code labels. Use a monospace face (e.g., JetBrains Mono, IBM Plex Mono, Berkeley Mono) for code, command examples, and the five skill names (`/rs-init`, etc.).
 - **Generous whitespace.** The page should breathe. Long line lengths for prose are fine — readers expect them in editorial contexts.
 - **Restrained palette.** Two or three colors maximum, plus neutrals. One accent color used sparingly for emphasis and interactive states. Avoid gradients, glassmorphism, glows, and other decorative effects. The diagram and interactive elements provide visual interest; the page chrome should not compete with them.
 - **Light mode is the default.** Dark mode is a toggle, not the default. Editorial sites read better in light mode, and defaulting to dark mode is a tell that the site was generated by an AI that defaulted to its training data's most common style.
