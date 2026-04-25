@@ -1,14 +1,12 @@
 # RootSpec Demos
 
-Demonstrates the RootSpec spec-to-code pipeline across three project scenarios. Each demo follows the full workflow — from product idea to deployed, validated application.
+Demonstrates the RootSpec spec-to-code pipeline. Each demo follows the full workflow — from product idea to deployed, validated application.
 
 ## Demos
 
 | Demo | Scenario | Status |
 |------|----------|--------|
 | [greenfield/](greenfield/) | Marketing site for RootSpec, built from scratch | In progress |
-| [scaffold/](scaffold/) | SvelteKit social feed, spec'd from a scaffold | In progress |
-| [brownfield/](brownfield/) | Weather dashboard, spec'd from legacy React code | In progress |
 
 ## How It Works
 

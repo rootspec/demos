@@ -64,65 +64,9 @@ jobs:
             greenfield/public
             greenfield/.dev-server.log
 
-  scaffold:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: scaffold
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-          cache-dependency-path: scaffold/package-lock.json
-      - run: npm ci
-      - run: npm run build
-      - name: Run Cypress tests
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: scaffold
-          install: false
-          start: npm run preview -- --port 5173
-          wait-on: http://localhost:5173
-          browser: chrome
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: scaffold-dist
-          path: scaffold/build
-
-  brownfield:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: brownfield
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-          cache-dependency-path: brownfield/package-lock.json
-      - run: npm ci
-      - run: npm run build
-      - name: Run Cypress tests
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: brownfield
-          install: false
-          start: npm run preview -- --port 5173
-          wait-on: http://localhost:5173
-          browser: chrome
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: brownfield-dist
-          path: brownfield/dist
-
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: [greenfield, scaffold, brownfield]
+    needs: [greenfield]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -141,18 +85,10 @@ jobs:
           else
             echo "No build step — using public/ as-is"
           fi
-      - name: Build scaffold
-        working-directory: scaffold
-        run: npm ci && npm run build
-      - name: Build brownfield
-        working-directory: brownfield
-        run: npm ci && npm run build
       - name: Assemble site
         run: |
           mkdir -p _site
           cp -r greenfield/dist _site/greenfield 2>/dev/null || cp -r greenfield/public _site/greenfield || true
-          cp -r scaffold/build _site/scaffold || true
-          cp -r brownfield/dist _site/brownfield || true
           cat > _site/index.html << 'HTML'
           <!DOCTYPE html>
           <html lang="en">
@@ -161,8 +97,6 @@ jobs:
             <h1>RootSpec Demos</h1>
             <ul>
               <li><a href="greenfield/">Greenfield: Marketing Site</a></li>
-              <li><a href="scaffold/">Scaffold: RootFeed Social Feed</a></li>
-              <li><a href="brownfield/">Brownfield: RootWeather Dashboard</a></li>
             </ul>
           </body>
           </html>

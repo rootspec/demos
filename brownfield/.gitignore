@@ -1,6 +1,0 @@
-node_modules/
-dist/
-.dev-server.pid
-.dev-server.log
-cypress/screenshots/
-cypress/videos/

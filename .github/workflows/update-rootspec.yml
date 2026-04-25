@@ -52,7 +52,7 @@ jobs:
 
       - name: Update skills in all demos
         run: |
-          for demo in greenfield scaffold brownfield; do
+          for demo in greenfield; do
             echo "=== Updating skills in ${demo} ==="
             cd "$demo"
             npx skills add rootspec/rootspec --agent claude-code universal --skill '*' -y
@@ -67,9 +67,9 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           MAX_BUDGET="${{ inputs.max_budget || '15' }}"
-          BUDGET_PER_DEMO=$(echo "$MAX_BUDGET / 3" | bc -l | xargs printf "%.0f")
+          BUDGET_PER_DEMO="$MAX_BUDGET"
 
-          for demo in greenfield scaffold brownfield; do
+          for demo in greenfield; do
             echo "=== Running rs-update in ${demo} ==="
             cd "$demo"
 
