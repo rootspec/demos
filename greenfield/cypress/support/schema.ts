@@ -7,8 +7,11 @@ const StepSchema = z.union([
   z.object({ loginAs: z.string() }),
   z.object({ seedItem: z.record(z.unknown()) }),
   z.object({ awaitReady: z.literal(true) }),
+  z.object({ setViewport: z.object({ width: z.number(), height: z.number() }) }),
   z.object({ shouldContain: z.object({ selector: z.string(), text: z.string() }) }),
   z.object({ shouldExist: z.object({ selector: z.string() }) }),
+  z.object({ shouldHaveNoOverflowX: z.literal(true) }),
+  z.object({ shouldFitViewport: z.object({ width: z.number(), height: z.number() }) }),
 ]);
 
 const AcceptanceCriterionSchema = z.object({

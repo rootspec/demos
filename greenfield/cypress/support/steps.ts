@@ -8,6 +8,7 @@ export function runSetupSteps(steps: Step[]) {
     else if ('loginAs' in s) cy.task('loginAs', s.loginAs);
     else if ('seedItem' in s) cy.task('seedItem', s.seedItem);
     else if ('awaitReady' in s) cy.appReady();
+    else if ('setViewport' in s) cy.viewport(s.setViewport.width, s.setViewport.height);
   }
 }
 
@@ -18,6 +19,16 @@ export function runAssertionSteps(steps: Step[]) {
     }
     else if ('shouldExist' in s) {
       cy.get(s.shouldExist.selector).should('exist');
+    }
+    else if ('shouldHaveNoOverflowX' in s) {
+      cy.get('body').then($body => {
+        expect($body[0].scrollWidth).to.be.lte($body[0].clientWidth);
+      });
+    }
+    else if ('shouldFitViewport' in s) {
+      cy.get('body').then($body => {
+        expect($body[0].scrollWidth).to.be.lte(s.shouldFitViewport.width);
+      });
     }
   }
 }
