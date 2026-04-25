@@ -148,7 +148,7 @@ This site deploys to GitHub Pages at `/demos/greenfield/`. Use that as the canon
 
 - **Dark/light theme** with system preference detection and manual toggle
 - **Smooth animations** on section transitions and interactive elements
-- **Responsive** — all interactive features must work on mobile (touch-friendly)
+- **Mobile-first** — the site must look and feel intentional on small screens, not just shrunk-down desktop. Test at 375px width: typography reflows cleanly, hero text doesn't overflow or hyphenate awkwardly, the navbar collapses into a usable form (hamburger or compact stack), tap targets are at least 44×44px, the hierarchy explorer and wizard are usable with thumb-only interaction, the diagram scales without losing legibility, and no horizontal scrolling appears at any width down to 320px. Mobile is a first-class viewport, not an accommodation.
 - **Keyboard accessible** — hierarchy explorer and wizard navigable via keyboard
 - **No external API calls** — everything runs client-side
 
